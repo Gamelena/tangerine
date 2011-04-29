@@ -1,0 +1,91 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="/admportal/base/web/view/css/estilos.css" />
+        <link rel="stylesheet" href="/dojotoolkit/dijit/themes/claro/claro.css" />
+        <!-- Carga del toolkit dojo -->
+        <script type="text/javascript" src="/dojotoolkit/dojo/dojo.js"
+        djConfig="parseOnLoad:true, isDebug:false"></script>
+        <link rel="stylesheet" href="/dojotoolkit/dojox/grid/resources/Grid.css"  />
+        <link rel="stylesheet" href="/dojotoolkit/dojox/grid/resources/claroGrid.css"  />
+        <link rel="stylesheet" href="/dojotoolkit/dojox/form/resources/FileInput.css" />
+        <link rel="stylesheet" href="/dojotoolkit/dojox/form/resources/CheckedMultiSelect.css"  />
+        <script type="text/javascript" src="/admportal/base/web/view/js/principal.js"></script>
+
+        <style type="text/css">
+            /*@import "/dojotoolkit/dojox/grid/resources/Grid.css";
+            @import "/dojotoolkit/dojox/grid/resources/claroGrid.css";*/
+
+            .dojoxGrid table {
+                margin: 0;
+            }
+
+            .center
+            {
+                text-align: center;
+            }
+
+            .center table
+            {
+                margin-left: auto;
+                margin-right: auto;
+
+            }        
+
+            html, body { width: 100%; height: 100%; margin: 0; overflow:hidden; }
+            #borderContainer { width: 100%; height: 100%; }
+
+        </style>
+    </head>
+    <body class="claro">
+        <div dojoType="dijit.layout.BorderContainer" design="headline" gutters="true"
+             liveSplitters="true" id="borderContainer">
+            <!-- Panel Superior -->
+            <div dojoType="dojox.layout.ContentPane" splitter="false" region="top" executeScripts="true" scriptHasHooks="true"
+                 style="height:40px;">
+                <div id="logosAdm" style="text-align: left;float: left;"> Logos </div>
+                <div id="tituloAdm" style="text-align: left;float: left;padding-left:20px;font-weight: bold"> Titulo </div>
+                <div style="text-align: right; float: right;">
+                    <button dojoType="dijit.form.DropDownButton" iconClass="dijitIconConfigure">
+                        <span>Configuracion</span>
+                        <div dojoType="dijit.Menu" id="confMenu" style="display: none;">
+                            <div dojoType="dijit.MenuItem" id="btnConfPersonal"
+                                    iconClass="dijitIconTask">
+                                    Personal
+                            </div>
+
+                            <div dojoType="dijit.MenuItem" id="btnConfUsuarios"
+                                     iconClass="dijitIconUsers">
+                                    Usuarios
+                            </div>
+                        </div>
+                    </button>
+                    <button type="button" dojoType="dijit.form.Button" name="btnSalir" id="btnSalir" iconClass="dijitIconError">
+                        Salir
+                    </button>
+                </div>
+                <div id="infoUsr" style="text-align: right; float: right;padding-right:20px;font-weight: bold">Info de Usuario</div>
+            </div>
+
+            <!-- Panel derecho -->
+            <div dojoType="dojox.layout.ContentPane" splitter="true" region="leading" executeScripts="true" scriptHasHooks="true"
+                 style="width: 200px;">
+                <div class="tituloPanel">Men&uacute; Principal</div>
+                <br>
+                 <div id="arbolPrincipal"></div> 
+            </div>
+
+            <!-- Panel central -->
+            <div id="panel_central" dojoType="dojox.layout.ContentPane" splitter="true" region="center" executeScripts="true" 
+                 scriptHasHooks="true" onLoad="cargaInicial()">
+                
+            </div>
+        </div>
+    </body>
+</html>

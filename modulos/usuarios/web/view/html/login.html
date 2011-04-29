@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>Ingreso de usuario</title>
+        <link rel="stylesheet" href="/dojotoolkit/dijit/themes/claro/claro.css" />
+        <link rel="stylesheet" href="/admportal/base/web/view/css/estilos.css" />
+        <!-- Carga del toolkit dojo -->
+        <script type="text/javascript" src="/dojotoolkit/dojo/dojo.js"
+            djConfig="parseOnLoad:true, isDebug:false"></script>
+        <script type="text/javascript" src="/admportal/modulos/usuarios/web/view/js/login.js"></script>
+
+    </head>
+    <body class="claro">
+	<br><br><br><br>
+	<p CLASS=TITULO>Plataforma Ciclo de Vida</p>
+
+        <table style="border: 1px solid #0066cc;" cellspacing="10" align="center">
+            <tr>
+                <td>
+                    <label for="username">Usuario</label>
+                </td>
+                <td>
+                    <input type="text" name="username" id="username"placeHolder="Ingrese nombre de usuario" dojoType="dijit.form.ValidationTextBox"
+                        trim="true" id="username" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                     <label for="password">Contrase&ntilde;a</label>
+                </td>
+                <td>
+                    <input type="password" name="password" id="password" placeHolder="Ingrese contrase&ntilde;a" dojoType="dijit.form.ValidationTextBox"
+                        trim="true" id="password" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconKey" name="btnLogin" onCLick="validaLogin();">
+                        Ingresar
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="10" align="center">
+            <tr>
+                <td>
+                    <div id="respLogin" class="divInfoLogin"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="esperaCarga"></div>
+                </td>
+            </tr>
+        </table>
+        
+       
+        
+    </body>
+
+</html>
