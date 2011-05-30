@@ -1,8 +1,9 @@
 <?php
 	require_once 'admportal/modulos/usuarios/web/model/LoginDAO.php';
 
-	$inicio = new LoginDAO( $dsn_admportal );
+	$login = new LoginDAO( $dsn_admportal );
 
-	echo $inicio->validaLogin( $_REQUEST['usr'], $_REQUEST['pwd'] )
+	$data = json_decode( $HTTP_RAW_POST_DATA );
+	echo $login->validaLogin( $data->usr, $data->pwd )
 	
 ?>

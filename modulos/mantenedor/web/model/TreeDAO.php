@@ -14,7 +14,7 @@ class TreeDAO extends BaseDAO {
 		$database = R::$adapter;
 
 		if( $id_usuario > 0 ){
-			$mantenedores = $database->get("SELECT * from mantenedor_mantenedores A, usuarios_roles B, usuarios_usuarios C, mantenedor_permisos D WHERE C.id = ".$id_usuario." AND B.id_usuario = C.id AND A.id = D.id_mant AND B.id_perfil = D.id_perfil;");
+			$mantenedores = $database->get("SELECT * from mantenedor_mantenedores A, usuarios_grupos B, usuarios_usuarios C, mantenedor_permisos D WHERE C.id = ".$id_usuario." AND B.id_usuario = C.id AND A.id = D.id_mant AND B.id_perfil = D.id_perfil;");
 		}
 		else{
 			$mantenedores = $database->get("SELECT id, titulo, url FROM mantenedor_mantenedores" );
@@ -36,7 +36,7 @@ class TreeDAO extends BaseDAO {
 			$i = $i + 1;
         }
 		$tree[ 'children' ] = $children;
-        return json_encode($tree);
+        return $tree;
     }
 
 }

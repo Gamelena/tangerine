@@ -4,15 +4,7 @@
 
 	$principal = new PrincipalDAO( $dsn_admportal );
 
-	$metodo = $_REQUEST['fc'];
-
-	$cadResp = "";
-
-
-	if($metodo == "cargarDatosTituloAdm")
-		$cadResp = $principal->cargarDatosTituloAdm();
-	else
-		$cadResp = "";
+	$cadResp = $principal->cargarParametros();
 
 	echo $cadResp;
 ?>

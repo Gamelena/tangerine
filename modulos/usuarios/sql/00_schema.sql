@@ -17,17 +17,16 @@ DROP TABLE IF EXISTS `usuarios_perfiles`;
 CREATE TABLE `usuarios_perfiles` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id del perfil',
   `nombre` VARCHAR(30) NOT NULL COMMENT 'Nombre del perfil',
+  `descrip` VARCHAR(100) NOT NULL COMMENT 'Descripción del perfil',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `key_nombre` (`nombre`)
 ) ENGINE=INNODB DEFAULT CHARSET=latin1 COMMENT='Tabla de Perfiles';
 
 
-DROP TABLE IF EXISTS `usuarios_roles`;
-CREATE TABLE `usuarios_roles` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id de rol',
-  `id_usuario` INT(11) NOT NULL COMMENT 'Id de usuario',
+DROP TABLE IF EXISTS `usuarios_grupos`;
+CREATE TABLE `usuarios_grupos` (
   `id_perfil` INT(11) NOT NULL COMMENT 'Id de perfil',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `key_usrperf` (`id_usuario`, `id_perfil` )
-) ENGINE=INNODB DEFAULT CHARSET=latin1 COMMENT='Tabla de Roles';
+  `id_usuario` INT(11) NOT NULL COMMENT 'Id de usuario',
+  UNIQUE KEY `key_perfusr` (`id_perfil`, `id_usuario` )
+) ENGINE=INNODB DEFAULT CHARSET=latin1 COMMENT='Tabla de Grupos';
 

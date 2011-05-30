@@ -9,7 +9,7 @@ class PrincipalDAO extends BaseDAO {
         parent::__construct($dsn);
     }
 
-    public function cargarDatosTituloAdm() {
+    public function cargarParametros() {
 
         $resp = array();
 

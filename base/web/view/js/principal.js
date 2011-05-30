@@ -58,7 +58,7 @@ function cargaInicial() {
 	InfoUsuario = dojo.fromJson(valCookie);
 	
     //Configuracion de titulo, logos de operadora y zweicom
-    cargarDatosTituloAdm(dojo.byId("logosAdm"),dojo.byId("tituloAdm"));
+    cargarParametros(dojo.byId("logosAdm"),dojo.byId("tituloAdm"));
 
     var divCD = dojo.byId("infoUsr");
 	
@@ -77,12 +77,11 @@ function cargaInicial() {
 
 }
 
-function cargarDatosTituloAdm(bloqueLogoHTML, bloqueTituloHTML) {
+function cargarParametros(bloqueLogoHTML, bloqueTituloHTML) {
 
     //Obtencion via AJAX de datos basicos del administrador web
     dojo.xhrGet( {
 		url: "/admportal/base/web/ctrl/principal.php",
-     content: {'fc':"cargarDatosTituloAdm"},
      handleAs: "json",
      preventCache: true,
      timeout: 5000,
@@ -109,25 +108,10 @@ function cargarDatosTituloAdm(bloqueLogoHTML, bloqueTituloHTML) {
 }
 
 
-// function configurarMenuUsuarios() {
-// 
-//     var opcItemConfUsuarios = dijit.byId("btnConfUsuarios");
-// 
-//     if(UsrData.GRUPO_NOMBRE != "OPERACIONES_PARAMETRIZADOR") {
-// 
-//         opcItemConfUsuarios.set("disabled","true");
-// 
-//     }
-// 
-// 
-// }
-
-
 function cargarArbolMenu() {
 
 	var treedata = new Array();
 	
-	//Obtencion via AJAX de datos basicos del administrador web
 	dojo.xhrGet( {
 		url: "/admportal/base/web/ctrl/modulos.php",
 		handleAs: "json",
@@ -137,6 +121,7 @@ function cargarArbolMenu() {
 		load: function(modulos){
 			
 			len = modulos.length;
+			x = 0;
 			for( i = 0; i < len; i++ )
 			{
 				if( modulos[i].url.length > 0 )
@@ -153,11 +138,12 @@ function cargarArbolMenu() {
 						sync : true,
 						timeout: 5000,
 						load: function(modtree){
-							treedata[ i ] = modtree;
+							if( modtree.label.length > 0 ){
+								treedata[ x ] = modtree;
+								x++;
+							}
 						},
 						error:function(err){
-							alert("Error al obtener arbol para [" + name + "]: "+err);
-							return err;
 						}
 					});
 				}
@@ -184,14 +170,14 @@ function cargarArbolMenu() {
 	var treeControl = new dijit.Tree({
 		model: treeModel,
 		showRoot: false,
-		onClick: function(item){cargarPanelCentral(item);},
-									 _createTreeNode: function(
-										 /*Object*/
-										 args) {
-										 var tnode = new dijit._TreeNode(args);
-										 tnode.labelNode.innerHTML = args.label;
-										 return tnode;
-										 }        
+		onClick: function(item){
+			cargarPanelCentral(item);
+		},
+		_createTreeNode: function( args ) {
+			var tnode = new dijit._TreeNode(args);
+			tnode.labelNode.innerHTML = args.label;
+			return tnode;
+		}        
 	},
 	"arbolPrincipal");
 }
@@ -201,7 +187,8 @@ function cargarPanelCentral(item) {
 
 	var widget = dijit.byId("panel_central");
 
-	widget.set('href',item.url);
+	if (typeof item.url  != "undefined")
+		widget.set('href',item.url);
 }
 
 dojo.ready(cargaInicial);

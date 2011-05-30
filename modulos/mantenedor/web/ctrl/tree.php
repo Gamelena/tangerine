@@ -5,5 +5,5 @@
 
 	$id_modulo = $_REQUEST['id_modulo'];
 	$id_usuario = $_REQUEST['id_usuario'];
-	echo $tree->getMantenedores( $id_modulo, $id_usuario );
+	echo json_encode( $tree->getMantenedores( $id_modulo, $id_usuario ) );
 ?>
