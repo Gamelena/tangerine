@@ -1,0 +1,66 @@
+/* 
+    Document   : estilos.css
+    Created on : 21-01-2011, 12:02:11 PM
+    Author     : jorge
+    Description:
+        Purpose of the stylesheet follows.
+*/ /* 
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+body {
+	font: 12px Myriad, Helvetica, Tahoma, Arial, clean, sans-serif;
+}
+
+.claro {
+	color: #131313;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.688em;
+}
+
+root {
+	display: block;
+}
+
+.divInfoLogin {
+	text-align: center;
+	color: white;
+	background: red;
+}
+
+h1 {
+	font-family: Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+	text-align: center;
+	color: blue;
+	font-size: 20pt
+}
+
+.TITULO {
+	FONT-WEIGHT: bolder;
+	FONT-SIZE: 18px;
+	WORD-SPACING: normal;
+	COLOR: #0066cc;
+	FONT-FAMILY: Tahoma;
+	LETTER-SPACING: 1px;
+	text-align: center;
+}
+
+/* Titulo de encabezado de paneles */
+.tituloPanel {
+	text-align: center;
+	font-weight: bold;
+	color: black;
+	background-color: #E1E8EF;
+	border: 1px solid #B5BCC7;
+}
+
+.tituloCentrado {
+	text-align: center;
+	font-weight: bold;
+}
+
+.avisoColorCentrado {
+	color: white;
+	text-align: center;
+	font-weight: bold;
+	background: green;
+}

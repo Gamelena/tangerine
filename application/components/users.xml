@@ -1,0 +1,11 @@
+<?xml version="1.0"?> 
+<!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
+<component name="Usuarios" search="user_name;email" type="table_dojo" target="acl_users" list="true" edit="true" add="true" delete="true">
+   	<element name="ID" target="id" type="id_box" visible="false" edit="false" add="false"/>
+    <element name="Usuario" target="user_name" type="dojo_validation_textbox" visible="true" edit="false" add="true"/>
+    <element name="Nombres" target="first_names" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>
+    <element name="Apellidos" target="last_names" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>
+    <element name="E-Mail" target="email" reg_exp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}" invalid_message="mail no valido" type="dojo_validation_textbox" visible="true" edit="true" add="true" />
+	<element name="Perfil" target="acl_roles_id" default_value="" type="dojo_filtering_select" table="acl_roles" field="role_name" visible="true" edit="true" add="true"/>
+	<element name="Activo" target="approved" type="dojo_yes_no" visible="true" edit="true" add="true"/>        
+</component>

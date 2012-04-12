@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
+<component name="Permisos" target="acl_permissions" type="table_dojo" list="true" edit="true" add="true" delete="true">
+    <element name="Perfil" default_value="" target="acl_roles_id" type="dojo_filtering_select" table="acl_roles" field="role_name" visible="true" edit="true" add="true"/>
+    <element name="M&amp;oacute;dulo" default_value="" target="acl_modules_id" type="dojo_filtering_select" table="acl_modules" table_method="get_modules" field="module_title" visible="true" edit="true" add="true"/>
+    <element name="Permisos" default_value="" target="permission" type="dojo_filtering_select" table="permissions" table_method="get_permissions" field="permission_title" visible="true" edit="true" add="true" />
+</component>

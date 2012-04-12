@@ -1,3 +1,0 @@
-curl -X POST --data-binary '{ "oper": "create", "args": { "nombre_p" : "Carlos", "nombre_s": "Felipe", "apellido_p": "Fangmeier", "apellido_m" : "", "login" :"carlos2", "password" :"carlos", "activo" :"", "perfiles" : [ 1,2,3,4] }}' -H "Content-type: application/json; charset=uft-8" localhost/admportal/modulos/usuarios/web/ctrl/usuarios.php
-
-curl -X POST --data-binary '{ "oper": "get", "args": { "id" : "-1" }}' -H "Content-type: application/json; charset=uft-8" localhost/admportal/modulos/usuarios/web/ctrl/usuarios.php

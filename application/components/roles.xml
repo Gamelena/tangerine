@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!DOCTYPE component PUBLIC "//COMPONENTS/" "components.dtd">
+<component name="Perfiles" type="table_dojo" target="acl_roles" list="true" search="msisdn;fijo" edit="true" add="true" delete="true">
+   	<element name="ID" target="id" type="id_box" visible="false" edit="false" add="false"/>
+    <element name="Perfil" target="role_name" type="dojo_validation_textbox" required="true" trim="true" visible="true" edit="true" add="true"/>
+</component>

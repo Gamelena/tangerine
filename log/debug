@@ -1,0 +1,124 @@
+/proyectos/admportal/public/index.php[71][2012-04-11 16:44:33]: exception 'Zend_View_Exception' with message 'script 'index/login.phtml' not found in path (/proyectos/admportal/application/views/scripts/)' in /usr/share/php/Zend/View/Abstract.php:988<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/View/Abstract.php(884): Zend_View_Abstract->_script('index/login.pht...')<br />
+#1 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(897): Zend_View_Abstract->render('index/login.pht...')<br />
+#2 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(918): Zend_Controller_Action_Helper_ViewRenderer->renderScript('index/login.pht...', NULL)<br />
+#3 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(957): Zend_Controller_Action_Helper_ViewRenderer->render()<br />
+#4 /usr/share/php/Zend/Controller/Action/HelperBroker.php(277): Zend_Controller_Action_Helper_ViewRenderer->postDispatch()<br />
+#5 /usr/share/php/Zend/Controller/Action.php(523): Zend_Controller_Action_HelperBroker->notifyPostDispatch()<br />
+#6 /usr/share/php/Zend/Controller/Dispatcher/Standard.php(295): Zend_Controller_Action->dispatch('loginAction')<br />
+#7 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#8 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#9 {main}
+/proyectos/admportal/public/index.php[71][2012-04-11 16:47:00]: exception 'Zend_View_Exception' with message 'script 'index/login.phtml' not found in path (/proyectos/admportal/application/views/scripts/)' in /usr/share/php/Zend/View/Abstract.php:988<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/View/Abstract.php(884): Zend_View_Abstract->_script('index/login.pht...')<br />
+#1 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(897): Zend_View_Abstract->render('index/login.pht...')<br />
+#2 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(918): Zend_Controller_Action_Helper_ViewRenderer->renderScript('index/login.pht...', NULL)<br />
+#3 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(957): Zend_Controller_Action_Helper_ViewRenderer->render()<br />
+#4 /usr/share/php/Zend/Controller/Action/HelperBroker.php(277): Zend_Controller_Action_Helper_ViewRenderer->postDispatch()<br />
+#5 /usr/share/php/Zend/Controller/Action.php(523): Zend_Controller_Action_HelperBroker->notifyPostDispatch()<br />
+#6 /usr/share/php/Zend/Controller/Dispatcher/Standard.php(295): Zend_Controller_Action->dispatch('loginAction')<br />
+#7 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#8 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#9 {main}
+/proyectos/admportal/public/index.php[71][2012-04-11 16:59:39]: exception 'Zend_Controller_Action_Exception' with message 'Action "objects" does not exist and was not trapped in __call()' in /usr/share/php/Zend/Controller/Action.php:485<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/Controller/Action.php(515): Zend_Controller_Action->__call('objectsAction', Array)<br />
+#1 /usr/share/php/Zend/Controller/Dispatcher/Standard.php(295): Zend_Controller_Action->dispatch('objectsAction')<br />
+#2 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#3 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#4 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:26:03]: exception 'Zend_View_Exception' with message 'script 'objects/index.json.phtml' not found in path (/proyectos/admportal/application/views/scripts/)' in /usr/share/php/Zend/View/Abstract.php:988<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/View/Abstract.php(884): Zend_View_Abstract->_script('objects/index.j...')<br />
+#1 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(897): Zend_View_Abstract->render('objects/index.j...')<br />
+#2 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(918): Zend_Controller_Action_Helper_ViewRenderer->renderScript('objects/index.j...', NULL)<br />
+#3 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(957): Zend_Controller_Action_Helper_ViewRenderer->render()<br />
+#4 /usr/share/php/Zend/Controller/Action/HelperBroker.php(277): Zend_Controller_Action_Helper_ViewRenderer->postDispatch()<br />
+#5 /usr/share/php/Zend/Controller/Action.php(523): Zend_Controller_Action_HelperBroker->notifyPostDispatch()<br />
+#6 /usr/share/php/Zend/Controller/Dispatcher/Standard.php(295): Zend_Controller_Action->dispatch('indexAction')<br />
+#7 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#8 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#9 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:26:04]: exception 'Zend_Controller_Dispatcher_Exception' with message 'Invalid controller specified (images)' in /usr/share/php/Zend/Controller/Dispatcher/Standard.php:248<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#1 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#2 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:26:04]: exception 'Zend_Controller_Dispatcher_Exception' with message 'Invalid controller specified (images)' in /usr/share/php/Zend/Controller/Dispatcher/Standard.php:248<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#1 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#2 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:26:05]: exception 'Zend_Controller_Dispatcher_Exception' with message 'Invalid controller specified (favicon.ico)' in /usr/share/php/Zend/Controller/Dispatcher/Standard.php:248<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#1 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#2 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:29:58]: exception 'Zend_Controller_Dispatcher_Exception' with message 'Invalid controller specified (favicon.ico)' in /usr/share/php/Zend/Controller/Dispatcher/Standard.php:248<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#1 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#2 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:30:08]: exception 'Zend_View_Exception' with message 'script 'objects/index.json.phtml' not found in path (/proyectos/admportal/application/views/scripts/)' in /usr/share/php/Zend/View/Abstract.php:988<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/View/Abstract.php(884): Zend_View_Abstract->_script('objects/index.j...')<br />
+#1 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(897): Zend_View_Abstract->render('objects/index.j...')<br />
+#2 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(918): Zend_Controller_Action_Helper_ViewRenderer->renderScript('objects/index.j...', NULL)<br />
+#3 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(957): Zend_Controller_Action_Helper_ViewRenderer->render()<br />
+#4 /usr/share/php/Zend/Controller/Action/HelperBroker.php(277): Zend_Controller_Action_Helper_ViewRenderer->postDispatch()<br />
+#5 /usr/share/php/Zend/Controller/Action.php(523): Zend_Controller_Action_HelperBroker->notifyPostDispatch()<br />
+#6 /usr/share/php/Zend/Controller/Dispatcher/Standard.php(295): Zend_Controller_Action->dispatch('indexAction')<br />
+#7 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#8 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#9 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:30:08]: exception 'Zend_Controller_Dispatcher_Exception' with message 'Invalid controller specified (images)' in /usr/share/php/Zend/Controller/Dispatcher/Standard.php:248<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#1 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#2 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:30:08]: exception 'Zend_Controller_Dispatcher_Exception' with message 'Invalid controller specified (images)' in /usr/share/php/Zend/Controller/Dispatcher/Standard.php:248<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#1 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#2 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:30:11]: exception 'Zend_Controller_Dispatcher_Exception' with message 'Invalid controller specified (favicon.ico)' in /usr/share/php/Zend/Controller/Dispatcher/Standard.php:248<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#1 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#2 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:30:34]: exception 'Zend_Controller_Dispatcher_Exception' with message 'Invalid controller specified (undefined)' in /usr/share/php/Zend/Controller/Dispatcher/Standard.php:248<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#1 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#2 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:34:12]: exception 'Zend_View_Exception' with message 'script 'objects/index.json.phtml' not found in path (/proyectos/admportal/application/views/scripts/)' in /usr/share/php/Zend/View/Abstract.php:988<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/View/Abstract.php(884): Zend_View_Abstract->_script('objects/index.j...')<br />
+#1 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(897): Zend_View_Abstract->render('objects/index.j...')<br />
+#2 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(918): Zend_Controller_Action_Helper_ViewRenderer->renderScript('objects/index.j...', NULL)<br />
+#3 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(957): Zend_Controller_Action_Helper_ViewRenderer->render()<br />
+#4 /usr/share/php/Zend/Controller/Action/HelperBroker.php(277): Zend_Controller_Action_Helper_ViewRenderer->postDispatch()<br />
+#5 /usr/share/php/Zend/Controller/Action.php(523): Zend_Controller_Action_HelperBroker->notifyPostDispatch()<br />
+#6 /usr/share/php/Zend/Controller/Dispatcher/Standard.php(295): Zend_Controller_Action->dispatch('indexAction')<br />
+#7 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#8 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#9 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:34:12]: exception 'Zend_Controller_Dispatcher_Exception' with message 'Invalid controller specified (favicon.ico)' in /usr/share/php/Zend/Controller/Dispatcher/Standard.php:248<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#1 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#2 {main}
+/proyectos/admportal/public/index.php[71][2012-04-12 08:34:22]: exception 'Zend_View_Exception' with message 'script 'objects/index.json.phtml' not found in path (/proyectos/admportal/application/views/scripts/)' in /usr/share/php/Zend/View/Abstract.php:988<br />
+Stack trace:<br />
+#0 /usr/share/php/Zend/View/Abstract.php(884): Zend_View_Abstract->_script('objects/index.j...')<br />
+#1 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(897): Zend_View_Abstract->render('objects/index.j...')<br />
+#2 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(918): Zend_Controller_Action_Helper_ViewRenderer->renderScript('objects/index.j...', NULL)<br />
+#3 /usr/share/php/Zend/Controller/Action/Helper/ViewRenderer.php(957): Zend_Controller_Action_Helper_ViewRenderer->render()<br />
+#4 /usr/share/php/Zend/Controller/Action/HelperBroker.php(277): Zend_Controller_Action_Helper_ViewRenderer->postDispatch()<br />
+#5 /usr/share/php/Zend/Controller/Action.php(523): Zend_Controller_Action_HelperBroker->notifyPostDispatch()<br />
+#6 /usr/share/php/Zend/Controller/Dispatcher/Standard.php(295): Zend_Controller_Action->dispatch('indexAction')<br />
+#7 /usr/share/php/Zend/Controller/Front.php(954): Zend_Controller_Dispatcher_Standard->dispatch(Object(Zend_Controller_Request_Http), Object(Zend_Controller_Response_Http))<br />
+#8 /proyectos/admportal/public/index.php(69): Zend_Controller_Front->dispatch()<br />
+#9 {main}

@@ -1,0 +1,196 @@
+/proyectos/admportal/application/controllers/ObjectsController.php[228][2012-04-12 08:48:00]: [TRANSACTION:]
+User:zweicom
+Query:UPDATE `web_settings` SET `value` = ? WHERE (id = 'titulo_adm')
+Query Params:Array
+(
+    [1] => Admin Portal Base
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[228][2012-04-12 08:48:00]: [TRANSACTION:]
+User:zweicom
+Query:UPDATE `web_settings` SET `value` = ? WHERE (id = 'url_logo_oper')
+Query Params:Array
+(
+    [1] => images/logo_movistar60x44.png
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[228][2012-04-12 08:48:00]: [TRANSACTION:]
+User:zweicom
+Query:UPDATE `web_settings` SET `value` = ? WHERE (id = 'url_logo_zweicom')
+Query Params:Array
+(
+    [1] => images/logo_zweicom26x15.png
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:53:46]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '66')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:53:53]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '67')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:53:59]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '69')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:54:05]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '58')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:54:12]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '68')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:54:19]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '70')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:54:25]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '71')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:54:33]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '73')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:54:39]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '77')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:54:45]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '81')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:54:51]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '85')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:54:56]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '89')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 08:55:01]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '93')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 09:02:18]: [TRANSACTION:edit]
+User:zweicom
+Query:UPDATE `acl_users` SET `first_names` = ?, `last_names` = ?, `email` = ? WHERE (id = '1')
+Query Params:Array
+(
+    [1] => Soporte
+    [2] => ZweicomX
+    [3] => tecnicos@zweicom.com
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 09:02:24]: [TRANSACTION:edit]
+User:zweicom
+Query:UPDATE `acl_users` SET `first_names` = ?, `last_names` = ?, `email` = ? WHERE (id = '1')
+Query Params:Array
+(
+    [1] => Soporte
+    [2] => Zweicom
+    [3] => tecnicos@zweicom.com
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 09:15:05]: [TRANSACTION:edit]
+User:admin
+Query:UPDATE `acl_users` SET `first_names` = ?, `last_names` = ?, `email` = ? WHERE (id = '2')
+Query Params:Array
+(
+    [1] => Administrador
+    [2] => Cliente
+    [3] => administrador@telefonicamoviles.com.pe
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 09:15:19]: [TRANSACTION:edit]
+User:admin
+Query:UPDATE `acl_users` SET `password` = ? WHERE (id = '2')
+Query Params:Array
+(
+    [1] => 21232f297a57a5a743894a0e4a801fc3
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 09:18:12]: [TRANSACTION:edit]
+User:consultas
+Query:UPDATE `acl_users` SET `password` = ? WHERE (id = '3')
+Query Params:Array
+(
+    [1] => 83da1fbc8f1a993de3f31cec6d7bf5b2
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 09:19:22]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '51')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 09:20:49]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '22')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 09:23:01]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '44')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 09:23:06]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '41')
+Query Params:Array
+(
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-12 09:23:11]: [TRANSACTION:delete]
+User:zweicom
+Query:DELETE FROM `acl_permissions` WHERE (id = '45')
+Query Params:Array
+(
+)
+

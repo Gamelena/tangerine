@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="content-language" content="es" />
+<script type="text/javascript">var base_url="<?=$this->base_url?>";</script>
+<style type="text/css">
+html,body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+}
+</style>
+<?=$this->headStyle()?>
+<?=$this->dojo()?>
+<?=$this->list?>
+<script type="text/javascript" src="<?=$this->base_url?>js/dojo.admin.js?v=1"></script>
+<script type="text/javascript" src="<?=$this->base_url?>js/ajax.js"></script>
+<script type="text/javascript" src="<?=$this->base_url?>js/admin.js"></script>
+<script type="text/javascript" src="<?=$this->base_url?>js/md5.js"></script>
+</head>
+<body class="<?=$this->body_class?>">
+    <!--[if lt IE 7]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0012_spanish_LATAM.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div> <![endif]-->
+	<div dojoType="dijit.layout.BorderContainer" design="headline" gutters="true" liveSplitters="true" id="borderContainer">
+	   <div dojoType="dojox.layout.ContentPane" splitter="false" region="top" executeScripts="true" scriptHasHooks="true" style="height: 60px;">
+            <div id="logosAdm"></div>
+            <div id="tituloAdm"></div>
+            <div style="text-align: right; float: right;">
+				<button dojoType="dijit.form.DropDownButton" iconClass="dijitIconConfigure"><span>Configuracion</span>
+					<div dojoType="dijit.Menu" id="confMenu" style="display: none;">
+						<div dojoType="dijit.MenuItem" id="btnConfPersonal"
+							iconClass="dijitIconTask"
+							onclick="dijit.byId('panel_central').set('href',base_url+'index/components?p=personal-info&id=<?=$this->user_id?>')">
+						Personal</div>
+			       </div>
+			    </button>
+	            <button type="button" dojoType="dijit.form.Button" name="btnSalir" id="btnSalir" iconClass="dijitIconError">Salir</button>
+            </div>
+		    <div id="infoUsr" style="text-align: right; float: right; padding-right: 20px; padding-top:6px; font-weight: bold">Bienvenido
+			<?=$this->first_names?>
+			</div>
+		</div>
+		<!-- Panel derecho -->
+		<div dojoType="dojox.layout.ContentPane" splitter="true" region="leading" executeScripts="true" scriptHasHooks="true" style="width: 250px;">
+		   <div class="tituloPanel">Men&uacute; Principal</div>
+		   <br />
+		   <div id="arbolPrincipal"></div>
+		</div>
+		<!-- Panel central -->
+        <div id="panel_central" jsId="dojo_panel_central" dojoType="dojox.layout.ContentPane" splitter="true" region="center" executeScripts="true" scriptHasHooks="true"></div>
+        <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props='region:"bottom", style:"background-color: #b39b86; height: auto;"'>
+            <span style="float:right;margin-right: 6px">
+                <span style="float: left">&nbsp; &copy; Zweicom 2012 &nbsp; </span> <img src="<?php echo $this->base_url ?>/images/logo_zweicom26x15.png" />  </span>
+        </div>
+	</div>
+	<div id="black_overlay"></div>
+	<div id="popup">
+		<div style="text-align: right"><a href="javascript:void(0)"
+			onClick="close_popup()" title="Close"> <img style="display: inline"
+			src="images/close.png" /> </a></div>
+	<div id="popup_body"></div>
+	</div>
+	<div id="context">
+	<div style="text-align: right"><a href="javascript:void(0)"
+		onClick="close_context()" title="Close"><img style="display: inline"
+		src="images/close.png" /></a></div>
+	<div id="context_body"></div>
+	</div>
+	<iframe name="ifrm_process" id="ifrm_process" style="display: none;"
+		src="" />
+</body>
+</html>
