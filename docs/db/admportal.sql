@@ -1,6 +1,8 @@
--- 
--- Structure for table `acl_modules`
--- 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl_modules`
+--
 
 DROP TABLE IF EXISTS `acl_modules`;
 CREATE TABLE IF NOT EXISTS `acl_modules` (
@@ -10,26 +12,29 @@ CREATE TABLE IF NOT EXISTS `acl_modules` (
   `module` varchar(200) DEFAULT NULL,
   `tree` enum('0','1') NOT NULL DEFAULT '1',
   `linkable` enum('0','1') NOT NULL,
+  `xml` enum('0','1') NOT NULL DEFAULT '1',
   `approved` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `module` (`module`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
 
--- 
--- Data for table `acl_modules`
--- 
+--
+-- Volcado de datos para la tabla `acl_modules`
+--
 
-INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `linkable`, `approved`) VALUES
-  ('1', '0', 'Configuraci&oacute;n', '', '1', '0', '1'),
-  ('2', '0', 'Reportes', 'reports', '1', '0', '1'),
-  ('3', '1', 'Datos Personales', 'personal-info', '0', '0', '1'),
-  ('4', '1', 'M&oacute;dulos', 'modules', '1', '1', '1'),
-  ('5', '1', 'Usuarios', 'users', '1', '1', '1'),
-  ('6', '1', 'Permisos', 'permissions', '1', '1', '1'),
-  ('7', '1', 'Servidor', 'phpinfo', '1', '1', '1'),
-  ('8', '2', 'Ejemplo', 'ejemplo', '1', '1', '1'),
-  ('9', '1', 'Variables', 'settings', '1', '1', '1');
+INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `linkable`, `xml`, `approved`) VALUES
+(1, 0, 'Configuraci&oacute;n', '', '1', '0', '1', '1'),
+(2, 0, 'Reportes', 'reports', '1', '0', '1', '1'),
+(3, 1, 'Datos Personales', 'personal-info', '0', '0', '1', '1'),
+(4, 1, 'M&oacute;dulos', 'modules', '1', '1', '1', '1'),
+(5, 1, 'Usuarios', 'users', '1', '1', '1', '1'),
+(6, 1, 'Permisos', 'permissions', '1', '1', '1', '1'),
+(7, 1, 'Servidor', 'phpinfo', '1', '1', '1', '1'),
+(8, 2, 'Ejemplo', 'ejemplo', '1', '1', '1', '1'),
+(9, 1, 'Variables', 'settings', '1', '1', '1', '1'),
+(30, 2, 'Clientes', 'clientes', '1', '1', '0', '1');
+
 
 -- 
 -- Structure for table `acl_permissions`

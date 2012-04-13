@@ -135,6 +135,9 @@ class IndexController extends Zend_Controller_Action
 		$this->view->content = "<center><img width=\"960\" src=\"".BASE_URL."images/satelite.jpg\"/></center>";
 	}
 
+	/**
+	 * Parsea componente XML y carga HTML
+	 */
 	public function componentsAction()
 	{
 		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
@@ -181,6 +184,18 @@ class IndexController extends Zend_Controller_Action
 		$this->view->content = $content;
 	}
 
+	/**
+	 * Carga modulo Zend y carga HTML
+	 * @return unknown_type
+	 */
+	public function zendModulesAction()
+	{
+		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
+        $userInfo = Zend_Auth::getInstance()->getStorage()->read();
+        $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
+		
+	}
+	
 	/**
 	 * Acá se asocia a un Zend Controller un objeto Zwei_Admin_Components_Helpers_EditTabsDojo()
 	 * ya que debe cargar dentro de una nueva URL la cual por convención ZF debe manejarse por un objeto Zend_Controller_Action

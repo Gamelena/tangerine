@@ -15,7 +15,7 @@ $ sudo apt-get install zend-framework-bin
  
 2. Ubicarse en consola en la carpeta padre de donde se creará el proyecto o donde se añadirá soporte para ZF Tool. 
 $ zf create project {proyecto}
-Se puede añadir soporte ZF Tool a un proyecto existente reemplazando {proyecto} por el nombre de la carpeta web.
+Se puede añadir soporte ZF Tool a un proyecto existente reemplazando {proyecto} por el nombre de la carpeta raiz del proyecto web (usualmente 'web','php' o 'public_html').
 
 3. Sobreescribir las carpetas creadas con ZF Tool con los archivos de AdmPortal (sobreescribir todo).
 

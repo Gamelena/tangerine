@@ -13,16 +13,16 @@ date_default_timezone_set('America/Lima');
 $eop=(substr(dirname($_SERVER["SCRIPT_NAME"]),-1,1) == "/") ? '' : '/';
 
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
-	define('PROTO', 'https://');
+    defined('PROTO') || define('PROTO', 'https://');
 }else{
-	define('PROTO', 'http://');
+    defined('PROTO') || define('PROTO', 'http://');
 }
 
-define('ROOT_DIR', dirname(dirname(__FILE__)));
-define('APPLICATION_PATH', ROOT_DIR . '/application');
-define('COMPONENTS_ADMIN_PATH', APPLICATION_PATH.'/components');
-define('BASE_URL', PROTO.$_SERVER['HTTP_HOST'].dirname($_SERVER["SCRIPT_NAME"]).$eop);
-define('TEMPLATE', '');
+defined('ROOT_DIR') || define('ROOT_DIR', dirname(dirname(__FILE__)));
+defined('APPLICATION_PATH') || define('APPLICATION_PATH', ROOT_DIR . '/application');
+defined('COMPONENTS_ADMIN_PATH') || define('COMPONENTS_ADMIN_PATH', APPLICATION_PATH.'/components');
+defined('BASE_URL') || define('BASE_URL', PROTO.$_SERVER['HTTP_HOST'].dirname($_SERVER["SCRIPT_NAME"]).$eop);
+defined('TEMPLATE') || define('TEMPLATE', '');
 
 
 // Define application environment
@@ -55,8 +55,10 @@ Zend_Layout::startMvc(array('layoutPath' => ROOT_DIR.'/application/views/layouts
 
 // Run!
 $frontController = Zend_Controller_Front::getInstance();
-$frontController->addControllerDirectory(ROOT_DIR.'/application/controllers');
-$frontController->throwExceptions(true);
+$frontController
+    ->addControllerDirectory(ROOT_DIR.'/application/controllers')
+    ->addModuleDirectory(ROOT_DIR.'/application/modules')
+    ->throwExceptions(true);
 
 $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
 
@@ -66,13 +68,13 @@ Zend_Db_Table::setDefaultAdapter($db);
 
 
 try {
-	$frontController->dispatch();
+    $frontController->dispatch();
 } catch(Exception $e) {
-	if ($config->resources->frontController->params->displayExceptions == "1") {
-	   echo nl2br($e->__toString());	
-	} else {
-	   Zwei_Utils_Debug::write(nl2br($e->__toString()));
-	}   
+    if ($config->resources->frontController->params->displayExceptions == "1") {
+       echo nl2br($e->__toString());    
+    } else {
+       Zwei_Utils_Debug::write($e->__toString());
+    }   
 }
 
  

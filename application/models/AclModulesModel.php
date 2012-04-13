@@ -35,7 +35,8 @@ class AclModulesModel extends Zwei_Db_Table
 			foreach ($childrens as $i => $child){
 				$childrens[$i]['label'] = utf8_encode(html_entity_decode($child['title']));
 				unset($childrens[$i]['title']);
-				$childrens[$i]['url'] = "index/components?p=".utf8_encode(html_entity_decode($child['module']));
+		        $prefix = $child['xml'] == '1' ? "index/components?p=" : "";
+				$childrens[$i]['url'] = $prefix.utf8_encode(html_entity_decode($child['module']));
 				unset($childrens[$i]['module']);
 			}
 		}
@@ -61,7 +62,8 @@ class AclModulesModel extends Zwei_Db_Table
 				$arrNodes[$key]['id']  = $branch['id'];
 				$arrNodes[$key]['label'] = utf8_encode(html_entity_decode($branch['title']));
 				if ($branch['linkable'] == '1') {
-					$arrNodes[$key]['url'] = "index/components?p=".$branch['module'];
+					$prefix = $branch['xml'] == '1' ? "index/components?p=" : "";
+					$arrNodes[$key]['url'] = $prefix.$branch['module'];
 				}
 				if ($this->getChildrens($branch['id'])) {
 					$arrNodes[$key]['children'] = $this->getChildrens($branch['id']);
@@ -80,11 +82,9 @@ class AclModulesModel extends Zwei_Db_Table
 	public function select(){
 		$select=new Zend_Db_Table_Select($this);
 		$select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
-		$select->from($this->_name, array('id','parent_id','title','module','tree','linkable','approved'))
+		$select->from($this->_name)
 		->joinLeft(array('parent'=>$this->_name), "$this->_name.parent_id = parent.id", array("parent_title"=>"title", "parent_module"=>"module"))
-		//->joinLeft($this->_name_approved, "a.approved=$this->_name_approved.id",array("approved_title"=>"title"))
 		;
-		//Zwei_Utils_Debug::write($select->__toString());
 		return $select;
 	}
 

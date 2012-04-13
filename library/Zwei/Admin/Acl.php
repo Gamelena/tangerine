@@ -135,7 +135,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 	{
 		 
 		$select=$this->_db->select()
-		->from($this->_tb_modules, array('id','parent_id','module','title','linkable','tree'))
+		->from($this->_tb_modules)
 		->from($this->_tb_permissions, array())
 		->from($this->_tb_roles, array())
 		->from($this->_tb_users, array())
