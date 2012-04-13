@@ -7,7 +7,7 @@
 DROP TABLE IF EXISTS `acl_modules`;
 CREATE TABLE IF NOT EXISTS `acl_modules` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` int(10) unsigned NOT NULL,
+  `parent_id` int(10) unsigned DEFAULT NULL,
   `title` varchar(200) DEFAULT NULL,
   `module` varchar(200) DEFAULT NULL,
   `tree` enum('0','1') NOT NULL DEFAULT '1',
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `acl_modules` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `module` (`module`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=32 ;
 
 --
 -- Volcado de datos para la tabla `acl_modules`
@@ -33,7 +33,9 @@ INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `linkab
 (7, 1, 'Servidor', 'phpinfo', '1', '1', '1', '1'),
 (8, 2, 'Ejemplo', 'ejemplo', '1', '1', '1', '1'),
 (9, 1, 'Variables', 'settings', '1', '1', '1', '1'),
-(30, 2, 'Clientes', 'clientes', '1', '1', '0', '1');
+(30, 2, 'Clientes', 'clientes', '1', '1', '0', '1'),
+(31, NULL, 'Ninguno', NULL, '0', '0', '0', '0');
+
 
 
 -- 
