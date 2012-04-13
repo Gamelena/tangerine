@@ -194,3 +194,41 @@ Query Params:Array
 (
 )
 
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-13 14:57:37]: [TRANSACTION:add]
+User:zweicom
+Query:INSERT INTO `acl_modules` (`title`, `module`, `parent_id`, `tree`, `linkable`, `xml`, `approved`) VALUES (?, ?, ?, ?, ?, ?, ?)
+Query Params:Array
+(
+    [1] => Clientes
+    [2] => clientes
+    [3] => 2
+    [4] => No
+    [5] => No
+    [6] => No
+    [7] => No
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-13 14:58:00]: [TRANSACTION:edit]
+User:zweicom
+Query:UPDATE `acl_modules` SET `title` = ?, `module` = ?, `parent_id` = ?, `tree` = ?, `linkable` = ?, `xml` = ?, `approved` = ? WHERE (id = '30')
+Query Params:Array
+(
+    [1] => Clientes
+    [2] => clientes
+    [3] => 2
+    [4] => 1
+    [5] => 1
+    [6] => 0
+    [7] => 1
+)
+
+/proyectos/admportal/application/controllers/ObjectsController.php[152][2012-04-13 14:58:22]: [TRANSACTION:add]
+User:zweicom
+Query:INSERT INTO `acl_permissions` (`acl_roles_id`, `acl_modules_id`, `permission`) VALUES (?, ?, ?)
+Query Params:Array
+(
+    [1] => 1
+    [2] => 30
+    [3] => LIST
+)
+
