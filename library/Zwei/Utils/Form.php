@@ -179,5 +179,3 @@ class Zwei_Utils_Form {
            )*$%xs', $string); 
     }
 }
-
-?>

@@ -27,4 +27,3 @@ class Zwei_Admin_Elements_Textarea extends Zwei_Admin_Elements_Element
 
 	}
 }
-?>

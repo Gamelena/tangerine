@@ -37,20 +37,18 @@ class IndexController extends Zend_Controller_Action
 
 		$this->view->body_class = $this->_dojo_style;
 
+		
 		try {
 			$Settings = new SettingsModel();
 			 
-			$Select = $Settings->select()->where('id = ?','admin_title');
+			$Select = $Settings->select()->where('id = ?','titulo_adm');
 			$result = $Settings->fetchAll($Select);
 			$this->_sitename = $result[0]['value'];
-			$this->view->admin_title = $result[0]['value'];
+			$this->view->adminTitle = $result[0]['value'];
 			 
-			$Select = $Settings->select()->where('id=?','admin_description');
-			$result = $Settings->fetchAll($Select);
-			$this->view->admin_description = $result[0]['value'];
-			 
+		 
 		} catch (Zend_Db_Exception $e){}
-
+        
 
 		$this->view->dojo()
 		->requireModule("dijit.layout.BorderContainer")
@@ -346,6 +344,17 @@ class IndexController extends Zend_Controller_Action
 		$this->_redirect(BASE_URL.'index/login');
 	}
 
+	public function legacyAction()
+	{
+		$this->view->content = include($this->_request->p); 
+	}
+	
+        public function iframeAction()
+        {
+    	         $this->view->content = $this->_request->p;
+        }
+	
+	
 
 	/**
 	 * Gets the adapter for authentication against a database table

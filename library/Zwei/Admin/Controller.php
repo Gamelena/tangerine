@@ -107,14 +107,7 @@ class Zwei_Admin_Controller{
             }
         }
         //Se imprime query en log debug según configuración del sitio
-        $oSettings = new SettingsModel();
-        try {
-            $oSettingsSelect = $oSettings->select()->where('id = ?', 'query_log');
-            $aSettings = $oSettings->fetchAll($oSettingsSelect);
-            if ($aSettings[0]['value'] == "SI") Zwei_Utils_Debug::write($oSelect->__toString());
-        } catch (Zend_Db_Exception $e) {
-            Zwei_Utils_Debug::write("Error {$e->getCode()} {$e->getMessage()}");
-        } 
+        Zwei_Utils_Debug::writeBySettings($oSelect->__toString());
         $aRows=$oModel->fetchAll($oSelect);
         
         foreach ($aRows as $row) {

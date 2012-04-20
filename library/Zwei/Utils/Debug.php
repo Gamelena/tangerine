@@ -10,19 +10,20 @@
  *
  *
  */
-class Zwei_Utils_Debug{
+class Zwei_Utils_Debug
+{
 	
   /**
    * Escribe el reporte de error en un archivo de texto plano llamado debug
    * @param $message
    */	
-    function write($message=null, $file="../log/debug")
+    function write($message = null, $file = "../log/debug")
     {
         $trace = debug_backtrace() ;
-	    if  ($message !==null ){
+	    if  ($message !== null ){
 	        $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
 	    } else {
-	        $message = "[".strftime('%Y-%m-%d %H:%M:%S')."]\n".print_r($trace,1);
+	        $message = "[".strftime('%Y-%m-%d %H:%M:%S')."]\n".print_r($trace, 1);
 	    }
 	    $ff = fopen($file, "a");
 	    fwrite($ff,"$message\r\n");
@@ -40,7 +41,7 @@ class Zwei_Utils_Debug{
             	if ($message !==null ) {
 	               $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
 		        } else {
-		           $message = "[".strftime('%Y-%m-%d %H:%M:%S')."]\n".print_r($trace,1);
+		           $message = "[".strftime('%Y-%m-%d %H:%M:%S')."]\n".print_r($trace, 1);
 		        }
 		        $ff = fopen($file, "a");
 		        fwrite($ff, "$message\r\n");

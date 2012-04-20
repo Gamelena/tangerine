@@ -64,4 +64,3 @@ class Zwei_Admin_Elements_DojoComboBox extends Zwei_Admin_Elements_Element{
 
 }
 
-?>

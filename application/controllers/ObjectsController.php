@@ -144,6 +144,7 @@ class ObjectsController extends Zend_Controller_Action
 					}
 					//Zwei_Utils_Debug::write($response);
 				}
+				$this->_response_content['todo'] = $oModel->getAjaxTodo();
 
 				$query = $oModel->getAdapter()->getProfiler()->getLastQueryProfile()->getQuery();
 				$query_params = print_r($oModel->getAdapter()->getProfiler()->getLastQueryProfile()->getQueryParams(),true);
@@ -171,7 +172,8 @@ class ObjectsController extends Zend_Controller_Action
 				$this->_response_content['message'] = $oModel->getMessage();
 				$data = array( 'id'=>'0',
                                'state'=>$this->_response_content['state'],
-                               'message'=>$this->_response_content['message'] );
+                               'message'=>$this->_response_content['message'],
+				               'todo'=>$this->_response_content['todo']);
 				$content = Zend_Json::encode($data);
 			} else {
 				foreach ($data as $rowArray) {

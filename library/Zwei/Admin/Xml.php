@@ -79,4 +79,3 @@ class Zwei_Admin_Xml{
 		xml_parser_free($this->xml_parser);
 	}
 }
-?>

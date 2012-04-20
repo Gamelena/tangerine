@@ -36,4 +36,3 @@ class Zwei_Admin_Elements_Checkbox extends Zwei_Admin_Elements_Element
 		return $value!=$this->value ? $this->value : 0;
 	}
 }
-?>

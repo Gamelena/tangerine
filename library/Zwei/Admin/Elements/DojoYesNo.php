@@ -17,14 +17,14 @@ class Zwei_Admin_Elements_DojoYesNo extends Zwei_Admin_Elements_Element
 {
 	function edit($i, $j, $display="block") {
 		$selected=array('','');
-		if($this->value == '1'){
-			$selected[1] = "selected=\"selected\"";
-		}else{
+		if($this->value == 'No'){
 			$selected[0] = "selected=\"selected\"";
+		}else{
+			$selected[1] = "selected=\"selected\"";
 		}
-		$return = "<select dojoType=\"dijit.form.FilteringSelect\" onload=\"dijit.byId('edit{$i}_{$j}').set('text', dijit.byId('edit{$i}_{$j}').get('text'));\"  value=\"1\" style=\"width:50px;display:$display\"  id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" >
-	  <option value=\"1\" $selected[1]>Sí</option>
-	  <option value=\"0\" $selected[0]>No</option>
+		$return = "<select dojoType=\"dijit.form.FilteringSelect\"  onload=\"dijit.byId('edit{$i}_{$j}').set('value', dijit.byId('edit{$i}_{$j}').get('value'))\" style=\"width:50px;display:$display\"  id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" >
+	  <option value=\"1\" $selected[1]>1</option>
+	  <option value=\"0\" $selected[0]>0</option>
 	  </select>";
 		
 		/*

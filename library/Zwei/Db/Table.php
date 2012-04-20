@@ -10,19 +10,45 @@ class Zwei_Db_Table extends Zend_Db_Table
 {
 	protected $_label;
 	protected $_search_fields = false;
+	/**
+	 * 
+	 * @var Zwei_Admin_Acl
+	 */
 	protected $_acl;
+	/**
+	 * @var Zend_Auth
+	 */
 	protected $_user_info;
+	/**
+	 * Mensaje a desplegar en Zwei_Admin_Components_Helpers_EditTableDojo
+	 * @var string
+	 */
 	protected $_message;
+	/**
+	 * Devuelve respuesta para ejecutar javascript segun valor en Zwei_Admin_Components_Helpers_EditTableDojo()
+	 * @var string
+	 */
+	protected $_ajax_todo;
 	protected $_is_filtered = false;
+	/**
+	* Adaptador de Base de datos. 
+	* Debe estar declarado en .ini o xml como resources.multidb.{$_adapter}
+	* @var string 
+	*/
+	protected $_adapter;
 
 	public function init()
 	{
 		if (Zend_Auth::getInstance()->hasIdentity()) {
 			$this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
 			$this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
-		} else {
-			//$this->_redirect('index/login');
-		}
+		} 
+		
+	    if (!empty($this->_adapter)) { 	
+	        $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+	        $db = Zend_Db::factory($config->resources->multidb->{$this->_adapter});
+	        $this->setDefaultAdapter($db);
+	    }
 	}
 
 	public function setLabel($value)
@@ -68,7 +94,8 @@ class Zwei_Db_Table extends Zend_Db_Table
 	 * Retorna el nombre de la tabla principal
 	 * @return string
 	 */
-	public function getName(){
+	public function getName()
+	{
 		return $this->_name;
 	}
 
@@ -77,7 +104,8 @@ class Zwei_Db_Table extends Zend_Db_Table
 	 * @return string
 	 */
 
-	public function getLabel(){
+	public function getLabel()
+	{
 		return $this->_label;
 	}
 
@@ -86,7 +114,8 @@ class Zwei_Db_Table extends Zend_Db_Table
 	 * sobrescribiendo metodo en Modelo a usar
 	 * @return string
 	 */
-	public function getSearchValidation(){
+	public function getSearchValidation()
+	{
 		return '';
 	}
 	/**
@@ -101,6 +130,16 @@ class Zwei_Db_Table extends Zend_Db_Table
 		return '';
 	}
 
+	/**
+	 * 
+	 * @return string
+	 */
+	public function getAjaxTodo()
+	{
+		return $this->_ajax_todo;
+	}
+	
+	
 
 	/**
 	 * Flag para especificar que ignore filtros en ObjectsController
@@ -118,7 +157,8 @@ class Zwei_Db_Table extends Zend_Db_Table
 	 * @return array()
 	 */
 
-	protected function whereToArray($string){
+	protected function whereToArray($string)
+	{
 		$array=explode('=', $string);
 		foreach ($array as $i=>$v){
 			$array[$i]=trim($v);

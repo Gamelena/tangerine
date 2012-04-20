@@ -127,7 +127,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
         function modify(model, items) {
             var resp = '';
             $additional_validation
-            if(global_opc == 'add') {
+            if (global_opc == 'add') {
                 resp = insertar(model,items);
             } else if(global_opc == 'edit') {
                 var items = main_grid.selection.getSelected();
@@ -135,20 +135,25 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 resp = actualizar(model, items, id);
             }
         
-            if(resp.message != '' && resp.message != null){
+            if (resp.message != '' && resp.message != null) {
                 alert(resp.message);
-            }else if(resp.state == 'UPDATE_OK'){
+            } else if(resp.state == 'UPDATE_OK') {
                 alert('Datos Actualizados');
-            }else if(resp.state == 'ADD_OK'){
+            } else if(resp.state == 'ADD_OK') {
                 alert('Datos Ingresados');
-            }else if(resp.state == 'UPDATE_FAIL'){
+            } else if(resp.state == 'UPDATE_FAIL') {
                 alert('Ha ocurrido un error, o no ha modificado datos');
-            }else if(resp.state == 'ADD_FAIL'){
+            } else if(resp.state == 'ADD_FAIL') {
                 alert('Ha ocurrido un error, verifique datos o intente más tarde');
             }
                 
                 
             cargarDatos(model);
+            
+            if (resp.todo == 'cargarArbolMenu') {
+                cargarArbolMenu() ;
+            }
+            
         }
     
     

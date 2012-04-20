@@ -25,4 +25,3 @@ class Zwei_Admin_Elements_DojoCalendar extends Zwei_Admin_Elements_Element
 		return "<input type=\"text\" name=\"$this->target[$i]\" value=\"".str_replace('"','&quot;',$this->value)."\" placeHolder=\"\" dojoType=\"dijit.form.DateTextBox\" id=\"edit{$i}_{$j}\" $required $constraints $invalid_message $prompt_message/>";
 	}
 }
-?>

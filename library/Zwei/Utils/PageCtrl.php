@@ -79,4 +79,3 @@ class Zwei_Utils_PageCtrl{
     return $output;
   }
 }
-?>

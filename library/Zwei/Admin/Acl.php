@@ -27,25 +27,31 @@ class Zwei_Admin_Acl extends Zend_Acl
 	{
 		$this->_user = $user ? $user : 'Guest';
 
+		$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+
+		$db_params = $config->resources->multidb->auth ? $config->resources->multidb->auth : $config->db;
+		
+		$this->_db = Zend_Db::factory($db_params);
+
 		$this->_tb_roles = 'acl_roles';
 		$this->_tb_users = 'acl_users';
 		$this->_tb_modules = 'acl_modules';
 		$this->_tb_permissions = 'acl_permissions';
-
-		$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
-		$this->_db = Zend_Db::factory($config->db);
+		$this->_user_login = 'user_name';
+		$this->_user_role_id = 'acl_roles_id';
 
 		self::roleResource();
 
-		$getUserRole = $this->_db->fetchRow(
-		$this->_db->select()
-		->from($this->_tb_roles)
-		->from($this->_tb_users)
-		->where($this->_tb_users.'.user_name = "' . $this->_user . '"')
-		->where($this->_tb_users.".{$this->_tb_roles}_id = $this->_tb_roles.id"));
-
-		$this->_getUserRoleId = $getUserRole[$this->_tb_roles.'_id'] ? $getUserRole[$this->_tb_roles.'_id'] : 4;
-		$this->_getUserRoleName = $getUserRole['role_name'] ? $getUserRole['role_name'] : 'User';
+		$select = $this->_db->select()
+ 	            ->from($this->_tb_roles)
+                ->from($this->_tb_users)
+                ->where("$this->_tb_users.$this->_user_login = '$this->_user'")
+                ->where($this->_tb_users.".$this->_user_role_id = $this->_tb_roles.id");
+		
+		$getUserRole = $this->_db->fetchRow($select);
+		
+		$this->_getUserRoleId = $getUserRole[$this->_user_role_id] ? $getUserRole[$this->_user_role_id] : 4;
+		$this->_getUserRoleName = $getUserRole["role_name"] ? $getUserRole["role_name"] : 'User';
 
 		$this->addRole(new Zend_Acl_Role($this->_user), $this->_getUserRoleName);
 
@@ -53,11 +59,11 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 	private function initRoles()
 	{
-		//Zwei_Utils_Debug::write('initRoles');
-		$roles = $this->_db->fetchAll(
-		$this->_db->select()
-		->from($this->_tb_roles)
-		->order(array('id DESC')));
+		$select = $this->_db->select()
+		        ->from($this->_tb_roles)
+		        ->order(array('id DESC'));
+        
+		$roles = $this->_db->fetchAll($select);
 
 		$this->addRole(new Zend_Acl_Role($roles[0]['role_name']));
 
@@ -133,19 +139,26 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 	public function listGrantedResourcesByParentId($parent_id)
 	{
-		 
-		$select=$this->_db->select()
-		->from($this->_tb_modules)
-		->from($this->_tb_permissions, array())
-		->from($this->_tb_roles, array())
-		->from($this->_tb_users, array())
-		->where($this->_tb_modules."_id = $this->_tb_modules.id")
-		->where($this->_tb_permissions.".{$this->_tb_roles}_id = $this->_tb_roles.id")
-		->where($this->_tb_users.".acl_roles_id = $this->_tb_permissions.{$this->_tb_roles}_id")
-		->where('parent_id ='.(int)$parent_id)
-		->where($this->_tb_users.'.user_name = "' . $this->_user . '"')
-		->where($this->_tb_modules.'.tree = ?', '1') //[TODO] externalizar la condicion tree segun el caso
-
+	    if (Zend_Auth::getInstance()->hasIdentity()) {
+                $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
+        } 
+		
+	    $select=$this->_db->select()
+		->from($this->_tb_modules);
+		
+		if ($this->_user_info->{$this->_user_role_id} != '1') {
+		    $select
+                ->from($this->_tb_permissions, array())
+	   	        ->from($this->_tb_roles, array())
+		        ->from($this->_tb_users, array())
+		        ->where($this->_tb_modules."_id = $this->_tb_modules.id")
+		        ->where($this->_tb_permissions.".{$this->_tb_roles}_id = $this->_tb_roles.id")
+		        ->where($this->_tb_users.".$this->_user_role_id = $this->_tb_permissions.{$this->_tb_roles}_id")
+		        ->where("$this->_tb_users.$this->_user_login = '$this->_user'");
+		} 
+		$select->where('parent_id ='.(int)$parent_id);
+		
+		$select->where($this->_tb_modules.'.tree = ?', '1') //[TODO] externalizar la condicion tree segun el caso
 		->group($this->_tb_modules.'.id')
 		;
 
@@ -187,14 +200,14 @@ class Zwei_Admin_Acl extends Zend_Acl
 		->from($this->_tb_users, array())
 		->where($this->_tb_modules."_id = $this->_tb_modules.id")
 		->where($this->_tb_permissions.".{$this->_tb_roles}_id = $this->_tb_roles.id")
-		->where($this->_tb_users.".acl_roles_id = $this->_tb_permissions.{$this->_tb_roles}_id")
+		->where("$this->_tb_users.$this->_user_role_id = $this->_tb_permissions.{$this->_tb_roles}_id")
 		->where($this->_tb_modules.".module ='$resource'");
 
 		if($permission!=null){
 			$select->where($this->_tb_permissions.".permission = '$permission'");
 		}
 
-		$select->where($this->_tb_users.'.user_name = "' . $user . '"')
+		$select->where("$this->_tb_users.$this->_user_login = '$user'")
 		->group($this->_tb_modules.'.id')
 		;
 		$result=$this->_db->fetchAll($select);

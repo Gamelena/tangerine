@@ -21,7 +21,7 @@
 class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 {
 	public $page;
-    private $_version = 8;//actualizar para forzar update de javascript [TODO] hacer administrable
+    private $_version = 9;//actualizar para forzar update de javascript [TODO] hacer administrable
 
 	/**
 	 * Despliegue para mostrar listados

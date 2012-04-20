@@ -27,4 +27,3 @@ class Zwei_Admin_Elements_DojoFileUploader extends Zwei_Admin_Elements_Element
 		return $value!=$this->value ? $this->value : 0;
 	}
 }
-?>
