@@ -203,7 +203,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 error:function(err){
                     //alert('Error en comunicacion de datos. error: '+err);
                     alert('Ha ocurrido un error, por favor reinicie sesión');
-                    window.location.href = base_url+'index/login';
+                    //window.location.href = base_url+'index/login';
                     return err;
                 }
             });
@@ -260,7 +260,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 },
                 error:function(err){
                     alert('Ha ocurrido un error, por favor reinicie sesión');
-                    window.location.href = base_url+'index/login';
+                    //window.location.href = base_url+'index/login';
                     return err;
                 }
             });
