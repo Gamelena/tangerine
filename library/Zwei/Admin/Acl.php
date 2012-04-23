@@ -10,174 +10,237 @@
  *
  *
  */
+ 
 class Zwei_Admin_Acl extends Zend_Acl
 {
+	private static $_acl;
+	private static $_ready = false;
+	private static $_permisos = null;
+	private static $_db = null;
+	private static $_tb_roles = null;
+	private static $_tb_users = null;
+	private static $_tb_modules = null;
+	private static $_tb_permissions = null;
 
-	private $_db;
-	private $_tb_roles;
-	private $_tb_users;
-	private $_tb_modules;
-	private $_tb_permissions;
+	private static $_getUserRoleName = null;
+	private static $_getUserRoleId = null;
+	private static $_user = null;
+	private static $_userInfo = null;
+	private static $_user_login = null;
+	private static $_user_role_id = null;
 
-	public $_getUserRoleName = null;
-	public $_getUserRoleId = null;
-	public $_user = null;
-
-	public function __construct($user)
+	public static function _init()
 	{
-		$this->_user = $user ? $user : 'Guest';
+		#throw new Exception("Error");
+		self::$_acl = new Zwei_Admin_Acl();
+		
+		if (!Zend_Auth::getInstance()->hasIdentity()){
+			self::$_user = $user ? $user : 'Guest';
+		} else {
+			self::$_userInfo = Zend_Auth::getInstance()->getStorage()->read();
+			self::$_user = self::$_userInfo->user_name;
+		}
 
 		$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
 
 		$db_params = $config->resources->multidb->auth ? $config->resources->multidb->auth : $config->db;
 		
-		$this->_db = Zend_Db::factory($db_params);
+		self::$_db = Zend_Db::factory($db_params);
 
-		$this->_tb_roles = 'acl_roles';
-		$this->_tb_users = 'acl_users';
-		$this->_tb_modules = 'acl_modules';
-		$this->_tb_permissions = 'acl_permissions';
-		$this->_user_login = 'user_name';
-		$this->_user_role_id = 'acl_roles_id';
+		self::$_tb_roles = 'acl_roles';
+		self::$_tb_users = 'acl_users';
+		self::$_tb_modules = 'acl_modules';
+		self::$_tb_permissions = 'acl_permissions';
+		self::$_user_login = 'user_name';
+		self::$_user_role_id = 'acl_roles_id';
 
 		self::roleResource();
 
-		$select = $this->_db->select()
- 	            ->from($this->_tb_roles)
-                ->from($this->_tb_users)
-                ->where("$this->_tb_users.$this->_user_login = '$this->_user'")
-                ->where($this->_tb_users.".$this->_user_role_id = $this->_tb_roles.id");
+		$select = self::$_db->select()
+ 	            ->from(self::$_tb_roles)
+                ->from(self::$_tb_users)
+                ->where( self::$_tb_users.".".self::$_user_login." = '".self::$_user."'")
+                ->where( self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_roles.".id");
 		
-		$getUserRole = $this->_db->fetchRow($select);
+		#Zwei_Utils_Debug::write($select->__toString());
+
+		$getUserRole = self::$_db->fetchRow($select);
 		
-		$this->_getUserRoleId = $getUserRole[$this->_user_role_id] ? $getUserRole[$this->_user_role_id] : 4;
-		$this->_getUserRoleName = $getUserRole["role_name"] ? $getUserRole["role_name"] : 'User';
+		self::$_getUserRoleId = $getUserRole[self::$_user_role_id] ? $getUserRole[self::$_user_role_id] : 4;
+		self::$_getUserRoleName = $getUserRole["role_name"] ? $getUserRole["role_name"] : 'User';
 
-		$this->addRole(new Zend_Acl_Role($this->_user), $this->_getUserRoleName);
-
+		self::$_acl->addRole(new Zend_Acl_Role(self::$_user), self::$_getUserRoleName);
+		self::$_ready = true;
 	}
 
-	private function initRoles()
+	private static function initRoles()
 	{
-		$select = $this->_db->select()
-		        ->from($this->_tb_roles)
+		$select = self::$_db->select()
+		        ->from(self::$_tb_roles)
 		        ->order(array('id DESC'));
-        
-		$roles = $this->_db->fetchAll($select);
 
-		$this->addRole(new Zend_Acl_Role($roles[0]['role_name']));
+		#Zwei_Utils_Debug::write($select->__toString());
+        
+		$roles = self::$_db->fetchAll($select);
+
+		self::$_acl->addRole(new Zend_Acl_Role($roles[0]['role_name']));
 
 		for ($i = 1; $i < count($roles); $i++) {
-			$this->addRole(new Zend_Acl_Role($roles[$i]['role_name']), $roles[$i-1]['role_name']);
+			self::$_acl->addRole(new Zend_Acl_Role($roles[$i]['role_name']), $roles[$i-1]['role_name']);
 		}
 	}
 
-	private function initResources()
+	private static function initResources()
 	{
 		self::initRoles();
 
-		$resources = $this->_db->fetchAll(
-		$this->_db->select()
-		->from($this->_tb_modules));
+		$select = self::$_db->select()
+		->from(self::$_tb_modules);
+		
+		#Zwei_Utils_Debug::write($select->__toString());
+
+		$resources = self::$_db->fetchAll( $select );
 
 		foreach ($resources as $key=>$value){
-			if (!$this->has($value['module'])) {
-				$this->add(new Zend_Acl_Resource($value['module']));
+			if (!self::$_acl->has($value['module'])) {
+				self::$_acl->add(new Zend_Acl_Resource($value['module']));
 			}
 		}
 	}
 
-	private function roleResource()
+	private static function roleResource()
 	{
 		self::initResources();
 
-		$acl = $this->_db->fetchAll(
-		$this->_db->select()
-		->from($this->_tb_roles)
-		->from($this->_tb_modules)
-		->from($this->_tb_permissions)
-		->where($this->_tb_roles.".id = $this->_tb_permissions.{$this->_tb_roles}_id"));
+		$select = self::$_db->select()
+		->from(self::$_tb_roles)
+		->from(self::$_tb_modules)
+		->from(self::$_tb_permissions)
+		->where(self::$_tb_roles.".id = ".self::$_tb_permissions.".".self::$_tb_roles."_id");
+		
+		#Zwei_Utils_Debug::write($select->__toString());
+
+		$acl = self::$_db->fetchAll( $select );
 
 		foreach ($acl as $key=>$value) {
-			$this->allow($value['role_name'], $value['module'], $value['permission']);
+			self::$_acl->allow($value['role_name'], $value['module'], $value['permission']);
 		}
 	}
 
-	public function listRoles()
+	public static function listRoles()
 	{
-		return $this->_db->fetchAll(
-		$this->_db->select()
-		->from($this->_tb_roles));
+		if( !self::$_ready ){
+			Zwei_Utils_Debug::write("Inicializando modulo permisos");
+			self::_init();
+		}
+
+
+		$select = self::$_db->select()
+		->from(self::$_tb_roles);
+		
+		#Zwei_Utils_Debug::write($select->__toString());
+		
+		return self::$_db->fetchAll( $select );
 	}
 
-	public function getRoleId($roleName)
+	public static function getRoleId($roleName)
 	{
-		return $this->_db->fetchRow(
-		$this->_db->select()
-		->from($this->_tb_roles, 'id')
-		->where($this->_tb_roles.'.role_name = "' . $roleName . '"'));
+		if( !self::$_ready ){
+			Zwei_Utils_Debug::write("Inicializando modulo permisos");
+			self::_init();
+		}
+
+
+		$select = self::$_db->select()
+		->from(self::$_tb_roles, "id")
+		->where(self::$_tb_roles.".role_name = '".$roleName."'");
+		
+		#Zwei_Utils_Debug::write($select->__toString());
+
+		return self::$_db->fetchRow( $select );
 	}
 
-	public function insertAclUser()
+	public static function insertAclUser()
 	{
+		if( !self::$_ready ){
+			Zwei_Utils_Debug::write("Inicializando modulo permisos");
+			self::_init();
+		}
+
 		$data = array(
-		$this->_tb_roles.'_id' => $this->_getUserRoleId,
-            'user_name' => $this->_user);
+		self::$_tb_roles.'_id' => self::$_getUserRoleId,
+            'user_name' => self::$_user);
 
-		return $this->_db->insert($this->_tb_users, $data);
+		return self::$_db->insert(self::$_tb_users, $data);
 	}
 
-	public function listResources()
+	public static function listResources()
 	{
-		return $this->_db->fetchAll(
-		$this->_db->select()
-		->from($this->_tb_modules)
-		->from($this->_tb_permissions)
-		->where("{$this->_tb_modules}_id = $this->_tb_modules.id")
-		);
+		if( !self::$_ready ){
+			Zwei_Utils_Debug::write("Inicializando modulo permisos");
+			self::_init();
+		}
+
+		$select = self::$_db->select()
+		->from(self::$_tb_modules)
+		->from(self::$_tb_permissions)
+		->where(self::$_tb_modules."_id = ".self::$_tb_modules.".id");
+		
+		#Zwei_Utils_Debug::write($select->__toString());
+		
+		return self::$_db->fetchAll( $select );
 	}
 
-	public function listGrantedResourcesByParentId($parent_id)
+	public static function listGrantedResourcesByParentId($parent_id)
 	{
-	    if (Zend_Auth::getInstance()->hasIdentity()) {
-                $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
-        } 
+		if( !self::$_ready ){
+			Zwei_Utils_Debug::write("Inicializando modulo permisos");
+			self::_init();
+		}
+
+	    $select=self::$_db->select()
+		->from(self::$_tb_modules);
 		
-	    $select=$this->_db->select()
-		->from($this->_tb_modules);
-		
-		if ($this->_user_info->{$this->_user_role_id} != '1') {
+		if (self::$_userInfo->{self::$_user_role_id} != '1') {
 		    $select
-                ->from($this->_tb_permissions, array())
-	   	        ->from($this->_tb_roles, array())
-		        ->from($this->_tb_users, array())
-		        ->where($this->_tb_modules."_id = $this->_tb_modules.id")
-		        ->where($this->_tb_permissions.".{$this->_tb_roles}_id = $this->_tb_roles.id")
-		        ->where($this->_tb_users.".$this->_user_role_id = $this->_tb_permissions.{$this->_tb_roles}_id")
-		        ->where("$this->_tb_users.$this->_user_login = '$this->_user'");
+                ->from(self::$_tb_permissions, array())
+	   	        ->from(self::$_tb_roles, array())
+		        ->from(self::$_tb_users, array())
+		        ->where(self::$_tb_modules."_id = ".self::$_tb_modules.id)
+		        ->where(self::$_tb_permissions.".".self::$_tb_roles."_id = ".self::$_tb_roles.id)
+		        ->where(self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_permissions.self::$_tb_roles.id)
+		        ->where(self::$_tb_users.self::$_user_login." = '".self::$_user."'");
 		} 
 		$select->where('parent_id ='.(int)$parent_id);
 		
-		$select->where($this->_tb_modules.'.tree = ?', '1') //[TODO] externalizar la condicion tree segun el caso
-		->group($this->_tb_modules.'.id')
+		$select->where(self::$_tb_modules.'.tree = ?', '1') //[TODO] externalizar la condicion tree segun el caso
 		;
 
-		//Zwei_Utils_Debug::write($select->__toString());
-		return($this->_db->fetchAll($select));
+		#Zwei_Utils_Debug::write($select->__toString());
+		
+		return(self::$_db->fetchAll($select));
 	}
 
-	public function listResourcesByGroup($group)
+	public static function listResourcesByGroup($group)
 	{
+		if( !self::$_ready ){
+			self::_init();
+		}
+
 		$result = null;
-		$group = $this->_db->fetchAll($this->_db->select()
-		->from($this->_tb_modules)
-		->from($this->_tb_permissions)
-		->where($this->_tb_modules.'.module = "' . $group . '"')
-		->where($this->_tb_modules.".id = {$this->_tb_modules}_id")
-		);
+		
+		$select = self::$_db->select()
+		->from(self::$_tb_modules)
+		->from(self::$_tb_permissions)
+		->where(self::$_tb_modules.'.module = "' . $group . '"')
+		->where(self::$_tb_modules.".id = ".self::$_tb_modules."_id");
+		
+		#Zwei_Utils_Debug::write($select->__toString());
+		
+		$group = self::$_db->fetchAll( $select );
 
 		foreach ($group as $key=>$value) {
-			if($this->isAllowed($this->_user, $value['module'], $value['permission'])) {
+			if(self::$_acl->isAllowed(self::$_user, $value['module'], $value['permission'])) {
 				$result[] = $value['permission'];
 			}
 		}
@@ -185,34 +248,68 @@ class Zwei_Admin_Acl extends Zend_Acl
 		return $result;
 	}
 
-	public function isUserAllowed($resource, $permission=null)
+	public static function isUserAllowed($resource, $permission=null)
 	{
-		return ($this->isAllowed($this->_user, $resource, $permission));
+		if( !self::$_ready ){
+			self::_init();
+		}
+
+		return (self::$_acl->isAllowed(self::$_user, $resource, $permission));
+
+	}
+
+	public static function isActionResourceAllowed( $permission, $resource )
+	{
+		if( !self::$_ready ){
+			self::_init();
+		}
+
+		return (self::$_acl->isAllowed(self::$_user, $resource, $permission));
+
+	}
+
+	public static function isActionAllowed( $permission )
+	{
+		if( !self::$_ready ){
+			self::_init();
+		}
+
+		return (self::$_acl->isAllowed(self::$_user, $_REQUEST['p'], $permission));
 
 	}
 
 	public function isAllowed($user, $resource, $permission){
-		//[TODO] este metodo es nativo de Zend_Acl pero debió ser reescrito para que funcionara según lo esperado
-		$select=$this->_db->select()
-		->from($this->_tb_modules, array('id'))
-		->from($this->_tb_permissions, array())
-		->from($this->_tb_roles, array())
-		->from($this->_tb_users, array())
-		->where($this->_tb_modules."_id = $this->_tb_modules.id")
-		->where($this->_tb_permissions.".{$this->_tb_roles}_id = $this->_tb_roles.id")
-		->where("$this->_tb_users.$this->_user_role_id = $this->_tb_permissions.{$this->_tb_roles}_id")
-		->where($this->_tb_modules.".module ='$resource'");
 
-		if($permission!=null){
-			$select->where($this->_tb_permissions.".permission = '$permission'");
+		if( isset( self::$_permisos[ $user ][ md5( $resource ) ][ $permission ] ) ){
+			return self::$_permisos[ $user ][ md5( $resource ) ][ $permission ];
 		}
 
-		$select->where("$this->_tb_users.$this->_user_login = '$user'")
-		->group($this->_tb_modules.'.id')
-		;
-		$result=$this->_db->fetchAll($select);
+		$select=self::$_db->select()
+		->from(self::$_tb_modules, array('id'))
+		->from(self::$_tb_permissions, array())
+		->from(self::$_tb_roles, array())
+		->from(self::$_tb_users, array())
+		->where(self::$_tb_modules."_id = ".self::$_tb_modules.".id" )
+		->where(self::$_tb_permissions.".".self::$_tb_roles."_id = ".self::$_tb_roles.".id")
+		->where(self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_permissions.".".self::$_tb_roles."_id")
+		->where(self::$_tb_modules.".module ='$resource'");
 
-		return (isset($result[0]['id'])) ? true: false;
+
+		if($permission!=null){
+			$select->where(self::$_tb_permissions.".permission = '$permission'");
+		}
+
+		$select->where( self::$_tb_users.".".self::$_user_login." = '".$user."'")
+			->group( self::$_tb_modules.".id" );
+			
+		#Zwei_Utils_Debug::write($select->__toString());
+			
+		$result=self::$_db->fetchAll($select);
+		
+		$rtn = (isset($result[0]['id'])) ? true: false;
+		self::$_permisos[ $user ][ md5( $resource ) ][ $permission ] = $rtn;
+		
+		return $rtn;
 	}
 
 
