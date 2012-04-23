@@ -62,8 +62,9 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 		}
 		$width_table += 40;
 
-		$dojotype = @$this->layout[0]['TABLE_DOJO_TYPE'] ? "dojoType=\"{$this->layout[0]['TABLE_DOJO_TYPE']}\"" : "dojoType=\"dojox.grid.DataGrid\"";
-		$plugins = @$this->layout[0]['PLUGINS'] ? "plugins=\"{$this->layout[0]['PLUGINS']}\"" : "plugin=\"dojox.grid.DataGrid\"";
+		$dojotype = @$this->layout[0]['TABLE_DOJO_TYPE'] ? "dojoType=\"{$this->layout[0]['TABLE_DOJO_TYPE']}\"" : "dojoType=\"dojox.grid.EnhancedGrid\"";
+		$plugins = @$this->layout[0]['PLUGINS'] ? "plugins=\"{$this->layout[0]['PLUGINS']}\"" : "plugins=\"{
+          pagination: {defaultPageSize:25, pageSizes:false } }\"";
 
 		$out .= "\r\n<table $dojotype $plugins id=\"main_grid\" jsId=\"main_grid\" $store clientSort=\"true\" style=\"width:{$width_table}px; height: 320px;\" rowSelector=\"20px\" rowsPerPage=\"10\" noDataMessage=\"Sin datos.\">\r\n<thead><tr>\r\n";
 
@@ -83,7 +84,13 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 			$out.="<input type=\"hidden\" name=\"id\" id=\"id\" value=\"$form->id\">\r\n";
 		}
 
-
+		//$modelname = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
+        //$model = new $modelname();
+        //$count = $model->fetchAll->count($model->select());
+        //$pages = Zwei_Utils_PageCtrl::getCtrl($count,$start,20,"index.php?p=$this->page&search=$search&text=$text&sort=$sort&dir=$dir".$this->getRequested_params()."&ajax=1",true);
+        //$out .="<p>$pages</p>";
+		
+		
 		return $out;
 	}
 
@@ -408,7 +415,6 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
                 return true;
             </script>\r\n";      
                 $out .="</div>\n<br/>\r\n";
-                 
                 return $out;
 	}
 }
