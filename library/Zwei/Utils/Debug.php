@@ -30,7 +30,7 @@ class Zwei_Utils_Debug
 	    fclose($ff);
 	}
 	
-	function writeBySettings($message, $settings_id, $settings_value='SI', $file="../log/debug")
+	function writeBySettings($message, $settings_id, $settings_value='SI', $file= "../log/debug")
 	{
         $oSettings = new SettingsModel();
         try {
