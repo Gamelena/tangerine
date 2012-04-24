@@ -32,14 +32,15 @@ class Zwei_Admin_Acl extends Zend_Acl
 	public static function _init()
 	{
 		#throw new Exception("Error");
-		self::$_acl = new Zwei_Admin_Acl();
 		
 		if (!Zend_Auth::getInstance()->hasIdentity()){
-			Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoAndExit('index/login');
+			Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoAndExit('login');
 		} else {
 			self::$_userInfo = Zend_Auth::getInstance()->getStorage()->read();
 			self::$_user = self::$_userInfo->user_name;
 		}
+
+		self::$_acl = new Zwei_Admin_Acl();
 
 		$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
 
