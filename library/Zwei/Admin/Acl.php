@@ -35,7 +35,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 		self::$_acl = new Zwei_Admin_Acl();
 		
 		if (!Zend_Auth::getInstance()->hasIdentity()){
-			self::$_user = $user ? $user : 'Guest';
+			Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoAndExit('index/login');
 		} else {
 			self::$_userInfo = Zend_Auth::getInstance()->getStorage()->read();
 			self::$_user = self::$_userInfo->user_name;
