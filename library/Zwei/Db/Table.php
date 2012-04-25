@@ -6,7 +6,7 @@
  * @version $Id:$
  * @since 0.1
  */
-class Zwei_Db_Table extends Zend_Db_Table
+class Zwei_Db_Table extends Zend_Db_Table_Abstract
 {
 	protected $_label;
 	protected $_search_fields = false;
@@ -29,6 +29,10 @@ class Zwei_Db_Table extends Zend_Db_Table
 	 * @var string
 	 */
 	protected $_ajax_todo;
+	/**
+	 * indica si tendra filtros personalizados, ignorando los filtros de Zwei_Db_Object para metodo select
+	 * @var boolean
+	 */
 	protected $_is_filtered = false;
 	/**
 	* Adaptador de Base de datos. 
@@ -36,7 +40,14 @@ class Zwei_Db_Table extends Zend_Db_Table
 	* @var string 
 	*/
 	protected $_adapter;
-
+	
+	/**
+	 * array $data de Zend_Db_Table_Select sobrecargado en $this->overloadData($data) 
+	 * @var Zend_Db_Table_Rowset
+	 */
+	protected $_overloaded_data = false;
+		
+	
 	public function init()
 	{
 		if (Zend_Auth::getInstance()->hasIdentity()) {
@@ -49,6 +60,13 @@ class Zwei_Db_Table extends Zend_Db_Table
 	        $db = Zend_Db::factory($config->resources->multidb->{$this->_adapter});
 	        $this->setDefaultAdapter($db);
 	    }
+	}
+	
+	public function setAdapter($adapter) 
+	{
+        $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+        $db = Zend_Db::factory($config->resources->multidb->{$adapter});
+        $this->setDefaultAdapter($db);		
 	}
 
 	public function setLabel($value)
@@ -157,12 +175,16 @@ class Zwei_Db_Table extends Zend_Db_Table
 	 * @return array()
 	 */
 
-	protected function whereToArray($string)
+	public function whereToArray($string)
 	{
 		$array=explode('=', $string);
 		foreach ($array as $i=>$v){
 			$array[$i]=trim($v);
 		}
 		return $array;
+	}
+	
+	public function overloadData($data) {
+		return $this->_overloaded_data;
 	}
 }
