@@ -25,9 +25,10 @@ class Zwei_Db_TableLoggeable extends Zwei_Db_Table
             $logBook = new LogBookModel();
             
             $logData = array (
-                "user"=>$this->_user_info->user_name,
-                "table"=> $this->_name,
-                "action"=>$action
+                "user" => $this->_user_info->user_name,
+                "acl_roles_id" => $this->_user_info->acl_roles_id,
+                "table" => $this->_name,
+                "action" => $action
             ); 
             
             if ($condition) $logData["condition"] = (string) $condition; 
