@@ -214,8 +214,8 @@ class Zwei_Admin_Acl extends Zend_Acl
 		} 
 		$select->where('parent_id ='.(int)$parent_id);
 		
-		$select->where(self::$_tb_modules.'.tree = ?', '1') //[TODO] externalizar la condicion tree segun el caso
-		;
+		$select->where(self::$_tb_modules.'.tree = ?', '1'); //[TODO] externalizar la condicion tree segun el caso
+		$select->order("order");
 
 		#Zwei_Utils_Debug::write($select->__toString());
 		

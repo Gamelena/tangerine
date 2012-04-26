@@ -4,23 +4,23 @@ class Zwei_Db_TableLoggeable extends Zwei_Db_Table
     public function insert($data)
     {
     	$last_insert_id = parent::insert($data);  
-        if ($last_insert_id) $this->log("ADD", $data, $last_insert_id);   
+        if ($last_insert_id) $this->log("ADD", $last_insert_id);   
         return true;
     }
     
     public function update($data, $where)
     {
-        $this->log("EDIT", $data, $where);
+        $this->log("EDIT", $where);
         return parent::update($data, $where);
     }
     
     public function delete($where)
     {
-        $this->log("DELETE", false, $where);
+        $this->log("DELETE", $where);
         return parent::delete($where);
     }   
     
-    public function log($action, $data, $condition=false) {
+    public function log($action, $condition) {
         if (self::$_defaultLogMode) {
             $logBook = new LogBookModel();
             
