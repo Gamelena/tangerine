@@ -136,21 +136,50 @@ function cargarArbolMenu()
 	        store: store
 	});
 	
-	var treeControl = new dijit.Tree({
-	    model: treeModel,
-	    showRoot: false,
-	    persist:false,
-	    onClick: function(item){
-	    	cargarPanelCentral(item.url);
-    	},
-	    _createTreeNode: function(
-	        args) {
-	        var tnode = new dijit._TreeNode(args);
-	        tnode.labelNode.innerHTML = args.label;
-	        return tnode;
-	    }        
-	},
-	'arbolPrincipal');
+	
+	if (!dijit.byId('arbolPrincipal')) {
+		var treeControl = new dijit.Tree({
+		    model: treeModel,
+		    showRoot: false,
+		    persist:false,
+		    onClick: function(item){
+		    	if (item.url != undefined) {
+		    		cargarPanelCentral(item.url);
+		    	} else {
+		    		return false;
+		    	} 	
+	    	},
+		    _createTreeNode: function(
+		        args) {
+		        var tnode = new dijit._TreeNode(args);
+		        tnode.labelNode.innerHTML = args.label;
+		        return tnode;
+		    }        
+		},
+		'arbolPrincipal');
+	} else {
+		var Tree = dijit.byId('arbolPrincipal');
+		
+		Tree.dndController.selectNone();
+
+	    Tree.model.store.clearOnClose = true;
+	    Tree.model.store.close();
+
+	    // Completely delete every node from the dijit.Tree     
+	    Tree._itemNodesMap = {};
+	    Tree.rootNode.state = "UNCHECKED";
+	    Tree.model.root.children = null;
+
+	    // Destroy the widget
+	    Tree.rootNode.destroyRecursive();
+
+	    // Recreate the model, (with the model again)
+	    Tree.model.constructor(dijit.byId('arbolPrincipal').model)
+
+	    // Rebuild the tree
+	    Tree.postMixInProperties();
+	    Tree._load();		
+	}	
 }
 
 
