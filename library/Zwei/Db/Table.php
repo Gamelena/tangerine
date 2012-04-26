@@ -195,6 +195,10 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 		return $array;
 	}
 	
+	public function getPrimary() {
+		return (isset($this->_primary)) ? $this->_primary : false;
+	} 
+	
 	public function overloadData($data) 
 	{
 		return $this->_overloaded_data;
