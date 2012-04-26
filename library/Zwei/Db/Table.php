@@ -8,7 +8,18 @@
  */
 class Zwei_Db_Table extends Zend_Db_Table_Abstract
 {
+	/**
+	 * Campo etiqueta o título
+	 * @var string
+	 */
 	protected $_label;
+	
+	/**
+	 * Tipo de bitacora
+	 * @var boolean|array
+	 */
+	static protected $_defaultLogMode = false;
+	
 	protected $_search_fields = false;
 	/**
 	 * 
@@ -184,7 +195,13 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 		return $array;
 	}
 	
-	public function overloadData($data) {
+	public function overloadData($data) 
+	{
 		return $this->_overloaded_data;
+	}
+	
+	public function setDefaultLogMode($mode)
+	{
+	    self::$_defaultLogMode = $mode; 	
 	}
 }
