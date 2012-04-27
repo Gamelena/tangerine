@@ -5,19 +5,21 @@ class Zwei_Db_TableLoggeable extends Zwei_Db_Table
     {
     	$last_insert_id = parent::insert($data);  
         if ($last_insert_id) $this->log("ADD", $last_insert_id);   
-        return true;
+        return $last_insert_id;
     }
     
     public function update($data, $where)
     {
-        $this->log("EDIT", $where);
-        return parent::update($data, $where);
+    	$update = parent::update($data, $where);
+    	if ($update) $this->log("EDIT", $where);
+        return $update;
     }
     
     public function delete($where)
     {
-        $this->log("DELETE", $where);
-        return parent::delete($where);
+    	$delete = parent::delete($where);
+        if ($delete) $this->log("DELETE", $where);
+        return $delete;
     }   
     
     public function log($action, $condition) {
@@ -28,7 +30,9 @@ class Zwei_Db_TableLoggeable extends Zwei_Db_Table
                 "user" => $this->_user_info->user_name,
                 "acl_roles_id" => $this->_user_info->acl_roles_id,
                 "table" => $this->_name,
-                "action" => $action
+                "action" => $action,
+                "ip" => $_SERVER['REMOTE_ADDR'],
+                "stamp" => date("Y-m-d H:i:s")
             ); 
             
             if ($condition) $logData["condition"] = (string) $condition; 
