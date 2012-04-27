@@ -64,7 +64,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 
 		$dojotype = @$this->layout[0]['TABLE_DOJO_TYPE'] ? "dojoType=\"{$this->layout[0]['TABLE_DOJO_TYPE']}\"" : "dojoType=\"dojox.grid.EnhancedGrid\"";
 		$plugins = @$this->layout[0]['PLUGINS'] ? "plugins=\"{$this->layout[0]['PLUGINS']}\"" : "plugins=\"{
-          pagination: {defaultPageSize:25, pageSizes:[], maxPageStep: 5 } }\"";
+          pagination: {defaultPageSize:25, maxPageStep: 5 } }\"";
 
 		$out .= "\r\n<table $dojotype $plugins id=\"main_grid\" jsId=\"main_grid\" $store clientSort=\"true\" style=\"width:{$width_table}px; height: 320px;\" rowSelector=\"20px\" rowsPerPage=\"10\" noDataMessage=\"Sin datos.\">\r\n<thead><tr>\r\n";
 
