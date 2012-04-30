@@ -64,7 +64,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 		for ($j = 1; $j<$count; $j++) {
 			$node = $this->layout[$j];
 			$params = array();
-			if ($node['ADD'] == "true" || $node['ADD'] == "disabled" && $node['TYPE'] != "pk_original") {
+			if (isset($node['ADD']) && ($node['ADD'] == "true" || $node['ADD'] == "disabled" && $node['TYPE'] != "pk_original")) {
 				$pfx = "_add";
 				$this->_out .= "\t\t\t try{";
 				if ($node['TYPE'] == "dojo_filtering_select" || $node['TYPE'] == 'dojo_yes_no') {
@@ -100,7 +100,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 		for ($j=1; $j<$count; $j++) {
 			$node = $this->layout[$j];
 			$params = array();
-			if ($node['EDIT'] == "true" || $node['EDIT'] == "disabled" || $node['TYPE'] == "pk_original") {
+			if (isset($node['EDIT']) && ($node['EDIT'] == "true" || $node['EDIT'] == "disabled" || $node['TYPE'] == "pk_original")) {
 				$pfx = "";
 				$this->_out .= "\t\t\t try{";
 				if ($node['TYPE'] == "dojo_filtering_select") {
@@ -193,7 +193,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             for ($j=1; $j<$count; $j++){
             	$node=$this->layout[$j];
             	$params=array();
-            	if ($node['ADD'] == "true" && $node['TYPE'] != "pk_original") {
+            	if (isset($node['ADD']) && $node['ADD'] == "true" && $node['TYPE'] != "pk_original") {
             		$pfx='_add';
             		if ($node['TYPE']=='dojo_filtering_select'){
               			$this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$pfx}{$j}').get('value'), \r\n";
@@ -247,7 +247,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             for ($j=1; $j<$count; $j++) {
             	$node = $this->layout[$j];
             	$params = array();
-            	if ($node['EDIT'] == "true") {
+            	if (isset($node['EDIT']) && $node['EDIT'] == "true") {
             		$pfx = '';
             		if ($node['TYPE'] == 'dojo_filtering_select' || $node['TYPE'] == 'dojo_yes_no'){
             			$this->_out.="     'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$pfx}{$j}').get('value'), \r\n";
