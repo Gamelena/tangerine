@@ -20,12 +20,25 @@
 
 class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 {
+	/**
+	 * 
+	 * @var string
+	 */
 	public $page;
+	/**
+	 * 
+	 * @var int
+	 */
     private $_version = 9;//actualizar para forzar update de javascript [TODO] hacer administrable
+    /**
+     * 
+     * @var Zwei_Db_Table
+     */
+    private $_model;
 
 	/**
 	 * Despliegue para mostrar listados
-	 * @return HTML
+	 * @return string HTML
 	 */
 	function display()
 	{
@@ -45,6 +58,12 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 		if(!empty($viewtable->layout[0]['JS'])) $out.="<script type=\"text/javascript\" src=\"".BASE_URL."js/".$viewtable->layout[0]['JS']."?version={$this->_version}\"></script>";
 		$out .= "
         <div id=\"content_dojo\" style=\"width:100%\">\r\n";
+		
+        $model = Zwei_Utils_String::toClassWord($viewtable->layout[0]['TARGET']) . "Model";
+        $this->_model = new $model;
+        $getPk = $this->_model->getPrimary();
+        $primary = ($getPk) ? $getPk : "id";
+
 
 		if ($viewtable->layout[1]['_name'] == 'TAB') {
 			$edittable = new Zwei_Admin_Components_Helpers_EditTabs($this->page);
@@ -54,11 +73,11 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 			$edittable = new Zwei_Admin_Components_Helpers_EditTableDojo($this->page);
 		}
 		$edittable->getLayout();
+		
 		$id = $edittable->layout[1]['TARGET'];
-
 		if(isset($request[$id])) $edittable->setId($request[$id]);
 
-		$params = $this->getRequested_params();
+		//$params = $this->getRequested_params();
 
 		$out .= $viewtable->display();
 		$out .= "\r\n<table align=\"center\"><tr>";
@@ -98,7 +117,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 
 
 		if (isset($viewtable->layout[0]['DELETE']) && $viewtable->layout[0]['DELETE'] == "true" && $this->_acl->isUserAllowed($this->page, 'DELETE')) {
-			$out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconDelete\" id=\"btnEliminarUsr\" onClick=\"eliminar('{$viewtable->layout[0]['TARGET']}');\">";
+			$out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconDelete\" id=\"btnEliminarUsr\" onClick=\"eliminar('{$viewtable->layout[0]['TARGET']}', '$primary');\">";
 			$out .= "Eliminar ".$viewtable->layout[0]['NAME'];
 			$out .= "</button></td>";
 		}
