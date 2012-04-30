@@ -14,12 +14,15 @@
 
 class Zwei_Admin_Elements_DojoCheckbox extends Zwei_Admin_Elements_Element
 {
-	function edit($i, $j, $display="block"){
-		$checked = $this->value=="1" ? "checked" : "";
+	function edit($i, $j, $display="block")
+	{
+		$defaultValue = isset($this->params['DEFAULT_VALUE']) ? $this->params['DEFAULT_VALUE'] : '1';
+		$defaultEmpty = isset($this->params['DEFAULT_EMPTY']) ? $this->params['DEFAULT_EMPTY'] : '0';
+		$checked = $this->value == $defaultValue ? "checked" : "";
 		if(@$this->params['CHECKED']) $checked = "checked";
-		$disabled = @$this->params['DISABLED'] ? "disabled" : '';
-		$onchange=isset($this->params['ONCHANGE']) ? "onChange=\"{$this->params['ONCHANGE']}\"":'';
-		return "<input dojoType=\"dijit.form.CheckBox\"  value=\"1\" $checked $disabled $onchange style=\"display:$display\" id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" />";
+		$disabled = isset($this->params['DISABLED']) ? "disabled=\"disabled\"" : '';
+		$onchange = isset($this->params['ONCHANGE']) ? $this->params['ONCHANGE'] : '';
+		return "<input dojoType=\"dijit.form.CheckBox\" onChange=\"if(dijit.byId('edit{$i}_{$j}').get('checked')){dijit.byId('edit{$i}_{$j}').set('value','$defaultValue')}else{dijit.byId('edit{$i}_{$j}').set('value','$defaultEmpty');dijit.byId('edit{$i}_{$j}').set('checked', false);}$onchange\" value=\"$defaultValue\" $checked $disabled style=\"display:$display\" id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" />";
 	}
 
 

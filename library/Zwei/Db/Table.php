@@ -6,6 +6,7 @@
  * @version $Id:$
  * @since 0.1
  */
+require_once ('Zend/Db/Table/Abstract.php');
 class Zwei_Db_Table extends Zend_Db_Table_Abstract
 {
 	/**

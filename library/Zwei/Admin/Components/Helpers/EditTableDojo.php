@@ -41,7 +41,6 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 		$this->getLayout();
 		$modelclass = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
         $this->_model = new $modelclass();
-        $this->_model_pk = $this->_model->getPrimary() ? $this->_model->getPrimary() : "id";
 		
 		$count = count($this->layout);
 		if (!isset($this->id)) $this->id = array();
@@ -55,7 +54,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 console.debug(opc);
                 var formDlg = (opc=='edit') ? dijit.byId('formDialogoEditar') : dijit.byId('formDialogo');
                 console.log('opcion usr:'+ opc);
-                global_opc=opc;
+                global_opc = opc;
                 
                     if(opc == 'add') {\r
                     ";
@@ -65,7 +64,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 		for ($j = 1; $j<$count; $j++) {
 			$node = $this->layout[$j];
 			$params = array();
-			if ($node['ADD']) {
+			if ($node['ADD'] == "true" || $node['ADD'] == "disabled" && $node['TYPE'] != "pk_original") {
 				$pfx = "_add";
 				$this->_out .= "\t\t\t try{";
 				if ($node['TYPE'] == "dojo_filtering_select" || $node['TYPE'] == 'dojo_yes_no') {
@@ -75,9 +74,6 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 					$clean_filtering_selects .= "\t\t\t\t dijit.byId('edit{$i}_{$pfx}{$j}').set('value', '');\r\n";
 				} else if ($node['TYPE'] == "select") {
 					$this->_out .= "\t\t\t\t selectValueSet('edit{$i}_{$pfx}{$j}', '0');\r\n";
-				} else if ($node['TYPE'] == "pk_original") {
-					Zwei_Utils_Debug::write("En Original");	
-					$this->_out .= "\t\t\t\tdocument.getElementById('edit{$i}_zwei_pk_original').value = '';\r\n";
 				} else if (!empty($this->layout[0]['SEARCH_TABLE_TARGET']) && ($this->layout[0]['SEARCH_TABLE_TARGET'] == $node['TARGET'])){
 					//esto debiera tener un type="hidden"
 					$this->_out .= "\t\t\tdocument.getElementById('edit{$i}_{$pfx}{$j}').value = dijit.byId('search').get('value');\r\n";
@@ -104,22 +100,33 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 		for ($j=1; $j<$count; $j++) {
 			$node = $this->layout[$j];
 			$params = array();
-			if ($node['EDIT']) {
+			if ($node['EDIT'] == "true" || $node['EDIT'] == "disabled" || $node['TYPE'] == "pk_original") {
 				$pfx = "";
 				$this->_out .= "\t\t\t try{";
 				if ($node['TYPE'] == "dojo_filtering_select") {
 					$this->_out .= "\t\t\tdijit.byId('edit{$i}_{$pfx}{$j}').set('value',items[0].{$node['TARGET']});\r\n";
+                } else if ($node['TYPE'] == "dojo_checkbox") {  
+                	$defaultValue = isset($node['DEFAULT_VALUE']) ? $node['DEFAULT_VALUE'] : '1';
+                	$defaultEmpty = isset($node['DEFAULT_EMPTY']) ? $node['DEFAULT_VALUE'] : '0';
+                	//check checkbox
+                    $this->_out .= "\t\t\tif (items[0].{$node['TARGET']} == '$defaultValue') { dijit.byId('edit{$i}_{$pfx}{$j}').set('value','$defaultValue'); dijit.byId('edit{$i}_{$pfx}{$j}').set('checked', true);
+                        \t\t\t}\r\n";
+                    //uncheck checkbox 
+                    $this->_out .= "\t\t\telse {dijit.byId('edit{$i}_{$pfx}{$j}').set('value','$defaultEmpty'); dijit.byId('edit{$i}_{$pfx}{$j}').set('checked', false);
+                        \t\t\t}\r\n"; 					
 				} else if($node['TYPE'] == "select") {
 					$this->_out .= "\t\t\tselectValueSet('edit{$i}_{$pfx}{$j}', items[0].{$node['TARGET']});\r\n";
                 } else if(isset($node['EDIT_CUSTOM_DISPLAY'])) {
-                        /**
-                         * Si es un input que require lógica especial para el despliegue 
-                         * agregar atributo <code>edit_custom_display="true"</code> en elemento XML
-                         * y sobrescribir método editCustomDisplay($i, $pfx.$j) en Element personalizado 
-                         */
+                    /**
+                     * Si es un input que require lógica especial para el despliegue 
+                     * agregar atributo <code>edit_custom_display="true"</code> en elemento XML
+                     * y sobrescribir método editCustomDisplay($i, $pfx.$j) en Element personalizado 
+                     */
 					$sElement = "Zwei_Admin_Elements_".Zwei_Utils_String::toClassWord($node['TYPE']);
 					$oElement = new $sElement($node['VISIBLE'], '', '', $node['TARGET'], '', $params);
-					$this->_out .= $oElement->editCustomDisplay($i, $pfx.$j);    
+					$this->_out .= $oElement->editCustomDisplay($i, $pfx.$j);
+                } else if ($node['TYPE'] == "pk_original") {
+					$this->_out .= "\t\t\tdocument.getElementById('edit{$i}_zwei_pk_original').value = items[0].{$node['TARGET']};\r\n";
 				} else {
 					$this->_out .= "\t\t\tdocument.getElementById('edit{$i}_{$pfx}{$j}').value = items[0].{$node['TARGET']};\r\n";
 				}
@@ -186,11 +193,11 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             for ($j=1; $j<$count; $j++){
             	$node=$this->layout[$j];
             	$params=array();
-            	if($node['ADD']){
+            	if ($node['ADD'] == "true" && $node['TYPE'] != "pk_original") {
             		$pfx='_add';
-            		if($node['TYPE']=='dojo_filtering_select'){
+            		if ($node['TYPE']=='dojo_filtering_select'){
               			$this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$pfx}{$j}').get('value'), \r\n";
-            		}else{
+            		} else {
              			$this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : document.getElementById('edit{$i}_{$pfx}{$j}').value, \r\n";
             		}
             	}
@@ -240,10 +247,12 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             for ($j=1; $j<$count; $j++) {
             	$node = $this->layout[$j];
             	$params = array();
-            	if ($node['EDIT']) {
+            	if ($node['EDIT'] == "true") {
             		$pfx = '';
-            		if ($node['TYPE']=='dojo_filtering_select' || $node['TYPE']=='dojo_yes_no'){
+            		if ($node['TYPE'] == 'dojo_filtering_select' || $node['TYPE'] == 'dojo_yes_no'){
             			$this->_out.="     'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$pfx}{$j}').get('value'), \r\n";
+            		} else if ($node['TYPE'] == "pk_original") { 
+            			$this->_out.="     'id[]' : document.getElementById('edit{$i}_zwei_pk_original').value, \r\n";       			
             		} else {
             			$this->_out.="     'data[{$node['TARGET']}]' : document.getElementById('edit{$i}_{$pfx}{$j}').value, \r\n";
             		}
@@ -373,7 +382,8 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 					$value = isset($form->{$node['TARGET']})?$form->{$node['TARGET']}:'';
 				}
 	    
-				if ($node[$mode] == 1) {
+				if ($node[$mode] == "true" || $node[$mode] == "disabled") {
+					if ($node[$mode] == "disabled") $params["DISABLED"] = $mode;
 					$ClassElement = "Zwei_Admin_Elements_".Zwei_Utils_String::toClassWord($node['TYPE']);
 					$element = new $ClassElement($node['VISIBLE'],
 					$node['EDIT'],

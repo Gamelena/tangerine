@@ -22,8 +22,8 @@ class Zwei_Admin_Elements_PkOriginal extends Zwei_Admin_Elements_Element
      * @return string HTML
      */
 
-    public function edit($i, $j, $display="none") {
-        Zwei_Utils_Debug::write($this->value);
+    public function edit($i, $j, $display="none") 
+    {
         return "<input type=\"hidden\" style=\"display:$display\" id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" value=\"".str_replace('"','&quot;',$this->value)."\" />";
     }
 

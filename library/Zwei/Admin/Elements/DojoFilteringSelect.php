@@ -78,11 +78,13 @@ class Zwei_Admin_Elements_DojoFilteringSelect extends Zwei_Admin_Elements_Elemen
                 $method = Zwei_Utils_String::toFunctionWord($this->params['TABLE_METHOD']);
                 $select = $model->$method();
             } else {
-                if (!empty($this->params['TABLE_FIELD'])){
+                if (!empty($this->params['TABLE_FIELD'])) {
                     $select = $model->select(array($this->params['TABLE_FIELD'], $id));
-                } else {
+                } else if (!empty($this->params['FIELD'])){
                     $select = $model->select(array($this->params['FIELD'], $id));
-                }    
+                } else {
+                    $select = $model->select(array("title", $id));                	
+                }   
             }
             Zwei_Utils_Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $model->fetchAll($select);
@@ -104,9 +106,11 @@ class Zwei_Admin_Elements_DojoFilteringSelect extends Zwei_Admin_Elements_Elemen
                 $selected = $row[$id] == $this->value ? "selected" : "";
                 if (!empty($this->params['TABLE_FIELD'])) {
                     $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$this->params['TABLE_FIELD']]}</option>\r\n";
-                } else {
+                } else if (!empty($this->params['FIELD'])) {
                     $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$this->params['FIELD']]}</option>\r\n";
-                }    
+                } else {
+                	$options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row["title"]}</option>\r\n";
+                }   
             }
         } else {
             if ($this->value == null) {

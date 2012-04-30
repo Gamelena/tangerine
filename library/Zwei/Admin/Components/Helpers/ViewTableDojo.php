@@ -24,14 +24,13 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 		$userInfo = Zend_Auth::getInstance()->getStorage()->read();
 		$this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
 
-		$form = new Zwei_Utils_Form();
 		$this->count = count($this->layout);
 
 		$out = '';
 
 		if (isset($this->layout[0]['SEARCH']) && $this->layout[0]['SEARCH'] != 'false' && $this->_acl->isUserAllowed($this->page, 'LIST'))
 		{
-			if (@$this->layout[0]['SEARCH_TYPE'] == 'multiple'){
+			if (@$this->layout[0]['SEARCH_TYPE'] == 'multiple') {
 				$out .= $this->searchMultiple();
 			}else{
 				$out .= $this->searcher();
@@ -55,16 +54,15 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 		$width_col = 120;
 		$width_table = 0;
 
-		for($i=1; $i<$count; $i++){
-			if($this->layout[$i]['VISIBLE']){
+		for ($i=1; $i<$count; $i++) {
+			if (isset($this->layout[$i]['VISIBLE']) && $this->layout[$i]['VISIBLE'] == "true") {
 				$width_table += (isset($this->layout[$i]['WIDTH'])) ? $this->layout[$i]['WIDTH'] : $width_col;
 			}
 		}
 		$width_table += 40;
 
 		$dojotype = @$this->layout[0]['TABLE_DOJO_TYPE'] ? "dojoType=\"{$this->layout[0]['TABLE_DOJO_TYPE']}\"" : "dojoType=\"dojox.grid.EnhancedGrid\"";
-		$plugins = @$this->layout[0]['PLUGINS'] ? "plugins=\"{$this->layout[0]['PLUGINS']}\"" : "plugins=\"{
-          pagination: {defaultPageSize:25, maxPageStep: 5 } }\"";
+		$plugins = @$this->layout[0]['PLUGINS'] ? "plugins=\"{$this->layout[0]['PLUGINS']}\"" : "plugins=\"{pagination: {defaultPageSize:25, maxPageStep: 5 } }\"";
 
 		$out .= "\r\n<table $dojotype $plugins id=\"main_grid\" jsId=\"main_grid\" $store clientSort=\"true\" style=\"width:{$width_table}px; height: 320px;\" rowSelector=\"20px\" rowsPerPage=\"10\" noDataMessage=\"Sin datos.\">\r\n<thead><tr>\r\n";
 
@@ -74,8 +72,8 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 			if(isset($this->layout[$i]['FORMATTER'])) $formatter = "formatter=\"{$this->layout[$i]['FORMATTER']}\"";
 			$width = (isset($this->layout[$i]['WIDTH'])) ? $this->layout[$i]['WIDTH'] : $width_col;
 
-			if(@$this->layout[$i]['VISIBLE']){
-				$out .= "\t\t<th field=\"$target\" editable=\"false\" width=\"{$width}px\" $formatter>{$this->layout[$i]['NAME']}</th>\r\n";
+			if (isset($this->layout[$i]['VISIBLE']) && $this->layout[$i]['VISIBLE'] == "true") {
+				$out .= "\t\t<th field=\"$target\" editable=\"false\" width=\"{$width}px\" $formatter>". str_replace('\\n', '<br/>', $this->layout[$i]['NAME']) ."</th>\r\n";
 			}
 		}
 		$out .= "\t</tr>\r\n</thead></table>\r\n";
@@ -93,7 +91,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 	 */
 	private function searcher()
 	{
-		$out="";
+		$out = "";
 		$this->format_date = (@$this->layout[0]['SEARCH_DOJO_TYPE']=="dijit.form.DateTextBox")? 'true' : 'false';
 		$this->search_format = (@$this->layout[0]['SEARCH_FORMAT'])? $this->layout[0]['SEARCH_FORMAT'] : 'false';
 		$this->between = 'false';
@@ -130,7 +128,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 			$j = 0;
 			for($i=1; $i<$this->count; $i++)
 			{
-				if(in_array(@$this->layout[$i]['FIELD'], $fields))
+				if(in_array(@$this->layout[$i]['FIELD'], $fields) && $this->layout[$i]['TYPE'] != 'pk_original')
 				{
 					$checked = ($j==0) ? "checked" : "";
 					$out.="\t\t<input dojoType=\"dijit.form.RadioButton\" id=\"search_fields[$j]\" name=\"search_fields\" $checked value=\"{$this->layout[$i]['FIELD']}\" type=\"radio\" /><label for=\"{$this->layout[$i]['FIELD']}\">{$this->layout[$i]['NAME']}</label>\r\n";
@@ -141,7 +139,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 					}
 					$j++;
 				}
-				else if(in_array($this->layout[$i]['TARGET'], $fields))
+				else if(in_array($this->layout[$i]['TARGET'], $fields)  && $this->layout[$i]['TYPE'] != 'pk_original')
 				{
 					$checked = ($j==0) ? "checked" : "";
 					$out.="\t\t<input dojoType=\"dijit.form.RadioButton\" id=\"search_fields[$j]\" name=\"search_fields\" $checked value=\"{$this->layout[$i]['TARGET']}\" type=\"radio\" /><label for=\"{$this->layout[$i]['TARGET']}\">{$this->layout[$i]['NAME']}</label>\r\n";
@@ -251,7 +249,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 
 		for ($i=1; $i<$this->count; $i++) {
 			//Buscamos si el campo de busqueda del nodo 0 está declarado en algunos nodos hijos para asociar otras propiedades auxiliares
-			if (in_array(@$this->layout[$i]['FIELD'], $fields) || in_array(@$this->layout[$i]['TARGET'], $fields)) {
+			if (in_array(@$this->layout[$i]['FIELD'], $fields) || in_array(@$this->layout[$i]['TARGET'], $fields) && $this->layout[$i]['TYPE'] != 'pk_original') {
 				$label[] = $this->layout[$i]['NAME'];
 				$constraints[] = !empty($this->layout[$i]['SEARCH_CONSTRAINTS'])?  "constraints=\"{$this->layout[$i]['SEARCH_CONSTRAINTS']}\"" : "";
 				$required[] = !empty($this->layout[$i]['SEARCH_REQUIRED'])?  "required=\"{$this->layout[$i]['SEARCH_REQUIRED']}\"" : "";

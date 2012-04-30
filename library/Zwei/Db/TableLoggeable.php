@@ -1,4 +1,5 @@
 <?php
+require_once ('Zwei/Db/Table.php');
 class Zwei_Db_TableLoggeable extends Zwei_Db_Table
 {
     public function insert($data)

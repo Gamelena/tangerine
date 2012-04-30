@@ -56,11 +56,13 @@ class Zwei_Admin_Controller{
         $this->target = @$this->layout[0]['TARGET'];
         $iCount = count($this->layout);
 
+        /*
         for ($i=1; $i<$iCount; $i++) {
             $this->layout[$i]["VISIBLE"] = @$this->layout[$i]["VISIBLE"] == "true" ? true : false;
             $this->layout[$i]["EDIT"] = @$this->layout[$i]["EDIT"] == "true" ? true : false;
             $this->layout[$i]["ADD"] = @$this->layout[$i]["ADD"] == "true" ? true : false;
         }
+        */
     }
 
     /**

@@ -17,7 +17,8 @@ class Zwei_Admin_Elements_Checkbox extends Zwei_Admin_Elements_Element
 	function edit($i, $j, $display="block"){
 		$checked = $this->value==1 ? "checked=\"checked\"" : "";
 		Zwei_Utils_Debug::write($this->params);
-		$onchange=isset($this->params['ONCHANGE']) ? "onchange=\"{$this->params['ONCHANGE']}\"":'';
+		$onchange = isset($this->params['ONCHANGE']) ? "onchange=\"{$this->params['ONCHANGE']}\"":'';
+		$disabled = isset($this->params['DISABLED']) ? "disabled=\"disabled\"":'';
 
 		return "<input type=\"checkbox\" style=\"display:$display\" id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" value=\"1\" $checked $onchange />";
 	}

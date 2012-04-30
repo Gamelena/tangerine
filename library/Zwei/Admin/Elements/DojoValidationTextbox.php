@@ -22,29 +22,6 @@ class Zwei_Admin_Elements_DojoValidationTextBox extends Zwei_Admin_Elements_Elem
 	protected $params;
 
 	/**
-	 * Constructor
-	 * @param $visible
-	 * @param $edit
-	 * @param $name
-	 * @param $target
-	 * @param $value
-	 * @param $params
-	 * @return unknown_type
-	 */
-
-	/*
-	 public function __construct($visible=false,$edit=false,$name="",$target="",$value="",$params=array()){
-		//Zwei_Utils_Debug::write($params);
-		$this->visible=$visible;
-		$this->edit=$edit;
-		$this->name=$name;
-		$this->target=$target;
-		$this->value=$value;
-		$this->params=$params;
-		}
-		*/
-
-	/**
 	 * Despliegue del elemento en formulario editable
 	 * @param $i
 	 * @param $j
@@ -52,8 +29,8 @@ class Zwei_Admin_Elements_DojoValidationTextBox extends Zwei_Admin_Elements_Elem
 	 * @return string HTML
 	 */
 
-	public function edit($i,$j,$display="block"){
-
+	public function edit($i,$j,$display="block")
+	{
 		$readonly = @$this->params['READONLY'] ? "readonly" : '';
 		$disabled = @$this->params['DISABLED'] ? "disabled" : '';
 		$required = @$this->params['REQUIRED'] ? "required=\"true\"" : '';
@@ -75,7 +52,7 @@ class Zwei_Admin_Elements_DojoValidationTextBox extends Zwei_Admin_Elements_Elem
 	 */
 
 
-	public function get($value,$i=0){
+	public function get($value){
 		return $value;
 	}
 
