@@ -12,12 +12,12 @@ CREATE TABLE IF NOT EXISTS `acl_modules` (
   `module` varchar(200) DEFAULT NULL,
   `tree` enum('0','1') NOT NULL DEFAULT '1',
   `linkable` enum('0','1') NOT NULL,
-  `xml` enum('0','1') NOT NULL DEFAULT '1',
+  `type` enum('xml','zend_module','legacy') NOT NULL DEFAULT 'xml',
   `approved` enum('0','1') NOT NULL,
+  `order` tinyint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `module` (`module`),
-  UNIQUE KEY `title` (`title`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=32 ;
+  UNIQUE KEY `module` (`module`)
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `acl_modules`
