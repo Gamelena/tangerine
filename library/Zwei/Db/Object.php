@@ -75,7 +75,8 @@ class Zwei_Db_Object
                             }
                             $i++;
                         } else {
-                            if (method_exists($oModel,"getName")) {
+                        	//TODO, evaluar borrar este if
+                            if ($oModel->getName() && !preg_match("/(.*)\.(.*)/", $sSearchField)) {
                                 $sSearchField = $oModel->getName().".".$sSearchField;
                             }
                             if (preg_match("/^date_format(.*)/", @$this->_form->search_format, $match)) {
