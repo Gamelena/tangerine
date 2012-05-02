@@ -19,8 +19,14 @@
 
 class Zwei_Admin_Components_Helpers_EditTabsDojo extends Zwei_Admin_Controller
 {
+	/**
+	 * 
+	 * @var Zwei_Db_Table
+	 */
+	protected $_model;
+	
 	function display($mode='add'){
-		$form=new Zwei_Utils_Form();
+		$form = new Zwei_Utils_Form();
 
 		$string_xml=file_get_contents(COMPONENTS_ADMIN_PATH.'/'.$this->page.'.xml');
 		$Xml=new SimpleXMLElement($string_xml);
@@ -262,8 +268,6 @@ class Zwei_Admin_Components_Helpers_EditTabsDojo extends Zwei_Admin_Controller
 	
 	
 	function eliminar(model) {
-	
-	    console.log('En eliminarUsuario');
 	
 	    var items = main_grid.selection.getSelected();
 	    console.debug(items);

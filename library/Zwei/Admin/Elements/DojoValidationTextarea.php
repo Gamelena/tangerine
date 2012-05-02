@@ -25,29 +25,6 @@ class Zwei_Admin_Elements_DojoValidationTextarea extends Zwei_Admin_Elements_Ele
 	protected $params;
 
 	/**
-	 * Constructor
-	 * @param $visible
-	 * @param $edit
-	 * @param $name
-	 * @param $target
-	 * @param $value
-	 * @param $params
-	 * @return unknown_type
-	 */
-
-	/*
-	 public function __construct($visible=false,$edit=false,$name="",$target="",$value="",$params=array()){
-		//Zwei_Utils_Debug::write($params);
-		$this->visible=$visible;
-		$this->edit=$edit;
-		$this->name=$name;
-		$this->target=$target;
-		$this->value=$value;
-		$this->params=$params;
-		}
-		*/
-
-	/**
 	 * Despliegue del elemento en formulario editable
 	 * @param $i
 	 * @param $j

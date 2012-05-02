@@ -31,8 +31,8 @@ class Zwei_Admin_Elements_DojoValidationTextBox extends Zwei_Admin_Elements_Elem
 
 	public function edit($i,$j,$display="block")
 	{
-		$readonly = @$this->params['READONLY'] ? "readonly" : '';
-		$disabled = @$this->params['DISABLED'] ? "disabled" : '';
+		$readonly = @$this->params['READONLY'] ? "readonly=\"readonly\"" : '';
+		$disabled = @$this->params['DISABLED'] ? "disabled=\"disabled\"" : '';
 		$required = @$this->params['REQUIRED'] ? "required=\"true\"" : '';
 		$onblur = @$this->params['ONBLUR'] ? "onblur=\"{$this->params['ONBLUR']}\"" : '';
 		$regexp = isset($this->params['REG_EXP']) ? "RegExp=\"{$this->params['REG_EXP']}\"" : '';

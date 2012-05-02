@@ -56,7 +56,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 console.log('opcion usr:'+ opc);
                 global_opc = opc;
                 
-                    if(opc == 'add') {\r
+                    if (opc == 'add') {\r
                     ";
 
 	    $i = 0;
@@ -64,7 +64,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 		for ($j = 1; $j<$count; $j++) {
 			$node = $this->layout[$j];
 			$params = array();
-			if (isset($node['ADD']) && ($node['ADD'] == "true" || $node['ADD'] == "disabled" && $node['TYPE'] != "pk_original")) {
+			if (isset($node['ADD']) && ($node['ADD'] == "true" || $node['ADD'] == "disabled") && $node['TYPE'] != "pk_original") {
 				$pfx = "_add";
 				$this->_out .= "\t\t\t try{";
 				if ($node['TYPE'] == "dojo_filtering_select" || $node['TYPE'] == 'dojo_yes_no') {

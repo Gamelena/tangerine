@@ -25,8 +25,10 @@ class Zwei_Db_Object
 	public function __construct($form, $select=false)
 	{
         $this->_form = $form;
-        $model = Zwei_Utils_String::toClassWord($form->model)."Model";
-        $this->_model = new $model;
+        if (!empty($form->model)) {
+	        $model = Zwei_Utils_String::toClassWord($form->model)."Model";
+	        $this->_model = new $model;
+        }
         if ($select) $this->_select = $select;
 	}
 	/**
@@ -37,7 +39,8 @@ class Zwei_Db_Object
 	{
 		$oModel = $this->_model;
 		$oSelect = isset($this->_select) ? $this->_select : $oModel->select();
-	    if (isset($this->_form->search) && (!empty($this->_form->search) || $this->_form->search === "0") && !$oModel->isFiltered()) {
+		
+	    if (isset($this->_form->search) && (!empty($this->_form->search) || $this->_form->search === "0") && (!isset($oModel) || !$oModel->isFiltered())) {
             if (!empty($this->_form->search_fields) || @$this->_form->search_fields === "0") {
                 $search_fields = @explode(";",$this->_form->search_fields);
                 if (!is_array($search_fields))
@@ -61,6 +64,7 @@ class Zwei_Db_Object
                                     $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchField,'$mask') = ?", $aSearchKeys[$i]));
                                 }
                             } else if ($search_format[$i] == 'equals') {
+                            	Zwei_Utils_Debug::write("$sSearchField = ?". $aSearchKeys[$i]);
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField = ?", $aSearchKeys[$i]));
                             } else if ($search_format[$i] == 'lesserorequals') {
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField <= ?", $aSearchKeys[$i]));
@@ -90,8 +94,8 @@ class Zwei_Db_Object
                         }
                     }
                 }//foreach
-            } else {
-                if ($oModel->getSearchFields()) {
+             } else {
+                if (isset($oModel) && $oModel->getSearchFields()) {
                     $search_fields = $oModel->getSearchFields();
                     foreach ($search_fields as $sSearchField) {
                         if (@$this->_form->search_type == "multiple") {

@@ -16,7 +16,7 @@ class Zwei_Admin_Elements_DojoFilteringSelect extends Zwei_Admin_Elements_Elemen
 {
 	function edit($i, $j, $display="block")
 	{
-		$required = isset($this->params['REQUIRED']) ? "required=\"true\"" : '';
+		$required = isset($this->params['REQUIRED']) ? "required=\"true\"" : "required=\"false\"";
 		$onchange = isset($this->params['ONCHANGE']) ? "onchange=\"{$this->params['ONCHANGE']}\"":'';
 		$regexp = isset($this->params['REG_EXP']) ? "RegExp=\"{$this->params['REG_EXP']}\"" : '';
 		$invalid_message = isset($this->params['INVALID_MESSAGE']) ? "invalidMessage=\"{$this->params['INVALID_MESSAGE']}\"" : '';
