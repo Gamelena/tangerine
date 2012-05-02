@@ -76,9 +76,9 @@ class Zwei_Db_Object
                             $i++;
                         } else {
                         	//TODO, evaluar borrar este if
-                            if ($oModel->getName() && !preg_match("/(.*)\.(.*)/", $sSearchField)) {
-                                $sSearchField = $oModel->getName().".".$sSearchField;
-                            }
+                            //if ($oModel->getName() && !preg_match("/(.*)\.(.*)/", $sSearchField)) {
+                            //    $sSearchField = $oModel->getName().".".$sSearchField;
+                            //}
                             if (preg_match("/^date_format(.*)/", @$this->_form->search_format, $match)) {
                                 //$mask=($match[1]) ? $match[1] : '%Y-%m-%d';//[FIXME] esto debiera ser parametrizable pero hay que solucionar el url_encode de "%"
                                 $mask = '%Y-%m-%d';
@@ -118,11 +118,11 @@ class Zwei_Db_Object
         }//if (isset($this->_form->search) && (!empty($this->_form->search) || $this->_form->search === "0"))
 
         if (isset($this->_form->id)) {
-            if (method_exists($oModel,"getPk")) {
-                $my_id = $oModel->getPk();
+            if ($oModel->getPrimary()) {
+                $my_id = $oModel->getPrimary();
             } else {
                 $my_id = "id";
-                if (method_exists($oModel, "getName")) $my_id = $oModel->getName().".".$my_id;
+                //if (method_exists($oModel, "getName")) $my_id = $oModel->getName().".".$my_id;
             }
         }
 
