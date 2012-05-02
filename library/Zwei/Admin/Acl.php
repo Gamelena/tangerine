@@ -16,6 +16,10 @@ class Zwei_Admin_Acl extends Zend_Acl
 	private static $_acl;
 	private static $_ready = false;
 	private static $_permisos = null;
+	/**
+	 * 
+	 * @var Zend_Db
+	 */
 	private static $_db = null;
 	private static $_tb_roles = null;
 	private static $_tb_users = null;
@@ -204,20 +208,21 @@ class Zwei_Admin_Acl extends Zend_Acl
 		
 		if (self::$_userInfo->{self::$_user_role_id} != '1') {
 		    $select
+		        ->distinct()  
                 ->from(self::$_tb_permissions, array())
 	   	        ->from(self::$_tb_roles, array())
 		        ->from(self::$_tb_users, array())
-		        ->where(self::$_tb_modules."_id = ".self::$_tb_modules.id)
-		        ->where(self::$_tb_permissions.".".self::$_tb_roles."_id = ".self::$_tb_roles.id)
-		        ->where(self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_permissions.self::$_tb_roles.id)
-		        ->where(self::$_tb_users.self::$_user_login." = '".self::$_user."'");
+		        ->where(self::$_tb_modules."_id = ".self::$_tb_modules.".id")
+		        ->where(self::$_tb_permissions.".".self::$_tb_roles."_id = ".self::$_tb_roles.".id")
+		        ->where(self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_permissions.".".self::$_tb_roles."_id")
+		        ->where(self::$_tb_users.".".self::$_user_login." = '".self::$_user."'");
 		} 
 		$select->where('parent_id ='.(int)$parent_id);
 		
 		$select->where(self::$_tb_modules.'.tree = ?', '1'); //[TODO] externalizar la condicion tree segun el caso
 		$select->order("order");
 
-		#Zwei_Utils_Debug::write($select->__toString());
+		Debug::write($select->__toString());
 		
 		return(self::$_db->fetchAll($select));
 	}
