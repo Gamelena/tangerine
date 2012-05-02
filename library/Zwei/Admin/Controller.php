@@ -54,7 +54,7 @@ class Zwei_Admin_Controller{
         $this->layout = $oXml->elements;
         $this->name = @$this->layout[0]['NAME'];
         $this->target = @$this->layout[0]['TARGET'];
-        $iCount = count($this->layout);
+        //$iCount = count($this->layout);
 
         /*
         for ($i=1; $i<$iCount; $i++) {
