@@ -132,14 +132,14 @@ function cargarArbolMenu()
 	});
 	
 	
-	var treeModel = new dijit.tree.ForestStoreModel({
+	var Model_tree = new dijit.tree.ForestStoreModel({
 	        store: store
 	});
 	
 	
 	if (!dijit.byId('arbolPrincipal')) {
 		var treeControl = new dijit.Tree({
-		    model: treeModel,
+		    model: Model_tree,
 		    showRoot: false,
 		    persist:false,
 		    onClick: function(item){
@@ -389,8 +389,8 @@ function eliminarRegistro(model, id) {
             return respuesta;
         },
         error:function(err){
-            //alert('Error en comunicacion de datos. error: '+err);
-        	window.location.href = base_url+'index/login';
+            alert('Error en comunicacion de datos. error: '+err);
+        	//window.location.href = base_url+'index/login';
             return err;
         }
     });

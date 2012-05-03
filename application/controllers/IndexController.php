@@ -160,7 +160,7 @@ class IndexController extends Zend_Controller_Action
 
 		if (isset($this->_request->p)) {
 			if ($this->_acl->isUserAllowed($this->_request->p, "LIST") || $this->_acl->isUserAllowed($this->_request->p, "EDIT") || $this->_acl->isUserAllowed($this->_request->p, "ADD")) {
-				$Xml->parse(COMPONENTS_ADMIN_PATH."/".$this->_request->p.".xml");
+				$Xml->parse(COMPONENTS_ADMIN_PATH."/".$this->_request->p);
 				//parche para que cargue tabla html no dojo, si el layout no es dojo
 				if (TEMPLATE == 'urban' && $Xml->elements[0]['TYPE'] == 'table_dojo')
 				    $Xml->elements[0]['TYPE'] = 'table';
@@ -210,7 +210,7 @@ class IndexController extends Zend_Controller_Action
 
 		if (isset($this->_request->p)) {
 			if ($this->_acl->isUserAllowed($this->_request->p, "LIST") || $this->_acl->isUserAllowed($this->_request->p, "EDIT") || $this->_acl->isUserAllowed($this->_request->p, "ADD")) {
-				$Xml->parse(COMPONENTS_ADMIN_PATH."/".$this->_request->p.".xml");
+				$Xml->parse(COMPONENTS_ADMIN_PATH."/".$this->_request->p);
 				//ComponentClass="Zwei_Admin_Components_".Zwei_Utils_String::toClassWord($Xml->elements[0]['TYPE']);
 				//Se pasa como parámetro $this->view para hacer posible la inclusión de librerías js y css auxiliares mediante un objeto Zend_View
 				$View = new Zwei_Admin_Components_Helpers_EditTabs($this->_request->p, @$this->_request->id, $this->view);
@@ -240,7 +240,7 @@ class IndexController extends Zend_Controller_Action
 		if(isset($this->_request->p))
 		{
 			if ($this->_acl->isUserAllowed($this->_request->p, "LIST") || $this->_acl->isUserAllowed($this->_request->p, "EDIT") || $this->_acl->isUserAllowed($this->_request->p, "ADD")) {
-				$Xml->parse(COMPONENTS_ADMIN_PATH."/".$this->_request->p.".xml");
+				$Xml->parse(COMPONENTS_ADMIN_PATH."/".$this->_request->p);
 				//ComponentClass="Zwei_Admin_Components_".Zwei_Utils_String::toClassWord($Xml->elements[0]['TYPE']);
 				//Se pasa como parámetro $this->view para hacer posible la inclusión de librerías js y css auxiliares mediante un objeto Zend_View
 				$View = new Zwei_Admin_Components_Helpers_EditTabsDojo($this->_request->p, $this->_request->id, $this->view);
