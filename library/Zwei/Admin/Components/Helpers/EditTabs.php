@@ -26,15 +26,30 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
      * 
      * @var Zwei_Db_Table
      */
-    private $_model;
 
+    /**
+     * 
+     * @var Zwei_Db_Table
+     */
+    private $_model;
+    
     function display($mode = 'add')
     {
         $form = new Zwei_Utils_Form();
-        //Zwei_Utils_Debug::write($mode);
-        $string_xml = file_get_contents(COMPONENTS_ADMIN_PATH.'/'.$this->page.'.xml');
+
+        if (preg_match('/(.*).php/', $this->page)) {
+            $file = BASE_URL ."/components/".$this->page;
+        } else {
+            $file = COMPONENTS_ADMIN_PATH."/".$this->page;
+        }
+        
+        $string_xml = file_get_contents($file);
+
         $Xml = new SimpleXMLElement($string_xml);
         $this->getLayout();
+        $model = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
+        $this->_model = new $model();
+        $primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : "id";
 
         $out = "<h2>{$this->layout[0]['NAME']}</h2>\r\n";
         $out .= "
@@ -70,7 +85,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         $k = 1;
         foreach($tabs as $tab) {
             $i++;
-            $node_tab_mode = (string)$tab[$mode];
+            $node_tab_mode = (string) $tab[$mode];
             if($node_tab_mode=="true"){
                 $out .= '<a id="tab_ctrl'.$i.'" class="settings_tab" '.$h.' onclick="showtab(this,\'tab'.$i.'\')">'.$tab['name'].'</a>';
                 $h = '';
@@ -84,7 +99,8 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         $xhr_insert_data='';
         $xhr_update_data='';
         $xhr_clean_data='';
-      
+        
+        //Loop por cada pestaña
         foreach ($tabs as $j => $tab) {
             if ($mode=='edit' || $mode=='clone') {
                 $ClassModel=Zwei_Utils_String::toClassWord($tab['target'])."Model";
@@ -96,7 +112,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 if (!is_array($my_id) || count($my_id) == 1) {
                     if (count($my_id) == 1) {
                         $my_id = array_values($my_id);
-                        $my_id = $my_id = 0;
+                        $my_id = $my_id = $my_id[0];
                     }
                     
                     $select->where($select->getAdapter()->quoteInto("$my_id = ?", $this->id));
@@ -118,17 +134,21 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
 
              
             $j=0;
-            foreach($tab->children() as $node){
+            //Loop por cada elemento dentro de una pestaña
+            foreach ($tab->children() as $node) {
                 $params = $this->getInputParams($node);
-                if ($mode == "edit") $params['ID'] = $this->id[0];
+                if ($mode == "edit") {
+                    $params['ID'] = $this->id[0];
+                    if ($node['edit'] == "disabled") $params['DISABLED'] = true;
+                    if ($node['edit'] == "readonly") $params['READONLY'] = true;
+                }
                  
                 //Zwei_Utils_Debug::write($params);
-                 
-                $node_field = (string)$node['field'];
-                $node_target = (string)$node['target'];
-                $node_value = (string)$node['value'];
-                $node_join = (string)$node['join'];
-                $node_offset = (string)$node['offset'];
+                $node_field = (string) $node['field'];
+                $node_target = (string) $node['target'];
+                $node_value = (string) $node['value'];
+                $node_join = (string) $node['join'];
+                $node_offset = (string) $node['offset'];
                 //$node_tab_mode=(string)$node[$mode];
                  
                 //if($node_tab_mode=="true"){
@@ -137,9 +157,11 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                         //[TODO] optimizar
                         $select2 = $Model->select();
           
-                        $my_id = (method_exists($Model,"getPk")) ? $Model->getPk() : "id";
+                        $my_id = ($Model->getPrimary()) ? $Model->getPrimary() : "id";
+                        if (is_array($my_id)) $my_id = array_values($my_id);
                          
                         if (!is_array($my_id) || count($my_id) == 1) {
+                            if (is_array($my_id) == 1) $my_id = $my_id[0];
                             $select2->where($select2->getAdapter()->quoteInto("$my_id = ?", $this->id));
                         } else {
                             foreach ($my_id as $id) {
@@ -147,37 +169,38 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                             }
                         };
                          
-                        $field=$node_join;
-                        $data=$Model->fetchAll($select2->where("$field = ? ", $node_target));
+                        $field = $node_join;
+                        $data = $Model->fetchAll($select2->where("$field = ? ", $node_target));
                          
                     }
                      
                      
-                    if(isset($node['offset'])){
-                        $select2=$Model->select();
+                    if (isset($node['offset'])) {
+                        $select2 = $Model->select();
                          
-                        $my_id=(method_exists($Model,"getPk")) ? $Model->getPk() : "id";
+                        $my_id = (method_exists($Model,"getPk")) ? $Model->getPk() : "id";
+                        if (is_array($my_id)) $my_id = array_values($my_id);
                          
-                        if(!is_array($my_id) || count($my_id) == 1){
+                        if (!is_array($my_id) || count($my_id) == 1){
+                            if (is_array($my_id) == 1) $my_id = $my_id[0];                          
                             $select2->where($select2->getAdapter()->quoteInto("$my_id = ?", $this->id));
-                        }else{
+                        } else {
                             foreach($my_id as $id){
                                 $select2->where($select2->getAdapter()->quoteInto("$id = ?", $this->id));
                             }
                         };
                          
                         $select2->limit(1, $node_offset);
-                        $data=$Model->fetchAll($select2);
+                        $data = $Model->fetchAll($select2);
                     }
                      
-                    $value="";
+                    $value = "";
                      
-                    try
-                    {
+                    try {
                         if (isset($node['field']) && !isset($node['table'])) {
-                            $value=$data[0][$node_field];
+                            $value = $data[0][$node_field];
                         }else{
-                            $value=$data[0][$node_target];
+                            $value = @$data[0][$node_target];
                         }
                          
                     } catch (Zend_Db_Exception $e) {
@@ -213,15 +236,14 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 else $pfx = "";
                  
                 //Zwei_Utils_Debug::("{$node['target']} $node_mode $mode $node_edit $node_add");
-                $name=str_replace('\n','<br/>',$node['name']);
-                if ($node_mode == "true") {
-                    if($node['target']=='x-dias') $node['target']='x_dias';//para bconsumo
-                    $out.="\t\t<tr id=\"row_{$node['target']}\"><th><label for=\"{$node['target']}\">{$name}</label></th><td>".$element->edit(0, $pfx.$k)."</td></tr>\r\n";
+                $name = str_replace('\n','<br/>',$node['name']);
+                if ($node_mode == "true" || $node_mode == "disabled" || $node_mode == "readonly") {
+                    $out .= "\t\t<tr id=\"row_{$node['target']}\"><th><label for=\"{$node['target']}\">{$name}</label></th><td>".$element->edit(0, $pfx.$k)."</td></tr>\r\n";
                      
-                    if(!empty($node['target'])){
-                        if($node['type']=='dojo_filtering_select' || $node['type']=='dojo_yes_no' || $node['type'] == 'dojo_checkbox'){
+                    if (!empty($node['target'])) {
+                        if ($node['type']=='dojo_filtering_select' || $node['type']=='dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
                             $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value'), \r\n";
-                        }else{
+                        } else {
                             $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$pfx}{$k}').value, \r\n";
                         }
                     }
@@ -277,7 +299,9 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         showtab(document.getElementById('tab_ctrl1'),'tab1');
         function modify(model, items, mode) {
             var resp = '';
+            alert('fuu');
             $additional_validation
+            alert('foo')
             if(mode == 'add' || mode == 'clone') {
                 resp = insertar(model,items);
             } else if(mode == 'edit') {
@@ -324,7 +348,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                     return respuesta;
                 },
                 error:function(err){
-                    window.location.href = base_url+'index/login';
+                    alert('Error en comunicacion de datos. error: '+err);
                     return err;
                 }
             });
@@ -356,8 +380,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                     return respuesta;
                 },
                 error:function(err){
-                    //alert('Error en comunicacion de datos. error: '+err);
-                    window.location.href = base_url+'index/login';
+                    alert('Error en comunicacion de datos. error: '+err);
                     return err;
                 }
             });
@@ -366,19 +389,22 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         }
         ";
                  
-                $out.="</script>
+            $out.="</script>
         ";              
                  
-                if(!empty($this->layout[0]['JS'])){
-                    $functionInit=str_replace('.js','', $this->layout[0]['JS']).'Init';
-                    $out.="
-            <script type=\"text/javascript\">
-            $functionInit();
-            </script>
+            if (!empty($this->layout[0]['JS'])) {
+                $functionInit=str_replace('.js','', $this->layout[0]['JS']).'Init';
+                $out.="
+                <script type=\"text/javascript\">
+                try {
+                   $functionInit();
+                } catch (e) {
+                    console.log('Función $functionInit no declarada');    
+                }
+                </script>
             ";
                 }
                  
-
-                return $out;
+        return $out;
     }
 }
