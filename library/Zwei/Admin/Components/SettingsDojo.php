@@ -29,6 +29,14 @@ class Zwei_Admin_Components_SettingsDojo
 		$this->page=$page;
 		 
 		$xml=new Zwei_Admin_XML();
+	    
+	    if (preg_match('/(.*).php/', $this->page)) {
+            $file = BASE_URL ."/components/".$this->page;
+        } else {
+            $file = COMPONENTS_ADMIN_PATH."/".$this->page;
+        }
+		
+		
 		$xml->parse(COMPONENTS_ADMIN_PATH."/".$this->page);
 		$this->model=isset($xml->elements[0]['TARGET']) ? Zwei_Utils_String::toClassWord($xml->elements[0]['TARGET'])."Model" : "SettingsModel";
 

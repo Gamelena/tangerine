@@ -76,6 +76,13 @@ class Zwei_Utils_Table
 	private function parseComponent($component)
 	{
 		$Xml=new Zwei_Admin_Xml();
+		
+	    if (preg_match('/(.*).php/', $component)) {
+            $file = BASE_URL ."/components/".$component;
+        } else {
+            $file = COMPONENTS_ADMIN_PATH."/".$component;
+        }
+		
 		$Xml->parse(COMPONENTS_ADMIN_PATH."/".$component);
 		$this->_xml=$Xml->elements;
 		$count=count($this->_xml);

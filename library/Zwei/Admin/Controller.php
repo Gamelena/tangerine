@@ -50,7 +50,14 @@ class Zwei_Admin_Controller{
     function getLayout()
     {
         $oXml = new Zwei_Admin_XML();
-        $oXml->parse(COMPONENTS_ADMIN_PATH."/".$this->page);
+        
+        if (preg_match('/(.*).php/', $this->page)) {
+            $file = BASE_URL ."/components/".$this->page;
+        } else {
+            $file = COMPONENTS_ADMIN_PATH."/".$this->page;
+        }
+        
+        $oXml->parse($file);
         $this->layout = $oXml->elements;
         $this->name = @$this->layout[0]['NAME'];
         $this->target = @$this->layout[0]['TARGET'];
