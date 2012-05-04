@@ -299,9 +299,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         showtab(document.getElementById('tab_ctrl1'),'tab1');
         function modify(model, items, mode) {
             var resp = '';
-            alert('fuu');
             $additional_validation
-            alert('foo')
             if(mode == 'add' || mode == 'clone') {
                 resp = insertar(model,items);
             } else if(mode == 'edit') {
