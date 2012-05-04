@@ -93,3 +93,21 @@ CREATE TABLE IF NOT EXISTS `web_settings` (
   `approved` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+-- 
+-- Structure for table `log_book`
+-- 
+
+DROP TABLE IF EXISTS `log_book`;
+CREATE TABLE IF NOT EXISTS `log_book` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user` char(40) NOT NULL,
+  `table` char(40) NOT NULL,
+  `action` char(40) NOT NULL,
+  `condition` char(200) NOT NULL,
+  `acl_roles_id` int(11) NOT NULL,
+  `ip` varchar(200) NOT NULL,
+  `stamp` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
