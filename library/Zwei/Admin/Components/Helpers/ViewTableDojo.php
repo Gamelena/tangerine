@@ -225,8 +225,8 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 			$search_table_pk = explode(";", @$node['SEARCH_TABLE_PK']);
 			if (!is_array($search_table_pk)) $search_table_pk = array(@$node['SEARCH_TABLE_PK']);
 
-			$search_table_field = explode(";", $node['SEARCH_TABLE_FIELD']);
-			if (!is_array($search_table_field)) $search_table_field = array($node['SEARCH_TABLE_FIELD']);
+			$search_table_field = explode(";", @$node['SEARCH_TABLE_FIELD']);
+			if (!is_array($search_table_field)) $search_table_field = array(@$node['SEARCH_TABLE_FIELD']);
 
 			$search_table_target = explode(";", $node['SEARCH_TABLE_TARGET']);
 			if (!is_array($search_table_target)) $search_table_target = array($node['SEARCH_TABLE_TARGET']);
@@ -285,7 +285,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 				$this->between="'$s'";
 				$i=$j;
 				$betweened=true;
-			}
+			} 
 			$i++;
 		}
 
