@@ -20,7 +20,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
      * 
      * @var integer
      */
-    private $_version = 9;//actualizar para forzar update de javascript [TODO] hacer administrable
+    private $_version = 10;//actualizar para forzar update de javascript [TODO] hacer administrable
     
     /**
      * 
