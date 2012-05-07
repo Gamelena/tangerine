@@ -20,7 +20,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
      * 
      * @var integer
      */
-    private $_version = 8;//actualizar para forzar update de javascript [TODO] hacer administrable
+    private $_version = 9;//actualizar para forzar update de javascript [TODO] hacer administrable
     
     /**
      * 
@@ -73,7 +73,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
       
         if (!empty($this->layout[0]['JS'])) $out.="<script type=\"text/javascript\" src=\"".BASE_URL."js/".$this->layout[0]['JS']."?version={$this->_version}\"></script>";
       
-        $out .= "<div dojoType=\"dijit.form.Form\" id=\"tab_form\" jsId=\"tab_form\" name=\"tab_form\" encType=\"multipart/form-data\" action=\"\" method=\"\" onsubmit=\"return false\">\r\n";
+        $out .= "<div dojoType=\"dijit.form.Form\" id=\"tabForm\" jsId=\"tabForm\" name=\"taForm\" encType=\"multipart/form-data\" action=\"\" method=\"\" onsubmit=\"return false\">\r\n";
       
         if (!isset($this->id)) $this->id = array();
         elseif (!is_array($this->id)) $this->id = array($this->id);
@@ -370,7 +370,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 sync: true,
                 preventCache: true,
                 timeout: 5000,
-                load: function(respuesta){
+                load: function(respuesta) {
         
                     console.debug(dojo.toJson(respuesta));
                     res = respuesta;

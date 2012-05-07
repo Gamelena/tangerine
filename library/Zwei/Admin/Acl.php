@@ -222,7 +222,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 		$select->where(self::$_tb_modules.'.tree = ?', '1'); //[TODO] externalizar la condicion tree segun el caso
 		$select->order("order");
 
-		Debug::write($select->__toString());
+
 		
 		return(self::$_db->fetchAll($select));
 	}
@@ -308,7 +308,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 		$select->where( self::$_tb_users.".".self::$_user_login." = '".$user."'")
 			->group( self::$_tb_modules.".id" );
 			
-		#Zwei_Utils_Debug::write($select->__toString());
+		//Debug::write($select->__toString());
 			
 		$result=self::$_db->fetchAll($select);
 		

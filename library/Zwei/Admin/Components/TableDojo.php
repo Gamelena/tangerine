@@ -142,11 +142,11 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 			$i = 0;
 			foreach ($functions as $f) {
 				//Zwei_Utils_Debug::write($permissions[$i]);
-				if(empty($permissions[$i]) || $this->_acl->isUserAllowed($this->page, strtoupper($permissions[$i]))){
-					$foo=Zwei_Utils_String::toFunctionWord($f);
-					$out.="<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon()}\" id=\"btn$foo\" onClick=\"execFunction('$f', '$params','$component');\">";
-					$out.=$CustomFunctions->getName($foo);
-					$out.="</button></td>";
+				if (empty($permissions[$i]) || $this->_acl->isUserAllowed($this->page, strtoupper($permissions[$i]))) {
+					$foo = Zwei_Utils_String::toFunctionWord($f);
+					$out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon()}\" id=\"btn$foo\" onClick=\"execFunction('$f', '$params', '$component', '$primary');\">";
+					$out .= $CustomFunctions->getName($foo);
+					$out .= "</button></td>";
 				}
 				$i++;
 			}
@@ -163,7 +163,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 			foreach ($items as $f) {
 				//Zwei_Utils_Debug::write($permissions[$i]);
 				if (empty($permissions[$i]) || $this->_acl->isUserAllowed($this->page, strtoupper($permissions[$i]))) {
-					$out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon()}\" id=\"btnlink$i\" onClick=\"redirectToModule('$i');\">";
+					$out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon()}\" id=\"btnlink$i\" onClick=\"redirectToModule('$i', '$primary');\">";
 					$out .= $CustomFunctions->getName($foo);
 					$out .= "</button></td>";
 				}
@@ -189,7 +189,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 				$sIframe = (!empty($iframes[$i]) && $iframes[$i]=="true") ? 'true' : 'false';
 				//Zwei_Utils_Debug::write($permissions[$i]);
 				if (empty($permissions[$i]) || $this->_acl->isUserAllowed($this->page, strtoupper($permissions[$i]))) {
-					$out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon()}\" id=\"btnlink$i\" onClick=\"popupGrid('$f', $sIframe);\">";
+					$out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon()}\" id=\"btnlink$i\" onClick=\"popupGrid('$f', $sIframe, '$primary');\">";
 					$out .= $titles[$i];
 					$out .= "</button></td>";
 				}

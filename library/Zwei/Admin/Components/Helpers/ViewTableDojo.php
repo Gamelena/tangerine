@@ -196,7 +196,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 
 	private function searchMultiple()
 	{
-		Zwei_Utils_Debug::write("Search Multiple");
+		Debug::write("Search Multiple");
 		
 		if(isset($this->layout[0]['SEARCH_ADDITIONAL_VALIDATION'])){
 			$modelname=Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";

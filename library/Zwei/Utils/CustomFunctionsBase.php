@@ -1,7 +1,8 @@
 <?php
 /**
  * Funciones para ser llamadas vía componentes XML (no obligatorio).
- * [IMPORTANTE] para añadir funciones adicionales este archivo debe ser copiado, pegado y modificado para cada proyecto 
+ * [IMPORTANTE] para añadir funciones adicionales esta clase debe ser heradada por una clase llamada
+ * Zwei_Utils_CustomFunctions() para cada proyecto y escribir las funciones pertinentes
  * 
  * Pueden ser invocadas mediante el atributo functions de los components xml del admin.
  * 
@@ -13,7 +14,7 @@
  *
  */
 
-class Zwei_Utils_CustomFunctions
+class Zwei_Utils_CustomFunctionsBase
 {
 	/**
 	 * Icono Dijit para pintar boton [TODO] diseñar implementar configuración de esto en XMl 
@@ -51,7 +52,11 @@ class Zwei_Utils_CustomFunctions
 		'clonarPromocion'=>'Clonar Promocion',
 		'procesarArchivoAbonados'=>'Procesar Archivo'
 	);
-	
+
+	/**
+	 * 
+	 * @var Zwei_Utils_Form
+	 */
 	private $_form;
 	
 	
@@ -91,11 +96,11 @@ class Zwei_Utils_CustomFunctions
 	/**
 	 * Clonar Promoción de Bonos Consumo //EJEMPLO
 	 */
-	public function clonarPromocion()
+	public function clonarPromocionExample()
 	{
 		echo "
 		<script type=\"text/javascript\">
-			window.parent.cargarTabsPanelCentral('promociones','clone');
+			window.parent.cargarTabsPanelCentral('promociones', 'clone', 'id_promo');
 		</script>
 		";
 	}
@@ -104,16 +109,16 @@ class Zwei_Utils_CustomFunctions
 	 * Procesar Archivo abonados de Bonos Consumo //EJEMPLO
 	 */
 	
-	public function procesarArchivoAbonados($target)
+	public function procesarArchivoAbonadosExample($target)
 	{
 		chmod($target, 0777);
-		$new_path="/home/promociones/files/processed";	 
-		$Abonados=new AbonadosModel();
+		$new_path = "/home/promociones/files/processed";	 
+		$Abonados = new AbonadosModel();
 			 
-		$db=$Abonados->getAdapter();
+		$db = $Abonados->getAdapter();
 
 		$db->query("DELETE FROM abonados_tmp");
-		$query="LOAD DATA LOCAL INFILE '$target' IGNORE INTO TABLE abonados_tmp ( `msisdn` );";
+		$query = "LOAD DATA LOCAL INFILE '$target' IGNORE INTO TABLE abonados_tmp ( `msisdn` );";
 		Zwei_Utils_Debug::writeBySettings($query, 'query_log'); 
 	
 		if ($db->query($query)) {
