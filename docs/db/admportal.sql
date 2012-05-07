@@ -100,14 +100,14 @@ CREATE TABLE IF NOT EXISTS `web_settings` (
 -- 
 
 DROP TABLE IF EXISTS `log_book`;
+
 CREATE TABLE IF NOT EXISTS `log_book` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `user` char(40) NOT NULL,
   `table` char(40) NOT NULL,
   `action` char(40) NOT NULL,
   `condition` char(200) NOT NULL,
   `acl_roles_id` int(11) NOT NULL,
   `ip` varchar(200) NOT NULL,
-  `stamp` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  `stamp` datetime NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
