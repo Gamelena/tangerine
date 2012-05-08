@@ -129,10 +129,10 @@ class Zwei_Db_Object
             }
         }
 
-        $count = (isset($this->_form->limit)) ? $this->_form->limit : 500;
+        $count = (isset($this->_form->limit)) ? $this->_form->limit : 20000;//[TODO] ver paginador 
         $start = (isset($this->_form->start)) ? $this->_form->start : 0;  
         
-        if (isset($this->_form->start)) $oSelect->limit($count, $offset);
+        $oSelect->limit($count, $start);
         
         //Se imprime query en log debug según configuración del sitio
         Zwei_Utils_Debug::writeBySettings($oSelect->__toString(), 'query_log');
