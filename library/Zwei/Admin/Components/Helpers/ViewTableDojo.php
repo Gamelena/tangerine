@@ -358,6 +358,10 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 		
 		$out = "";
 		$node=@$this->layout[0];
+        $this->format_date = (@$this->layout[0]['SEARCH_DOJO_TYPE']=="dijit.form.DateTextBox")? 'true' : 'false';
+        $this->search_format = (@$this->layout[0]['SEARCH_FORMAT'])? $this->layout[0]['SEARCH_FORMAT'] : 'false';
+        $this->between = 'false';
+        $this->search_in_fields='false';
 
 		if (isset($this->layout[0]['SEARCH_ADDITIONAL_VALIDATION'])) {
 			$modelname=Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
@@ -372,19 +376,19 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 
 		$out .="<div dojoType=\"dijit.form.Form\" id=\"search_form\" jsId=\"search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
 		$out .="<table style=\"border: 1px solid #AAA;\" cellspacing=\"10\" align=\"center\">\r\n";
-		$search_name =! empty($node['SEARCH_NAME'])?$node['SEARCH_NAME']:'';
+		$search_name =! empty($node['SEARCH_NAME'])?$node['SEARCH_NAME']:'';//[TODO] search_name debiera leerse de los elements xml
 		$out .="<tr><td><label for=\"search\">$search_name</label></td>";
 
 
 		$out .="<td>
         <select id=\"search\" name=\"search\" dojoType=\"dijit.form.FilteringSelect\">";
-		$ClassModel=Zwei_Utils_String::toClassWord($node['SEARCH_TABLE'])."Model";
-		$Model=new $ClassModel();
-		$select=$Model->select();
-		$result=$Model->fetchAll($select);
-		$search_table_pk=(isset($node['SEARCH_TABLE_PK'])) ? $node['SEARCH_TABLE_PK'] :'id';
-		$search_table_field=(isset($node['SEARCH_TABLE_FIELD'])) ? $node['SEARCH_TABLE_FIELD'] :'title';
-		$search_table_target=(isset($node['SEARCH_TABLE_TARGET'])) ? $node['SEARCH_TABLE_TARGET'] :$node['SEARCH_TABLE']."_".$search_table_pk;
+		$ClassModel = Zwei_Utils_String::toClassWord($node['SEARCH_TABLE'])."Model";
+		$Model = new $ClassModel();
+		$select = $Model->select();
+		$result = $Model->fetchAll($select);
+		$search_table_pk = (isset($node['SEARCH_TABLE_PK'])) ? $node['SEARCH_TABLE_PK'] :'id';
+		$search_table_field = (isset($node['SEARCH_TABLE_FIELD'])) ? $node['SEARCH_TABLE_FIELD'] :'title';
+		$search_table_target = (isset($node['SEARCH_TABLE_TARGET'])) ? $node['SEARCH_TABLE_TARGET'] :$node['SEARCH_TABLE']."_".$search_table_pk;
 
 		foreach ($result as $v){
 			$out.="<option value=\"{$v[$search_table_pk]}\">{$v[$search_table_field]}</option>";
