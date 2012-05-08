@@ -124,8 +124,8 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
   
                 $data = $Model->fetchAll($select);
-                $overloadData = $Model->overloadData($data);
-                if ($overloadData) $data = $overloadData;
+                $overloadData = $Model->overloadDataTabs($data);
+                if ($overloadData) { $data = $overloadData; Debug::write($overloadData);}
             }
              
             $out.='<div id="tab'.($i+1).'" class="settings_area" '.$hidden.'>';

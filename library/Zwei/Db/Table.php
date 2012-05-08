@@ -55,10 +55,17 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	
 	/**
 	 * array $data de Zend_Db_Table_Select sobrecargado en $this->overloadData($data) 
-	 * @var Zend_Db_Table_Rowset
+	 * @var array|false 
 	 */
 	protected $_overloaded_data = false;
 		
+	   /**
+     * array $data de Zend_Db_Table_Select sobrecargado en $this->overloadDataTabs($data) 
+     * @var array|false
+     */
+    protected $_overloaded_data_tabs = false;
+	
+	
 	
 	public function init()
 	{
@@ -203,6 +210,11 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	public function overloadData($data) 
 	{
 		return $this->_overloaded_data;
+	}
+	
+	public function overloadDataTabs($data)
+	{
+        return $this->_overloaded_data_tabs;		
 	}
 	
 	public function setDefaultLogMode($mode)
