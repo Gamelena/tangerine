@@ -51,7 +51,7 @@ class Zwei_Db_Object
                     $search_format = explode(';',@$this->_form->search_format);
                     $search_between = explode(';',@$this->_form->search_between);
                 }
-                Debug::write($aSearchKeys);
+  
                 $i = 0;
                 $auxI = $i;
                 foreach ($search_fields as $sSearchField) {
