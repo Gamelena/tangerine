@@ -43,6 +43,7 @@ class Zwei_Db_Object
 	    if (isset($this->_form->search) && (!empty($this->_form->search) || $this->_form->search === "0") && (!isset($oModel) || !$oModel->isFiltered())) {
             if (!empty($this->_form->search_fields) || @$this->_form->search_fields === "0") {
                 $search_fields = @explode(";",$this->_form->search_fields);
+
                 if (!is_array($search_fields))
                     $search_fields = array($this->_form->search_fields);
                 if (@$this->_form->search_type == 'multiple') {
@@ -50,9 +51,11 @@ class Zwei_Db_Object
                     $search_format = explode(';',@$this->_form->search_format);
                     $search_between = explode(';',@$this->_form->search_between);
                 }
+                Debug::write($aSearchKeys);
                 $i = 0;
                 $auxI = $i;
                 foreach ($search_fields as $sSearchField) {
+                	                    
                     if ((!empty($sSearchField) || $sSearchField === "0") && (!empty($aSearchKeys[$i]) || @$aSearchKeys[$i] === "0" || empty($this->_form->search_type))) {
                         if (@$this->_form->search_type == 'multiple') {
                             if (preg_match("/^date_format(.*)/", @$search_format[$auxI], $match)) {
@@ -61,12 +64,11 @@ class Zwei_Db_Object
                                     $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchField,'$mask') >= ?", $aSearchKeys[$i]));
                                     $i++;
                                     $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchField,'$mask') <= ?", $aSearchKeys[$i]));
-                                    //$auxI--;
+                                    //$auxI++;
                                 } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
                                     $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchField,'$mask') = ?", $aSearchKeys[$i]));
                                 }
                             } else if ($search_format[$auxI] == 'equals') {
-                            	Zwei_Utils_Debug::write("$sSearchField = ?". $aSearchKeys[$i]);
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField = ?", $aSearchKeys[$i]));
                             } else if ($search_format[$auxI] == 'lesserorequals') {
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField <= ?", $aSearchKeys[$i]));
@@ -76,6 +78,7 @@ class Zwei_Db_Object
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField LIKE ?", "%{$aSearchKeys[$i]}%"));
                             }
                             $i++;
+                                                //Debug::write($i);
                             $auxI++;
                         } else {
                         	//TODO, evaluar borrar este if
@@ -96,7 +99,7 @@ class Zwei_Db_Object
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField LIKE ?", "%{$this->_form->search}%"));
                             }
                         }
-                    }
+                    } else {$i++;}
                 }//foreach
              } else {
                 if (isset($oModel) && $oModel->getSearchFields()) {
