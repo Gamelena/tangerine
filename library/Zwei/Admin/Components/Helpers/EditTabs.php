@@ -125,7 +125,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
   
                 $data = $Model->fetchAll($select);
                 $overloadData = $Model->overloadDataTabs($data);
-                if ($overloadData) { $data = $overloadData; Debug::write($overloadData);}
+                if ($overloadData) { $data = $overloadData; }
             }
              
             $out.='<div id="tab'.($i+1).'" class="settings_area" '.$hidden.'>';
