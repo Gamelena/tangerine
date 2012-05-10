@@ -21,14 +21,21 @@
 
 class Zwei_Admin_Components_SettingsDojo
 {
+	/**
+	 * Nombre del archivo XML
+	 * @var string
+	 */
 	public $page;
-	private $model;
+	/**
+	 * Nombre del modelo Zend_Db_Table
+	 * @var string
+	 */
+	private $_model;
 
-	public function __construct($page, $zend_view)
+	public function __construct($page, $zend_view=null)
 	{
-		$this->page=$page;
-		 
-		$xml=new Zwei_Admin_XML();
+		$this->page = $page;
+		$xml = new Zwei_Admin_XML();
 	    
 	    if (preg_match('/(.*).php/', $this->page)) {
             $file = BASE_URL ."/components/".$this->page;
@@ -38,7 +45,7 @@ class Zwei_Admin_Components_SettingsDojo
 		
 		
 		$xml->parse(COMPONENTS_ADMIN_PATH."/".$this->page);
-		$this->model=isset($xml->elements[0]['TARGET']) ? Zwei_Utils_String::toClassWord($xml->elements[0]['TARGET'])."Model" : "SettingsModel";
+		$this->_model=isset($xml->elements[0]['TARGET']) ? Zwei_Utils_String::toClassWord($xml->elements[0]['TARGET'])."Model" : "SettingsModel";
 
 		/*
 		 $zend_view->dojo()
@@ -53,8 +60,8 @@ class Zwei_Admin_Components_SettingsDojo
 	 
 	public function display()
 	{
-		$form=new Zwei_Utils_Form();
-		$settings=new $this->model();
+		$form = new Zwei_Utils_Form();
+		$settings = new $this->_model();
 		$out = "<h2>Configuraci&oacute;n del Sitio</h2>\r\n";
 
 		if(isset($form->save)){
@@ -89,7 +96,7 @@ class Zwei_Admin_Components_SettingsDojo
 			$out.="\t\t<div dojoType=\"dijit.form.Form\" id=\"settings{$i}_form\" jsId=\"settings{$i}_form\" encType=\"multipart/form-data\" target=\"ifrm_process\" action=\"".BASE_URL."objects/multi-update\" method=\"post\">\r\n";
 				
 			//Subgrupos
-			$settings=new $this->model();
+			$settings=new $this->_model();
 			$table=$settings->getName();
 				
 			$query=
@@ -139,7 +146,7 @@ class Zwei_Admin_Components_SettingsDojo
 				
 			$out.="<button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSave\" id=\"btnSaveSettings$i\">Guardar</button>";
 			$out.="<input type=\"hidden\" name=\"save\" value=\"save\" />\r\n";
-			$out.="<input type=\"hidden\" name=\"model\" value=\"$this->model\" />\r\n";
+			$out.="<input type=\"hidden\" name=\"model\" value=\"$this->_model\" />\r\n";
 			$out.="\t\t</div>\r\n";
 			$out.="\t</div>\r\n";
 		}

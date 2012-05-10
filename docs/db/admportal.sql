@@ -8,17 +8,17 @@ DROP TABLE IF EXISTS `acl_modules`;
 CREATE TABLE IF NOT EXISTS `acl_modules` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned DEFAULT NULL,
-  `title` varchar(200) DEFAULT NULL,
-  `module` varchar(200) DEFAULT NULL,
+  `title` char(200) DEFAULT NULL,
+  `module` char(200) DEFAULT NULL,
   `tree` enum('0','1') NOT NULL DEFAULT '1',
   `linkable` enum('0','1') NOT NULL,
   `type` enum('xml','xml_php','zend_module','legacy') NOT NULL DEFAULT 'xml',
   `approved` enum('0','1') NOT NULL,
   `order` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `root` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `module` (`module`)
-) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=latin1;
-
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 
 -- 
@@ -29,10 +29,10 @@ CREATE TABLE IF NOT EXISTS `acl_permissions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `acl_roles_id` int(1) NOT NULL,
   `acl_modules_id` int(4) NOT NULL,
-  `permission` varchar(64) NOT NULL,
+  `permission` char(64) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `acl_roles_id` (`acl_roles_id`,`acl_modules_id`,`permission`)
-) ENGINE=MyISAM AUTO_INCREMENT=136 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 -- 
@@ -41,10 +41,10 @@ CREATE TABLE IF NOT EXISTS `acl_permissions` (
 DROP TABLE IF EXISTS `acl_roles`;
 CREATE TABLE IF NOT EXISTS `acl_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(64) NOT NULL,
+  `role_name` char(64) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_name` (`role_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- 
 -- Structure for table `acl_users`
@@ -54,15 +54,15 @@ DROP TABLE IF EXISTS `acl_users`;
 CREATE TABLE IF NOT EXISTS `acl_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `acl_roles_id` int(4) NOT NULL,
-  `user_name` varchar(64) NOT NULL,
-  `password` varchar(200) NOT NULL,
-  `first_names` varchar(50) NOT NULL,
-  `last_names` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
+  `user_name` char(64) NOT NULL,
+  `password` char(200) NOT NULL,
+  `first_names` char(50) NOT NULL,
+  `last_names` char(50) NOT NULL,
+  `email` char(50) NOT NULL,
   `approved` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name` (`user_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 -- 
@@ -71,8 +71,8 @@ CREATE TABLE IF NOT EXISTS `acl_users` (
 
 DROP TABLE IF EXISTS `web_permissions`;
 CREATE TABLE IF NOT EXISTS `web_permissions` (
-  `id` varchar(20) NOT NULL,
-  `title` varchar(50) NOT NULL,
+  `id` char(20) NOT NULL,
+  `title` char(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -82,17 +82,17 @@ CREATE TABLE IF NOT EXISTS `web_permissions` (
 -- 
 DROP TABLE IF EXISTS `web_settings`;
 CREATE TABLE IF NOT EXISTS `web_settings` (
-  `id` varchar(255) NOT NULL DEFAULT '',
-  `enum` varchar(255) NOT NULL,
-  `value` varchar(255) NOT NULL DEFAULT '0',
-  `type` varchar(255) NOT NULL DEFAULT '',
+  `id` char(255) NOT NULL DEFAULT '',
+  `enum` char(255) NOT NULL,
+  `value` char(255) NOT NULL DEFAULT '0',
+  `type` char(255) NOT NULL DEFAULT '',
   `description` text NOT NULL,
   `ord` int(11) NOT NULL DEFAULT '0',
-  `group` varchar(255) NOT NULL,
-  `function` varchar(255) NOT NULL,
+  `group` char(255) NOT NULL,
+  `function` char(255) NOT NULL,
   `approved` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 -- 
@@ -108,6 +108,6 @@ CREATE TABLE IF NOT EXISTS `log_book` (
   `action` char(40) NOT NULL,
   `condition` char(200) NOT NULL,
   `acl_roles_id` int(11) NOT NULL,
-  `ip` varchar(200) NOT NULL,
+  `ip` char(200) NOT NULL,
   `stamp` datetime NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
