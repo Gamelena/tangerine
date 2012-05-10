@@ -139,6 +139,7 @@ class Zwei_Db_Object
         
         //Se imprime query en log debug según configuración del sitio
         Zwei_Utils_Debug::writeBySettings($oSelect->__toString(), 'query_log');
+        Zwei_Utils_Debug::writeBySettings($oSelect->getAdapter()->getConfig(), 'query_log');
         return $oSelect;
     }
 }
