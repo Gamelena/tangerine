@@ -41,7 +41,6 @@ final class Zwei_Utils_Cache
 
     public function start() 
     {
-    	Debug::write("start");
 		if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == "/components" 
 		  && Zend_Auth::getInstance()->hasIdentity() 
 		  && !preg_match("/grafico/", @$_REQUEST['p'])) {
