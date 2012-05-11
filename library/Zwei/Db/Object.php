@@ -61,21 +61,21 @@ class Zwei_Db_Object
                             if (preg_match("/^date_format(.*)/", @$search_format[$auxI], $match)) {
                                 $mask='%Y-%m-%d';
                                 if (@$this->_form->between == $sSearchField) {
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchField,'$mask') >= ?", $aSearchKeys[$i]));
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT(`$sSearchField`,'$mask') >= ?", $aSearchKeys[$i]));
                                     $i++;
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchField,'$mask') <= ?", $aSearchKeys[$i]));
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT(`$sSearchField`,'$mask') <= ?", $aSearchKeys[$i]));
                                     //$auxI++;
                                 } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchField,'$mask') = ?", $aSearchKeys[$i]));
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT(`$sSearchField`,'$mask') = ?", $aSearchKeys[$i]));
                                 }
                             } else if ($search_format[$auxI] == 'equals') {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField = ?", $aSearchKeys[$i]));
+                                $oSelect->where($oModel->getAdapter()->quoteInto("`$sSearchField` = ?", $aSearchKeys[$i]));
                             } else if ($search_format[$auxI] == 'lesserorequals') {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField <= ?", $aSearchKeys[$i]));
+                                $oSelect->where($oModel->getAdapter()->quoteInto("`$sSearchField` <= ?", $aSearchKeys[$i]));
                             } else if ($search_format[$auxI] == 'greaterorequals') {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField >= ?", $aSearchKeys[$i]));
+                                $oSelect->where($oModel->getAdapter()->quoteInto("`$sSearchField` >= ?", $aSearchKeys[$i]));
                             } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField LIKE ?", "%{$aSearchKeys[$i]}%"));
+                                $oSelect->where($oModel->getAdapter()->quoteInto("`$sSearchField` LIKE ?", "%{$aSearchKeys[$i]}%"));
                             }
                             $i++;
                                                 //Debug::write($i);
@@ -90,13 +90,13 @@ class Zwei_Db_Object
                                 $mask = '%Y-%m-%d';
                                 if (@$this->_form->between === '1') {
                                     $aSearchKeys=explode(";",$this->_form->search);
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchField,'$mask') >= ?", $aSearchKeys[0]));
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchField,'$mask') <= ?", $aSearchKeys[1]));
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT(`$sSearchField`,'$mask') >= ?", $aSearchKeys[0]));
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT(`$sSearchField`,'$mask') <= ?", $aSearchKeys[1]));
                                 } else {
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchField,'$mask') = ?", $this->_form->search));
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT(`$sSearchField`,'$mask') = ?", $this->_form->search));
                                 }
                             } else {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField LIKE ?", "%{$this->_form->search}%"));
+                                $oSelect->where($oModel->getAdapter()->quoteInto("`$sSearchField` LIKE ?", "%{$this->_form->search}%"));
                             }
                         }
                     } else {$i++;}
@@ -114,7 +114,7 @@ class Zwei_Db_Object
                             if ($sSearchField == 'id' || preg_match("/^id_/", $sSearchField) ||  preg_match("/_id$/", $sSearchField)) {
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchField = ? ", $this->_form->search));
                             } else {
-                                $oSelect->orWhere($oModel->getAdapter()->quoteInto("$sSearchField LIKE ?", "%{$this->_form->search}%"));
+                                $oSelect->orWhere($oModel->getAdapter()->quoteInto("`$sSearchField` LIKE ?", "%{$this->_form->search}%"));
                             }
                         }
                     }
