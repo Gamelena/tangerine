@@ -68,7 +68,7 @@ class Zwei_Utils_CustomFunctionsBase
         $this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
         $this->_form = new Zwei_Utils_Form();		
 		
-		$this->_icon = $icon ? $icon : "dijitIconEdit";
+		$this->_icon = $icon ? $icon : "dijitIconFunction";
 	}
 	
 	public function setId($value)

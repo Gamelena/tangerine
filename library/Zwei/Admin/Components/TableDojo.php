@@ -125,9 +125,9 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 		if (isset($viewtable->layout[0]['EXCEL']) && $viewtable->layout[0]['EXCEL'] == "true") {
 			$out .= "<td>";
 			if(@$viewtable->layout[0]['SEARCH_TYPE']=='multiple'){
-				$out .= "<button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"btnExport\" onClick=\"searchMultiple('{$viewtable->layout[0]['TARGET']}', $viewtable->search_in_fields, $viewtable->search_format, $viewtable->between, 'excel', '$this->page');\">";
+				$out .= "<button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconTable\" id=\"btnExport\" onClick=\"searchMultiple('{$viewtable->layout[0]['TARGET']}', $viewtable->search_in_fields, $viewtable->search_format, $viewtable->between, 'excel', '$this->page');\">";
 			}else{
-				$out .= "<button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"btnExport\" onClick=\"cargarDatos('{$viewtable->layout[0]['TARGET']}', $viewtable->search_in_fields, $viewtable->format_date, $viewtable->search_format, $viewtable->between, 'excel', '$this->page');\">";
+				$out .= "<button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconTable\" id=\"btnExport\" onClick=\"cargarDatos('{$viewtable->layout[0]['TARGET']}', $viewtable->search_in_fields, $viewtable->format_date, $viewtable->search_format, $viewtable->between, 'excel', '$this->page');\">";
 			}
 			$out .= "Exportar a Excel";
 			$out .= "</button></td>";
