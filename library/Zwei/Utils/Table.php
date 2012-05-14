@@ -33,18 +33,18 @@ class Zwei_Utils_Table
 	 * @return html
 	 */
 	
-	function showTitles($rowset, $component)
+	function showTitles($rowset)
 	{
-		$out="<tr>";
+		$out = "<tr>";
 		foreach ($rowset[0] as $target => $value) 
 		{
-			if(!isset($this->_xml)){
+			if (!isset($this->_xml)) {
 				$out.= "<th>".$target."</th>";
-			}else if(!empty($this->_name[$target])){		
-			    $out.= "<th>".$this->_name[$target]."</th>";
+			} else if(!empty($this->_name[$target])) {		
+			    $out.= "<th>".str_replace("\n", "", $this->_name[$target])."</th>";
 			}
 		}
-		$out.="</tr>\n";
+		$out .= "</tr>\n";
 		return $out;		
 	}
 	
@@ -75,7 +75,7 @@ class Zwei_Utils_Table
 	
 	private function parseComponent($component)
 	{
-		$Xml=new Zwei_Admin_Xml();
+		$Xml = new Zwei_Admin_Xml();
 		
 	    if (preg_match('/(.*).php/', $component)) {
             $file = BASE_URL ."/components/".$component;
@@ -83,9 +83,9 @@ class Zwei_Utils_Table
             $file = COMPONENTS_ADMIN_PATH."/".$component;
         }
 		
-		$Xml->parse(COMPONENTS_ADMIN_PATH."/".$component);
-		$this->_xml=$Xml->elements;
-		$count=count($this->_xml);
+		$Xml->parse($file);
+		$this->_xml = $Xml->elements;
+		$count = count($this->_xml);
 	    for($i=1; $i<$count; $i++){
 	  		if($this->_xml[$i]["VISIBLE"]=="true"){
 	  			$this->_name[$this->_xml[$i]["TARGET"]]=$this->_xml[$i]["NAME"];
@@ -102,18 +102,24 @@ class Zwei_Utils_Table
 	
 	function rowsetToHtml($rowset, $component=false)
 	{
-		if($component){
-			$this->parseComponent($component);
+		if ($component) {
+			if (!is_array($component)) {
+		        $this->parseComponent($component);
+			} else {
+			    //Debug::write("is array");
+				$this->_name = $component;
+				$this->_xml = "array";
+			}    
 		}
 		
-		$count=count($rowset);
+		$count = count($rowset);
 
-		$out="<table cellspacing=\"0\" border=\"2\">\n";
-		$out.=$this->showTitles($rowset, $component);
-		for($i=0;$i<$count;$i++){
-			$out.=$this->showContent($rowset, $i);
+		$out = "<table cellspacing=\"0\" border=\"2\">\n";
+		$out .= $this->showTitles($rowset, $component);
+		for ($i=0;$i<$count;$i++) {
+			$out .= $this->showContent($rowset, $i);
 		}	
-		$out.="</table>\n";
+		$out .= "</table>\n";
 		return $out;
 	}
 }
