@@ -182,14 +182,16 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 			$permissions = explode(";",(@$viewtable->layout[0]['POPUPS_PERMISSIONS']));
 			$titles = explode(";",(@$viewtable->layout[0]['POPUPS_TITLE']));
 			$iframes = explode(";",(@$viewtable->layout[0]['POPUPS_IFRAME']));
+			$icons = explode(";",(@$viewtable->layout[0]['POPUPS_ICONS']));
 			$i = 0;
 			foreach ($items as $f) {
 				//$href=str_replace("{id}",$this->params['ID'],$f);
 				//$href=str_replace("{value}",$this->value,$href);
+				$sIcon = (!empty($icons[$i]) && $icons[$i] != "null") ? $icons[$i] : "dijitIconApplication"; 
 				$sIframe = (!empty($iframes[$i]) && $iframes[$i]=="true") ? 'true' : 'false';
 				//Zwei_Utils_Debug::write($permissions[$i]);
 				if (empty($permissions[$i]) || $this->_acl->isUserAllowed($this->page, strtoupper($permissions[$i]))) {
-					$out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon()}\" id=\"btnlink$i\" onClick=\"popupGrid('$f', $sIframe, '$primary');\">";
+					$out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"$sIcon\" id=\"btnlink$i\" onClick=\"popupGrid('$f', $sIframe, '$primary');\">";
 					$out .= $titles[$i];
 					$out .= "</button></td>";
 				}
