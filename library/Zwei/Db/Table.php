@@ -85,7 +85,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	{
         $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
         $db = Zend_Db::factory($config->resources->multidb->{$adapter});
-        $this->setDefaultAdapter($db);		
+        $this->_setAdapter($db);
 	}
 
 	public function setLabel($value)
