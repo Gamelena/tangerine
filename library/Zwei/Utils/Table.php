@@ -87,7 +87,7 @@ class Zwei_Utils_Table
 		$this->_xml = $Xml->elements;
 		$count = count($this->_xml);
 	    for($i=1; $i<$count; $i++){
-	  		if($this->_xml[$i]["VISIBLE"]=="true"){
+	  		if(isset($this->_xml[$i]["VISIBLE"]) && $this->_xml[$i]["VISIBLE"] == "true"){
 	  			$this->_name[$this->_xml[$i]["TARGET"]]=$this->_xml[$i]["NAME"];
 	  		}	
 		}
