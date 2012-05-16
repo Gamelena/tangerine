@@ -110,7 +110,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 		}
 
 		$out .= "<div dojoType=\"dijit.form.Form\" id=\"search_form\" jsId=\"search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
-		$out .= "<table style=\"border: 1px solid #AAA;\" cellspacing=\"10\" align=\"center\">\r\n";
+		$out .= "<table cellspacing=\"10\" align=\"center\">\r\n";
 		$out .= "<tr><td><label for=\"search\">$label1</label></td>";
 		$out .= "<td><input type=\"text\" name=\"search\" placeHolder=\"Ingresar\" $dojotype trim=\"true\" id=\"search\" $constrains $invalid_message $prompt_message $required /></td></tr>\r\n";
 
@@ -237,7 +237,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 			$search_table = '';
 		}
 		$out .= "<div dojoType=\"dijit.form.Form\" id=\"search_form\" jsId=\"search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
-		$out .= "<table style=\"border: 1px solid #AAA;\" cellspacing=\"10\" align=\"center\">\r\n";
+		$out .= "<table cellspacing=\"10\" align=\"center\">\r\n";
 
 
 		$label = array();
@@ -375,7 +375,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 		$required= @$node['SEARCH_REQUIRED']=="true"? "required=\"true\"" : '';
 
 		$out .="<div dojoType=\"dijit.form.Form\" id=\"search_form\" jsId=\"search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
-		$out .="<table style=\"border: 1px solid #AAA;\" cellspacing=\"10\" align=\"center\">\r\n";
+		$out .="<table cellspacing=\"10\" align=\"center\">\r\n";
 		$search_name =! empty($node['SEARCH_NAME'])?$node['SEARCH_NAME']:'';//[TODO] search_name debiera leerse de los elements xml
 		$out .="<tr><td><label for=\"search\">$search_name</label></td>";
 

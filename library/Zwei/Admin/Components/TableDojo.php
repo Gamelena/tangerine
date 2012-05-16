@@ -231,7 +231,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 			$out .= "<div dojoType=\"dijit.Dialog\" id=\"formPassword\" title=\"Cambio de password\" execute=\"changePassword('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
 			$out .= "<br/><br/>\r\n";
 			$out .= "
-                <table style=\"border: 1px solid #0066cc;\" cellspacing=\"10\" align=\"center\">
+                <table cellspacing=\"10\" align=\"center\">
                     <tr>
                         <td>
                             <label for=\"txtNvoPass\">Nueva contrase&ntilde;a</label>
