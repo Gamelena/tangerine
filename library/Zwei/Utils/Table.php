@@ -95,18 +95,17 @@ class Zwei_Utils_Table
 	
 	/**
 	 * Tranforma un Zend_Db_Rowset a HTML
-	 * @param $rowset
-	 * @param $component componente XML asociado
+	 * @param array|Zend_Db_Rowset
+	 * @param string|array componente XML|array de títulos
 	 * @return string tabla HTML
 	 */
 	
 	function rowsetToHtml($rowset, $component=false)
 	{
 		if ($component) {
-			if (!is_array($component)) {
+			if (!is_array($component)) { // buscar títulos en componente xml
 		        $this->parseComponent($component);
-			} else {
-			    //Debug::write("is array");
+			} else { // sacar títulos de array
 				$this->_name = $component;
 				$this->_xml = "array";
 			}    
@@ -114,7 +113,7 @@ class Zwei_Utils_Table
 		
 		$count = count($rowset);
 
-		$out = "<table cellspacing=\"0\" border=\"2\">\n";
+		$out = "<table border=\"1\">\n";
 		$out .= $this->showTitles($rowset, $component);
 		for ($i=0;$i<$count;$i++) {
 			$out .= $this->showContent($rowset, $i);
