@@ -114,10 +114,13 @@ class Zwei_Utils_Table
 		$count = count($rowset);
 
 		$out = "<table border=\"1\">\n";
-		$out .= $this->showTitles($rowset, $component);
-		for ($i=0;$i<$count;$i++) {
-			$out .= $this->showContent($rowset, $i);
-		}	
+		Debug::write($rowset);
+		if (!empty($rowset) && count($rowset) > 0) {
+    		$out .= $this->showTitles($rowset, $component);
+    		for ($i=0;$i<$count;$i++) {
+    			$out .= $this->showContent($rowset, $i);
+    		}
+		}		
 		$out .= "</table>\n";
 		return $out;
 	}

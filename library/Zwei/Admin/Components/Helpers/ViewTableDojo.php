@@ -359,7 +359,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 		$out = "";
 		$node=@$this->layout[0];
         $this->format_date = (@$this->layout[0]['SEARCH_DOJO_TYPE']=="dijit.form.DateTextBox")? 'true' : 'false';
-        $this->search_format = (@$this->layout[0]['SEARCH_FORMAT'])? $this->layout[0]['SEARCH_FORMAT'] : 'false';
+        $this->search_format = (@$this->layout[0]['SEARCH_FORMAT'])? $this->layout[0]['SEARCH_FORMAT'] : "'equals'";
         $this->between = 'false';
         $this->search_in_fields='false';
 
@@ -389,7 +389,8 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 		$search_table_pk = (isset($node['SEARCH_TABLE_PK'])) ? $node['SEARCH_TABLE_PK'] :'id';
 		$search_table_field = (isset($node['SEARCH_TABLE_FIELD'])) ? $node['SEARCH_TABLE_FIELD'] :'title';
 		$search_table_target = (isset($node['SEARCH_TABLE_TARGET'])) ? $node['SEARCH_TABLE_TARGET'] :$node['SEARCH_TABLE']."_".$search_table_pk;
-
+        $this->search_in_fields = "'$search_table_target'";
+		
 		foreach ($result as $v){
 			$out.="<option value=\"{$v[$search_table_pk]}\">{$v[$search_table_field]}</option>";
 		}

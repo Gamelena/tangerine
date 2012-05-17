@@ -124,9 +124,9 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 
 		if (isset($viewtable->layout[0]['EXCEL']) && $viewtable->layout[0]['EXCEL'] == "true") {
 			$out .= "<td>";
-			if(@$viewtable->layout[0]['SEARCH_TYPE']=='multiple'){
+			if (@$viewtable->layout[0]['SEARCH_TYPE'] == 'multiple' || !empty($viewtable->layout[0]['SEARCH_TABLE'])) {
 				$out .= "<button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconTable\" id=\"btnExport\" onClick=\"searchMultiple('{$viewtable->layout[0]['TARGET']}', $viewtable->search_in_fields, $viewtable->search_format, $viewtable->between, 'excel', '$this->page');\">";
-			}else{
+			} else {
 				$out .= "<button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconTable\" id=\"btnExport\" onClick=\"cargarDatos('{$viewtable->layout[0]['TARGET']}', $viewtable->search_in_fields, $viewtable->format_date, $viewtable->search_format, $viewtable->between, 'excel', '$this->page');\">";
 			}
 			$out .= "Exportar a Excel";
@@ -134,7 +134,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 		}
 
 		if (isset($viewtable->layout[0]['FUNCTIONS'])) {
-			$CustomFunctions = new Zwei_Utils_CustomFunctions();
+			$CustomFunctions = new Zwei_Utils_CustomFunctions();//Declarar esta funcion en proyectos específico heredando de Zwei_Utils_CustomFunctionsBase()
 			$params = '';
 			$component = $this->page;
 			$functions = explode(";",(@$viewtable->layout[0]['FUNCTIONS']));
@@ -153,7 +153,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 		}
 		$permissions = false;
 		if (isset($viewtable->layout[0]['LINKS'])) {
-			$CustomFunctions = new Zwei_Utils_CustomFunctions();
+			$CustomFunctions = new Zwei_Utils_CustomFunctions();//Declarar esta funcion en proyectos específico heredando de Zwei_Utils_CustomFunctionsBase()
 			$params = '';
 			$model = $this->page;
 			$items = explode(";",(@$viewtable->layout[0]['LINKS']));
@@ -266,10 +266,15 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 		$out .= "<input type=\"hidden\" id=\"data_url\" value=\"\" />";
 
 		if (!empty($viewtable->layout[0]['JS'])) {
+		    //Función opcional para ser ejecutada al cargar el JS {nombrejs}Init()
 			$functionInit = str_replace('.js','', $viewtable->layout[0]['JS']).'Init';
 			$out .= "
             <script type=\"text/javascript\">
-            $functionInit();
+            try{
+                $functionInit();
+            } catch (e) {
+                console.debug(e);
+            }
             </script>
             ";
 		}
