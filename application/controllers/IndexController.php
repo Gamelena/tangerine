@@ -11,11 +11,31 @@
 
 class IndexController extends Zend_Controller_Action
 {
-	private $_acl;
+	/**
+	 * 
+	 * @var string
+	 */
 	private $_dojo_style = 'tundra';
+	/**
+	 * 
+	 * @var string
+	 */
 	private $_sitename;
+	/**
+	 * 
+	 * @var string
+	 */
 	private $_template = TEMPLATE;
-	private $_version = 1;
+	/**
+	 * 
+	 * @var int
+	 */
+	private $_version = 4;
+	/**
+	 * 
+	 * @var Zwei_Db_Table
+	 */
+	private $_model;
 
 	public function init()
 	{
@@ -83,13 +103,16 @@ class IndexController extends Zend_Controller_Action
 		->requireModule("dojo.date.locale")
 		;
 
-		$this->view->headStyle()->appendStyle('
+        $this->view->headStyle()->appendStyle('
             @import "'.$this->base_dojo_folder.'/dojox/grid/resources/Grid.css";
             @import "'.$this->base_dojo_folder.'/dojox/grid/resources/'.$this->_dojo_style.'Grid.css";
+            @import "'.$this->base_dojo_folder.'/dojox/grid/enhanced/resources/'.$this->_dojo_style.'/EnhancedGrid.css";
+            @import "'.$this->base_dojo_folder.'/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css";
             @import "'.$this->base_dojo_folder.'/dojox/form/resources/CheckedMultiSelect.css";
             @import "'.$this->base_dojo_folder.'/dojox/form/resources/FileInput.css";
             @import "'.BASE_URL.'css/admin.css?version='.$this->_version.'";
         ');         
+		        
 
 		if ($this->_template != '' && $this->_template != 'dojo') {
 			$this->view->headStyle()->appendStyle('
@@ -113,7 +136,6 @@ class IndexController extends Zend_Controller_Action
 		// action body
 		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
 		$userInfo = Zend_Auth::getInstance()->getStorage()->read();
-		$this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
 		$this->view->user_name = $userInfo->user_name;
 		$this->view->first_names = $userInfo->first_names;
 		$this->view->last_names = $userInfo->last_names;
@@ -133,15 +155,10 @@ class IndexController extends Zend_Controller_Action
 		$this->view->content = "<center><img width=\"960\" src=\"".BASE_URL."images/satelite.jpg\"/></center>";
 	}
 
-	/**
-	 * Parsea componente XML y carga HTML
-	 */
 	public function componentsAction()
 	{
 		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
 		$userInfo = Zend_Auth::getInstance()->getStorage()->read();
-		$this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
-
 		/*
 		 * Esto aplica sólo en el caso de no usar template dojo por defecto.
 		 */
@@ -159,11 +176,19 @@ class IndexController extends Zend_Controller_Action
 		$Xml = new Zwei_Admin_Xml();
 
 		if (isset($this->_request->p)) {
-			if ($this->_acl->isUserAllowed($this->_request->p, "LIST") || $this->_acl->isUserAllowed($this->_request->p, "EDIT") || $this->_acl->isUserAllowed($this->_request->p, "ADD")) {
-				$Xml->parse(COMPONENTS_ADMIN_PATH."/".$this->_request->p);
+			if (Zwei_Admin_Acl::isUserAllowed($this->_request->p, "LIST") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "EDIT") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "ADD")) {
+				
+				if (preg_match('/(.*).php/', $this->_request->p)) {
+				    $file = BASE_URL ."components/".$this->_request->p;
+				} else {
+				    $file = COMPONENTS_ADMIN_PATH."/".$this->_request->p;
+				}
+				$Xml->parse($file);
+				
 				//parche para que cargue tabla html no dojo, si el layout no es dojo
-				if (TEMPLATE == 'urban' && $Xml->elements[0]['TYPE'] == 'table_dojo')
-				    $Xml->elements[0]['TYPE'] = 'table';
+				if (TEMPLATE == 'urban' && $Xml->elements[0]['TYPE'] == 'table_dojo') {
+					$Xml->elements[0]['TYPE'] = 'table';
+				}	
 				$ComponentClass = "Zwei_Admin_Components_".Zwei_Utils_String::toClassWord($Xml->elements[0]['TYPE']);
 				//Se pasa como parámetro $this->view para hacer posible la inclusión de librerías js y css auxiliares 
 				$View = new $ComponentClass($this->_request->p, $this->view);
@@ -175,24 +200,18 @@ class IndexController extends Zend_Controller_Action
 		} else {
 			$content = "portada";
 		}
-
 		if (isset($this->_request->ajax)) {
 			$this->_helper->viewRenderer('ajax');
 		}
 		$this->view->content = $content;
 	}
 
-	/**
-	 * Carga modulo Zend y carga HTML
-	 * @return unknown_type
-	 */
-	public function zendModulesAction()
-	{
-		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
-        $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-        $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
-		
-	}
+	
+    public function dynaComponentsAction()
+    {
+        //DEPRECATED
+    }	
+	
 	
 	/**
 	 * Acá se asocia a un Zend Controller un objeto Zwei_Admin_Components_Helpers_EditTabsDojo()
@@ -203,17 +222,27 @@ class IndexController extends Zend_Controller_Action
 	{
 		if(!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
 		$userInfo = Zend_Auth::getInstance()->getStorage()->read();
-		$this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
 
 		$Xml=new Zwei_Admin_Xml();
 		$Form=new Zwei_Utils_Form();
 
 		if (isset($this->_request->p)) {
-			if ($this->_acl->isUserAllowed($this->_request->p, "LIST") || $this->_acl->isUserAllowed($this->_request->p, "EDIT") || $this->_acl->isUserAllowed($this->_request->p, "ADD")) {
-				$Xml->parse(COMPONENTS_ADMIN_PATH."/".$this->_request->p);
+			if (Zwei_Admin_Acl::isUserAllowed($this->_request->p, "LIST") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "EDIT") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "ADD")) {
+				
+			    if (preg_match('/(.*).php/', $this->_request->p)) {
+	                $file = BASE_URL ."/components/".$this->_request->p;
+                } else {
+                    $file = COMPONENTS_ADMIN_PATH."/".$this->_request->p;
+                }	
+                			
+				$Xml->parse($file);
+				$model = Zwei_Utils_String::toClassWord($Xml->elements[0]['TARGET']).'Model';
+				$this->_model = new $model;
+				$primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : "id";
+				
 				//ComponentClass="Zwei_Admin_Components_".Zwei_Utils_String::toClassWord($Xml->elements[0]['TYPE']);
 				//Se pasa como parámetro $this->view para hacer posible la inclusión de librerías js y css auxiliares mediante un objeto Zend_View
-				$View = new Zwei_Admin_Components_Helpers_EditTabs($this->_request->p, @$this->_request->id, $this->view);
+				$View = new Zwei_Admin_Components_Helpers_EditTabs($this->_request->p, $this->_request->$primary, $this->view);
 				$content = $View->display($Form->action);
 			} else {
 				$content = "Acceso denegado a módulo";
@@ -232,15 +261,19 @@ class IndexController extends Zend_Controller_Action
 	{
 		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
 		$userInfo = Zend_Auth::getInstance()->getStorage()->read();
-		$this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
 
 		$Xml = new Zwei_Admin_Xml();
 		$Form = new Zwei_Utils_Form();
 
 		if(isset($this->_request->p))
 		{
-			if ($this->_acl->isUserAllowed($this->_request->p, "LIST") || $this->_acl->isUserAllowed($this->_request->p, "EDIT") || $this->_acl->isUserAllowed($this->_request->p, "ADD")) {
-				$Xml->parse(COMPONENTS_ADMIN_PATH."/".$this->_request->p);
+			if (Zwei_Admin_Acl::isUserAllowed($this->_request->p, "LIST") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "EDIT") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "ADD")) {
+			    if (preg_match('/(.*).php/', $this->_request->p)) {
+                    $file = BASE_URL ."/components/".$this->_request->p;
+                } else {
+                    $file = COMPONENTS_ADMIN_PATH."/".$this->_request->p;
+                }				
+				$Xml->parse($file);
 				//ComponentClass="Zwei_Admin_Components_".Zwei_Utils_String::toClassWord($Xml->elements[0]['TYPE']);
 				//Se pasa como parámetro $this->view para hacer posible la inclusión de librerías js y css auxiliares mediante un objeto Zend_View
 				$View = new Zwei_Admin_Components_Helpers_EditTabsDojo($this->_request->p, $this->_request->id, $this->view);
@@ -258,7 +291,6 @@ class IndexController extends Zend_Controller_Action
 	{
 		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
 		$userInfo = Zend_Auth::getInstance()->getStorage()->read();
-		$this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
 
 
 		Zend_Dojo::enableView($this->view);
@@ -349,10 +381,11 @@ class IndexController extends Zend_Controller_Action
 		$this->view->content = include($this->_request->p); 
 	}
 	
-        public function iframeAction()
-        {
-    	         $this->view->content = $this->_request->p;
-        }
+    public function iframeAction()
+    {
+    	$this->view->content = $this->_request->p;
+        // action body
+    }
 	
 	
 
@@ -363,13 +396,19 @@ class IndexController extends Zend_Controller_Action
 	 */
 	protected function getAuthAdapter()
 	{
-		$dbAdapter = Zend_Db_Table::getDefaultAdapter();
+		$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+		$dbAdapter = Zend_Db::factory($config->resources->multidb->auth);
+		//$dbAdapter = Zend_Db_Table::getDefaultAdapter();
 		$authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
-
-		$authAdapter->setTableName('acl_users')
-		->setIdentityColumn('user_name')
-		->setCredentialColumn('password')
-		->setCredentialTreatment('MD5(?)');
+        $authUsersTable = 'acl_users';
+        $authUserName = 'user_name';
+        $authPassword = 'password';
+		
+		
+		$authAdapter->setTableName($authUsersTable)
+		->setIdentityColumn($authUserName)
+		->setCredentialColumn($authPassword)
+		->setCredentialTreatment('MD5(?) and approved="1"');
 
 		return $authAdapter;
 	}

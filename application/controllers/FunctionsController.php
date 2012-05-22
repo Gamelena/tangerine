@@ -21,7 +21,6 @@ class FunctionsController extends Zend_Controller_Action
 		$this->_helper->layout()->disableLayout();
 		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
 		$this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
-		$this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
 	}
 
 	public function indexAction(){
