@@ -21,6 +21,10 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	 */
 	static protected $_defaultLogMode = false;
 	
+	/**
+	 * Campos sobre los cuales se puede realizar la búsqueda por defecto, aunque esto tambien se puede hacer vía XML
+	 * @var array
+	 */
 	protected $_search_fields = false;
 	/**
 	 * 
@@ -59,13 +63,18 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	 */
 	protected $_overloaded_data = false;
 		
-	   /**
+	 /**
      * array $data de Zend_Db_Table_Select sobrecargado en $this->overloadDataTabs($data) 
      * @var array|false
      */
     protected $_overloaded_data_tabs = false;
 	
-	
+	/**
+	 * parámetros de búsqueda llave:valor enviados por request
+	 * @var array
+	 */
+    protected $_query_params;
+    
 	
 	public function init()
 	{
@@ -197,8 +206,10 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	public function whereToArray($string)
 	{
 		$array=explode('=', $string);
-		foreach ($array as $i=>$v){
-			$array[$i]=trim($v);
+		foreach ($array as $i => $v){
+		    $i = str_replace("'", "", $i);
+		    $v = str_replace("'", "", $v);
+			$array[$i] = trim($v);
 		}
 		return $array;
 	}
@@ -207,18 +218,57 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 		return (isset($this->_primary)) ? $this->_primary : false;
 	} 
 	
+	/**
+	 * Extiende arreglo de datos nativo de $self::select() para el despliegue en listado. 
+	 * @param Zend_Db_Rowset retorno de $self::select()
+	 * @return array
+	 */
 	public function overloadData($data) 
 	{
 		return $this->_overloaded_data;
 	}
 	
+    /**
+     * Extiende arreglo de datos nativo de $self::select() para el despliegue en pestañas. 
+     * @param Zend_Db_Rowset retorno de $self::select()
+     * @return array
+     */	
 	public function overloadDataTabs($data)
 	{
         return $this->_overloaded_data_tabs;		
 	}
 	
+	/**
+	 * Indica si se guardarán transacciones en log, Modelo debe extender de Zwei_Table_Loggeable()
+	 * @param boolean
+	 */
 	public function setDefaultLogMode($mode)
 	{
 	    self::$_defaultLogMode = $mode; 	
+	}
+	
+	/**
+	 * Inicializa $this->_query_params con un array asociativo de parámetros de busqueda
+	 * @return array
+	 */
+	public function initQueryParams()
+	{
+	    $form = new Zwei_Utils_Form;
+	    if (!empty($form->search) || $form->search === '0') {
+	        $searchFields = explode(";", $form->search_fields);
+            $search = explode(';', $form->search);
+            if (!empty($form->between) || $form->between === '0') $between = explode(';', $form->between);
+            $i = 0;    
+            foreach ($search as $v) {
+                $this->_query_params[$searchFields[$i]] = $v;
+                if (!in_array($searchFields[$i], $between)) {
+                    $i++;
+                } else {
+                    $this->_query_params[$searchFields[$i]] = array();
+                    $this->_query_params[$searchFields[$i]][] = $search[$i];
+                    $this->_query_params[$searchFields[$i]][] = $search[$i+1];                            
+                }
+            }
+ 	    }
 	}
 }
