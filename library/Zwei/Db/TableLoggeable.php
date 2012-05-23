@@ -5,7 +5,7 @@ class Zwei_Db_TableLoggeable extends Zwei_Db_Table
     public function insert($data)
     {
     	$last_insert_id = parent::insert($data);  
-        if ($last_insert_id) $this->log("ADD", $last_insert_id);   
+        if ($last_insert_id) $this->log("Agregar", $last_insert_id);   
         return $last_insert_id;
     }
     
@@ -17,14 +17,14 @@ class Zwei_Db_TableLoggeable extends Zwei_Db_Table
     		$where = (count($where) == 1) ? $where[0] : print_r($where, true);
     		$where = print_r($where, true);
     	} 
-    	if ($update) $this->log("EDIT", $where);
+    	if ($update) $this->log("Editar", $where);
         return $update;
     }
     
     public function delete($where)
     {
     	$delete = parent::delete($where);
-        if ($delete) $this->log("DELETE", $where);
+        if ($delete) $this->log("Eliminar", $where);
         return $delete;
     }   
     
