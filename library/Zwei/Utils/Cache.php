@@ -41,7 +41,7 @@ final class Zwei_Utils_Cache
 
     public function start() 
     {
-        if (Zend_Auth::getInstance()->hasIdentity()) {
+        if (Zend_Auth::getInstance()->hasIdentity() && !isset($_REQUEST['action']) && !preg_match("/grafico/", @$_REQUEST['p'])) {
             $userInfo = Zend_Auth::getInstance()->getStorage()->read();
             $pathInfo = isset($_SERVER['PATH_INFO']) ? isset($_SERVER['PATH_INFO']) : '';
             if ($pathInfo == "/components" && !preg_match("/grafico/", @$_REQUEST['p']))
