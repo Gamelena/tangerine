@@ -48,17 +48,19 @@ final class Zwei_Utils_Cache
             {
                 $this->_check = true;
                 $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-                $cacheid = md5($userInfo->acl_roles_id.@$_REQUEST['p']); 
+                $cacheid = md5($userInfo->acl_roles_id.@$_SERVER['PATH_INFO'].@$_REQUEST['p']); 
                 // make object
                 $this->_cache = Zend_Cache::factory('Output', 'File', $this->_frontendOpt, $this->_backendOpt);
                 $this->_isStarted = $this->_cache->start($cacheid);
             } else if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] == "model=settings&format=json") {
-                $cacheid = $userInfo->acl_roles_id."settings"; 
+                $cacheid = $userInfo->acl_roles_id."_settings"; 
+                
                 $this->_check = true;
                 $this->_cache = Zend_Cache::factory('Output', 'File', $this->_frontendOpt, $this->_backendOpt);
                 $this->_isStarted = $this->_cache->start($cacheid);
             } else if ($pathInfo == "/modules") {
-                $cacheid = $userInfo->acl_roles_id."modules"; 
+                $cacheid = md5($userInfo->acl_roles_id."_modules"); 
+                
                 $this->_check = true;
                 $this->_cache = Zend_Cache::factory('Output', 'File', $this->_frontendOpt, $this->_backendOpt);
                 $this->_isStarted = $this->_cache->start($cacheid);             
