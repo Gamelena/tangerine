@@ -84,26 +84,26 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 
         if ($viewtable->layout[1]['_name'] == 'TAB') {
             if(isset($viewtable->layout[0]['ADD']) && $viewtable->layout[0]['ADD'] == "true" && $this->_acl->isUserAllowed($this->page, 'ADD')){
-                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnNuevoUsr\" onClick=\"cargarTabsPanelCentral('$this->page','add', '$primary');\">";
+                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnAdd\" onClick=\"cargarTabsPanelCentral('$this->page','add', '$primary');\">";
                 $out .= "Agregar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }
 
             if (isset($viewtable->layout[0]['EDIT']) && $viewtable->layout[0]['EDIT'] == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT')){
-                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"btnEditarUsr\" onClick=\"cargarTabsPanelCentral('$this->page','edit', '$primary');\">";
+                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"btnEdit\" onClick=\"cargarTabsPanelCentral('$this->page','edit', '$primary');\">";
                 $out .= "Editar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }
 
         } else {
             if (isset($viewtable->layout[0]['ADD']) && $viewtable->layout[0]['ADD'] == "true" && $this->_acl->isUserAllowed($this->page, 'ADD')){
-                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnNuevoUsr\" onClick=\"showDialog('add');\">";
+                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnAdd\" onClick=\"showDialog('add');\">";
                 $out .= "Agregar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }
 
             if (isset($viewtable->layout[0]['EDIT']) && $viewtable->layout[0]['EDIT'] == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT')){
-                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"btnEditarUsr\" onClick=\"showDialog('edit');\">";
+                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"btnEdit\" onClick=\"showDialog('edit');\">";
                 $out .= "Editar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }
@@ -211,14 +211,14 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
         if ((isset($viewtable->layout[0]['ADD']) && $viewtable->layout[0]['ADD'] == 'true')
         && ($this->_acl->isUserAllowed($this->page, 'ADD'))) 
         {
-            if ($viewtable->layout[1]['_name']!='TAB')
+            if ($viewtable->layout[1]['_name'] != 'TAB')
             {
                 $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 $out .= "\t".$edittable->display('ADD');
                 $out .= "\n</div>\r\n";
     
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\" onload=\"global_opc='add';showtab('tab_ctrl1', 'tab1', $iframe);initModule();\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\" onload=\"global_opc='add';showtab('tabadd_ctrl1', 'tabadd1', $iframe);initModule();\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
                     $out .= "\t<iframe src=\"\" id=\"iframeDialogAdd\" name=\"iframeDialogAdd\" frameborder=\"no\" $height $width $style></iframe>";
                 }
@@ -235,7 +235,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                 $out .= "\t".$edittable->display('EDIT');
                 $out .= "\n</div>\r\n";
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\"  onload=\"global_opc='edit';showtab('tab_ctrl1', 'tab1', $iframe);initModule();\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1', $iframe);initModule();\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
                     $out .= "\t<iframe src=\"\" id=\"iframeDialogEdit\" name=\"iframeDialogoEdit\" frameborder=\"no\" $height $width $style></iframe>";
                 }    
@@ -346,13 +346,11 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
             }
             
             
-            if (isset($this->layout[0]['EDIT_ADDITIONAL_VALIDATION'])) {
-                $modelclass=Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
+
+                $modelclass=Zwei_Utils_String::toClassWord($viewtable->layout[0]['TARGET'])."Model";
                 $Model=new $modelclass();
                 $additional_validation= $Model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
-            } else {
-                $additional_validation='';
-            }
+
             $out.="
             <script type=\"text/javascript\">
             //showtab('tab_ctrl1', 'tab1');
@@ -449,6 +447,6 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                 $out.="</script>
             ";   
         }   
-        return $out;
+        return $out; 
     }
 }
