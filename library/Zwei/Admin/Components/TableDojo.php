@@ -173,7 +173,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 
         $permissions = false;
 
-
+        $popups = array();
         if (isset($viewtable->layout[0]['POPUPS'])) {
             $CustomFunctions = new Zwei_Utils_CustomFunctions();
             $params = '';
@@ -197,6 +197,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                 }
                 $i++;
             }
+            $popups = $items;
         }
 
 
@@ -243,6 +244,25 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
             }
         }
 
+        $i=0;
+        
+        foreach ($popups as $i => $v)
+        {
+            if (!empty($iframes[$i]) && $iframes[$i]=="true")
+            {
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo$i\" title=\"{$titles[$i]}\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "\n</div>\r\n";
+            } else {
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo$i\" title=\"{$titles[$i]}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1', $iframe);initModule();\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                if ($iframe == 'true') {
+                    $out .= "\t<iframe src=\"\" id=\"iframeDialogEdit\" name=\"iframeDialogoEdit$i\" frameborder=\"no\" $height $width $style></iframe>";
+                }    
+                $out .= "\n</div>\r\n";
+            }
+            $i++;
+        }
+        
+        
         $out .= "</div>\r\n";
         $out .="<div id=\"output_grid\"></div>";
 
