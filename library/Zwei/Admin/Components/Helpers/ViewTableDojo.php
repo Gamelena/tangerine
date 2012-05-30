@@ -269,7 +269,6 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         //Zwei_Utils_Debug::write($constraints);
 
         $i=0;
-        $this->between=$between;
         foreach ($search as $s){
 
             $dojotype[$i]=(empty($dojotype[$i]) || $dojotype[$i]=='null') ? 'dojoType="dijit.form.ValidationTextBox"': 'dojoType="'.$dojotype[$i].'"';
@@ -284,7 +283,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
                 $out.="<td><input type=\"text\" name=\"search$j\" placeHolder=\"Ingresar\" ".@$dojotype[$i]." trim=\"true\" id=\"search$j\" ".$constraints[$i].@$invalid_message[$i].@$prompt_message[$i].@$required[$i]." onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format',  $between)\" /></td></tr>\r\n";
 
                 $this->search_in_fields='true';
-                //$this->between="'$s'";
+                $this->between="'$s'";
                 $i=$j;
                 $betweened=true;
             } 
