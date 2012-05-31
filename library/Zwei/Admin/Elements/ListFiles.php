@@ -33,7 +33,7 @@ class Zwei_Admin_Elements_ListFiles extends Zwei_Admin_Elements_Element{
 						if (isset($this->params['FUNCTIONS'])) {
 						    $out .= "<td>$file</td>";
 						} else if (isset($this->params['PATH_PUBLIC'])){
-						    $out .= "<td><a href=\"{$this->params['PATH_PUBLIC']}\">$file</a></td>";     
+						    $out .= "<td><a href=\"{$this->params['PATH_PUBLIC']}/$file\">$file</a></td>";     
 						} else {
 						    $out .= "<td>$file</td>";
 						}
