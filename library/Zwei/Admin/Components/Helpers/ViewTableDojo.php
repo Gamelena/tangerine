@@ -64,10 +64,11 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $dojotype = isset($this->layout[0]['TABLE_DOJO_TYPE']) ? "dojoType=\"{$this->layout[0]['TABLE_DOJO_TYPE']}\"" : "dojoType=\"dojox.grid.EnhancedGrid\"";
         $plugins = isset($this->layout[0]['PLUGINS']) ? "plugins=\"{$this->layout[0]['PLUGINS']}\"" : "plugins=\"{pagination: {defaultPageSize:25, maxPageStep: 5 } }\"";
         $on_row_click = isset($this->layout[0]['ON_ROW_CLICK']) ? "onRowClick=\"{$this->layout[0]['ON_ROW_CLICK']}\"" : "";
+        $on_row_dbl_click = isset($this->layout[0]['ON_ROW_DBL_CLICK']) ? "onRowDblClick=\"{$this->layout[0]['ON_ROW_DBL_CLICK']}\"" : "";
         
         
         if (!isset($this->layout[0]['SEARCH_HIDE_SUBMIT'])) {
-            $out .= "\r\n<table $dojotype $plugins $on_row_click id=\"main_grid\" jsId=\"main_grid\" $store clientSort=\"true\" style=\"width:{$width_table}px; height: 320px;\" selectable=\"true\" rowSelector=\"20px\" rowsPerPage=\"10\" noDataMessage=\"Sin datos.\">\r\n<thead><tr>\r\n";
+            $out .= "\r\n<table $dojotype $plugins $on_row_click $on_row_dbl_click id=\"main_grid\" jsId=\"main_grid\" $store clientSort=\"true\" style=\"width:{$width_table}px; height: 320px;\" selectable=\"true\" rowSelector=\"20px\" rowsPerPage=\"10\" noDataMessage=\"Sin datos.\">\r\n<thead><tr>\r\n";
     
             for ($i=1; $i<$count; $i++) {
                 $target = (!isset($this->layout[$i]['FIELD'])) ? @$this->layout[$i]['TARGET'] : $this->layout[$i]['FIELD'];
@@ -307,7 +308,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
                 $ClassModel = Zwei_Utils_String::toClassWord($s)."Model";
                 $Model = new $ClassModel();
                 $select = $Model->select();
-                //Zwei_Utils_Debug::write($select->__toString());
+                Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
                 $result = $Model->fetchAll($select);
                 $table_pk = (!empty($search_table_pk[$j])) ? $search_table_pk[$j] :'id';
                 $table_field = (!empty($search_table_field[$j])) ? $search_table_field[$j] :'title';

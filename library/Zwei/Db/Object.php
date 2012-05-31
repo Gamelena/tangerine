@@ -70,6 +70,10 @@ class Zwei_Db_Object
                                 } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
                                     $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchFieldFormatted,'$mask') = ?", $aSearchKeys[$i]));
                                 }
+                            } else if (@$this->_form->between ==  $sSearchField) {    
+                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[$i]));
+                                $i++;
+                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[$i]));
                             } else if ($search_format[$auxI] == 'equals') {
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted = ?", $aSearchKeys[$i]));
                             } else if ($search_format[$auxI] == 'lesserorequals') {
@@ -137,11 +141,11 @@ class Zwei_Db_Object
         $count = (isset($this->_form->limit)) ? $this->_form->limit : 20000;//[TODO] ver paginador 
         $start = (isset($this->_form->start)) ? $this->_form->start : 0;  
         
-        $oSelect->limit($count, $start);
+        if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) $oSelect->limit($count, $start);
         
         //Se imprime query en log debug según configuración del sitio
-        Zwei_Utils_Debug::writeBySettings($oSelect->__toString(), 'query_log');
-        Zwei_Utils_Debug::writeBySettings($oSelect->getAdapter()->getConfig(), 'query_log');
+        if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($oSelect->__toString(), 'query_log');
+       if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($oSelect->getAdapter()->getConfig(), 'query_log');
         return $oSelect;
     }
 }
