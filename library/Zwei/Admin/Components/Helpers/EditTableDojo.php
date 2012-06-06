@@ -163,8 +163,10 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 alert(resp.message);
             } else if(resp.state == 'UPDATE_OK') {
                 alert('Datos Actualizados');
+                cargarDatos(model);
             } else if(resp.state == 'ADD_OK') {
                 alert('Datos Ingresados');
+                cargarDatos(model);
             } else if(resp.state == 'UPDATE_FAIL') {
                 alert('Ha ocurrido un error, o no ha modificado datos');
             } else if(resp.state == 'ADD_FAIL') {
@@ -172,7 +174,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             }
                 
                 
-            cargarDatos(model);
+
             
             if (resp.todo == 'cargarArbolMenu') {
                 cargarArbolMenu() ;

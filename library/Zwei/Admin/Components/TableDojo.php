@@ -95,6 +95,13 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                 $out .= "</button></td>";
             }
 
+            if (isset($viewtable->layout[0]['CLONE']) && $viewtable->layout[0]['CLONE'] == "true"  && $this->_acl->isUserAllowed($this->page, 'ADD')){
+                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnClone\" onClick=\"cargarTabsPanelCentral('$this->page','clone', '$primary');\">";
+                $out .= "Clonar ".$viewtable->layout[0]['NAME'];
+                $out .= "</button></td>";
+            }
+            
+            
         } else {
             if (isset($viewtable->layout[0]['ADD']) && $viewtable->layout[0]['ADD'] == "true" && $this->_acl->isUserAllowed($this->page, 'ADD')){
                 $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnAdd\" onClick=\"showDialog('add');\">";
@@ -207,9 +214,10 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
         $width = isset ($viewtable->layout[0]['WIDTH']) ? "height=\"{$viewtable->layout[0]['HEIGHT']}\"" : "";
         $style = isset ($viewtable->layout[0]['STYLE']) ? "height=\"{$viewtable->layout[0]['STYLE']}\"" : "";
         $iframe = isset ($viewtable->layout[0]['IFRAME']) && $viewtable->layout[0]['IFRAME'] == 'true' ? 'true' : 'false';
+        $initModule = isset ($viewtable->layout[0]['JS']) ? "initModule();" : "";
         
 
-        if ((isset($viewtable->layout[0]['ADD']) && $viewtable->layout[0]['ADD'] == 'true')
+        if ((@$viewtable->layout[0]['ADD'] == 'true' || @$viewtable->layout[0]['CLONE'] == 'true')
         && ($this->_acl->isUserAllowed($this->page, 'ADD'))) 
         {
             if ($viewtable->layout[1]['_name'] != 'TAB')
@@ -219,7 +227,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                 $out .= "\n</div>\r\n";
     
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\" onload=\"global_opc='add';showtab('tabadd_ctrl1', 'tabadd1', $iframe);initModule();\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\" onload=\"global_opc='add';showtab('tabadd_ctrl1', 'tabadd1');$initModule\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
                     $out .= "\t<iframe src=\"\" id=\"iframeDialogAdd\" name=\"iframeDialogAdd\" frameborder=\"no\" $height $width $style></iframe>";
                 }
@@ -236,7 +244,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                 $out .= "\t".$edittable->display('EDIT');
                 $out .= "\n</div>\r\n";
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1', $iframe);initModule();\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1');$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
                     $out .= "\t<iframe src=\"\" id=\"iframeDialogEdit\" name=\"iframeDialogoEdit\" frameborder=\"no\" $height $width $style></iframe>";
                 }    
@@ -244,6 +252,8 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
             }
         }
 
+        
+        
         $i=0;
         
         foreach ($popups as $i => $v)
@@ -253,7 +263,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                 $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo$i\" title=\"{$titles[$i]}\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 $out .= "\n</div>\r\n";
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo$i\" title=\"{$titles[$i]}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1', $iframe);initModule();\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo$i\" title=\"{$titles[$i]}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1', $iframe);$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
                     $out .= "\t<iframe src=\"\" id=\"iframeDialogEdit\" name=\"iframeDialogoEdit$i\" frameborder=\"no\" $height $width $style></iframe>";
                 }    
@@ -328,8 +338,8 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
          */
         if ($viewtable->layout[1]['_name'] == 'TAB')
         {       
-            $xhr_insert_data='';
-            $xhr_update_data='';
+            $xhr_insert_data = '';
+            $xhr_update_data = '';
             
             if (preg_match('/(.*).php/', $this->page)) {
                 $file = BASE_URL ."/components/".$this->page;
@@ -344,10 +354,10 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
             $k = 1;
             foreach($tabs as $tab) {
                 foreach ($tab->children() as $node) {
-                    if (($node["add"] == "true" || $node["add"] == "readonly") && !empty($node['target'])) {
+                    if (($node["add"] == "true" || $node["add"] == "readonly" || $node["clone"] == "true" || $node["clone"] == "readonly") && !empty($node['target'])) {
                         $pfx = '_add';
-                        if ($node['type']=='dojo_filtering_select' || $node['type']=='dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
-                            $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value'), \r\n";
+                        if ($node['type']=='dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox' || strstr($node['type'], "dojo_checked_multiselect")) {
+                            $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value').join(':::'), \r\n";
                         } else {
                             $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$pfx}{$k}').value, \r\n";
                         }
@@ -355,8 +365,8 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
 
                     if (($node["edit"] == "true" || $node["edit"] == "readonly") && !empty($node['target'])) {
                         $pfx = '';
-                        if ($node['type']=='dojo_filtering_select' || $node['type']=='dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
-                            $xhr_update_data.="\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value'), \r\n";
+                        if ($node['type'] == 'dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox' || strstr($node['type'], "dojo_checked_multiselect")) {
+                            $xhr_update_data.="\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value').join(':::'), \r\n";
                         } else {
                             $xhr_update_data.="\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$pfx}{$k}').value, \r\n";
                         }
@@ -364,18 +374,17 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                     $k++; 
                 }
             }
-            
-            
 
-                $modelclass=Zwei_Utils_String::toClassWord($viewtable->layout[0]['TARGET'])."Model";
-                $Model=new $modelclass();
-                $additional_validation= $Model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
+            $modelclass = Zwei_Utils_String::toClassWord($viewtable->layout[0]['TARGET'])."Model";
+            $Model = new $modelclass();
+            $additional_validation = $Model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
 
             $out.="
             <script type=\"text/javascript\">
             //showtab('tab_ctrl1', 'tab1');
             function modify(model, items, mode) {
                 var resp = '';
+                console.log('modify');
                 $additional_validation
                 if(mode == 'add' || mode == 'clone') {
                     resp = insertar(model,items);
@@ -389,10 +398,12 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                     alert(resp.message);
                 }else if(resp.state == 'UPDATE_OK'){
                     alert('Datos Actualizados');
-                    cargarPanelCentral('index/components?p=$this->page');
+                    cargarDatos(model);
+                    dijit.byId('formDialogoEditar').hide();
                 }else if(resp.state == 'ADD_OK'){
                     alert('Datos Ingresados');
-                    cargarPanelCentral('index/components?p=$this->page');
+                    cargarDatos(model);
+                    dijit.byId('formDialogo').hide();
                 }else if(resp.state == 'UPDATE_FAIL'){
                     alert('Ha ocurrido un error, o no ha modificado datos');
                 }else if(resp.state == 'ADD_FAIL'){
@@ -432,12 +443,12 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
             }
         
             function actualizar(model, items, id) {
-            
+                console.log('actualizar');
                 var res = '';
                 dojo.xhrPost( {
                     url: base_url+'objects',
                     content: {
-                    $xhr_update_data
+                        $xhr_update_data
                         'id'        : id,
                         'action'    :'edit',
                         'model'     : model,

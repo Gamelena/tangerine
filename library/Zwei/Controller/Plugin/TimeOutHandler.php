@@ -9,17 +9,12 @@ class Zwei_Controller_Plugin_TimeOutHandler extends Zend_Controller_Plugin_Abstr
             Zend_Auth::getInstance()->clearIdentity();
         } else {
             // User is still active - update the timeout time.
-            $authNamespace->timeout = time() + 1200;
+            $authNamespace->timeout = time() + 3600;
             // Store the request URI so that an authentication after a timeout
             // can be directed back to the pre-timeout display.  The base URL needs to
             // be stripped off of the request URI to function properly.
             $authNamespace->requestUri = substr($this->_request->getRequestUri(),
                 strlen(Zend_Controller_Front::getInstance()->getBaseUrl()));
         }
-        // If the user has no identity here, there has either been a time out or the user has
-        // not logged in yet.
-        //if (!Zend_Auth::getInstance()->hasIdentity()) {
-        //    $this->_redirect('/index/login');
-        //}
     }   
 }

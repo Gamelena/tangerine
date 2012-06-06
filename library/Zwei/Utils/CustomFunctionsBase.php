@@ -20,13 +20,13 @@ class Zwei_Utils_CustomFunctionsBase
 	 * Icono Dijit para pintar boton [TODO] diseñar implementar configuración de esto en XMl 
 	 * @var string
 	 */
-	private $_icon;
+	protected $_icon;
 	
 	/**
-	 * Id Capturada generalmente de la fila seleccionada de la grilla al llamar a la función 
+	 * Id Capturada de la fila seleccionada de la grilla al llamar a la función 
 	 * @var mixed
 	 */
-	private $_id;
+	protected $_id;
 	
     
 	/**
@@ -34,13 +34,13 @@ class Zwei_Utils_CustomFunctionsBase
 	 * @var Zwei_Admin_Acl
 	 */
 	
-	private $_acl;
+	protected $_acl;
 	
 	/**
 	 * 
 	 * @var unknown_type
 	 */
-	private $_user_info;
+	protected $_user_info;
 	
 	
 	/**
@@ -48,7 +48,7 @@ class Zwei_Utils_CustomFunctionsBase
 	 * @var array
 	 */
 	
-	private $_names=array(
+	protected $_names=array(
 		'clonarPromocion'=>'Clonar Promocion',
 		'procesarArchivoAbonados'=>'Procesar Archivo'
 	);
@@ -57,7 +57,7 @@ class Zwei_Utils_CustomFunctionsBase
 	 * 
 	 * @var Zwei_Utils_Form
 	 */
-	private $_form;
+	protected $_form;
 	
 	
 	public function __construct($icon=false)
