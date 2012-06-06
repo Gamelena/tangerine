@@ -42,9 +42,11 @@ DROP TABLE IF EXISTS `acl_roles`;
 CREATE TABLE IF NOT EXISTS `acl_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `role_name` char(64) NOT NULL,
+  `description` char(100) CHARACTER SET utf8 NOT NULL,
+  `approved` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_name` (`role_name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- 
 -- Structure for table `acl_users`
