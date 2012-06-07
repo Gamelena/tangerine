@@ -86,15 +86,17 @@ class Zwei_Utils_CustomFunctionsBase
 	}
 	
 	/**
-	 * LO ANTERIOR ES LA BASE REQUERIDA PARA EL FUNCIONAMIENTO BÁSICO
-	 * A CONTINUACIÓN SE MOSTRARÁN EJEMPLOS ESPECÍFICOS A MODO DE TUTORIAL, PUEDEN SER BORRADOS
-	 * PARA CADA PROYECTO
+	 * A continuación se ponen ejemplos como apoyo, no son son usados de ninguna otra forma 
+	 * sólo son de referencia para construir la clase Zwei_Utils_CustomFunctions en cada proyecto   
+	 * 
 	 */
 	
 	
 	
 	/**
-	 * Clonar Promoción de Bonos Consumo //EJEMPLO
+	 * Ejemplo Clonar Promoción de Bonos Consumo 
+	 * @example
+	 * <code><component {...} functions="clonar_promocion_examples" functions_permissions="add" ...</code>
 	 */
 	public function clonarPromocionExample()
 	{
@@ -106,7 +108,9 @@ class Zwei_Utils_CustomFunctionsBase
 	}
 	
 	/**
-	 * Procesar Archivo abonados de Bonos Consumo //EJEMPLO
+	 * Ejemplo Procesar Archivo abonados de Bonos Consumo 
+     * @example
+     * <code><componenent {...} functions="procesar_archivo_abonado_example" functions_permissions="add" ...</code>
 	 */
 	
 	public function procesarArchivoAbonadosExample($target)
