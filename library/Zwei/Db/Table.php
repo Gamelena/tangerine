@@ -254,7 +254,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	public function initQueryParams()
 	{
 	    $form = new Zwei_Utils_Form;
-	    if (!empty($form->search) || $form->search === '0') {
+	    if (isset($form->search) && (!empty($form->search) || $form->search === '0')) {
 	        $searchFields = explode(";", $form->search_fields);
             $search = explode(';', $form->search);
             if (!empty($form->between) || $form->between === '0') $between = explode(';', $form->between);
