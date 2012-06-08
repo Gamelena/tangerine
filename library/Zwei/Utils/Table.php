@@ -35,6 +35,8 @@ class Zwei_Utils_Table
 	
 	function showTitles($rowset)
 	{
+	    Debug::write($rowset);
+	    Debug::write($this->_name);
 		$out = "<tr>";
 		foreach ($rowset[0] as $target => $value) 
 		{
@@ -101,12 +103,18 @@ class Zwei_Utils_Table
 	 */
 	
 	function rowsetToHtml($rowset, $component=false)
-	{
+	{ 
 		if ($component) {
 			if (!is_array($component)) { // buscar títulos en componente xml
 		        $this->parseComponent($component);
 			} else { // sacar títulos de array
-				$this->_name = $component;
+			    $row = $rowset[0];
+			    $j = 0;
+			    foreach($row as $i => $v) {
+			        $this->_name[$i] = $component[$j];
+			        $j++;
+			    }
+				
 				$this->_xml = "array";
 			}    
 		}
@@ -115,7 +123,7 @@ class Zwei_Utils_Table
 
 		$out = "<table border=\"1\">\n";
 		if (!empty($rowset) && count($rowset) > 0) {
-    		$out .= $this->showTitles($rowset, $component);
+    		$out .= $this->showTitles($rowset);
     		for ($i=0;$i<$count;$i++) {
     			$out .= $this->showContent($rowset, $i);
     		}

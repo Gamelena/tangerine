@@ -18,9 +18,9 @@ class Zwei_Utils_CustomFunctionsBase
 {
 	/**
 	 * Icono Dijit para pintar boton [TODO] diseñar implementar configuración de esto en XMl 
-	 * @var string
+	 * @var array
 	 */
-	protected $_icon;
+	protected $_icons;
 	
 	/**
 	 * Id Capturada de la fila seleccionada de la grilla al llamar a la función 
@@ -28,7 +28,21 @@ class Zwei_Utils_CustomFunctionsBase
 	 */
 	protected $_id;
 	
+    /**
+     * URL de busqueda original
+     * @var string
+     */
+	
+	protected $_uri;
+	
+	
+	 /**
+     * Parámetros de búsqueda
+     * @var array
+     */
     
+    protected $_query_params;
+	
 	/**
 	 * Variable para control de permisos
 	 * @var Zwei_Admin_Acl
@@ -62,13 +76,16 @@ class Zwei_Utils_CustomFunctionsBase
 	
 	public function __construct($icon=false)
 	{
-		if(!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
+		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
     	
     	$this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
         $this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
-        $this->_form = new Zwei_Utils_Form();		
-		
-		$this->_icon = $icon ? $icon : "dijitIconFunction";
+        $this->_form = new Zwei_Utils_Form();
+        if (!empty($_REQUEST['uri'])) {
+            parse_str(urldecode($_REQUEST['uri']), $aParams);
+            $subForm = new Zwei_Utils_Form($aParams);
+            $this->initQueryParams($subForm);
+        }		
 	}
 	
 	public function setId($value)
@@ -80,10 +97,48 @@ class Zwei_Utils_CustomFunctionsBase
 		return $this->_names[$index];
 	}
 	
-	public function getIcon()
+	public function getIcon($index)
 	{
-		return $this->_icon;
+		return !empty($this->_icons[$index]) ? $this->_icons[$index] : "dijitIconFunction";
 	}
+	
+   /**
+     * Inicializa $this->_query_params con un array asociativo de parámetros de busqueda
+     * @return array
+     */
+    public function initQueryParams($form)
+    {
+        Debug::write($form);
+        if (!empty($form->search) || $form->search === '0') {
+            $searchFields = explode(";", $form->search_fields);
+            $search = explode(';', $form->search);
+            $betweened = false;
+            
+            if (isset($form->between) && (!empty($form->between) || $form->between === '0')) $between = explode(';', $form->between);
+            $i = 0;    
+            foreach ($search as $v) {
+                if (!empty($searchFields[$i])) {
+                    if (!in_array($searchFields[$i], $between)) {
+                        if ($betweened) {
+                           if ($search[$i+1] != '') $this->_query_params[$searchFields[$i]] = $search[$i+1];
+                        } else {
+                           if ($search[$i] != '')  $this->_query_params[$searchFields[$i]] = $search[$i];
+                        }    
+                    } else {
+                        $betweened = true;
+                        $this->_query_params[$searchFields[$i]] = array();
+                        if ($search[$i] != '') $this->_query_params[$searchFields[$i]][] = $search[$i];
+                        if ($search[$i+1] != '') $this->_query_params[$searchFields[$i]][] = $search[$i+1];                            
+                    }
+                    $i++;
+                }    
+            }
+        }
+        Debug::write($this->_query_params);
+        return $this->_query_params;
+    }
+	
+	
 	
 	/**
 	 * A continuación se ponen ejemplos como apoyo, no son son usados de ninguna otra forma 
