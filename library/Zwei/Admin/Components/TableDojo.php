@@ -151,7 +151,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                 //Zwei_Utils_Debug::write($permissions[$i]);
                 if (empty($permissions[$i]) || $this->_acl->isUserAllowed($this->page, strtoupper($permissions[$i]))) {
                     $foo = Zwei_Utils_String::toFunctionWord($f);
-                    $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon()}\" id=\"btn$foo\" onClick=\"execFunction('$f', '$params', '$component', '$primary');\">";
+                    $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon($foo)}\" id=\"btn$foo\" onClick=\"execFunction('$f', '$params', '$component', '$primary');\">";
                     $out .= $CustomFunctions->getName($foo);
                     $out .= "</button></td>";
                 }
@@ -356,19 +356,23 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
                 foreach ($tab->children() as $node) {
                     if (($node["add"] == "true" || $node["add"] == "readonly" || $node["clone"] == "true" || $node["clone"] == "readonly") && !empty($node['target'])) {
                         $pfx = '_add';
-                        if ($node['type']=='dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox' || strstr($node['type'], "dojo_checked_multiselect")) {
-                            $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value').join(':::'), \r\n";
+                        if ($node['type']=='dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
+                            $xhr_insert_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value'), \r\n";
+                        } else if (strstr($node['type'], "dojo_checked_multiselect")) {    
+                            $xhr_insert_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value').join(':::'), \r\n";
                         } else {
-                            $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$pfx}{$k}').value, \r\n";
+                            $xhr_insert_data .= "\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$pfx}{$k}').value, \r\n";
                         }
                     }
 
                     if (($node["edit"] == "true" || $node["edit"] == "readonly") && !empty($node['target'])) {
                         $pfx = '';
-                        if ($node['type'] == 'dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox' || strstr($node['type'], "dojo_checked_multiselect")) {
-                            $xhr_update_data.="\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value').join(':::'), \r\n";
+                        if ($node['type'] == 'dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
+                            $xhr_update_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value'), \r\n";
+                        } else if (strstr($node['type'], "dojo_checked_multiselect")) {        
+                            $xhr_update_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value').join(':::'), \r\n";
                         } else {
-                            $xhr_update_data.="\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$pfx}{$k}').value, \r\n";
+                            $xhr_update_data .= "\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$pfx}{$k}').value, \r\n";
                         }
                     }
                     $k++; 

@@ -60,6 +60,8 @@ class Zwei_Db_Object
                                         
                     if ((!empty($sSearchField) || $sSearchField === "0") && (!empty($aSearchKeys[$i]) || @$aSearchKeys[$i] === "0" || empty($this->_form->search_type))) {
                         if (@$this->_form->search_type == 'multiple') {
+                            if (isset($search_format[$auxI])) $search_format[$auxI] = preg_replace('/[^(\x20-\x7F)]*/', '', $search_format[$auxI]);
+                            
                             if (preg_match("/^date_format(.*)/", @$search_format[$auxI], $match)) {
                                 $mask='%Y-%m-%d';
                                 if (@$this->_form->between ==  $sSearchField) {
@@ -84,15 +86,13 @@ class Zwei_Db_Object
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted LIKE ?", "%{$aSearchKeys[$i]}%"));
                             }
                             $i++;
-                                                //Debug::write($i);
+
                             $auxI++;
                         } else {
-                            //TODO, evaluar borrar este if
-                            //if ($oModel->getName() && !preg_match("/(.*)\.(.*)/", $sSearchField)) {
-                            //    $sSearchField = $oModel->getName().".".$sSearchField;
-                            //}
+                            if (isset($this->_form->search_format)) $this->_form->search_format = preg_replace('/[^(\x20-\x7F)]*/', '', $this->_form->search_format);    
+                            
                             if (preg_match("/^date_format(.*)/", @$this->_form->search_format, $match)) {
-                                //$mask=($match[1]) ? $match[1] : '%Y-%m-%d';//[FIXME] esto debiera ser parametrizable pero hay que solucionar el url_encode de "%"
+                                $mask=($match[1]) ? $match[1] : '%Y-%m-%d';//[FIXME] esto debiera ser parametrizable pero hay que solucionar el url_encode de "%"
                                 $mask = '%Y-%m-%d';
                                 if (@$this->_form->between === '1') {
                                     $aSearchKeys=explode(";",$this->_form->search);
@@ -129,13 +129,17 @@ class Zwei_Db_Object
 
         }//if (isset($this->_form->search) && (!empty($this->_form->search) || $this->_form->search === "0"))
 
-        if (isset($this->_form->id)) {
-            if ($oModel->getPrimary()) {
-                $my_id = $oModel->getPrimary();
-            } else {
-                $my_id = "id";
-                //if (method_exists($oModel, "getName")) $my_id = $oModel->getName().".".$my_id;
+        if (isset($this->_form->group)) {
+            $groups = explode(';', $this->_form->group);
+            if (!is_array($groups)) {
+                $groups = array($groups);
+            } 
+            
+            foreach ($groups as $g) {
+                $g = preg_replace('/[^(\x20-\x7F)]*/', '', $g);
+                $oSelect->group($g);
             }
+
         }
 
         $count = (isset($this->_form->limit)) ? $this->_form->limit : 20000;//[TODO] ver paginador 
@@ -145,7 +149,7 @@ class Zwei_Db_Object
         
         //Se imprime query en log debug según configuración del sitio
         if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($oSelect->__toString(), 'query_log');
-       if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($oSelect->getAdapter()->getConfig(), 'query_log');
+        if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($oSelect->getAdapter()->getConfig(), 'query_log');
         return $oSelect;
     }
 }
