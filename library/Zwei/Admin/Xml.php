@@ -75,6 +75,7 @@ class Zwei_Admin_Xml{
 			    Debug::write(sprintf("XML error: %s at line %d",
                 xml_error_string(xml_get_error_code($this->xml_parser)),
                 xml_get_current_line_number($this->xml_parser)));
+                Debug::write($file);
 			    Debug::write(file_get_contents($file));
                 
                 
