@@ -79,15 +79,12 @@ class Zwei_Utils_Table
 	{
 		$Xml = new Zwei_Admin_Xml();
 		
-	    if (preg_match('/(.*).php/', $component)) {
-            $file = BASE_URL ."/components/".$component;
-        } else {
-            $file = COMPONENTS_ADMIN_PATH."/".$component;
-        }
+        $file = Zwei_Admin_XML::getFullPath($component);
 		
 		$Xml->parse($file);
 		$this->_xml = $Xml->elements;
 		$count = count($this->_xml);
+		
 	    for($i=1; $i<$count; $i++){
 	  		if(isset($this->_xml[$i]["VISIBLE"]) && $this->_xml[$i]["VISIBLE"] == "true"){
 	  			$this->_name[$this->_xml[$i]["TARGET"]]=$this->_xml[$i]["NAME"];

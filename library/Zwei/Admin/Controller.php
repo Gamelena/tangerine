@@ -51,25 +51,13 @@ class Zwei_Admin_Controller{
     {
         $oXml = new Zwei_Admin_XML();
         
-        if (preg_match('/(.*).php/', $this->page)) {
-            $file = BASE_URL ."/components/".$this->page;
-        } else {
-            $file = COMPONENTS_ADMIN_PATH."/".$this->page;
-        }
+    
+        $file = Zwei_Admin_XML::getFullPath($this->page);
         
         $oXml->parse($file);
         $this->layout = $oXml->elements;
         $this->name = @$this->layout[0]['NAME'];
         $this->target = @$this->layout[0]['TARGET'];
-        //$iCount = count($this->layout);
-
-        /*
-        for ($i=1; $i<$iCount; $i++) {
-            $this->layout[$i]["VISIBLE"] = @$this->layout[$i]["VISIBLE"] == "true" ? true : false;
-            $this->layout[$i]["EDIT"] = @$this->layout[$i]["EDIT"] == "true" ? true : false;
-            $this->layout[$i]["ADD"] = @$this->layout[$i]["ADD"] == "true" ? true : false;
-        }
-        */
     }
 
     /**

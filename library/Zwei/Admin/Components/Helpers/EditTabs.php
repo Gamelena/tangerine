@@ -37,11 +37,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
     {
         $form = new Zwei_Utils_Form();
 
-        if (preg_match('/(.*).php/', $this->page)) {
-            $file = BASE_URL ."/components/".$this->page;
-        } else {
-            $file = COMPONENTS_ADMIN_PATH."/".$this->page;
-        }
+        $file = Zwei_Admin_XML::getFullPath($this->page);
         
         $string_xml = file_get_contents($file);
 

@@ -65,7 +65,8 @@ class Zwei_Admin_Xml{
 		$this->parents=array();
 		$this->pos=-1;
 
-		if (!($fp = @fopen($file, "r"))) {
+		if (!($fp = fopen($file, "r"))) {
+			Debug::write("no se encuentra XML $file");
 			die("no se encuentra XML $file");
 		}
 
@@ -78,4 +79,23 @@ class Zwei_Admin_Xml{
 		}
 		xml_parser_free($this->xml_parser);
 	}
+	
+	static function getFullPath($file) {
+        if (preg_match('/(.*).php/', $file)) {
+            $prefix = BASE_URL ."/components/";
+        } else {
+            $prefix = COMPONENTS_ADMIN_PATH."/";
+
+            $model = new SettingsModel();//Buscar URL 
+            $select = $model->select();
+            $select->where('id = ?', 'url_from_local');
+            $select->where('value != ?', '');
+            $select->where('value IS NOT NULL');
+            Debug::writeBySettings($select->__toString(), 'query_log');
+            $settings = $model->fetchAll($select);
+            
+            if ($settings->count() > 0) { $prefix = $settings[0]['value'];}    
+        } 
+        return $prefix.$file; 
+	}    
 }
