@@ -99,7 +99,7 @@ class Zwei_Admin_Xml{
             Debug::writeBySettings($select->__toString(), 'query_log');
             $settings = $model->fetchAll($select);
             
-            if ($settings->count() > 0) { $prefix = $settings[0]['value'];}  
+            if ($settings->count() > 0) { $prefix = $settings[0]['value']."/components/";}  
             
         } else {
             $prefix = COMPONENTS_ADMIN_PATH."/";
