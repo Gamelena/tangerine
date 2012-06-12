@@ -83,9 +83,7 @@ class Zwei_Admin_Xml{
 	static function getFullPath($file) {
         if (preg_match('/(.*).php/', $file)) {
             $prefix = BASE_URL ."/components/";
-        } else {
-            $prefix = COMPONENTS_ADMIN_PATH."/";
-
+            
             $model = new SettingsModel();//Buscar URL 
             $select = $model->select();
             $select->where('id = ?', 'url_from_local');
@@ -94,7 +92,10 @@ class Zwei_Admin_Xml{
             Debug::writeBySettings($select->__toString(), 'query_log');
             $settings = $model->fetchAll($select);
             
-            if ($settings->count() > 0) { $prefix = $settings[0]['value'];}    
+            if ($settings->count() > 0) { $prefix = $settings[0]['value'];}  
+            
+        } else {
+            $prefix = COMPONENTS_ADMIN_PATH."/";
         } 
         return $prefix.$file; 
 	}    
