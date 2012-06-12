@@ -72,6 +72,12 @@ class Zwei_Admin_Xml{
 
 		while ($data = fread($fp, 4096)) {
 			if (!xml_parse($this->xml_parser, $data, feof($fp))) {
+			    Debug::write(sprintf("XML error: %s at line %d",
+                xml_error_string(xml_get_error_code($this->xml_parser)),
+                xml_get_current_line_number($this->xml_parser)));
+			    Debug::write(file_get_contents($file));
+                
+                
 				die(sprintf("XML error: %s at line %d",
 				xml_error_string(xml_get_error_code($this->xml_parser)),
 				xml_get_current_line_number($this->xml_parser)));
