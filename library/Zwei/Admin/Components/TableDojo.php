@@ -341,11 +341,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
             $xhr_insert_data = '';
             $xhr_update_data = '';
             
-            if (preg_match('/(.*).php/', $this->page)) {
-                $file = BASE_URL ."/components/".$this->page;
-            } else {
-                $file = COMPONENTS_ADMIN_PATH."/".$this->page;
-            }
+            $file = Zwei_Admin_Xml::getFullPath($this->page);
             
             $string_xml = file_get_contents($file);
             $Xml = new SimpleXMLElement($string_xml);
