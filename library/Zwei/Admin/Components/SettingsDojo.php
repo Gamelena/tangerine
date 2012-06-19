@@ -19,7 +19,7 @@
  */
 
 
-class Zwei_Admin_Components_SettingsDojo
+class Zwei_Admin_Components_SettingsDojo implements Zwei_Admin_ComponentsInterface
 {
 	/**
 	 * Nombre del archivo XML

@@ -23,7 +23,7 @@
  *
  */
 
-class Zwei_Admin_Components_CurlDojo extends Zwei_Admin_Controller
+class Zwei_Admin_Components_CurlDojo extends Zwei_Admin_Controller implements Zwei_Admin_ComponentsInterface
 {
 	public $page;
 	protected $_acl;

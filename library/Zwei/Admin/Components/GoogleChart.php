@@ -20,7 +20,7 @@
  *
  */
 
-final class Zwei_Admin_Components_GoogleChart
+final class Zwei_Admin_Components_GoogleChart implements Zwei_Admin_ComponentsInterface
 {
     /**
      * 

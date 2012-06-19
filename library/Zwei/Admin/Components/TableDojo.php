@@ -18,7 +18,7 @@
  *
  */
 
-class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller
+class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Zwei_Admin_ComponentsInterface
 {
     /**
      * 

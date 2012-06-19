@@ -16,7 +16,8 @@
  * @since 0.1
  *
  */
-class Zwei_Admin_Components_Settings{
+class Zwei_Admin_Components_Settings implements Zwei_Admin_ComponentsInterface
+{
 	public $page;
 
 	function __construct($page){

@@ -25,7 +25,7 @@
  * @link http://code.google.com/p/xml-admin/
  */
 
-class Zwei_Admin_Components_Table
+class Zwei_Admin_Components_Table implements Zwei_Admin_ComponentsInterface
 {
 	public $page;
 	private $_acl;
