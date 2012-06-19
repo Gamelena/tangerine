@@ -1,4 +1,29 @@
 <?php
+/**
+ * Crea un objeto Zend_Db_Select o Zend_Db_Table_Select según parámetros enviados por Zwei_Utils_Form ($_REQUEST),
+ * generalmente es instanciado por ObjectsController pero puede instanciado en cualquier lugar, 
+ * por ejemplo para sobrecargar manualmente Zwei_Db_Table::select() usando parámetros equivalentes.
+ * @example
+ * <code>
+ * //Solo recibe parametros de $_REQUEST, debe existir $_REQUEST['model'] esto equivale a $form->model. 
+ * $form = new Zwei_Utils_Form();
+ * $object = new Zend_Db_Object($form);
+ * $select = $object->select(); 
+ * </code>
+ * <code>
+ * //Recibe un Zend_Db_Select como segundo param, el array $form, filtrará ese objecto Zend_Db_Select.
+ * $form = new Zwei_Utils_Form();
+ * $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+ * $db = Zend_Db::factory($config->resources->multidb->dn);
+ * $select = $db->select();
+ * $object = new Zend_Db_Object($form, $select);
+ * $select = $object->select();  
+ * </code>
+ * @category Zwei
+ * @package Zwei_Db
+ * @version $Id:$
+ * @since 0.1
+ */
 class Zwei_Db_Object
 {
     /**

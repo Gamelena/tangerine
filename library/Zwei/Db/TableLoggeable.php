@@ -1,4 +1,11 @@
 <?php
+/**
+ * Extiende Zend_Db_Table guardando en log las acciones crear, modificar, eliminar
+ *
+ * @package Zwei_Db
+ * @version $Id:$
+ * @since 0.1
+ */
 require_once ('Zwei/Db/Table.php');
 class Zwei_Db_TableLoggeable extends Zwei_Db_Table
 {
