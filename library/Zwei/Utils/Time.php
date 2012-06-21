@@ -8,11 +8,10 @@ class Zwei_Utils_Time{
 	
 	/**
 	 * 
-	 * @param $sec
-	 * @param $padHours
-	 * @param $showSeconds
-	 * @param $showDays
-	 * @param $addSufix
+	 * @param int
+	 * @param boolean
+	 * @param boolean
+	 * @param boolean
 	 * @return string
 	 */
 	
@@ -49,8 +48,8 @@ class Zwei_Utils_Time{
 	
 	/**
 	 * 
-	 * @param $datetime YYYY-MM-DD hh:mm:ss
-	 * @param $lang "eng"||"esp"
+	 * @param datetime YYYY-MM-DD hh:mm:ss|DD-MM-YYY hh:mm:ss
+	 * @param string "eng"|"esp"
 	 * @return int timestamp
 	 */
 	
