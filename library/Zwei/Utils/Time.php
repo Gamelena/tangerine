@@ -55,31 +55,42 @@ class Zwei_Utils_Time{
 	
 	static public function datetimeToTimestamp($datetime, $lang="eng")
 	{
-		try
-		{
-			//Zwei_Utils_Debug::write($datetime, false);
-			$arrDateTime=explode(" ", trim($datetime));
-	    	$arrDate=explode("-", $arrDateTime[0]);
+			$arrDateTime = explode(" ", trim($datetime));
+	    	$arrDate = explode("-", $arrDateTime[0]);
 	    	if(!is_array($arrDate)){ 
-	    		$arrDate=explode("/", $arrDateTime[0]);
+	    		$arrDate = explode("/", $arrDateTime[0]);
 	    	}	
-		    $arrTime=explode(":", $arrDateTime[1]);
-		    //Zwei_Utils_Debug::write($datetime."|".$arrDateTime[0]."|".$arrDateTime[1]);
+		    $arrTime = explode(":", $arrDateTime[1]);
 		    
 		    
-		    if ($lang=="eng"){
-		    	$timestamp=@mktime($arrTime[0],$arrTime[1],$arrTime[2],(int)$arrDate[1],(int)$arrDate[2],(int)$arrDate[0]);
-			}else if($lang=="esp"){
-				$timestamp=@mktime((int)$arrTime[0],(int)$arrTime[1],(int)$arrTime[2],(int)$arrDate[1],(int)$arrDate[0],(int)$arrDate[2]);
+		    if ($lang == "eng"){
+		    	$timestamp = mktime($arrTime[0],$arrTime[1],$arrTime[2],(int)$arrDate[1],(int)$arrDate[2],(int)$arrDate[0]);
+			}else if($lang == "esp"){
+				$timestamp = mktime((int)$arrTime[0],(int)$arrTime[1],(int)$arrTime[2],(int)$arrDate[1],(int)$arrDate[0],(int)$arrDate[2]);
 			}
+			return $timestamp;
 			//Zwei_Utils_Debug::write("mktime((int){$arrTime[0]},(int){$arrTime[1]},(int){$arrTime[2]},(int){$arrDate[1]},(int){$arrDate[2]},(int){$arrDate[0]})");
-			
-		}catch(Exception $e){
-			$dumpDate=var_dump($arrDate);
-			$dumpTime=var_dump($arrTime);
-			
-			Zwei_Utils_Debug::write("Error al convertir $datetime a TS ".$e->getCode()." ".$e->getMessage()."|$dumpDate|$dumpTime|");
-		}	
-		return $timestamp;
+	}
+	
+	/**
+	 * 
+	 * @param int timestamp
+	 * @param int timestamp
+	 * @param string "hours"|"days"
+	 * @return array 
+	 */
+	static public function createInterval($from, $to, $interval="hours")
+	{
+	   $return = array();
+       if ($interval == "hours") {$seconds = 3600;}
+	   elseif ($interval == "days") {$seconds = 86400;}  
+	   
+	   $j = 1;
+	   
+	   for ($i=$from; $i<=$to; $i+=$seconds) {
+	       $return[] = $from + ($seconds * $j);
+	       $j++; 
+	   }
+	   return $return;
 	}
 }

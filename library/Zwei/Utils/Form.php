@@ -2,7 +2,7 @@
 /**
  * Manejador de Requests. 
  * 
- * Encapsula los $_POST, $_GET y $_FILES, codifica/decodifica los datos ingresados.
+ * Encapsula los $_POST, $_GET y $_FILES, codifica/decodifica los datos ingresados como html_entities UTF-8.
  * Los valores de los resultados son datos HTML.
  * 
  * @package Zwei_Utils
