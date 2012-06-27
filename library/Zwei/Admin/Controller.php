@@ -36,7 +36,7 @@ class Zwei_Admin_Controller{
         $this->id = $id;
         $this->requested_params = "";
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-        $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
+        if (isset($userInfo) && !empty($userInfo)) $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
     }
 
     function setId($id)

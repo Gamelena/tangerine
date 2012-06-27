@@ -83,7 +83,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $out .= "\r\n<table align=\"center\"><tr>";
 
         if ($viewtable->layout[1]['_name'] == 'TAB') {
-            if(isset($viewtable->layout[0]['ADD']) && $viewtable->layout[0]['ADD'] == "true" && $this->_acl->isUserAllowed($this->page, 'ADD')){
+            if (isset($viewtable->layout[0]['ADD']) && $viewtable->layout[0]['ADD'] == "true" && $this->_acl->isUserAllowed($this->page, 'ADD')){
                 $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnAdd\" onClick=\"cargarTabsPanelCentral('$this->page','add', '$primary');\">";
                 $out .= "Agregar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
@@ -116,7 +116,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
             }
         }
 
-        if(isset($viewtable->layout[0]['CHANGE_PASSWORD']) && $viewtable->layout[0]['CHANGE_PASSWORD'] == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT')){
+        if (isset($viewtable->layout[0]['CHANGE_PASSWORD']) && $viewtable->layout[0]['CHANGE_PASSWORD'] == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT')){
             $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"btnPswd\" onClick=\"showDialogPass();\">";
             $out .= "Cambiar Contrase&ntilde;a";
             $out .= "</button></td>";
