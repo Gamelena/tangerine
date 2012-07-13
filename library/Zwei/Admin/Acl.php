@@ -13,31 +13,86 @@
  
 class Zwei_Admin_Acl extends Zend_Acl
 {
+    /**
+     * Permisos asociados a sesión de usuario.
+     * @var Zwei_Admin_Acl
+     */
 	private static $_acl;
+	/**
+	 * Flag que indica si ya existe una instancia estática de Zwei_Admin_Acl.
+	 * @var boolean
+	 */
 	private static $_ready = false;
+	/**
+	 * Tabla de permisos.
+	 * @var string
+	 */
 	private static $_permisos = null;
 	/**
-	 * 
+	 * Base de datos a conectar.
 	 * @var Zend_Db
 	 */
 	private static $_db = null;
+	/**
+	 * Tabla de perfiles.
+	 * @var string
+	 */
 	private static $_tb_roles = null;
+	/**
+	 * Tabla de usuarios.
+	 * @var string
+	 */
 	private static $_tb_users = null;
+	/**
+	 * Tabla de módulos.
+	 * @var string
+	 */
 	private static $_tb_modules = null;
+	/**
+	 * Tabla de permisos.
+	 * @var string
+	 */
 	private static $_tb_permissions = null;
-
+    /**
+     * Campo nombre de perfil en tabla self::$_tb_roles
+     * @var string
+     */
 	private static $_getUserRoleName = null;
+	/**
+	 * Campo id de perfil en tabla self::$_tb_roles
+	 * @var string
+	 */
 	private static $_getUserRoleId = null;
+	/**
+	 * Campo nombre de usuario en sesión.
+	 * @var string
+	 */
 	private static $_user = null;
+	/**
+	 * Datos de usuario en sesión.
+	 * @var Zend_Auth_Storage
+	 */
 	private static $_userInfo = null;
+	/**
+	 * Campo de user login en tabla self::$_tb_users.
+	 * @var string
+	 */
 	private static $_user_login = null;
+	/**
+	 * Campo id de perfil en tabla self::$_tb_users.
+	 * @var string
+	 */
 	private static $_user_role_id = null;
 
+	/**
+	 * 
+	 * @return void
+	 */
 	public static function _init()
 	{
-		#throw new Exception("Error");
+		//throw new Exception("Error");
 		
-		if (!Zend_Auth::getInstance()->hasIdentity()){
+		if (!Zend_Auth::getInstance()->hasIdentity()) {
 			Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoAndExit('login');
 		} else {
 			self::$_userInfo = Zend_Auth::getInstance()->getStorage()->read();
@@ -48,7 +103,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 		$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
 
-		$db_params = $config->resources->multidb->auth ? $config->resources->multidb->auth : $config->db;
+		$db_params = isset($config->resources->multidb->auth) ? $config->resources->multidb->auth : $config->db;
 		
 		self::$_db = Zend_Db::factory($db_params);
 
@@ -64,10 +119,10 @@ class Zwei_Admin_Acl extends Zend_Acl
 		$select = self::$_db->select()
  	            ->from(self::$_tb_roles)
                 ->from(self::$_tb_users)
-                ->where( self::$_tb_users.".".self::$_user_login." = '".self::$_user."'")
-                ->where( self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_roles.".id");
+                ->where(self::$_tb_users.".".self::$_user_login." = '".self::$_user."'")
+                ->where(self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_roles.".id");
 		
-		#Zwei_Utils_Debug::write($select->__toString());
+		//Zwei_Utils_Debug::write($select->__toString());
 
 		$getUserRole = self::$_db->fetchRow($select);
 		
@@ -78,13 +133,17 @@ class Zwei_Admin_Acl extends Zend_Acl
 		self::$_ready = true;
 	}
 
+	/**
+	 * Inicializa los perfiles
+	 * @return void
+	 */
 	private static function initRoles()
 	{
 		$select = self::$_db->select()
 		        ->from(self::$_tb_roles)
 		        ->order(array('id DESC'));
 
-		#Zwei_Utils_Debug::write($select->__toString());
+		//Zwei_Utils_Debug::write($select->__toString());
         
 		$roles = self::$_db->fetchAll($select);
 
@@ -95,6 +154,10 @@ class Zwei_Admin_Acl extends Zend_Acl
 		}
 	}
 
+	/**
+	 * Inicializa los recursos (módulos).
+	 * @return void
+	 */
 	private static function initResources()
 	{
 		self::initRoles();
@@ -102,7 +165,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 		$select = self::$_db->select()
 		->from(self::$_tb_modules);
 		
-		#Zwei_Utils_Debug::write($select->__toString());
+		//Zwei_Utils_Debug::write($select->__toString());
 
 		$resources = self::$_db->fetchAll( $select );
 
@@ -113,6 +176,10 @@ class Zwei_Admin_Acl extends Zend_Acl
 		}
 	}
 
+	/**
+	 * 
+	 * @return unknown_type
+	 */
 	private static function roleResource()
 	{
 		self::initResources();
@@ -123,7 +190,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 		->from(self::$_tb_permissions)
 		->where(self::$_tb_roles.".id = ".self::$_tb_permissions.".".self::$_tb_roles."_id");
 		
-		#Zwei_Utils_Debug::write($select->__toString());
+		//Zwei_Utils_Debug::write($select->__toString());
 
 		$acl = self::$_db->fetchAll( $select );
 
@@ -143,7 +210,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 		$select = self::$_db->select()
 		->from(self::$_tb_roles);
 		
-		#Zwei_Utils_Debug::write($select->__toString());
+		//Zwei_Utils_Debug::write($select->__toString());
 		
 		return self::$_db->fetchAll( $select );
 	}
@@ -160,7 +227,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 		->from(self::$_tb_roles, "id")
 		->where(self::$_tb_roles.".role_name = '".$roleName."'");
 		
-		#Zwei_Utils_Debug::write($select->__toString());
+		//Zwei_Utils_Debug::write($select->__toString());
 
 		return self::$_db->fetchRow( $select );
 	}
@@ -191,11 +258,16 @@ class Zwei_Admin_Acl extends Zend_Acl
 		->from(self::$_tb_permissions)
 		->where(self::$_tb_modules."_id = ".self::$_tb_modules.".id");
 		
-		#Zwei_Utils_Debug::write($select->__toString());
+		//Zwei_Utils_Debug::write($select->__toString());
 		
 		return self::$_db->fetchAll( $select );
 	}
 
+	/**
+	 * Devuelve una lista con los recursos que a que tiene acceso el usuario en sesión.
+	 * @param $parent_id int
+	 * @return Zend_Db_Rowset
+	 */
 	public static function listGrantedResourcesByParentId($parent_id)
 	{
 		if( !self::$_ready ){
@@ -227,6 +299,13 @@ class Zwei_Admin_Acl extends Zend_Acl
 		return(self::$_db->fetchAll($select));
 	}
 
+	/**
+	 * Lista permisos de un módulo.
+	 * [FIXME] se usa esto?
+	 * 
+	 * @param $group
+	 * @return Zend_Db_Table_Rowset
+	 */
 	public static function listResourcesByGroup($group)
 	{
 		if( !self::$_ready ){
@@ -241,7 +320,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 		->where(self::$_tb_modules.'.module = "' . $group . '"')
 		->where(self::$_tb_modules.".id = ".self::$_tb_modules."_id");
 		
-		#Zwei_Utils_Debug::write($select->__toString());
+		//Zwei_Utils_Debug::write($select->__toString());
 		
 		$group = self::$_db->fetchAll( $select );
 
@@ -254,9 +333,16 @@ class Zwei_Admin_Acl extends Zend_Acl
 		return $result;
 	}
 
+	/**
+     * Verifica si usuario en sesión tiene tal permiso en tal módulo. 
+     * 
+	 * @param $resource string
+	 * @param $permission string
+	 * @return boolean
+	 */
 	public static function isUserAllowed($resource, $permission=null)
 	{
-		if( !self::$_ready ){
+		if (!self::$_ready) {
 			self::_init();
 		}
 
@@ -264,9 +350,17 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 	}
 
-	public static function isActionResourceAllowed( $permission, $resource )
+	/**
+     * Verifica si usuario en sesión tiene tal permiso en tal módulo 
+	 * [FIXME] está repetida debería deprecarse y borrarse.
+	 * 
+	 * @param $permission string
+	 * @param $resource string
+	 * @return boolean
+	 */
+	public static function isActionResourceAllowed($permission, $resource)
 	{
-		if( !self::$_ready ){
+		if (!self::$_ready) {
 			self::_init();
 		}
 
@@ -274,6 +368,12 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 	}
 
+	/**
+	 * Verifica si sesión de usuario tiene acceso a módulo $_REQUEST['p']
+	 * 
+	 * @param $permission string - 'LIST'|'EDIT'|'ADD'|'DELETE' 
+	 * @return boolean 
+	 */
 	public static function isActionAllowed( $permission )
 	{
 		if( !self::$_ready ){
@@ -284,13 +384,21 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 	}
 
-	public function isAllowed($user, $resource, $permission){
+    /**
+     * Verifica si tal usuario tiene tal permiso en tal módulo 
+     * @param $user string - tal usuario.
+     * @param $resource string - tal módulo.
+     * @param $permission string - tal permiso 'LIST'|'EDIT'|'ADD'|'DELETE' 
+     * @return boolean 
+     */
+	public function isAllowed($user, $resource, $permission = null)
+	{
 
 		if( isset( self::$_permisos[ $user ][ md5( $resource ) ][ $permission ] ) ){
 			return self::$_permisos[ $user ][ md5( $resource ) ][ $permission ];
 		}
 
-		$select=self::$_db->select()
+		$select = self::$_db->select()
 		->from(self::$_tb_modules, array('id'))
 		->from(self::$_tb_permissions, array())
 		->from(self::$_tb_roles, array())
@@ -301,22 +409,20 @@ class Zwei_Admin_Acl extends Zend_Acl
 		->where(self::$_tb_modules.".module ='$resource'");
 
 
-		if($permission!=null){
+		if ($permission != null) {
 			$select->where(self::$_tb_permissions.".permission = '$permission'");
 		}
 
 		$select->where( self::$_tb_users.".".self::$_user_login." = '".$user."'")
 			->group( self::$_tb_modules.".id" );
 			
-		//Debug::write($select->__toString());
+		Debug::writeBySettings($select->__toString(), 'query_log');
 			
-		$result=self::$_db->fetchAll($select);
+		$result = self::$_db->fetchAll($select);//Todo acá podía usarse $_db->fetchRow($select) y estaríamos.
 		
 		$rtn = (isset($result[0]['id'])) ? true: false;
-		self::$_permisos[ $user ][ md5( $resource ) ][ $permission ] = $rtn;
+		self::$_permisos[$user][md5($resource)][$permission] = $rtn;
 		
 		return $rtn;
 	}
-
-
 }
