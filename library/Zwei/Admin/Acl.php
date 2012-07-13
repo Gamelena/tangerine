@@ -30,7 +30,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 	private static $_permisos = null;
 	/**
 	 * Base de datos a conectar.
-	 * @var Zend_Db
+	 * @var Zend_Db_Adapter
 	 */
 	private static $_db = null;
 	/**
@@ -54,12 +54,12 @@ class Zwei_Admin_Acl extends Zend_Acl
 	 */
 	private static $_tb_permissions = null;
     /**
-     * Campo nombre de perfil en tabla self::$_tb_roles
+     * Campo nombre de perfil de sesión activa.
      * @var string
      */
 	private static $_getUserRoleName = null;
 	/**
-	 * Campo id de perfil en tabla self::$_tb_roles
+	 * Campo id de perfil de sesión activa.
 	 * @var string
 	 */
 	private static $_getUserRoleId = null;
@@ -106,7 +106,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 		$db_params = isset($config->resources->multidb->auth) ? $config->resources->multidb->auth : $config->db;
 		
 		self::$_db = Zend_Db::factory($db_params);
-
+		
 		self::$_tb_roles = 'acl_roles';
 		self::$_tb_users = 'acl_users';
 		self::$_tb_modules = 'acl_modules';
@@ -177,8 +177,9 @@ class Zwei_Admin_Acl extends Zend_Acl
 	}
 
 	/**
+	 * Añade las reglas "allow" al usuario en sesión.
 	 * 
-	 * @return unknown_type
+	 * @return void
 	 */
 	private static function roleResource()
 	{
@@ -199,6 +200,11 @@ class Zwei_Admin_Acl extends Zend_Acl
 		}
 	}
 
+	/**
+	 * Lista todos los perfiles.
+	 * 
+	 * @return Zend_Db_Rowset
+	 */
 	public static function listRoles()
 	{
 		if( !self::$_ready ){
@@ -215,6 +221,12 @@ class Zwei_Admin_Acl extends Zend_Acl
 		return self::$_db->fetchAll( $select );
 	}
 
+	/**
+	 * Obtiene id de perfil a través del nombre.
+	 * 
+	 * @param string $roleName
+	 * @return Zend_Db_Table_Row
+	 */
 	public static function getRoleId($roleName)
 	{
 		if( !self::$_ready ){
@@ -228,10 +240,15 @@ class Zwei_Admin_Acl extends Zend_Acl
 		->where(self::$_tb_roles.".role_name = '".$roleName."'");
 		
 		//Zwei_Utils_Debug::write($select->__toString());
-
 		return self::$_db->fetchRow( $select );
 	}
 
+	/**
+	 * Inserta usuario.
+	 * [TODO] se usará esto a futuro? tiene sentido si se piensa en un log de sesiones abiertas. 
+	 * 
+	 * @return int - last insert id
+	 */
 	public static function insertAclUser()
 	{
 		if( !self::$_ready ){
@@ -246,6 +263,11 @@ class Zwei_Admin_Acl extends Zend_Acl
 		return self::$_db->insert(self::$_tb_users, $data);
 	}
 
+	/**
+	 * Listado de los módulos.
+	 * 
+	 * @return Zend_Db_Table_Rowset
+	 */
 	public static function listResources()
 	{
 		if( !self::$_ready ){
@@ -265,6 +287,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 	/**
 	 * Devuelve una lista con los recursos que a que tiene acceso el usuario en sesión.
+	 * 
 	 * @param $parent_id int
 	 * @return Zend_Db_Rowset
 	 */
@@ -301,7 +324,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 	/**
 	 * Lista permisos de un módulo.
-	 * [FIXME] se usa esto?
+	 * [FIXME] se usa esto en algún lado?
 	 * 
 	 * @param $group
 	 * @return Zend_Db_Table_Rowset
