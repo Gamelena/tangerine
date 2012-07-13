@@ -1,12 +1,18 @@
 <?php
+/**
+ * 
+ * Extensión de SimpleXMLElement, clase reciclada de USSD (SimpleXMLElementExtended).
+ *
+* @package Zwei_Utils
+* @version $Id:$
+* @since 0.1
+ */
 class Zwei_Utils_SimpleXML extends SimpleXMLElement
 {
   public function getAttribute($name)
   {
-     foreach($this->attributes() as $key=>$val)
-     {
-        if($key == $name)
-        {
+     foreach ($this->attributes() as $key=>$val) {
+        if ($key == $name) {
            return (string)$val;
         }
      }
@@ -15,7 +21,7 @@ class Zwei_Utils_SimpleXML extends SimpleXMLElement
   public function getChildrenCount()
   {
         $cnt = 0;
-        foreach($this->children() as $node){
+        foreach ($this->children() as $node) {
             $cnt++;
         }
         return (int)$cnt;
@@ -24,12 +30,11 @@ class Zwei_Utils_SimpleXML extends SimpleXMLElement
    public function getChildrenCountName($name)
   {
         $cnt = 0;
-        foreach($this->children() as $node)
-    {
-        if( $node->getName() == $name )
-               $cnt++;
+        foreach ($this->children() as $node) {
+        if ($node->getName() == $name )
+            $cnt++;
         }
-        return (int)$cnt;
+        return (int) $cnt;
   }
 
  

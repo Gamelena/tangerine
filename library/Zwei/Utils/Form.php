@@ -17,9 +17,11 @@
  * 
  */
 class Zwei_Utils_Form {
-  /**
-   * Constructor
-   */
+    /**
+     * 
+     * @param $array array - si existe se transforma $array a objeto y se retorna, ignorando el $_REQUEST por defecto.
+     * @return void
+     */
     function __construct ($array=false)
     {
         if ($array) {

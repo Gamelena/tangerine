@@ -21,9 +21,9 @@ class Zwei_Utils_String {
 	}
 	
 	/**
-	 * Reemplaza caracteres especiales por genéricos 
-	 * @param $string
-	 * @param $nospaces true|false reemplaza espacios por underscores
+	 * Reemplaza caracteres especiales por estandar internacionales. 
+	 * @param $string string
+	 * @param $nospaces boolean, reemplazar espacios por underscores.
 	 * @return string
 	 */
 	

@@ -30,13 +30,13 @@ class Zwei_Utils_Table
 	 * Retorna los headers de la tabla HTML  
 	 * @param $rowset Zend_Db_Rowset
 	 * @param $component Zwei_Admin_Components
-	 * @return html
+	 * @return string html
 	 */
 	
 	function showTitles($rowset)
 	{
-	    Debug::write($rowset);
-	    Debug::write($this->_name);
+	    //Debug::write($rowset);
+	    //Debug::write($this->_name);
 		$out = "<tr>";
 		foreach ($rowset[0] as $target => $value) 
 		{

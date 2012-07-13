@@ -14,7 +14,7 @@ class Zwei_Utils_Menu
     
     /**
      * 
-     * @param Array() $tree
+     * @param array $tree, arreglo con índices url y label con el cual se contruirá el menú.
      */
     function __construct($tree)
     {
@@ -91,7 +91,7 @@ class Zwei_Utils_Menu
     }
     
     /**
-     * 
+     * Despliega el menú ya construido.
      * @return string html
      */
     

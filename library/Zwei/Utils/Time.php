@@ -7,11 +7,11 @@
 class Zwei_Utils_Time{
 	
 	/**
-	 * 
-	 * @param int
-	 * @param boolean
-	 * @param boolean
-	 * @param boolean
+	 * Convierte segundos a hh:mm:ss
+	 * @param $sec int
+	 * @param $showSeconds boolean
+	 * @param $showDays boolean
+	 * @param $addSufix boolean
 	 * @return string
 	 */
 	
@@ -47,12 +47,12 @@ class Zwei_Utils_Time{
 	}
 	
 	/**
+	 * Convierte un string datetime a un timestamp.
 	 * 
-	 * @param datetime YYYY-MM-DD hh:mm:ss|DD-MM-YYY hh:mm:ss
-	 * @param string "eng"|"esp"
+	 * @param $datetime datetime YYYY-MM-DD hh:mm:ss|DD-MM-YYY hh:mm:ss
+	 * @param $lang string "eng"|"esp"
 	 * @return int timestamp
 	 */
-	
 	static public function datetimeToTimestamp($datetime, $lang="eng")
 	{
 			$arrDateTime = explode(" ", trim($datetime));
@@ -73,10 +73,11 @@ class Zwei_Utils_Time{
 	}
 	
 	/**
+	 * Retorna un array de días u horas de un intervalo de tiempo dado.
 	 * 
-	 * @param int timestamp
-	 * @param int timestamp
-	 * @param string "hours"|"days"
+	 * @param $from int timestamp - datetime desde.
+	 * @param $to int timestamp - datetime hasta.
+	 * @param $interval string "hours"|"days" - retornar días u horas.
 	 * @return array 
 	 */
 	static public function createInterval($from, $to, $interval="hours")

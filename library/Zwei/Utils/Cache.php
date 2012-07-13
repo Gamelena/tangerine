@@ -1,8 +1,11 @@
 <?php
 /**
  * Implementación de Zend_Cache para admportal,
- * tip: para no cachear graficos, usar la palabra "grafico" en el nombre del componente
+ * tip: para no cachear graficos, usar la palabra "grafico" en el nombre del componente XML
  *
+ * @package Zwei_Utils
+ * @version $Id:$
+ * @since 0.1
  */
 final class Zwei_Utils_Cache
 {
@@ -33,12 +36,22 @@ final class Zwei_Utils_Cache
      */
     protected $_check = false;
     
+    /**
+     * 
+     * @param $backendOpt array - opciones de BackEnd para Zend_Cache::factory 
+     * @param $frontendOpt array - opciones de FrontEnd para Zend_Cache::factory 
+     * @return void
+     */
     public function __construct($backendOpt, $frontendOpt) 
     {
         $this->_backendOpt = $backendOpt;
         $this->_frontendOpt = $frontendOpt;
     }
 
+    /**
+     * Inicializa el output de caché.
+     * @return void
+     */
     public function start() 
     {
         if (Zend_Auth::getInstance()->hasIdentity() && !isset($_REQUEST['action']) && !preg_match("/grafico/", @$_REQUEST['p'])) {
@@ -69,16 +82,28 @@ final class Zwei_Utils_Cache
         
     }
     
+    /**
+     * Checkea si debe inicializar el caché según los parámetros del constructor.
+     * @return boolean
+     */
     public function check()
     {
         return $this->_check;
     }
-    
+
+    /**
+     * Checkea si el output del caché está inicializado.
+     * @return boolean
+     */    
     public function isStarted()
     {
         return $this->_isStarted;
     }
     
+    /**
+     * Finaliza la escritura en caché.
+     * @return void
+     */
     public function end()
     {
         $this->_cache->end();

@@ -6,6 +6,7 @@
  * 
  * Pueden ser invocadas mediante el atributo functions de los components xml del admin.
  * 
+ * @category Zwei
  * @package Zwei_Utils
  * @version $Id:$
  * @since 0.1
@@ -17,19 +18,19 @@
 class Zwei_Utils_CustomFunctionsBase
 {
 	/**
-	 * Icono Dijit para pintar boton [TODO] diseñar implementar configuración de esto en XMl 
+	 * Icono Dijit para pintar boton [TODO] diseñar implementar configuración de esto en XML.
 	 * @var array
 	 */
 	protected $_icons;
 	
 	/**
-	 * Id Capturada de la fila seleccionada de la grilla al llamar a la función 
+	 * Id Capturada de la fila seleccionada de la grilla al llamar a la función .
 	 * @var mixed
 	 */
 	protected $_id;
 	
     /**
-     * URL de busqueda original
+     * URL de busqueda original.
      * @var string
      */
 	
@@ -37,38 +38,37 @@ class Zwei_Utils_CustomFunctionsBase
 	
 	
 	 /**
-     * Parámetros de búsqueda
+     * Parámetros de búsqueda.
      * @var array
      */
     
     protected $_query_params;
 	
 	/**
-	 * Variable para control de permisos
+	 * Permisos de usuario en sesión.
 	 * @var Zwei_Admin_Acl
 	 */
 	
 	protected $_acl;
 	
 	/**
-	 * 
-	 * @var unknown_type
+	 * Datos de sesión de usuario.
+	 * @var Zend_Auth_Storage
 	 */
 	protected $_user_info;
 	
 	
 	/**
-	 * Array asociativo entre el nombre del método y la descripción a mostrar, útil para pintar botones
+	 * Array asociativo entre el nombre del método y la descripción a mostrar, para pintar botones.
 	 * @var array
 	 */
-	
 	protected $_names=array(
 		'clonarPromocion'=>'Clonar Promocion',
 		'procesarArchivoAbonados'=>'Procesar Archivo'
 	);
 
 	/**
-	 * 
+	 * Objeto $_REQUEST.
 	 * @var Zwei_Utils_Form
 	 */
 	protected $_form;
@@ -97,6 +97,11 @@ class Zwei_Utils_CustomFunctionsBase
 		return $this->_names[$index];
 	}
 	
+	/**
+	 * 
+	 * @param $index string
+	 * @return string
+	 */
 	public function getIcon($index)
 	{
 		return !empty($this->_icons[$index]) ? $this->_icons[$index] : "dijitIconFunction";
@@ -104,11 +109,17 @@ class Zwei_Utils_CustomFunctionsBase
 	
    /**
      * Inicializa $this->_query_params con un array asociativo de parámetros de busqueda
+     * 
+     * @param $form - Objeto Request
      * @return array
+     * @example
+     * <code>
+     *     $this->initQueryParams(new Zwei_Utils_Form);
+     *     Debug::write($this->_query_params);
+     * </code>
      */
     public function initQueryParams($form)
     {
-        Debug::write($form);
         if (!empty($form->search) || $form->search === '0') {
             $searchFields = explode(";", $form->search_fields);
             $search = explode(';', $form->search);
