@@ -22,4 +22,16 @@ class Zwei_Utils_File
         }
         if ($remove_dir) rmdir($dir);
     }
+    
+    
+    public function isNotEmptyFolder($folder) { 
+        if (! is_dir($folder)) 
+            return false; // not a dir 
+    
+        $files = opendir($folder); 
+        while ($file = readdir($files)) { 
+            if ($file != '.' && $file != '..') 
+            return true; // not empty 
+        } 
+    } 
 }
