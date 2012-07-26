@@ -5,13 +5,13 @@
  * por ejemplo para sobrecargar manualmente Zwei_Db_Table::select() usando parámetros equivalentes.
  * @example
  * <code>
- * //Solo recibe parametros de $_REQUEST, debe existir $_REQUEST['model'] esto equivale a $form->model. 
+ * //Recibe parametros $_REQUEST, debe existir $_REQUEST['model'] esto equivale a $form->model. 
  * $form = new Zwei_Utils_Form();
  * $object = new Zend_Db_Object($form);
  * $select = $object->select(); 
  * </code>
  * <code>
- * //Recibe un Zend_Db_Select como segundo param, el array $form, filtrará ese objecto Zend_Db_Select.
+ * //Recibe parametros $_REQUEST como primer param y un Zend_Db_Select como segundo param, el array $form, filtrará ese objecto Zend_Db_Select.
  * $form = new Zwei_Utils_Form();
  * $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
  * $db = Zend_Db::factory($config->resources->multidb->dn);
@@ -86,7 +86,7 @@ class Zwei_Db_Object
                     if ((!empty($sSearchField) || $sSearchField === "0") && (!empty($aSearchKeys[$i]) || @$aSearchKeys[$i] === "0" || empty($this->_form->search_type))) {
                         if (@$this->_form->search_type == 'multiple') {
                             if (isset($search_format[$auxI])) $search_format[$auxI] = preg_replace('/[^(\x20-\x7F)]*/', '', $search_format[$auxI]);
-                            
+
                             if (preg_match("/^date_format(.*)/", @$search_format[$auxI], $match)) {
                                 $mask='%Y-%m-%d';
                                 if (@$this->_form->between ==  $sSearchField) {
@@ -96,6 +96,15 @@ class Zwei_Db_Object
                                     //$auxI++;
                                 } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
                                     $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchFieldFormatted,'$mask') = ?", $aSearchKeys[$i]));
+                                }
+                            } else if ($search_format[$auxI] == 'date_to_datetime') {
+                                if (@$this->_form->between ==  $sSearchField) {
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[$i] . " 00:00:00"));
+                                    $i++;
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[$i] . " 23:59:59"));     
+                                } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[$i] . " 00:00:00"));
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[$i] . " 23:59:59"));
                                 }
                             } else if (@$this->_form->between ==  $sSearchField) {    
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[$i]));
@@ -126,6 +135,15 @@ class Zwei_Db_Object
                                 } else {
                                     $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchFieldFormatted,'$mask') = ?", $this->_form->search));
                                 }
+                           } else if (@$this->_form->search_format == 'date_to_datetime') {
+                                if (@$this->_form->between ==  $sSearchField) {
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[0] . " 00:00:00"));
+                                    $i++;
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[1] . " 23:59:59"));     
+                                } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[0] . " 00:00:00"));
+                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[0] . " 23:59:59"));
+                                }    
                             } else {
                                 $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted LIKE ?", "%{$this->_form->search}%"));
                             }
