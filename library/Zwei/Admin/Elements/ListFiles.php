@@ -22,6 +22,7 @@ class Zwei_Admin_Elements_ListFiles extends Zwei_Admin_Elements_Element{
 		if (is_dir($this->params['PATH'])) {
 			if ($dh = opendir($this->params['PATH'])) {
 				$out="
+				<div style=\"height:300px;overflow:auto\">
 				<table class=\"select_files\">";
 				while (($file = readdir($dh)) !== false) {
 
@@ -64,7 +65,7 @@ class Zwei_Admin_Elements_ListFiles extends Zwei_Admin_Elements_Element{
 
 				}
 				$out.="</table>";
-				$out.="<div id=\"ajax_loading_bar\"></div>";
+				$out.="<div id=\"ajax_loading_bar\"></div></div>";
 				closedir($dh);
 			}
 		}else{
