@@ -185,11 +185,19 @@ class Zwei_Db_Object
 
         }
 
-        $count = (isset($this->_form->limit)) ? $this->_form->limit : 20000;//[TODO] deprecar esto y usar solo $this->_form->count
-         
+        $count = (isset($this->_form->limit)) ? $this->_form->limit : 20000;//[TODO] deprecar esto y dejar solo $this->_form->count 
         $start = (isset($this->_form->start)) ? $this->_form->start : 0; 
         $count = (isset($this->_form->count)) ? $this->_form->count : $count;//dojo.data.QueryReadStore usa count en lugar de limit
+        $sort = (isset($this->_form->sort)) ? $this->_form->sort : false;
         
+        if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select") && $sort) {
+            if (preg_match("/^-(.*)/", $sort)) {
+                $sort = substr($sort, 1);
+                $oSelect->order("$sort DESC");    
+            } else {
+                $oSelect->order($sort);
+            }
+        }
         
         if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) $oSelect->limit($count, $start);
         

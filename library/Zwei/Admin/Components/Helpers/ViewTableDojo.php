@@ -43,8 +43,13 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 
         $params = $this->getRequested_params();
 
+
         if (isset($this->layout[0]['LIST']) && $this->layout[0]['LIST']=="true" && $this->_acl->isUserAllowed($this->page, 'LIST') && (!isset($this->layout[0]['SEARCH_HIDE_SUBMIT']))) {
-            $out .= "\r\n <span dojoType=\"dojo.data.ItemFileReadStore\" id=\"store_grid\" jsId=\"store_grid\" url=\"".BASE_URL."objects?model={$this->layout[0]['TARGET']}&format=json$params\"></span>";
+            if (isset($this->layout[0]['SERVER_PAGINATION']) && $this->layout[0]['SERVER_PAGINATION'] == "true") {
+                $out .= "\r\n <span dojoType=\"dojox.data.QueryReadStore\" id=\"store_grid\" jsId=\"store_grid\" url=\"".BASE_URL."objects?model={$this->layout[0]['TARGET']}&format=json$params\"></span>";
+            } else {    
+                $out .= "\r\n <span dojoType=\"dojo.data.ItemFileReadStore\" id=\"store_grid\" jsId=\"store_grid\" url=\"".BASE_URL."objects?model={$this->layout[0]['TARGET']}&format=json$params\"></span>";
+            }    
             $store = "store=\"store_grid\"";
         } else {
             $store = '';
