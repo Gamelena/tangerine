@@ -24,7 +24,12 @@ class Zwei_Admin_Elements_ListFiles extends Zwei_Admin_Elements_Element{
 				$out="
 				<div style=\"height:300px;overflow:auto\">
 				<table class=\"select_files\">";
-				while (($file = readdir($dh)) !== false) {
+				
+				$files = array();
+				while ($files[] = readdir($dh));
+				sort($files);
+				
+				foreach ($files as $file) {
 
 					if (!is_dir($this->params['PATH'] .'/'. $file) && $file!="." && $file!=".."){
 						//solo si el archivo es un directorio, distinto que "." y ".."
