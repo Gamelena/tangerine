@@ -3,7 +3,7 @@
 /**
  * Tabla HTML Dojo para un Dojo Layout, Interfaz para operaciones CRUD
  *
- * Ejemplo:
+ * @example
  * <code>
  * <section name="Perfiles" type="table_dojo" target="acl_roles" list="true" search="msisdn,fijo" edit="true" add="true" delete="true">
  <field name="ID" target="id" type="id_box" visible="false" edit="false" add="false"/>
@@ -62,7 +62,8 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $model = Zwei_Utils_String::toClassWord($viewtable->layout[0]['TARGET']) . "Model";
         $this->_model = new $model;
         $getPk = $this->_model->getPrimary();
-        $primary = ($getPk) ? $getPk : "id";
+        Debug::write($getPk);
+        $primary = ($getPk && !@stristr($getPk, ".")) ? $getPk : "id";
 
 
         if ($viewtable->layout[1]['_name'] == 'TAB') {
@@ -84,19 +85,19 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
 
         if ($viewtable->layout[1]['_name'] == 'TAB') {
             if (isset($viewtable->layout[0]['ADD']) && $viewtable->layout[0]['ADD'] == "true" && $this->_acl->isUserAllowed($this->page, 'ADD')){
-                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnAdd\" onClick=\"cargarTabsPanelCentral('$this->page','add', '$primary');\">";
+                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnAdd\" onClick=\"cargarTabsPanelCentral('$this->page','add', '$primary');try{initModule();}catch(e){console.debug(e);}\">";
                 $out .= "Agregar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }
 
             if (isset($viewtable->layout[0]['EDIT']) && $viewtable->layout[0]['EDIT'] == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT')){
-                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"btnEdit\" onClick=\"cargarTabsPanelCentral('$this->page','edit', '$primary');\">";
+                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"btnEdit\" onClick=\"cargarTabsPanelCentral('$this->page','edit', '$primary');try{initModule();}catch(e){console.debug(e);}\">";
                 $out .= "Editar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }
 
             if (isset($viewtable->layout[0]['CLONE']) && $viewtable->layout[0]['CLONE'] == "true"  && $this->_acl->isUserAllowed($this->page, 'ADD')){
-                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnClone\" onClick=\"cargarTabsPanelCentral('$this->page','clone', '$primary');\">";
+                $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"btnClone\" onClick=\"cargarTabsPanelCentral('$this->page','clone', '$primary');try{initModule();}catch(e){console.debug(e);}\">";
                 $out .= "Clonar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }

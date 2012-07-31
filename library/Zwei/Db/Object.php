@@ -185,8 +185,11 @@ class Zwei_Db_Object
 
         }
 
-        $count = (isset($this->_form->limit)) ? $this->_form->limit : 20000;//[TODO] ver paginador 
-        $start = (isset($this->_form->start)) ? $this->_form->start : 0;  
+        $count = (isset($this->_form->limit)) ? $this->_form->limit : 20000;//[TODO] deprecar esto y usar solo $this->_form->count
+         
+        $start = (isset($this->_form->start)) ? $this->_form->start : 0; 
+        $count = (isset($this->_form->count)) ? $this->_form->count : 20000;//dojo.data.QueryReadStore usa count en lugar de limit
+        
         
         if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) $oSelect->limit($count, $start);
         
