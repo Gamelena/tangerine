@@ -191,6 +191,7 @@ class Zwei_Db_Object
         $sort = (isset($this->_form->sort)) ? $this->_form->sort : false;
         
         if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select") && $sort) {
+            $oSelect->reset(Zend_Db_Select::ORDER);
             if (preg_match("/^-(.*)/", $sort)) {
                 $sort = substr($sort, 1);
                 $oSelect->order("$sort DESC");    
