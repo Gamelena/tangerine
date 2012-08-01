@@ -190,7 +190,7 @@ class Zwei_Db_Object
         $count = (isset($this->_form->count)) ? $this->_form->count : $count;//dojo.data.QueryReadStore usa count en lugar de limit
         $sort = (isset($this->_form->sort)) ? $this->_form->sort : false;
         
-        if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select") && $sort) {
+        if ( (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) && $sort) {
             $oSelect->reset(Zend_Db_Select::ORDER);
             if (preg_match("/^-(.*)/", $sort)) {
                 $sort = substr($sort, 1);
