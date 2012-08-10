@@ -36,6 +36,7 @@ class Zwei_Db_TableLoggeable extends Zwei_Db_Table
     }   
     
     public function log($action, $condition) {
+        if (is_array($condition)) $condition = print_r($condition, true);
         if (self::$_defaultLogMode) {
             $logBook = new LogBookModel();
             
