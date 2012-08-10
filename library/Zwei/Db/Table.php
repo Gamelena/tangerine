@@ -97,6 +97,49 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $this->_setAdapter($db);
 	}
 
+	public function insert($data)
+	{
+        if (class_exists("SettingsModel")) {
+            $userName = (isset($this->_user_info->user_name)) ? $this->_user_info->user_name : "NN"; 
+            $ip = $_SERVER['REMOTE_ADDR'];
+
+            $strData = print_r($data, true);
+            $logMessage = "[$userName $ip] INSERT INTO " . $this->info(Zend_Db_Table::NAME) . " VALUES ($strData) ";
+            Debug::writeBySettings($logMessage, 'query_log', 'SI', "../log/transactions");
+        }
+	    
+	    return parent::insert($data);
+	}
+	
+	public function update($data, $where)
+	{
+	    if (class_exists("SettingsModel")) {
+	        $userName = (isset($this->_user_info->user_name)) ? $this->_user_info->user_name : "NN"; 
+            $ip = $_SERVER['REMOTE_ADDR'];
+	        
+            $strData = print_r($data, true);
+            $strWhere = print_r($where, true);
+            $logMessage = "[$userName $ip] UPDATE " . $this->info(Zend_Db_Table::NAME) . " SET (".$strData.") WHERE (".$strWhere.") ";
+            Debug::writeBySettings($logMessage, 'query_log', 'SI', "../log/transactions");
+        }
+	    
+	    return parent::update($data, $where);
+	}    
+	
+	public function delete($where)
+	{
+	    if (class_exists("SettingsModel")) {
+	        $userName = (isset($this->_user_info->user_name)) ? $this->_user_info->user_name : "NN"; 
+            $ip = $_SERVER['REMOTE_ADDR'];
+	        
+            $strWhere = print_r($where, true);
+            $logMessage = "[$userName $ip] DELETE FROM " . $this->info(Zend_Db_Table::NAME) . " WHERE ($strWhere) ";
+            Debug::writeBySettings($logMessage, 'query_log', 'SI', "../log/transactions");
+        }
+
+        return parent::delete($where);
+	}
+
 	public function setLabel($value)
 	{
 		$this->_label = $value;
@@ -112,7 +155,17 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	}
 
 
-
+	/**
+	 * Retorna atributo resources.multidb.{$_adapter}.
+	 * Lleva prefijo Zw para distinguirlo de método nativo Zend_Db_Table_Abstract::getAdapter()
+	 * 
+	 *  
+	 * @return string
+	 */
+	public function getZwAdapter()
+	{
+	    return $this->_adapter;
+	}
 
 
 	/**
@@ -255,7 +308,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     public function initQueryParams($form = false)
     {
         if (!$form) { $form = new Zwei_Utils_Form(); }
-        if (!empty($form->search) || $form->search === '0') {
+        if (isset($form->search) && (!empty($form->search) || $form->search === '0')) {
             $searchFields = explode(";", $form->search_fields);
             $search = explode(';', $form->search);
             $betweened = false;
