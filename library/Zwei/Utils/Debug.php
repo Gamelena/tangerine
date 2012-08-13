@@ -46,8 +46,8 @@ class Zwei_Utils_Debug
         $oSettings = new SettingsModel();
         try {
             $oSettingsSelect = $oSettings->select()->where('id = ?', $settings_id);
-            $aSettings = $oSettings->fetchAll($oSettingsSelect);
-            if ($aSettings[0]['value'] == $settings_value) {
+            $aSettings = $oSettings->fetchRow($oSettingsSelect);
+            if (isset($aSettings) && $aSettings->value == $settings_value) {
                 $trace = debug_backtrace();
             	if ($message !==null ) {
 	               $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
