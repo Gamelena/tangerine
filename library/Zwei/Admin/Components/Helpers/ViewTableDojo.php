@@ -18,9 +18,16 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
     public $search_format;
     public $between;
     private $count;
+    private $_model;
 
     public function display()
     {
+        $model = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET']) . "Model";
+        $this->_model = new $model;
+        $getPk = $this->_model->getPrimary();
+        $primary = ($getPk && !@stristr($getPk, ".")) ? $getPk : "id";
+        
+        
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
 
@@ -69,9 +76,16 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $dojotype = isset($this->layout[0]['TABLE_DOJO_TYPE']) ? "dojoType=\"{$this->layout[0]['TABLE_DOJO_TYPE']}\"" : "dojoType=\"dojox.grid.EnhancedGrid\"";
         $plugins = isset($this->layout[0]['PLUGINS']) ? "plugins=\"{$this->layout[0]['PLUGINS']}\"" : "plugins=\"{pagination: {defaultPageSize:25, maxPageStep: 5 } }\"";
         $on_row_click = isset($this->layout[0]['ON_ROW_CLICK']) ? "onRowClick=\"{$this->layout[0]['ON_ROW_CLICK']}\"" : "";
-        $on_row_dbl_click = isset($this->layout[0]['ON_ROW_DBL_CLICK']) ? "onRowDblClick=\"{$this->layout[0]['ON_ROW_DBL_CLICK']}\"" : "";
-        
-        
+        $on_row_dbl_click = "";
+        if (isset($this->layout[0]['ON_ROW_DBL_CLICK'])) { 
+            $on_row_dbl_click = "onRowDblClick=\"{$this->layout[0]['ON_ROW_DBL_CLICK']}\"";
+        } else if (isset($this->layout[0]['EDIT']) && $this->layout[0]['EDIT'] == 'true') {
+            if ($this->layout[1]['_name'] == 'TAB' ) {
+                $on_row_dbl_click = "onRowDblClick=\"cargarTabsPanelCentral('$this->page', 'edit', '$primary');try{initModule();}catch(e){console.debug(e);}\"";
+            } else {
+                $on_row_dbl_click = "onRowDblClick=\"showDialog('edit');\"";
+            }
+        }
         if (!isset($this->layout[0]['SEARCH_HIDE_SUBMIT'])) {
             $out .= "\r\n<table $dojotype $plugins $on_row_click $on_row_dbl_click id=\"main_grid\" jsId=\"main_grid\" $store clientSort=\"true\" style=\"width:{$width_table}px; height: 320px;\" selectable=\"true\" rowSelector=\"20px\" rowsPerPage=\"10\" noDataMessage=\"Sin datos.\">\r\n<thead><tr>\r\n";
     
