@@ -79,7 +79,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $on_row_dbl_click = "";
         if (isset($this->layout[0]['ON_ROW_DBL_CLICK'])) { 
             $on_row_dbl_click = "onRowDblClick=\"{$this->layout[0]['ON_ROW_DBL_CLICK']}\"";
-        } else if (isset($this->layout[0]['EDIT']) && $this->layout[0]['EDIT'] == 'true') {
+        } else if (isset($this->layout[0]['EDIT']) && $this->layout[0]['EDIT'] == 'true' && $this->_acl->isUserAllowed($this->page, 'EDIT') ) {
             if ($this->layout[1]['_name'] == 'TAB' ) {
                 $on_row_dbl_click = "onRowDblClick=\"cargarTabsPanelCentral('$this->page', 'edit', '$primary');try{initModule();}catch(e){console.debug(e);}\"";
             } else {
