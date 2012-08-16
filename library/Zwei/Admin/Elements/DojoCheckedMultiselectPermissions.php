@@ -27,6 +27,7 @@ class Zwei_Admin_Elements_DojoCheckedMultiselectPermissions extends Zwei_Admin_E
 		$options = $this->options();
 		$return =  "<select dojoType=\"dojox.form.CheckedMultiSelect\" multiple=\"true\" id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" $value $onchange $required $regexp $invalid_message $prompt_message style=\"display:$display\" >\r\n$options\r\n</select>\r\n
 		";
+		$return .= "<style type=\"text/css\">.dojoxCheckedMultiSelectWrapper{height:400px;}</style>";
 		return $return;
 	}
   
