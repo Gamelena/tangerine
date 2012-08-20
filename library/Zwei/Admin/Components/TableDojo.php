@@ -62,7 +62,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $model = Zwei_Utils_String::toClassWord($viewtable->layout[0]['TARGET']) . "Model";
         $this->_model = new $model;
         $getPk = $this->_model->getPrimary();
-        Debug::write($getPk);
+
         $primary = ($getPk && !@stristr($getPk, ".")) ? $getPk : "id";
 
 
@@ -197,9 +197,10 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 //$href=str_replace("{value}",$this->value,$href);
                 $sIcon = (!empty($icons[$i]) && $icons[$i] != "null") ? $icons[$i] : "dijitIconApplication"; 
                 $sIframe = (!empty($iframes[$i]) && $iframes[$i]=="true") ? 'true' : 'false';
+                $sTitle = (!empty($titles[$i])) ? $titles[$i] : 'undefined';
                 //Zwei_Utils_Debug::write($permissions[$i]);
                 if (empty($permissions[$i]) || $this->_acl->isUserAllowed($this->page, strtoupper($permissions[$i]))) {
-                    $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"$sIcon\" id=\"btnlink$i\" onClick=\"popupGrid('$f', $sIframe, '$primary');\">";
+                    $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"$sIcon\" id=\"btnlink$i\" onClick=\"popupGrid('$f', $sIframe, '$primary', '$sTitle');\">";
                     $out .= $titles[$i];
                     $out .= "</button></td>";
                 }
@@ -223,12 +224,12 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         {
             if ($viewtable->layout[1]['_name'] != 'TAB')
             {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" jsId=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 $out .= "\t".$edittable->display('ADD');
                 $out .= "\n</div>\r\n";
     
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\" onload=\"global_opc='add';showtab('tabadd_ctrl1', 'tabadd1');$initModule\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" jsId=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\" onload=\"global_opc='add';showtab('tabadd_ctrl1', 'tabadd1');$initModule\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
                     $out .= "\t<iframe src=\"\" id=\"iframeDialogAdd\" name=\"iframeDialogAdd\" frameborder=\"no\" $height $width $style></iframe>";
                 }
@@ -241,11 +242,11 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         {
             if ($viewtable->layout[1]['_name'] != 'TAB')
             {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" jsId=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 $out .= "\t".$edittable->display('EDIT');
                 $out .= "\n</div>\r\n";
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1');$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" jsId=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1');$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
                     $out .= "\t<iframe src=\"\" id=\"iframeDialogEdit\" name=\"iframeDialogoEdit\" frameborder=\"no\" $height $width $style></iframe>";
                 }    
@@ -261,10 +262,10 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         {
             if (!empty($iframes[$i]) && $iframes[$i]=="true")
             {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo$i\" title=\"{$titles[$i]}\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo$i\" jsId=\"formDialogo$i\" title=\"{$titles[$i]}\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 $out .= "\n</div>\r\n";
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo$i\" title=\"{$titles[$i]}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1', $iframe);$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo$i\" jsId=\"formDialogo$i\" title=\"{$titles[$i]}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1', $iframe);$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
                     $out .= "\t<iframe src=\"\" id=\"iframeDialogEdit\" name=\"iframeDialogoEdit$i\" frameborder=\"no\" $height $width $style></iframe>";
                 }    
