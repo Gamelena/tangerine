@@ -19,8 +19,9 @@ class Zwei_Utils_Debug
    * @param string $message - texto a escribir en archivo. 
    * @param $file - ruta relativa del archivo a escribir.
    */	
-    function write($message = null, $file = "../log/debug")
+    function write($message = null, $file ="" )
     {
+	if( $file == "" ) $file = ROOT_DIR."/log/debug";
         $trace = debug_backtrace() ;
 	    if  ($message !== null ){
 	        $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
