@@ -33,7 +33,7 @@ class Zwei_Utils_Table
 	 * @return string html
 	 */
 	
-	function showTitles($rowset)
+	function showTitlesHtml($rowset)
 	{
 	    //Debug::write($rowset);
 	    //Debug::write($this->_name);
@@ -99,7 +99,7 @@ class Zwei_Utils_Table
 	 * @return string tabla HTML
 	 */
 	
-	function rowsetToHtml($rowset, $component=false)
+	public function rowsetToHtml($rowset, $component=false)
 	{ 
 		if ($component) {
 			if (!is_array($component)) { // buscar títulos en componente xml
@@ -120,12 +120,107 @@ class Zwei_Utils_Table
 
 		$out = "<table border=\"1\">\n";
 		if (!empty($rowset) && count($rowset) > 0) {
-    		$out .= $this->showTitles($rowset);
+    		$out .= $this->showTitlesHtml($rowset);
     		for ($i=0;$i<$count;$i++) {
     			$out .= $this->showContent($rowset, $i);
     		}
 		}		
 		$out .= "</table>\n";
 		return $out;
+	}
+	
+	/**
+	 * 
+	 * Convierte un recordset en una hoja excel
+	 * 
+	 * @param array|Zend_Db_Rowset
+	 * @param string|array componente XML|array de títulos
+	 * @param string
+	 * @param string
+	 */
+	public function rowsetToExcel($rowset, $component=false, $excelVersion='Excel2007', $filename = false)
+	{
+	    if ($component) {
+			if (!is_array($component)) { // buscar títulos en componente xml
+		        $this->parseComponent($component);
+			} else { // sacar títulos de array
+			    $row = $rowset[0];
+			    $j = 0;
+			    foreach($row as $i => $v) {
+			        $this->_name[$i] = $component[$j];
+			        $j++;
+			    }
+				
+				$this->_xml = "array";
+			}    
+		}
+		$count = count($rowset);
+		
+		$excel = new PHPExcel();
+        $excel->setActiveSheetIndex(0);
+        $excel->getProperties()->setCreator("Zweicom");
+        
+        if (!empty($this->_xml[0]['NAME'])) {
+            $excel->getProperties()->setTitle(!empty($this->_xml[0]['NAME']));    
+        }
+        
+        if (!$filename) {
+            $filename = (!empty($this->_xml[0]['TARGET'])) ? $this->_xml[0]['TARGET'] : "Reporte";
+        }
+        
+        $ext = $excelVersion == 'Excel2007' ? 'xlsx' : 'xls';
+        $worksheet = $excel->getActiveSheet();
+
+        $col = "A";
+        $row = 1;
+        
+        //Titulos
+		foreach ($rowset[0] as $target => $value) 
+		{
+			if (!isset($this->_xml)) {
+				$worksheet->getCell($col.$row)->setValue($target);
+				$col++;
+			} else if(!empty($this->_name[$target])) {
+     		    $title = str_ireplace('\n', "", $this->_name[$target]);
+     		    $title = html_entity_decode($title, null, 'UTF-8');
+			    $worksheet->getCell($col.$row)->setValue($title);
+
+			    $col++;
+
+			}
+		}
+		$worksheet->getStyle(1)->getFont()->setBold(true)->setUnderline("single")->setName("Arial");
+
+        //Valores
+		$row = 2;
+		foreach ($rowset as $index => $tuple) {
+		    $col = "A";
+			foreach ($tuple as $target => $value) 
+    		{
+    			if(!empty($this->_name[$target]) || !isset($this->_xml)){
+    			    $value = html_entity_decode($value, null, 'UTF-8');	
+    			    $worksheet->getCell($col.$row)->setValue($value);
+    			    $col++;
+    			}    
+    		}
+		    $row ++;
+		} 
+        
+
+        ob_end_clean();
+        
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        header("Cache-Control: no-store, no-cache, must-revalidate");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=\"$filename.$ext\"");
+
+        $objWriter = PHPExcel_IOFactory::createWriter($excel, $excelVersion);
+        ob_end_clean();
+        
+        $objWriter->save('php://output');
+        $excel->disconnectWorksheets();
+        unset($excel);
 	}
 }
