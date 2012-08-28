@@ -213,25 +213,24 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $out .= "</tr></table>\r\n";
         
         $height = isset ($viewtable->layout[0]['HEIGHT']) ? "height=\"{$viewtable->layout[0]['HEIGHT']}\"" : "";
-        $width = isset ($viewtable->layout[0]['WIDTH']) ? "height=\"{$viewtable->layout[0]['HEIGHT']}\"" : "";
-        $style = isset ($viewtable->layout[0]['STYLE']) ? "height=\"{$viewtable->layout[0]['STYLE']}\"" : "";
+        $width = isset ($viewtable->layout[0]['WIDTH']) ? "width=\"{$viewtable->layout[0]['WIDTH']}\"" : "";
+        $style = isset ($viewtable->layout[0]['STYLE']) ? "style=\"{$viewtable->layout[0]['STYLE']}\"" : "";
         $iframe = isset ($viewtable->layout[0]['IFRAME']) && $viewtable->layout[0]['IFRAME'] == 'true' ? 'true' : 'false';
         $initModule = isset ($viewtable->layout[0]['JS']) ? "initModule();" : "";
-        
 
         if ((@$viewtable->layout[0]['ADD'] == 'true' || @$viewtable->layout[0]['CLONE'] == 'true')
         && ($this->_acl->isUserAllowed($this->page, 'ADD'))) 
         {
             if ($viewtable->layout[1]['_name'] != 'TAB')
             {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" jsId=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" jsId=\"formDialogo\" $style title=\"Agregar {$viewtable->layout[0]['NAME']}\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 $out .= "\t".$edittable->display('ADD');
                 $out .= "\n</div>\r\n";
     
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" jsId=\"formDialogo\" title=\"Agregar {$viewtable->layout[0]['NAME']}\" onload=\"global_opc='add';showtab('tabadd_ctrl1', 'tabadd1');$initModule\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" jsId=\"formDialogo\" $style title=\"Agregar {$viewtable->layout[0]['NAME']}\" onload=\"global_opc='add';showtab('tabadd_ctrl1', 'tabadd1');$initModule\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
-                    $out .= "\t<iframe src=\"\" id=\"iframeDialogAdd\" name=\"iframeDialogAdd\" frameborder=\"no\" $height $width $style></iframe>";
+                    $out .= "\t<iframe src=\"\" id=\"iframeDialogAdd\" name=\"iframeDialogAdd\" frameborder=\"no\" $height $width></iframe>";
                 }
                 $out .= "\n</div>\r\n";
             }
@@ -242,13 +241,13 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         {
             if ($viewtable->layout[1]['_name'] != 'TAB')
             {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" jsId=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" $style refreshOnShow=\"true\" jsId=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 $out .= "\t".$edittable->display('EDIT');
                 $out .= "\n</div>\r\n";
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" jsId=\"formDialogoEditar\" title=\"Editar {$viewtable->layout[0]['NAME']}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1');$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogoEditar\" $style jsId=\"formDialogoEditar\" refreshOnShow=\"true\" title=\"Editar {$viewtable->layout[0]['NAME']}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1');$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
-                    $out .= "\t<iframe src=\"\" id=\"iframeDialogEdit\" name=\"iframeDialogoEdit\" frameborder=\"no\" $height $width $style></iframe>";
+                    $out .= "\t<iframe src=\"\" id=\"iframeDialogEdit\" name=\"iframeDialogoEdit\" frameborder=\"no\" $height $width></iframe>";
                 }    
                 $out .= "\n</div>\r\n";
             }
