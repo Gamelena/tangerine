@@ -223,7 +223,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         {
             if ($viewtable->layout[1]['_name'] != 'TAB')
             {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" jsId=\"formDialogo\" $style title=\"Agregar {$viewtable->layout[0]['NAME']}\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $out .= "<div dojoType=\"dijit.Dialog\" id=\"formDialogo\" jsId=\"formDialogo\" refreshOnShow=\"true\" onHide=\"this.reset()\" $style title=\"Agregar {$viewtable->layout[0]['NAME']}\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 $out .= "\t".$edittable->display('ADD');
                 $out .= "\n</div>\r\n";
     
