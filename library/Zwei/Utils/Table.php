@@ -135,10 +135,10 @@ class Zwei_Utils_Table
 	 * 
 	 * @param array|Zend_Db_Rowset
 	 * @param string|array componente XML|array de títulos
-	 * @param string
+	 * @param string 'Excel5'|'Excel2007'
 	 * @param string
 	 */
-	public function rowsetToExcel($rowset, $component=false, $excelVersion='Excel2007', $filename = false)
+	public function rowsetToExcel($rowset, $component=false, $excelVersion='Excel5', $filename = false)
 	{
 	    if ($component) {
 			if (!is_array($component)) { // buscar títulos en componente xml
@@ -184,11 +184,10 @@ class Zwei_Utils_Table
      		    $title = str_ireplace('\n', "", $this->_name[$target]);
      		    $title = html_entity_decode($title, null, 'UTF-8');
 			    $worksheet->getCell($col.$row)->setValue($title);
-
 			    $col++;
-
 			}
 		}
+		
 		$worksheet->getStyle(1)->getFont()->setBold(true)->setUnderline("single")->setName("Arial");
 
         //Valores
