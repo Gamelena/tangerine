@@ -87,3 +87,9 @@ INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `linkab
 (3, 0, 'Datos Personales', 'personal-info.xml', '0', '0', 'xml', '1', 0, '0'),
 (2, NULL, 'Reportes Generales', NULL, '1', '0', 'xml', '1', 6, '0'),
 (1, NULL, 'Configuraci&oacute;n', NULL, '1', '0', 'xml', '1', 11, '0');
+
+
+-- 
+-- Vista para combo en buscador 
+--       
+CREATE VIEW tables_logged AS SELECT DISTINCT log_book.table AS id, log_book.table AS title FROM log_book ORDER BY log_book.table; 
