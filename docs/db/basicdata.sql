@@ -1,95 +1,255 @@
-INSERT INTO `acl_users` (`id`, `acl_roles_id`, `user_name`, `password`, `first_names`, `last_names`, `email`, `approved`) VALUES
-  ('1', '1', 'zweicom', 'bc5ac95d42e44c9ba777516afe83fc3f', 'Soporte', 'Zweicom', 'tecnicos@zweicom.com', '1'),
-  ('2', '2', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'Cliente', 'administrador@telefonicamoviles.com.pe', '1'),
-  ('3', '3', 'consultas', '83da1fbc8f1a993de3f31cec6d7bf5b2', 'Consultas', 'Cliente', '', '1');
-  
-INSERT INTO `acl_roles` (`id`, `role_name`, `description`) VALUES
-  ('1', 'Soporte', 'Usuario Root'),
-  ('2', 'Administrador', 'Usuario Administrador'),
-  ('3', 'Consultas', 'Usuario de Consultas');
-  
-  
-INSERT INTO `web_permissions` (`id`, `title`) VALUES
-  ('ADD', 'Agregar'),
-  ('EDIT', 'Editar'),
-  ('DELETE', 'Borrar'),
-  ('LIST', 'Listar');
-  
-INSERT INTO `acl_permissions` (`id`, `acl_roles_id`, `acl_modules_id`, `permission`) VALUES
-  ('1', '1', '1', 'LIST'),
-  ('2', '1', '2', 'LIST'),
-  ('3', '1', '3', 'LIST'),
-  ('4', '1', '3', 'EDIT'),
-  ('5', '1', '3', 'ADD'),
-  ('6', '1', '3', 'DELETE'),
-  ('7', '1', '4', 'LIST'),
-  ('8', '1', '4', 'EDIT'),
-  ('9', '1', '4', 'ADD'),
-  ('10', '1', '4', 'DELETE'),
-  ('11', '1', '5', 'LIST'),
-  ('12', '1', '5', 'EDIT'),
-  ('13', '1', '5', 'ADD'),
-  ('57', '2', '5', 'DELETE'),
-  ('15', '1', '6', 'LIST'),
-  ('16', '1', '6', 'EDIT'),
-  ('17', '1', '6', 'ADD'),
-  ('18', '1', '6', 'DELETE'),
-  ('19', '1', '7', 'LIST'),
-  ('20', '2', '1', 'LIST'),
-  ('21', '2', '2', 'LIST'),
-  ('40', '1', '9', 'LIST'),
-  ('42', '1', '8', 'LIST'),
-  ('43', '1', '8', 'EDIT'),
-  ('46', '1', '9', 'ADD'),
-  ('47', '1', '9', 'EDIT'),
-  ('48', '2', '9', 'LIST'),
-  ('49', '2', '9', 'ADD'),
-  ('50', '2', '9', 'EDIT'),
-  ('52', '3', '8', 'LIST'),
-  ('53', '2', '8', 'LIST'),
-  ('54', '2', '5', 'LIST'),
-  ('55', '2', '5', 'ADD'),
-  ('56', '3', '2', 'LIST'),
-  ('60', '3', '3', 'LIST'),
-  ('61', '3', '3', 'EDIT'),
-  ('62', '1', '5', 'DELETE'),
-  ('63', '2', '3', 'LIST'),
-  ('64', '2', '3', 'EDIT'),
-  ('65', '1', '9', 'DELETE');
-  
-  
-  
-INSERT INTO `web_settings` (`id`, `enum`, `value`, `type`, `description`, `ord`, `group`, `function`, `approved`) VALUES
-  ('query_log', 'SI,NO', 'NO', 'dojo_filtering_select', '', '1', 'Debug', '', '1'),
-  ('titulo_adm', '', 'Admin Portal Base', 'dojo_validation_textbox', '', '0', 'Admin', '', '1'),
-  ('url_logo_oper', '', 'images/logo_movistar60x44.png', 'dojo_validation_textbox', '', '0', 'Admin', '', '1'),
-  ('url_logo_zweicom', '', 'images/logo_zweicom26x15.png', 'dojo_validation_textbox', '', '0', 'Admin', '', '1');
-  
-INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `linkable`, `xml`, `approved`) VALUES
-(1, 0, 'Configuraci&oacute;n', '', '1', '0', '1', '1'),
-(2, 0, 'Reportes', 'reports', '1', '0', '1', '1'),
-(3, 1, 'Datos Personales', 'personal-info', '0', '0', '1', '1'),
-(4, 1, 'M&oacute;dulos', 'modules', '1', '1', '1', '1'),
-(5, 1, 'Usuarios', 'users', '1', '1', '1', '1'),
-(6, 1, 'Permisos', 'permissions', '1', '1', '1', '1'),
-(7, 1, 'Servidor', 'phpinfo', '1', '1', '1', '1'),
-(8, 2, 'Ejemplo', 'ejemplo', '1', '1', '1', '1'),
-(9, 1, 'Variables', 'settings', '1', '1', '1', '1');
+-- phpMyAdmin SQL Dump
+-- version 3.4.10.1deb1
+-- http://www.phpmyadmin.net
+--
+-- Servidor: localhost
+-- Tiempo de generación: 05-09-2012 a las 11:26:32
+-- Versión del servidor: 5.5.24
+-- Versión de PHP: 5.3.10-1ubuntu3.2
 
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Base de datos: `regla_cobros`
+--
+
+
+--
+-- Estructura de tabla para la tabla `acl_modules`
+--
+
+DROP TABLE IF EXISTS `acl_modules`;
+CREATE TABLE IF NOT EXISTS `acl_modules` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(10) unsigned DEFAULT NULL,
+  `title` char(200) DEFAULT NULL,
+  `module` char(200) DEFAULT NULL,
+  `tree` enum('0','1') NOT NULL DEFAULT '1',
+  `linkable` enum('0','1') NOT NULL,
+  `type` enum('xml','xml_php','zend_module','legacy') NOT NULL DEFAULT 'xml',
+  `approved` enum('0','1') NOT NULL,
+  `order` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  `root` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `module` (`module`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+
+--
+-- Volcado de datos para la tabla `acl_modules`
+--
 
 INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `linkable`, `type`, `approved`, `order`, `root`) VALUES
 (9, 1, 'Variables', 'settings.xml', '1', '1', 'xml', '1', 0, '1'),
-(8, 2, 'Compras', 'rep-general-compra.xml', '1', '1', 'xml', '1', 0, '0'),
+(8, 1, 'Perfiles', 'roles.xml', '1', '1', 'xml', '1', 0, '1'),
 (7, 1, 'Servidor', 'phpinfo.xml', '1', '1', 'xml', '1', 0, '1'),
 (6, 1, 'Permisos', 'permissions.xml', '0', '1', 'xml', '0', 0, '1'),
 (5, 1, 'Usuarios', 'users.xml', '1', '1', 'xml', '1', 0, '0'),
 (4, 1, 'M&oacute;dulos', 'modules.xml', '1', '1', 'xml', '1', 7, '1'),
-(3, 0, 'Datos Personales', 'personal-info.xml', '0', '0', 'xml', '1', 0, '0'),
+(3, NULL, 'Datos Personales', 'personal-info.xml', '0', '0', 'xml', '1', 0, '0'),
 (2, NULL, 'Reportes Generales', NULL, '1', '0', 'xml', '1', 6, '0'),
 (1, NULL, 'Configuraci&oacute;n', NULL, '1', '0', 'xml', '1', 11, '0');
 
+-- --------------------------------------------------------
 
--- 
--- Vista para combo en buscador 
---       
-CREATE VIEW tables_logged AS SELECT DISTINCT log_book.table AS id, log_book.table AS title FROM log_book ORDER BY log_book.table; 
+--
+-- Estructura de tabla para la tabla `acl_permissions`
+--
+
+DROP TABLE IF EXISTS `acl_permissions`;
+CREATE TABLE IF NOT EXISTS `acl_permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `acl_roles_id` int(1) NOT NULL,
+  `acl_modules_id` int(4) NOT NULL,
+  `permission` char(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `acl_roles_id` (`acl_roles_id`,`acl_modules_id`,`permission`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=162 ;
+
+--
+-- Volcado de datos para la tabla `acl_permissions`
+--
+
+INSERT INTO `acl_permissions` (`id`, `acl_roles_id`, `acl_modules_id`, `permission`) VALUES
+(110, 1, 5, 'LIST'),
+(109, 1, 5, 'EDIT'),
+(108, 1, 5, 'DELETE'),
+(107, 1, 5, 'ADD'),
+(106, 1, 9, 'LIST'),
+(105, 1, 9, 'EDIT'),
+(104, 1, 9, 'DELETE'),
+(103, 1, 9, 'ADD'),
+(102, 1, 8, 'LIST'),
+(101, 1, 8, 'EDIT'),
+(100, 1, 8, 'DELETE'),
+(99, 1, 8, 'ADD'),
+(98, 1, 7, 'LIST'),
+(97, 1, 4, 'LIST'),
+(96, 1, 4, 'EDIT'),
+(95, 1, 4, 'DELETE'),
+(94, 1, 4, 'ADD'),
+(159, 2, 5, 'DELETE'),
+(93, 1, 3, 'LIST'),
+(92, 1, 3, 'EDIT'),
+(91, 1, 2, 'LIST'),
+(90, 1, 1, 'LIST'),
+(89, 1, 1, 'EDIT'),
+(158, 2, 5, 'ADD'),
+(153, 2, 1, 'LIST'),
+(154, 2, 2, 'LIST'),
+(134, 3, 3, 'LIST'),
+(160, 2, 5, 'EDIT'),
+(161, 2, 5, 'LIST'),
+(157, 2, 8, 'LIST'),
+(133, 3, 3, 'EDIT'),
+(132, 3, 2, 'LIST'),
+(88, 1, 1, 'DELETE'),
+(156, 2, 3, 'LIST'),
+(155, 2, 3, 'EDIT'),
+(87, 1, 1, 'ADD');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl_roles`
+--
+
+DROP TABLE IF EXISTS `acl_roles`;
+CREATE TABLE IF NOT EXISTS `acl_roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` char(64) NOT NULL,
+  `description` char(100) CHARACTER SET utf8 NOT NULL,
+  `approved` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `role_name` (`role_name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Volcado de datos para la tabla `acl_roles`
+--
+
+INSERT INTO `acl_roles` (`id`, `role_name`, `description`, `approved`) VALUES
+(1, 'Soporte', 'Perfil root.', '1'),
+(2, 'Administrador', 'Administrador con acceso a hacer modificaciones administrativas y manejo de usuarios.', '1'),
+(3, 'Consultas', 'Acceso a listados y reportes.', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl_users`
+--
+
+DROP TABLE IF EXISTS `acl_users`;
+CREATE TABLE IF NOT EXISTS `acl_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `acl_roles_id` int(4) NOT NULL,
+  `user_name` char(64) NOT NULL,
+  `password` char(200) NOT NULL,
+  `first_names` char(50) NOT NULL,
+  `last_names` char(50) NOT NULL,
+  `email` char(50) NOT NULL,
+  `approved` enum('0','1') NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_name` (`user_name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Volcado de datos para la tabla `acl_users`
+--
+
+INSERT INTO `acl_users` (`id`, `acl_roles_id`, `user_name`, `password`, `first_names`, `last_names`, `email`, `approved`) VALUES
+(1, 1, 'zweicom', '3a62dc577a0db23fb0b5c1c9e8046c05', 'Soporte', 'Zweicom', 'tecnicos@zweicom.com', '1'),
+(2, 2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'Cliente', 'administrador@telefonicamoviles.com.pe', '1'),
+(3, 3, 'consultas', '83da1fbc8f1a993de3f31cec6d7bf5b2', 'Consultas', 'Cliente', '', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `log_book`
+--
+
+DROP TABLE IF EXISTS `log_book`;
+CREATE TABLE IF NOT EXISTS `log_book` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user` char(40) NOT NULL,
+  `table` char(40) NOT NULL,
+  `action` char(40) NOT NULL,
+  `condition` char(200) NOT NULL,
+  `acl_roles_id` int(11) NOT NULL,
+  `ip` char(200) NOT NULL,
+  `stamp` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `tables_logged`
+--
+DROP VIEW IF EXISTS `tables_logged`;
+CREATE TABLE IF NOT EXISTS `tables_logged` (
+`id` char(40)
+,`title` char(40)
+);
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `web_permissions`
+--
+
+DROP TABLE IF EXISTS `web_permissions`;
+CREATE TABLE IF NOT EXISTS `web_permissions` (
+  `id` char(20) NOT NULL,
+  `title` char(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `web_permissions`
+--
+
+INSERT INTO `web_permissions` (`id`, `title`) VALUES
+('ADD', 'Agregar'),
+('EDIT', 'Editar'),
+('DELETE', 'Borrar'),
+('LIST', 'Listar');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `web_settings`
+--
+
+DROP TABLE IF EXISTS `web_settings`;
+CREATE TABLE IF NOT EXISTS `web_settings` (
+  `id` char(255) NOT NULL DEFAULT '',
+  `enum` char(255) NOT NULL,
+  `value` char(255) NOT NULL DEFAULT '0',
+  `type` char(255) NOT NULL DEFAULT '',
+  `description` text NOT NULL,
+  `ord` int(11) NOT NULL DEFAULT '0',
+  `group` char(255) NOT NULL,
+  `function` char(255) NOT NULL,
+  `approved` enum('0','1') NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `web_settings`
+--
+
+INSERT INTO `web_settings` (`id`, `enum`, `value`, `type`, `description`, `ord`, `group`, `function`, `approved`) VALUES
+('query_log', 'SI,NO', 'SI', 'dojo_filtering_select', '', 1, 'Debug', '', '1'),
+('transactions_log', 'SI,NO', 'SI', 'dojo_filtering_select', '', 1, 'Debug', '', '1'),
+('titulo_adm', '', 'Admin Portal Base', 'dojo_validation_textbox', '', 0, 'Admin', '', '1'),
+('url_logo_oper', '', 'images/logo_movistar60x44.png', 'dojo_validation_textbox', '', 0, 'Admin', '', '1'),
+('url_logo_zweicom', '', 'images/logo_zweicom26x15.png', 'dojo_validation_textbox', '', 0, 'Admin', '', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `tables_logged`
+--
+DROP TABLE IF EXISTS `tables_logged`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tables_logged` AS select distinct `log_book`.`table` AS `id`,`log_book`.`table` AS `title` from `log_book` order by `log_book`.`table`;
