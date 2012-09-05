@@ -17,7 +17,7 @@ class Zwei_Admin_Acl extends Zend_Acl
      * Permisos asociados a sesión de usuario.
      * @var Zwei_Admin_Acl
      */
-	private static $_acl;
+	private static $_acl = null;
 	/**
 	 * Flag que indica si ya existe una instancia estática de Zwei_Admin_Acl.
 	 * @var boolean
@@ -103,7 +103,8 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 		$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
 
-		$db_params = isset($config->resources->multidb->auth) ? $config->resources->multidb->auth : $config->db;
+		$db_params = isset($config->resources->multidb->auth) ? $config->resources->multidb->auth : $config->resources->db;
+		if (empty($db_params)) $db_params = $config->db; //Compatibilidad legacy, ZF Tool crea $config->resources->db en lugar de $config->db.
 		
 		self::$_db = Zend_Db::factory($db_params);
 		
@@ -133,6 +134,21 @@ class Zwei_Admin_Acl extends Zend_Acl
 		self::$_ready = true;
 	}
 
+    /**
+     *
+     * Implementación Singleton.
+     *
+     * @return Zend_Admin_Acl
+     */
+    public static function getInstance()
+    {
+        if (null === self::$_acl) {
+            self::$_acl = new self();
+        }
+        return self::$_acl;
+    }
+	
+	
 	/**
 	 * Inicializa los perfiles
 	 * @return void
@@ -312,12 +328,16 @@ class Zwei_Admin_Acl extends Zend_Acl
 		        ->where(self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_permissions.".".self::$_tb_roles."_id")
 		        ->where(self::$_tb_users.".".self::$_user_login." = '".self::$_user."'");
 		} 
-		$select->where('parent_id ='.(int)$parent_id);
+		if (is_null($parent_id)) {
+		    $select->where('parent_id IS NULL');
+		} else {
+		    $select->where('parent_id = ?', (int) $parent_id);
+		}    
 		
 		$select->where(self::$_tb_modules.'.tree = ?', '1'); //[TODO] externalizar la condicion tree segun el caso
 		$select->order("order");
 
-
+		Debug::write($select->__toString());
 		
 		return(self::$_db->fetchAll($select));
 	}
