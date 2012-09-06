@@ -38,10 +38,12 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 	function __construct($page, $id=array(), $view=false)
 	{
 		parent::__construct($page, $id, $view);
+		$form = new Zwei_Utils_Form();
 		$this->getLayout();
 		$modelclass = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
         $this->_model = new $modelclass();
-		
+        $primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : 'id';
+ 		
 		$count = count($this->layout);
 		if (!isset($this->id)) $this->id = array();
 		elseif (!is_array($this->id)) $this->id = array($this->id);
@@ -155,7 +157,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 resp = insertar(model,items);
             } else if(global_opc == 'edit') {
                 var items = main_grid.selection.getSelected();
-                var id = items[0].id;
+                var id = items[0].$primary;
                 resp = actualizar(model, items, id);
             }
         
@@ -263,7 +265,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 
 
             $this->_out .= "
-                    'id'        : id,
+                    '$primary'        : id,
                     'action'    :'edit',
                     'model'     : model,
                     'format'    : 'json'    
