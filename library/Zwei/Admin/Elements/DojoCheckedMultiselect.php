@@ -115,7 +115,7 @@ class Zwei_Admin_Elements_DojoCheckedMultiselect extends Zwei_Admin_Elements_Ele
 
             foreach ($rows as $row) {
                 $selected = "";
-                if (isset($this->value) && in_array($row->$primary, $this->value)) {
+                if (isset($this->value) && is_array($this->value) && in_array($row->$primary, $this->value)) {
                     $selected = "selected=\"selected\"";
                 } 
                 
