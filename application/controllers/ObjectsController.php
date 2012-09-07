@@ -12,273 +12,257 @@
 
 class ObjectsController extends Zend_Controller_Action
 {
-	/**
-	 * Instancia Singleton
-	 * @var Zend_Auth
-	 */
-	private $_user_info;
-	/**
-	 * Instancia de $_REQUEST, preferible a Zend_Controller_Request ya que este no permite manejar un <pre>$_REQUEST['action']</pre>
-	 * @var Zwei_Utils_Form
-	 */
-	private $_form;
-	/**
-	 * Arreglo que será parte de la respuesta en json, Dojo data store, u otro formato a definir
-	 * @var array()
-	 */
-	private $_response_content=array();
+    /**
+     * Instancia Singleton
+     * @var Zend_Auth
+     */
+    private $_user_info;
+    /**
+     * Instancia de $_REQUEST, en este caso preferible a Zend_Controller_Request ya que este no permite manejar un <pre>$_REQUEST['action']</pre> al ser el índice palabra reservada.
+     * @var Zwei_Utils_Form
+     */
+    private $_form;
+    /**
+     * Arreglo que será parte de la respuesta en json, Dojo data store, u otro formato a definir
+     * @var array()
+     */
+    private $_response_content=array();
 
-	public function init()
-	{
-		if (Zend_Auth::getInstance()->hasIdentity()) {
-			$this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
-		} else {
-			$this->_redirect('index/login');
-		}
+    public function init()
+    {
+        if (Zend_Auth::getInstance()->hasIdentity()) {
+            $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
+        } else {
+            $this->_redirect('index/login');
+        }
 
-		$this->_helper->layout()->disableLayout();
-		$this->_form = new Zwei_Utils_Form();
+        $this->_helper->layout()->disableLayout();
+        $this->_form = new Zwei_Utils_Form();
 
-	}
+    }
 
-	/**
-	 * Retorna un json a partir de un objeto modelo,
-	 * enviar nombre de clase modelo separada por "_" y sin sufijo "Model",
-	 * ej: enviar "model=solicitud_th" en lugar de "model=SolicitudThModel"
-	 * @return excel|json
-	 */
+    /**
+     * Retorna un json a partir de un objeto modelo,
+     * enviar nombre de clase modelo separada por "_" y sin sufijo "Model",
+     * ej: enviar "model=solicitud_th" en lugar de "model=SolicitudThModel"
+     * @return excel|json
+     */
 
-	public function indexAction()
-	{
+    public function indexAction()
+    {
 
-		/**
-		 * [TODO] Validar segun perfil de usuario autorizado a obtener estos datos
-		 * [TODO] En el caso de datos personales solo se debieran poder ver y editar los datos de UN reg.
-		 */
+        /**
+         * [TODO] Validar segun perfil de usuario autorizado a obtener estos datos
+         * [TODO] En el caso de datos personales solo se debieran poder ver y editar los datos de UN reg.
+         */
 
-		if (@$this->_form->format == 'excel') {
-			header('Content-type: application/vnd.ms-excel');
-			header("Content-Disposition: attachment; filename={$this->_form->model}.xls");
-			header("Pragma: no-cache");
-			header("Expires: 0");
+        if ($this->_form->format == 'json') {
+            $this->_helper->ContextSwitch
+            ->setAutoJsonSerialization(false)
+            ->addActionContext('index', 'json')
+            ->initContext();
+        }
 
-		} else {
-			$this->_helper->ContextSwitch
-			->setAutoJsonSerialization(false)
-			->addActionContext('index', 'json')
-			->initContext();
-		}
+        //enviar nombre de clase modelo separada por "_" y sin sufijo "Model",
+        //ej: enviar solicitud_th en lugar de SolicitudThModel"
 
-		//enviar nombre de clase modelo separada por "_" y sin sufijo "Model",
-		//ej: enviar solicitud_th en lugar de SolicitudThModel"
+        $ClassModel = Zwei_Utils_String::toClassWord($this->_form->model)."Model";
 
-		$ClassModel = Zwei_Utils_String::toClassWord($this->_form->model)."Model";
+        if (class_exists($ClassModel)) {
+            /**
+             * 
+             * @var Zwei_Db_Table
+             */    
+            $oModel = new $ClassModel();
+            $this->view->collection = array();
 
-		if (class_exists($ClassModel)) {
+            if (isset($this->_form->action) && Zend_Auth::getInstance()->hasIdentity()) {
+                $data = array();
+                $oModel->getAdapter()->getProfiler()->setEnabled(true);
+                $id = $oModel->getPrimary();
+                if ($id === false) $id = "id";
 
-			$oModel = new $ClassModel();
-			$this->view->collection = array();
+                if ($this->_form->action == 'add') {
+                     
+                    foreach ($this->_form->data as $i=>$v) {
+                        $data[$i] = $v;
+                    }
 
-			if (isset($this->_form->action) && Zend_Auth::getInstance()->hasIdentity()) {
-				$data = array();
-				$oModel->getAdapter()->getProfiler()->setEnabled(true);
-				$id = $oModel->getPrimary();
-				if ($id === false) $id = "id";
-
-				if ($this->_form->action == 'add') {
-					 
-					foreach ($this->_form->data as $i=>$v) {
-						$data[$i] = $v;
-					}
-
-					try {
-						$response = $oModel->insert($data);
-						if ($response) {
-							$this->_response_content['state'] = 'ADD_OK';
-						} else {
-							$this->_response_content['state'] = 'ADD_FAIL';
-						}
-					} catch(Zend_Db_Exception $e) {
-						$this->_response_content['state'] = 'ADD_FAIL';
-					    if (is_object($oModel->getAdapter()->getProfiler()->getLastQueryProfile())) {
-                            $query = $oModel->getAdapter()->getProfiler()->getLastQueryProfile()->getQuery();
-                            $query_params = print_r($oModel->getAdapter()->getProfiler()->getLastQueryProfile()->getQueryParams(),true);
-                            $oModel->getAdapter()->getProfiler()->setEnabled(false);
-                            Zwei_Utils_Debug::write("[TRANSACTION:{$this->_form->action}]\nUser:{$this->_user_info->user_name}\nQuery:$query\nQuery Params:$query_params",  "../log/transactions");
+                    try {
+                        $response = $oModel->insert($data);
+                        if ($response) {
+                            $this->_response_content['state'] = 'ADD_OK';
                         } else {
-                            Zwei_Utils_Debug::write("Se modificó $ClassModel TRANSACTION:{$this->_form->action} \nUser:{$this->_user_info->user_name} \nData:$log_data \nWhere:$log_where", "../log/transactions");
+                            $this->_response_content['state'] = 'ADD_FAIL';
                         }
-						Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}/Query:$query/Params:$query_params");
-					}
+                    } catch (Zend_Db_Exception $e) {
+                        $this->_response_content['state'] = 'ADD_FAIL';
+                        Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
+                    }
 
-				} elseif ($this->_form->action == 'delete') {
-					 
-					if (!empty($this->_form->id) || $this->_form->id === "0") {
-						$where = $oModel->getAdapter()->quoteInto("$id = ?", $this->_form->id);
-						$response = $oModel->delete($where);
-						if ($response) {
-							$this->_response_content['state'] = 'DELETE_OK';
-						} else {
-							$this->_response_content['state'] = 'DELETE_FAIL';
-						}
-					} else {
-						$this->_response_content['state'] = 'DELETE_FAIL';
-					}
-					//Zwei_Utils_Debug::write($response);
-				} else if ($this->_form->action == 'edit') {
-					
-					foreach ($this->_form->data as $i=>$v) {
+                } elseif ($this->_form->action == 'delete') {
+                     
+                    if (!empty($this->_form->id) || $this->_form->id === "0") {
+                        $where = $oModel->getAdapter()->quoteInto("$id = ?", $this->_form->id);
+                        $response = $oModel->delete($where);
+                        if ($response) {
+                            $this->_response_content['state'] = 'DELETE_OK';
+                        } else {
+                            $this->_response_content['state'] = 'DELETE_FAIL';
+                        }
+                    } else {
+                        $this->_response_content['state'] = 'DELETE_FAIL';
+                    }
+                    //Zwei_Utils_Debug::write($response);
+                } else if ($this->_form->action == 'edit') {
+                    
+                    foreach ($this->_form->data as $i=>$v) {
                         if ($i == $id) { // si es pk, tratar como pk
                             $this->_form->$id = $v;
                         } 
                         $data[$i] = $v;
                         
-					}
+                    }
 
-					//en caso de tener multiples PK [FIXME] capturar nombres de campos para que funcione
-					if (isset($this->_form->id)) {
-						if (is_array($this->_form->id)) {
-						   $where = array();	
-	                       foreach ($this->_form->id as $i => $v) {
-	                            $where[] = $oModel->getAdapter()->quoteInto("$id = ?", $v); 	
-	                       }   
-						} else {
-						   $where = $oModel->getAdapter()->quoteInto("id = ?", $this->_form->id);
-						}   
-					} else {
-					   if (is_array($this->_form->$id)) {
-	                       $where = array();    
-	                       foreach ($this->_form->$id as $i => $v) {
-	                            $where[] = $oModel->getAdapter()->quoteInto("$id = ?", $v);
-	                       }          
+                    //en caso de tener multiples PK [FIXME] capturar nombres de campos para que funcione
+                    if (isset($this->_form->id)) {
+                        if (is_array($this->_form->id)) {
+                           $where = array();    
+                           foreach ($this->_form->id as $i => $v) {
+                                $where[] = $oModel->getAdapter()->quoteInto("$id = ?", $v);     
+                           }   
+                        } else {
+                           $where = $oModel->getAdapter()->quoteInto("id = ?", $this->_form->id);
+                        }   
+                    } else {
+                       if (is_array($this->_form->$id)) {
+                           $where = array();    
+                           foreach ($this->_form->$id as $i => $v) {
+                                $where[] = $oModel->getAdapter()->quoteInto("$id = ?", $v);
+                           }          
                        } else {
                            $where = $oModel->getAdapter()->quoteInto("$id = ?", $this->_form->$id);
-                       }  						
-					}
-					
-										
-					try {
-						$response = $oModel->update($data, $where);
-						if ($response) {
-							$this->_response_content['state'] = 'UPDATE_OK';
-						} else {
-							$this->_response_content['state'] = 'UPDATE_FAIL';
-						}
-					} catch (Zend_Db_Exception $e) {
-						$this->_response_content['state'] = 'UPDATE_FAIL';
-						Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$ClassModel|".$e->getTraceAsString());
-					}
-					//Zwei_Utils_Debug::write($response);
-				}
-				$log_data = isset($data) ? print_r($data, true) : '';
+                       }                        
+                    }
+                    
+                                        
+                    try {
+                        $response = $oModel->update($data, $where);
+                        if ($response) {
+                            $this->_response_content['state'] = 'UPDATE_OK';
+                        } else {
+                            $this->_response_content['state'] = 'UPDATE_FAIL';
+                        }
+                    } catch (Zend_Db_Exception $e) {
+                        $this->_response_content['state'] = 'UPDATE_FAIL';
+                        Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$ClassModel|".$e->getTraceAsString());
+                    }
+                    //Zwei_Utils_Debug::write($response);
+                }
+                $log_data = isset($data) ? print_r($data, true) : '';
                 $log_where = isset($where) ? print_r($where, true) : '';
-				$this->_response_content['todo'] = $oModel->getAjaxTodo();
+                $this->_response_content['todo'] = $oModel->getAjaxTodo();
 
-				//si se usó otro adaptador que el por default (ej: en replicación multidb no podemos usar $oModel->getAdapter(), i dont know why
-				                // IMPORTANTE, LOG DE TRANSACCIONES: acá van query y usuario a un log de texto en caso de ser query INSERT, DELETE o UPDATE
-			    if (is_object($oModel->getAdapter()->getProfiler()->getLastQueryProfile())) {
-    				$query = $oModel->getAdapter()->getProfiler()->getLastQueryProfile()->getQuery();
-    				$query_params = print_r($oModel->getAdapter()->getProfiler()->getLastQueryProfile()->getQueryParams(),true);
-    				$oModel->getAdapter()->getProfiler()->setEnabled(false);
-    				Zwei_Utils_Debug::write("[TRANSACTION:{$this->_form->action}]\nUser:{$this->_user_info->user_name}\nQuery:$query\nQuery Params:$query_params",  "../log/transactions");
-			    } else {
-			        Zwei_Utils_Debug::write("Se modificó $ClassModel TRANSACTION:{$this->_form->action} \nUser:{$this->_user_info->user_name} \nData:$log_data \nWhere:$log_where", "../log/transactions");
-			    }
-		
+            }//if (isset($this->_form->action))
 
-				
+            $oDbObject = new Zwei_Db_Object($this->_form);
+            $oSelect = $oDbObject->select();
 
-			}//if (isset($this->_form->action))
+            
 
-			$oDbObject = new Zwei_Db_Object($this->_form);
-			$oSelect = $oDbObject->select();
+            if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) {
+                $adapter = $oModel->getZwAdapter();
 
-			$data = $oModel->fetchAll($oSelect);
-			$i = 0;
+                if (isset($adapter) && !empty($adapter)) {
+                    Debug::write($adapter);
+                    $oModel->setAdapter($adapter);
+                }
+                
+                $data = $oModel->fetchAll($oSelect);
+                $paginator = Zend_Paginator::factory($oSelect);
+                $numRows = $paginator->getTotalItemCount();
+            } else {
+                $data = $oDbObject->select();
+            }    
+            $i = 0;
                
-			//Si es necesario se añaden columnas o filas manualmente que no vengan del select original
-	        if ($oModel->overloadData($data) !== false) {
+            //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
+            if ($oModel->overloadData($data) !== false) {
                 $data = $oModel->overloadData($data);
             }    
 
-			//si ?format=excel exportamos el rowset a html, los headers de excel ya han sido generados
-			if (@$this->_form->format == 'excel') {
-				$Table = new Zwei_Utils_Table();
-				if (isset($this->_form->p)) {
-					$content = $Table->rowsetToHtml($data, $this->_form->p);
-				} else {
-					$content = $Table->rowsetToHtml($data);
-				}
-			} elseif (count($this->_response_content) > 0) {
-				$this->_response_content['message'] = $oModel->getMessage();
-				$data = array( 'id'=>'0',
+            //si ?format=excel exportamos el rowset a excel
+            if (@$this->_form->format == 'excel') {
+                $this->_helper->layout->disableLayout();
+                $this->_helper->viewRenderer->setNoRender();
+                
+                $Table = new Zwei_Utils_Table();
+                if (isset($this->_form->p)) {
+                    $content = $Table->rowsetToExcel($data, $this->_form->p);
+                } else {
+                    $content = $Table->rowsetToExcel($data);
+                }
+
+                exit();
+                
+            } else if (count($this->_response_content) > 0) {
+                $this->_response_content['message'] = $oModel->getMessage();
+                $data = array( 'id'=>'0',
                                'state'=>$this->_response_content['state'],
                                'message'=>$this->_response_content['message'],
-				               'todo'=>$this->_response_content['todo']);
-				$content = Zend_Json::encode($data);
-			} else {
-				foreach ($data as $rowArray) {
-					$collection[$i]=array();
-					foreach ($rowArray as $column => $value) {
-						$collection[$i][$column] = utf8_encode(html_entity_decode($value));
-					}
-					$i++;
-				}
-				//Zwei_Utils_Debug::write($str_collection);
-				$id = $oModel->getPrimary();
-				
-				if ($id !== false && (!is_array($id) || count($id) == 1)) {
-					$id = $oModel->getPrimary();
-					$content = new Zend_Dojo_Data($id[1], @$collection);
-				} else {
-					/*
-					 * En caso de que no exista ninguna PK simple, inventamos un ID aca para que funcione el datastore
-					 * (SOLO PARA LISTAR, NO USAR ESTA ID PARA EDITAR, MODIFICAR O ELIMINAR) 
-					 * [TODO] aunque un dojo datastore no lo permita nativamente se debe emular PK multiple de ser necesario, ¿primary separada por ';'?
-					 */
-					if (!isset($collection[0]['id'])) {
-						for($j=0;$j<$i;$j++) {
-							$collection[$j]['id']=$j;
-						}
-					}
-					$content = new Zend_Dojo_Data('id', @$collection);
-				}
-				if (method_exists($oModel,'getLabel')) {
-					$content->setLabel($oModel->getLabel());
-				}
-			}
-			$this->view->content = $content;
-
-		}//if (class_exists($ClassModel))
-
-	}//public function indexAction()
-
-	public function multiUpdateAction()
-	{
-		$ClassModel = Zwei_Utils_String::toClassWord($this->_form->model);
-		$oSettings=new $ClassModel();
-
-		$oSettings->getAdapter()->getProfiler()->setEnabled(true);
-
-		foreach ($this->_form->id as $i=>$v) {
-			//echo $i;
-			$value=isset($this->_form->value[$i])?$this->_form->value[$i]:"";
-			$where=$oSettings->getAdapter()->quoteInto('id = ?', $v);
-			$data=array('value'=>$value);
-			$oSettings->update($data, $where);
-
-	        if (is_object($oModel->getAdapter()->getProfiler()->getLastQueryProfile())) {
-                $query = $oModel->getAdapter()->getProfiler()->getLastQueryProfile()->getQuery();
-                $query_params = print_r($oModel->getAdapter()->getProfiler()->getLastQueryProfile()->getQueryParams(),true);
-                $oModel->getAdapter()->getProfiler()->setEnabled(false);
-                Zwei_Utils_Debug::write("[TRANSACTION:{$this->_form->action}]\nUser:{$this->_user_info->user_name}\nQuery:$query\nQuery Params:$query_params",  "../log/transactions");
+                               'todo'=>$this->_response_content['todo']);
+                $content = Zend_Json::encode($data);
             } else {
-                Zwei_Utils_Debug::write("Se modificó $ClassModel TRANSACTION:{$this->_form->action} \nUser:{$this->_user_info->user_name} \nData:$log_data \nWhere:$log_where", "../log/transactions");
+                foreach ($data as $rowArray) {
+                    $collection[$i]=array();
+                    foreach ($rowArray as $column => $value) {
+                        $collection[$i][$column] = utf8_encode(html_entity_decode($value));
+                    }
+                    $i++;
+                }
+                //Zwei_Utils_Debug::write($str_collection);
+                $id = $oModel->getPrimary();
+                
+                if ($id !== false && (!is_array($id) || count($id) == 1)) {
+                    $id = $oModel->getPrimary();
+                    $content = new Zend_Dojo_Data($id[1], @$collection);
+                } else {
+                    /*
+                     * En caso de que no exista ninguna PK simple, inventamos un ID aca para que funcione el datastore
+                     * (SOLO PARA LISTAR, NO USAR ESTA ID PARA EDITAR, MODIFICAR O ELIMINAR) 
+                     * [TODO] aunque un dojo datastore no lo permita nativamente se debe emular PK multiple de ser necesario, ¿primary separada por ';'?
+                     */
+                    if (!isset($collection[0]['id'])) {
+                        for($j=0;$j<$i;$j++) {
+                            $collection[$j]['id']=$j;
+                        }
+                    }
+                    $content = new Zend_Dojo_Data('id', @$collection);
+                }
+                if (method_exists($oModel,'getLabel')) {
+                    $content->setLabel($oModel->getLabel());
+                }
+                
+                if (isset($numRows)) $content->setMetadata('numRows', $numRows);
+                
             }
+            $this->view->content = $content;
 
-			Zwei_Utils_Debug::write("[TRANSACTION:{$this->_form->action}]\nUser:{$this->_user_info->user_name}\nQuery:$query\nQuery Params:$query_params", "../log/transactions");
+        }//if (class_exists($ClassModel))
 
-		}
-		$oSettings->getAdapter()->getProfiler()->setEnabled(false);
-	}
+    }//public function indexAction()
+
+    public function multiUpdateAction()
+    {
+        $ClassModel = Zwei_Utils_String::toClassWord($this->_form->model);
+        $oSettings = new $ClassModel();
+
+
+        foreach ($this->_form->id as $i=>$v) {
+            $value = isset($this->_form->value[$i]) ? $this->_form->value[$i] : "";
+            $where = $oSettings->getAdapter()->quoteInto('id = ?', $v);
+            $data = array('value'=>$value);
+            $oSettings->update($data, $where);
+        }
+    }
 }
