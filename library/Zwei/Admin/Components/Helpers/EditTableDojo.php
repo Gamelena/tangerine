@@ -95,7 +95,10 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                         alert('Debes seleccionar una fila');
                         return;
                     }
-                    //console.debug(items[0]);\r\n"; 
+                    if (items[0].i != undefined) { //Bug Dojo?
+                        items[0] = items[0].i;
+                    }
+                    console.debug(items[0]);\r\n"; 
 
 
 	    $i=0; 
