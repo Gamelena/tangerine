@@ -160,7 +160,12 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 resp = insertar(model,items);
             } else if(global_opc == 'edit') {
                 var items = main_grid.selection.getSelected();
+                if (items[0].i != undefined) { //Bug Dojo?
+                   items[0] = items[0].i;
+                }
+                
                 var id = items[0].$primary;
+                               
                 resp = actualizar(model, items, id);
             }
         
