@@ -95,7 +95,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                         alert('Debes seleccionar una fila');
                         return;
                     }
-                    if (items[0].i != undefined) { //Bug Dojo?
+                    if (items[0].i != undefined && items[0].r._items != undefined) { //Bug Dojo?
                         items[0] = items[0].i;
                     }
                     console.debug(items[0]);\r\n"; 
@@ -160,7 +160,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 resp = insertar(model,items);
             } else if(global_opc == 'edit') {
                 var items = main_grid.selection.getSelected();
-                if (items[0].i != undefined) { //Bug Dojo?
+                if (items[0].i != undefined && items[0].r._items != undefined) { //Bug Dojo?
                    items[0] = items[0].i;
                 }
                 
