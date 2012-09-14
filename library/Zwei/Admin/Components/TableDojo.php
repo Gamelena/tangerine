@@ -52,7 +52,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         }
         
         $excelVersion = isset($this->_config->zwei->excel->version) ? $this->_config->zwei->excel->version : 'Excel5';
-        $domPrefix = ($this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord(str_replace('.', '_', $form->p)) : '';
+        $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord(str_replace('.', '_', $form->p)) : '';
 
         $start = isset($request['start']) ? (int)$request['start'] : 0;
         $search = isset($request['search']) ? $request['search'] : "";
