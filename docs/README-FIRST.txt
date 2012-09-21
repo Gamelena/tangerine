@@ -12,26 +12,25 @@ Para crear un nuevo proyecto con AdmPortal:
 
 1. Instalar ZF Tool, en algunas distribuciones Linux se puede encontrar en repos, si no, bajar manualmente y configurar el path 
 $ sudo apt-get install zend-framework-bin
+
+2. Crear variables de entorno, agregar las siguiente líneas al ~/.bashrc asumiendo que AdmPortal está instalado en $DEVELBASE/admportal 
+
+DEVELBASE="/{Carpeta de desarrollo de proyectos}"
+export ZWC_ADMPORTAL=$DEVELBASE/admportal
+export PATH=$PATH:$ZWC_ADMPORTAL/tools  
  
-2. Ubicarse en consola en la carpeta padre de donde se creará el proyecto o donde se añadirá soporte para ZF Tool. 
-$ zf create project {proyecto}
-Se puede añadir soporte ZF Tool a un proyecto existente reemplazando {proyecto} por el nombre de la carpeta raiz del proyecto web (usualmente 'web','php' o 'public_html').
+3. Ubicarse en consola en la carpeta del proyecto, dentro de esta carpeta se creará una subcarpeta llamada web donde estará el proyecto web.
 
-3. Sobreescribir las carpetas creadas con ZF Tool con los archivos de AdmPortal (sobreescribir todo).
+4. Crear base de datos y usuario de base de datos, tomar como referencia docs/db/createdb.sql.
 
-4. Crear la base de datos de ser necesario basandose en docs/db/createdb.sql (opcional).
+4. Ejecutar admportal-create.sh. 
+    Deberá ingresar: Tipo de DB (MySQL por omisión), nombre de DB, Usuario DB, Password DB.
+    Deberá escoger: generación automática de tablas y datos base (S/N) (S por omisión) 
+    
 
-5. Configurar conexion en configs/application.ini.
+Perfiles y Usuarios por defecto en caso de generación automática de tablas:
 
-6. Ejecutar SQL de docs/db/admportal.sql.
-
-7. Configurar vhost según el archivo README.txt generado con ZF Tool (opcional).
-
-8. Loguearse con usuario Soporte.
-
-Perfiles y Usuarios por defecto:
-
--Soporte         user: zweicom, password: zweicomadmin2011
+-Soporte         user: zweicom, password: zweicom
 -Administrador   user: admin,   password: admin
 -Consultas       user: consultas, password: consultas
 

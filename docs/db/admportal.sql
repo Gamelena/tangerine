@@ -113,3 +113,11 @@ CREATE TABLE IF NOT EXISTS `log_book` (
   `ip` char(200) NOT NULL,
   `stamp` datetime NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+--
+-- Estructura para la vista `tables_logged`
+--
+DROP TABLE IF EXISTS `tables_logged`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tables_logged` AS select distinct `log_book`.`table` AS `id`,`log_book`.`table` AS `title` from `log_book` order by `log_book`.`table`;
