@@ -8,6 +8,7 @@
 <?=$this->dojo()?>
 <script type="text/javascript" src="/dojotoolkit/dojo/dojo.js"
 	djConfig="parseOnLoad:true, isDebug:false"></script>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />	
 </head>
 <body class="claro login">
 <!--[if lt IE 7]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0012_spanish_LATAM.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div> <![endif]-->
@@ -16,14 +17,14 @@
 <table style="margin: 0 auto">
 	<tr>
 		<th>
-		<h1>Bonos de Consumo</h1>
+		<h1 id="tituloAdm" style="float: none;"><?php echo $this->adminTitle;?></h1>
 		<p>Portal de Administraci&oacute;n</p>
 		</th>
 	</tr>
 	<tr>
 		<td><?php if($this->errorMessage != ""): ?>
-		<p class="error"><?=$this->errorMessage?></p>
-		<?php endif; ?> <?=$this->loginForm?></td>
+		<p class="error"><?php echo $this->errorMessage;?></p>
+		<?php endif; ?> <?php echo $this->loginForm;?></td>
 	</tr>
 </table>
 </div>

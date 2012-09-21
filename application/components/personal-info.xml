@@ -1,6 +1,6 @@
 <?xml version="1.0"?> 
 <!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
-<component name="Informaci&amp;oacute;n" type="table_dojo" target="personal_info" list="true" change_password="true" edit="true" add="false" delete="false">
+<component name="Informaci&amp;oacute;n" type="table_dojo" target="personal_info" list="true" plugins="{}" change_password="true" edit="true" add="false" delete="false">
    	<element name="ID" target="id" type="id_box" visible="false" edit="false" add="false"/>
     <element name="Usuario" target="user_name" type="dojo_validation_textbox" visible="true" edit="false" add="true"/>
     <element name="Nombres" target="first_names" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>

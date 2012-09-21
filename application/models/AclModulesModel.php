@@ -20,16 +20,29 @@ class AclModulesModel extends Zwei_Db_Table
 	public function update($data, $where) 
 	{
 		if (empty($data['module'])) $data['module'] = NULL;
+		if (empty($data['parent_id'])) $data['parent_id'] = NULL;
+		
 		$this->_ajax_todo = 'cargarArbolMenu';
+		Zwei_Utils_File::clearRecursive(ROOT_DIR ."/cache");
+		
 		return parent::update($data, $where);
 	}
 	
 	public function insert($data)
 	{
         if (empty($data['module'])) $data['module'] = NULL;
+        if (empty($data['parent_id'])) $data['parent_id'] = NULL;
+        
         $this->_ajax_todo = 'cargarArbolMenu';
+        Zwei_Utils_File::clearRecursive(ROOT_DIR ."/cache");
+
         return parent::insert($data);		
 	} 
+	
+	public function delete($where)
+	{
+		return parent::delete($where);
+	}
 	
 	
 	public function setApproved($value=1)
@@ -70,7 +83,7 @@ class AclModulesModel extends Zwei_Db_Table
 	 * @param $parent_id
 	 * @return Array()
 	 */
-	public function getTree($parent_id = 0)
+	public function getTree($parent_id = null)
 	{
 		$root = $this->getChildrens($parent_id);
 
@@ -106,13 +119,20 @@ class AclModulesModel extends Zwei_Db_Table
 	 * @return Zend_Db_Table_Select
 	 */
 
-	public function select(){
+	public function select()
+	{
 		$select=new Zend_Db_Table_Select($this);
 		$select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
 		$select->from($this->_name)
 		->joinLeft(array('parent'=>$this->_name), "$this->_name.parent_id = parent.id", array("parent_title"=>"title", "parent_module"=>"module"))
 		->where("$this->_name.id != ?", 0)
 		;
+		
+	    //Si no pertenece al role_id 1, no puede ver módulos root
+        if ($this->_user_info->acl_roles_id != '1') {
+            $select->where("$this->_name.root != ?", "1");
+        }
+		
 		return $select;
 	}
 
@@ -133,7 +153,7 @@ class AclModulesModel extends Zwei_Db_Table
         ;
 
 		if ($this->_user_info->acl_roles_id != '1') {
-				//Condiciones adicionales en caso de no ser root
+            $select->where("$this->_name.root != ?", "1");
 		}
 		return $select;
 	}
@@ -145,10 +165,19 @@ class AclModulesModel extends Zwei_Db_Table
 
 	public function getModules()
 	{
-		$select=new Zend_Db_Table_Select($this);
-		$select->distinct()
-		->from($this->_name, array('id','module_title'=>'title'))
-		;
-		return $select;
+        $select=new Zend_Db_Table_Select($this);
+        $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
+        $select->from($this->_name, array('id','title'=>'title'))
+        ->joinLeft(array('parent'=>$this->_name), "$this->_name.parent_id = parent.id",
+            array("module_title"=>new Zend_Db_Expr("IF($this->_name.parent_id > 0, CONCAT(parent.title, '->', $this->_name.title), $this->_name.title)")))
+        ->where("$this->_name.id != ?", 0)
+        ->order("parent.id")  
+        ->order("title")
+        ;
+
+        if ($this->_user_info->acl_roles_id != '1') {
+            $select->where("$this->_name.root != ?", "1");
+        }
+        return $select;
 	}
 }

@@ -42,15 +42,16 @@ class PersonalInfoModel extends Zwei_Db_Table
 	 * se genera la password repitiendo el nombre de usuario en md5
 	 * @return int
 	 */
-	public function insert($data){
-		$data["password"]=md5($data[$this->_generate_pass]);
-		try{
+	public function insert($data)
+	{
+		$data["password"] = md5($data[$this->_generate_pass]);
+		try {
 			$last_insert_id = parent::insert($data);
-		}catch(Zend_Db_Exception $e){
-			if($e->getCode()=='23000'){
+		} catch(Zend_Db_Exception $e) {
+			if ($e->getCode() == '23000') {
 				$this->setMessage('Nombre de Usuario en uso.');
 				return false;
-			}else{
+			} else {
 				Zwei_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
 			}
 		}
@@ -61,18 +62,17 @@ class PersonalInfoModel extends Zwei_Db_Table
 	 * Captura de excepciones posibles como nombre de usuario en uso
 	 */
 
-	public function update($data, $where){
-		try{
+	public function update($data, $where) {
+		try {
 			$update = parent::update($data, $where);
-		}catch(Zend_Db_Exception $e){
-			if($e->getCode()=='23000'){
+		} catch(Zend_Db_Exception $e) {
+			if ($e->getCode()=='23000') {
 				$this->setMessage('Nombre de Usuario en uso.');
 				return false;
-			}else{
+			} else {
 				Zwei_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
 			}
 		}
 		return $update;
-
 	}
 }

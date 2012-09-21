@@ -1,12 +1,16 @@
 <?xml version="1.0"?> 
 <!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
-<component name="Modul&amp;oacute;s" type="table_dojo" table_dojo_type="dojox.grid.EnhancedGrid" target="acl_modules" list="true" edit="true" add="true" delete="true">
+<component name="M&amp;oacute;dulos" type="table_dojo" search="parent.title;acl_modules.title" table_dojo_type="dojox.grid.EnhancedGrid" target="acl_modules" list="true" edit="true" add="true" delete="true">
    	<element name="ID" target="id" type="id_box" visible="false" edit="false" add="false"/>
-    <element name="M&amp;oacute;dulo" target="title" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>   	
+    <element name="M&amp;oacute;dulo Padre" target="parent_id" type="dojo_filtering_select" table="acl_modules" default_text="Ninguno" default_value="" table_method="select_distinct" field="parent_title" visible="true" edit="true" add="true"/>
+    <element name="M&amp;oacute;dulo Padre" target="parent.title" type="dojo_validation_textbox" visible="false" edit="false" add="false"/>                        	
+    <element name="M&amp;oacute;dulo" target="title" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>
+    <element name="M&amp;oacute;dulo" target="acl_modules.title" type="dojo_validation_textbox" visible="false" edit="false" add="false"/> 
     <element name="Componente" target="module" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>
-   	<element name="M&amp;oacute;dulo Padre" target="parent_id" type="dojo_filtering_select" table="acl_modules" table_method="select_distinct" field="parent_title" visible="true" edit="true" add="true"/>    
-    <element name="En &amp;Aacute;rbol" target="tree" type="dojo_yes_no" visible="true" edit="true" add="true"/>
-    <element name="Enlazable" target="linkable" type="dojo_yes_no" visible="true" edit="true" add="true"/> 
-    <element name="XML" target="xml" type="dojo_yes_no" visible="true" edit="true" add="true"/>       
-    <element name="Aprobado" target="approved" type="dojo_yes_no" visible="true" edit="true" add="true"/>  
+    <element name="En &amp;Aacute;rbol" target="tree" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
+    <element name="Enlazable" target="linkable" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
+    <element name="Tipo" target="type" type="dojo_filtering_select" list="xml,xml_php,zend_module,legacy,iframe" visible="true" edit="true" add="true"/>        
+    <element name="Aprobado" target="approved" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
+    <element name="Root" target="root" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
+    <element name="Orden" target="order" type="dojo_validation_textbox" reg_exp="[\d]+" invalid_message="Solo números" visible="false" edit="true" add="true"/>    
 </component>

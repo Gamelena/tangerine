@@ -7,7 +7,7 @@
 	excel (true | false) #IMPLIED
 	change_password (true | false) #IMPLIED
 	functions_permissions (list | add | edit | delete) #IMPLIED
-	table_dojo_type (dojox.grid.EnhancedGrid) #IMPLIED
+	table_dojo_type (dojox.grid.EnhancedGrid | dojox.grid.DataGrid) #IMPLIED
 	plugins CDATA #IMPLIED
 	id CDATA #IMPLIED
 	target CDATA #IMPLIED
@@ -18,11 +18,15 @@
 	search_prompt_message CDATA #IMPLIED
 	search_constraints CDATA #IMPLIED
 	search_table CDATA #IMPLIED
+	search_table_pk CDATA #IMPLIED 
 	search_table_field CDATA #IMPLIED
 	search_table_target CDATA #IMPLIED
 	search_display CDATA #IMPLIED	
 	search_additional_validation (true) #IMPLIED
+	search_hide_submit (true) #IMPLIED
+	style CDATA #IMPLIED
 	edit_additional_validation (true) #IMPLIED
+	server_pagination (true) #IMPLIED 
 	inherits_data (true) #IMPLIED
 	cols CDATA #IMPLIED
     titles CDATA #IMPLIED
@@ -31,34 +35,45 @@
 	popups CDATA #IMPLIED
 	popups_iframe CDATA #IMPLIED 
 	popups_title CDATA #IMPLIED
+	popups_icons CDATA #IMPLIED
+	options CDATA #IMPLIED
+	on_row_click CDATA #IMPLIED
+	on_row_dbl_click CDATA #IMPLIED
 	js  CDATA #IMPLIED
 	list (true | false) #IMPLIED
 	edit (true | false) #IMPLIED
 	add (true | false) #IMPLIED
 	delete (true | false) #IMPLIED
+	clone (true | false) #IMPLIED
+	chart_x_type (datetime) #IMPLIED  
+	fields CDATA #IMPLIED
+	order CDATA #IMPLIED
+	group_by CDATA #IMPLIED
 >
 <!ELEMENT element (#PCDATA)>
 <!ATTLIST element
 	name CDATA #IMPLIED
-	type (null | checkbox | dojo_combo_box | dojo_calendar | dojo_filtering_select | dojo_validation_textbox | dojo_checkbox | id_box | password | select | textarea | textfield | xml_list | yes_no | dojo_yes_no | element | permissions_modules | dojo_textarea | dojo_validation_textarea | ajax_box | list_files | hidden) #REQUIRED
+	type (null | checkbox | dojo_combo_box | dojo_calendar | dojo_filtering_select | dojo_validation_textbox | dojo_checkbox | id_box | password | select | textarea | textfield | xml_list | yes_no | dojo_yes_no | element | permissions_modules | dojo_textarea | dojo_validation_textarea | ajax_box | list_files | hidden | pk_original | dojo_checked_multiselect | dojo_checked_multiselect_permissions) #REQUIRED
 	target CDATA #IMPLIED
 	trim (true | false) #IMPLIED
 	reg_exp CDATA #IMPLIED
 	required (true | false) "true"
 	visible (true | false) "true"
-	edit (true | false) "false"
-	add (true | false) "false"
+	edit (true | false | disabled) "false"
+	add (true | false | disabled) "false"
 	table CDATA #IMPLIED
 	table_pk CDATA #IMPLIED
 	table_method CDATA #IMPLIED
+	table_field CDATA #IMPLIED
 	field CDATA #IMPLIED	
 	image CDATA #IMPLIED
 	link CDATA #IMPLIED
 	list CDATA #IMPLIED
 	default_value CDATA #IMPLIED
+	default_empty CDATA #IMPLIED
 	default_text CDATA #IMPLIED
-	constraints CDATA #IMPLIED 
-	search_format (equals, greaterorequals, lesserorequals, date_format)
+	constraints CDATA #IMPLIED
+    search_format (equals | greaterorequals | lesserorequals | date_format | date_to_datetime) #IMPLIED
 	search_required CDATA #IMPLIED
 	search_constraints CDATA #IMPLIED
 	search_reg_exp CDATA #IMPLIED 	
@@ -67,7 +82,7 @@
 	search_onchange CDATA #IMPLIED 
 	onchange CDATA #IMPLIED
 	onblur CDATA #IMPLIED 
-	disabled CDATA #IMPLIED	
+	disabled CDATA #IMPLIED
 	offset CDATA #IMPLIED
 	checked CDATA #IMPLIED
 	formatter CDATA #IMPLIED
@@ -77,9 +92,9 @@
 	clone (true | false) #IMPLIED 
 	functions CDATA  #IMPLIED 
 	path CDATA  #IMPLIED 
-	functions_permissions (list | add | edit | delete) #IMPLIED      			 			
+	functions_permissions (list | add | edit | delete) #IMPLIED 
 >
-<!ELEMENT tab (field*)>
+<!ELEMENT tab (element*)>
 <!ATTLIST tab
 	name CDATA #IMPLIED
 	target CDATA #IMPLIED

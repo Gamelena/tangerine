@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <!DOCTYPE component PUBLIC "//COMPONENTS/" "components.dtd">
-<component name="Perfiles" type="table_dojo" target="acl_roles" list="true" search="msisdn;fijo" edit="true" add="true" delete="true">
-   	<element name="ID" target="id" type="id_box" visible="false" edit="false" add="false"/>
-    <element name="Perfil" target="role_name" type="dojo_validation_textbox" required="true" trim="true" visible="true" edit="true" add="true"/>
+<component name="Perfiles" type="table_dojo" target="acl_roles" js="roles.js" list="true" edit="true" add="true" clone="true" delete="true" plugins="{}" style="min-height:427px;width:416px;">
+    <tab name="Informaci&amp;oacute;n B&amp;aacute;sica" target="acl_roles" add="true" edit="true" clone="true">
+   	    <element name="ID" target="id" type="id_box" visible="true" edit="false" add="false" />
+        <element name="Perfil" target="role_name" type="dojo_validation_textbox" required="true" trim="true" visible="true" edit="true" add="true" clone="true"/>
+        <element name="Descripci&amp;oacute;n" target="description" type="dojo_validation_textbox" visible="true" edit="true" add="true"  clone="true" />
+    </tab>
+    <tab name="Permisos" target="acl_roles" add="true" edit="true" clone="true">   
+        <element name="Permisos" target="permissions" type="dojo_checked_multiselect_permissions"  table="acl_roles" table_method="select_permissions" required="false" visible="false" edit="true" add="true" clone="true"/>
+    </tab>     
 </component>
