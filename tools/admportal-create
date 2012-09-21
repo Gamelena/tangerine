@@ -20,21 +20,38 @@ read DB_PASS
 
 
 echo Se seleccionaron los sig parámetros: DB_ADAPTER:$DB_ADAPTER, DB:$DB_NAME, USER:$DB_USER, PASSWORD:$DB_PASS
+echo " "
+
+read -p "¿Desea crear la base de datos MySQL? (S/N) (por defecto N):" CREATE_DATABASE    
+CREATE_DATABASE=${CREATE_DATABASE:-N}
+
+
+if [ "$CREATE_DATABASE" = "S" ]; then
+        read -p "Ingrese Super Usuario para creación de DB (por defecto $DB_USER):" DB_ROOT_USER  
+        DB_ROOT_USER=${DB_ROOT_USER:-$DB_USER}
+        
+        MYSQL=`which mysql`
+ 
+        Q1="CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+        Q2="GRANT ALL ON $DB_NAME.* TO $DB_USER IDENTIFIED BY '$DB_PASS';"
+        Q3="GRANT ALL ON $DB_NAME.* TO $DB_USER@localhost IDENTIFIED BY '$DB_PASS';"
+        SQL="${Q1}${Q2}${Q3}"
+         
+        $MYSQL -u$DB_ROOT_USER -p -e "$SQL"
+fi
+
 read -p "¿Desea crear y poblar tablas básicas MySQL de AdmPortal? (S/N) (por defecto S):" CREATE_TABLES    
-#CREATE_TABLES=S
 CREATE_TABLES=${CREATE_TABLES:-S}
-#CREATE_TABLES=$( echo "$CREATE_TABLES:" | tr -s  '[:lower:]'  '[:upper:]' )
-
 if [ "$CREATE_TABLES" = "S" ]; then
-	read -p "Ingrese Usuario con privilegios para importal datos (por defecto $DB_USER):" DB_ROOT_USER  
-	DB_ROOT_USER=${DB_ROOT_USER:-$DB_USER}
-	read -p "Ingrese Password Usuario con privilegios para importal datos (por defecto $DB_PASS):" DB_ROOT_PASS 
-	DB_ROOT_PASS_USER=${DB_ROOT_PASS_USER:-$DB_USER}
+    	read -p "Ingrese Usuario con privilegios para importar datos (por defecto $DB_USER):" DB_ROOT_USER  
+    	DB_ROOT_USER=${DB_ROOT_USER:-$DB_USER}
+    #	read -p "Ingrese Password Usuario con privilegios para importal datos (por defecto $DB_PASS):" DB_ROOT_PASS 
+    #	DB_ROOT_PASS_USER=${DB_ROOT_PASS_USER:-$DB_USER}
 
-	echo mysql -u$DB_ROOT_USER -p$DB_ROOT_PASS $DB_NAME \< $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql
-	mysql -u$DB_ROOT_USER -p$DB_ROOT_PASS $DB_NAME < $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql
-	echo mysql -u$DB_ROOT_USER -p$DB_ROOT_PASS $DB_NAME \< $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql
-	mysql -u$DB_ROOT_USER -p$DB_ROOT_PASS $DB_NAME < $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql	
+	echo mysql -u$DB_ROOT_USER -p $DB_NAME \< $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql
+	mysql -u$DB_ROOT_USER -p $DB_NAME < $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql
+	echo mysql -u$DB_ROOT_USER -p $DB_NAME \< $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql
+	mysql -u$DB_ROOT_USER -p $DB_NAME < $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql	
 fi
 
 

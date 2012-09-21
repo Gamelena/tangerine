@@ -8,13 +8,21 @@
  * @since 0.1
  *
  */
+
+if (!defined('PHP_VERSION_ID')) {
+    $version = explode('.', PHP_VERSION);
+    define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+}
+
+
+
 date_default_timezone_set('America/Lima');
 
-$eop=(substr(dirname($_SERVER["SCRIPT_NAME"]),-1,1) == "/") ? '' : '/';
+$eop = (substr(dirname($_SERVER["SCRIPT_NAME"]),-1,1) == "/") ? '' : '/';
 
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
     defined('PROTO') || define('PROTO', 'https://');
-}else{
+} else {
     defined('PROTO') || define('PROTO', 'http://');
 }
 
@@ -22,59 +30,85 @@ defined('ROOT_DIR') || define('ROOT_DIR', dirname(dirname(__FILE__)));
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', ROOT_DIR . '/application');
 defined('COMPONENTS_ADMIN_PATH') || define('COMPONENTS_ADMIN_PATH', APPLICATION_PATH.'/components');
 defined('BASE_URL') || define('BASE_URL', PROTO.$_SERVER['HTTP_HOST'].dirname($_SERVER["SCRIPT_NAME"]).$eop);
-defined('TEMPLATE') || define('TEMPLATE', '');
+defined('TEMPLATE') || define('TEMPLATE', '');//si es 'urban' se encontrará un huevito de pascua (en desarrollo) 
 
 
 // Define application environment
 defined('APPLICATION_ENV')
 || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
-// Ensure library/ is on include_path
-set_include_path(implode(PATH_SEPARATOR, array(
-realpath(APPLICATION_PATH . '/../library'),
-get_include_path(),
-)));
-
  
 require_once 'Zend/Loader/Autoloader.php';
 
 $loader = Zend_Loader_Autoloader::getInstance();
 set_include_path('.'
-. PATH_SEPARATOR . ROOT_DIR.'/library'
-. PATH_SEPARATOR . APPLICATION_PATH . '/models'
-. PATH_SEPARATOR . APPLICATION_PATH . '/forms'
-. PATH_SEPARATOR . get_include_path()
+    . PATH_SEPARATOR . ROOT_DIR.'/library'
+    . PATH_SEPARATOR . APPLICATION_PATH . '/models'
+    . PATH_SEPARATOR . APPLICATION_PATH . '/forms'
+    . PATH_SEPARATOR . get_include_path()
 );
 
 $loader->setFallbackAutoloader(true);
 
-Zend_Session::start();
+try {
+    Zend_Session::start();
+} catch (Zend_Session_Exception $e) {
+    session_start();
+    Zwei_Utils_Debug::write($e->getCode()." ".$e->getMessage());
+    //Zend_Session::start();
+}    
 
 // Inicializar el MVC
 Zend_Layout::startMvc(array('layoutPath' => ROOT_DIR.'/application/views/layouts'));
-
+$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+//defined('ADMPORTAL_APPLICATION_PATH') || define('ADMPORTAL_APPLICATION_PATH', $config->zwei->admportal->applicationPath);
 // Run!
 $frontController = Zend_Controller_Front::getInstance();
-$frontController
-    ->addControllerDirectory(ROOT_DIR.'/application/controllers')
-    ->addModuleDirectory(ROOT_DIR.'/application/modules')
-    ->throwExceptions(true);
-
-$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
-
-$db = Zend_Db::factory($config->db);
-//$db->getProfiler()->setEnabled(true);//para debug de queries
-Zend_Db_Table::setDefaultAdapter($db);
+$frontController->registerPlugin(new Zwei_Controller_Plugin_TimeOutHandler());
+//$frontController->registerPlugin(new Zwei_Controller_Plugin_ApplicationPath());
 
 
-try {
-    $frontController->dispatch();
-} catch(Exception $e) {
-    if ($config->resources->frontController->params->displayExceptions == "1") {
-       echo nl2br($e->__toString());    
-    } else {
-       Zwei_Utils_Debug::write($e->__toString());
-    }   
+//1.- Se leen los controladores y módulos zend de admportal. 
+//$frontController->addControllerDirectory(ADMPORTAL_APPLICATION_PATH.'/controllers');
+//$frontController->addModuleDirectory(ADMPORTAL_APPLICATION_PATH.'/modules');
+
+//2.- De ser necesario se sobreescriben los controladores y módulos de admportal.
+$frontController->addControllerDirectory(ROOT_DIR.'/application/controllers');
+$frontController->addModuleDirectory(ROOT_DIR.'/application/modules');
+
+
+
+
+
+$frontController->throwExceptions(true);
+
+$db = Zend_Db::factory($config->resources->db);
+
+Zwei_Db_Table::setDefaultAdapter($db);
+Zwei_Db_Table::setDefaultLogMode($config->zwei->db->table->logbook);
+
+
+$backendOpt = array('cache_dir' => ROOT_DIR .'/cache');
+$frontendOpt = array('lifetime' => 600);
+
+$cache = new Zwei_Utils_Cache($backendOpt, $frontendOpt);
+$cache->start();
+
+if (!$cache->isStarted()) {
+    try {
+        $frontController->dispatch();
+    } catch(Exception $e) {
+        if ($config->resources->frontController->params->displayExceptions == "1") {
+           echo nl2br($e->__toString());    
+        } else {
+           Zwei_Utils_Debug::write(nl2br($e->__toString()));
+        }   
+    }
+
+    if ($cache->check()) {
+        $cache->end();
+    }
+} else {
+    Zwei_Utils_Debug::write( "Está en cache:".@$_SERVER['PATH_INFO'] . @$_REQUEST['p'] );
 }
-
  
