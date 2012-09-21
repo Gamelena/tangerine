@@ -2,10 +2,9 @@ var global_opc;
 
 dojo.declare(
 	    "dijit.form.ValidationTextarea",
-	    [dijit.form.ValidationTextBox,dijit.form.SimpleTextarea],
-	    [dijit.form.ValidationTextBox,dijit.form.SimpleTextarea],
+	    [dijit.form.ValidationTextBox, dijit.form.SimpleTextarea],
 	    {
-	      invalidMessage: "This field is required",
+	      invalidMessage: "\u00e9ste campo es requerido",
 
 	      firstValidation: true,
 
@@ -27,6 +26,7 @@ dojo.declare(
 	      validate: function() {
 	        this.inherited(arguments);
 	        var isValid = this.isValid(arguments[0])
+	        
 	        if (!isValid) {
 	          this.displayMessage(this.getErrorMessage());
 	        }
@@ -47,7 +47,7 @@ dojo.declare(
 	        this.validate(true);
 	      }
 	    }
-	  );
+);
 
 
 
@@ -59,14 +59,14 @@ function eventos()
 }
 
 
-function cargaInicial() 
+function initLoad(layout) 
 {
 	eventos();
     //Configuracion de titulo, logos de operadora y zweicom
     cargarDatosTituloAdm(dojo.byId("logosAdm"),dojo.byId("tituloAdm"));
 	
     //Carga del panel lateral
-    cargarArbolMenu();
+    cargarArbolMenu(layout);
 }
 
 
@@ -100,14 +100,50 @@ function cargarDatosTituloAdm(bloqueLogoHTML, bloqueTituloHTML)
 	});	
 }
 
-function cargarPanelCentral(url) 
+
+function cargarPanelCentral(url, moduleId, moduleTitle) 
 {
 	var widget = dijit.byId("panel_central");
     widget.set('href',base_url+url);
 }
 
-function cargarArbolMenu() 
+function loadModuleTab(url, moduleId, moduleTitle) 
 {
+	if (!dojo.byId('mainTabModule'+moduleId)) {
+		//require(["dijit/registry", "dijit/layout/ContentPane"], function(registry, ContentPane){
+			
+
+			if (dijit.byId('mainTabModule'+moduleId)) dijit.byId('mainTabModule'+moduleId).destroy();
+			
+			var tab = tabContainer.addChild(
+					new dijit.layout.ContentPane({
+						title:moduleTitle, 
+						closable:true, 
+						id: 'mainTabModule'+moduleId, 
+						jsId: 'mainTabModule'+moduleId,
+						href: base_url+url,
+						style: {background: 'transparent', top: 0},
+						selected: true
+					})
+			);
+			//var tabs = registry.byId("mainTabModule");
+			//tabs.selectChild(tab);
+			tabContainer.selectChild(dijit.byId('mainTabModule'+moduleId));
+			//dijit.byId('mainTabModule'+moduleId).set('selected', true);
+			//dijit.byId('mainTabModule'+moduleId).style({top: 0});
+		//});	
+	} else {
+		console.debug('ya esta abierto mainTabModule '+moduleId);
+		//dijit.byId('mainTabModule'+moduleId).set('selected', true);
+		tabContainer.selectChild(dijit.byId('mainTabModule'+moduleId));
+	}
+}
+
+
+function cargarArbolMenu(layout) 
+{
+	if (layout == undefined) var layout = false;
+	
 	var store = new dojo.data.ItemFileWriteStore({
         url: base_url+'index/modules?format=json',
         clearOnClose:true,
@@ -132,19 +168,23 @@ function cargarArbolMenu()
 	});
 	
 	
-	var Model_tree = new dijit.tree.ForestStoreModel({
+	var treeModel = new dijit.tree.ForestStoreModel({
 	        store: store
 	});
 	
 	
 	if (!dijit.byId('arbolPrincipal')) {
 		var treeControl = new dijit.Tree({
-		    model: Model_tree,
+		    model: treeModel,
 		    showRoot: false,
 		    persist:false,
 		    onClick: function(item){
 		    	if (item.url != undefined) {
-		    		cargarPanelCentral(item.url);
+		    		if (layout == 'dijitTabs') {
+		    			loadModuleTab(item.url, item.id, item.label);
+		    		} else {
+		    			cargarPanelCentral(item.url);
+		    		}	
 		    	} else {
 		    		return false;
 		    	} 	
@@ -183,23 +223,40 @@ function cargarArbolMenu()
 }
 
 
-function cargarTabsPanelCentral(component, action)
+function cargarTabsPanelCentral(component, action, primary, iframe)
 {
-	var widget = dijit.byId("panel_central");
-	if(action=='edit' || action=='clone'){
-		try{
+	global_opc = action;
+	if (iframe == undefined) var iframe = false;
+	if (primary == undefined) var primary = "id";
+
+	var formDlg;
+	if (action == 'edit') formDlg = dijit.byId('formDialogoEditar');
+	//else if (action == 'clone') formDlg = dijit.byId('formDialogoClonar');
+	else formDlg = dijit.byId('formDialogo');
+
+	if (action == 'edit' || action == 'clone') {
+		try {
 			var items = main_grid.selection.getSelected();
-			var id = "&id="+items[0].id;
-		}catch(e){
+			var id = "&"+primary+"="+ eval("items[0]."+primary);
+			console.debug(id);
+		} catch(e) {
+			console.debug(e);
 			alert('Debe seleccionar un registro');
 			return;
 		}
-	}else{
+	} else {
 		var id = '';
 	}	
 	
-    widget.set('href',base_url+'index/tabs?p='+component+'&action='+action+id);
+	if (iframe) {
+		ifrmDlg.src = base_url+'index/tabs?p='+component+'&action='+action+id+"&is_iframe=true";
+	} else {
+		formDlg.set('href',base_url+'index/tabs?p='+component+'&action='+action+id);
+	}	
+	formDlg.show();
 }
+
+
 
 function cargarDatos(model, search_in_fields, format_date, cast, between, formato, component) 
 {
@@ -237,7 +294,6 @@ function cargarDatos(model, search_in_fields, format_date, cast, between, format
     	var search_fields_lenght;
     	try{
     		search_fields_length = dojo.byId('search_form').elements['search_fields'].length;
-    		console.log(search_fields_length);
     	}catch(e){
     		console.debug(e);
     		search_fields_length = 0;
@@ -286,10 +342,10 @@ function cargarDatos(model, search_in_fields, format_date, cast, between, format
 
 function searchMultiple(model, fields, search_format,  between, response_format, component)
 {
-	if(response_format==undefined) var response_format='json';
-	if(search_format==undefined) var search_format=false;
-	if(between==undefined) var between=false;
-	if(component==undefined)var component=false;	
+	if (response_format==undefined) {var response_format='json';}
+	if (search_format==undefined) {var search_format=false;}
+	if (between==undefined) {var between=false;}
+	if (component==undefined) {var component=false;}	
 	
 	var form=dojo.byId('search_form');
 	var search='';
@@ -315,7 +371,7 @@ function searchMultiple(model, fields, search_format,  between, response_format,
 		    	  search+=document.getElementById(entry.id).value;
 		    	  search+=';';
 			  }
-			}
+	       }
 		
 		});
 	}catch(e){
@@ -335,7 +391,7 @@ function searchMultiple(model, fields, search_format,  between, response_format,
     if(response_format=='excel'){
     	dojo.byId('ifrm_process').src=search_url;
     }else{
-        var store = new dojo.data.ItemFileWriteStore({
+        var store = new dojox.data.QueryReadStore({
             url: search_url,
             clearOnClose: true,
             urlPreventCache: true
@@ -345,14 +401,51 @@ function searchMultiple(model, fields, search_format,  between, response_format,
 	//console.debug(form.elements);
 }
 
+function loadDataUrl(model, fields, search_format,  between, response_format)
+{
+	if (response_format==undefined) {var response_format='json';}
+	if (search_format==undefined) {var search_format=false;}
+	if (between==undefined) {var between=false;}
+	
+	if (search_format) search_format='&search_format='+search_format;	
+	var search_between=between!=false?'&between='+between:'';
+	var search = '';
+	
+	var form=dojo.byId('search_form');
+	dojo.forEach(form.elements, function(entry, i){
+		
+		if(entry.id!=''){
+		  //console.debug(entry.id);	
+		  if(dijit.byId(entry.id).get('declaredClass')=='dijit.form.FilteringSelect'){	
+	    	  search += dijit.byId(entry.id).get('value');
+	    	  search += ';';
+			
+		  }else if(dijit.byId(entry.id).get('declaredClass')=='dijit.form.DateTextBox'){
 
-function eliminar(model)
+			  aux_search = dijit.byId(entry.id).get('value');
+			  search += dojo.date.locale.format(aux_search, {datePattern: "yyyy-MM-dd", selector: "date"});
+			  search += ';';
+
+		  }else{
+			  
+	    	  search += document.getElementById(entry.id).value;
+	    	  search += ';';
+		  }
+       }
+	
+	});
+	
+	var search_url = base_url+'objects?model='+model+'&search='+search+'&search_fields='+fields+'&format='+response_format+'&'+search_format+search_between+'&search_type=multiple';
+	
+   	dojo.byId('data_url').value = search_url;
+}
+
+
+function eliminar(model, primary)
 {
     var items = main_grid.selection.getSelected();
-    console.debug(items);
-    console.debug(items[0].id);
     if(confirm('Desea eliminar el registro seleccionado?')) {
-        eliminarRegistro(model, items[0].id);
+        eval("eliminarRegistro(model, items[0]."+primary+")");
         //main_grid.removeSelectedRows();
     }
 }
@@ -398,39 +491,118 @@ function eliminarRegistro(model, id) {
 }
 
 
-function execFunction(method, params, object){
-	try{
+function execFunction(method, params, object, primary){
+
+	if (primary == undefined) var primary = 'id'; 
+	try {
 		var items = main_grid.selection.getSelected();
-		var id = items[0].id;
-	}catch(e){
+		var id = "&"+primary+"="+ eval("items[0]."+primary);
+	} catch(e) {
+		console.debug(e);
 		var id = '';
 	}	
-		
-    document.getElementById('ifrm_process').src=base_url+'functions?method='+method+'&params='+params+"&id="+id+"&object="+object;
+    document.getElementById('ifrm_process').src=base_url+'functions?method='+method+'&params='+params+id+"&object="+object+"&uri="+escape(dojo.byId('data_url').value);
 }
 
-function popupGrid(module, iframe){
-	if(iframe==undefined) var iframe=false;
+/*
+function popupGrid(module, iframe, primary, i){
+	if (primary == undefined) var primary = 'id'; 
+	if (iframe == undefined) var iframe=false;
+	if (i == undefined) var i = '0';
+	var formDlg = dijit.byId('formDialogo'+i);
+	
 	try{
 		var items = main_grid.selection.getSelected();
-		var id = "&search="+items[0].id;
+		var id = "&"+primary+"="+ eval("items[0]."+primary);
 	}catch(e){
 		var id = '';
 	}
+
+
+	//if(iframe){
+	//	popupIframe(module+id+"&uri="+escape(dojo.byId('data_url').value)); 
+	//}else{
+		//popupIframe(module+id+"&uri="+escape(dojo.byId('data_url').value));//[FIXME] implementar lo de abajo
+		formDlg.set('href', base_url+module+id+"&uri="+escape(dojo.byId('data_url').value));
+		formDlg.show();
+		//popup(module+id+"&uri="+escape(dojo.byId('data_url').value)); 
+	//}
+		
+}
+*/
+
+function popupGrid(module, iframe, primary, title){ //proximo reemplazo de popupGrid, pero hay que arreglar bugs
+	if (primary == undefined) var primary = 'id'; 
+	if (iframe == undefined) var iframe=false;
+	//if (title == undefined) var i = '0';
+
+	var formDlg = dijit.byId('formDialogo0');
 	
-	if(iframe){
-		popupIframe(module+id+"&uri="+escape(dojo.byId('data_url').value)); 
-	}else{
-		popup(module+id+"&uri="+escape(dojo.byId('data_url').value)); 
-	}	
+	try{
+		var items = main_grid.selection.getSelected();
+		var id = "&"+primary+"="+ eval("items[0]."+primary);
+	}catch(e){
+		var id = '';
+	}
+
+	if (iframe) {
+		//popupIframe(module+id+"&uri="+escape(dojo.byId('data_url').value));
+		formDlg.set('html', '');
+		formDlg.set('content', '');
+		if (title) formDlg.set('title', title);
+		
+		var iframe = document.createElement("iframe");
+		iframe.src = base_url+module+id+"&uri="+escape(dojo.byId('data_url').value);
+		//iframe.src = base_url+'ajax/loading';
+		iframe.width='810';
+		iframe.height='593';
+		iframe.frameBorder='0';
+		iframe.id='ifrm_popup';
+		iframe.name='ifrm_popup';
+		iframe.style.marginTop='0px';
+		iframe.style.marginBottom='0px';
+		iframe.style.marginLeft='auto';
+		iframe.style.marginRight='auto';	
+
+		
+		var domDlg = document.getElementById('formDialogo0');
+		//domDlg.innerHTML='';
+		if (!document.getElementById("ifrm_popup")) {
+			console.log('no hay iframe');
+			domDlg.appendChild(iframe);
+			document.getElementById('formDialogo0').style.background = 'url('+base_url+'"css/i/loading.gif) #ffffff;';
+			document.getElementById('formDialogo0').style.backgroundPosition = 'center';
+			
+		} else {
+			console.log('hay iframe');
+			document.getElementById('formDialogo0').style.background = '#ffffff;';
+			if (window.frames["ifrm_popup"].document.getElementById('loading_overlay')) {
+				window.frames["ifrm_popup"].document.getElementById('loading_overlay').style.display='block';
+			}
+			
+			document.getElementById("ifrm_popup").src = base_url+module+id+"&uri="+escape(dojo.byId('data_url').value);
+		}	
+		
+		
+		formDlg.show();
+		
+		
+	} else {
+		//popupIframe(module+id+"&uri="+escape(dojo.byId('data_url').value));//[FIXME] implementar lo de abajo
+		formDlg.set('href', base_url+module+id+"&uri="+escape(dojo.byId('data_url').value));
+		formDlg.show();
+		//popup(module+id+"&uri="+escape(dojo.byId('data_url').value)); 
+	}
+		
 }
 
 
 function redirectToModule(url){
+	if (primary == undefined) var primary = 'id'; 
 	try{
 		var items = main_grid.selection.getSelected();
-	    var id = items[0].id;		
-	}catch(e){
+		var id = "&"+primary+"="+ eval("items[0]."+primary);	
+	} catch(e) {
 		var id='';
 	}
 	var widget = dijit.byId("panel_central");
@@ -438,16 +610,17 @@ function redirectToModule(url){
 }
 
 
-function execFunctionPopup(method, params, must_select){
+function execFunctionPopup(method, params, must_select, primary){
+	if (primary == undefined) var primary = 'id'
 	try{
 		var items = main_grid.selection.getSelected();
-		var id = items[0].id;
+		var id = "&"+primary+"="+ eval("items[0]."+primary);
 	}catch(e){
 		if(must_select){
 			alert('Debe seleccionar una fila');
 		}		
 	}	
-	popup(base_url+"functions?method="+method+"&params="+params+"&id="+id);
+	popup(base_url+"functions?method="+method+"&params="+params+id);
 }
 
 
@@ -467,12 +640,66 @@ function formatYesNo(valCell) {
         return valCell;
     }
     var val = valCell;
-    if (valCell == '0') val = 'No';
-    else if (valCell == '1') val = 'Sí';	
-    
+    if (valCell == '1') {val = 'Sí';}	
+    else {val = 'No';}
     return val;
 }
 
+function limitText(limitField, limitCount, limitNum)
+{
+    if (limitField.value.length > limitNum) {
+    	limitField.value = limitField.value.substring(0, limitNum);
+    } else {
+        limitCount.value = limitNum - limitField.value.length;
+    }
+}
 
-dojo.ready(cargaInicial);
+function limitTextDijit(limitField, limitCount, limitNum)
+{
+    if (limitField.get('value').length > limitNum) {
+    	limitField.set('value', limitField.get('value').substring(0, limitNum));
+    } else {
+        limitCount.set('value', limitNum - limitField.get('value').length);
+    }
+}
+
+function showtab(tab, area) {
+    var e=document.getElementsByTagName('div');
+    for (i=0; i<e.length; i++){
+      if(e[i].className=='settings_area')e[i].style.display='none';
+    }
+    var e=document.getElementsByTagName('a');
+    for (i=0; i<e.length; i++){
+      if(e[i].className=='settings_tab')e[i].style.backgroundColor='';
+    }
+    try {
+    	dojo.byId(area).style.display='block';
+    	dojo.byId(tab).style.background='url("/dojotoolkit/dijit/themes/claro/images/commonHighlight.png") #CFE5FA repeat-x';
+    } catch (e) {
+    	console.debug(e.message);
+    }	
+}
+
+/*
+window.alert = function(message) {
+	myDialog = new dijit.Dialog({
+        title: "GW Promociones",
+        content: message,
+        style: ""
+    });
+	myDialog.show();
+};
+*/
+/*
+window.confirm = function(message) {
+	myDialog = new dijit.Dialog({
+        title: "GW Promociones",
+        content: message,
+        style: ""
+    });
+	myDialog.show();
+};
+*/
+
+
 //dojo.ready(eventos);

@@ -326,8 +326,8 @@ function popup(url,position){
 		pos = document.body.scrollTop;
 	}
 	
-	document.getElementById('popup_body').style.width='480px';
-	document.getElementById('popup_body').style.height='323px';
+	document.getElementById('popup_body').style.width='800px';
+	document.getElementById('popup_body').style.height='633px';
 	
 	switch(position){
 		case 'topright':
@@ -381,8 +381,8 @@ function popupIframe(url,position){
 		pos = document.body.scrollTop;
 	}
 	
-	document.getElementById('popup_body').style.width='510px';
-	document.getElementById('popup_body').style.height='350px';
+	document.getElementById('popup_body').style.width='830px';
+	document.getElementById('popup_body').style.height='600px';
 	
 	removeChildrensFromNode('popup_body');
 	
@@ -399,7 +399,7 @@ function popupIframe(url,position){
 		  	var y=pos+10;
 		break;
 		default:
-		  var x=document.documentElement.clientWidth/2-240;
+		  var x=document.documentElement.clientWidth/2-400;
 		  var y=pos+100;
 	}
 	document.getElementById('popup').style.top=y+'px';
@@ -424,8 +424,8 @@ function popupIframe(url,position){
 	popup.style.display='block';
 	var iframe = document.createElement("iframe");
 	iframe.src = url;
-	iframe.width='490';
-	iframe.height='343';
+	iframe.width='810';
+	iframe.height='593';
 	iframe.frameBorder='0';
 	iframe.style.marginTop='0px';
 	iframe.style.marginBottom='0px';
