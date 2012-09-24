@@ -27,8 +27,8 @@ CREATE_DATABASE=${CREATE_DATABASE:-N}
 
 
 if [ "$CREATE_DATABASE" = "S" ]; then
-        read -p "Ingrese Super Usuario para creación de DB (por defecto $DB_USER):" DB_ROOT_USER  
-        DB_ROOT_USER=${DB_ROOT_USER:-$DB_USER}
+        read -p "Ingrese Super Usuario para creación de DB (por defecto root):" DB_ROOT_USER  
+        DB_ROOT_USER=${DB_ROOT_USER:-root}
         
         MYSQL=`which mysql`
  
@@ -42,9 +42,10 @@ fi
 
 read -p "¿Desea crear y poblar tablas básicas MySQL de AdmPortal? (S/N) (por defecto S):" CREATE_TABLES    
 CREATE_TABLES=${CREATE_TABLES:-S}
+
 if [ "$CREATE_TABLES" = "S" ]; then
-    	read -p "Ingrese Usuario con privilegios para importar datos (por defecto $DB_USER):" DB_ROOT_USER  
-    	DB_ROOT_USER=${DB_ROOT_USER:-$DB_USER}
+    	read -p "Ingrese Usuario con privilegios para importar datos (por defecto root):" DB_ROOT_USER  
+    	DB_ROOT_USER=${DB_ROOT_USER:-root}
     #	read -p "Ingrese Password Usuario con privilegios para importal datos (por defecto $DB_PASS):" DB_ROOT_PASS 
     #	DB_ROOT_PASS_USER=${DB_ROOT_PASS_USER:-$DB_USER}
 
@@ -110,8 +111,10 @@ echo Creando proyecto AdmPortal en $DEST_PATH/web
 mkdir -p $DEST_PATH/web/application/
 mkdir -p $DEST_PATH/web/public/
 
-cp -r $ZWC_ADMPORTAL_PATH/application/* $DEST_PATH/web/application/ 
-cp -r $ZWC_ADMPORTAL_PATH/public/* $DEST_PATH/web/public/ 
+#cp -r $ZWC_ADMPORTAL_PATH/application/* $DEST_PATH/web/application/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/ $DEST_PATH/web/application/ 
+#cp -r $ZWC_ADMPORTAL_PATH/public/* $DEST_PATH/web/public/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/public/ $DEST_PATH/web/public/ 
 
 #echo Borrando definiciones por default obsoletas.
 #sed resources/d $DEST_PATH/web/application/configs/application.ini
