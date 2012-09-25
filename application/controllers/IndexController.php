@@ -115,6 +115,8 @@ class IndexController extends Zend_Controller_Action
         ->requireModule("dijit.form.Button")
         ->requireModule("dijit.form.DateTextBox")
         ->requireModule("dijit.form.FilteringSelect")
+        ->requireModule("dijit.form.TimeTextBox")
+        ->requireModule("dijit.form.ComboBox")
         ->requireModule("dojox.grid.DataGrid")
         ->requireModule("dojox.grid.EnhancedGrid")
         ->requireModule("dojox.grid.enhanced.plugins.Pagination")
