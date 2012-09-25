@@ -270,6 +270,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $required = array();
         $invalid_message = array();
         $prompt_message = array();
+        $default_value = array();
         $search_format = '';
 
         for ($i=1; $i<$this->count; $i++) {
@@ -281,7 +282,8 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
                 $invalid_message[] = !empty($this->layout[$i]['SEARCH_INVALID_MESSAGE'])?  "invalidMessage=\"{$this->layout[$i]['SEARCH_INVALID_MESSAGE']}\"" : "";
                 $prompt_message[] = !empty($this->layout[$i]['SEARCH_PROMPT_MESSAGE'])?  "promptMessage=\"{$this->layout[$i]['SEARCH_PROMPT_MESSAGE']}\"" : "";
                 $search_onchange[] = !empty($this->layout[$i]['SEARCH_ONCHANGE'])?  "onchange=\"{$this->layout[$i]['SEARCH_ONCHANGE']}\"" : "";
-                $between = !empty($this->layout[$i]['BETWEEN'])?  "'{$this->layout[$i]['SEARCH_ONCHANGE']}'" : 'false';
+                $default_value[] = !empty($this->layout[$i]['SEARCH_DEFAULT_VALUE'])?  "value=\"{$this->layout[$i]['SEARCH_DEFAULT_VALUE']}\"" : "";
+                $between = !empty($this->layout[$i]['BETWEEN'])?  "'{$this->layout[$i]['BETWEEN']}'" : 'false';
 
                 if (!empty($this->layout[$i]['SEARCH_FORMAT'])) {
                     $search_format .= $this->layout[$i]['SEARCH_FORMAT'].';';
@@ -306,12 +308,12 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
             $current_label = (@$search_display[$i] == 'between') ? 'Desde' : $label[$i];
             $out .= "<tr><td><label for=\"search\">$current_label</label></td>";
 
-            $out .= "<td><input type=\"text\" name=\"search$i\" placeHolder=\"Ingresar\" ".@$dojotype[$i]." trim=\"true\" id=\"search$i\" ".$constraints[$i].@$invalid_message[$i].@$prompt_message[$i].@$required[$i]." onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format',  $this->between)\"  /></td></tr>\r\n";
+            $out .= "<td><input type=\"text\" name=\"search$i\" placeHolder=\"Ingresar\" ".@$dojotype[$i]." trim=\"true\" id=\"search$i\" ".$constraints[$i].@$invalid_message[$i].@$prompt_message[$i].@$required[$i].@$default_value[$i]." onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format',  $this->between)\"  /></td></tr>\r\n";
 
             if (@$search_display[$i] == 'between') {
                 $j = $i+1;
                 $out .= "<tr><td><label for=\"search$i\">Hasta</label></td>";
-                $out .= "<td><input type=\"text\" name=\"search$j\" placeHolder=\"Ingresar\" ".@$dojotype[$i]." trim=\"true\" id=\"search$j\" ".$constraints[$i].@$invalid_message[$i].@$prompt_message[$i].@$required[$i]." onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format',  $this->between)\" /></td></tr>\r\n";
+                $out .= "<td><input type=\"text\" name=\"search$j\" placeHolder=\"Ingresar\" ".@$dojotype[$i]." trim=\"true\" id=\"search$j\" ".$constraints[$i].@$invalid_message[$i].@$prompt_message[$i].@$required[$i].@$default_value[$i]." onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format',  $this->between)\" /></td></tr>\r\n";
                 $i = $j;
             } 
             $i++;
@@ -386,7 +388,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
      */
     private function searchInTable() 
     {
-        Zwei_Utils_Debug::write("Search in Table");
+        Debug::write("Search in Table");
         
         $out = "";
         $node=@$this->layout[0];
@@ -435,8 +437,8 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 
         $out .="<div dojoType=\"dijit.form.Form\" id=\"search_form\" jsId=\"search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
         $out .="<table cellspacing=\"10\" align=\"center\">\r\n";
-        $search_name =! empty($node['SEARCH_NAME'])?$node['SEARCH_NAME']:'';//[TODO] search_name debiera leerse de los elements xml
-        $out .="<tr><td><label for=\"search\">$search_name</label></td>";
+        //$search_name =! empty($node['SEARCH_NAME'])?$node['SEARCH_NAME']:'';//[TODO] search_name debiera leerse de los elements xml
+        $out .="<tr><td><label for=\"search\">{$label[0]}</label></td>";
 
 
         $out .="<td>
