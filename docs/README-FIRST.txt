@@ -2,16 +2,38 @@
 README
 ======
 
-Descargar Zend Framework de la web 
-http://http://framework.zend.com/download/overview.
+Requerimientos Básicos
+
+- Zend Framework 1.12 
+http://www.zend.com/community/downloads.
 descomprimirlo en /usr/share/php/Zend y agregar /usr/share/php/ al include_path en php.ini.
 
-También se puede descargar desde repositorios. 
+- Dojo Toolkit 1.7
+http://download.dojotoolkit.org/
+
+Y configurar Apache para ser accessible desde la url http://localhost/dojotoolkit. 
+Considerar el sig. ejemplo: 
+
+Alias /dojotoolkit/ "/usr/share/javascript/dojotoolkit/"
+<Directory "/usr/share/javascript/dojotoolkit/">
+Options Indexes MultiViews FollowSymLinks
+AllowOverride None
+Order deny,allow
+Deny from all
+Allow from 127.0.0.0/255.0.0.0 ::1/128
+</Directory>
+
 
 Para crear un nuevo proyecto con AdmPortal:
 
-1. Instalar ZF Tool, en algunas distribuciones Linux se puede encontrar en repos, si no, bajar manualmente y configurar el path 
+1. Instalar ZF Tool, en algunas distribuciones Linux se puede encontrar en los repositorios por defecto, 
 $ sudo apt-get install zend-framework-bin
+
+Si no se encuentra en los repositorios, basta con agregar al path de archivos ejecutables php los archivos zf.sh y zf.php, 
+este path se puede encuentra con.
+
+$ which php
+
 
 2. Crear variables de entorno, agregar las siguiente líneas al ~/.bashrc asumiendo que AdmPortal está instalado en $DEVELBASE/admportal 
 
