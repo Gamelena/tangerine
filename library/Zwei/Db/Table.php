@@ -254,6 +254,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	 * Convierte un string "Zend_Db_Table where" a un array asociativo campo=>valor
 	 * @param $string
 	 * @return array()
+	 * @deprecated Use $this->where2Array($string) instead
 	 */
 
 	public function whereToArray($string)
@@ -266,6 +267,22 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 		}
 		return $array;
 	}
+	
+	
+    /**
+     * Convierte un string "Zend_Db_Table where" a un array asociativo campo=>valor
+     * @param $string
+     * @return array()
+     */
+
+    public function where2Array($string)
+    {
+        $where = array();
+        $array = explode('=', $string);
+        $where[$array[0]] = str_replace("'", "",$array[1]); 
+        return $where;
+    }
+	
 	
 	public function getPrimary() {
 		return (isset($this->_primary)) ? $this->_primary : false;
