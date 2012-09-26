@@ -14,9 +14,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	 * @var string
 	 */
 	protected $_label;
-	
 	/**
-	 * Tipo de bitacora
+	 * Tipo de bitacora.
 	 * @var boolean|array
 	 */
 	static protected $_defaultLogMode = false;
@@ -27,38 +26,39 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	 */
 	protected $_search_fields = false;
 	/**
-	 * 
+	 * Permisos de usuario en sesión.
 	 * @var Zwei_Admin_Acl
 	 */
 	protected $_acl;
 	/**
-	 * @var Zend_Auth
+	 * Datos de usuario en sesión.
+	 * @var Zend_Auth_Storage_Interface
 	 */
 	protected $_user_info;
 	/**
-	 * Mensaje a desplegar en Zwei_Admin_Components_Helpers_EditTableDojo
+	 * Mensaje a desplegar en Zwei_Admin_Components_Helpers_EditTableDojo.
 	 * @var string
 	 */
 	protected $_message;
 	/**
-	 * Devuelve respuesta para ejecutar javascript segun valor en Zwei_Admin_Components_Helpers_EditTableDojo()
+	 * Devuelve respuesta para ejecutar javascript segun valor en Zwei_Admin_Components_Helpers_EditTableDojo().
 	 * @var string
 	 */
 	protected $_ajax_todo;
 	/**
-	 * indica si tendra filtros personalizados, ignorando los filtros de Zwei_Db_Object para metodo select
+	 * indica si tendra filtros personalizados, ignorando los filtros de Zwei_Db_Object para metodo select.
 	 * @var boolean
 	 */
 	protected $_is_filtered = false;
 	/**
 	* Adaptador de Base de datos. 
-	* Debe estar declarado en .ini o xml como resources.multidb.{$_adapter}
+	* Debe estar declarado en .ini o xml como resources.multidb.{$_adapter}.
 	* @var string 
 	*/
 	protected $_adapter;
 	
 	/**
-	 * array $data de Zend_Db_Table_Select sobrecargado en $this->overloadData($data) 
+	 * array $data de Zend_Db_Table_Select sobrecargado en $this->overloadData($data). 
 	 * @var array|false 
 	 */
 	protected $_overloaded_data = false;
@@ -75,7 +75,10 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	 */
     protected $_query_params;
     
-	
+	/**
+     * Post Constructor.
+     * Inicializa atributos de usuario en sesion, permisos y adaptador de DB.
+	 */
 	public function init()
 	{
 		if (Zend_Auth::getInstance()->hasIdentity()) {
@@ -90,6 +93,16 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	    }
 	}
 	
+	/**
+	 * Configura el adaptador de base de datos segun valores de atributo de configuración.
+	 * resources.multidb.{$adapter}.*
+	 * 
+	 * en archivo /application/configs/application.ini
+	 * 
+	 * 
+	 * @param $adapter
+	 * @return void
+	 */
 	public function setAdapter($adapter) 
 	{
         $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
@@ -97,6 +110,12 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $this->_setAdapter($db);
 	}
 
+    /**
+     * Inserts a new row.
+     *
+     * @param  array  $data  Column-value pairs.
+     * @return mixed         The primary key of the row inserted.
+     */	
 	public function insert($data)
 	{
         if (class_exists("SettingsModel")) {
@@ -111,6 +130,13 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	    return parent::insert($data);
 	}
 	
+	/**
+     * Updates existing rows.
+     *
+     * @param  array        $data  Column-value pairs.
+     * @param  array|string $where An SQL WHERE clause, or an array of SQL WHERE clauses.
+     * @return int          The number of rows updated.
+     */
 	public function update($data, $where)
 	{
 	    if (class_exists("SettingsModel")) {
@@ -125,7 +151,12 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	    
 	    return parent::update($data, $where);
 	}    
-	
+    /**
+     * Deletes existing rows.
+     *
+     * @param  array|string $where SQL WHERE clause(s).
+     * @return int          The number of rows deleted.
+     */
 	public function delete($where)
 	{
 	    if (class_exists("SettingsModel")) {
@@ -270,17 +301,26 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	
 	
     /**
-     * Convierte un string "Zend_Db_Table where" a un array asociativo campo=>valor
-     * @param $string
-     * @return array()
+     * Convierte un "Zend_Db_Table where" a un array asociativo campo=>valor
+     * @param $string | array
+     * @return array
      */
 
-    public function where2Array($string)
+    public function where2Array($where)
     {
-        $where = array();
-        $array = explode('=', $string);
-        $where[$array[0]] = str_replace("'", "",$array[1]); 
-        return $where;
+        $where = (array) $where;
+        $return = array();
+        
+        foreach ($where as $string) {
+            $array = explode('=', $string);
+            if (stristr($array[0], ".")) {
+                $aux = explode(".", $array[0]);
+                $array[0] = str_replace("`", "", $aux[1]);
+            }
+            
+            $return[trim($array[0])] = str_replace("'", "",$array[1]);
+        }     
+        return $return;
     }
 	
 	
