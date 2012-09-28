@@ -59,8 +59,8 @@
 	reg_exp CDATA #IMPLIED
 	required (true | false) "true"
 	visible (true | false) "true"
-	edit (true | false | disabled) "false"
-	add (true | false | disabled) "false"
+	edit (true | false | disabled | readonly) "false"
+	add (true | false | disabled  | readonly) "false"
 	table CDATA #IMPLIED
 	table_pk CDATA #IMPLIED
 	table_method CDATA #IMPLIED

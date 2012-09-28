@@ -19,12 +19,13 @@ class Zwei_Admin_Elements_DojoFilteringSelect extends Zwei_Admin_Elements_Elemen
 		$required = isset($this->params['REQUIRED']) ? "required=\"true\"" : "required=\"false\"";
 		$onchange = isset($this->params['ONCHANGE']) ? "onchange=\"{$this->params['ONCHANGE']}\"":'';
 		$disabled = isset($this->params['DISABLED']) ? "disabled=\"{$this->params['DISABLED']}\"":'';
+		$readonly = isset($this->params['READONLY']) ? "readonly=\"{$this->params['READONLY']}\"":'';
 		$regexp = isset($this->params['REG_EXP']) ? "RegExp=\"{$this->params['REG_EXP']}\"" : '';
 		$invalid_message = isset($this->params['INVALID_MESSAGE']) ? "invalidMessage=\"{$this->params['INVALID_MESSAGE']}\"" : '';
 		$prompt_message = isset($this->params['PROMPT_MESSAGE']) ? "promptMessage=\"{$this->params['PROMPT_MESSAGE']}\"" : '';
 		$value =  isset($this->params['DEFAULT_VALUE']) && !isset($this->params['DEFAULT_TEXT']) ? "value=\"{$this->params['DEFAULT_VALUE']}\"" : '';
 		$options = $this->options();
-		$return =  "<select dojoType=\"dijit.form.FilteringSelect\" id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" onload=\"dijit.byId('edit{$i}_{$j}').set('value', dijit.byId('edit{$i}_{$j}').get('value'))\" $value $onchange $required $regexp $invalid_message $prompt_message $disabled style=\"display:$display\" >\r\n$options\r\n</select>\r\n
+		$return =  "<select dojoType=\"dijit.form.FilteringSelect\" id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" onload=\"dijit.byId('edit{$i}_{$j}').set('value', dijit.byId('edit{$i}_{$j}').get('value'))\" $value $onchange $required $regexp $invalid_message $prompt_message $disabled $readonly style=\"display:$display\" >\r\n$options\r\n</select>\r\n
 		";
 		return $return;
 	}
