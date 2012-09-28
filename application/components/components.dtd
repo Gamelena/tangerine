@@ -76,7 +76,8 @@
     search_format (equals | greaterorequals | lesserorequals | date_format | date_to_datetime) #IMPLIED
 	search_required CDATA #IMPLIED
 	search_constraints CDATA #IMPLIED
-	search_reg_exp CDATA #IMPLIED 	
+	search_reg_exp CDATA #IMPLIED
+	search_default_value CDATA #IMPLIED   	
 	invalid_message CDATA #IMPLIED
 	prompt_message CDATA #IMPLIED 
 	search_onchange CDATA #IMPLIED 
