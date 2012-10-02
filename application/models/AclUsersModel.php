@@ -33,13 +33,45 @@ class AclUsersModel extends Zwei_Db_Table
 	}
 
 	/**
+	 * Un usuario no podría borrarse a si mismo, si es que no existen otros usuarios que puedan cumplir su misión.
+	 * (si no existen otros usuarios con su mismo perfil)
+	 * @see Zwei_Db_Table::delete()
+	 */
+	public function delete($where)
+	{
+	    $aWhere = $this->where2Array($where);
+	    $id = $aWhere['id'];
+	    
+	    if ($id == $this->_user_info->id) {
+	        //El usuario se está tratando de "suicidar" del sistema.
+	        $users = new AclUsersModel();
+	        $row = $users->find($id)->current();
+	        
+	        if ($row->acl_roles_id == $this->_user_info->acl_roles_id) {
+	            //Nadie más puede cumplir su misión encomendada, no lo permitiremos.
+	            $this->setMessage("No puede darse de baja usted mismo,\nno hay más usuarios con perfil $row->role_name.\n\nSi detectó un problema de seguridad se le sugiere cambiar su contraseña en Configuración.");
+	            return false;
+	        }
+	        
+	    }
+	    
+	    return parent::delete($where);
+	}
+	
+	
+	/**
 	 * En el caso de crearse un usuario nuevo,
 	 * se genera la password repitiendo el nombre de usuario en md5
 	 * @return int
 	 */
 	public function insert($data)
 	{
-		$data["password"] = md5($data[$this->_generate_pass]);
+	    if (!isset($data["password"])) {
+	        $data["password"] = md5($data[$this->_generate_pass]);
+	    } else {
+	        $data["password"] = md5($data["password"]);
+	    }
+	    
 		try {
 			$last_insert_id = parent::insert($data);
 		} catch(Zend_Db_Exception $e) {
