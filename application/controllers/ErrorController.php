@@ -49,11 +49,11 @@ class ErrorController extends Zend_Controller_Action
 	public function getLog()
 	{
 		$bootstrap = $this->getInvokeArg('bootstrap');
-		if (!$bootstrap->hasPluginResource('Log')) {
-			return false;
-		}
-		$log = $bootstrap->getResource('Log');
-		return $log;
+		//if (!$bootstrap->hasPluginResource('Log')) {
+		//	return false;
+		//}
+		//$log = $bootstrap->getResource('Log');
+		//return $log;
 	}
 
 

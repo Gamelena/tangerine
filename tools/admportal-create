@@ -40,14 +40,13 @@ if [ "$CREATE_DATABASE" = "S" ]; then
         $MYSQL -u$DB_ROOT_USER -p -e "$SQL"
 fi
 
+echo " "
 read -p "¿Desea crear y poblar tablas básicas MySQL de AdmPortal? (S/N) (por defecto S):" CREATE_TABLES    
 CREATE_TABLES=${CREATE_TABLES:-S}
 
 if [ "$CREATE_TABLES" = "S" ]; then
-    	read -p "Ingrese Usuario con privilegios para importar datos (por defecto root):" DB_ROOT_USER  
-    	DB_ROOT_USER=${DB_ROOT_USER:-root}
-    #	read -p "Ingrese Password Usuario con privilegios para importal datos (por defecto $DB_PASS):" DB_ROOT_PASS 
-    #	DB_ROOT_PASS_USER=${DB_ROOT_PASS_USER:-$DB_USER}
+	read -p "Ingrese Usuario con privilegios para importar datos (por defecto root):" DB_ROOT_USER  
+	DB_ROOT_USER=${DB_ROOT_USER:-root}
 
 	echo mysql -u$DB_ROOT_USER -p $DB_NAME \< $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql
 	mysql -u$DB_ROOT_USER -p $DB_NAME < $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql
@@ -64,61 +63,92 @@ cd web/
 echo Borrando prefijo \'Application_\' por defecto.
 sed -i 's/Application_//g' $DEST_PATH/web/.zfproject.xml
 
-echo " "
-echo Creando Controladores.
-
-#zf create controller Index  
-zf create action components -c Index 
-zf create action tabs -c Index 
-zf create action tabsDojo -c Index 
-zf create action modules -c Index
-zf create action login -c Index 
-zf create action logout -c Index 
-
-zf create controller Ajax index-action-included=1
-zf create action loading -c Ajax 
-
-zf create controller Functions index-action-included=1
-
-zf create controller Cache index-action-included=1
-
-zf create controller Uploads index-action-included=1
-
-zf create controller Objects index-action-included=1
-zf create action multiUpdate -c Objects 
 
 
-
-echo " "
-echo Creando Modelos.
-
-zf create model AclModulesModel
-zf create model AclPermissionsModel
-zf create model AclRolesModel
-zf create model AclUsersModel
-zf create model LogBookModel
-zf create model PermissionsModel
-zf create model PersonalInfoModel
-zf create model SettingsModel
-
-echo " "
-zf create module components
-
-
-echo " "
 echo Creando proyecto AdmPortal en $DEST_PATH/web
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/configs/ $DEST_PATH/web/application/configs/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/components/ $DEST_PATH/web/application/components/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/views/ $DEST_PATH/web/application/views/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/modules/ $DEST_PATH/web/application/modules/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/public/ $DEST_PATH/web/public/
 
-mkdir -p $DEST_PATH/web/application/
-mkdir -p $DEST_PATH/web/public/
+cp  $ZWC_ADMPORTAL_PATH/application/Bootstrap.php $DEST_PATH/web/application/Bootstrap.php
+cp  $ZWC_ADMPORTAL_PATH/application/configs/application.ini $DEST_PATH/web/application/configs/application.ini
 
-#cp -r $ZWC_ADMPORTAL_PATH/application/* $DEST_PATH/web/application/
-rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/ $DEST_PATH/web/application/ 
-#cp -r $ZWC_ADMPORTAL_PATH/public/* $DEST_PATH/web/public/
-rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/public/ $DEST_PATH/web/public/ 
+ADMAPPPATH=$ZWC_ADMPORTAL_PATH/application
+PATHESCAPED=$(echo "${ADMAPPPATH}" | sed 's/\//\\\//g')
 
-#echo Borrando definiciones por default obsoletas.
-#sed resources/d $DEST_PATH/web/application/configs/application.ini
-#sed dbTable/d $DEST_PATH/web/.zfproject.xml
+echo guardando variable zwei.admportal.applicationPath con valor $ADMAPPPATH en application.ini
+
+sed -i "s/ADMPORTAL_APPLICATION_PATH/$PATHESCAPED/g" $DEST_PATH/web/application/configs/application.ini
+
+echo " "
+read -p "¿Desea copiar Controladores de AdmPortal en su proyecto local? (S/N) (por defecto N):" CREATE_CONTROLLERS    
+CREATE_CONTROLLERS=${CREATE_CONTROLLERS:-N}
+
+if [ "$CREATE_CONTROLLERS" = "S" ]; then
+    echo " "
+    echo Creando Controladores.
+    
+    #zf create controller Index  
+    zf create action components -c Index 
+    zf create action tabs -c Index 
+    zf create action tabsDojo -c Index 
+    zf create action modules -c Index
+    zf create action login -c Index 
+    zf create action logout -c Index 
+    
+    zf create controller Ajax index-action-included=1
+    zf create action loading -c Ajax 
+    
+    zf create controller Functions index-action-included=1
+
+    zf create controller Cache index-action-included=1
+    
+    zf create controller Uploads index-action-included=1
+    
+    zf create controller Objects index-action-included=1
+    zf create action multiUpdate -c Objects 
+    rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/controllers/ $DEST_PATH/web/application/controllers/
+else    
+    rm -rf $DEST_PATH/web/application/controllers/
+    rm -rf $DEST_PATH/web/application/views/helpers/
+    rm -rf $DEST_PATH/web/application/views/scripts/
+    mkdir -p $DEST_PATH/web/application/controllers/
+    mkdir -p $DEST_PATH/web/application/views/helpers/
+    mkdir -p $DEST_PATH/web/application/views/scripts/
+fi
+
+echo " "
+read -p "¿Desea copiar Modelos de AdmPortal en su proyecto local? (S/N) (por defecto N):" CREATE_MODELS    
+CREATE_MODELS=${CREATE_MODELS:-N}
+
+if [ "$CREATE_MODELS" = "S" ]; then
+
+    echo " "
+    echo Creando Modelos.
+    
+    zf create model AclModulesModel
+    zf create model AclPermissionsModel
+    zf create model AclRolesModel
+    zf create model AclUsersModel
+    zf create model LogBookModel
+    zf create model PermissionsModel
+    zf create model PersonalInfoModel
+    zf create model SettingsModel
+    
+    echo " "
+    zf create module components
+    
+    
+    echo " "
+
+    rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/models $DEST_PATH/web/application/models
+else    
+    rm -rf $DEST_PATH/web/application/models/
+    mkdir -p $DEST_PATH/web/application/models/
+fi
+
 
 echo Guardando configuracion de base de datos en $DEST_PATH/web/application/configs/application.ini
 zf configure dbadapter "adapter=$DB_ADAPTER&username=$DB_USER&password=$DB_PASS&dbname=$DB_NAME"

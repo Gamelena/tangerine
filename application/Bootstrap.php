@@ -2,6 +2,7 @@
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
+    protected $_config;
     
     public function loadConstants()
     {
@@ -27,24 +28,35 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Define application environment
         defined('APPLICATION_ENV')
         || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+        
+        $this->_config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+        if (isset($this->_config->zwei->date->defaultTimezone)) date_default_timezone_set($this->_config->zwei->date->defaultTimezone);
+        
+        defined('ADMPORTAL_APPLICATION_PATH') || define('ADMPORTAL_APPLICATION_PATH', $this->_config->zwei->admportal->applicationPath);
     }
     
-    public function run()
+    public function confAutoLoader()
     {
+        require_once 'Zend/Loader/Autoloader.php';
         $this->loadConstants();
         
-        require_once 'Zend/Loader/Autoloader.php';
-
         $loader = Zend_Loader_Autoloader::getInstance();
         $loader->setFallbackAutoloader(true);
         
         set_include_path('.'
             . PATH_SEPARATOR . ROOT_DIR.'/library'
             . PATH_SEPARATOR . APPLICATION_PATH . '/models'
+            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/models'
             . PATH_SEPARATOR . APPLICATION_PATH . '/forms'
+            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/forms'
             . PATH_SEPARATOR . get_include_path()
         );
-        
+    }
+    
+    public function run()
+    {
+        $this->confAutoLoader();
+       
         
         try {
             Zend_Session::start();
@@ -57,9 +69,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Inicializar el MVC
         Zend_Layout::startMvc(array('layoutPath' => ROOT_DIR.'/application/views/layouts'));
         
-        $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
-        if (isset($config->zwei->date->defaultTimezone)) date_default_timezone_set($config->zwei->date->defaultTimezone);
-        defined('ADMPORTAL_APPLICATION_PATH') || define('ADMPORTAL_APPLICATION_PATH', $config->zwei->admportal->applicationPath);
+
         // Run!
         
         $frontController = Zend_Controller_Front::getInstance();
@@ -73,10 +83,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         //$frontController->throwExceptions(true);
         
-        $db = Zend_Db::factory($config->resources->db);
+        $db = Zend_Db::factory($this->_config->resources->db);
         
         Zwei_Db_Table::setDefaultAdapter($db);
-        Zwei_Db_Table::setDefaultLogMode($config->zwei->db->table->logbook);
+        Zwei_Db_Table::setDefaultLogMode($this->_config->zwei->db->table->logbook);
         
         
         $backendOpt = array('cache_dir' => ROOT_DIR .'/cache');
@@ -89,7 +99,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             try {
                 $frontController->dispatch();
             } catch(Exception $e) {
-                if ($config->resources->frontController->params->displayExceptions == "1") {
+                if ($this->_config->resources->frontController->params->displayExceptions == "1") {
                    echo nl2br($e->__toString());    
                 } else {
                    Zwei_Utils_Debug::write(nl2br($e->__toString()));
