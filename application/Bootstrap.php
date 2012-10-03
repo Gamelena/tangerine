@@ -57,7 +57,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $this->confAutoLoader();
        
-        
         try {
             Zend_Session::start();
         } catch (Zend_Session_Exception $e) {
