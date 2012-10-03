@@ -79,11 +79,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         //Plugin para usar multiples carpetas aplication sobreescribibles
         $frontController->registerPlugin(new Zwei_Controller_Plugin_ApplicationPath());       
         
+        //Plugin para cache de páginas
+        $frontController->registerPlugin(new Zwei_Controller_Plugin_Cache($this->_config));
         
         $frontController->addModuleDirectory(ADMPORTAL_APPLICATION_PATH . '/modules');
         $frontController->addModuleDirectory(APPLICATION_PATH . '/modules');
         
-        //$frontController->throwExceptions(true);
+        $frontController->throwExceptions(true);
         
         $db = Zend_Db::factory($this->_config->resources->db);
         
@@ -91,31 +93,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zwei_Db_Table::setDefaultLogMode($this->_config->zwei->db->table->logbook);
         
         
-        $backendOpt = array('cache_dir' => ROOT_DIR .'/cache');
-        $frontendOpt = array('lifetime' => 600);
-        //Debug::write($config->zwei->admportal->applicationPath.'/controllers');
-        $cache = new Zwei_Utils_Cache($backendOpt, $frontendOpt);
-        $cache->start();
-        
-        if (!$cache->isStarted()) {
-            try {
-                $frontController->dispatch();
-            } catch(Exception $e) {
-                if ($this->_config->resources->frontController->params->displayExceptions == "1") {
-                   echo nl2br($e->__toString());    
-                } else {
-                   Zwei_Utils_Debug::write(nl2br($e->__toString()));
-                }   
-            }
-        
-            if ($cache->check()) {
-                $cache->end();
-            }
-        } else {
-            Zwei_Utils_Debug::write( "Está en cache:".@$_SERVER['PATH_INFO'] . @$_REQUEST['p'] );
-        }
-        
-        //parent::run();
+        parent::run();
     }
 }
 

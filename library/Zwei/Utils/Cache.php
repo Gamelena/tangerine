@@ -6,6 +6,7 @@
  * @package Zwei_Utils
  * @version $Id:$
  * @since 0.1
+ * @deprecated se recomienda usar Zwei_Controller_Plugin_Cache() en su lugar.
  */
 final class Zwei_Utils_Cache
 {
