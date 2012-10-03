@@ -52,15 +52,13 @@ class AclUsersModel extends Zwei_Db_Table
 	            $this->setMessage("No puede darse de baja usted mismo,\nno hay más usuarios con perfil $row->role_name.\n\nSi detectó un problema de seguridad se le sugiere cambiar su contraseña en Configuración.");
 	            return false;
 	        }
-	        
 	    }
-	    
 	    return parent::delete($where);
 	}
 	
 	
 	/**
-	 * En el caso de crearse un usuario nuevo,
+	 * En el caso de crearse un usuario nuevo y tener seteado cambio de password,
 	 * se genera la password repitiendo el nombre de usuario en md5
 	 * @return int
 	 */

@@ -79,7 +79,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         //Plugin para usar multiples carpetas aplication sobreescribibles
         $frontController->registerPlugin(new Zwei_Controller_Plugin_ApplicationPath());       
         
-        $frontController->addModuleDirectory(ROOT_DIR.'/application/modules');
+        
+        $frontController->addModuleDirectory(ADMPORTAL_APPLICATION_PATH . '/modules');
+        $frontController->addModuleDirectory(APPLICATION_PATH . '/modules');
         
         //$frontController->throwExceptions(true);
         
