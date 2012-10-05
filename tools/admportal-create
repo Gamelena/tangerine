@@ -67,9 +67,7 @@ sed -i 's/Application_//g' $DEST_PATH/web/.zfproject.xml
 
 echo Creando proyecto AdmPortal en $DEST_PATH/web
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/configs/ $DEST_PATH/web/application/configs/
-rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/components/ $DEST_PATH/web/application/components/
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/views/ $DEST_PATH/web/application/views/
-rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/modules/ $DEST_PATH/web/application/modules/
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/public/ $DEST_PATH/web/public/
 
 cp  $ZWC_ADMPORTAL_PATH/application/Bootstrap.php $DEST_PATH/web/application/Bootstrap.php
@@ -110,6 +108,7 @@ if [ "$CREATE_CONTROLLERS" = "S" ]; then
     zf create controller Objects index-action-included=1
     zf create action multiUpdate -c Objects 
     rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/controllers/ $DEST_PATH/web/application/controllers/
+    rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/views/ $DEST_PATH/web/application/views/
 else    
     rm -rf $DEST_PATH/web/application/controllers/
     rm -rf $DEST_PATH/web/application/views/helpers/
@@ -117,6 +116,22 @@ else
     mkdir -p $DEST_PATH/web/application/controllers/
     mkdir -p $DEST_PATH/web/application/views/helpers/
     mkdir -p $DEST_PATH/web/application/views/scripts/
+    cp $ZWC_ADMPORTAL_PATH/application/views/layouts/layout.phtml $DEST_PATH/web/application/views/layouts/layout.phtml
+fi
+
+echo " "
+read -p "¿Desea copiar Módulos ZF de AdmPortal en su proyecto local? (S/N) (por defecto N):" CREATE_MODULES    
+CREATE_MODULES=${CREATE_MODULES:-N}
+
+zf create module components 
+
+if [ "$CREATE_MODULES" = "S" ]; then
+    echo " "
+    echo Creando Módulos.
+    zf create controller DojoPieChart components
+    rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/modules/ $DEST_PATH/web/application/modules/
+else
+    mkdir -p $DEST_PATH/web/application/modules/
 fi
 
 echo " "
@@ -137,13 +152,11 @@ if [ "$CREATE_MODELS" = "S" ]; then
     zf create model PersonalInfoModel
     zf create model SettingsModel
     
-    echo " "
-    zf create module components
-    
+  
     
     echo " "
 
-    rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/models $DEST_PATH/web/application/models
+    rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/models/ $DEST_PATH/web/application/models/
 else    
     rm -rf $DEST_PATH/web/application/models/
     mkdir -p $DEST_PATH/web/application/models/
