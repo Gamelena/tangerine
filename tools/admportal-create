@@ -36,6 +36,8 @@ if [ "$CREATE_DATABASE" = "S" ]; then
         Q2="GRANT ALL ON $DB_NAME.* TO $DB_USER IDENTIFIED BY '$DB_PASS';"
         Q3="GRANT ALL ON $DB_NAME.* TO $DB_USER@localhost IDENTIFIED BY '$DB_PASS';"
         SQL="${Q1}${Q2}${Q3}"
+        
+        echo $Q1
          
         $MYSQL -u$DB_ROOT_USER -p -e "$SQL"
 fi
@@ -47,9 +49,10 @@ CREATE_TABLES=${CREATE_TABLES:-S}
 if [ "$CREATE_TABLES" = "S" ]; then
 	read -p "Ingrese Usuario con privilegios para importar datos (por defecto root):" DB_ROOT_USER  
 	DB_ROOT_USER=${DB_ROOT_USER:-root}
-
+    echo " "
 	echo mysql -u$DB_ROOT_USER -p $DB_NAME \< $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql
 	mysql -u$DB_ROOT_USER -p $DB_NAME < $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql
+	echo " "
 	echo mysql -u$DB_ROOT_USER -p $DB_NAME \< $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql
 	mysql -u$DB_ROOT_USER -p $DB_NAME < $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql	
 fi
@@ -67,6 +70,7 @@ sed -i 's/Application_//g' $DEST_PATH/web/.zfproject.xml
 
 echo Creando proyecto AdmPortal en $DEST_PATH/web
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/configs/ $DEST_PATH/web/application/configs/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/components/ $DEST_PATH/web/application/components/
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/views/ $DEST_PATH/web/application/views/
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/public/ $DEST_PATH/web/public/
 
@@ -120,10 +124,14 @@ else
 fi
 
 echo " "
+
+echo "Creando base de módulo components" 
+zf create module components 
+
 read -p "¿Desea copiar Módulos ZF de AdmPortal en su proyecto local? (S/N) (por defecto N):" CREATE_MODULES    
 CREATE_MODULES=${CREATE_MODULES:-N}
 
-zf create module components 
+
 
 if [ "$CREATE_MODULES" = "S" ]; then
     echo " "
@@ -191,10 +199,21 @@ echo " "
 mkdir -p $DEST_PATH/web/log/
 mkdir -p $DEST_PATH/web/cache/
 echo RewriteBase /${PWD##*/}/
+echo " "
+echo "Puede copiar este comando para hacerlo vía consola:"
+echo " "
+echo "      sed -e \'1 RewriteBase /${PWD##*/}/\' $DEST_PATH/web/public/.htaccess " 
+
 echo " "  
 echo \*\*\* Deberá darles permisos de escritura a las carpetas $DEST_PATH/web/log/ y  $DEST_PATH/web/cache/  \*\*\*
+echo " "
+echo "Puede tomar como referencia uno de estos comandos:"
+echo " "
+echo "      chown www-data  $DEST_PATH/web/log/ $DEST_PATH/web/cache/"
+echo "      chown chmod 777 -R  $DEST_PATH/web/log/ $DEST_PATH/web/cache/"
+echo " "
 echo Happy AdmPortal\'ing.
-
+echo " "
 
 
 
