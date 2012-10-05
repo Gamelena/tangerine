@@ -11,6 +11,10 @@ descomprimirlo en /usr/share/php/Zend y agregar /usr/share/php/ al include_path 
 - Dojo Toolkit 1.7
 http://download.dojotoolkit.org/
 
+- PHP Unit 3.5.15
+
+
+
 Y configurar Apache para ser accessible desde la url http://localhost/dojotoolkit. 
 Considerar el sig. ejemplo: 
 

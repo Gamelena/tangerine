@@ -1,0 +1,36 @@
+** APLICAR ESTO EN CASO DE TENER EL SIGUIENTE MENSAJE DE ERROR AL INSTALAR E INTENTAR EJECUTAR PHPUNIT:   
+
+PHP Fatal error:  Call to undefined method PHP_CodeCoverage_Filter::getInstance() in /usr/bin/phpunit on line 39
+
+**
+Sacado de http://dustyreagan.com/downgrade-phpunit-3-6-to-3-5-15/
+
+How to Downgrade PHPUnit 3.6 to 3.5.15
+Posted on November 3, 2011 by Dusty Reagan
+The newest release of PHPUnit 3.6 broke my unit test process in PHPStorm. PHPStorm is aware of the issue and is fixing it in the next update. However, in order to run my unit tests in the meantime I had to downgrade from PHPUnit 3.6 to 3.5.15, which was harder than it should’ve been.
+
+If you try installing PHPUnit-3.5.15 first, you’ll find PEAR forces you to install 3.6. The way around this is installing the old versions of all of the PHPUnit dependencies.
+
+First you need to uninstall PHPUnit 3.6 and all of it’s dependencies.
+
+sudo pear uninstall phpunit/PHPUnit
+sudo pear uninstall phpunit/DbUnit
+sudo pear uninstall phpunit/PHP_CodeCoverage
+sudo pear uninstall phpunit/File_Iterator
+sudo pear uninstall phpunit/Text_Template
+sudo pear uninstall phpunit/PHP_Timer
+sudo pear uninstall phpunit/PHPUnit_MockObject
+sudo pear uninstall phpunit/PHPUnit_Selenium
+sudo pear uninstall pear.symfony-project.com/YAML
+
+Next install these specific versions of each dependency, in this order, installing PHPUnit-3.5.15 last.
+
+sudo pear install pear.symfony-project.com/YAML-1.0.2
+sudo pear install phpunit/PHPUnit_Selenium-1.0.1
+sudo pear install phpunit/PHPUnit_MockObject-1.0.3
+sudo pear install phpunit/PHP_Timer-1.0.0
+sudo pear install phpunit/File_Iterator-1.2.3
+sudo pear install phpunit/PHP_CodeCoverage-1.0.2
+sudo pear install phpunit/Text_Template-1.0.0
+sudo pear install phpunit/DbUnit-1.0.0
+sudo pear install phpunit/PHPUnit-3.5.15
