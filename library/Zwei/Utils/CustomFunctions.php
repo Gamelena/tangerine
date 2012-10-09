@@ -1,15 +1,27 @@
 <?php 
+/**
+ * Funciones auxiliares para ser invocadas por los componentes XML.
+ * 
+ * @category Zwei
+ * @package Zwei_Utils
+ * @version $Id:$
+ * @since 0.1
+ * 
+ *
+ *
+ */
+
 class Zwei_Utils_CustomFunctions extends Zwei_Utils_CustomFunctionsBase
 {
     //[TODO] personalizar este código, es solo una base de ejemplo para modificar. 
     protected $_names = array(
         'enviarReporte' => 'Enviar Reporte'
     );
-    
+    //[TODO] personalizar este código, es solo una base de ejemplo para modificar. 
     protected $_icons = array(
         'enviarReporte' => 'dijitIconMail'
     );
-    
+    //[TODO] personalizar este código, es solo una base de ejemplo para modificar. 
     public function enviarReporte()
     {
         echo "<script  type='text/javascript'>
