@@ -29,10 +29,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         defined('APPLICATION_ENV')
         || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
         
-        $this->_config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+        $this->_config = $this->getConfig();
         if (isset($this->_config->zwei->date->defaultTimezone)) date_default_timezone_set($this->_config->zwei->date->defaultTimezone);
         
         defined('ADMPORTAL_APPLICATION_PATH') || define('ADMPORTAL_APPLICATION_PATH', $this->_config->zwei->admportal->applicationPath);
+    }
+    
+    /**
+     * 
+     * @return Zend_Config_Ini
+     */
+    public function getConfig()
+    {
+        return new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
     }
     
     public function confAutoLoader()
@@ -80,9 +89,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         //Plugin para cache de páginas
         $frontController->registerPlugin(new Zwei_Controller_Plugin_Cache($this->_config));
-        
-        $frontController->addModuleDirectory(ADMPORTAL_APPLICATION_PATH . '/modules');
-        $frontController->addModuleDirectory(APPLICATION_PATH . '/modules');
         
         $frontController->throwExceptions(true);
         

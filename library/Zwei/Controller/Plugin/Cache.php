@@ -2,7 +2,6 @@
 /**
  * 
  * Plugin para cachear ciertas páginas estáticas de AdmPortal.
- * @author rodrigo
  *
  */
 final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract

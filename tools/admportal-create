@@ -76,6 +76,8 @@ rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/public/ $DEST_PATH/web/public/
 
 cp  $ZWC_ADMPORTAL_PATH/application/Bootstrap.php $DEST_PATH/web/application/Bootstrap.php
 cp  $ZWC_ADMPORTAL_PATH/application/configs/application.ini $DEST_PATH/web/application/configs/application.ini
+mkdir -p $DEST_PATH/web/library/Zwei/Utils/
+cp  $ZWC_ADMPORTAL_PATH/library/Zwei/Utils/CustomFunctions.php $DEST_PATH/web/library/Zwei/Utils/CustomFunctions.php
 
 ADMAPPPATH=$ZWC_ADMPORTAL_PATH/application
 PATHESCAPED=$(echo "${ADMAPPPATH}" | sed 's/\//\\\//g')

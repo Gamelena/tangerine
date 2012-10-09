@@ -1,4 +1,9 @@
 <?php
+/**
+ * Plugin para controlar el timeout de sesión
+ *
+ */
+
 class Zwei_Controller_Plugin_TimeOutHandler extends Zend_Controller_Plugin_Abstract
 {
     public function preDispatch(Zend_Controller_Request_Abstract $request) {
