@@ -8,7 +8,7 @@
  * @since 0.1
  * 
  *
- *
+ * @example: <section type="table_dojo" functions="assign_request,enviar_reporte" (...)> para $CustomFunctions->assignRequest(...) y $CustomFunctions->enviarReporte(...)
  */
 
 class Zwei_Utils_CustomFunctions extends Zwei_Utils_CustomFunctionsBase
