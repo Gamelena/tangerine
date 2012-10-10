@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `acl_modules` (
   `module` char(200) DEFAULT NULL,
   `tree` enum('0','1') NOT NULL DEFAULT '1',
   `linkable` enum('0','1') NOT NULL,
-  `type` enum('xml','xml_php','zend_module','legacy') NOT NULL DEFAULT 'xml',
+  `type` enum('xml','xml_mvc','zend_module','legacy','iframe') NOT NULL DEFAULT 'xml',
   `approved` enum('0','1') NOT NULL,
   `order` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `root` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
