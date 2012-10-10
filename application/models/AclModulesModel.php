@@ -67,7 +67,9 @@ class AclModulesModel extends Zwei_Db_Table
 
                 if ($child['type'] == 'zend_module') $prefix = "";
                 else if ($child['type'] == 'xml') $prefix = "index/components?p=";
+                else if ($child['type'] == 'xml_mvc') $prefix = "index/components_mvc?p=";
                 else if ($child['type'] == 'legacy') $prefix = "index/legacy?p=";
+                else if ($child['type'] == 'iframe') $prefix = "index/iframe?p=";
                     
                 if ($prefix != "") $child['module'] = urlencode($child['module']);
 
@@ -99,7 +101,10 @@ class AclModulesModel extends Zwei_Db_Table
 	                $prefix = "";
 	                if ($branch['type'] == 'zend_module') $prefix = "";
 	                else if ($branch['type'] == 'xml') $prefix = "index/components?p=";
+	                else if ($branch['type'] == 'xml_mvc') $prefix = "index/components_mvc?p=";
 	                else if ($branch['type'] == 'legacy') $prefix = "index/legacy?p=";
+	                else if ($branch['type'] == 'iframe') $prefix = "index/iframe?p=";
+	                
 	                
 	                if ($prefix != "") $branch['module'] = urlencode($branch['module']);
 					$arrNodes[$key]['url'] = $prefix.$branch['module'];

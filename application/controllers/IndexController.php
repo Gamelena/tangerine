@@ -55,9 +55,6 @@ class IndexController extends Zend_Controller_Action
             @import "'.$this->base_dojo_folder.'/dijit/themes/'.$this->_dojo_style.'/'.$this->_dojo_style.'.css";
         ');    
 
-
-
-
         try {
             $Settings = new SettingsModel();
 
@@ -172,6 +169,17 @@ class IndexController extends Zend_Controller_Action
         }
     }
 
+    /**
+     * Parsea archivo XML <i> APPLICATION_PATH '/components/' $_REQUEST['p'] </i>,
+     * obtiene atributo "type" (lo etiquetaremos como $type) 
+     * e invoca método display() de clase Zwei_Admin_Components_$type.
+     * $type esta trasformado a Canonical Case.
+     * 
+     * @example
+     * <code>
+	 *		<component type="some_class" ...
+	 *  </code>
+     */    
     public function componentsAction()
     {
         if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
@@ -211,7 +219,7 @@ class IndexController extends Zend_Controller_Action
             }
 
         } else {
-            $content = "portada";
+            $this->view->content = "<h2>portada</h2>";
         }
         if (isset($this->_request->ajax)) {
             $this->_helper->viewRenderer('ajax');
@@ -219,17 +227,57 @@ class IndexController extends Zend_Controller_Action
         $this->view->content = $content;
     }
 
-
-    public function dynaComponentsAction()
+    /**
+     * Parsea archivo XML <i> APPLICATION_PATH '/components/' $_REQUEST['p'] </i>,
+     * obtiene atributo "type" (lo etiquetaremos como $type) 
+     * e invoca a module "components" y controller/action segun $type.
+     * 
+     * @example
+     * <code>
+	 *		<component type="some-controller" ...
+	 *		<component type="some-controller/some-action"
+	 *  </code>
+	 * some_controller se convierte a Canonical Case.
+	 * some-action se convierte a Camel Case.   
+     */  
+    public function componentsMvcAction()
     {
-        //DEPRECATED
-    }
+        if (isset($this->_request->p)) {
+            if (Zwei_Admin_Acl::isUserAllowed($this->_request->p, "LIST") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "EDIT") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "ADD")) {
+                $xml = new Zwei_Admin_Xml();
+                $file = Zwei_Admin_XML::getFullPath($this->_request->p);
+                $xml->parse($file);
+                
 
+                
+                if (stristr($xml->elements[0]['TYPE'], '/')) {
+                    list($controller, $action) = explode('/', $xml->elements[0]['TYPE']);
+                } else {
+                    $action = 'index';                 
+                    $controller = $xml->elements[0]['TYPE'];
+                }
+           
+                $this->view->content =  $this->view->action($action, $controller, 'components', $_REQUEST);
+            } else {
+                $this->view->content = "Acceso denegado a módulo";
+            }
+
+        } else {
+            $this->view->component = "index";
+        }
+    }
+    
 
     /**
-     * Acá se asocia a un Zend Controller un objeto Zwei_Admin_Components_Helpers_EditTabsDojo()
-     * ya que debe cargar dentro de una nueva URL la cual por convención ZF debe manejarse por un objeto Zend_Controller_Action
-     * @return HTML
+     * Se asocia a un Zend Controller un objeto Zwei_Admin_Components_Helpers_EditTabs().
+     * Para invocar a este action el segundo elemento del XML debe ser del tipo "tab".
+     * 
+     * @example
+     * <code>
+     * 		<component (...)
+     * 			<tab (...) >
+	 *				<element (...)>
+	 *  </code>
      */
     public function tabsAction()
     {
