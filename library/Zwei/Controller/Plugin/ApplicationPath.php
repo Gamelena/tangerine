@@ -14,11 +14,13 @@ class Zwei_Controller_Plugin_ApplicationPath extends Zend_Controller_Plugin_Abst
         $controller = $request->getControllerName();
         $module = $request->getModuleName();
         $frontController = Zend_Controller_Front::getInstance();
-        
+        Debug::write("controller:$controller-module:$module");
         
         if (file_exists(APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php')) {
+            Debug::write("Existe ". APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');
             $frontController->addControllerDirectory(APPLICATION_PATH . '/controllers');
         } else {
+            Debug::write("Buscando ".ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');
             $frontController->addControllerDirectory(ADMPORTAL_APPLICATION_PATH.'/controllers');
         }
         
