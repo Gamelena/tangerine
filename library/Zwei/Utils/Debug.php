@@ -19,14 +19,15 @@ class Zwei_Utils_Debug
    * @param string $message - texto a escribir en archivo. 
    * @param $file - ruta relativa del archivo a escribir.
    */	
-    function write($message = null, $file ="" )
+    function write($message = null, $file = "" )
     {
-	if( $file == "" ) $file = ROOT_DIR."/log/debug";
+        if( $file == "" ) $file = ROOT_DIR."/log/debug";
         $trace = debug_backtrace() ;
 	    if  ($message !== null ){
 	        $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
 	    } else {
-	        $message = "[".strftime('%Y-%m-%d %H:%M:%S')."]\n".print_r($trace, 1);
+	        //$message = "[".strftime('%Y-%m-%d %H:%M:%S')."]\n".print_r($trace, 1);
+	        $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] El grillo dijo "cri cri" (acá no hay nada).';
 	    }
 	    $ff = fopen($file, "a");
 	    fwrite($ff,"$message\r\n");
@@ -53,7 +54,8 @@ class Zwei_Utils_Debug
             	if ($message !==null ) {
 	               $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
 		        } else {
-		           $message = "[".strftime('%Y-%m-%d %H:%M:%S')."]\n".print_r($trace, 1);
+		           //$message = "[".strftime('%Y-%m-%d %H:%M:%S')."]\n".print_r($trace, 1);
+		           $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] El grillo dijo "cri cri" (acá no hay nada).';
 		        }
 		        $ff = fopen($file, "a");
 		        fwrite($ff, "$message\r\n");

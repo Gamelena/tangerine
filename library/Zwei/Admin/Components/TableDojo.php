@@ -196,6 +196,15 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
             $titles = explode(";",(@$viewtable->layout[0]['POPUPS_TITLE']));
             $iframes = explode(";",(@$viewtable->layout[0]['POPUPS_IFRAME']));
             $icons = explode(";",(@$viewtable->layout[0]['POPUPS_ICONS']));
+            /*
+             * [TODO] $execute_scripts deberia ser implicitamente 'true' siempre, por ahora se requiere explicitamente
+             * para no generar errores en instalaciones anteriores de AdmPortal ya que necesita el módulo "dojox.widget.DialogSimple" para funcionar.
+             */
+            $execute_scripts = explode(";",(@$viewtable->layout[0]['POPUPS_EXECUTE_SCRIPTS']));
+            
+            $popups_width = explode(";",(@$viewtable->layout[0]['POPUPS_WIDTH']));
+            $popups_height = explode(";",(@$viewtable->layout[0]['POPUPS_HEIGHT']));
+            
             $i = 0;
             foreach ($items as $f) {
                 //$href=str_replace("{id}",$this->params['ID'],$f);
@@ -261,15 +270,23 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         
         
         $i=0;
-        
-        foreach ($popups as $i => $v)
-        {
-            if (!empty($iframes[$i]) && $iframes[$i]=="true")
-            {
+        Debug::write($execute_scripts);
+        foreach ($popups as $i => $v) {
+            if (!empty($iframes[$i]) && $iframes[$i] == "true") {
                 $out .= "<div dojoType=\"dijit.Dialog\" id=\"{$domPrefix}formDialogo$i\" jsId=\"formDialogo$i\" title=\"{$titles[$i]}\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 $out .= "\n</div>\r\n";
             } else {
-                $out .= "<div dojoType=\"dijit.Dialog\" id=\"{$domPrefix}formDialogo$i\" jsId=\"formDialogo$i\" title=\"{$titles[$i]}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1', $iframe);$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+                $dojoType = "dijit.Dialog";
+                $execute = "";
+                if (!empty($execute_scripts[$i]) && $execute_scripts[$i] === "true") {
+                    $dojoType = "dojox.widget.DialogSimple";
+                    $execute = 'executeScripts="true"'; 
+                }   
+                
+                $pwidth = (!empty($popups_width[$i])) ? "width:{$popups_width[$i]}px;" : '';
+                $pheight = (!empty($popups_height[$i])) ? "height:{$popups_height[$i]}px;" : '';
+                
+                $out .= "<div dojoType=\"$dojoType\" style=\"$pwidth $pheight\" $execute id=\"{$domPrefix}formDialogo$i\" jsId=\"formDialogo$i\" title=\"{$titles[$i]}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1', $iframe);$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
                     $out .= "\t<iframe src=\"\" id=\"{$domPrefix}iframeDialogEdit\" name=\"iframeDialogoEdit$i\" frameborder=\"no\" $height $width $style></iframe>";
                 }    
@@ -340,7 +357,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         
         
         /**
-         * Si cargamos un lightbox debemos tener el javascript necesario fuera de el (acá)
+         * Si cargamos un dijit.tabContainer debemos tener el javascript necesario fuera de el (acá)
          */
         if ($viewtable->layout[1]['_name'] == 'TAB')
         {       
