@@ -1,4 +1,71 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>DojoChart</b> and script/action name <b>pie</b></p>
-</div>
+<div id="chartNode" style="width:800px;height:600px"></div>
+<script>
+    var base_url = "<?php echo BASE_URL?>"
+    require([
+    	"dojox/charting/Chart",
+    	"dojox/charting/themes/<?php echo $this->chartingTheme ?>",
+    	"dojox/charting/plot2d/Pie",
+    	"dojox/charting/action2d/Tooltip",
+    	"dojox/charting/action2d/MoveSlice",
+    	"dojo/data/ItemFileReadStore",
+    	"dojox/charting/plot2d/Markers",
+    	"dojox/charting/axis2d/Default",
+    	"dojo/domReady!"
+    ], function(Chart, theme, Pie, Tooltip, MoveSlice, ItemFileReadStore) {
+    	var options = <?php echo $this->options ?>;
+<?php 
+if (!empty($this->title)): 
+?>
+		options.title = '<?php echo $this->title ?>';
+		options.titleFont = "normal normal normal 15pt Verdana";
+		options.titleGap = 0;
+<?php
+endif;
+?>
+    	var store = new ItemFileReadStore({
+    		url: base_url+'objects?model=<?php echo $this->model ?>&format=json<?php echo $this->queryParams ?>'
+    	});
+    	
+    	var gotList = function(items, request){
+    		var item = {};
+    		var itemsList = [];
+    		dojo.forEach(items, function(i) {
+    			item = {};
+    			item.y = parseInt(store.getValue(i, "<?php echo $this->xTarget ?>"), 10);
+    			item.text = store.getValue(i, "<?php echo $this->xTitle ?>") + "<br/><strong>" + store.getValue(i, "<?php echo $this->xTarget ?>") + "</strong>";
+    			item.tooltip = store.getValue(i, "<?php echo $this->xTarget ?>");
+    			itemsList.push(item);
+    
+    	  	});
+    		console.debug(itemsList);
+    
+    		var chart = new Chart("chartNode", options);
+    		chart.setTheme(theme);
+    		chart.addPlot("default", {
+    			type: Pie,
+    			font: "Arial, Verdana",
+    			markers: true,
+    			radius:170
+    		});
+    		chart.addAxis("x");
+    		chart.addAxis("y", { min: 5000, max: 30000, vertical: true, fixLower: "major", fixUpper: "major" });
+    		chart.addSeries("Series A", itemsList);
+    		
+    		var tip = new Tooltip(chart,"default");
+    		var mag = new MoveSlice(chart,"default");
+    		
+    		// Render the chart!
+    		chart.render();
+        };
+    
+    	var gotError = function(error, request){
+    		alert("¡Vaya! ha ocurrido un error: " +  error);
+    	};
+    
+    	// Invoke the search
+    	store.fetch({
+    		onComplete: gotList,
+    		onError: gotError
+       	});
+	});
+</script>

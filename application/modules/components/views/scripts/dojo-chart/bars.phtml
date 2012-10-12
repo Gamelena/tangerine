@@ -1,4 +1,62 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>DojoChart</b> and script/action name <b>bars</b></p>
+<style type="text/css">
+	body {background-color:#FFF;}
+</style>    
+<script type="text/javascript">
+    var chart = {};
+    // Require the basic 2d chart resource: Chart2D
+    dojo.require("dojox.charting.Chart2D");
+    
+    // Retrieve the Legend, Tooltip, and Magnify classes
+    dojo.require("dojox.charting.widget.Legend");
+    dojo.require("dojox.charting.action2d.Tooltip");
+    dojo.require("dojox.charting.action2d.Magnify");
+    
+    // Require the theme of our choosing
+    // "Claro", new in Dojo 1.6, will be used
+    dojo.require("dojox.charting.themes.Distinctive");
+            
+    // Define the data\n";
+     
+    // When the DOM is ready and resources are loaded...
+    dojo.ready(function() {
+        
+        // Create the chart within it's "holding" node
+        var chart = new dojox.charting.Chart2D("chartNode");
+    
+        // Set the theme
+        chart.setTheme(dojox.charting.themes.Distinctive);
+    
+        // Add the only/default plot 
+        chart.addPlot("default", {
+            type: "ClusteredColumns",
+            animate: {duration: 1800}
+        });
+        
+        // Add axes
+        chart.addAxis("y", {labels:[<?php echo $this->xAxisLabels ;?>], rotation: 90});
+        chart.addAxis("x", { min: 0, max: <?php echo $this->top ;?>, vertical: true, fixLower: "major", fixUpper: "major" });
+    
+        // Add the series of data \n"
+        <?php echo $this->data; ?>	    
+		// Create the tooltip
+        var tip = new dojox.charting.action2d.Tooltip(chart, "default");
+        
+        // Create the magnifier
+        var mag = new dojox.charting.action2d.Magnify(chart, "default");
+        
+        // Render the chart!
+        chart.render();
+        
+        // Create the legend
+        var legend = new dojox.charting.widget.Legend({ chart: chart }, "legend");
+    });
+        
+</script>
+<div>
+    <h2><?php echo $this->title ?></h2>
+    
+    <div id="chartNode" style="width:800px;height:400px;"></div>
+    <div id="legend"></div>
+    <button type="button" class="dijitButtonNode dijitIconPrint" style="width:19px;position:absolute;top:2px;left:754px;" iconClass="dijitIconPrint" id="btnPrint" title="Imprimir" onClick="document.getElementById('btnExcel').style.display='none';this.style.display='none';window.print();this.style.display='block';document.getElementById('btnExcel').style.display='block';">  </button>
+    <button type="button" class="dijitButtonNode dijitIconTable" style="width:19px;position:absolute;top:2px;left:778px;" iconClass="dijitIconTable" id="btnExcel" title="Exportar a Excel" onClick="window.location.href=window.location.href+'&action=excel';">  </button>     
 </div>

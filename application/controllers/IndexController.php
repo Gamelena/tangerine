@@ -248,10 +248,8 @@ class IndexController extends Zend_Controller_Action
                 $file = Zwei_Admin_XML::getFullPath($this->_request->p);
                 $xml->parse($file);
                 
-
-                
-                if (stristr($xml->elements[0]['TYPE'], '/')) {
-                    list($controller, $action) = explode('/', $xml->elements[0]['TYPE']);
+                if (stristr($xml->elements[0]['TYPE'], '.')) {
+                    list($controller, $action) = explode('.', $xml->elements[0]['TYPE']);
                 } else {
                     $action = 'index';                 
                     $controller = $xml->elements[0]['TYPE'];
