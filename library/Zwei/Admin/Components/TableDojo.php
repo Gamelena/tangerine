@@ -270,7 +270,6 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         
         
         $i=0;
-        Debug::write($execute_scripts);
         foreach ($popups as $i => $v) {
             if (!empty($iframes[$i]) && $iframes[$i] == "true") {
                 $out .= "<div dojoType=\"dijit.Dialog\" id=\"{$domPrefix}formDialogo$i\" jsId=\"formDialogo$i\" title=\"{$titles[$i]}\" execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
