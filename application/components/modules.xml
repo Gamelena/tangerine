@@ -9,7 +9,7 @@
     <element name="Componente" target="module" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>
     <element name="En &amp;Aacute;rbol" target="tree" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
     <element name="Enlazable" target="linkable" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
-    <element name="Tipo" target="type" type="dojo_filtering_select" list="xml,xml_php,zend_module,legacy,iframe" visible="true" edit="true" add="true"/>        
+    <element name="Tipo" target="type" type="dojo_filtering_select" list="xml,xml_mvc,zend_module,legacy,iframe" visible="true" edit="true" add="true"/>        
     <element name="Aprobado" target="approved" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
     <element name="Root" target="root" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
     <element name="Orden" target="order" type="dojo_validation_textbox" reg_exp="[\d]+" invalid_message="Solo números" visible="false" edit="true" add="true"/>    
