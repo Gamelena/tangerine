@@ -105,13 +105,13 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	 */
 	public function setAdapter($adapter) 
 	{
+	    $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
 	    if (isset($config->resources->multidb->{$adapter}->params)) {
             /**
              * [TODO]
              * @deprecated bloque backward compatibility
              * 
              */
-	        $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
             $db = Zend_Db::factory($config->resources->multidb->{$adapter});
             $this->_setAdapter($db);
 	    } else {    
