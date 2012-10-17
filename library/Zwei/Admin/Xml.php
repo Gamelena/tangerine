@@ -7,7 +7,7 @@
  * <code>
  * <?php
  * $Xml=new Zwei_Admin_Xml();
- * $Xml->parse('file');
+ * $Xml->parse('file.xml');
  * echo $Xml->elements[0]['NAME'];
  * ?>
  * </code>
@@ -27,7 +27,7 @@ class Zwei_Admin_Xml{
 	var $parents;
 	var $pos;
 
-	function startElement($parser, $name, $attrs)
+	private function startElement($parser, $name, $attrs)
 	{
 		$this->pos++;
 		$this->elements[$this->pos]=$attrs;
@@ -36,7 +36,7 @@ class Zwei_Admin_Xml{
 		array_push($this->parents,$this->pos);
 	}
 
-	function endElement($parser, $name)
+	private function endElement($parser, $name)
 	{
 		array_pop($this->parents);
 	}
@@ -46,7 +46,7 @@ class Zwei_Admin_Xml{
 	 * Constructor
 	 */
 
-	function __construct()
+	public function __construct()
 	{
 		$this->xml_parser = xml_parser_create();
 		xml_set_object($this->xml_parser,$this);
@@ -59,7 +59,7 @@ class Zwei_Admin_Xml{
 	 * @return
 	 */
 
-	function parse($file)
+	public function parse($file)
 	{
 		$this->elements=array();
 		$this->parents=array();
@@ -87,7 +87,7 @@ class Zwei_Admin_Xml{
 		xml_parser_free($this->xml_parser);
 	}
 	
-	static function getFullPath($file) {
+	public function getFullPath($file) {
         if (preg_match('/(.*).php/', $file)) {
             $prefix = BASE_URL ."/components/";
             

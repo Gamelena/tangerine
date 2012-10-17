@@ -87,11 +87,11 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 		} 
 		
 	    if (!empty($this->_adapter)) { 	
-	        $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
-	        $db = Zend_Db::factory($config->resources->multidb->{$this->_adapter});
-	        $this->setDefaultAdapter($db);
+	        $this->setAdapter($this->_adapter);  
 	    }
 	}
+	
+	
 	
 	/**
 	 * Configura el adaptador de base de datos segun valores de atributo de configuración.
@@ -105,9 +105,19 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	 */
 	public function setAdapter($adapter) 
 	{
-        $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
-        $db = Zend_Db::factory($config->resources->multidb->{$adapter});
-        $this->_setAdapter($db);
+	    if (isset($config->resources->multidb->{$adapter}->params)) {
+            /**
+             * [TODO]
+             * @deprecated bloque backward compatibility
+             * 
+             */
+	        $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+            $db = Zend_Db::factory($config->resources->multidb->{$adapter});
+            $this->_setAdapter($db);
+	    } else {    
+            $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
+            $db = $resource->getDb($adapter);
+	    }
 	}
 
     /**

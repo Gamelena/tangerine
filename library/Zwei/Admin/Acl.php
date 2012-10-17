@@ -103,10 +103,24 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 		$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
 
-		$db_params = isset($config->resources->multidb->auth) ? $config->resources->multidb->auth : $config->resources->db;
-		if (empty($db_params)) $db_params = $config->db; //Compatibilidad legacy, ZF Tool crea $config->resources->db en lugar de $config->db.
+		/**
+		 * [TODO] codigo backward compatibility, debiera ser reducido en la version 2 de AdmPortal
+		 */
+		if (isset($config->resources->multidb->auth)) {
+		    if (isset($config->resources->multidb->auth->params)) {
+		        //Este bloque debe deprecarse
+		        $db_params = $config->resources->multidb->auth;
+		        self::$_db = Zend_Db::factory($db_params);
+		    } else {
+		        $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
+		        self::$_db = $resource->getDb("auth");
+		    }
+ 		} else {
+            $db_params = isset($config->resources->db) ? $config->resources->db : $config->db; //[TODO] backward compatibility, $config->db debe deprecarse.
+            self::$_db = Zend_Db::factory($db_params);
+		}
+
 		
-		self::$_db = Zend_Db::factory($db_params);
 		
 		self::$_tb_roles = 'acl_roles';
 		self::$_tb_users = 'acl_users';
