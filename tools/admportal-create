@@ -43,41 +43,40 @@ if [ "$CREATE_DATABASE" = "S" ]; then
 fi
 
 echo " "
-read -p "¿Desea crear y poblar tablas básicas MySQL de AdmPortal? (S/N) (por defecto S):" CREATE_TABLES    
-CREATE_TABLES=${CREATE_TABLES:-S}
-
-if [ "$CREATE_TABLES" = "S" ]; then
-	read -p "Ingrese Usuario con privilegios para importar datos (por defecto root):" DB_ROOT_USER  
-	DB_ROOT_USER=${DB_ROOT_USER:-root}
-    echo " "
-	echo mysql -u$DB_ROOT_USER -p $DB_NAME \< $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql
-	mysql -u$DB_ROOT_USER -p $DB_NAME < $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql
-	echo " "
-	echo mysql -u$DB_ROOT_USER -p $DB_NAME \< $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql
-	mysql -u$DB_ROOT_USER -p $DB_NAME < $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql	
-fi
-
-
-echo " "
 echo Creando definiciones proyecto Zend Framework en $DEST_PATH/web/ 
 zf create project web
-cd web/
-
-echo Borrando prefijo \'Application_\' por defecto.
-sed -i 's/Application_//g' $DEST_PATH/web/.zfproject.xml
-
-
-
 echo Creando proyecto AdmPortal en $DEST_PATH/web
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/configs/ $DEST_PATH/web/application/configs/
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/components/ $DEST_PATH/web/application/components/
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/views/ $DEST_PATH/web/application/views/
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/public/ $DEST_PATH/web/public/
-
 cp  $ZWC_ADMPORTAL_PATH/application/Bootstrap.php $DEST_PATH/web/application/Bootstrap.php
-cp  $ZWC_ADMPORTAL_PATH/application/configs/application.ini $DEST_PATH/web/application/configs/application.ini
 mkdir -p $DEST_PATH/web/library/Zwei/Utils/
 cp  $ZWC_ADMPORTAL_PATH/library/Zwei/Utils/CustomFunctions.php $DEST_PATH/web/library/Zwei/Utils/CustomFunctions.php
+
+echo Borrando prefijo \'Application_\' por defecto.
+sed -i 's/Application_//g' $DEST_PATH/web/.zfproject.xml
+
+cd web/
+
+echo Guardando configuracion de base de datos en $DEST_PATH/web/application/configs/application.ini
+zf configure dbadapter "adapter=$DB_ADAPTER&username=$DB_USER&password=$DB_PASS&dbname=$DB_NAME"
+
+echo Creando definiciones de tablas ZF en $DEST_PATH/web/application/models/DbTable ...
+zf create dbtable.from-database
+
+echo " "
+read -p "¿Desea crear y poblar tablas básicas MySQL de AdmPortal? (S/N) (por defecto S):" CREATE_TABLES
+CREATE_TABLES=${CREATE_TABLES:-S}
+
+if [ "$CREATE_TABLES" = "S" ]; then
+        echo mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql" $DB_NAME
+        mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql" $DB_NAME
+        echo " "
+        echo mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql" $DB_NAME
+        mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql" $DB_NAME
+fi
+
 
 ADMAPPPATH=$ZWC_ADMPORTAL_PATH/application
 PATHESCAPED=$(echo "${ADMAPPPATH}" | sed 's/\//\\\//g')
@@ -162,27 +161,20 @@ if [ "$CREATE_MODELS" = "S" ]; then
     zf create model PersonalInfoModel
     zf create model SettingsModel
     
-  
-    
     echo " "
 
     rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/models/ $DEST_PATH/web/application/models/
 else    
-    rm -rf $DEST_PATH/web/application/models/
     mkdir -p $DEST_PATH/web/application/models/
 fi
 
 
-echo Guardando configuracion de base de datos en $DEST_PATH/web/application/configs/application.ini
-zf configure dbadapter "adapter=$DB_ADAPTER&username=$DB_USER&password=$DB_PASS&dbname=$DB_NAME"
-
-echo Creando definiciones de tablas ZF en $DEST_PATH/web/application/models/DbTable ...
-zf create dbtable.from-database
-
+if [ -a $DEST_PATH/web/application/models/DbTable ];then
 echo Adaptando Tablas ZF a Tablas de AdmPortal
 echo " "
 find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Model_//' {} \;
 find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Zend_Db_Table_Abstract/Zwei_Db_Table/' {} \;
+fi
 
 
 echo \*\*\* Listo, para configurar el servidor con VHOST revise ejemplo en $DEST_PATH/web/docs/README.txt. \*\*\*
@@ -204,7 +196,7 @@ echo RewriteBase /${PWD##*/}/
 echo " "
 echo "Puede copiar este comando para hacerlo vía consola:"
 echo " "
-echo "      sed -e \'1 RewriteBase /${PWD##*/}/\' $DEST_PATH/web/public/.htaccess " 
+echo "      sed -i '1 i\RewriteBase /${PWD##*/}/' $DEST_PATH/web/public/.htaccess " 
 
 echo " "  
 echo \*\*\* Deberá darles permisos de escritura a las carpetas $DEST_PATH/web/log/ y  $DEST_PATH/web/cache/  \*\*\*
@@ -212,7 +204,7 @@ echo " "
 echo "Puede tomar como referencia uno de estos comandos:"
 echo " "
 echo "      chown www-data  $DEST_PATH/web/log/ $DEST_PATH/web/cache/"
-echo "      chown chmod 777 -R  $DEST_PATH/web/log/ $DEST_PATH/web/cache/"
+echo "      chmod 777 -R  $DEST_PATH/web/log/ $DEST_PATH/web/cache/"
 echo " "
 echo Happy AdmPortal\'ing.
 echo " "
