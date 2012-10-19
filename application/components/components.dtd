@@ -33,12 +33,12 @@
     items CDATA #IMPLIED
     links CDATA #IMPLIED
     popups CDATA #IMPLIED
-    popups_iframe (true) #IMPLIED 
+    popups_iframe CDATA #IMPLIED 
     popups_title CDATA #IMPLIED
     popups_icons CDATA #IMPLIED
     popups_width CDATA #IMPLIED
     popups_height CDATA #IMPLIED
-    popups_execute_scripts (true) #IMPLIED
+    popups_execute_scripts CDATA #IMPLIED
     options CDATA #IMPLIED
     on_row_click CDATA #IMPLIED
     on_row_dbl_click CDATA #IMPLIED

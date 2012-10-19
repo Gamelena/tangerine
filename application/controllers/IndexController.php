@@ -237,8 +237,8 @@ class IndexController extends Zend_Controller_Action
 	 *		<component type="some-controller" ...
 	 *		<component type="some-controller/some-action"
 	 *  </code>
-	 * some_controller se convierte a Canonical Case.
-	 * some-action se convierte a Camel Case.   
+	 * some-controller se convierte a CanonicalCase (SomeController).
+	 * some-action se convierte a camelCase (someAction).   
      */  
     public function componentsMvcAction()
     {
@@ -254,7 +254,6 @@ class IndexController extends Zend_Controller_Action
                     $action = 'index';                 
                     $controller = $xml->elements[0]['TYPE'];
                 }
-           
                 $this->view->content =  $this->view->action($action, $controller, 'components', $_REQUEST);
             } else {
                 $this->view->content = "Acceso denegado a módulo";
