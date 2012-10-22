@@ -1,3 +1,4 @@
+Nota: Este archivo se llama README-FIRST.txt y no README.txt, debido a "zf create project" ya crea un archivo llamado README.txt
 
 README
 ======
@@ -8,7 +9,7 @@ Requerimientos Básicos
 http://www.zend.com/community/downloads.
 descomprimirlo en /usr/share/php/Zend y agregar /usr/share/php/ al include_path en php.ini.
 
-- Dojo Toolkit 1.7
+- Dojo Toolkit 1.7 ó 1.8.1 (se detectó un problema con Dojo 1.8.0) 
 http://download.dojotoolkit.org/
 
 - PHP Unit 3.5.15
@@ -34,7 +35,7 @@ Para crear un nuevo proyecto con AdmPortal:
 $ sudo apt-get install zend-framework-bin
 
 Si no se encuentra en los repositorios, basta con agregar al path de archivos ejecutables php los archivos zf.sh y zf.php, 
-este path se puede encuentra con.
+copiar y renombrar zf.sh a zf (borrarle el sufijo .sh). La ruta de estos archivos se puede encontrar con.
 
 $ which php
 
@@ -53,7 +54,8 @@ export PATH=$PATH:$ZWC_ADMPORTAL/tools
     Deberá escoger:
         - Creación automática de Base de Datos y Usuario (S/N) (N por omisión) escoger S en caso de no usar una DB ya existente, sólo se crea la DB si no existe. 
         - Generación automática de tablas y datos base (S/N) (S por omisión) solo se (re)crean los datos básicos para el funcionamiento de AdmPortal.
-    
+        - Copiar modelos, módulos y controladores de AdmPortal (N por omisión) escoger S sólo en caso de necesitar modificar modelos, módulos, controladores/vistas por defecto,
+         tener en cuenta que en este caso, las actualizaciones y mejoras que se hagan en AdmPortal en estos elementos no serán reflejados en la nueva aplicación.    
 
 Perfiles y Usuarios por defecto en caso de generación automática de tablas:
 
