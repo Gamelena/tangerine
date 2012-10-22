@@ -10,7 +10,8 @@ require_once ('Zend/Db/Table/Abstract.php');
 class Zwei_Db_Table extends Zend_Db_Table_Abstract
 {
 	/**
-	 * Campo etiqueta o título
+	 * Campo etiqueta o título, este atributo es obligatorio cuando se usa el modelo para graficar en 2 dimensiones
+	 * ya que especifica cuales son las etiquetas del eje X.
 	 * @var string
 	 */
 	protected $_label;
