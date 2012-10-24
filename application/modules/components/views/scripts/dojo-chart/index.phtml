@@ -1,4 +1,128 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>DojoChart</b> and script/action name <b>index</b></p>
-</div>
+<div id="chartNode" style="width:800px;height:600px"></div>
+<div id="chartLegend"></div>
+<button style="display: none" type="button" class="dijitButtonNode dijitIconPrint" style="width:19px;position:absolute;top:32px;left:16px;" iconClass="dijitIconPrint" id="btnPrint" title="Imprimir" onClick="this.style.display='none';window.print();this.style.display='block';"></button>
+<script>
+    var base_url = "<?php echo BASE_URL?>"
+    var store;
+    var labels = [];
+    var useLabelNative = true;
+	require([
+ 	  "dojox/charting/Chart", 
+	  "dojox/charting/themes/<?php echo $this->chartingTheme ?>",
+ 	  "dojox/charting/axis2d/Default", 
+ 	  "dojox/charting/plot2d/<?php echo $this->chartType ?>",
+      "dojox/charting/action2d/Tooltip",
+      "dojox/charting/action2d/Magnify",
+  	  "dojo/data/ItemFileReadStore", 
+  	  "dojox/charting/widget/Legend",
+  	  "dojo/_base/xhr",
+      "dojo/domReady!"
+ 	],
+    function(Chart, theme, Default, Lines, Tooltip, Magnify, ItemFileReadStore, Legend, xhr){
+	    var options = <?php echo $this->options ?>;
+<?php 
+if (!empty($this->title)): 
+?>
+        options.title = '<?php echo $this->title ?>';
+        options.titleFont = "normal normal normal 15pt Verdana";
+        options.titleGap = 0;
+<?php
+endif;
+
+if (!empty($this->model)) :
+?>
+		var json = xhr.get({
+		    url:"<?php echo $this->url ?>", handleAs:"json",
+		    load: function(resp){
+				if (resp.labels != undefined) {
+					useLabelNative = false;
+					i = 0;
+					dojo.forEach(resp.labels, function(label) {
+						labels.push({
+							text: label,
+							value: i
+						});
+						i++;
+					});
+
+				}	
+		        store = new ItemFileReadStore({
+		        	data: resp
+		        });
+
+		        store.fetch({
+		            onComplete: gotList,
+		            onError: gotError
+		        });
+		    }
+		});
+
+
+<?php
+else :
+?>
+        store = store_grid;
+
+        store.fetch({
+            onComplete: gotList,
+            onError: gotError
+        });
+<?php
+endif;
+?>
+        var gotList = function(items, request){
+            var chart = new Chart("chartNode", options);
+            chart.setTheme(theme);
+            chart.addPlot("default", {
+                type: "<?php echo $this->chartType ?>",
+                font: "Arial, Verdana",
+                animate: {duration: 1800}    
+            });
+
+     
+            var item = {};
+            var itemsList = [];
+            var x = 0;
+
+            chart.addAxis("x", {vertical: true, fixLower: "major", fixUpper: "major" });
+
+            dojo.forEach(items, function(i) {
+            	if (useLabelNative) { labels.push(store.getLabel(i)); }  
+            	itemsList = [];
+            	item = store.getValue(i, "<?php echo $this->columns ?>");
+				x = 0;
+				dojo.forEach(store.getValues(i, "<?php echo $this->yTarget ?>"), function(value) {
+					itemsList.push({x: x, y: value, tooltip:"<b>" + item + "</b><br/>"+labels[x].text+"<br/>" + value});
+					x++;
+				});	
+
+ 
+                //item.y = parseInt(store.getValue(i, "<?php echo $this->yTarget ?>"), 10);
+                //item.text = store.getValue(i, "<?php echo $this->yTitle ?>") + "<br/><strong>" + store.getValue(i, "<?php echo $this->xTarget ?>") + "</strong>";
+                //item.tooltip = store.getValue(i, "<?php echo $this->yTarget ?>");
+                chart.addSeries(item, itemsList);
+
+            });
+
+            chart.addAxis("y", {'labels': labels });
+            
+            var tip = new Tooltip(chart, "default");
+            
+            // Create the magnifier
+            var mag = new Magnify(chart, "default");
+            
+            // Render the chart!
+            chart.render();
+            
+            // Create the legend
+            var legend = new dojox.charting.widget.Legend({ chart: chart }, "chartLegend");
+        };
+        
+        var gotError = function(error, request){
+            console.debug(request);
+            console.debug(error);
+            alert("¡Vaya! ha ocurrido un error: " +  error);
+        };
+
+    });
+</script>
