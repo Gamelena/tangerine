@@ -2,7 +2,7 @@
 <!ELEMENT component (element*,tab*)>
 <!ATTLIST component
     name CDATA #IMPLIED
-    type (table|table_dojo|settings|settings_dojo|php_info|curl_dojo|google_chart|dojo-chart.pie|dojo-chart.bars|dojo-chart.lines) #REQUIRED
+    type (table|table_dojo|settings|settings_dojo|php_info|curl_dojo|google_chart|dojo-chart|dojo-chart.pie|dojo-chart.bars|dojo-chart.lines) #REQUIRED
     functions CDATA #IMPLIED  
     excel (true|false) #IMPLIED
     change_password (true|false) #IMPLIED
@@ -53,7 +53,9 @@
     chart_x_target CDATA #IMPLIED
     chart_y_label CDATA #IMPLIED
     chart_y_target CDATA #IMPLIED
-    chart_theme (Adobebricks|Algae|Bahamation|BlueDusk|Charged|Chris|Claro|CubanShirts|Desert|Distinctive|Dollar|Electric|Grasshoper|Grasslands|GreySkies|Harmony|IndigoNation|Ireland|Julie|MiamiNice|Midwest|Minty|PrimaryColors|PurpleRain|Renkoo|RoyalPurples|SageToLime|Shrooms|Threed|Tom|Tufte|WatersEdge|Wetland) #IMPLIED
+    chart_columns CDATA #IMPLIED
+    chart_dojo_type CDATA #IMPLIED
+    chart_dojo_theme (Adobebricks|Algae|Bahamation|BlueDusk|Charged|Chris|Claro|CubanShirts|Desert|Distinctive|Dollar|Electric|Grasshoper|Grasslands|GreySkies|Harmony|IndigoNation|Ireland|Julie|MiamiNice|Midwest|Minty|PrimaryColors|PurpleRain|Renkoo|RoyalPurples|SageToLime|Shrooms|Threed|Tom|Tufte|WatersEdge|Wetland) #IMPLIED
     fields CDATA #IMPLIED
     order CDATA #IMPLIED
     group_by CDATA #IMPLIED
