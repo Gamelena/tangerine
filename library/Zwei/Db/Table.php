@@ -10,19 +10,31 @@ require_once ('Zend/Db/Table/Abstract.php');
 class Zwei_Db_Table extends Zend_Db_Table_Abstract
 {
 	/**
-	 * Campo etiqueta o título, este atributo es obligatorio cuando se usa el modelo para graficar en 2 dimensiones
-	 * ya que especifica cuales son las etiquetas del eje X.
-	 * @var string
+	 * Campo etiqueta o título, util cuando se usa el modelo para graficar en 2 dimensiones
+	 * ya que especifica cual es el índice de las etiquetas del eje X.
+	 * 
+	 * (*) Es obligatorio inicializar $this->_label o $this->_labels para graficar en 2D.
+	 * 
+	 * @var string | false
 	 */
-	protected $_label;
+	protected $_label = false;
+	/**
+	 * Array de etiquetas o títulos, util cuando se usa el modelo para graficar en 2 dimensiones.
+	 * ya que especifica cuales son las etiquetas del eje X.
+	 * 
+	 * (*) Es obligatorio inicializar $this->_label o $this->_labels para graficar en 2D.
+	 * 
+	 * @var array | false
+	 */
+	protected $_labels = false;
 	/**
 	 * Tipo de bitacora.
-	 * @var boolean|array
+	 * @var boolean | array
 	 */
 	static protected $_defaultLogMode = false;
 	
 	/**
-	 * Campos sobre los cuales se puede realizar la búsqueda por defecto, aunque esto tambien se puede hacer vía XML
+	 * Campos sobre los cuales se puede realizar la búsqueda por defecto, esto tambien se puede hacer vía XML
 	 * @var array
 	 */
 	protected $_search_fields = false;
@@ -241,7 +253,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	}
 
 	/**
-	 * Retorna el label del datastore dojo
+	 * Retorna el índice del label del datastore dojo
 	 * @return string
 	 */
 
@@ -250,6 +262,16 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 		return $this->_label;
 	}
 
+	/**
+	 * Retorna el array de labels que etiquetan al recorset (ejemplo típico, un intervalo de fechas).
+	 * @return string
+	 */
+
+	public function getLabels()
+	{
+		return $this->_labels;
+	}
+	
 	/**
 	 * Agregar string javascript para añadir validación adicional para la busqueda,
 	 * sobrescribiendo metodo en Modelo a usar

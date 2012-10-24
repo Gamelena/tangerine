@@ -189,6 +189,7 @@ class ObjectsController extends Zend_Controller_Action
             //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
             if ($oModel->overloadData($data) !== false) {
                 $data = $oModel->overloadData($data);
+                $numRows = count($data);
             }    
 
             //si ?format=excel exportamos el rowset a excel
@@ -213,10 +214,16 @@ class ObjectsController extends Zend_Controller_Action
                                'todo'=>$this->_response_content['todo']);
                 $content = Zend_Json::encode($data);
             } else {
+
                 foreach ($data as $rowArray) {
                     $collection[$i]=array();
                     foreach ($rowArray as $column => $value) {
-                        $collection[$i][$column] = utf8_encode(html_entity_decode($value));
+                        if (!is_array($value)) $collection[$i][$column] = utf8_encode(html_entity_decode($value));
+                        else {
+                            foreach ($value as $column2 => $value2) {
+                                $collection[$i][$column][$column2] = utf8_encode(html_entity_decode($value2));
+                            }
+                        }
                     }
                     $i++;
                 }
@@ -239,8 +246,17 @@ class ObjectsController extends Zend_Controller_Action
                     }
                     $content = new Zend_Dojo_Data('id', @$collection);
                 }
-                if (method_exists($oModel,'getLabel')) {
+
+                /**
+                 * Si esta especificado $oModel->_label se especifica el ÍNDICE del atributo label, standard dojo store,
+                 * Si esta especificado $oModel->_labels se especifica el ARRAY de labels, NO standard dojo store pero necesario para algunos casos.
+                 */
+                if ($oModel->getLabel()) {
                     $content->setLabel($oModel->getLabel());
+                } 
+                
+                if ($oModel->getLabels()) {
+                    $content->setMetadata(array("labels" => $oModel->getLabels()));
                 }
                 
                 if (isset($numRows)) $content->setMetadata('numRows', $numRows);
