@@ -1,4 +1,13 @@
-<div id="chartNode" style="width:800px;height:600px"></div>
+<style type="text/css">
+    #chartNode {
+    	width: 800px;
+    	height:600px;
+		background:url(<?php echo BASE_URL; ?>css/i/loading.gif) #ffffff;
+		background-repeat: no-repeat;
+		background-position: center;
+	}	
+</style>
+<div id="chartNode"></div>
 <div id="chartLegend"></div>
 <button style="display: none" type="button" class="dijitButtonNode dijitIconPrint" style="width:19px;position:absolute;top:32px;left:16px;" iconClass="dijitIconPrint" id="btnPrint" title="Imprimir" onClick="this.style.display='none';window.print();this.style.display='block';"></button>
 <script>
