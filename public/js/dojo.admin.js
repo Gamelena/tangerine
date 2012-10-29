@@ -589,6 +589,7 @@ function popupGrid(module, iframe, primary, title){ //proximo reemplazo de popup
 		
 	} else {
 		//popupIframe(module+id+"&uri="+escape(dojo.byId('data_url').value));//[FIXME] implementar lo de abajo
+		if (title) formDlg.set('title', title);
 		formDlg.set('href', base_url+module+id+"&uri="+escape(dojo.byId('data_url').value));
 		formDlg.show();
 		//popup(module+id+"&uri="+escape(dojo.byId('data_url').value)); 
