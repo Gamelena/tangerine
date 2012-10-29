@@ -87,6 +87,11 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	 * @var array
 	 */
     protected $_query_params;
+    /**
+     * Se asocia un título al recordset modelo, el cual puede ir en metadata de archivo json. 
+     * @var string
+     */
+    protected $_title = false;
     
 	/**
      * Post Constructor.
@@ -122,7 +127,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	    if (isset($config->resources->multidb->{$adapter}->params)) {
             /**
              * [TODO]
-             * @deprecated bloque backward compatibility
+             * @deprecated bloque backward compatibility, incluyendo $config
              * 
              */
             $db = Zend_Db::factory($config->resources->multidb->{$adapter});
@@ -264,13 +269,22 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 
 	/**
 	 * Retorna el array de labels que etiquetan al recorset (ejemplo típico, un intervalo de fechas).
-	 * @return string
+	 * @return array
 	 */
 
 	public function getLabels()
 	{
 		return $this->_labels;
 	}
+	/**
+	 * Retorna un título para el recordset de ser requerido.
+	 * @return string
+	 */
+	public function getTitle()
+	{
+	    return $this->_title;
+	}
+	
 	
 	/**
 	 * Agregar string javascript para añadir validación adicional para la busqueda,

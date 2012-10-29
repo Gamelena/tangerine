@@ -259,6 +259,10 @@ class ObjectsController extends Zend_Controller_Action
                     $content->setMetadata(array("labels" => $oModel->getLabels()));
                 }
                 
+                if ($oModel->getTitle()) {
+                    $content->setMetadata(array("title" => $oModel->getTitle()));
+                }
+                
                 if (isset($numRows)) $content->setMetadata('numRows', $numRows);
                 
             }
