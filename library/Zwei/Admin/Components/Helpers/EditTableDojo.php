@@ -207,7 +207,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             	$params=array();
             	if (isset($node['ADD']) && ($node['ADD'] == "true" || $node['ADD'] == "readonly") && $node['TYPE'] != "pk_original") {
             		$pfx='_add';
-            		if ($node['TYPE']=='dojo_filtering_select'){
+            		if ($node['TYPE'] == 'dojo_filtering_select' || $node['TYPE'] == 'dojo_checkbox'){
               			$this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$pfx}{$j}').get('value'), \r\n";
             		} else {
              			$this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : document.getElementById('edit{$i}_{$pfx}{$j}').value, \r\n";
