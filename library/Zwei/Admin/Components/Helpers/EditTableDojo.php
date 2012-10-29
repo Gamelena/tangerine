@@ -74,6 +74,17 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 					// workaround bug dojo para limpiar selects despues de insertar
 					// de otra forma notifica como opción NO valida una opción SI válida y confunde a usuario
 					$clean_filtering_selects .= "\t\t\t\t dijit.byId('edit{$i}_{$pfx}{$j}').set('value', '');\r\n";
+				                
+				} else if ($node['TYPE'] == "dojo_checkbox") {  
+                    $defaultValue = isset($node['DEFAULT_VALUE']) ? $node['DEFAULT_VALUE'] : '1';
+                    $defaultEmpty = isset($node['DEFAULT_EMPTY']) ? $node['DEFAULT_VALUE'] : '0';
+                    //check checkbox
+                    if (isset($node['CHECKED']) && $node['CHECKED'] == 'true') {
+                        $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$pfx}{$j}').set('value','$defaultValue'); dijit.byId('edit{$i}_{$pfx}{$j}').set('checked', true);\r\n";
+                    } else {    
+                    //uncheck checkbox 
+                        $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$pfx}{$j}').set('value','$defaultEmpty'); dijit.byId('edit{$i}_{$pfx}{$j}').set('checked', false);\r\n";
+                    }               	
 				} else if ($node['TYPE'] == "select") {
 					$this->_out .= "\t\t\t\t selectValueSet('edit{$i}_{$pfx}{$j}', '0');\r\n";
 				} else if (!empty($this->layout[0]['SEARCH_TABLE_TARGET']) && ($this->layout[0]['SEARCH_TABLE_TARGET'] == $node['TARGET'])){
@@ -207,7 +218,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             	$params=array();
             	if (isset($node['ADD']) && ($node['ADD'] == "true" || $node['ADD'] == "readonly") && $node['TYPE'] != "pk_original") {
             		$pfx='_add';
-            		if ($node['TYPE'] == 'dojo_filtering_select' || $node['TYPE'] == 'dojo_checkbox'){
+            		if ($node['TYPE']=='dojo_filtering_select'){
               			$this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$pfx}{$j}').get('value'), \r\n";
             		} else {
              			$this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : document.getElementById('edit{$i}_{$pfx}{$j}').value, \r\n";
