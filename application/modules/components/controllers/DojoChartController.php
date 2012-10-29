@@ -16,55 +16,60 @@ class Components_DojoChartController extends Zend_Controller_Action
     private $_base_dojo_folder = '/dojotoolkit';
     /**
      * 
-     * Enter archivo xml
+     * Nombre archivo xml
      * @var string
      */
     private $_page;
     /**
      * 
-     * Array de archivo xml
-     * @var array
+     * Objeto XML
+     * @var Zwei_Admin_Xml
      */
-    private $_layout;
+    private $_xml;
     
     public function init()
     {
         $this->_helper->layout()->disableLayout();
         
         $this->_page = $this->_request->getParam('p');
-        $xml = new Zwei_Admin_Xml();
-        $file = $xml->getFullPath($this->_page);
-        $xml->parse($file);
-        $this->_layout = $xml->elements;
+        $file = Zwei_Admin_Xml::getFullPath($this->_page);
+        $this->_xml = new Zwei_Admin_Xml($file, 0, true);
         
         $this->view->dojoStyle = $this->_dojo_style;
         $this->view->baseDojo = $this->_base_dojo_folder;
-        $this->view->title = isset($this->_layout[0]['NAME']) ? $this->_layout[0]['NAME'] : "";
+        $this->view->title = $this->_xml->getAttribute("name") ? $this->_xml->getAttribute("name") : "";
          
         //Si existe $this->_layout[0]['TARGET'] se usa el modelo especificado en el XML, 
         //pero se sigue usando el resto de los parametros
-        if (isset($this->_layout[0]['TARGET'])) {
-            $this->view->model = $this->_layout[0]['TARGET'];
+        if ($this->_xml->getAttribute("target")) {
+            $this->view->model = $this->_xml->getAttribute("target");
         }
         
         $uri = html_entity_decode(urldecode($this->_request->getParam('uri')));
         if (!empty($uri)) { 
             $aUri = parse_url($uri);
-            $aParams = array(); 
-            
-            parse_str($aUri['query'], $aParams);
-            
-            if (isset($this->_layout[0]['TARGET'])) $aParams['model'] = $this->_layout[0]['TARGET'];
-            if (isset($this->_layout[0]['GROUP_BY'])) $aParams['group'] = $this->_layout[0]['GROUP_BY'];
-    
-            if (!empty($aUri)) $this->view->url = $aUri['scheme'].'://'.$aUri['host'].$aUri['path'].'?'.str_replace('%3B', ';',http_build_query($aParams)); 
+            if (!empty($aUri)) {
+                $aParams = array(); 
+                
+                parse_str($aUri['query'], $aParams);
+                
+                if ($this->_xml->getAttribute("target")) { $aParams['model'] = $this->_xml->getAttribute("target");}
+                else if ($this->_request->getParam("target")) { $aParams['model'] = $this->_request->getParam("target");}
+                
+                if ($this->_xml->getAttribute("group_by")) { $aParams['group'] = $this->_xml->getAttribute("group_by");}
+                else if ($this->_request->getParam("group_by")) { $aParams['group'] = $this->_request->getParam("group_by");}
+                
+                $aParams['p'] = $this->_request->getParam('p');
+        
+                $this->view->url = $aUri['scheme'].'://'.$aUri['host'].$aUri['path'].'?'.str_replace('%3B', ';',http_build_query($aParams));
+            } 
         }
         //Eje Y
-        $this->view->yTarget = $this->_layout[0]['CHART_Y_TARGET'];
-        if (isset($this->_layout[0]['CHART_Y_LABEL'])) $this->view->yTitle = $this->_layout[0]['CHART_Y_LABEL'];
+        $this->view->yTarget = $this->_xml->getAttribute("chart_y_target");
+        if ($this->_xml->getAttribute("chart_y_label")) $this->view->yTitle = $this->_xml->getAttribute("chart_y_label");
         
-        $this->view->options = isset($this->_layout[0]['OPTIONS']) ? $this->_layout[0]['OPTIONS'] : "new Object()";
-        $this->view->chartingTheme = isset($this->_layout[0]['CHART_DOJO_THEME']) ? $this->_layout[0]['CHART_DOJO_THEME'] : "Claro";
+        $this->view->options = $this->_xml->getAttribute("options") ? $this->_xml->getAttribute("options") : "new Object()";
+        $this->view->chartingTheme = $this->_xml->getAttribute("chart_dojo_theme") ? $this->_xml->getAttribute("chart_dojo_theme") : "Claro";
         
         if (!empty($this->_request->style)) $this->_dojo_style = $this->_request->style;
     }
@@ -72,13 +77,23 @@ class Components_DojoChartController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->xTarget = $this->_layout[0]['CHART_X_TARGET'];
-        $this->view->columns = $this->_layout[0]['CHART_COLUMNS'];
+        $this->view->xTarget = $this->_xml->getAttribute("chart_x_target");
+        $this->view->items = $this->_xml->getAttribute("chart_items");
+
+        if ($this->_request->getParam("chart_items")) {
+            $this->view->items = $this->_request->getParam("chart_items");
+            $this->view->url .= "&chart_items=" . $this->_request->getParam("chart_items");
+        }
+        
+        if ($this->_request->getParam("chart_items_description")) {
+            $this->view->items = $this->_request->getParam("chart_items_description");
+            $this->view->url .= "&chart_items_description=" . $this->_request->getParam("chart_items_description");            
+        }
         
         
-        if (isset($this->_layout[0]['CHART_X_LABEL'])) $this->view->xTitle = $this->_layout[0]['CHART_X_LABEL'];
+        if ($this->_xml->getAttribute("chart_x_label")) $this->view->xTitle = $this->_xml->getAttribute("chart_x_label");
         
-        $this->view->chartType = (isset($this->_layout[0]['CHART_DOJO_TYPE'])) ? $this->_layout[0]['CHART_DOJO_TYPE'] : "Lines";
+        $this->view->chartType = $this->_xml->getAttribute("chart_dojo_type") ?  $this->_xml->getAttribute("chart_dojo_type") : "Lines";
     }
 
     public function pieAction()
@@ -88,23 +103,11 @@ class Components_DojoChartController extends Zend_Controller_Action
 
     public function barsAction()
     {
-        $this->view->xTarget = $this->_layout[0]['CHART_X_TARGET'];
-        if (isset($this->_layout[0]['CHART_X_LABEL'])) $this->view->xTitle = $this->_layout[0]['CHART_X_LABEL'];
+
     }
 
     public function linesAction()
     {
-        $this->view->xTarget = $this->_layout[0]['CHART_X_TARGET'];
-        $this->view->columns = $this->_layout[0]['CHART_COLUMNS'];
-        
-        
-        if (isset($this->_layout[0]['CHART_X_LABEL'])) $this->view->xTitle = $this->_layout[0]['CHART_X_LABEL'];
+
     }
 }
-
-
-
-
-
-
-
