@@ -16,7 +16,7 @@
  * $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
  * $db = Zend_Db::factory($config->resources->multidb->dn);
  * $select = $db->select();
- * $object = new Zend_Db_Object($form, $select);
+ * $object = new Zwei_Db_Object($form, $select);
  * $select = $object->select();  
  * </code>
  * @category Zwei
