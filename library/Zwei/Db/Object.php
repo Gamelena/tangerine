@@ -44,12 +44,16 @@ class Zwei_Db_Object
     
     /**
      * 
-     * @param Zwei_Utils_Form
+     * @param Zwei_Utils_Form | array
      * @param Zwei_Db_Select
      */
     public function __construct($form, $select=false)
     {
-        $this->_form = $form;
+        if (is_a($form, 'Zwei_Db_Object')) {
+            $this->_form = $form;
+        } else { //en este punto $form debe ser array
+            $this->_form = new Zwei_Utils_Form($form);
+        }    
         if (!empty($form->model)) {
             $model = Zwei_Utils_String::toClassWord($form->model)."Model";
             $this->_model = new $model;
