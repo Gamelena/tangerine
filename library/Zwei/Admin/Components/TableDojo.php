@@ -29,7 +29,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
      * 
      * @var int
      */
-    private $_version = 9;//actualizar para forzar update de javascript [TODO] hacer administrable
+    private $_version = 10;//actualizar para forzar update de javascript [TODO] hacer administrable
     /**
      * 
      * @var Zwei_Db_Table
@@ -81,7 +81,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $edittable->getLayout();
         
         $id = $edittable->layout[1]['TARGET'];
-        if(isset($request[$id])) $edittable->setId($request[$id]);
+        if (isset($request[$id])) $edittable->setId($request[$id]);
 
         //$params = $this->getRequested_params();
 
@@ -282,8 +282,8 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                     $execute = 'executeScripts="true"'; 
                 }   
                 
-                $pwidth = (!empty($popups_width[$i])) ? "width:{$popups_width[$i]}px;" : '';
-                $pheight = (!empty($popups_height[$i])) ? "height:{$popups_height[$i]}px;" : '';
+                $pwidth = (!empty($popups_width[$i])) ? "min-width:{$popups_width[$i]}px;" : '';
+                $pheight = (!empty($popups_height[$i])) ? "min-height:{$popups_height[$i]}px;" : '';
                 
                 $out .= "<div dojoType=\"$dojoType\" style=\"$pwidth $pheight\" $execute id=\"{$domPrefix}formDialogo$i\" jsId=\"formDialogo$i\" title=\"{$titles[$i]}\"  onload=\"global_opc='edit';showtab('tabedit_ctrl1', 'tabedit1', $iframe);$initModule\"  execute=\"modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
