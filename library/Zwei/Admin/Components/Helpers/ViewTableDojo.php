@@ -334,7 +334,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
                 $ClassModel = Zwei_Utils_String::toClassWord($s)."Model";
                 $Model = new $ClassModel();
                 $select = $Model->select();
-                Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
+                Zwei_Utils_Debug::writeBySettings( (method_exists( $select, "__toString" )? $select->__toString():"" ), "query_log");
                 $result = $Model->fetchAll($select);
                 $table_pk = (!empty($search_table_pk[$j])) ? $search_table_pk[$j] :'id';
                 $table_field = (!empty($search_table_field[$j])) ? $search_table_field[$j] :'title';
