@@ -393,7 +393,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $out = "";
         $node=@$this->layout[0];
         //$this->format_date = (@$this->layout[0]['SEARCH_DOJO_TYPE']=="dijit.form.DateTextBox")? 'true' : 'false';
-        //$this->search_format = (@$this->layout[0]['SEARCH_FORMAT'])? $this->layout[0]['SEARCH_FORMAT'] : "'equals'";
+        $this->search_format = (@$this->layout[0]['SEARCH_FORMAT'])? $this->layout[0]['SEARCH_FORMAT'] : "'equals'";
         $this->between = 'false';
         $this->search_in_fields='false';
 
