@@ -89,7 +89,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         }
 
         if (!isset($this->layout[0]['SEARCH_HIDE_SUBMIT'])) {
-            $out .= "\r\n<table $dojotype $plugins $on_row_click $on_row_dbl_click id=\"main_grid\" jsId=\"main_grid\" $store clientSort=\"true\" style=\"width:{$width_table}px; height: 320px;\" selectable=\"true\" rowSelector=\"20px\" rowsPerPage=\"10\" noDataMessage=\"Sin datos.\">\r\n<thead><tr>\r\n";
+            $out .= "\r\n<table $dojotype $plugins $on_row_click $on_row_dbl_click id=\"main_grid\" jsId=\"main_grid\" $store clientSort=\"true\" style=\"width:{$width_table}px; height: 320px;\" selectable=\"true\" rowSelector=\"20px\" rowsPerPage=\"25\" noDataMessage=\"Sin datos.\">\r\n<thead><tr>\r\n";
     
             for ($i=1; $i<$count; $i++) {
                 $target = (!isset($this->layout[$i]['FIELD'])) ? @$this->layout[$i]['TARGET'] : $this->layout[$i]['FIELD'];
