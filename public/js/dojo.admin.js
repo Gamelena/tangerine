@@ -116,11 +116,13 @@ function loadModuleTab(url, moduleId, moduleTitle)
 			if (dijit.byId('mainTabModule'+moduleId)) dijit.byId('mainTabModule'+moduleId).destroy();
 			
 			var tab = tabContainer.addChild(
-					new dijit.layout.ContentPane({
+					new dojox.layout.ContentPane({
 						title:moduleTitle, 
 						closable:true, 
 						id: 'mainTabModule'+moduleId, 
 						jsId: 'mainTabModule'+moduleId,
+						executeScripts: true,
+						scriptHasHooks: true,
 						href: base_url+url,
 						style: {background: 'transparent', top: 0},
 						selected: true
@@ -223,20 +225,22 @@ function cargarArbolMenu(layout)
 }
 
 
-function cargarTabsPanelCentral(component, action, primary, iframe)
+function cargarTabsPanelCentral(component, action, primary, domPrefix)
 {
 	global_opc = action;
-	if (iframe == undefined) var iframe = false;
+	//if (iframe == undefined) var iframe = false;
 	if (primary == undefined) var primary = "id";
-
+	if (domPrefix == undefined) var domPrefix = "";
+	
 	var formDlg;
-	if (action == 'edit') formDlg = dijit.byId('formDialogoEditar');
+	if (action == 'edit') formDlg = dijit.byId(domPrefix + 'formDialogoEditar');
 	//else if (action == 'clone') formDlg = dijit.byId('formDialogoClonar');
-	else formDlg = dijit.byId('formDialogo');
+	else formDlg = dijit.byId(domPrefix + 'formDialogo');
 
 	if (action == 'edit' || action == 'clone') {
 		try {
-			var items = main_grid.selection.getSelected();
+			console.debug(domPrefix + 'main_grid');
+			var items = dijit.byId(domPrefix + 'main_grid').selection.getSelected();
 			var id = "&"+primary+"="+ eval("items[0]."+primary);
 			console.debug(id);
 		} catch(e) {
@@ -248,31 +252,32 @@ function cargarTabsPanelCentral(component, action, primary, iframe)
 		var id = '';
 	}	
 	
-	if (iframe) {
-		ifrmDlg.src = base_url+'index/tabs?p='+component+'&action='+action+id+"&is_iframe=true";
-	} else {
+	//if (iframe) { //ifrmDlg!?
+	//	ifrmDlg.src = base_url+'index/tabs?p='+component+'&action='+action+id+"&is_iframe=true";
+	//} else {
 		formDlg.set('href',base_url+'index/tabs?p='+component+'&action='+action+id);
-	}	
+	//}	
 	formDlg.show();
 }
 
 
 
-function cargarDatos(model, search_in_fields, format_date, cast, between, formato, component) 
+function cargarDatos(model, search_in_fields, format_date, cast, between, formato, component, domPrefix) 
 {
 	if(search_in_fields==undefined)var search_in_fields=false;
 	if(format_date==undefined)var format_date=false;
 	if(cast==undefined)var cast=false;
 	if(between==undefined)var between=false;
 	if(formato==undefined)var formato='json';
-	if(component==undefined)var component=false;	
+	if(component==undefined)var component=false;
+	if(domPrefix==undefined)var domPrefix='';	
 	
 	try{
-		var search = dijit.byId("search").get("value");
+		var search = dijit.byId(domPrefix+"search").get("value");
 		if(format_date){
 			search = dojo.date.locale.format(search, {datePattern: "yyyy-MM-dd", selector: "date"});
-			if(dijit.byId("search2") != undefined){
-				var search2 = dijit.byId("search2").get("value");
+			if(dijit.byId(domPrefix+"search2") != undefined){
+				var search2 = dijit.byId(domPrefix+"search2").get("value");
 				search2 = dojo.date.locale.format(search2, {datePattern: "yyyy-MM-dd", selector: "date"});
 				search+=";"+search2;
 			}	
@@ -282,7 +287,7 @@ function cargarDatos(model, search_in_fields, format_date, cast, between, format
 	}
 	
 	try{
-		var id = "&id="+document.getElementById("id").value;
+		var id = "&id="+document.getElementById(domPrefix+"id").value;
 	}catch(e){
 		var id="";
 	}
@@ -293,7 +298,7 @@ function cargarDatos(model, search_in_fields, format_date, cast, between, format
     if(search_in_fields){
     	var search_fields_lenght;
     	try{
-    		search_fields_length = dojo.byId('search_form').elements['search_fields'].length;
+    		search_fields_length = dojo.byId(domPrefix+'search_form').elements['search_fields'].length;
     	}catch(e){
     		console.debug(e);
     		search_fields_length = 0;
@@ -301,9 +306,9 @@ function cargarDatos(model, search_in_fields, format_date, cast, between, format
     	
     	for(var i = 0; i < search_fields_length; i++)
     	{
-    		if(dojo.byId('search_form').elements['search_fields'][i].checked)
+    		if(dojo.byId(domPrefix+'search_form').elements['search_fields'][i].checked)
     		{
-	   			search_fields+=dojo.byId('search_form').elements['search_fields'][i].value+';';
+	   			search_fields+=dojo.byId(domPrefix+'search_form').elements['search_fields'][i].value+';';
 	   		}
 	   	}
     	search_fields=(search_fields!='')? '&search_fields='+search_fields:'';
@@ -312,7 +317,7 @@ function cargarDatos(model, search_in_fields, format_date, cast, between, format
     var search_format;
     
     try{
-    	search_format='&search_format='+ document.getElementById('search_format[0]').value;
+    	search_format='&search_format='+ document.getElementById(domPrefix+'search_format[0]').value;
     }catch(e){
     	search_format='';
     }	
@@ -323,31 +328,34 @@ function cargarDatos(model, search_in_fields, format_date, cast, between, format
     search_url = base_url+'objects?model='+model+'&format='+formato+'&search='+search+search_fields+id+search_format+search_between+component_param;
     
     try{
-    	dojo.byId('data_url').value=search_url;
+    	dojo.byId(domPrefix+'data_url').value=search_url;
     }catch(e){}	
     
  
     if(formato=='excel'){
     	dojo.byId('ifrm_process').src=search_url;
     }else{
+    	console.debug(domPrefix+'main_grid');
         var store = new dojo.data.ItemFileWriteStore({
             url: search_url,
             clearOnClose: true,
             urlPreventCache: true
-        });    	
-    	main_grid.setStore(store);   	
+        });
+        console.debug(domPrefix+'main_grid');
+    	dijit.byId(domPrefix+'main_grid').setStore(store);   	
     }	
 }
 
 
-function searchMultiple(model, fields, search_format,  between, response_format, component)
+function searchMultiple(model, fields, search_format,  between, response_format, component, domPrefix)
 {
 	if (response_format==undefined) {var response_format='json';}
 	if (search_format==undefined) {var search_format=false;}
 	if (between==undefined) {var between=false;}
-	if (component==undefined) {var component=false;}	
+	if (component==undefined) {var component=false;}
+	if (domPrefix==undefined) {var domPrefix='';}	
 	
-	var form=dojo.byId('search_form');
+	var form=dojo.byId(domPrefix+'search_form');
 	var search='';
 	var aux_search;
 	
@@ -384,7 +392,7 @@ function searchMultiple(model, fields, search_format,  between, response_format,
 	var search_url = base_url+'objects?model='+model+'&search='+search+'&search_fields='+fields+'&format='+response_format+'&'+search_format+search_between+'&search_type=multiple';
 	
     try{
-    	dojo.byId('data_url').value=search_url;
+    	dojo.byId(domPrefix+'data_url').value=search_url;
     }catch(e){}	
 	
 	
@@ -396,22 +404,24 @@ function searchMultiple(model, fields, search_format,  between, response_format,
             clearOnClose: true,
             urlPreventCache: true
         });    	
-    	main_grid.setStore(store);   	
+        dijit.byId(domPrefix+'main_grid').setStore(store);   	
     }	
 	//console.debug(form.elements);
 }
 
-function loadDataUrl(model, fields, search_format,  between, response_format)
+function loadDataUrl(model, fields, search_format,  between, response_format, domPrefix)
 {
 	if (response_format==undefined) {var response_format='json';}
 	if (search_format==undefined) {var search_format=false;}
 	if (between==undefined) {var between=false;}
+	if (domPrefix==undefined) {var between='';}
 	
 	if (search_format) search_format='&search_format='+search_format;	
 	var search_between=between!=false?'&between='+between:'';
 	var search = '';
 	
-	var form=dojo.byId('search_form');
+	var form=dojo.byId(domPrefix+'search_form');
+	console.debug(domPrefix+'search_form');
 	dojo.forEach(form.elements, function(entry, i){
 		
 		if(entry.id!=''){
@@ -437,7 +447,7 @@ function loadDataUrl(model, fields, search_format,  between, response_format)
 	
 	var search_url = base_url+'objects?model='+model+'&search='+search+'&search_fields='+fields+'&format='+response_format+'&'+search_format+search_between+'&search_type=multiple';
 	
-   	dojo.byId('data_url').value = search_url;
+   	dojo.byId(domPrefix+'data_url').value = search_url;
 }
 
 
@@ -491,9 +501,10 @@ function eliminarRegistro(model, id) {
 }
 
 
-function execFunction(method, params, object, primary){
+function execFunction(method, params, object, primary, domPrefix){
 
 	if (primary == undefined) var primary = 'id'; 
+	if (domPrefix == undefined) var domPrefix = '';
 	try {
 		var items = main_grid.selection.getSelected();
 		var id = "&"+primary+"="+ eval("items[0]."+primary);
@@ -501,7 +512,7 @@ function execFunction(method, params, object, primary){
 		console.debug(e);
 		var id = '';
 	}	
-    document.getElementById('ifrm_process').src=base_url+'functions?method='+method+'&params='+params+id+"&object="+object+"&uri="+escape(dojo.byId('data_url').value);
+    document.getElementById('ifrm_process').src=base_url+'functions?method='+method+'&params='+params+id+"&object="+object+"&uri="+escape(dojo.byId(domPrefix+'data_url').value);
 }
 
 /*
@@ -531,15 +542,16 @@ function popupGrid(module, iframe, primary, i){
 }
 */
 
-function popupGrid(module, iframe, primary, title){ //proximo reemplazo de popupGrid, pero hay que arreglar bugs
+function popupGrid(module, iframe, primary, title, domPrefix){ //proximo reemplazo de popupGrid, pero hay que arreglar bugs
 	if (primary == undefined) var primary = 'id'; 
 	if (iframe == undefined) var iframe=false;
+	if (domPrefix == undefined) var domPrefix='';
 	//if (title == undefined) var i = '0';
 
-	var formDlg = dijit.byId('formDialogo0');
+	var formDlg = dijit.byId(domPrefix+'formDialogo0');
 	
 	try{
-		var items = main_grid.selection.getSelected();
+		var items = dijit.byId(domPrefix+'main_grid').selection.getSelected();
 		var id = "&"+primary+"="+ eval("items[0]."+primary);
 	}catch(e){
 		var id = '';
@@ -552,7 +564,7 @@ function popupGrid(module, iframe, primary, title){ //proximo reemplazo de popup
 		if (title) formDlg.set('title', title);
 		
 		var iframe = document.createElement("iframe");
-		iframe.src = base_url+module+id+"&uri="+escape(dojo.byId('data_url').value);
+		iframe.src = base_url+module+id+"&uri="+escape(dojo.byId(domPrefix+'data_url').value);
 		//iframe.src = base_url+'ajax/loading';
 		iframe.width='810';
 		iframe.height='593';
@@ -580,7 +592,7 @@ function popupGrid(module, iframe, primary, title){ //proximo reemplazo de popup
 				window.frames["ifrm_popup"].document.getElementById('loading_overlay').style.display='block';
 			}
 			
-			document.getElementById("ifrm_popup").src = base_url+module+id+"&uri="+escape(dojo.byId('data_url').value);
+			document.getElementById("ifrm_popup").src = base_url+module+id+"&uri="+escape(dojo.byId(domPrefix+'data_url').value);
 		}	
 		
 		
@@ -590,7 +602,7 @@ function popupGrid(module, iframe, primary, title){ //proximo reemplazo de popup
 	} else {
 		//popupIframe(module+id+"&uri="+escape(dojo.byId('data_url').value));//[FIXME] implementar lo de abajo
 		if (title) formDlg.set('title', title);
-		formDlg.set('href', base_url+module+id+"&uri="+escape(dojo.byId('data_url').value));
+		formDlg.set('href', base_url+module+id+"&uri="+escape(dojo.byId(domPrefix+'data_url').value));
 		formDlg.show();
 		//popup(module+id+"&uri="+escape(dojo.byId('data_url').value)); 
 	}
@@ -598,10 +610,11 @@ function popupGrid(module, iframe, primary, title){ //proximo reemplazo de popup
 }
 
 
-function redirectToModule(url){
-	if (primary == undefined) var primary = 'id'; 
+function redirectToModule(url, domPrefix){
+	if (primary == undefined) var primary = 'id';
+	if (domPrefix == undefined) var domPrefix = ''; 
 	try{
-		var items = main_grid.selection.getSelected();
+		var items = dijit.byId(domPrefix + 'main_grid').selection.getSelected();
 		var id = "&"+primary+"="+ eval("items[0]."+primary);	
 	} catch(e) {
 		var id='';
@@ -611,10 +624,11 @@ function redirectToModule(url){
 }
 
 
-function execFunctionPopup(method, params, must_select, primary){
+function execFunctionPopup(method, params, must_select, primary, domPrefix){
+	if (domPrefix == undefined) var domPrefix = ''; 
 	if (primary == undefined) var primary = 'id'
 	try{
-		var items = main_grid.selection.getSelected();
+		var items = dijit.byId(domPrefix + 'main_grid').selection.getSelected();
 		var id = "&"+primary+"="+ eval("items[0]."+primary);
 	}catch(e){
 		if(must_select){
@@ -675,7 +689,12 @@ function showtab(tab, area) {
     }
     try {
     	dojo.byId(area).style.display='block';
-    	dojo.byId(tab).style.background='url("/dojotoolkit/dijit/themes/claro/images/commonHighlight.png") #CFE5FA repeat-x';
+    	
+    	if (parseFloat(dojo.version.toString()) < 1.8) {
+    		dojo.byId(tab).style.background='url("/dojotoolkit/dijit/themes/claro/images/commonHighlight.png") #CFE5FA repeat-x';
+	} else {	
+			dojo.byId(tab).style.background='url("/dojotoolkit/dijit/themes/claro/images/activeGradient.png") #CFE5FA repeat-x';
+	}	
     } catch (e) {
     	console.debug(e.message);
     }	

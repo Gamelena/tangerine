@@ -17,7 +17,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
     public $format_date;
     public $search_format;
     public $between;
-    private $count;
+    public $count;
     private $_model;
 
     public function display()
@@ -27,7 +27,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $this->_model = new $model;
         $getPk = $this->_model->getPrimary();
         $primary = ($getPk && !@stristr($getPk, ".")) ? $getPk : "id";
-        //$domPrefix = ($this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord(str_replace('.', '_', $form->p)) : '';
+        $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
         
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
@@ -54,11 +54,11 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 
         if (isset($this->layout[0]['LIST']) && $this->layout[0]['LIST']=="true" && $this->_acl->isUserAllowed($this->page, 'LIST') && (!isset($this->layout[0]['SEARCH_HIDE_SUBMIT']))) {
             if (isset($this->layout[0]['SERVER_PAGINATION']) && $this->layout[0]['SERVER_PAGINATION'] == "true") {
-                $out .= "\r\n <span dojoType=\"dojox.data.QueryReadStore\" id=\"store_grid\" jsId=\"store_grid\" url=\"".BASE_URL."objects?model={$this->layout[0]['TARGET']}&format=json$params\"></span>";
+                $out .= "\r\n <span dojoType=\"dojox.data.QueryReadStore\" id=\"{$domPrefix}store_grid\" jsId=\"{$domPrefix}store_grid\" url=\"".BASE_URL."objects?model={$this->layout[0]['TARGET']}&format=json$params\"></span>";
             } else {    
-                $out .= "\r\n <span dojoType=\"dojo.data.ItemFileReadStore\" id=\"store_grid\" jsId=\"store_grid\" url=\"".BASE_URL."objects?model={$this->layout[0]['TARGET']}&format=json$params\"></span>";
+                $out .= "\r\n <span dojoType=\"dojo.data.ItemFileReadStore\" id=\"{$domPrefix}store_grid\" jsId=\"{$domPrefix}store_grid\" url=\"".BASE_URL."objects?model={$this->layout[0]['TARGET']}&format=json$params\"></span>";
             }    
-            $store = "store=\"store_grid\"";
+            $store = "store: {$domPrefix}store_grid,";
         } else {
             $store = '';
         }
@@ -75,21 +75,21 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $width_table += 40;
 
         $dojotype = isset($this->layout[0]['TABLE_DOJO_TYPE']) ? "data-dojo-type=\"{$this->layout[0]['TABLE_DOJO_TYPE']}\"" : "data-dojo-type=\"dojox.grid.EnhancedGrid\"";
-        $plugins = isset($this->layout[0]['PLUGINS']) ? "plugins=\"{$this->layout[0]['PLUGINS']}\"" : "plugins=\"{pagination: {defaultPageSize:25, maxPageStep: 5 } }\"";
-        $on_row_click = isset($this->layout[0]['ON_ROW_CLICK']) ? "onRowClick=\"{$this->layout[0]['ON_ROW_CLICK']}\"" : "";
+        $plugins = isset($this->layout[0]['PLUGINS']) ? "plugins:{$this->layout[0]['PLUGINS']}," : "plugins:{pagination: {defaultPageSize:25, maxPageStep: 5 } },";
+        $on_row_click = isset($this->layout[0]['ON_ROW_CLICK']) ? "onRowClick:{$this->layout[0]['ON_ROW_CLICK']}," : "";
         $on_row_dbl_click = "";
         if (isset($this->layout[0]['ON_ROW_DBL_CLICK'])) { 
             $on_row_dbl_click = "onRowDblClick=\"{$this->layout[0]['ON_ROW_DBL_CLICK']}\"";
         } else if (isset($this->layout[0]['EDIT']) && $this->layout[0]['EDIT'] == 'true' && $this->_acl->isUserAllowed($this->page, 'EDIT') ) {
             if ($this->layout[1]['_name'] == 'TAB' ) {
-                $on_row_dbl_click = "onRowDblClick=\"cargarTabsPanelCentral('$this->page', 'edit', '$primary');try{initModule();}catch(e){console.debug(e);}\"";
+                $on_row_dbl_click = "onRowDblClick=\"cargarTabsPanelCentral('$this->page', 'edit', '$primary', '$domPrefix');try{initModule();}catch(e){console.debug(e);}\"";
             } else {
-                $on_row_dbl_click = "onRowDblClick=\"showDialog('edit');\"";
+                $on_row_dbl_click = "onRowDblClick=\"{$domPrefix}showDialog('edit')\"";
             }
         }
 
         if (!isset($this->layout[0]['SEARCH_HIDE_SUBMIT'])) {
-            $out .= "\r\n<table $dojotype $plugins $on_row_click $on_row_dbl_click id=\"main_grid\" jsId=\"main_grid\" $store clientSort=\"true\" style=\"width:{$width_table}px; height: 320px;\" selectable=\"true\" rowSelector=\"20px\" rowsPerPage=\"25\" noDataMessage=\"Sin datos.\">\r\n<thead><tr>\r\n";
+            $out .= "\r\n<table $dojotype data-dojo-props=\"$store $plugins clientSort:true, selectable: true, rowSelector: '20px', rowsPerPage: 10, noDataMessage:'Sin datos.'\" jsId=\"{$domPrefix}main_grid\" class=\"main_grid\" id=\"{$domPrefix}main_grid\" $on_row_click $on_row_dbl_click style=\"width:{$width_table}px; height: 320px;\">\r\n<thead><tr>\r\n";
     
             for ($i=1; $i<$count; $i++) {
                 $target = (!isset($this->layout[$i]['FIELD'])) ? @$this->layout[$i]['TARGET'] : $this->layout[$i]['FIELD'];
@@ -103,10 +103,10 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
             }
             $out .= "\t</tr>\r\n</thead></table>\r\n";
         }
-        if(isset($form->id)){
-            $out.="<input type=\"hidden\" name=\"id\" id=\"id\" value=\"$form->id\">\r\n";
+        if (isset($form->id)){
+            $out.="<input type=\"hidden\" name=\"id\" id=\"{$domPrefix}id\" value=\"$form->id\">\r\n";
         }
-        
+       
         return $out;
     }
 
@@ -117,6 +117,8 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
     private function searcher()
     {
         $out = "";
+        $form = new Zwei_Utils_Form();
+        $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
         $this->format_date = (@$this->layout[0]['SEARCH_DOJO_TYPE']=="dijit.form.DateTextBox")? 'true' : 'false';
         $this->search_format = (@$this->layout[0]['SEARCH_FORMAT'])? $this->layout[0]['SEARCH_FORMAT'] : 'false';
         $this->between = 'false';
@@ -126,6 +128,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $invalid_message = @$this->layout[0]['SEARCH_INVALID_MESSAGE']? "invalidMessage=\"{$this->layout[0]['SEARCH_INVALID_MESSAGE']}\"" : '';
         $prompt_message = @$this->layout[0]['SEARCH_PROMPT_MESSAGE']? "promptMessage=\"{$this->layout[0]['SEARCH_PROMPT_MESSAGE']}\"" : '';
         $required = @$this->layout[0]['SEARCH_REQUIRED'] == "true"? "required=\"true\"" : '';
+        $storeType = isset ($node['SERVER_PAGINATION']) && $node['SERVER_PAGINATION'] == 'true' ? "'query'" : 'false';
 
         if (@$this->layout[0]['SEARCH_DISPLAY']=='between') {
             $label1 = "Desde";
@@ -134,10 +137,10 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
             $label1 = "Buscar";
         }
 
-        $out .= "<div dojoType=\"dijit.form.Form\" id=\"search_form\" jsId=\"search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
+        $out .= "<div dojoType=\"dijit.form.Form\" id=\"{$domPrefix}search_form\" jsId=\"{$domPrefix}search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
         $out .= "<table cellspacing=\"10\" align=\"center\">\r\n";
         $out .= "<tr><td><label for=\"search\">$label1</label></td>";
-        $out .= "<td><input type=\"text\" name=\"search\" placeHolder=\"Ingresar\" $dojotype trim=\"true\" id=\"search\" $constrains $invalid_message $prompt_message $required /></td></tr>\r\n";
+        $out .= "<td><input type=\"text\" name=\"search\" placeHolder=\"Ingresar\" $dojotype trim=\"true\" id=\"{$domPrefix}search\" $constrains $invalid_message $prompt_message $required /></td></tr>\r\n";
 
         if($this->layout[0]['SEARCH'] != "true")
         {
@@ -156,27 +159,27 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
                 if(in_array(@$this->layout[$i]['FIELD'], $fields) && $this->layout[$i]['TYPE'] != 'pk_original')
                 {
                     $checked = ($j==0) ? "checked" : "";
-                    $out.="\t\t<input dojoType=\"dijit.form.RadioButton\" id=\"search_fields[$j]\" name=\"search_fields\" $checked value=\"{$this->layout[$i]['FIELD']}\" type=\"radio\" /><label for=\"{$this->layout[$i]['FIELD']}\">{$this->layout[$i]['NAME']}</label>\r\n";
+                    $out.="\t\t<input dojoType=\"dijit.form.RadioButton\" id=\"{$domPrefix}search_fields[$j]\" name=\"search_fields\" $checked value=\"{$this->layout[$i]['FIELD']}\" type=\"radio\" /><label for=\"{$this->layout[$i]['FIELD']}\">{$this->layout[$i]['NAME']}</label>\r\n";
 
                     if(isset($this->layout[$i]['SEARCH_FORMAT']))
                     {
-                        $out.= "<input type=\"hidden\" id=\"search_format[$j]\" name=\"search_format[$j]\" value=\"{$this->layout[$i]['SEARCH_FORMAT']}\">\r\n";
+                        $out.= "<input type=\"hidden\" id=\"{$domPrefix}search_format[$j]\" name=\"search_format[$j]\" value=\"{$this->layout[$i]['SEARCH_FORMAT']}\">\r\n";
                     }
                     $j++;
                 }
                 else if(in_array($this->layout[$i]['TARGET'], $fields)  && $this->layout[$i]['TYPE'] != 'pk_original')
                 {
                     $checked = ($j==0) ? "checked" : "";
-                    $out.="\t\t<input dojoType=\"dijit.form.RadioButton\" id=\"search_fields[$j]\" name=\"search_fields\" $checked value=\"{$this->layout[$i]['TARGET']}\" type=\"radio\" /><label for=\"{$this->layout[$i]['TARGET']}\">{$this->layout[$i]['NAME']}</label>\r\n";
+                    $out.="\t\t<input dojoType=\"dijit.form.RadioButton\" id=\"{$domPrefix}search_fields[$j]\" name=\"search_fields\" $checked value=\"{$this->layout[$i]['TARGET']}\" type=\"radio\" /><label for=\"{$this->layout[$i]['TARGET']}\">{$this->layout[$i]['NAME']}</label>\r\n";
 
                     if(isset($this->layout[$i]['SEARCH_FORMAT']))
                     {
-                        $out.= "<input type=\"hidden\" id=\"search_format[$j]\" name=\"search_format[$j]\" value=\"{$this->layout[$i]['SEARCH_FORMAT']}\">\r\n";
+                        $out.= "<input type=\"hidden\" id=\"{$domPrefix}search_format[$j]\" name=\"search_format[$j]\" value=\"{$this->layout[$i]['SEARCH_FORMAT']}\">\r\n";
                     }
                     $j++;
                 }
             }
-            $out .= "<div style=\"display:none\"><input dojoType=\"dijit.form.RadioButton\" id=\"search_fields[$j]\" name=\"search_fields\" value=\"\" type=\"radio\" /></div>";
+            $out .= "<div style=\"display:none\"><input dojoType=\"dijit.form.RadioButton\" id=\"{$domPrefix}search_fields[$j]\" name=\"search_fields\" value=\"\" type=\"radio\" /></div>";
             if ($j <= 1) $out .= "<script>function hideRadio(){dijit.byId('search_fields[0]').domNode.style.display='none';} setTimeout('hideRadio()', 1000)</script>";
             if (!isset($this->layout[0]['SEARCH_DISPLAY'])) $out.="</td></tr>\r\n";
             $this->search_in_fields='true';
@@ -184,7 +187,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 
         if (@$this->layout[0]['SEARCH_DISPLAY']=='between') {
             $out .= "<tr><td><label for=\"search2\">$label2</label></td>";
-            $out .= "<td><input type=\"text\" name=\"search2\" placeHolder=\"Ingresar\" $dojotype trim=\"true\" id=\"search2\" $constrains $invalid_message $prompt_message/></td></tr>\r\n";
+            $out .= "<td><input type=\"text\" name=\"search2\" placeHolder=\"Ingresar\" $dojotype trim=\"true\" id=\"{$domPrefix}search2\" $constrains $invalid_message $prompt_message/></td></tr>\r\n";
             $this->search_in_fields = 'true';
             $this->between = 'true';
         }
@@ -198,14 +201,14 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         }
 
         $out .= "<tr><td colspan=\"2\" align=\"center\">";
-        $out .= "<button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSearch\" id=\"btnBuscar\">Buscar</button>";
+        $out .= "<button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSearch\" id=\"{$domPrefix}btnBuscar\">Buscar</button>";
         $out .= "</td></tr>";
         $out .= "</table>\r\n";
         $out .= "
             <script type=\"dojo/method\" event=\"onSubmit\">
                 if (this.validate()) {
                 $additional_validation
-                    cargarDatos('{$this->layout[0]['TARGET']}', $this->search_in_fields, $this->format_date, $this->search_format, $this->between);
+                    cargarDatos('{$this->layout[0]['TARGET']}', $this->search_in_fields, $this->format_date, $this->search_format, $this->between, 'json', false, '$domPrefix');
                     return false;
                 } else {
                     alert('Por favor corrija los campos marcados.');
@@ -222,6 +225,8 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
     private function searchMultiple()
     {
         Debug::write("Search Multiple");
+        $form = new Zwei_Utils_Form();        
+        $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';        
         
         if(isset($this->layout[0]['SEARCH_ADDITIONAL_VALIDATION'])){
             $modelname=Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
@@ -240,6 +245,9 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $search = explode(";",$node['SEARCH']);
         $search_display=explode(";",@$node['SEARCH_DISPLAY']);
         $dojotype = explode(";",@$node['SEARCH_DOJO_TYPE']);
+
+        $storeType = isset ($node['SERVER_PAGINATION']) && $node['SERVER_PAGINATION'] == 'true' ? "'query'" : 'false';
+
         $betweened = false;
         $out = "";
 
@@ -261,7 +269,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
             $node['SEARCH_TABLE'] = '';
             $search_table = '';
         }
-        $out .= "<div dojoType=\"dijit.form.Form\" id=\"search_form\" jsId=\"search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
+        $out .= "<div dojoType=\"dijit.form.Form\" id=\"{$domPrefix}search_form\" jsId=\"{$domPrefix}search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
         $out .= "<table cellspacing=\"10\" align=\"center\">\r\n";
 
 
@@ -308,12 +316,12 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
             $current_label = (@$search_display[$i] == 'between') ? 'Desde' : $label[$i];
             $out .= "<tr><td><label for=\"search\">$current_label</label></td>";
 
-            $out .= "<td><input type=\"text\" name=\"search$i\" placeHolder=\"Ingresar\" ".@$dojotype[$i]." trim=\"true\" id=\"search$i\" ".$constraints[$i].@$invalid_message[$i].@$prompt_message[$i].@$required[$i].@$default_value[$i]." onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format',  $this->between)\"  /></td></tr>\r\n";
+            $out .= "<td><input type=\"text\" name=\"search$i\" placeHolder=\"Ingresar\" ".@$dojotype[$i]." trim=\"true\" id=\"{$domPrefix}search$i\" ".$constraints[$i].@$invalid_message[$i].@$prompt_message[$i].@$required[$i].@$default_value[$i]." onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format',  $this->between, 'json', '$domPrefix')\"  /></td></tr>\r\n";
 
             if (@$search_display[$i] == 'between') {
                 $j = $i+1;
                 $out .= "<tr><td><label for=\"search$i\">Hasta</label></td>";
-                $out .= "<td><input type=\"text\" name=\"search$j\" placeHolder=\"Ingresar\" ".@$dojotype[$i]." trim=\"true\" id=\"search$j\" ".$constraints[$i].@$invalid_message[$i].@$prompt_message[$i].@$required[$i].@$default_value[$i]." onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format',  $this->between)\" /></td></tr>\r\n";
+                $out .= "<td><input type=\"text\" name=\"search$j\" placeHolder=\"Ingresar\" ".@$dojotype[$i]." trim=\"true\" id=\"{$domPrefix}search$j\" ".$constraints[$i].@$invalid_message[$i].@$prompt_message[$i].@$required[$i].@$default_value[$i]." onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format',  $this->between, 'json', '$domPrefix')\" /></td></tr>\r\n";
                 $i = $j;
             } 
             $i++;
@@ -329,7 +337,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
                 //$search_name=!empty($node['SEARCH_NAME'])?$node['SEARCH_NAME']:'';
                 $out .= "<tr><td><label for=\"search\">$current_label</label></td>";
                 $out .= "<td>
-                <select id=\"search$i\" name=\"search$i\" dojoType=\"dijit.form.FilteringSelect\" $onchange onLoad=\"dijit.byId('search$i').set('value', dijit.byId('search$i').get('value'))\" onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format',  $this->between)\"  >";
+                <select id=\"{$domPrefix}search$i\" name=\"search$i\" dojoType=\"dijit.form.FilteringSelect\" $onchange onLoad=\"dijit.byId('{$domPrefix}search$i').set('value', dijit.byId('{$domPrefix}search$i').get('value'))\" onchange=\"loadDataUrl('{$this->layout[0]['TARGET']}', '{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '$search_format', $this->between, 'json', '$domPrefix')\"  >";
 
                 $ClassModel = Zwei_Utils_String::toClassWord($s)."Model";
                 $Model = new $ClassModel();
@@ -360,7 +368,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         
         if (!isset($node['SEARCH_HIDE_SUBMIT']) || $node['SEARCH_HIDE_SUBMIT'] == 'false') {
             $out .="<tr><td colspan=\"2\" align=\"center\">";
-            $out .="<button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSearch\" id=\"btnBuscar\">Buscar</button>";
+            $out .="<button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSearch\" id=\"{$domPrefix}btnBuscar\">Buscar</button>";
             $out .="</td></tr>";
         }
         
@@ -369,7 +377,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
             <script type=\"dojo/method\" event=\"onSubmit\">
                 if (this.validate()) {
                 $additional_validation
-                    searchMultiple('{$node['TARGET']}','{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '{$search_format}' , $this->between);
+                    searchMultiple('{$node['TARGET']}','{$node['SEARCH']};".@$node['SEARCH_TABLE_TARGET']."', '{$search_format}' , $this->between, 'json', false, '$domPrefix', $storeType);
                     return false;
                 } else {
                     alert('Por favor corrija los campos marcados.');
@@ -389,9 +397,11 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
     private function searchInTable() 
     {
         Debug::write("Search in Table");
-        
+        $form = new Zwei_Utils_Form();        
+        $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
+                
         $out = "";
-        $node=@$this->layout[0];
+        $node=$this->layout[0];
         //$this->format_date = (@$this->layout[0]['SEARCH_DOJO_TYPE']=="dijit.form.DateTextBox")? 'true' : 'false';
         $this->search_format = (@$this->layout[0]['SEARCH_FORMAT'])? $this->layout[0]['SEARCH_FORMAT'] : "'equals'";
         $this->between = 'false';
@@ -406,6 +416,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $prompt_message = array();
         $search_format = '';
         $fields = explode(";", $this->layout[0]['SEARCH_TABLE_TARGET']);
+        $storeType = isset ($node['SERVER_PAGINATION']) && $node['SERVER_PAGINATION'] == 'true' ? "'query'" : 'false';
         
         for ($i=1; $i<$this->count; $i++) {
             //Buscamos si el campo de busqueda del nodo 0 está declarado en algunos nodos hijos para asociar otras propiedades auxiliares
@@ -435,14 +446,14 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 
         //$required= @$node['SEARCH_REQUIRED']=="true"? "required=\"true\"" : '';
 
-        $out .="<div dojoType=\"dijit.form.Form\" id=\"search_form\" jsId=\"search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
+        $out .="<div dojoType=\"dijit.form.Form\" id=\"{$domPrefix}search_form\" jsId=\"{$domPrefix}search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
         $out .="<table cellspacing=\"10\" align=\"center\">\r\n";
         //$search_name =! empty($node['SEARCH_NAME'])?$node['SEARCH_NAME']:'';//[TODO] search_name debiera leerse de los elements xml
         $out .="<tr><td><label for=\"search\">{$label[0]}</label></td>";
 
 
         $out .="<td>
-        <select id=\"search\" name=\"search\" dojoType=\"dijit.form.FilteringSelect\">";
+        <select id=\"{$domPrefix}search\" name=\"{$domPrefix}search\" dojoType=\"dijit.form.FilteringSelect\">";
         $ClassModel = Zwei_Utils_String::toClassWord($node['SEARCH_TABLE'])."Model";
         $Model = new $ClassModel();
         $select = $Model->select();
@@ -465,7 +476,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
 
         $out .="</select></td></tr>\r\n";
         $out .="<tr><td colspan=\"2\" align=\"center\">";
-        $out .="<button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSearch\" id=\"btnBuscar\">Buscar</button>";
+        $out .="<button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSearch\" id=\"{$domPrefix}btnBuscar\">Buscar</button>";
 
 
         $out .="</td></tr>";
@@ -474,7 +485,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
             <script type=\"dojo/method\" event=\"onSubmit\">
                 if (this.validate()) {
                 $additional_validation
-                    searchMultiple('{$node['TARGET']}','$search_table_target', 'equals' , false);
+                    searchMultiple('{$node['TARGET']}','$search_table_target', 'equals', false, 'json', false, '$domPrefix', $storeType);
                     return false;
                 } else {
                     alert('Por favor corrija los campos marcados.');
