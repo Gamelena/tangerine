@@ -30,14 +30,27 @@ class ObjectsController extends Zend_Controller_Action
 
     public function init()
     {
+        $this->_form = new Zwei_Utils_Form();
         if (Zend_Auth::getInstance()->hasIdentity()) {
             $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
+        } else if ($this->_form->format == 'json') {
+            $this->_helper->ContextSwitch
+            ->setAutoJsonSerialization(false)
+            ->addActionContext('index', 'json')
+            ->initContext();
+            $data = array( 'id'=>'0',
+                               'state'=>'inactive',
+                               'message'=>'Su sesión a expirado, por favor vuelva a ingresar.',
+                               'todo'=>'goToLogin');//declarar dojo.admin.js y llamarla en TableDojo
+            $this->view->content = Zend_Json::encode($data);
+            $this->render('index'); 
+
         } else {
             $this->_redirect('index/login');
         }
 
         $this->_helper->layout()->disableLayout();
-        $this->_form = new Zwei_Utils_Form();
+
 
     }
 
@@ -159,8 +172,6 @@ class ObjectsController extends Zend_Controller_Action
                     }
                     //Zwei_Utils_Debug::write($response);
                 }
-                $log_data = isset($data) ? print_r($data, true) : '';
-                $log_where = isset($where) ? print_r($where, true) : '';
                 $this->_response_content['todo'] = $oModel->getAjaxTodo();
 
             }//if (isset($this->_form->action))
@@ -173,10 +184,7 @@ class ObjectsController extends Zend_Controller_Action
             if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) {
                 $adapter = $oModel->getZwAdapter();
 
-                if (isset($adapter) && !empty($adapter)) {
-                    Debug::write($adapter);
-                    $oModel->setAdapter($adapter);
-                }
+                if (isset($adapter) && !empty($adapter)) $oModel->setAdapter($adapter);
                 
                 $data = $oModel->fetchAll($oSelect);
                 $paginator = Zend_Paginator::factory($oSelect);
@@ -198,11 +206,31 @@ class ObjectsController extends Zend_Controller_Action
                 $this->_helper->viewRenderer->setNoRender();
                 
                 $Table = new Zwei_Utils_Table();
-                if (isset($this->_form->p)) {
-                    $content = $Table->rowsetToExcel($data, $this->_form->p);
+                
+                
+                if ($numRows > 5000) {
+                    //Si el numero es mayor a 5000 filas, exportamos "a la antigua" ya que PhpExcel puede agotar el limite de RAM
+                    //Tomar en cuenta que el numero mayor de registros a soportar es 20000 12/11/2012
+                    header('Content-type: application/vnd.ms-excel');
+                    header("Content-Disposition: attachment; filename={$this->_form->model}.xls");
+                    header("Pragma: no-cache");
+                    header("Expires: 0");
+                    
+                    if (isset($this->_form->p)) {
+                        $content = $Table->rowsetToHtml($data, $this->_form->p);
+                    } else {
+                        $content = $Table->rowsetToHtml($data);
+                    }
                 } else {
-                    $content = $Table->rowsetToExcel($data);
-                }
+                  
+                
+                    if (isset($this->_form->p)) {
+                        $content = $Table->rowsetToExcel($data, $this->_form->p);
+                    } else {
+                        $content = $Table->rowsetToExcel($data);
+                    }
+                }    
+                    
 
                 exit();
                 
