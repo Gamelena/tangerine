@@ -97,15 +97,17 @@ class Zwei_Utils_String {
 	}
 	
 	/**
-	 * Transforma una variable a un string que sigue las convenciones Zend
-	 * de nombres de variables simples
+	 * Transforma una variable a un string a nombres de variables simple 
+	 * compatible con identificadores Dom HTML y variables Javascript
 	 * @param $string
 	 * @param $limiter
 	 * @return string
 	 */	
 	
 	public static function toVarWord($string){
-		return preg_replace("/(?<=[a-zA-Z])(?=[A-Z])/", "_", $string);
+		$string = preg_replace("/(?<=[a-zA-Z])(?=[A-Z])/", "_", $string);
+		$string = preg_replace("/[\.-]/", "_", $string);
+		return $string;
 	}
 	
 	

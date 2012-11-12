@@ -11,9 +11,9 @@ class Zwei_Utils_Array
      * 
      * Busca recursivamente en $array un $value con índice $key.
      * 
-     * @param array 
-     * @param mixed
-     * @param mixed
+     * @param array - arreglo 
+     * @param mixed - índice en el cual buscar
+     * @param mixed - valor a buscar
      * @return array
      */
     function search($array, $key, $value)

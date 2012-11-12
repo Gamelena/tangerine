@@ -75,7 +75,7 @@ class Zwei_Admin_Xml
      * @return void
      */
 
-	public function Zwei_Admin_Xml($data = null, $options = 0, $data_is_url = false, $ns = "", $is_prefix = false)
+	public function __construct($data = null, $options = 0, $data_is_url = false, $ns = "", $is_prefix = false)
 	{
 	    if (is_null($data)) {
 	        //[TODO] esto se debe deprecar
@@ -148,7 +148,7 @@ class Zwei_Admin_Xml
             $prefix = COMPONENTS_ADMIN_PATH."/";
         } 
         return $prefix.$file; 
-	}
+    }
 
 	
 	

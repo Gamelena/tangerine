@@ -1,9 +1,8 @@
 <?php
-
 /**
- * Dojo Filtering Select
- * 
- * 
+ * Combobox Dojo
+ *
+ *
  * @category Zwei
  * @package Zwei_Admin
  * @subpackage Elements

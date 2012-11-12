@@ -27,10 +27,6 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
      * @var Zwei_Db_Table
      */
 
-    /**
-     * 
-     * @var Zwei_Db_Table
-     */
     private $_model;
     
     function display($mode = 'add')
@@ -41,18 +37,20 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         
         $string_xml = file_get_contents($file);
 
-        $Xml = new SimpleXMLElement($string_xml);
+        $Xml = new Zwei_Utils_SimpleXML($string_xml);
         $this->getLayout();
         $model = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
         $this->_model = new $model();
 
         $out = '';        
         $modeDom = ($mode == 'add' || $mode == 'clone') ? 'add' : 'edit';
+        $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
       
         if (!empty($this->layout[0]['JS'])) $out.="<script type=\"text/javascript\" src=\"".BASE_URL."js/".$this->layout[0]['JS']."?version={$this->_version}\"></script>";
       
-        $out .= "<div dojoType=\"dijit.form.Form\" id=\"tabForm$modeDom\" jsId=\"tabForm\" name=\"tabForm\" encType=\"multipart/form-data\" action=\"\" method=\"\" onsubmit=\"return false\">\r\n";
+        $out .= "<div dojoType=\"dijit.form.Form\" id=\"{$domPrefix}tabForm\" class=\"tabForm$modeDom\" jsId=\"{$domPrefix}tabForm\" name=\"{$domPrefix}tabForm$modeDom\" encType=\"multipart/form-data\" action=\"\" method=\"\" onsubmit=\"return false\">\r\n";
       
+        
         if (!isset($this->id)) $this->id = array();
         elseif (!is_array($this->id)) $this->id = array($this->id);
       
@@ -65,7 +63,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
             $i++;
             $node_tab_mode = (string) $tab[$mode];
             if ($node_tab_mode == "true") {
-                $out .= "<a id=\"tab{$mode}_ctrl$i\" class=\"settings_tab\" $h onclick=\"showtab(this.id, 'tab{$modeDom}{$i}')\">{$tab['name']}</a>";
+                $out .= "<a id=\"tab{$mode}_ctrl$i\" class=\"settings_tab\" $h onclick=\"showtab(this.id, '{$domPrefix}tab{$modeDom}{$i}')\">{$tab['name']}</a>";
                 $h = '';
             }
 
@@ -79,12 +77,12 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         //Loop por cada pestaña
         foreach ($tabs as $j => $tab) {
             if ($mode=='edit' || $mode=='clone') {
-                $ClassModel=Zwei_Utils_String::toClassWord($tab['target'])."Model";
-                $Model=new $ClassModel();
-                $select=$Model->select();
-                
-                $my_id = ($Model->getPrimary()) ? $Model->getPrimary() : "id";
-                                
+                $ClassModel = Zwei_Utils_String::toClassWord($tab['target'])."Model";
+                $this->_model = new $ClassModel();
+                $select = $this->_model->select();
+
+                $my_id = ($this->_model->getPrimary()) ? $this->_model->getPrimary() : "id";
+        
                 if (!is_array($my_id) || count($my_id) == 1) {
                     if (is_array($my_id) && count($my_id) == 1) {
                         $my_id = array_values($my_id);
@@ -99,12 +97,12 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 
                 Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
   
-                $data = $Model->fetchAll($select);
-                $overloadData = $Model->overloadDataTabs($data);
+                $data = $this->_model->fetchAll($select);
+                $overloadData = $this->_model->overloadDataTabs($data);
                 if ($overloadData) { $data = $overloadData; }
             }
              
-            $out.='<div id="tab'.$modeDom.($i+1).'" class="settings_area" '.$hidden.'>';
+            $out.='<div id="'.$domPrefix.'tab'.$modeDom.($i+1).'" class="settings_area" '.$hidden.'>';
             $out.="\r\n";
             $out.="\t<table>\r\n";
 
@@ -130,9 +128,9 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 if ($mode == 'edit' || $mode == 'clone') {
                     if(isset($node['join'])){
                         //[TODO] optimizar
-                        $select2 = $Model->select();
+                        $select2 = $this->_model->select();
           
-                        $my_id = ($Model->getPrimary()) ? $Model->getPrimary() : "id";
+                        $my_id = ($this->_model->getPrimary()) ? $this->_model->getPrimary() : "id";
                         if (is_array($my_id)) $my_id = array_values($my_id);
                          
                         if (!is_array($my_id) || count($my_id) == 1) {
@@ -145,7 +143,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                         };
                          
                         $field = $node_join;
-                        $data = $Model->fetchAll($select2->where("$field = ? ", $node_target));
+                        $data = $this->_model->fetchAll($select2->where("$field = ? ", $node_target));
                          
                     }
                      
@@ -157,9 +155,9 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                      */
                     
                     if (isset($node['offset'])) {
-                        $select2 = $Model->select();
+                        $select2 = $this->_model->select();
                          
-                        $my_id = (method_exists($Model,"getPk")) ? $Model->getPk() : "id";
+                        $my_id = ($this->_model->getPrimary()) ? $this->_model->getPrimary() : "id";
                         if (is_array($my_id)) $my_id = array_values($my_id);
                          
                         if (!is_array($my_id) || count($my_id) == 1){
@@ -172,7 +170,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                         };
                          
                         $select2->limit(1, $node_offset);
-                        $data = $Model->fetchAll($select2);
+                        $data = $this->_model->fetchAll($select2);
                     }
                      
                     $value = "";
@@ -220,12 +218,12 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 $name = str_replace('\n','<br/>',$node['name']);
                 if ($node_mode == "true" || $node_mode == "disabled" || $node_mode == "readonly") {
                     $out .= "\t\t<tr id=\"row_{$node['target']}\"><th><label for=\"{$node['target']}\">{$name}</label></th>";
-                    $out .= "<td>".$element->edit(0, $pfx.$k)."</td></tr>\r\n";
+                    $out .= "<td>".$element->edit('0', $domPrefix.$pfx.$k)."</td></tr>\r\n";
                     if (!empty($node['target'])) {
                         if ($node['type']=='dojo_filtering_select' || $node['type']=='dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
-                            $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$pfx}{$k}').get('value'), \r\n";
+                            $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$domPrefix}{$pfx}{$k}').get('value'), \r\n";
                         } else {
-                            $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$pfx}{$k}').value, \r\n";
+                            $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$domPrefix}{$pfx}{$k}').value, \r\n";
                         }
                     }
                 } elseif($mode == "edit" && $node_edit == "false" && $node_add == "true") {
@@ -244,7 +242,11 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         $out.="
                 <script type=\"dojo/method\" event=\"onSubmit\">
                     if (this.validate()) {
-                        modify('{$this->layout[0]['TARGET']}', arguments[0], '$mode');
+                        try {
+                            {$domPrefix}modify('{$this->layout[0]['TARGET']}', arguments[0], '$mode');
+                        } catch (e) {
+                            console.debug(e)    
+                        }
                         return false;
                     } else {
                         alert('Por favor corrija los campos marcados.');
@@ -257,7 +259,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         $out.="
                     <tr>
                         <td align=\"center\" colspan=\"2\">
-                            <button dojoType=\"dijit.form.Button\" id=\"tabs_btn_save$modeDom\" type=\"submit\">
+                            <button dojoType=\"dijit.form.Button\" id=\"{$domPrefix}tabs_btn_save$modeDom\" type=\"submit\">
                                 Guardar
                             </button>
                         </td>

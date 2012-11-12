@@ -21,6 +21,8 @@ class Zwei_Admin_Controller{
     public $target;
     public $maxsize;
     protected $_acl;
+    protected $_config;
+    protected $_mainPane;
 
   /**
    * Constructor
@@ -36,6 +38,8 @@ class Zwei_Admin_Controller{
         $this->id = $id;
         $this->requested_params = "";
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
+        $this->_config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+        $this->_mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
         if (isset($userInfo) && !empty($userInfo)) $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
     }
 

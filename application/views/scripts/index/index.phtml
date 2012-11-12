@@ -4,13 +4,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="content-language" content="es" />
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-    <script type="text/javascript">var base_url="<?=$this->base_url?>";</script>
+    <script type="text/javascript">
+    var base_url="<?php echo $this->base_url?>";
+    var layout=<?php echo $this->layout;?>; 
+    </script>
     <style type="text/css">
     html, body {
-    	width: 100%;
-    	height: 100%;
-    	margin: 0;
-    	overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
     }
     </style>
     <?=$this->headStyle()?>
@@ -22,88 +25,74 @@
     <script type="text/javascript" src="<?=$this->base_url?>js/admin.js?v=6"></script>
     <script type="text/javascript" src="<?=$this->base_url?>js/md5.js"></script>
     <script type="text/javascript">
-	// Create a Standby instance
-	dojo.addOnLoad(function() {
-    	var appStandBy = new dojox.widget.Standby({
-    		target: "borderContainer",
-    		imageText: "Loading ..."
-    	});
-    	document.body.appendChild(appStandBy.domNode);
-    	appStandBy.startup();
+    // Create a Standby instance
+    dojo.addOnLoad(function() {
+        var appStandBy = new dojox.widget.Standby({
+            target: "borderContainer",
+            imageText: "Loading ..."
+        });
+        document.body.appendChild(appStandBy.domNode);
+        appStandBy.startup();
     	initLoad(<?=$this->layout?>);
-    	// Add pre-loading
-	});
+        // Add pre-loading
+    });
 
-	function preLoading(){
-    	setTimeout(function() {
-    		dojo.fadeOut({
-    			node: "appLoader",
-    			duration: 500,
-    			onEnd: function() {
-    				dojo.style("appLoader", "display", "none");
-    			}
-    		}).play();
-    	}, 500);
-	}	
+    function preLoading(){
+        setTimeout(function() {
+            dojo.fadeOut({
+                node: "appLoader",
+                duration: 500,
+                onEnd: function() {
+                    dojo.style("appLoader", "display", "none");
+                }
+            }).play();
+        }, 500);
+    }   
     
     </script>
 </head>
 <body class="<?=$this->body_class?>" onload="preLoading();">
     <!--[if lt IE 7]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0012_spanish_LATAM.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div> <![endif]-->
-    	<!-- Loader -->
-	<div id="appLoader" class="appLoader">
-		<div>Cargando ...</div>
-	</div>
-	<!-- /Loader -->
-	<div dojoType="dijit.layout.BorderContainer" id="borderContainer" jsId="borderContainer" data-dojo-props="design: 'headline', region: 'center', gutters: true" >
-	   <div dojoType="dojox.layout.ContentPane" splitter="false" region="top" executeScripts="true" scriptHasHooks="true" style="height: 60px;">
+        <!-- Loader -->
+    <div id="appLoader" class="appLoader">
+        <div>Cargando ...</div>
+    </div>
+    <!-- /Loader -->
+    <div dojoType="dijit.layout.BorderContainer" id="borderContainer" jsId="borderContainer" data-dojo-props="design: 'headline', region: 'center', gutters: true" >
+       <div dojoType="dojox.layout.ContentPane" data-dojo-props="splitter: false, region: 'top', executeScripts: true, scriptHasHooks: true" style="height: 60px;">
             <div id="logosAdm"></div>
             <div id="tituloAdm"></div>
             <div style="text-align: right; float: right;">
-				<button data-dojo-type="dijit.form.DropDownButton" iconClass="dijitIconConfigure"><span>Configuracion</span>
-					<div data-dojo-type="dijit.Menu" id="confMenu" style="display: none;">
-						<div data-dojo-type="dijit.MenuItem" id="btnConfPersonal"
-							iconClass="dijitIconTask"
-							onclick="dijit.byId('panel_central').set('href',base_url+'index/components?p=personal-info.xml')">
-						Personal</div>
-			       </div>
-			    </button>
-	            <button type="button" data-dojo-type="dijit.form.Button" name="btnSalir" id="btnSalir" iconClass="dijitIconFilter">Salir</button>
+                <button data-dojo-type="dijit.form.DropDownButton" iconClass="dijitIconConfigure"><span>Configuracion</span>
+                    <div data-dojo-type="dijit.Menu" id="confMenu" style="display: none;">
+                        <div data-dojo-type="dijit.MenuItem" id="btnConfPersonal"
+                            iconClass="dijitIconTask"
+                            onclick="dijit.byId('panel_central').set('href',base_url+'index/components?p=personal-info.xml')">
+                        Personal</div>
+                   </div>
+                </button>
+                <button type="button" data-dojo-type="dijit.form.Button" name="btnSalir" id="btnSalir" iconClass="dijitIconFilter">Salir</button>
             </div>
-		    <div id="infoUsr" style="text-align: right; float: right; padding-right: 20px; padding-top:6px; font-weight: bold">Bienvenido
+            <div id="infoUsr" style="text-align: right; float: right; padding-right: 20px; padding-top:6px; font-weight: bold">Bienvenido
 			<?=$this->user_name?>
-			</div>
-		</div>
-		<!-- Panel derecho -->
-		<div data-dojo-type="dojox.layout.ExpandoPane" id="menuExpand" jsId="menuExpand" data-dojo-props="region: 'left', splitter: true, previewOnDblClick: false, startExpanded: true, maxWidth: 250, title: 'Men&uacute; Principal', style: 'width: 250px;'">
-		   <div id="appToolboxContainer" style="background: url(css/i/bgmetal-light.png) #F0F0F0;padding-top:4px;">
-		      	<div id="arbolPrincipal" style="padding-top:4px;"></div>
-		   </div>
-		</div>
-		<!-- Panel central -->
+            </div>
+        </div>
+        <!-- Panel derecho -->
+        <div data-dojo-type="dojox.layout.ExpandoPane" id="menuExpand" jsId="menuExpand" data-dojo-props="region: 'left', splitter: true, previewOnDblClick: false, startExpanded: true, maxWidth: 250, title: 'Men&uacute; Principal', style: 'width: 250px;'">
+           <div id="appToolboxContainer" style="background: url(css/i/bgmetal-light.png) #F0F0F0;padding-top:4px;">
+                <div id="arbolPrincipal" style="padding-top:4px;"></div>
+           </div>
+        </div>
+        <!-- Panel central -->
         <div id="panel_central" id="panelCentral" jsId="dojo_panel_central" dojoType="dojox.layout.ContentPane" splitter="true" region="center" style="padding-bottom: -20px;" executeScripts="true" scriptHasHooks="true">
-        	<div dojoType="dijit.layout.TabContainer" id="tabContainer" jsId="tabContainer" style="width:100%;height:100%;" tabPosition="top"></div>
+            <div dojoType="dijit.layout.TabContainer" id="tabContainer" data-dojo-props="executeScripts: true, scriptHasHooks: true" jsId="tabContainer" style="width:100%;height:100%;" tabPosition="top"></div>
         </div>
         <div data-dojo-type="dojox.layout.ContentPane" data-dojo-props='region:"bottom", style:"background-color: #b39b86; height: auto;"'>
             <span style="float:right;margin-right: 6px">
                 <span style="float: left">&nbsp; &copy; Zweicom 2012 &nbsp; </span> <img src="<?php echo $this->base_url ?>/images/logo_zweicom26x15.png" />  
             </span>
         </div>
-	</div>
-	<div id="black_overlay"></div>
-	<div id="popup">
-		<div style="text-align: right"><a href="javascript:void(0)"
-			onClick="close_popup()" title="Close"> <img style="display: inline"
-			src="images/close.png" /> </a></div>
-	<div id="popup_body"></div>
-	</div>
-	<div id="context">
-	<div style="text-align: right"><a href="javascript:void(0)"
-		onClick="close_context()" title="Close"><img style="display: inline"
-		src="images/close.png" /></a></div>
-	<div id="context_body"></div>
-	</div>
-	<iframe name="ifrm_process" id="ifrm_process" style="display: none;"
-		src="" />
+    </div>
+    <iframe name="ifrm_process" id="ifrm_process" style="display: none;"  src="" />
 </body>
 </html>

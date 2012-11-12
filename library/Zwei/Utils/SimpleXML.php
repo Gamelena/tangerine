@@ -38,7 +38,7 @@ class Zwei_Utils_SimpleXML extends SimpleXMLElement
   }
 
  
-  public function existChildren($name)
+  public function existsChildren($name)
   {
         
         foreach($this->children() as $node){

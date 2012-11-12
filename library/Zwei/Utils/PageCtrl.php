@@ -3,6 +3,7 @@
 /**
  * Paginador
  * 
+ * @category Zwei
  * @package Zwei_Utils
  * @version $Id:$
  * @since 0.1

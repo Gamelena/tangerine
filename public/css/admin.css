@@ -1,19 +1,19 @@
 @font-face {
-	font-family: 'ZapfHumnstBTBold';
-	src: url('f/zapf_humanist_601_bold_bt-webfont.eot');
-	src: url('f/zapf_humanist_601_bold_bt-webfont.eot?#iefix')
-		format('embedded-opentype'),
-		url('f/zapf_humanist_601_bold_bt-webfont.woff') format('woff'),
-		url('f/zapf_humanist_601_bold_bt-webfont.ttf') format('truetype'),
-		url('f/zapf_humanist_601_bold_bt-webfont.svg#ZapfHumnstBTBold')
-		format('svg');
-	font-weight: normal;
-	font-style: normal;
+    font-family: 'ZapfHumnstBTBold';
+    src: url('f/zapf_humanist_601_bold_bt-webfont.eot');
+    src: url('f/zapf_humanist_601_bold_bt-webfont.eot?#iefix')
+        format('embedded-opentype'),
+        url('f/zapf_humanist_601_bold_bt-webfont.woff') format('woff'),
+        url('f/zapf_humanist_601_bold_bt-webfont.ttf') format('truetype'),
+        url('f/zapf_humanist_601_bold_bt-webfont.svg#ZapfHumnstBTBold')
+        format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 
 .login {
-	background: url("i/bgmetal-light.png") repeat-x scroll center top #f0f0f0;
-	background-attachment: fixed;
+    background: url("i/bgmetal-light.png") repeat-x scroll center top #f0f0f0;
+    background-attachment: fixed;
 }
 
 .login .zend_form_dojo{
@@ -22,17 +22,17 @@
 }	
 
 a {
-	color: #000;
-	text-decoration: none;
+    color: #000;
+    text-decoration: none;
 }
 
 #wrapper {
-	margin: 0 auto;
-	width: 960px;
+    margin: 0 auto;
+    width: 960px;
 }
 
 .login {
-	font: Arial, Helvetica, sans-serif;
+    font: Arial, Helvetica, sans-serif;
 }
 
 .login table {
@@ -58,457 +58,461 @@ a {
 }
 
 .login table th {
-	padding: 6px;
-	font-size: 12px;
+    padding: 6px;
+    font-size: 12px;
 }
 
 .login table td {
-	color: #000;
-	font-weight: bold;
+    color: #000;
+    font-weight: bold;
 }
 
 .login input[type="submit"] {
-	background: url("i/panel-button-active.png") no-repeat scroll 0 2px transparent !important;
-	border: 0 none;
-	color: #FFFFFF !important;
-	font-weight: bold !important;
-	height: 33px;
-	width: 128px;
+    background: url("i/panel-button-active.png") no-repeat scroll 0 2px transparent !important;
+    border: 0 none;
+    color: #FFFFFF !important;
+    font-weight: bold !important;
+    height: 33px;
+    width: 128px;
 }
 
 .big-button {
-	background: url("i/panel-button-active.png") no-repeat scroll 0 2px
-		#000000 !important;
-	border: 0 none;
-	color: #FFFFFF !important;
-	font-weight: bold !important;
-	height: 33px;
-	width: 128px;
+    background: url("i/panel-button-active.png") no-repeat scroll 0 2px
+        #000000 !important;
+    border: 0 none;
+    color: #FFFFFF !important;
+    font-weight: bold !important;
+    height: 33px;
+    width: 128px;
 }
 
 .login input {
-	color: #000066;
-	font-style: bold;
-	font-family: verdana;
-	font-weight: normal;
-	font-size: 11px;
-	background-color: #f0f8ff
+    color: #000066;
+    font-style: bold;
+    font-family: verdana;
+    font-weight: normal;
+    font-size: 11px;
+    background-color: #f0f8ff
 }
 
 .login #header {
-	height: 160px;
-	text-align: center;
+    height: 160px;
+    text-align: center;
 }
 
 .login #footer {
-	text-align: center;
-	margin: 60px;
-	text-align: center;
+    text-align: center;
+    margin: 60px;
+    text-align: center;
 }
 
 .login h1 {
-	font-size: 18px;
-	font-family: verdana;
-	font-weight: bolder;
+    font-size: 18px;
+    font-family: verdana;
+    font-weight: bolder;
 }
 
 .login table p {
-	font-size: 9px;
-	font-weight: lighter;
+    font-size: 9px;
+    font-weight: lighter;
 }
 
 .login .errors {
-	font-size: 9px;
-	font-weight: lighter;
+    font-size: 9px;
+    font-weight: lighter;
 }
 
 }
 #footer a {
-	color: #FFFFFF;
-	font-size: 10px;
-	text-decoration: none;
+    color: #FFFFFF;
+    font-size: 10px;
+    text-decoration: none;
 }
 
 #footer a:hover {
-	color: #faaaaa;
+    color: #faaaaa;
 }
 
 input,textarea,select {
-	
+    
 }
 
 #tituloAdm {
-	text-align: left;
-	float: left;
-	padding-left: 20px;
-	padding-top: 10px;
-	font-size: 20px;
-	color: #EFEFEF;
-	font-weight: bold;
-	text-shadow: 0.2em 0em 1em black, 0.2em 0.1em 0.3em black;
-	filter: progid:DXImageTransform.Microsoft.Shadow(color='gray', Direction=135, Strength=6);
+    text-align: left;
+    float: left;
+    padding-left: 20px;
+    padding-top: 10px;
+    font-size: 20px;
+    color: #EFEFEF;
+    font-weight: bold;
+    text-shadow: 0.2em 0em 1em black, 0.2em 0.1em 0.3em black;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='gray', Direction=135, Strength=6);
 }
 
 #logosAdm {
-	text-align: left;
-	float: left;
-	padding: 0 0 0 14px;
+    text-align: left;
+    float: left;
+    padding: 0 0 0 14px;
 }
 
 #side {
-	margin-bottom: 10px;
-	padding: 5px;
+    margin-bottom: 10px;
+    padding: 5px;
 }
 
 #area {
-	float: left;
-	width: 960px;
-	margin-top: 12px;
+    float: left;
+    width: 960px;
+    margin-top: 12px;
 }
 
 #logo {
-	float: left;
-	margin-left: 9px;
-	width: 285px;
+    float: left;
+    margin-left: 9px;
+    width: 285px;
 }
 
 a.tab {
-	display: block;
-	float: left;
-	font-size: 12px;
-	font-weight: bold;
-	color: white;
-	text-decoration: none;
-	background-image: url('i/tab.gif');
-	width: 146px;
-	height: 22px;
-	padding-top: 5px;
-	padding-left: 10px;
+    display: block;
+    float: left;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    background-image: url('i/tab.gif');
+    width: 146px;
+    height: 22px;
+    padding-top: 5px;
+    padding-left: 10px;
 }
 
 a.subtab {
-	background: black;
-	color: silver;
-	display: block;
-	font-size: 9pt;
-	margin: 1px 0pt;
-	padding: 2px;
-	text-decoration: none;
+    background: black;
+    color: silver;
+    display: block;
+    font-size: 9pt;
+    margin: 1px 0pt;
+    padding: 2px;
+    text-decoration: none;
 }
 
 a.subtab:hover {
-	background: #000000;
-	color: #ffffff;
+    background: #000000;
+    color: #ffffff;
 }
 
 div.menu {
-	position: absolute;
-	display: none;
-	top: 500px;
-	left: 0;
-	width: 200px;
-	padding: 5px;
-	background: black;
-	border: 1px solid #DDDDDD;
-	z-index: 9999;
+    position: absolute;
+    display: none;
+    top: 500px;
+    left: 0;
+    width: 200px;
+    padding: 5px;
+    background: black;
+    border: 1px solid #DDDDDD;
+    z-index: 9999;
 }
 
 .bottom {
-	background: url("i/panel-bg.png") repeat scroll 0 0 #000;
-	padding: 5px 5px 5px 5px;
-	border-top: 2px solid black;
+    background: url("i/panel-bg.png") repeat scroll 0 0 #000;
+    padding: 5px 5px 5px 5px;
+    border-top: 2px solid black;
 }
 
 .line {
-	margin: 10px 0;
-	padding: 10px 5px 5px;
+    margin: 10px 0;
+    padding: 10px 5px 5px;
 }
 
 #content {
-	background: url("i/bg.png") repeat-x scroll 0 0 #333949;
-	color: #FFFFFF;
-	padding: 4px 22px 10px;
+    background: url("i/bg.png") repeat-x scroll 0 0 #333949;
+    color: #FFFFFF;
+    padding: 4px 22px 10px;
 }
 
 .theader {
-	background: url('i/panel-bg.png') #000000;
-	padding: 5px;
-	color: white;
+    background: url('i/panel-bg.png') #000000;
+    padding: 5px;
+    color: white;
 }
 
 .trow {
-	background: none repeat scroll 0 0 #000000;
-	opacity: 0.7;
-	filter: alpha(opacity = 70);
-	color: #fff;
+    background: none repeat scroll 0 0 #000000;
+    opacity: 0.7;
+    filter: alpha(opacity = 70);
+    color: #fff;
 }
 
 .trow:hover {
-	opacity: 1;
-	filter: alpha(opacity = 100);
+    opacity: 1;
+    filter: alpha(opacity = 100);
 }
 
 .trow a {
-	color: yellow;
+    color: yellow;
 }
 
 .trow a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 img {
-	border: 0;
+    border: 0;
 }
 
 .white {
-	color: white;
+    color: white;
 }
 
 div.brclear {
-	clear: both;
-	height: 1px;
-	line-height: 0px;
-	font-size: 1px;
-	padding: 0px;
-	margin: 0px;
+    clear: both;
+    height: 1px;
+    line-height: 0px;
+    font-size: 1px;
+    padding: 0px;
+    margin: 0px;
 }
 
 form.search {
-	margin: 0 0 10px 0;
-	background: url('i/panel-bg.png') #000000;
-	padding: 5px;
-	border-bottom: 2px solid white;
-	border-top: 2px solid white;
+    margin: 0 0 10px 0;
+    background: url('i/panel-bg.png') #000000;
+    padding: 5px;
+    border-bottom: 2px solid white;
+    border-top: 2px solid white;
 }
 
 form .login {
-	margin: auto auto;
+    margin: auto auto;
 }
 
 #popup, #context {
-	position: absolute;
-	display: none;
-	top: 0;
-	left: 0;
-	background: #000;
-	padding: 10px;
-	z-index: 101;
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    background: #000;
+    padding: 10px;
+    z-index: 101;
 }
 
 #popup a, #context a {
-	color: #FFF;
+    color: #FFF;
 }
 
 #popup_body,#context_body {
-	width: 480px;
-	height: 320px;
-	overflow: auto;
-	background: #fff;
-	padding: 10px;
-	color: #000;
+    width: 480px;
+    height: 320px;
+    overflow: auto;
+    background: #fff;
+    padding: 10px;
+    color: #000;
 }
 
 #popup_body table,#context_body table,#popup_body h2,#context_body h2,#popup_body h3,#context_body h3
-	{
-	color: #fff;
+    {
+    color: #fff;
 }
 
 #popup_body div { /*background: #999;
     border: 1px solid #000;
     padding: 10px;*/
-	
+    
 }
 
 .popup_title {
-	font-weight: bold;
-	font-size: 13px;
+    font-weight: bold;
+    font-size: 13px;
 }
 
 a.settings_tab {
-	display: block;
-	float: left;
-	padding: 2px;
-	margin-right: 2px;
-	border: 1px solid #769DC0;
-	font-size: 12px;
-	cursor: pointer;
+    display: block;
+    float: left;
+    padding: 2px;
+    margin-right: 2px;
+    border: 1px solid #769DC0;
+    font-size: 12px;
+    cursor: pointer;
 }
 
 #black_overlay {
-	display: none;
-	background-color: #000000;
-	height: 100%;
-	left: 0px;
-	filter: alpha(opacity = 75);
-	opacity: 0.75;
-	position: fixed;
-	top: 0px;
-	width: 100%;
-	z-index: 100;
+    display: none;
+    background-color: #000000;
+    height: 100%;
+    left: 0px;
+    filter: alpha(opacity = 75);
+    opacity: 0.75;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 100;
 }
 
 #content table { /*background: none repeat scroll 0 0 #000000;*/
-	margin: 0 auto;
-	width: 100%;
+    margin: 0 auto;
+    width: 100%;
 }
 
 #content table td {
-	padding: 8px;
+    padding: 8px;
 }
 
 .admin form {
-	background: none repeat scroll 0 0 #000000;
-	opacity: 0.7;
-	filter: alpha(opacity = 70);
+    background: none repeat scroll 0 0 #000000;
+    opacity: 0.7;
+    filter: alpha(opacity = 70);
 }
 
 .overlay-admin {
-	background: none repeat scroll 0 0 #000000;
-	opacity: 0.75;
-	filter: alpha(opacity = 75);
+    background: none repeat scroll 0 0 #000000;
+    opacity: 0.75;
+    filter: alpha(opacity = 75);
 }
 
 .conversion img {
-	margin: 2px;
+    margin: 2px;
 }
 
 .center .e,.center .v {
-	text-align: left;
+    text-align: left;
 }
 
 .center .e {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 /*Dojo*/
 .dojoxGrid table {
-	margin: 0;
+    margin: 0;
 }
 
 .center {
-	text-align: center;
+    text-align: center;
 }
 
 .center table {
-	margin-left: auto;
-	margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /*html, body { width: 100%; height: 100%; margin: 0; }*/
 #borderContainer {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 #main_grid, .main_grid {
-	margin: 0 auto !important;
+    margin: 0 auto !important;
 }
 
 .claro table.dijitCalendarContainer {
-	margin: 25px auto;
+    margin: 25px auto;
 }
 
 #formatted {
-	text-align: center;
+    text-align: center;
 }
 
 .uploadBtn {
-	border: 1px solid #333333;
-	background: url(buttonEnabled.png) #d0d0d0 repeat-x scroll 0px top;
-	font-size: 14px;
-	width: 201px;
-	height: 30px;
-	vertical-align: middle; /* emulates a <button> if node is not */
-	text-align: center;
+    border: 1px solid #333333;
+    background: url(buttonEnabled.png) #d0d0d0 repeat-x scroll 0px top;
+    font-size: 14px;
+    width: 201px;
+    height: 30px;
+    vertical-align: middle; /* emulates a <button> if node is not */
+    text-align: center;
 }
 
 .uploadHover {
-	background-image: url(buttonHover.png);
-	cursor: pointer;
-	font-weight: bold;
+    background-image: url(buttonHover.png);
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .uploadPress {
-	background-image: url(buttonActive.png);
+    background-image: url(buttonActive.png);
 }
 
 .uploadDisabled {
-	background-image: none;
-	background-color: #666;
-	color: #999;
-	border: 1px solid #999;
+    background-image: none;
+    background-color: #666;
+    color: #999;
+    border: 1px solid #999;
 }
 
 #tab_form th {
-	text-align: left !important;
-	font-weight: normal;
-	color: navy;
+    text-align: left !important;
+    font-weight: normal;
+    color: navy;
 }
 
 .select_files {
-	
+    
 }
 
 .select_files tr {
-	
+    
 }
 
 .select_files td {
-	
+    
 }
 
 .select_files a {
-	color: navy;
+    color: navy;
 }
 
 #ajax_loading_bar {
-	height: 20px;
-	width: 220px;
+    height: 20px;
+    width: 220px;
 }
 
 .dijitSplitContainer-dijitContentPane,.dijitBorderContainer-dijitContentPane
 {
-	background: url(i/bgmetal-light.png) #F0F0F0;
+    background: url(i/bgmetal-light.png) #F0F0F0;
 }
 
 .tundra .dijitSplitterH,.tundra .dijitGutterH,.tundra .dijitSplitterV,.tundra .dijitGutterV,.tundra .dijitBorderContainer
 {
-	background: #EFEFEF;
+    background: #EFEFEF;
 }
 
 #panel_central h2 {
-	text-align: left;
-	padding-left: 10px;
-	color: black;
-	font-weight: normal;
-	text-shadow: 0.2em 0em 1em white, 0.2em 0.1em 0.3em white;
-	text-align: center;
+    text-align: left;
+    padding-left: 10px;
+    color: black;
+    font-weight: normal;
+    text-shadow: 0.2em 0em 1em white, 0.2em 0.1em 0.3em white;
+    text-align: center;
 }
 
 #tabForm th, #tabFormedit th, #tabFormadd th, #tabFormclone th{
-	text-align: left;
-	font-weight: normal;
+    text-align: left;
+    font-weight: normal;
 }
 
+.tabForm th, .tabFormedit th, .tabFormadd th, .tabFormclone th{
+    text-align: left;
+    font-weight: normal;
+}
 
 /*image shadow*/
 .img-shadow {
-	float:right;
-	background: url(i/trans-shadow.png) no-repeat bottom right; /* Most major browsers other than IE supports transparent shadow. Newer release of IE should be able to support that. */
+    float:right;
+    background: url(i/trans-shadow.png) no-repeat bottom right; /* Most major browsers other than IE supports transparent shadow. Newer release of IE should be able to support that. */
 }
 
 .img-shadow img {
-	display: block; /* IE won't do well without this */
-	position: relative; /* Make the shadow's position relative to its image */
-	padding: 5px; /* This creates a border around the image */
-	background-color: #fff; /* Background color of the border created by the padding */
-	border: 1px solid #cecece; /* A 1 pixel greyish border is applied to the white border created by the padding */
-	margin: -6px 6px 6px -6px; /* Offset the image by certain pixels to reveal the shadow, as the shadows are 6 pixels wide, offset it by that amount to get a perfect shadow */
+    display: block; /* IE won't do well without this */
+    position: relative; /* Make the shadow's position relative to its image */
+    padding: 5px; /* This creates a border around the image */
+    background-color: #fff; /* Background color of the border created by the padding */
+    border: 1px solid #cecece; /* A 1 pixel greyish border is applied to the white border created by the padding */
+    margin: -6px 6px 6px -6px; /* Offset the image by certain pixels to reveal the shadow, as the shadows are 6 pixels wide, offset it by that amount to get a perfect shadow */
 }
 
 #panel_central form > table {
-	border: 1px solid #AAA;
-	padding: 10px;	
+    border: 1px solid #AAA;
+    padding: 10px;  
 }
 
 .SUBT {
@@ -518,14 +522,14 @@ a.settings_tab {
 
 /*Arbol*/
 .dijitLeaf{
-	background-image: url(/dojotoolkit/dijit/icons/images/commonIconsObjActEnabled.png) !important;
-    background-position: -416px !important;	
+    background-image: url(/dojotoolkit/dijit/icons/images/commonIconsObjActEnabled.png) !important;
+    background-position: -416px !important; 
 }
 
 /*Paginador, workaround para IE >= 6, IE 6 ya está advertido*/
 
 .dojoxGridPaginator td {
-	min-width: 33%;
+    min-width: 33%;
 }
 
 /*Multi Selects*/
@@ -533,11 +537,11 @@ a.settings_tab {
 
 .aux {
     padding: 2px 2px 10px 8px;
-    color: #646464;	
+    color: #646464; 
 }
 
 .aux .tip {
-	float: right;
+    float: right;
 }
 
 
@@ -547,13 +551,13 @@ a.settings_tab {
 }
 
 .dojoxExpandoContent {
-	overflow: auto !important;
-	border: 1px #CCC solid;    
+    overflow: auto !important;
+    border: 1px #CCC solid;    
 }
 
 .dojoxExpandoWrapper {
     background: url(i/bgmetal-light.png) #F0F0F0;
-}
+}   
 
 
 .dijitTabPane, .dijitStackContainer-child, .dijitAccordionContainer-child {
@@ -569,6 +573,3 @@ a.settings_tab {
 /* Loader */
 .appLoader { background: #ededed url(i/loading.gif) center center no-repeat; display: "none"; height: 100%; left: 0; margin: 0; padding: 0; position: absolute; top: 0; vertical-align: middle; width: 100%; z-index: 999; }
 .appLoader div:first-child { font-size: 1.364em; margin: 0 auto; margin-top: 42px; position: absolute; text-align: center; top: 50%; width: 100%; }
-
-
-

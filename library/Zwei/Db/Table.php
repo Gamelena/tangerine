@@ -416,12 +416,9 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             $searchFields = explode(";", $form->search_fields);
             $search = explode(';', $form->search);
             $betweened = false;
+            $between = array();
             
-            if (isset($form->between) && (!empty($form->between) || $form->between === '0')){
-		$between = explode(';', $form->between);
-	    } else {
-		$between = array();
-	    }
+            if (isset($form->between) && (!empty($form->between) || $form->between === '0')) $between = explode(';', $form->between);
             $i = 0;    
             foreach ($search as $v) {
                 if (!empty($searchFields[$i])) {

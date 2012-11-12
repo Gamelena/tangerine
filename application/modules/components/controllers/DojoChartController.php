@@ -32,6 +32,7 @@ class Components_DojoChartController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         
         $this->_page = $this->_request->getParam('p');
+        $this->view->domPrefix = Zwei_Utils_String::toVarWord($this->_page);
         $file = Zwei_Admin_Xml::getFullPath($this->_page);
         $this->_xml = new Zwei_Admin_Xml($file, 0, true);
         

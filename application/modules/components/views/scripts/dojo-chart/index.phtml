@@ -1,18 +1,38 @@
 <style type="text/css">
-    #chartNode {
+    .chartNode {
         width: 800px;
         height:600px;
         background:url(<?php echo BASE_URL; ?>css/i/loading.gif) #ffffff;
         background-repeat: no-repeat;
         background-position: center;
-    }   
+    }
+
+    
 </style>
-<div id="chartNode"></div>
-<div id="chartLegend"></div>
-<button style="display: none" type="button" class="dijitButtonNode dijitIconPrint" style="width:19px;position:absolute;top:32px;left:16px;" iconClass="dijitIconPrint" id="btnPrint" title="Imprimir" onClick="this.style.display='none';window.print();this.style.display='block';"></button>
+<style type="text/css" media="print">
+    @media print
+    {
+    body * { visibility: hidden; }
+        #<?php echo $this->domPrefix;?>printMe * { visibility: visible; }
+        #<?php echo $this->domPrefix;?>printMe { position: absolute; top: 0px; left: -230px; }
+    }
+</style>
+<div id="<?php echo $this->domPrefix;?>printMe" class="printMe">
+    <table>
+        <tr>
+            <td>
+                <div id="<?php echo $this->domPrefix;?>chartNode" class="chartNode"></div>
+            </td>
+            <td>  
+                <div id="<?php echo $this->domPrefix;?>chartLegend" class="chartLegend"></div>
+            </td>    
+        </tr>
+    </table>
+</div>
 <script>
     var base_url = "<?php echo BASE_URL?>"
     var store;
+    var legend;
     var labels = [];
     var useLabelNative = true;
     require([
@@ -82,7 +102,7 @@ else :
 endif;
 ?>
         var gotList = function(items, request){
-            var chart = new Chart("chartNode", options);
+            var chart = new Chart("<?php echo $this->domPrefix;?>chartNode", options);
             chart.setTheme(theme);
             chart.addPlot("default", {
                 type: "<?php echo $this->chartType ?>",
@@ -110,7 +130,7 @@ endif;
 
             });
 
-            chart.addAxis("y", {'labels': labels });
+            chart.addAxis("y", {'labels': labels, rotation: 90});
             
             var tip = new Tooltip(chart, "default");
             
@@ -121,14 +141,15 @@ endif;
             chart.render();
             
             // Create the legend
-            var legend = new dojox.charting.widget.Legend({ chart: chart }, "chartLegend");
+            legend = new dojox.charting.widget.Legend({ chart: chart, horizontal: false }, "<?php echo $this->domPrefix;?>chartLegend");
         };
         
         var gotError = function(error, request){
             console.debug(request);
             console.debug(error);
-            alert("¡Vaya! ha ocurrido un error: " +  error);
+            //alert("¡Vaya! ha ocurrido un error: " +  error);
         };
 
     });
 </script>
+<button type="button" class="dijitIconPrint" style="width:21px;position:absolute;top:24px;left:16px;" iconClass="dijitIconPrint" id="btnPrint" title="Imprimir" onClick="window.print();"></button>

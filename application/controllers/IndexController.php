@@ -373,7 +373,6 @@ class IndexController extends Zend_Controller_Action
         {
             $this->_redirect(BASE_URL. 'index');
         }
-        Debug::write($_SESSION);
 
         $request = $this->getRequest();
         $loginForm = $this->getLoginForm();
@@ -401,6 +400,8 @@ class IndexController extends Zend_Controller_Action
 
                     // Obtenter toda la info de usuario, excepto la password
                     $userInfo = $authAdapter->getResultRowObject(null, 'password');
+                    //$userInfo->sessionNamespace = 'bonos';
+                    //Debug::write($userInfo);
 
                     $authSession = new Zend_Session_Namespace('Promociones');
                     //$authSession->setExpirationSeconds(3600);
