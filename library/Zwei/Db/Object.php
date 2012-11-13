@@ -160,14 +160,14 @@ class Zwei_Db_Object
                     foreach ($search_fields as $sSearchField) {
                         if (@$this->_form->search_type == "multiple") {
                             foreach ($aSearchKeys as $f) {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted = ? ", $f));
+                                $oSelect->where($oModel->getAdapter()->quoteInto("`$sSearchField` = ? ", $f));
                             }
                         } else {
                             //Zwei_Utils_Debug::write($sSearchField);
                             if ($sSearchField == 'id' || preg_match("/^id_/", $sSearchField) ||  preg_match("/_id$/", $sSearchField)) {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted = ? ", $this->_form->search));
+                                $oSelect->where($oModel->getAdapter()->quoteInto("`$sSearchField` = ? ", $this->_form->search));
                             } else {
-                                $oSelect->orWhere($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted LIKE ?", "%{$this->_form->search}%"));
+                                $oSelect->orWhere($oModel->getAdapter()->quoteInto("`$sSearchField` LIKE ?", "%{$this->_form->search}%"));
                             }
                         }
                     }
