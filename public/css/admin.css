@@ -16,11 +16,6 @@
     background-attachment: fixed;
 }
 
-.login .zend_form_dojo{
-	width: 223px;
-	margin: 0 auto;	
-}	
-
 a {
     color: #000;
     text-decoration: none;
@@ -36,25 +31,12 @@ a {
 }
 
 .login table {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 10px;
-	padding: 0px 22px 26px 22px;
-	background: url("i/bgmetal-light.png");
-	margin: 0 auto;
-	/*
-	position: absolute;
-	width: 280px;
-	left: 50%;
-	margin-left: -140px;
-	top: 50%;
-	height: 280px;
-	margin-top: -180px;
-	border: 2px ridge;
-	*/
-	
-	
-/*	opacity: 0.7;
-	filter: alpha(opacity = 70);*/
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 0px 22px 26px 22px;
+    background: url("i/bgmetal-light.png");
+/*  opacity: 0.7;
+    filter: alpha(opacity = 70);*/
 }
 
 .login table th {
@@ -534,6 +516,120 @@ a.settings_tab {
 
 /*Multi Selects*/
 
+.seccionBusquedaUsr {
+
+}
+
+.seccionBusquedaPerfil {
+    position: absolute; 
+    top: 0pt; 
+    left: 0pt;   
+}
+
+.seccionInfoUsr {
+    width: 320px;
+    height:467px;
+}
+
+.seccionInfoPerfil {
+    position: relative;
+    top: 0pt; 
+    left: 230px; 
+    width: 670px;
+    border: solid blue 1px;
+    padding: 2px;
+}
+
+.subseccionInfo {
+    margin-top : 10px;
+    padding: 5px;
+    border: solid gray 1px;
+    border-radius: 10px;
+    
+}
+
+
+#divLeftSwitch a {
+    margin: 0px 5px 8px 5px;
+    float: right;
+}
+
+#divLeftMainTitle {
+    color: #0066CC;
+    margin: 8px 5px 8px 5px;
+}
+
+.divSearch {
+    margin: 0px 5px 8px 5px;
+}
+
+#divLeftList {
+    margin: 8px 5px 8px 5px;
+    border: 1px solid #0066CC;
+    width: 250px;
+    height: 400px;
+    overflow-y: scroll;
+    overflow-x: auto;
+}
+
+.listLink {
+    font-size: 11px;
+}
+#divLeftAddTitle {
+    margin: 8px 5px 8px 5px;
+}
+
+#divLeftAdd {
+    margin: 8px 5px 8px 5px;
+}
+
+#divCenterMainTitle {
+    width: 264px;
+    height: 20px;
+    margin-left: 3px;
+}
+
+#divRightMainTitle {
+    width: 264px;
+    height: 20px;
+    margin-left: 3px;
+}
+
+#divCenterList {
+    width: 265px;
+    height: 470px;
+    border: 1px solid #0066CC;
+    overflow-y: scroll;
+    overflow-x: auto;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+#divRightList {
+    width: 265px;
+    height: 470px;
+    border: 1px solid #0066CC;
+    overflow-y: scroll;
+    overflow-x: auto;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.borde3 th {
+    text-align: right;
+    font-weight: normal;
+}   
+#divLeftList table, #divCenterList table, #divRightListTable table {
+    border: 1px #ddeeff;
+}
+
+#divLeftList tr, #divCenterList tr, #divRightListTable tr {
+    border-bottom: 1px #0066cc;
+}
+
+#divLeftList td, #divCenterList td, #divRightListTable td {
+    border-bottom: 1px #0066cc;
+}
 
 .aux {
     padding: 2px 2px 10px 8px;
@@ -558,17 +654,6 @@ a.settings_tab {
 .dojoxExpandoWrapper {
     background: url(i/bgmetal-light.png) #F0F0F0;
 }   
-
-
-.dijitTabPane, .dijitStackContainer-child, .dijitAccordionContainer-child {
-	border: none !important;
-	top: 0px !important;
-}
-
-.dijitTextBoxDisabled input {
-    color: #555 !important;
-}
-
 
 /* Loader */
 .appLoader { background: #ededed url(i/loading.gif) center center no-repeat; display: "none"; height: 100%; left: 0; margin: 0; padding: 0; position: absolute; top: 0; vertical-align: middle; width: 100%; z-index: 999; }
