@@ -42,6 +42,7 @@ class Zwei_Admin_Controller{
             $configParams = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
             $this->_config = new Zend_Config($configParams);
         } else {
+            //[TODO] This is backward compatibility
             $this->_config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
         }    
         $this->_mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';

@@ -105,6 +105,7 @@ class Zwei_Admin_Acl extends Zend_Acl
 		    $configParams = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
 		    $config = new Zend_Config($configParams);
 		} else {
+		    //[TODO] This is backward compatibility
 		    $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);   
 		}  
 		
