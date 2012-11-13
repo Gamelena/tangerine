@@ -347,13 +347,14 @@ function cargarDatos(model, search_in_fields, format_date, cast, between, format
 }
 
 
-function searchMultiple(model, fields, search_format,  between, response_format, component, domPrefix)
+function searchMultiple(model, fields, search_format,  between, response_format, component, domPrefix, storeType)
 {
 	if (response_format==undefined) {var response_format='json';}
 	if (search_format==undefined) {var search_format=false;}
 	if (between==undefined) {var between=false;}
 	if (component==undefined) {var component=false;}
-	if (domPrefix==undefined) {var domPrefix='';}	
+	if (domPrefix==undefined) {var domPrefix='';}
+	if (storeType==undefined) {var storeType=false;}	
 	
 	var form=dojo.byId(domPrefix+'search_form');
 	var search='';
@@ -399,11 +400,19 @@ function searchMultiple(model, fields, search_format,  between, response_format,
     if(response_format=='excel'){
     	dojo.byId('ifrm_process').src=search_url;
     }else{
-        var store = new dojox.data.QueryReadStore({
-            url: search_url,
-            clearOnClose: true,
-            urlPreventCache: true
-        });    	
+    	if (storeType == 'query') {
+	        var store = new dojox.data.QueryReadStore({
+	            url: search_url,
+	            clearOnClose: true,
+	            urlPreventCache: true
+	        });
+    	} else {
+	        var store = new dojo.data.ItemFileReadStore({
+	            url: search_url,
+	            clearOnClose: true,
+	            urlPreventCache: true
+	        });    		
+    	}	
         dijit.byId(domPrefix+'main_grid').setStore(store);   	
     }	
 	//console.debug(form.elements);
@@ -414,7 +423,7 @@ function loadDataUrl(model, fields, search_format,  between, response_format, do
 	if (response_format==undefined) {var response_format='json';}
 	if (search_format==undefined) {var search_format=false;}
 	if (between==undefined) {var between=false;}
-	if (domPrefix==undefined) {var between='';}
+	if (domPrefix==undefined) {var domPrefix='';}
 	
 	if (search_format) search_format='&search_format='+search_format;	
 	var search_between=between!=false?'&between='+between:'';
@@ -542,7 +551,7 @@ function popupGrid(module, iframe, primary, i){
 }
 */
 
-function popupGrid(module, iframe, primary, title, domPrefix){ //proximo reemplazo de popupGrid, pero hay que arreglar bugs
+function popupGrid(module, iframe, primary, title, domPrefix){ 
 	if (primary == undefined) var primary = 'id'; 
 	if (iframe == undefined) var iframe=false;
 	if (domPrefix == undefined) var domPrefix='';
@@ -577,17 +586,17 @@ function popupGrid(module, iframe, primary, title, domPrefix){ //proximo reempla
 		iframe.style.marginRight='auto';	
 
 		
-		var domDlg = document.getElementById('formDialogo0');
+		var domDlg = document.getElementById(domPrefix+'formDialogo0');
 		//domDlg.innerHTML='';
 		if (!document.getElementById("ifrm_popup")) {
 			console.log('no hay iframe');
 			domDlg.appendChild(iframe);
-			document.getElementById('formDialogo0').style.background = 'url('+base_url+'"css/i/loading.gif) #ffffff;';
-			document.getElementById('formDialogo0').style.backgroundPosition = 'center';
+			document.getElementById(domPrefix+'formDialogo0').style.background = 'url('+base_url+'"css/i/loading.gif) #ffffff;';
+			document.getElementById(domPrefix+'formDialogo0').style.backgroundPosition = 'center';
 			
 		} else {
 			console.log('hay iframe');
-			document.getElementById('formDialogo0').style.background = '#ffffff;';
+			document.getElementById(domPrefix+'formDialogo0').style.background = '#ffffff;';
 			if (window.frames["ifrm_popup"].document.getElementById('loading_overlay')) {
 				window.frames["ifrm_popup"].document.getElementById('loading_overlay').style.display='block';
 			}
@@ -679,6 +688,7 @@ function limitTextDijit(limitField, limitCount, limitNum)
 }
 
 function showtab(tab, area) {
+	console.debug(area);
     var e=document.getElementsByTagName('div');
     for (i=0; i<e.length; i++){
       if(e[i].className=='settings_area')e[i].style.display='none';
@@ -692,9 +702,9 @@ function showtab(tab, area) {
     	
     	if (parseFloat(dojo.version.toString()) < 1.8) {
     		dojo.byId(tab).style.background='url("/dojotoolkit/dijit/themes/claro/images/commonHighlight.png") #CFE5FA repeat-x';
-	} else {	
+		} else {	
 			dojo.byId(tab).style.background='url("/dojotoolkit/dijit/themes/claro/images/activeGradient.png") #CFE5FA repeat-x';
-	}	
+		}	
     } catch (e) {
     	console.debug(e.message);
     }	
