@@ -30,7 +30,7 @@ class IndexController extends Zend_Controller_Action
      *
      * @var int
      */
-    private $_version = 9;
+    private $_version = 10;
     /**
      *
      * @var Zwei_Db_Table
