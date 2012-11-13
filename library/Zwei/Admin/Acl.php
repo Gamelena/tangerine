@@ -101,7 +101,13 @@ class Zwei_Admin_Acl extends Zend_Acl
 
 		self::$_acl = new Zwei_Admin_Acl();
 
-		$config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+		if (Zend_Controller_Front::getInstance()->getParam('bootstrap')) {
+		    $configParams = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
+		    $config = new Zend_Config($configParams);
+		} else {
+		    $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);   
+		}  
+		
 
 		/**
 		 * [TODO] codigo backward compatibility, debiera ser reducido en la version 2 de AdmPortal
