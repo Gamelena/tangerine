@@ -153,7 +153,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->first_names = $userInfo->first_names;
         $this->view->last_names = $userInfo->last_names;
         $this->view->user_id = $userInfo->id;
-        $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+        $config = $this->getFrontController()->getParam('bootstrap')->getApplication()->getOptions();
         $this->view->layout = isset($config->zwei->layout->mainPane) ? "'".$config->zwei->layout->mainPane."'" : 'undefined';
 
         if (!empty($this->_template)) {
@@ -448,7 +448,7 @@ class IndexController extends Zend_Controller_Action
      */
     protected function getAuthAdapter()
     {
-        $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+        //$config = $this->getFrontController()->getParam('bootstrap')->getApplication()->getOptions();
         //$dbAdapter = Zend_Db::factory($config->resources->multidb->auth);
         $dbAdapter = Zend_Db_Table::getDefaultAdapter();
         $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
