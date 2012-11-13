@@ -9,9 +9,9 @@ class Zwei_Utils_File
 {
     /**
      * 
-     * @param $dir string - ruta 
-     * @param $remove_dir
-     * @return unknown_type
+     * @param string - ruta 
+     * @param boolean
+     * @return void
      */
     public function clearRecursive($dir, $remove_dir = false) {
         foreach (glob($dir . '/*') as $file) {
@@ -23,7 +23,11 @@ class Zwei_Utils_File
         if ($remove_dir) rmdir($dir);
     }
     
-    
+    /**
+     * 
+     * @param $folder string - carpeta
+     * @return boolean
+     */
     public function isNotEmptyFolder($folder) { 
         if (! is_dir($folder)) 
             return false; // not a dir 
