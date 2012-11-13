@@ -41,8 +41,8 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 		$form = new Zwei_Utils_Form();
 		$this->getLayout();
 		$modelclass = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
-        $this->_model = new $modelclass();
-        $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
+        	$this->_model = new $modelclass();
+        	$domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
 		$primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : 'id';
 		$count = count($this->layout);
 		if (!isset($this->id)) $this->id = array();
