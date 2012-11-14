@@ -31,7 +31,7 @@ class ObjectsController extends Zend_Controller_Action
     public function init()
     {
         $this->_form = new Zwei_Utils_Form();
-        if (Zend_Auth::getInstance()->hasIdentity()) {
+        if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
         } else if ($this->_form->format == 'json') {
             $this->_helper->ContextSwitch
@@ -89,7 +89,7 @@ class ObjectsController extends Zend_Controller_Action
             $oModel = new $ClassModel();
             $this->view->collection = array();
 
-            if (isset($this->_form->action) && Zend_Auth::getInstance()->hasIdentity()) {
+            if (isset($this->_form->action) && Zwei_Admin_Auth::getInstance()->hasIdentity()) {
                 $data = array();
                 $oModel->getAdapter()->getProfiler()->setEnabled(true);
                 $id = $oModel->getPrimary();

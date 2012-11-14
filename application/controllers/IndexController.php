@@ -147,7 +147,7 @@ class IndexController extends Zend_Controller_Action
     {
         // action body
         $this->enableDojo();
-        if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         $this->view->user_name = $userInfo->user_name;
         $this->view->first_names = $userInfo->first_names;
@@ -182,7 +182,7 @@ class IndexController extends Zend_Controller_Action
      */    
     public function componentsAction()
     {
-        if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         /*
          * Esto aplica sólo en el caso de no usar template dojo por defecto.
@@ -313,7 +313,7 @@ class IndexController extends Zend_Controller_Action
      */
     public function tabsDojoAction()
     {
-        if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
 
         $Xml = new Zwei_Admin_Xml();
@@ -339,7 +339,7 @@ class IndexController extends Zend_Controller_Action
 
     public function modulesAction()
     {
-        if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
 
 
@@ -369,7 +369,7 @@ class IndexController extends Zend_Controller_Action
             @import "'.BASE_URL.'css/admin.css";
         '); 
 
-        if (Zend_Auth::getInstance()->hasIdentity())
+        if (Zwei_Admin_Auth::getInstance()->hasIdentity())
         {
             $this->_redirect(BASE_URL. 'index');
         }
@@ -400,10 +400,13 @@ class IndexController extends Zend_Controller_Action
 
                     // Obtenter toda la info de usuario, excepto la password
                     $userInfo = $authAdapter->getResultRowObject(null, 'password');
-                    //$userInfo->sessionNamespace = 'bonos';
-                    //Debug::write($userInfo);
+                    
+                    $configOptions = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
+                    $config = new Zend_Config($configOptions);
+                    
+                    if (isset($config->zwei->session->namespace)) $userInfo->sessionNamespace = $config->zwei->session->namespace;
 
-                    $authSession = new Zend_Session_Namespace('Promociones');
+                    //$authSession = new Zend_Session_Namespace('Promociones');
                     //$authSession->setExpirationSeconds(3600);
 
                     // El storage por defecto es una session con namespace Zend_Auth

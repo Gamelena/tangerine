@@ -20,7 +20,7 @@ class PersonalInfoModel extends Zwei_Db_Table
 
 	public function init()
 	{
-		if(!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
+		if(!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
 		$userInfo = Zend_Auth::getInstance()->getStorage()->read();
 		$this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
 		$this->_user_name = $userInfo->user_name;

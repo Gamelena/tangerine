@@ -19,7 +19,7 @@ class FunctionsController extends Zend_Controller_Action
 	public function init()
 	{
 		$this->_helper->layout()->disableLayout();
-		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
+		if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
 		$this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
 	}
 
