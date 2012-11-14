@@ -81,9 +81,11 @@ fi
 ADMAPPPATH=$ZWC_ADMPORTAL_PATH/application
 PATHESCAPED=$(echo "${ADMAPPPATH}" | sed 's/\//\\\//g')
 
+echo " "
 echo guardando variable zwei.admportal.applicationPath con valor $ADMAPPPATH en application.ini
 
 sed -i "s/ADMPORTAL_APPLICATION_PATH/$PATHESCAPED/g" $DEST_PATH/web/application/configs/application.ini
+
 
 echo " "
 read -p "¿Desea copiar Controladores de AdmPortal en su proyecto local? (S/N) (por defecto N):" CREATE_CONTROLLERS    
@@ -125,7 +127,6 @@ else
 fi
 
 echo " "
-
 echo "Creando base de módulo components" 
 zf create module components 
 
@@ -170,17 +171,25 @@ fi
 
 
 if [ -a $DEST_PATH/web/application/models/DbTable ];then
-echo Adaptando Tablas ZF a Tablas de AdmPortal
-echo " "
-find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Model_//' {} \;
-find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Zend_Db_Table_Abstract/Zwei_Db_Table/' {} \;
+    echo Adaptando Tablas ZF a Tablas de AdmPortal
+    echo " "
+    find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Model_//' {} \;
+    find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Zend_Db_Table_Abstract/Zwei_Db_Table/' {} \;
 fi
 
+cd ../
 
+echo " "
+echo guardando variable zwei.session.namespace con valor ${PWD##*/} en application.ini
+
+sed -i "s/ADMPORTAL_SITENAME/${PWD##*/}/g" $DEST_PATH/web/application/configs/application.ini
+
+echo " "
 echo \*\*\* Listo, para configurar el servidor con VHOST revise ejemplo en $DEST_PATH/web/docs/README.txt. \*\*\*
 echo \*\*\* Si no desea usar VHOST considere el siguiente script para configurar un ALIAS de Apache. \*\*\*
 echo " " 
-cd ../
+
+
 echo Alias /${PWD##*/} \"$DEST_PATH/web/public\"
 echo \<Directory \"$DEST_PATH/web/public\"\>
 echo    Options Indexes MultiViews FollowSymLinks
