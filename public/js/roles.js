@@ -18,12 +18,16 @@ function rolesInit()
               
             on(dijit.byId(domPrefix+'formDialogo'), "show", function(e){
                 console.debug("formDialogo show");
-                dojo.query('.dijitDialog').style({'min-height':null, height:'auto',width:'auto'});
+                setTimeout(function() {
+                    dojo.query('.dijitDialog').style({'min-height':null, height:'auto',width:'auto'});
+                }, 1800);      
             });
               
             on(dijit.byId(domPrefix+'formDialogoEditar'), "show", function(e){
                 console.debug("formDialogoEditar show");
-                dojo.query('.dijitDialog').style({'min-height':null, height:'auto',width:'auto'});
+                setTimeout(function() {
+                    dojo.query('.dijitDialog').style({'min-height':null, height:'auto',width:'auto'});
+                }, 1800);    
             });
         }, 800);  
     });
