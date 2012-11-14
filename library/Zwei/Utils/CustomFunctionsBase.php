@@ -76,7 +76,9 @@ class Zwei_Utils_CustomFunctionsBase
 	
 	public function __construct($icon=false)
 	{
-		if (!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
+		if (!Zend_Auth::getInstance()->hasIdentity()) {
+		    Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoAndExit('login');
+		}
     	
     	$this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
         $this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
