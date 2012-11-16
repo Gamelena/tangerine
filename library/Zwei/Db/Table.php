@@ -131,12 +131,11 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
              * 
              */
             $db = Zend_Db::factory($config->resources->multidb->{$adapter});
-            $this->_setAdapter($db);
 	    } else {    
             $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
             $db = $resource->getDb($adapter);
-            $this->_setAdapter($db);
 	    }
+	    $this->_setAdapter($db);
 	}
 
     /**
