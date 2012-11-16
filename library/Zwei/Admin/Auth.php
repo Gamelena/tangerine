@@ -35,11 +35,11 @@ class Zwei_Admin_Auth
     {}
 
     /**
-     * Returns an instance of Zend_Auth
+     * Returns an instance of Zwei_Admin_Auth
      *
      * Singleton pattern implementation
      *
-     * @return Zend_Auth Provides a fluent interface
+     * @return Zwei_Admin_Auth Provides a fluent interface
      */
     public static function getInstance()
     {

@@ -451,9 +451,12 @@ class IndexController extends Zend_Controller_Action
      */
     protected function getAuthAdapter()
     {
-        //$config = new Zend_Config($this->getFrontController()->getParam('bootstrap')->getApplication()->getOptions());
-        //$dbAdapter = Zend_Db::factory($config->resources->multidb->auth);
-        $dbAdapter = Zend_Db_Table::getDefaultAdapter();
+        $resource = $this->getFrontController()->getParam('bootstrap')->getResource("multidb");
+        
+        $dbAdapter = isset($resource) && $resource->getDb("auth") ? 
+            $resource->getDb("auth") :
+            Zend_Db_Table::getDefaultAdapter();
+        
         $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
         $authUsersTable = 'acl_users';
         $authUserName = 'user_name';
