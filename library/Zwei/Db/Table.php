@@ -153,7 +153,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 
             $strData = print_r($data, true);
             $logMessage = "[$userName $ip] INSERT INTO " . $this->info(Zend_Db_Table::NAME) . " VALUES ($strData) ";
-            Debug::writeBySettings($this->getAdapter()->getConfig());
+            Debug::writeBySettings($this->getAdapter()->getConfig(), 'SI', "../log/transactions");
             Debug::writeBySettings($logMessage, 'transactions_log', 'SI', "../log/transactions");
         }
 	    
@@ -176,7 +176,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             $strData = print_r($data, true);
             $strWhere = print_r($where, true);
             $logMessage = "[$userName $ip] UPDATE " . $this->info(Zend_Db_Table::NAME) . " SET (".$strData.") WHERE (".$strWhere.") ";
-            Debug::writeBySettings($this->getAdapter()->getConfig());
+            Debug::writeBySettings($this->getAdapter()->getConfig(), 'SI', "../log/transactions");
             Debug::writeBySettings($logMessage, 'transactions_log', 'SI', "../log/transactions");
         }
 	    
@@ -196,7 +196,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	        
             $strWhere = print_r($where, true);
             $logMessage = "[$userName $ip] DELETE FROM " . $this->info(Zend_Db_Table::NAME) . " WHERE ($strWhere) ";
-            Debug::writeBySettings($this->getAdapter()->getConfig());
+            Debug::writeBySettings($this->getAdapter()->getConfig(), 'SI', "../log/transactions");
             Debug::writeBySettings($logMessage, 'transactions_log', 'SI', "../log/transactions");
         }
 
