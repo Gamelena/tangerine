@@ -15,7 +15,7 @@ class IndexController extends Zend_Controller_Action
      *
      * @var string
      */
-    private $_dojo_style = 'tundra';
+    private $_dojo_theme = 'tundra';
     /**
      *
      * @var string
@@ -42,8 +42,16 @@ class IndexController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         $this->view->base_url = BASE_URL;
         $this->base_dojo_folder = '/dojotoolkit';
-        if (!empty($this->_request->style)) $this->_dojo_style = $this->_request->style;
+        
+        $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
+        
+        if (!empty($config->zwei->layout->dojoTheme)) $this->_dojo_theme = $config->zwei->layout->dojoTheme;
+        if (!empty($config->zwei->layout->template)) $this->_dojo_theme = $config->zwei->layout->template;
+        
+        if (!empty($this->_request->theme)) $this->_dojo_theme = $this->_request->theme;
         if (!empty($this->_request->template)) $this->_template = $this->_request->template;
+        
+
 
         Zend_Dojo::enableView($this->view);
         $this->view->addHelperPath('Zend/Dojo/View/Helper/', 'Zend_Dojo_View_Helper');
@@ -52,7 +60,7 @@ class IndexController extends Zend_Controller_Action
         ->setDjConfig(array('parseOnLoad' => 'true', 'isDebug'=> 'false', 'locale'=>'es'));
 
         $this->view->headStyle()->appendStyle('
-            @import "'.$this->base_dojo_folder.'/dijit/themes/'.$this->_dojo_style.'/'.$this->_dojo_style.'.css";
+            @import "'.$this->base_dojo_folder.'/dijit/themes/'.$this->_dojo_theme.'/'.$this->_dojo_theme.'.css";
         ');    
 
         try {
@@ -86,7 +94,7 @@ class IndexController extends Zend_Controller_Action
     {
 
 
-        $this->view->body_class = $this->_dojo_style;
+        $this->view->body_class = $this->_dojo_theme;
 
         $this->view->dojo()
         ->requireModule("dojox.widget.Standby")
@@ -131,8 +139,8 @@ class IndexController extends Zend_Controller_Action
 
         $this->view->headStyle()->appendStyle('
             @import "'.$this->base_dojo_folder.'/dojox/grid/resources/Grid.css";
-            @import "'.$this->base_dojo_folder.'/dojox/grid/resources/'.$this->_dojo_style.'Grid.css";
-            @import "'.$this->base_dojo_folder.'/dojox/grid/enhanced/resources/'.$this->_dojo_style.'/EnhancedGrid.css";
+            @import "'.$this->base_dojo_folder.'/dojox/grid/resources/'.$this->_dojo_theme.'Grid.css";
+            @import "'.$this->base_dojo_folder.'/dojox/grid/enhanced/resources/'.$this->_dojo_theme.'/EnhancedGrid.css";
             @import "'.$this->base_dojo_folder.'/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css";
             @import "'.$this->base_dojo_folder.'/dojox/form/resources/CheckedMultiSelect.css";
             @import "'.$this->base_dojo_folder.'/dojox/layout/resources/ExpandoPane.css";
@@ -153,7 +161,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->first_names = $userInfo->first_names;
         $this->view->last_names = $userInfo->last_names;
         $this->view->user_id = $userInfo->id;
-        $config = new Zend_Config($this->getFrontController()->getParam('bootstrap')->getApplication()->getOptions());
+        $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
         $this->view->layout = isset($config->zwei->layout->mainPane) ? "'".$config->zwei->layout->mainPane."'" : 'undefined';
 
         if (!empty($this->_template)) {
@@ -340,8 +348,6 @@ class IndexController extends Zend_Controller_Action
     public function modulesAction()
     {
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
-        $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-
 
         Zend_Dojo::enableView($this->view);
 
@@ -401,8 +407,7 @@ class IndexController extends Zend_Controller_Action
                     // Obtenter toda la info de usuario, excepto la password
                     $userInfo = $authAdapter->getResultRowObject(null, 'password');
                     
-                    $configOptions = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
-                    $config = new Zend_Config($configOptions);
+                    $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
                     
                     if (isset($config->zwei->session->namespace)) $userInfo->sessionNamespace = $config->zwei->session->namespace;
 
@@ -451,7 +456,7 @@ class IndexController extends Zend_Controller_Action
      */
     protected function getAuthAdapter()
     {
-        $resource = $this->getFrontController()->getParam('bootstrap')->getResource("multidb");
+        $resource = $this->getInvokeArg('bootstrap')->getResource("multidb");
         
         $dbAdapter = isset($resource) && $resource->getDb("auth") ? 
             $resource->getDb("auth") :
