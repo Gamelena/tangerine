@@ -10,7 +10,7 @@
  * @category Zwei
  * @package Zwei_Admin
  * @subpackage Components
- * @version $Id:$
+ * @version $Id$
  * @since 0.1
  */
 
@@ -81,8 +81,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 $this->_model = new $ClassModel();
                 $select = $this->_model->select();
 
-                $my_id = ($this->_model->getPrimary()) ? $this->_model->getPrimary() : "id";
-        
+                $my_id = ($this->_model->getPrimary()) ? $this->_model->getPrimary() : $this->_model->getName().".id";
                 if (!is_array($my_id) || count($my_id) == 1) {
                     if (is_array($my_id) && count($my_id) == 1) {
                         $my_id = array_values($my_id);
@@ -130,7 +129,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                         //[TODO] optimizar
                         $select2 = $this->_model->select();
           
-                        $my_id = ($this->_model->getPrimary()) ? $this->_model->getPrimary() : "id";
+                        $my_id = ($this->_model->getPrimary()) ? $this->_model->getPrimary() : $this->_model->getName().".id";
                         if (is_array($my_id)) $my_id = array_values($my_id);
                          
                         if (!is_array($my_id) || count($my_id) == 1) {
@@ -157,7 +156,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                     if (isset($node['offset'])) {
                         $select2 = $this->_model->select();
                          
-                        $my_id = ($this->_model->getPrimary()) ? $this->_model->getPrimary() : "id";
+                        $my_id = ($this->_model->getPrimary()) ? $this->_model->getPrimary() : $this->_model->getName()."id";
                         if (is_array($my_id)) $my_id = array_values($my_id);
                          
                         if (!is_array($my_id) || count($my_id) == 1){
