@@ -131,8 +131,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
              * @deprecated bloque backward compatibility, incluyendo $config
              * 
              */
-	        Debug::write($db);
             $db = Zend_Db::factory($config->resources->multidb->{$adapter});
+            Debug::write($db);
 	    } else {    
             $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
             Debug::write($db);
