@@ -123,7 +123,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	 */
 	public function setAdapter($adapter) 
 	{
-	    Debug::write($adapter);
+	    //Debug::write($adapter);
 	    $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
 	    if (isset($config->resources->multidb->{$adapter}->params)) {
             /**
@@ -132,11 +132,11 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
              * 
              */
             $db = Zend_Db::factory($config->resources->multidb->{$adapter});
-            Debug::write($db);
+            //Debug::write($db);
 	    } else {    
             $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
-            Debug::write($db);
             $db = $resource->getDb($adapter);
+            //Debug::write($db);
 	    }
 	    $this->_setAdapter($db);
 	}
@@ -155,8 +155,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 
             $strData = print_r($data, true);
             $logMessage = "[$userName $ip] INSERT INTO " . $this->info(Zend_Db_Table::NAME) . " VALUES ($strData) ";
-            Debug::writeBySettings($this->getAdapter()->getConfig(), 'transactions_log', 'SI', "../log/transactions");
-            Debug::writeBySettings($logMessage, 'transactions_log', 'SI', "../log/transactions");
+            //Debug::writeBySettings($this->getAdapter()->getConfig(), 'transactions_log', 'SI', "../log/transactions");
+            //Debug::writeBySettings($logMessage, 'transactions_log', 'SI', "../log/transactions");
         }
 	    
 	    return parent::insert($data);
@@ -178,8 +178,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             $strData = print_r($data, true);
             $strWhere = print_r($where, true);
             $logMessage = "[$userName $ip] UPDATE " . $this->info(Zend_Db_Table::NAME) . " SET (".$strData.") WHERE (".$strWhere.") ";
-            Debug::writeBySettings($this->getAdapter()->getConfig(), 'transactions_log', 'SI', "../log/transactions");
-            Debug::writeBySettings($logMessage, 'transactions_log', 'SI', "../log/transactions");
+            //Debug::writeBySettings($this->getAdapter()->getConfig(), 'transactions_log', 'SI', "../log/transactions");
+            //Debug::writeBySettings($logMessage, 'transactions_log', 'SI', "../log/transactions");
         }
 	    
 	    return parent::update($data, $where);
@@ -198,8 +198,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 	        
             $strWhere = print_r($where, true);
             $logMessage = "[$userName $ip] DELETE FROM " . $this->info(Zend_Db_Table::NAME) . " WHERE ($strWhere) ";
-            Debug::writeBySettings($this->getAdapter()->getConfig(), 'transactions_log', 'SI', "../log/transactions");
-            Debug::writeBySettings($logMessage, 'transactions_log', 'SI', "../log/transactions");
+            //Debug::writeBySettings($this->getAdapter()->getConfig(), 'transactions_log', 'SI', "../log/transactions");
+            //Debug::writeBySettings($logMessage, 'transactions_log', 'SI', "../log/transactions");
         }
 
         return parent::delete($where);
