@@ -45,9 +45,7 @@ class Zwei_Utils_Db
 
         $return = array();
         foreach ($realTables as $i => $v ) {
-            Debug::write($v);
             $return[] = $v[$whereAlias];
-            
         }
         
         return $return; 
