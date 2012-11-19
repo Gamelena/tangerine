@@ -9,8 +9,8 @@ class Zwei_Utils_Db
     /**
      * Obtiene un array con nombres de tablas rotadas, tipo "transacciones_20121222"  
      * 
-     * @param datetime - fecha desde 'Y-m-d h:i:s'
-     * @param datetime - fecha hasta 'Y-m-d h:i:s'
+     * @param datetime|null - fecha desde 'Y-m-d h:i:s'
+     * @param datetime|null - fecha hasta 'Y-m-d h:i:s'
      * @param string - alias de columna (ejecutar "SHOW TABLES" en MySQL para saber cual es este alias)
      * @param string - prefijo de tabla que es seguido por fecha resultante 
      * @param string "days"|"hours"
@@ -20,26 +20,32 @@ class Zwei_Utils_Db
     {
         $possibleTables = array();
         $realTables = array();
-        $interval = Zwei_Utils_Time::createInterval (
-            Zwei_Utils_Time::datetimeToTimestamp($from), 
-            Zwei_Utils_Time::datetimeToTimestamp($to),
-            $interval
-        );
+        if (!is_null($from) && !is_null($to)) {
         
-        foreach ($interval as $stamp)
-        {
-            $possibleTables[] = "'$prefix".date("Ymd", $stamp)."'";    
+            $interval = Zwei_Utils_Time::createInterval (
+                Zwei_Utils_Time::datetimeToTimestamp($from), 
+                Zwei_Utils_Time::datetimeToTimestamp($to),
+                $interval
+            );
+            
+            foreach ($interval as $stamp)
+            {
+                $possibleTables[] = "'$prefix".date("Ymd", $stamp)."'";
+            }
+            
+            $possibleTables = implode(",", $possibleTables);
+    
+            $query = "SHOW TABLES WHERE $whereAlias IN ($possibleTables)";
+        } else {
+            $query = "SHOW TABLES LIKE '$prefix'";
+            $whereAlias .= " ($prefix)";
         }
-        
-        $possibleTables = implode(",", $possibleTables);
-
-        $query = "SHOW TABLES WHERE $whereAlias IN ($possibleTables)";
-
         Debug::writeBySettings($query, 'query_log', "SI");
         $realTables = $this->getAdapter()->fetchAll($query);
 
         $return = array();
         foreach ($realTables as $i => $v ) {
+            Debug::write($v);
             $return[] = $v[$whereAlias];
             
         }
