@@ -38,7 +38,13 @@ class Zwei_Utils_Db
         Debug::writeBySettings($query, 'query_log', "SI");
         $realTables = $this->getAdapter()->fetchAll($query);
 
-        return $realTables; 
+        $return = array();
+        foreach ($realTables as $i => $v ) {
+            $return[] = $v[$whereAlias];
+            
+        }
+        
+        return $return; 
     }
     
 }
