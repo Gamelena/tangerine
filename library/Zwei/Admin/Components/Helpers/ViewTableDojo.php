@@ -73,7 +73,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
             }
         }
         $width_table += 40;
-
+        
         $dojotype = isset($this->layout[0]['TABLE_DOJO_TYPE']) ? "data-dojo-type=\"{$this->layout[0]['TABLE_DOJO_TYPE']}\"" : "data-dojo-type=\"dojox.grid.EnhancedGrid\"";
         $plugins = isset($this->layout[0]['PLUGINS']) ? "plugins:{$this->layout[0]['PLUGINS']}," : "plugins:{pagination: {defaultPageSize:25, maxPageStep: 5 } },";
         $on_row_click = isset($this->layout[0]['ON_ROW_CLICK']) ? "onRowClick:{$this->layout[0]['ON_ROW_CLICK']}," : "";
@@ -89,7 +89,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         }
 
         if (!isset($this->layout[0]['SEARCH_HIDE_SUBMIT'])) {
-            $out .= "\r\n<table $dojotype data-dojo-props=\"$store $plugins clientSort:true, selectable: true, rowSelector: '20px', rowsPerPage: 10, noDataMessage:'Sin datos.'\" jsId=\"{$domPrefix}main_grid\" class=\"main_grid\" id=\"{$domPrefix}main_grid\" $on_row_click $on_row_dbl_click style=\"width:{$width_table}px; height: 320px;\">\r\n<thead><tr>\r\n";
+            $out .= "\r\n<table $dojotype data-dojo-props=\"$store $plugins clientSort:true, selectable: true, rowSelector: '20px', rowsPerPage: 10, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.'\" jsId=\"{$domPrefix}main_grid\" class=\"main_grid\" id=\"{$domPrefix}main_grid\" $on_row_click $on_row_dbl_click style=\"width:{$width_table}px; height: 320px;\">\r\n<thead><tr>\r\n";
     
             for ($i=1; $i<$count; $i++) {
                 $target = (!isset($this->layout[$i]['FIELD'])) ? @$this->layout[$i]['TARGET'] : $this->layout[$i]['FIELD'];
@@ -106,7 +106,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         if (isset($form->id)){
             $out.="<input type=\"hidden\" name=\"id\" id=\"{$domPrefix}id\" value=\"$form->id\">\r\n";
         }
-       
+      
         return $out;
     }
 
@@ -180,7 +180,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
                 }
             }
             $out .= "<div style=\"display:none\"><input dojoType=\"dijit.form.RadioButton\" id=\"{$domPrefix}search_fields[$j]\" name=\"search_fields\" value=\"\" type=\"radio\" /></div>";
-            if ($j <= 1) $out .= "<script>function hideRadio(){dijit.byId('search_fields[0]').domNode.style.display='none';} setTimeout('hideRadio()', 1000)</script>";
+            if ($j <= 1) $out .= "<script>function hideRadio(){dijit.byId('{$domPrefix}search_fields[0]').domNode.style.display='none';} setTimeout('hideRadio()', 1000)</script>";
             if (!isset($this->layout[0]['SEARCH_DISPLAY'])) $out.="</td></tr>\r\n";
             $this->search_in_fields='true';
         }
@@ -437,8 +437,8 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         
         
         if (isset($this->layout[0]['SEARCH_ADDITIONAL_VALIDATION'])) {
-            $modelname=Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
-            $Model=new $modelname();
+            $modelname = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
+            $Model = new $modelname();
             $additional_validation=(isset($this->layout[0]['SEARCH_ADDITIONAL_VALIDATION'])) ? $Model->getSearchValidation() :'';
         } else {
             $additional_validation='';
