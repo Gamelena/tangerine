@@ -25,43 +25,42 @@
 
 class Zwei_Admin_Components_CurlDojo extends Zwei_Admin_Controller implements Zwei_Admin_ComponentsInterface
 {
-	public $page;
-	protected $_acl;
+    public $page;
+    protected $_acl;
+    
+    /**
+     *
+     * @param string $page
+     */
+    function __construct($page){
+        $this->page=$page;
+        $userInfo = Zend_Auth::getInstance()->getStorage()->read();
+        $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
+        $this->getLayout();
+    }
 
-	/**
-	 *
-	 * @param string $page
-	 */
-	function __construct($page){
-		$this->page=$page;
-		$userInfo = Zend_Auth::getInstance()->getStorage()->read();
-		$this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
-		$this->getLayout();
-	}
-
-	function display(){
-		$form=new Zwei_Utils_Form();
-		$request=array();
-		foreach (get_object_vars($form) as $var=>$val){
-			$request[$var]=$val;
-		}
-		$url=urlencode($this->layout[0]["TARGET"]);
-
-		$out="
-	    <div id=\"content_dojo\" style=\"width:100%\">\r\n";
-		if(isset($this->layout[0]['SEARCH'])){
-			$dojotype= @$this->layout[0]['SEARCH_DOJO_TYPE'] ? "dojoType=\"{$this->layout[0]['SEARCH_DOJO_TYPE']}\"" : "dojoType=\"dijit.form.ValidationTextBox\"";
-			$constrains= @$this->layout[0]['SEARCH_CONSTRAINTS']? "constraints=\"{$this->layout[0]['SEARCH_CONSTRAINTS']}\"" : '';
-			$invalid_message= @$this->layout[0]['SEARCH_INVALID_MESSAGE']? "invalidMessage=\"{$this->layout[0]['SEARCH_INVALID_MESSAGE']}\"" : '';
-			$prompt_message= @$this->layout[0]['SEARCH_PROMPT_MESSAGE']? "promptMessage=\"{$this->layout[0]['SEARCH_PROMPT_MESSAGE']}\"" : '';
-			$required= @$this->layout[0]['SEARCH_REQUIRED']=="true"? "required=\"true\"" : '';
-			$regexp = @$this->layout[0]['SEARCH_REG_EXP'] ? "RegExp=\"{$this->layout[0]['SEARCH_REG_EXP']}\"" : '';
-			$label= @$this->layout[1]['NAME']?$this->layout[1]['NAME']:"Buscar";
-				
-			$out .= "<h2>{$this->layout[0]['NAME']}</h2>";	
-			$out .="<div dojoType=\"dijit.form.Form\" id=\"search_form\" jsId=\"search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
-			$out .="
-        	<script type=\"dojo/method\" event=\"onSubmit\">
+    function display(){
+        $form=new Zwei_Utils_Form();
+        $request=array();
+        foreach (get_object_vars($form) as $var=>$val) {
+            $request[$var]=$val;
+        }
+        $url=urlencode($this->layout[0]["TARGET"]);
+        $out="
+        <div id=\"content_dojo\" style=\"width:100%\">\r\n";
+        if (isset($this->layout[0]['SEARCH'])) {
+            $dojotype= @$this->layout[0]['SEARCH_DOJO_TYPE'] ? "dojoType=\"{$this->layout[0]['SEARCH_DOJO_TYPE']}\"" : "dojoType=\"dijit.form.ValidationTextBox\"";
+            $constrains= @$this->layout[0]['SEARCH_CONSTRAINTS']? "constraints=\"{$this->layout[0]['SEARCH_CONSTRAINTS']}\"" : '';
+            $invalid_message= @$this->layout[0]['SEARCH_INVALID_MESSAGE']? "invalidMessage=\"{$this->layout[0]['SEARCH_INVALID_MESSAGE']}\"" : '';
+            $prompt_message= @$this->layout[0]['SEARCH_PROMPT_MESSAGE']? "promptMessage=\"{$this->layout[0]['SEARCH_PROMPT_MESSAGE']}\"" : '';
+            $required= @$this->layout[0]['SEARCH_REQUIRED']=="true"? "required=\"true\"" : '';
+            $regexp = @$this->layout[0]['SEARCH_REG_EXP'] ? "RegExp=\"{$this->layout[0]['SEARCH_REG_EXP']}\"" : '';
+            $label= @$this->layout[1]['NAME']?$this->layout[1]['NAME']:"Buscar";
+            	
+            $out .= "<h2>{$this->layout[0]['NAME']}</h2>";	
+            $out .="<div dojoType=\"dijit.form.Form\" id=\"search_form\" jsId=\"search_form\" encType=\"multipart/form-data\" action=\"\" method=\"\">\r\n";
+            $out .="
+            <script type=\"dojo/method\" event=\"onSubmit\">
                 if (this.validate()) {
 	                get_url_contents('http-request/curl?url=$url&params={$this->layout[0]['SEARCH']}%3D'+dojo.byId('search_form').elements['search'].value,'ajax_box');
                     return false;
@@ -71,21 +70,19 @@ class Zwei_Admin_Components_CurlDojo extends Zwei_Admin_Controller implements Zw
                 }
                 return true;
             </script>\r\n";
-			$out .="<table cellspacing=\"10\" align=\"center\">\r\n";
-			$out .="<tr><td><label for=\"search\">$label</label></td>";
-			$out .="<td><input type=\"text\" name=\"search\" placeHolder=\"Ingresar\" $dojotype trim=\"true\" id=\"search\" $constrains $invalid_message $prompt_message $regexp $required /></td></tr>\r\n";
-			$out .="<tr><td colspan=\"2\" align=\"center\">";
-			$out .="<button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSearch\" id=\"btnBuscar\" >Buscar</button>";
-			$out .="</td></tr>";
-			$out .="</table>\r\n";
-			$out .="</div>\n<br/>\r\n";
-	   
-		}
-
-
-		$out.="</td></tr></table>\r\n";
-		$out .= "</div>\r\n";
-		$out .="<div id=\"ajax_box\"></div>";
-		return $out;
-	}
+            $out .="<table cellspacing=\"10\" align=\"center\">\r\n";
+            $out .="<tr><td><label for=\"search\">$label</label></td>";
+            $out .="<td><input type=\"text\" name=\"search\" placeHolder=\"Ingresar\" $dojotype trim=\"true\" id=\"search\" $constrains $invalid_message $prompt_message $regexp $required /></td></tr>\r\n";
+            $out .="<tr><td colspan=\"2\" align=\"center\">";
+            $out .="<button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSearch\" id=\"btnBuscar\" >Buscar</button>";
+            $out .="</td></tr>";
+            $out .="</table>\r\n";
+            $out .="</div>\n<br/>\r\n";
+            
+        }
+        $out.="</td></tr></table>\r\n";
+        $out .= "</div>\r\n";
+        $out .="<div id=\"ajax_box\"></div>";
+        return $out;
+    }
 }
