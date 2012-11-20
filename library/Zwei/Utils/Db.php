@@ -40,11 +40,11 @@ class Zwei_Utils_Db
             $query = "SHOW TABLES LIKE '$prefix'";
             $whereAlias .= " ($prefix)";
         }
-        Debug::writeBySettings($query, 'query_log', "SI");
+        Debug::writeBySettings($query, 'query_log');
         $realTables = $this->getAdapter()->fetchAll($query);
 
         $return = array();
-        foreach ($realTables as $i => $v ) {
+        foreach ($realTables as $v) {
             $return[] = $v[$whereAlias];
         }
         
