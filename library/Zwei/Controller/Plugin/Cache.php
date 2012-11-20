@@ -10,17 +10,17 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
      *  @var boolean
      */
     public static $doNotCache = false;
-
+    
     /**
      * @var Zend_Cache_Frontend
      */
     public $cache;
-
+    
     /**
      * @var string Cache key
      */
     public $key;
-
+    
     /**
      * Constructor: inicializar cache
      * 
@@ -30,15 +30,15 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
      */
     public function __construct($options)
     {
-        if ($options instanceof Zend_Config && isset($options->resources->cacheManager->page)) {
+        if ($options instanceof Zend_Config && isset($options->resources->cacheManager->page) && !empty($options->resources->cacheManager->page->backend->options->cache_dir)) {
             $options = $options->resources->cacheManager->page->toArray();
         } else {
             Debug::write("No hay valores para inicializar cache");
             return;
         }
-
+        
         $options['frontend']['options']['automatic_serialization'] = true;
-
+        
         $this->cache = Zend_Cache::factory(
             'Output',
             'File',
@@ -46,7 +46,7 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             $options['backend']['options']
         );
     }
-
+    
     /**
      * Start caching
      *
@@ -66,7 +66,7 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             self::$doNotCache = true;
         } else {
             $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-
+            
             if ($request->getControllerName() == "index" && $request->getActionName() == "components") {
                 $this->key = md5($request->getPathInfo().$request->getParam("p")) . "acl_roles_id_".$userInfo->acl_roles_id;
             } else if ($request->getControllerName() == "objects" && $request->getParam('model') == "settings" && $request->getParam('format') == "json") {
@@ -77,7 +77,7 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
                 self::$doNotCache = true;
                 return;
             }
-        
+            
             if (false !== ($response = $this->getCache())) {
                 $response->sendResponse();
                 exit;
@@ -94,7 +94,7 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
         }
         return false;
     }
-
+    
     /**
      * Guardar cache
      * 

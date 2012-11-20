@@ -16,20 +16,22 @@ class Zwei_Controller_Plugin_ApplicationPath extends Zend_Controller_Plugin_Abst
         $frontController = Zend_Controller_Front::getInstance();
         //Debug::write("controller:$controller-module:$module");
         
-        if (file_exists(APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php')) {
-            //Debug::write("Existe ". APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');
+        if (file_exists(APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, '-').'Controller.php')) {
+            //Debug::write("Existe ". APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, '-').'Controller.php');
             $frontController->addControllerDirectory(APPLICATION_PATH . '/controllers');
-        } else {
-            //Debug::write("Buscando ".ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');
+        } else if (file_exists(ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, '-').'Controller.php')){
+            //Debug::write("Buscando ".ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, '-').'Controller.php');
             $frontController->addControllerDirectory(ADMPORTAL_APPLICATION_PATH.'/controllers');
+        } else {
+            Debug::write("No se encontró ".ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, '-').'Controller.php');
         }
         
         if ($module != "default") {
-            if (file_exists(APPLICATION_PATH . '/modules/' . $module . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php')) {
-                //Debug::write("Existe ". APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');
+            if (file_exists(APPLICATION_PATH . '/modules/' . $module . '/controllers/' . Zwei_Utils_String::toClassWord($controller, '-').'Controller.php')) {
+                //Debug::write("Existe ". APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, '-').'Controller.php');
                 $frontController->addModuleDirectory(APPLICATION_PATH . '/modules');
-            } else {
-                //Debug::write("Buscando ". ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');   
+            } else if (file_exists()) {
+                //Debug::write("Buscando ". ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, '-').'Controller.php');   
                 $frontController->addModuleDirectory(ADMPORTAL_APPLICATION_PATH . '/modules');            
             }
         }
