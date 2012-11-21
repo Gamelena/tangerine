@@ -67,10 +67,9 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $model = Zwei_Utils_String::toClassWord($viewtable->layout[0]['TARGET']) . "Model";
         $this->_model = new $model;
         $getPk = $this->_model->getPrimary();
-
+        
         $primary = ($getPk && !@stristr($getPk, ".")) ? $getPk : "id";
-
-
+        
         if ($viewtable->layout[1]['_name'] == 'TAB') {
             $edittable = new Zwei_Admin_Components_Helpers_EditTabs($this->page);
         } elseif ($viewtable->layout[1]['_name'] == 'TAB_DOJO'){
@@ -82,25 +81,25 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         
         $id = $edittable->layout[1]['TARGET'];
         if (isset($request[$id])) $edittable->setId($request[$id]);
-
+        
         //$params = $this->getRequested_params();
-
+        
         $out .= $viewtable->display();
         $out .= "\r\n<table align=\"center\"><tr>";
-
+        
         if ($viewtable->layout[1]['_name'] == 'TAB') {
             if (isset($viewtable->layout[0]['ADD']) && $viewtable->layout[0]['ADD'] == "true" && $this->_acl->isUserAllowed($this->page, 'ADD')){
                 $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"{$domPrefix}btnAdd\" onClick=\"cargarTabsPanelCentral('$this->page', 'add', '$primary', '$domPrefix');try{initModule();}catch(e){console.debug(e);}\">";
                 $out .= "Agregar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }
-
+            
             if (isset($viewtable->layout[0]['EDIT']) && $viewtable->layout[0]['EDIT'] == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT')){
                 $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"{$domPrefix}btnEdit\" onClick=\"cargarTabsPanelCentral('$this->page', 'edit', '$primary', '$domPrefix');try{initModule();}catch(e){console.debug(e);}\">";
                 $out .= "Editar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }
-
+            
             if (isset($viewtable->layout[0]['CLONE']) && $viewtable->layout[0]['CLONE'] == "true"  && $this->_acl->isUserAllowed($this->page, 'ADD')){
                 $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconNewTask\" id=\"{$domPrefix}btnClone\" onClick=\"cargarTabsPanelCentral('$this->page', 'clone', '$primary', '$domPrefix');try{initModule();}catch(e){console.debug(e);}\">";
                 $out .= "Clonar ".$viewtable->layout[0]['NAME'];
@@ -114,27 +113,26 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 $out .= "Agregar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }
-
+            
             if (isset($viewtable->layout[0]['EDIT']) && $viewtable->layout[0]['EDIT'] == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT')){
                 $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"{$domPrefix}btnEdit\" onClick=\"{$domPrefix}showDialog('edit');\">";
                 $out .= "Editar ".$viewtable->layout[0]['NAME'];
                 $out .= "</button></td>";
             }
         }
-
+        
         if (isset($viewtable->layout[0]['CHANGE_PASSWORD']) && $viewtable->layout[0]['CHANGE_PASSWORD'] == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT')){
             $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconEdit\" id=\"{$domPrefix}btnPswd\" onClick=\"{$domPrefix}showDialogPass();\">";
             $out .= "Cambiar Contrase&ntilde;a";
             $out .= "</button></td>";
         }
-
-
+        
         if (isset($viewtable->layout[0]['DELETE']) && $viewtable->layout[0]['DELETE'] == "true" && $this->_acl->isUserAllowed($this->page, 'DELETE')) {
-            $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconDelete\" id=\"{$domPrefix}btnEliminarUsr\" onClick=\"{$domPrefix}eliminar('{$viewtable->layout[0]['TARGET']}', '$primary');\">";
+            $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconDelete\" id=\"{$domPrefix}btnEliminarUsr\" onClick=\"eliminar('{$viewtable->layout[0]['TARGET']}', '$primary', '{$domPrefix}');\">";
             $out .= "Eliminar ".$viewtable->layout[0]['NAME'];
             $out .= "</button></td>";
         }
-
+        
         if (isset($viewtable->layout[0]['EXCEL']) && $viewtable->layout[0]['EXCEL'] == "true") {
             $out .= "<td>";
             if (@$viewtable->layout[0]['SEARCH_TYPE'] == 'multiple' || !empty($viewtable->layout[0]['SEARCH_TABLE'])) {
@@ -145,7 +143,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
             $out .= "Exportar a Excel";
             $out .= "</button></td>";
         }
-
+        
         if (isset($viewtable->layout[0]['FUNCTIONS'])) {
             $CustomFunctions = new Zwei_Utils_CustomFunctions();//Declarar esta funcion en proyectos específico heredando de Zwei_Utils_CustomFunctionsBase()
             $params = '';
@@ -164,6 +162,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 $i++;
             }
         }
+        
         $permissions = false;
         if (isset($viewtable->layout[0]['LINKS'])) {
             $CustomFunctions = new Zwei_Utils_CustomFunctions();//Declarar esta funcion en proyectos específico heredando de Zwei_Utils_CustomFunctionsBase()
@@ -183,9 +182,9 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 $i++;
             }
         }
-
+        
         $permissions = false;
-
+        
         $popups = array();
         if (isset($viewtable->layout[0]['POPUPS'])) {
             $CustomFunctions = new Zwei_Utils_CustomFunctions();
@@ -222,8 +221,8 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
             }
             $popups = $items;
         }
-
-
+        
+        
         $out .= "</tr></table>\r\n";
         
         $height = isset ($viewtable->layout[0]['HEIGHT']) ? "height=\"{$viewtable->layout[0]['HEIGHT']}\"" : "";
@@ -231,7 +230,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $style = isset ($viewtable->layout[0]['STYLE']) ? "style=\"{$viewtable->layout[0]['STYLE']}\"" : "";
         $iframe = isset ($viewtable->layout[0]['IFRAME']) && $viewtable->layout[0]['IFRAME'] == 'true' ? 'true' : 'false';
         $initModule = isset ($viewtable->layout[0]['JS']) ? "initModule();" : "";
-
+        
         if ((@$viewtable->layout[0]['ADD'] == 'true' || @$viewtable->layout[0]['CLONE'] == 'true')
         && ($this->_acl->isUserAllowed($this->page, 'ADD'))) 
         {
@@ -240,7 +239,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 $out .= "<div dojoType=\"dijit.Dialog\" id=\"{$domPrefix}formDialogo\" jsId=\"formDialogo\" refreshOnShow=\"true\" onHide=\"this.reset()\" $style title=\"Agregar {$viewtable->layout[0]['NAME']}\"  execute=\"{$domPrefix}modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 $out .= "\t".$edittable->display('ADD');
                 $out .= "\n</div>\r\n";
-    
+                
             } else {
                 $out .= "<div dojoType=\"dijit.Dialog\" id=\"{$domPrefix}formDialogo\" jsId=\"formDialogo\" $style title=\"Agregar {$viewtable->layout[0]['NAME']}\" onload=\"global_opc='add';showtab('tabadd_ctrl1', '{$domPrefix}tabadd1');$initModule\" execute=\"{$domPrefix}modify('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
                 if ($iframe == 'true') {
@@ -249,7 +248,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 $out .= "\n</div>\r\n";
             }
         }
-
+        
         if ((isset($viewtable->layout[0]['EDIT']) && $viewtable->layout[0]['EDIT'] == 'true')
         && ($this->_acl->isUserAllowed($this->page, 'EDIT')))
         {
@@ -266,7 +265,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 $out .= "\n</div>\r\n";
             }
         }
-
+        
         
         
         $i=0;
@@ -297,8 +296,8 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         
         $out .= "</div>\r\n";
         $out .="<div id=\"{$domPrefix}output_grid\"></div>";
-
-
+        
+        
         if (@$viewtable->layout[0]['CHANGE_PASSWORD']=='true' && $this->_acl->isUserAllowed($this->page,'EDIT')) {
             $out .= "<div dojoType=\"dijit.Dialog\" id=\"{$domPrefix}formPassword\" title=\"Cambio de password\" execute=\"changePassword('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
             $out .= "
@@ -329,14 +328,14 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                                 Guardar Contrase&ntilde;a
                             </button>
                         </td>
-
+                        
                     </tr>
                 </table>\r\n";
             $out.="</div>";
         }
-
+        
         $out .= "<input type=\"hidden\" id=\"{$domPrefix}data_url\" value=\"\" />";
-
+        
         if (!empty($viewtable->layout[0]['JS'])) {
             //Función opcional para ser ejecutada al cargar el JS {nombrejs}Init()
             $functionInit = str_replace('.js','', $viewtable->layout[0]['JS']).'Init';
@@ -382,7 +381,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                             $xhr_insert_data .= "\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$domPrefix}{$pfx}{$k}').value, \r\n";
                         }
                     }
-
+                    
                     if (($node["edit"] == "true" || $node["edit"] == "readonly") && !empty($node['target'])) {
                         $pfx = '';
                         if ($node['type'] == 'dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
@@ -397,11 +396,11 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                     $k++; 
                 }
             }
-
+            
             $modelclass = Zwei_Utils_String::toClassWord($viewtable->layout[0]['TARGET'])."Model";
             $Model = new $modelclass();
             $additional_validation = $Model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
-
+            
             $out.="
             <script type=\"text/javascript\">
             //showtab('tab_ctrl1', '{$domPrefix}tab1');
