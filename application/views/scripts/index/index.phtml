@@ -67,7 +67,7 @@
                     <div data-dojo-type="dijit.Menu" id="confMenu" style="display: none;">
                         <div data-dojo-type="dijit.MenuItem" id="btnConfPersonal"
                             iconClass="dijitIconTask"
-                            onclick="dijit.byId('panel_central').set('href',base_url+'index/components?p=personal-info.xml')">
+                            onclick="<?=$this->jsLoadModuleFunction?>('index/components?p=personal-info.xml', '<?= uniqid() ?>', 'Datos Personales')">
                         Personal</div>
                    </div>
                 </button>

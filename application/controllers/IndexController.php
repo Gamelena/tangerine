@@ -44,15 +44,15 @@ class IndexController extends Zend_Controller_Action
         $this->base_dojo_folder = '/dojotoolkit';
         
         $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
+        $confLayout = $config->zwei->layout;
         
-        if (!empty($config->zwei->layout->dojoTheme)) $this->_dojo_theme = $config->zwei->layout->dojoTheme;
-        if (!empty($config->zwei->layout->template)) $this->_dojo_theme = $config->zwei->layout->template;
+        if (!empty($confLayout->dojoTheme)) $this->_dojo_theme = $confLayout->dojoTheme;
+        if (!empty($confLayout->template)) $this->_dojo_theme = $confLayout->layout->template;
+        $this->view->jsLoadModuleFunction = isset($confLayout->mainPane) && $confLayout->mainPane == 'dijitTabs' ? 'loadModuleTab' : 'cargarPanelCentral';
         
         if (!empty($this->_request->theme)) $this->_dojo_theme = $this->_request->theme;
         if (!empty($this->_request->template)) $this->_template = $this->_request->template;
-        
-
-
+                
         Zend_Dojo::enableView($this->view);
         $this->view->addHelperPath('Zend/Dojo/View/Helper/', 'Zend_Dojo_View_Helper');
         $this->view->dojo()
@@ -92,8 +92,6 @@ class IndexController extends Zend_Controller_Action
 
     private function enableDojo()
     {
-
-
         $this->view->body_class = $this->_dojo_theme;
 
         $this->view->dojo()
