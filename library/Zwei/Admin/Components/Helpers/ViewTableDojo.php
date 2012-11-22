@@ -19,7 +19,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
     public $between;
     public $count;
     private $_model;
-
+    
     public function display()
     {
         $model = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET']) . "Model";
@@ -31,11 +31,11 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
-
+        
         $this->count = count($this->layout);
-
+        
         $out = '';
-
+        
         if (isset($this->layout[0]['SEARCH']) && $this->layout[0]['SEARCH'] != 'false' && $this->_acl->isUserAllowed($this->page, 'LIST'))
         {
             if (@$this->layout[0]['SEARCH_TYPE'] == 'multiple') {
@@ -44,35 +44,37 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
                 $out .= $this->searcher();
             }
         }
-
+        
         if (isset($this->layout[0]['SEARCH_TABLE']) && @$this->layout[0]['SEARCH_TYPE'] != 'multiple' && $this->_acl->isUserAllowed($this->page, 'LIST')) {
             $out .= $this->searchInTable();
         }
-
+        
         $params = $this->getRequested_params();
-
-
+        if (isset($form->id)) $params .= "&search=".$form->id; 
+        if (isset($form->id_cos_serv_regla)) $params .= "&search=".$form->id_cos_serv_regla; //Si está seteado un $_GET['id'] se buscará por id, debe existir $this->model->_search_fields [TODO] esto sirve solo si PK es id
+        
+        
         if (isset($this->layout[0]['LIST']) && $this->layout[0]['LIST']=="true" && $this->_acl->isUserAllowed($this->page, 'LIST') && (!isset($this->layout[0]['SEARCH_HIDE_SUBMIT']))) {
             if (isset($this->layout[0]['SERVER_PAGINATION']) && $this->layout[0]['SERVER_PAGINATION'] == "true") {
                 $out .= "\r\n <span dojoType=\"dojox.data.QueryReadStore\" id=\"{$domPrefix}store_grid\" jsId=\"{$domPrefix}store_grid\" url=\"".BASE_URL."objects?model={$this->layout[0]['TARGET']}&format=json$params\"></span>";
-            } else {    
+            } else {
                 $out .= "\r\n <span dojoType=\"dojo.data.ItemFileReadStore\" id=\"{$domPrefix}store_grid\" jsId=\"{$domPrefix}store_grid\" url=\"".BASE_URL."objects?model={$this->layout[0]['TARGET']}&format=json$params\"></span>";
-            }    
+            }
             $store = "store: {$domPrefix}store_grid,";
         } else {
             $store = '';
         }
-
+        
         $count = count($this->layout);
         $width_col = 120;
         $width_table = 0;
-
+        
         for ($i=1; $i<$count; $i++) {
             if (isset($this->layout[$i]['VISIBLE']) && $this->layout[$i]['VISIBLE'] == "true") {
                 $width_table += (isset($this->layout[$i]['WIDTH'])) ? $this->layout[$i]['WIDTH'] : $width_col;
             }
         }
-        $width_table += 40;
+        $width_table += 44;
         
         $dojotype = isset($this->layout[0]['TABLE_DOJO_TYPE']) ? "data-dojo-type=\"{$this->layout[0]['TABLE_DOJO_TYPE']}\"" : "data-dojo-type=\"dojox.grid.EnhancedGrid\"";
         $plugins = isset($this->layout[0]['PLUGINS']) ? "plugins:{$this->layout[0]['PLUGINS']}," : "plugins:{pagination: {defaultPageSize:25, maxPageStep: 5 } },";
@@ -87,16 +89,16 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
                 $on_row_dbl_click = "onRowDblClick=\"{$domPrefix}showDialog('edit')\"";
             }
         }
-
+        
         if (!isset($this->layout[0]['SEARCH_HIDE_SUBMIT'])) {
             $out .= "\r\n<table $dojotype data-dojo-props=\"$store $plugins clientSort:true, selectable: true, rowSelector: '20px', rowsPerPage: 10, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.'\" jsId=\"{$domPrefix}main_grid\" class=\"main_grid\" id=\"{$domPrefix}main_grid\" $on_row_click $on_row_dbl_click style=\"width:{$width_table}px; height: 320px;\">\r\n<thead><tr>\r\n";
-    
+            
             for ($i=1; $i<$count; $i++) {
                 $target = (!isset($this->layout[$i]['FIELD'])) ? @$this->layout[$i]['TARGET'] : $this->layout[$i]['FIELD'];
                 $formatter = isset($this->layout[$i]['TYPE']) && $this->layout[$i]['TYPE'] == 'dojo_yes_no' ? "formatter=\"formatYesNo\"":'';
                 if(isset($this->layout[$i]['FORMATTER'])) $formatter = "formatter=\"{$this->layout[$i]['FORMATTER']}\"";
                 $width = (isset($this->layout[$i]['WIDTH'])) ? $this->layout[$i]['WIDTH'] : $width_col;
-    
+                
                 if (isset($this->layout[$i]['VISIBLE']) && $this->layout[$i]['VISIBLE'] == "true") {
                     $out .= "\t\t<th field=\"$target\" editable=\"false\" width=\"{$width}px\" $formatter>". str_replace('\\n', '<br/>', $this->layout[$i]['NAME']) ."</th>\r\n";
                 }
@@ -109,7 +111,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
       
         return $out;
     }
-
+    
     /**
      * Generación del buscador
      * @return HTML
@@ -129,7 +131,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $prompt_message = @$this->layout[0]['SEARCH_PROMPT_MESSAGE']? "promptMessage=\"{$this->layout[0]['SEARCH_PROMPT_MESSAGE']}\"" : '';
         $required = @$this->layout[0]['SEARCH_REQUIRED'] == "true"? "required=\"true\"" : '';
         $storeType = isset ($node['SERVER_PAGINATION']) && $node['SERVER_PAGINATION'] == 'true' ? "'query'" : 'false';
-
+        
         if (@$this->layout[0]['SEARCH_DISPLAY']=='between') {
             $label1 = "Desde";
             $label2 = "Hasta";

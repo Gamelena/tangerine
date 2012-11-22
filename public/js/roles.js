@@ -3,7 +3,7 @@ function rolesInit()
     var domPrefix = (layout != undefined && layout == 'dijitTabs') ? 'roles_xml' : ''; 
         
     console.log('rolesInit');
-    //var formDialogo = dijit.byId('formDialogo'); // para explicacion, esto no es necesario ya existe var tabForm global (jsId)
+   
     require(["dojo/on"], function(on){
         setTimeout(function() {
             on(dijit.byId(domPrefix+'formDialogo'), "hide", function(e){

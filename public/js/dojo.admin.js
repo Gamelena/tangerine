@@ -1,4 +1,6 @@
 var global_opc;
+var globalModuleId;
+var globalModule;
 
 dojo.declare(
 	    "dijit.form.ValidationTextarea",
@@ -56,6 +58,9 @@ function eventos()
     dojo.connect(dojo.byId("btnSalir"), "onclick", function(){
         window.location = base_url+"index/logout";
     });
+    dojo.connect(dijit.byId("tabContainer"), "selectChild", function(page){ 
+    	globalModuleId = parseInt(page.id.match(/\d+$/)); 
+    });
 }
 
 
@@ -107,6 +112,7 @@ function cargarPanelCentral(url, moduleId, moduleTitle)
     widget.set('href',base_url+url);
 }
 
+
 function loadModuleTab(url, moduleId, moduleTitle) 
 {
 	if (!dojo.byId('mainTabModule'+moduleId)) {
@@ -139,6 +145,21 @@ function loadModuleTab(url, moduleId, moduleTitle)
 		//dijit.byId('mainTabModule'+moduleId).set('selected', true);
 		tabContainer.selectChild(dijit.byId('mainTabModule'+moduleId));
 	}
+}
+
+function loadModuleByConfig(url, moduleId, moduleTitle) {
+	if (layout != undefined && layout == 'dijitTabs') {
+		cargarPanelCentral(url, moduleId, moduleTitle);
+	} else {
+		loadModuleTab(url, moduleId, moduleTitle); 
+	}	
+}
+
+function loadModuleInSelfTab(url)
+{
+	console.debug(globalModuleId);
+	dijit.byId('mainTabModule'+globalModuleId).href = base_url+url;
+	dijit.byId('mainTabModule'+globalModuleId).refresh();
 }
 
 
@@ -460,16 +481,18 @@ function loadDataUrl(model, fields, search_format,  between, response_format, do
 }
 
 
-function eliminar(model, primary)
+function eliminar(model, primary, domPrefix)
 {
-    var items = main_grid.selection.getSelected();
+    if (domPrefix == undefined) domPrefix = "";
+    var items = dijit.byId(domPrefix+'main_grid').selection.getSelected();
     if(confirm('Desea eliminar el registro seleccionado?')) {
-        eval("eliminarRegistro(model, items[0]."+primary+")");
+        eval("eliminarRegistro(model, items[0]."+primary+", '"+ domPrefix+"')");
         //main_grid.removeSelectedRows();
     }
 }
 
-function eliminarRegistro(model, id) {
+function eliminarRegistro(model, id, domPrefix) {
+    if (domPrefix == undefined) domPrefix = "";
     var res = '';
     dojo.xhrPost( {
         url: base_url+'objects',
@@ -493,7 +516,7 @@ function eliminarRegistro(model, id) {
             }else if(resp.state == 'DELETE_OK'){
         		alert('Se ha borrado correctamente.');
                 //main_grid.removeSelectedRows();
-                cargarDatos(model);
+                cargarDatos(model, false, false, false, false, false, false, domPrefix);
     		}else if(resp.state == 'DELETE_FAIL'){
         		alert('Ha ocurrido un error, verifique datos o intente más tarde');
     		}
@@ -511,16 +534,16 @@ function eliminarRegistro(model, id) {
 
 
 function execFunction(method, params, object, primary, domPrefix){
+    if (primary == undefined) var primary = 'id'; 
+    if (domPrefix == undefined) var domPrefix = '';
 
-	if (primary == undefined) var primary = 'id'; 
-	if (domPrefix == undefined) var domPrefix = '';
-	try {
-		var items = main_grid.selection.getSelected();
-		var id = "&"+primary+"="+ eval("items[0]."+primary);
-	} catch(e) {
-		console.debug(e);
-		var id = '';
-	}	
+    try {
+        var items = dijit.byId(domPrefix + 'main_grid').selection.getSelected();
+        var id = "&"+primary+"="+ eval("items[0]."+primary);
+    } catch(e) {
+        console.debug(e);
+        var id = '';
+    }	
     document.getElementById('ifrm_process').src=base_url+'functions?method='+method+'&params='+params+id+"&object="+object+"&uri="+escape(dojo.byId(domPrefix+'data_url').value);
 }
 

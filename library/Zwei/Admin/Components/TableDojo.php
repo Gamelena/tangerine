@@ -44,6 +44,12 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
     {
         $form = new Zwei_Utils_Form();
         $viewtable = new Zwei_Admin_Components_Helpers_ViewTableDojo($this->page);
+        if (!$viewtable->search_in_fields) $viewtable->search_in_fields = 'false';
+        if (!$viewtable->format_date) $viewtable->format_date = 'false';
+        if (!$viewtable->search_format) $viewtable->search_format = 'false';
+        if (!$viewtable->between) $viewtable->between = 'false';
+        
+        
         $viewtable->getLayout();
         
         $request = array();
@@ -155,7 +161,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 //Zwei_Utils_Debug::write($permissions[$i]);
                 if (empty($permissions[$i]) || $this->_acl->isUserAllowed($this->page, strtoupper($permissions[$i]))) {
                     $foo = Zwei_Utils_String::toFunctionWord($f);
-                    $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon($foo)}\" id=\"{$domPrefix}btn$foo\" onClick=\"execFunction('$f', '$params', '$component', '$primary');\">";
+                    $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon($foo)}\" id=\"{$domPrefix}btn$foo\" onClick=\"execFunction('$f', '$params', '$component', '$primary', '$domPrefix');\">";
                     $out .= $CustomFunctions->getName($foo);
                     $out .= "</button></td>";
                 }
@@ -175,7 +181,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
             foreach ($items as $f) {
                 //Zwei_Utils_Debug::write($permissions[$i]);
                 if (empty($permissions[$i]) || $this->_acl->isUserAllowed($this->page, strtoupper($permissions[$i]))) {
-                    $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon()}\" id=\"{$domPrefix}btnlink$i\" onClick=\"redirectToModule('$i', '$primary');\">";
+                    $out .= "<td><button type=\"button\" dojoType=\"dijit.form.Button\" iconClass=\"{$CustomFunctions->getIcon()}\" id=\"{$domPrefix}btnlink$i\" onClick=\"redirectToModule('$i', '$primary', '$domPrefix');\">";
                     $out .= $CustomFunctions->getName($foo);
                     $out .= "</button></td>";
                 }
