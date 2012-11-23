@@ -200,7 +200,8 @@ function cargarArbolMenu(layout)
 		var treeControl = new dijit.Tree({
 		    model: treeModel,
 		    showRoot: false,
-		    persist:false,
+		    persist: true,
+		    openOnClick: true,
 		    onClick: function(item){
 		    	if (item.url != undefined) {
 		    		if (layout == 'dijitTabs') {
@@ -651,9 +652,12 @@ function redirectToModule(url, domPrefix){
 	} catch(e) {
 		var id='';
 	}
-	var widget = dijit.byId("panel_central");
-    widget.set('href',base_url+url);	
-}
+    if (domPrefix == '') {
+        var widget = dijit.byId("panel_central");
+        widget.set('href',base_url+url);
+    } else {    
+        loadModuleByConfig(url, globalModuleId, '');
+    }
 
 
 function execFunctionPopup(method, params, must_select, primary, domPrefix){
