@@ -39,7 +39,7 @@ class ObjectsController extends Zend_Controller_Action
             ->addActionContext('index', 'json')
             ->initContext();
             $data = array( 'id'=>'0',
-                               'state'=>'inactive',
+                               'state'=>'AUTH_FAILED',
                                'message'=>'Su sesión a expirado, por favor vuelva a ingresar.',
                                'todo'=>'goToLogin');//declarar dojo.admin.js y llamarla en TableDojo
             $this->view->content = Zend_Json::encode($data);
