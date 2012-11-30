@@ -29,7 +29,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
      * 
      * @var int
      */
-    private $_version = 9;//actualizar para forzar update de javascript [TODO] hacer administrable
+    private $_version = 10;//actualizar para forzar update de javascript [TODO] hacer administrable
     /**
      * 
      * @var Zwei_Db_Table
