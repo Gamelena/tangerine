@@ -69,9 +69,9 @@ class Zwei_Admin_Controller{
         $this->name = @$this->layout[0]['NAME'];
         $this->target = @$this->layout[0]['TARGET'];
     }
-
+    
     /**
-     * Obtiene los datos a desplegar del modelo asociado
+     * Obtiene los datos a desplegar del modelo asociado, se usa con template urban, componente xml type="table"
      * @param int
      * @param int
      * @param string
@@ -85,7 +85,7 @@ class Zwei_Admin_Controller{
         $ClassName = Zwei_Utils_String::toClassWord($this->layout[0]["TARGET"])."Model"; 
         $oModel = new $ClassName();
         $oSelect = $oModel->select();
-    
+        
         if ($search != "") {
             if (method_exists($oModel,"getSearchFields")){
                 $fields = $oModel->getSearchFields();
@@ -99,7 +99,7 @@ class Zwei_Admin_Controller{
                 }
             }
         }
-
+        
         if (!empty($this->layout[0]["WHERE"])) $oSelect->where($this->layout[0]["WHERE"]);
         if ($sort!="") $oSelect->order("$sort $dir");
         if (empty($this->id)) $oSelect->limit($limit, $start);
