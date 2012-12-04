@@ -15,42 +15,42 @@
 
 class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 {
-	/**
-	 * 
-	 * @var string
-	 */
-	private $_out = "";
-	/**
-	 * @var Zwei_Db_Table
-	 */
-	private $_model;
-	/**
-	 * 
-	 * @var string
-	 */
-	private $_model_pk;
-	/**
-	 * 
-	 * @param $page string
-	 * @param $id string
-	 * @param $view Zend_View_Interface|false 
-	 */
-	function __construct($page, $id=array(), $view=false)
-	{
-		parent::__construct($page, $id, $view);
-		$form = new Zwei_Utils_Form();
-		$this->getLayout();
-		$modelclass = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
-        	$this->_model = new $modelclass();
-        	$domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
-		$primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : 'id';
-		$count = count($this->layout);
-		if (!isset($this->id)) $this->id = array();
-		elseif (!is_array($this->id)) $this->id = array($this->id);
-		if (!isset($this->layout[1]['VALUE'])) $this->layout[1]['VALUE'] = array("");
-		//$vcount = count($this->layout[1]['VALUE']);
+    /**
+     * 
+     * @var string
+     */
+    private $_out = "";
+    /**
+     * @var Zwei_Db_Table
+     */
+    private $_model;
+    /**
+     * 
+     * @var string
+     */
+    private $_model_pk;
+    /**
+     * 
+     * @param $page string
+     * @param $id string
+     * @param $view Zend_View_Interface|false 
+     */
+    function __construct($page, $id=array(), $view=false)
+    {
+        parent::__construct($page, $id, $view);
+        $form = new Zwei_Utils_Form();
+        $this->getLayout();
+        $modelclass = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
+            $this->_model = new $modelclass();
+            $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
+        $primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : 'id';
+        $count = count($this->layout);
+        if (!isset($this->id)) $this->id = array();
+        elseif (!is_array($this->id)) $this->id = array($this->id);
+        if (!isset($this->layout[1]['VALUE'])) $this->layout[1]['VALUE'] = array("");
+        //$vcount = count($this->layout[1]['VALUE']);
 
-		$this->_out .= "
+        $this->_out .= "
         <script type=\"text/javascript\">
             function {$domPrefix}showDialog(opc) {
                 console.debug(opc);
@@ -61,43 +61,43 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                     if (opc == 'add') {\r
                     ";
 
-	    $i = 0;
-	    $clean_filtering_selects = '';  
-		for ($j = 1; $j<$count; $j++) {
-			$node = $this->layout[$j];
-			$params = array();
-			if (isset($node['ADD']) && ($node['ADD'] == "true" || $node['ADD'] == "disabled" || $node['ADD'] == "readonly") && $node['TYPE'] != "pk_original") {
-				$pfx = "_add";
-				$this->_out .= "\t\t\t try{";
-				if ($node['TYPE'] == "dojo_filtering_select" || $node['TYPE'] == 'dojo_yes_no') {
-					$this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value',0);\r\n";
-					// workaround bug dojo para limpiar selects despues de insertar
-					// de otra forma notifica como opción NO valida una opción SI válida y confunde a usuario
-					$clean_filtering_selects .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value', '');\r\n";
-				} else if ($node['TYPE'] == "dojo_checkbox") {  
-		                    $defaultValue = isset($node['DEFAULT_VALUE']) ? $node['DEFAULT_VALUE'] : '1';
-		                    $defaultEmpty = isset($node['DEFAULT_EMPTY']) ? $node['DEFAULT_VALUE'] : '0';
-		                    //check checkbox
-		                    if (isset($node['CHECKED']) && $node['CHECKED'] == 'true') {
-		                        $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value','$defaultValue'); dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('checked', true);\r\n";
-		                    } else {    
-		                    //uncheck checkbox 
-		                        $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value','$defaultEmpty'); dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('checked', false);\r\n";
-		                    }               	
-				} else if ($node['TYPE'] == "select") {
-					$this->_out .= "\t\t\t\t selectValueSet('edit{$i}_{$domPrefix}{$pfx}{$j}', '0');\r\n";
-				} else if (!empty($this->layout[0]['SEARCH_TABLE_TARGET']) && ($this->layout[0]['SEARCH_TABLE_TARGET'] == $node['TARGET'])){
-					//esto debiera tener un type="hidden"
-					$this->_out .= "\t\t\tdocument.getElementById('edit{$i}_{$domPrefix}{$pfx}{$j}').value = dijit.byId('{$domPrefix}search').get('value');\r\n";
-				} else {
-					$this->_out .= "\t\t\t\tdocument.getElementById('edit{$i}_{$domPrefix}{$pfx}{$j}').value = '';\r\n";
-				}
-				$this->_out .= "\t\t\t }catch(e){console.log(e)}";
-			}
-		}
+        $i = 0;
+        $clean_filtering_selects = '';  
+        for ($j = 1; $j<$count; $j++) {
+            $node = $this->layout[$j];
+            $params = array();
+            if (isset($node['ADD']) && ($node['ADD'] == "true" || $node['ADD'] == "disabled" || $node['ADD'] == "readonly") && $node['TYPE'] != "pk_original") {
+                $pfx = "_add";
+                $this->_out .= "\t\t\t try{";
+                if ($node['TYPE'] == "dojo_filtering_select" || $node['TYPE'] == 'dojo_yes_no') {
+                    $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value',0);\r\n";
+                    // workaround bug dojo para limpiar selects despues de insertar
+                    // de otra forma notifica como opción NO valida una opción SI válida y confunde a usuario
+                    $clean_filtering_selects .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value', '');\r\n";
+                } else if ($node['TYPE'] == "dojo_checkbox") {  
+                            $defaultValue = isset($node['DEFAULT_VALUE']) ? $node['DEFAULT_VALUE'] : '1';
+                            $defaultEmpty = isset($node['DEFAULT_EMPTY']) ? $node['DEFAULT_VALUE'] : '0';
+                            //check checkbox
+                            if (isset($node['CHECKED']) && $node['CHECKED'] == 'true') {
+                                $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value','$defaultValue'); dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('checked', true);\r\n";
+                            } else {    
+                            //uncheck checkbox 
+                                $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value','$defaultEmpty'); dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('checked', false);\r\n";
+                            }                   
+                } else if ($node['TYPE'] == "select") {
+                    $this->_out .= "\t\t\t\t selectValueSet('edit{$i}_{$domPrefix}{$pfx}{$j}', '0');\r\n";
+                } else if (!empty($this->layout[0]['SEARCH_TABLE_TARGET']) && ($this->layout[0]['SEARCH_TABLE_TARGET'] == $node['TARGET'])){
+                    //esto debiera tener un type="hidden"
+                    $this->_out .= "\t\t\tdocument.getElementById('edit{$i}_{$domPrefix}{$pfx}{$j}').value = dijit.byId('{$domPrefix}search').get('value');\r\n";
+                } else {
+                    $this->_out .= "\t\t\t\tdocument.getElementById('edit{$i}_{$domPrefix}{$pfx}{$j}').value = '';\r\n";
+                }
+                $this->_out .= "\t\t\t }catch(e){console.log(e)}";
+            }
+        }
 
 
-		$this->_out .= "
+        $this->_out .= "
                     formDlg.set('title','Agregar {$this->layout[0]['NAME']}');
                 } else if(opc == 'edit') {
                     var items = dijit.byId('{$domPrefix}main_grid').selection.getSelected();
@@ -111,58 +111,58 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                     console.debug(items[0]);\r\n"; 
 
 
-	    $i=0; 
-		for ($j=1; $j<$count; $j++) {
-			$node = $this->layout[$j];
-			$params = array();
-			if (isset($node['EDIT']) && ($node['EDIT'] == "true" || $node['EDIT'] == "disabled" || $node['EDIT'] == "readonly" || $node['TYPE'] == "pk_original")) {
-				$pfx = "";
-				$this->_out .= "\t\t\t try{";
-				if ($node['TYPE'] == "dojo_filtering_select") {
-					$this->_out .= "\t\t\tdijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value',items[0].{$node['TARGET']});\r\n";
+        $i=0; 
+        for ($j=1; $j<$count; $j++) {
+            $node = $this->layout[$j];
+            $params = array();
+            if (isset($node['EDIT']) && ($node['EDIT'] == "true" || $node['EDIT'] == "disabled" || $node['EDIT'] == "readonly" || $node['TYPE'] == "pk_original")) {
+                $pfx = "";
+                $this->_out .= "\t\t\t try{";
+                if ($node['TYPE'] == "dojo_filtering_select") {
+                    $this->_out .= "\t\t\tdijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value',items[0].{$node['TARGET']});\r\n";
                 } else if ($node['TYPE'] == "dojo_checkbox") {  
-                	$defaultValue = isset($node['DEFAULT_VALUE']) ? $node['DEFAULT_VALUE'] : '1';
-                	$defaultEmpty = isset($node['DEFAULT_EMPTY']) ? $node['DEFAULT_VALUE'] : '0';
-                	//check checkbox
+                    $defaultValue = isset($node['DEFAULT_VALUE']) ? $node['DEFAULT_VALUE'] : '1';
+                    $defaultEmpty = isset($node['DEFAULT_EMPTY']) ? $node['DEFAULT_VALUE'] : '0';
+                    //check checkbox
                     $this->_out .= "\t\t\tif (items[0].{$node['TARGET']} == '$defaultValue') { dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value','$defaultValue'); dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('checked', true);
                         \t\t\t}\r\n";
                     //uncheck checkbox 
                     $this->_out .= "\t\t\telse {dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value','$defaultEmpty'); dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('checked', false);
-                        \t\t\t}\r\n"; 					
-				} else if($node['TYPE'] == "select") {
-					$this->_out .= "\t\t\tselectValueSet('edit{$i}_{$domPrefix}{$pfx}{$j}', items[0].{$node['TARGET']});\r\n";
+                        \t\t\t}\r\n";                     
+                } else if($node['TYPE'] == "select") {
+                    $this->_out .= "\t\t\tselectValueSet('edit{$i}_{$domPrefix}{$pfx}{$j}', items[0].{$node['TARGET']});\r\n";
                 } else if(isset($node['EDIT_CUSTOM_DISPLAY'])) {
                     /**
                      * Si es un input que require lógica especial para el despliegue 
                      * agregar atributo <code>edit_custom_display="true"</code> en elemento XML
                      * y sobrescribir método editCustomDisplay($i, $pfx.$j) en Element personalizado 
                      */
-					$sElement = "Zwei_Admin_Elements_".Zwei_Utils_String::toClassWord($node['TYPE']);
-					$oElement = new $sElement($node['VISIBLE'], '', '', $node['TARGET'], '', $params);
-					$this->_out .= $oElement->editCustomDisplay($i, $pfx.$j);
+                    $sElement = "Zwei_Admin_Elements_".Zwei_Utils_String::toClassWord($node['TYPE']);
+                    $oElement = new $sElement($node['VISIBLE'], '', '', $node['TARGET'], '', $params);
+                    $this->_out .= $oElement->editCustomDisplay($i, $pfx.$j);
                 } else if ($node['TYPE'] == "pk_original") {
-					$this->_out .= "\t\t\tdocument.getElementById('edit{$i}_{$domPrefix}zwei_pk_original').value = items[0].{$node['TARGET']};\r\n";
-				} else {
-					$this->_out .= "\t\t\tdocument.getElementById('edit{$i}_{$domPrefix}{$pfx}{$j}').value = items[0].{$node['TARGET']};\r\n";
-				}
-				$this->_out .= "\t\t\t }catch(e){console.log(e)}";
-			}
-		}
+                    $this->_out .= "\t\t\tdocument.getElementById('edit{$i}_{$domPrefix}zwei_pk_original').value = items[0].{$node['TARGET']};\r\n";
+                } else {
+                    $this->_out .= "\t\t\tdocument.getElementById('edit{$i}_{$domPrefix}{$pfx}{$j}').value = items[0].{$node['TARGET']};\r\n";
+                }
+                $this->_out .= "\t\t\t }catch(e){console.log(e)}";
+            }
+        }
 
 
-		$this->_out.="\t\t\ttry{formDlg.set('title','Editar {$this->layout[0]['NAME']}');}catch(e){console.debug(e);}
+        $this->_out.="\t\t\ttry{formDlg.set('title','Editar {$this->layout[0]['NAME']}');}catch(e){console.debug(e);}
                    }
                 formDlg.show();
             }\r\n";
 
-		if (isset($this->layout[0]['EDIT_ADDITIONAL_VALIDATION'])) {
-			$additional_validation = $this->_model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
-		} else {
-			$additional_validation = '';
-		}
-        		
-		
-		$this->_out .= "
+        if (isset($this->layout[0]['EDIT_ADDITIONAL_VALIDATION'])) {
+            $additional_validation = $this->_model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
+        } else {
+            $additional_validation = '';
+        }
+                
+        
+        $this->_out .= "
         function {$domPrefix}modify(model, items) {
             var resp = '';
             $additional_validation
@@ -213,16 +213,16 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             $i=0;
 
             for ($j=1; $j<$count; $j++){
-            	$node=$this->layout[$j];
-            	$params=array();
-            	if (isset($node['ADD']) && ($node['ADD'] == "true" || $node['ADD'] == "readonly") && $node['TYPE'] != "pk_original") {
-            		$pfx='_add';
-            		if ($node['TYPE']=='dojo_filtering_select') {
-              			$this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value'), \r\n";
-            		} else {
-             			$this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : document.getElementById('edit{$i}_{$domPrefix}{$pfx}{$j}').value, \r\n";
-            		}
-            	}
+                $node=$this->layout[$j];
+                $params=array();
+                if (isset($node['ADD']) && ($node['ADD'] == "true" || $node['ADD'] == "readonly") && $node['TYPE'] != "pk_original") {
+                    $pfx='_add';
+                    if ($node['TYPE']=='dojo_filtering_select') {
+                          $this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value'), \r\n";
+                    } else {
+                         $this->_out.="\t\t\t\t'data[{$node['TARGET']}]' : document.getElementById('edit{$i}_{$domPrefix}{$pfx}{$j}').value, \r\n";
+                    }
+                }
             }
 
 
@@ -267,18 +267,18 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 
 
             for ($j=1; $j<$count; $j++) {
-            	$node = $this->layout[$j];
-            	$params = array();
-            	if (isset($node['EDIT']) && ($node['EDIT'] == "true" || $node['EDIT'] == "readonly")) {
-            		$pfx = '';
-            		if ($node['TYPE'] == 'dojo_filtering_select' || $node['TYPE'] == 'dojo_yes_no'){
-            			$this->_out.="     'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value'), \r\n";
-            		} else if ($node['TYPE'] == "pk_original") { 
-            			$this->_out.="     'id[]' : document.getElementById('edit{$i}_{$domPrefix}zwei_pk_original').value, \r\n";       			
-            		} else {
-            			$this->_out.="     'data[{$node['TARGET']}]' : document.getElementById('edit{$i}_{$domPrefix}{$pfx}{$j}').value, \r\n";
-            		}
-            	}
+                $node = $this->layout[$j];
+                $params = array();
+                if (isset($node['EDIT']) && ($node['EDIT'] == "true" || $node['EDIT'] == "readonly")) {
+                    $pfx = '';
+                    if ($node['TYPE'] == 'dojo_filtering_select' || $node['TYPE'] == 'dojo_yes_no'){
+                        $this->_out.="     'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value'), \r\n";
+                    } else if ($node['TYPE'] == "pk_original") { 
+                        $this->_out.="     'id[]' : document.getElementById('edit{$i}_{$domPrefix}zwei_pk_original').value, \r\n";                   
+                    } else {
+                        $this->_out.="     'data[{$node['TARGET']}]' : document.getElementById('edit{$i}_{$domPrefix}{$pfx}{$j}').value, \r\n";
+                    }
+                }
             }
 
 
@@ -313,7 +313,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 
             if (isset($this->layout[0]['CHANGE_PASSWORD']) && $this->layout[0]['CHANGE_PASSWORD']=="true"  && $this->_acl->isUserAllowed($this->page, 'EDIT')){
 
-            	$this->_out .= "function showDialogPass() {
+                $this->_out .= "function showDialogPass() {
                 var formDlg = dijit.byId('{$domPrefix}formPassword');
                 formDlg.set('title','Cambio de Contraseña');
                 var items = dijit.byId('{$domPrefix}main_grid').selection.getSelected();
@@ -376,75 +376,75 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             }
             $this->_out.="</script>
         ";      
-	}
+    }
 
 
-	public function display($mode='EDIT')
-	{
-		$form = new Zwei_Utils_Form();
-        	$domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord(str_replace('.', '_', $form->p)) : '';
- 	    	$out = $this->_out;
-		$this->_out = '';
-		$out .= "<table>\r\n";
-		$count = count($this->layout);
-		if (!isset($this->id)) $this->id = array();
-		elseif (!is_array($this->id)) $this->id = array($this->id);
-		if (!isset($this->layout[1]['VALUE'])) $this->layout[1]['VALUE'] = array("");
-		$vcount = count($this->layout[1]['VALUE']);
-	  
-		for ($i=0; $i<$vcount; $i++) {
-			for ($j=1; $j<$count; $j++) {
-				$node = $this->layout[$j];
-				$params = array();
-				foreach ($node as $k=>$v) if($k!='VALUE') $params[$k] = $v;
-				if (!isset($node['VALUE'][$i])) $node['VALUE'][$i] = "";
-	    
-				if (!empty($node['VALUE'][$i]) || isset($form->{$node['TARGET']}) && is_array($form->{$node['TARGET']})){
-					$value = $node['VALUE'][$i];
-				} else {
-					$value = isset($form->{$node['TARGET']})?$form->{$node['TARGET']}:'';
-				}
-	    
-				if ($node[$mode] == "true" || $node[$mode] == "disabled" || $node[$mode] == "readonly") {
-					if ($node[$mode] == "disabled") $params["DISABLED"] = $mode;
-					if ($node[$mode] == "readonly") $params["READONLY"] = $mode;
-					$ClassElement = "Zwei_Admin_Elements_".Zwei_Utils_String::toClassWord($node['TYPE']);
-					$element = new $ClassElement($node['VISIBLE'],
-					$node['EDIT'],
-					@$node['NAME'],
-					$node['TARGET'],
-					$value,
-					$params);
-					 
-					if($mode=='ADD')$pfx="_add";
-					else $pfx="";
+    public function display($mode='EDIT')
+    {
+        $form = new Zwei_Utils_Form();
+            $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord(str_replace('.', '_', $form->p)) : '';
+             $out = $this->_out;
+        $this->_out = '';
+        $out .= "<table>\r\n";
+        $count = count($this->layout);
+        if (!isset($this->id)) $this->id = array();
+        elseif (!is_array($this->id)) $this->id = array($this->id);
+        if (!isset($this->layout[1]['VALUE'])) $this->layout[1]['VALUE'] = array("");
+        $vcount = count($this->layout[1]['VALUE']);
+      
+        for ($i=0; $i<$vcount; $i++) {
+            for ($j=1; $j<$count; $j++) {
+                $node = $this->layout[$j];
+                $params = array();
+                foreach ($node as $k=>$v) if($k!='VALUE') $params[$k] = $v;
+                if (!isset($node['VALUE'][$i])) $node['VALUE'][$i] = "";
+        
+                if (!empty($node['VALUE'][$i]) || isset($form->{$node['TARGET']}) && is_array($form->{$node['TARGET']})){
+                    $value = $node['VALUE'][$i];
+                } else {
+                    $value = isset($form->{$node['TARGET']})?$form->{$node['TARGET']}:'';
+                }
+        
+                if ($node[$mode] == "true" || $node[$mode] == "disabled" || $node[$mode] == "readonly") {
+                    if ($node[$mode] == "disabled") $params["DISABLED"] = $mode;
+                    if ($node[$mode] == "readonly") $params["READONLY"] = $mode;
+                    $ClassElement = "Zwei_Admin_Elements_".Zwei_Utils_String::toClassWord($node['TYPE']);
+                    $element = new $ClassElement($node['VISIBLE'],
+                    $node['EDIT'],
+                    @$node['NAME'],
+                    $node['TARGET'],
+                    $value,
+                    $params);
+                     
+                    if($mode=='ADD')$pfx="_add";
+                    else $pfx="";
 
-					if ($node['TYPE'] == 'pk_original') {
-					    $out .= $element->edit($i, $domPrefix.'zwei_pk_original');
-					} else if ($node['TYPE'] != 'hidden') {
-						$out .= "<tr><td><label for=\"{$node['TARGET']}\">{$node['NAME']}</label></td><td>".$element->edit($i, $domPrefix.$pfx.$j)."</td></tr>";
-					} else {
-						$out .= $element->edit($i,$domPrefix.$pfx.$j);
-					}
-				}
-			}
-			$out.="
-		        <tr>
-		                    <td align=\"center\" colspan=\"2\">
-		                    <input type=\"hidden\" name=\"action\" id=\"action\" value=\"\" />
-		                        <button dojoType=\"dijit.form.Button\" type=\"submit\" onClick=\"if (global_opc=='add') { return dijit.byId('{$domPrefix}formDialogo').validate(); } else { return dijit.byId('{$domPrefix}formDialogoEditar').validate(); }\">
-		                            Guardar
-		                        </button>
-		                        <button dojoType=\"dijit.form.Button\" type=\"button\" onClick=\"if (global_opc=='add') { dijit.byId('{$domPrefix}formDialogo').hide(); } else { dijit.byId('{$domPrefix}formDialogoEditar').hide(); }\">
-		                            Cancelar
-		                        </button>
-		                    </td>
-		                </tr>
-		                ";
-			$out.="<tr><td>&nbsp;</td></tr>";
-		}
-		$out.="</table>\r\n";
+                    if ($node['TYPE'] == 'pk_original') {
+                        $out .= $element->edit($i, $domPrefix.'zwei_pk_original');
+                    } else if ($node['TYPE'] != 'hidden') {
+                        $out .= "<tr><td><label for=\"{$node['TARGET']}\">{$node['NAME']}</label></td><td>".$element->edit($i, $domPrefix.$pfx.$j)."</td></tr>";
+                    } else {
+                        $out .= $element->edit($i,$domPrefix.$pfx.$j);
+                    }
+                }
+            }
+            $out.="
+                <tr>
+                            <td align=\"center\" colspan=\"2\">
+                            <input type=\"hidden\" name=\"action\" id=\"action\" value=\"\" />
+                                <button dojoType=\"dijit.form.Button\" type=\"submit\" onClick=\"if (global_opc=='add') { return dijit.byId('{$domPrefix}formDialogo').validate(); } else { return dijit.byId('{$domPrefix}formDialogoEditar').validate(); }\">
+                                    Guardar
+                                </button>
+                                <button dojoType=\"dijit.form.Button\" type=\"button\" onClick=\"if (global_opc=='add') { dijit.byId('{$domPrefix}formDialogo').hide(); } else { dijit.byId('{$domPrefix}formDialogoEditar').hide(); }\">
+                                    Cancelar
+                                </button>
+                            </td>
+                        </tr>
+                        ";
+            $out.="<tr><td>&nbsp;</td></tr>";
+        }
+        $out.="</table>\r\n";
 
-		return $out;
-	}
+        return $out;
+    }
 }
