@@ -12,13 +12,13 @@
 
 class Zwei_Admin_Elements_Idbox extends Zwei_Admin_Elements_Element
 {
-	function edit($i, $j, $display="inline")
-	{
-		return "<input type=\"hidden\" name=\"{$this->target}[$i]\" value=\"{$this->value}\"/>$this->value";
-	}
+    function edit($i, $j, $display="inline")
+    {
+        return "<input type=\"hidden\" name=\"{$this->target}[$i]\" value=\"{$this->value}\"/>$this->value";
+    }
 
-	function display($i, $j)
-	{
-		return "<input id=\"edit{$i}_{$j}\" type=\"checkbox\" name=\"{$this->target}[]\" value=\"{$this->value}\"/>";
-	}
+    function display($i, $j)
+    {
+        return "<input id=\"edit{$i}_{$j}\" type=\"checkbox\" name=\"{$this->target}[]\" value=\"{$this->value}\"/>";
+    }
 }

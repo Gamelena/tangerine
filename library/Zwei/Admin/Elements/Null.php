@@ -9,11 +9,11 @@
  * @since 0.1
  */
 class Zwei_Admin_Elements_Null extends Zwei_Admin_Elements_Element{
-	function edit($i, $j, $display="inline"){
-		return '';
-	}
+    function edit($i, $j, $display="inline"){
+        return '';
+    }
 
-	function display($i, $j){
-		return '';
-	}
+    function display($i, $j){
+        return '';
+    }
 }

@@ -19,10 +19,10 @@
 
 class Zwei_Admin_Elements_AjaxBox extends Zwei_Admin_Elements_Element
 {
-	function edit($i, $j, $display="inline")
-	{
-		$out="<div id=\"ajax_box\"></div>";
-		$out.="<script type=\"text/javascript\">get_url_contents('".$this->params['PATH']."?id=".$this->params['ID']."','ajax_box');</script>";
-		return $out;
-	}
+    function edit($i, $j, $display="inline")
+    {
+        $out="<div id=\"ajax_box\"></div>";
+        $out.="<script type=\"text/javascript\">get_url_contents('".$this->params['PATH']."?id=".$this->params['ID']."','ajax_box');</script>";
+        return $out;
+    }
 }

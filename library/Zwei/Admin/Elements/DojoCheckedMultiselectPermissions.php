@@ -16,20 +16,20 @@
 
 class Zwei_Admin_Elements_DojoCheckedMultiselectPermissions extends Zwei_Admin_Elements_Element
 {
-	function edit($i, $j, $display="block")
-	{
-		$required = isset($this->params['REQUIRED']) && $this->params['REQUIRED']=="true" ? "required=\"true\"" : "required=\"false\"";
-		$onchange = isset($this->params['ONCHANGE']) ? "onchange=\"{$this->params['ONCHANGE']}\"":'';
-		$regexp = isset($this->params['REG_EXP']) ? "RegExp=\"{$this->params['REG_EXP']}\"" : '';
-		$invalid_message = isset($this->params['INVALID_MESSAGE']) ? "invalidMessage=\"{$this->params['INVALID_MESSAGE']}\"" : '';
-		$prompt_message = isset($this->params['PROMPT_MESSAGE']) ? "promptMessage=\"{$this->params['PROMPT_MESSAGE']}\"" : '';
-		$value =  isset($this->params['DEFAULT_VALUE']) && !isset($this->params['DEFAULT_TEXT']) ? "value=\"{$this->params['DEFAULT_VALUE']}\"" : '';
-		$options = $this->options();
-		$return =  "<select dojoType=\"dojox.form.CheckedMultiSelect\" multiple=\"true\" id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" $value $onchange $required $regexp $invalid_message $prompt_message style=\"display:$display\" >\r\n$options\r\n</select>\r\n
-		";
-		$return .= "<style type=\"text/css\">.dojoxCheckedMultiSelectWrapper{height:400px !important;}</style>";
-		return $return;
-	}
+    function edit($i, $j, $display="block")
+    {
+        $required = isset($this->params['REQUIRED']) && $this->params['REQUIRED']=="true" ? "required=\"true\"" : "required=\"false\"";
+        $onchange = isset($this->params['ONCHANGE']) ? "onchange=\"{$this->params['ONCHANGE']}\"":'';
+        $regexp = isset($this->params['REG_EXP']) ? "RegExp=\"{$this->params['REG_EXP']}\"" : '';
+        $invalid_message = isset($this->params['INVALID_MESSAGE']) ? "invalidMessage=\"{$this->params['INVALID_MESSAGE']}\"" : '';
+        $prompt_message = isset($this->params['PROMPT_MESSAGE']) ? "promptMessage=\"{$this->params['PROMPT_MESSAGE']}\"" : '';
+        $value =  isset($this->params['DEFAULT_VALUE']) && !isset($this->params['DEFAULT_TEXT']) ? "value=\"{$this->params['DEFAULT_VALUE']}\"" : '';
+        $options = $this->options();
+        $return =  "<select dojoType=\"dojox.form.CheckedMultiSelect\" multiple=\"true\" id=\"edit{$i}_{$j}\" name=\"$this->target[$i]\" $value $onchange $required $regexp $invalid_message $prompt_message style=\"display:$display\" >\r\n$options\r\n</select>\r\n
+        ";
+        $return .= "<style type=\"text/css\">.dojoxCheckedMultiSelectWrapper{height:400px !important;}</style>";
+        return $return;
+    }
   
     function display($i, $j)
     {
@@ -50,7 +50,7 @@ class Zwei_Admin_Elements_DojoCheckedMultiselectPermissions extends Zwei_Admin_E
         
         
         if (isset($this->params['DEFAULT_VALUE']) && $value == $this->params['DEFAULT_VALUE']) {
-        	return isset($this->params['DEFAULT_TEXT']) ? $this->params['DEFAULT_TEXT'] : "Ninguno";
+            return isset($this->params['DEFAULT_TEXT']) ? $this->params['DEFAULT_TEXT'] : "Ninguno";
         } else if (!empty($this->params['TABLE_METHOD'])) {
             $method = Zwei_Utils_String::toFunctionWord($this->params['TABLE_METHOD']);
             $select = $model->$method();
@@ -58,12 +58,12 @@ class Zwei_Admin_Elements_DojoCheckedMultiselectPermissions extends Zwei_Admin_E
             $select = $model->select(array($field, $id));
         }
 
-		$select->where($model->getAdapter()->quoteInto("$id = ? ", $value));
-		Zwei_Utils_Debug::writeBySettings($select->__toString(), 'query_log');   
-		$rows = $model->fetchAll($select);
-				
-		return isset($rows[0]) ? $rows[0][$this->params['FIELD']] : ''; 
-	}
+        $select->where($model->getAdapter()->quoteInto("$id = ? ", $value));
+        Zwei_Utils_Debug::writeBySettings($select->__toString(), 'query_log');   
+        $rows = $model->fetchAll($select);
+                
+        return isset($rows[0]) ? $rows[0][$this->params['FIELD']] : ''; 
+    }
 
     function options() 
     {
@@ -86,7 +86,7 @@ class Zwei_Admin_Elements_DojoCheckedMultiselectPermissions extends Zwei_Admin_E
                 } else if (!empty($this->params['FIELD'])){
                     $select = $model->select(array($this->params['FIELD'], $id));
                 } else {
-                    $select = $model->select(array("title", $id));                	
+                    $select = $model->select(array("title", $id));                    
                 }   
             }
             Debug::writeBySettings($select->__toString(), 'query_log');
@@ -101,26 +101,26 @@ class Zwei_Admin_Elements_DojoCheckedMultiselectPermissions extends Zwei_Admin_E
             
 
             if (isset($this->params['DEFAULT_VALUE']) && isset($this->params['DEFAULT_TEXT'])) {
-        		$text = $this->params['DEFAULT_TEXT'];
-            	$options .= "<option value=\"{$this->params['DEFAULT_VALUE']}\">$text</option>\r\n";
-        	}
+                $text = $this->params['DEFAULT_TEXT'];
+                $options .= "<option value=\"{$this->params['DEFAULT_VALUE']}\">$text</option>\r\n";
+            }
 
 
-			foreach ($rows as $row) {
-			    $selected = "";
-			    if (!empty($this->value))  $ids = array_keys($this->value);
+            foreach ($rows as $row) {
+                $selected = "";
+                if (!empty($this->value))  $ids = array_keys($this->value);
                 if (isset($ids) && in_array($row->id, $ids)) {
                     $permissions = $this->value[$row->id];
                     if (in_array($row->permission, $permissions)) $selected = "selected=\"selected\"";
                 } 
-			    
-			    
+                
+                
                 if (!empty($this->params['TABLE_FIELD'])) {
                     $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$this->params['TABLE_FIELD']]}</option>\r\n";
                 } else if (!empty($this->params['FIELD'])) {
                     $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$this->params['FIELD']]}</option>\r\n";
                 } else {
-                	$options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row["title"]}</option>\r\n";
+                    $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row["title"]}</option>\r\n";
                 }   
             }
         } else {
