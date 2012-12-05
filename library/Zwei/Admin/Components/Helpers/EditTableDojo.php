@@ -313,7 +313,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
 
             if (isset($this->layout[0]['CHANGE_PASSWORD']) && $this->layout[0]['CHANGE_PASSWORD']=="true"  && $this->_acl->isUserAllowed($this->page, 'EDIT')){
 
-                $this->_out .= "function showDialogPass() {
+                $this->_out .= "function {$domPrefix}showDialogPass() {
                 var formDlg = dijit.byId('{$domPrefix}formPassword');
                 formDlg.set('title','Cambio de Contraseña');
                 var items = dijit.byId('{$domPrefix}main_grid').selection.getSelected();

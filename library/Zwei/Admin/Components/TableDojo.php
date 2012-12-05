@@ -305,7 +305,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         
         
         if (@$viewtable->layout[0]['CHANGE_PASSWORD']=='true' && $this->_acl->isUserAllowed($this->page,'EDIT')) {
-            $out .= "<div dojoType=\"dijit.Dialog\" id=\"{$domPrefix}formPassword\" title=\"Cambio de password\" execute=\"changePassword('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
+            $out .= "<div dojoType=\"dijit.Dialog\" id=\"{$domPrefix}formPassword\" title=\"Cambio de password\" execute=\"{$domPrefix}changePassword('{$viewtable->layout[0]['TARGET']}',arguments[0]);\">\r\n";
             $out .= "
                 <table cellspacing=\"10\" align=\"center\">
                     <tr>
@@ -330,7 +330,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                     <tr>
                         <td colspan=\"2\" align=\"center\">
                             <button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSave\" id=\"{$domPrefix}btnGuardarDatosPass\"
-                                    onClick=\"return dijit.byId('formPassword').validate();\">
+                                    onClick=\"return dijit.byId('{$domPrefix}formPassword').validate();\">
                                 Guardar Contrase&ntilde;a
                             </button>
                         </td>
