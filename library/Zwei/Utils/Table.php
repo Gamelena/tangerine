@@ -11,152 +11,152 @@
 
 class Zwei_Utils_Table
 {
-	/**
-	 * componente XML
-	 * @var Zwei_Admin_Xml
-	 */
-	private $_xml;
-	/**
-	 * @var Zend_Db_Rowset
-	 */
-	private $_rowset=array();
-	/**
-	 * atributo name componente xml
-	 * @var array()
-	 */
-	private $_name=array();
+    /**
+     * componente XML
+     * @var Zwei_Admin_Xml
+     */
+    private $_xml;
+    /**
+     * @var Zend_Db_Rowset
+     */
+    private $_rowset=array();
+    /**
+     * atributo name componente xml
+     * @var array()
+     */
+    private $_name=array();
 
-	/**
-	 * Retorna los headers de la tabla HTML  
-	 * @param $rowset Zend_Db_Rowset
-	 * @param $component Zwei_Admin_Components
-	 * @return string html
-	 */
-	
-	function showTitlesHtml($rowset)
-	{
-	    //Debug::write($rowset);
-	    //Debug::write($this->_name);
-		$out = "<tr>";
-		foreach ($rowset[0] as $target => $value) 
-		{
-			if (!isset($this->_xml)) {
-				$out.= "<th>".$target."</th>";
-			} else if(!empty($this->_name[$target])) {		
-			    $out.= "<th>".str_replace("\n", "", $this->_name[$target])."</th>";
-			}
-		}
-		$out .= "</tr>\n";
-		return $out;		
-	}
-	
-	/**
-	 * Retorna una fila del Rowset como HTML
-	 * @param $rowset
-	 * @param $count
-	 * @return HTML
-	 */
-	
-	function showContent($rowset, $count)
-	{
-		$out="<tr>";
-		foreach ($rowset[$count] as $target => $value) 
-		{
-			if(!empty($this->_name[$target]) || !isset($this->_xml)){	
-			    $out.= "<td>$value</td>";
-			}    
-		}
-		$out.="</tr>\n";
-		return $out;		
-	}	
-	
-	/**
-	 * Lee los alias de los campos de la tabla según su equivalente en el XML
-	 * y lo prepara para su impresión si es que debe ser visible
-	 */
-	
-	private function parseComponent($component)
-	{
-		$Xml = new Zwei_Admin_Xml();
-		
+    /**
+     * Retorna los headers de la tabla HTML  
+     * @param $rowset Zend_Db_Rowset
+     * @param $component Zwei_Admin_Components
+     * @return string html
+     */
+    
+    function showTitlesHtml($rowset)
+    {
+        //Debug::write($rowset);
+        //Debug::write($this->_name);
+        $out = "<tr>";
+        foreach ($rowset[0] as $target => $value) 
+        {
+            if (!isset($this->_xml)) {
+                $out.= "<th>".$target."</th>";
+            } else if(!empty($this->_name[$target])) {        
+                $out.= "<th>".str_replace("\n", "", $this->_name[$target])."</th>";
+            }
+        }
+        $out .= "</tr>\n";
+        return $out;        
+    }
+    
+    /**
+     * Retorna una fila del Rowset como HTML
+     * @param $rowset
+     * @param $count
+     * @return HTML
+     */
+    
+    function showContent($rowset, $count)
+    {
+        $out="<tr>";
+        foreach ($rowset[$count] as $target => $value) 
+        {
+            if(!empty($this->_name[$target]) || !isset($this->_xml)){    
+                $out.= "<td>$value</td>";
+            }    
+        }
+        $out.="</tr>\n";
+        return $out;        
+    }    
+    
+    /**
+     * Lee los alias de los campos de la tabla según su equivalente en el XML
+     * y lo prepara para su impresión si es que debe ser visible
+     */
+    
+    private function parseComponent($component)
+    {
+        $Xml = new Zwei_Admin_Xml();
+        
         $file = Zwei_Admin_XML::getFullPath($component);
-		
-		$Xml->parse($file);
-		$this->_xml = $Xml->elements;
-		$count = count($this->_xml);
-		
-	    for($i=1; $i<$count; $i++){
-	  		if(isset($this->_xml[$i]["VISIBLE"]) && $this->_xml[$i]["VISIBLE"] == "true"){
-	  			$this->_name[$this->_xml[$i]["TARGET"]]=$this->_xml[$i]["NAME"];
-	  		}	
-		}
-	}
-	
-	/**
-	 * Tranforma un Zend_Db_Rowset a HTML
-	 * @param array|Zend_Db_Rowset
-	 * @param string|array componente XML|array de títulos
-	 * @return string tabla HTML
-	 */
-	
-	public function rowsetToHtml($rowset, $component=false)
-	{ 
-		if ($component) {
-			if (!is_array($component)) { // buscar títulos en componente xml
-		        $this->parseComponent($component);
-			} else { // sacar títulos de array
-			    $row = $rowset[0];
-			    $j = 0;
-			    foreach($row as $i => $v) {
-			        $this->_name[$i] = $component[$j];
-			        $j++;
-			    }
-				
-				$this->_xml = "array";
-			}    
-		}
-		
-		$count = count($rowset);
+        
+        $Xml->parse($file);
+        $this->_xml = $Xml->elements;
+        $count = count($this->_xml);
+        
+        for($i=1; $i<$count; $i++){
+              if(isset($this->_xml[$i]["VISIBLE"]) && $this->_xml[$i]["VISIBLE"] == "true"){
+                  $this->_name[$this->_xml[$i]["TARGET"]]=$this->_xml[$i]["NAME"];
+              }    
+        }
+    }
+    
+    /**
+     * Tranforma un Zend_Db_Rowset a HTML
+     * @param array|Zend_Db_Rowset
+     * @param string|array componente XML|array de títulos
+     * @return string tabla HTML
+     */
+    
+    public function rowsetToHtml($rowset, $component=false)
+    { 
+        if ($component) {
+            if (!is_array($component)) { // buscar títulos en componente xml
+                $this->parseComponent($component);
+            } else { // sacar títulos de array
+                $row = $rowset[0];
+                $j = 0;
+                foreach($row as $i => $v) {
+                    $this->_name[$i] = $component[$j];
+                    $j++;
+                }
+                
+                $this->_xml = "array";
+            }    
+        }
+        
+        $count = count($rowset);
 
-		$out = "<table border=\"1\">\n";
-		if (!empty($rowset) && count($rowset) > 0) {
-    		$out .= $this->showTitlesHtml($rowset);
-    		for ($i=0;$i<$count;$i++) {
-    			$out .= $this->showContent($rowset, $i);
-    		}
-		}		
-		$out .= "</table>\n";
-		return $out;
-	}
-	
-	/**
-	 * 
-	 * Convierte un recordset en una hoja excel
-	 * 
-	 * @param array|Zend_Db_Rowset
-	 * @param string|array componente XML|array de títulos
-	 * @param string 'Excel5'|'Excel2007'
-	 * @param string
-	 */
-	public function rowsetToExcel($rowset, $component=false, $excelVersion='Excel5', $filename = false)
-	{
-	    if ($component) {
-			if (!is_array($component)) { // buscar títulos en componente xml
-		        $this->parseComponent($component);
-			} else { // sacar títulos de array
-			    $row = $rowset[0];
-			    $j = 0;
-			    foreach($row as $i => $v) {
-			        $this->_name[$i] = $component[$j];
-			        $j++;
-			    }
-				
-				$this->_xml = "array";
-			}    
-		}
-		$count = count($rowset);
-		
-		$excel = new PHPExcel();
+        $out = "<table border=\"1\">\n";
+        if (!empty($rowset) && count($rowset) > 0) {
+            $out .= $this->showTitlesHtml($rowset);
+            for ($i=0;$i<$count;$i++) {
+                $out .= $this->showContent($rowset, $i);
+            }
+        }        
+        $out .= "</table>\n";
+        return $out;
+    }
+    
+    /**
+     * 
+     * Convierte un recordset en una hoja excel
+     * 
+     * @param array|Zend_Db_Rowset
+     * @param string|array componente XML|array de títulos
+     * @param string 'Excel5'|'Excel2007'
+     * @param string
+     */
+    public function rowsetToExcel($rowset, $component=false, $excelVersion='Excel5', $filename = false)
+    {
+        if ($component) {
+            if (!is_array($component)) { // buscar títulos en componente xml
+                $this->parseComponent($component);
+            } else { // sacar títulos de array
+                $row = $rowset[0];
+                $j = 0;
+                foreach($row as $i => $v) {
+                    $this->_name[$i] = $component[$j];
+                    $j++;
+                }
+                
+                $this->_xml = "array";
+            }    
+        }
+        $count = count($rowset);
+        
+        $excel = new PHPExcel();
         $excel->setActiveSheetIndex(0);
         $excel->getProperties()->setCreator("Zweicom");
         
@@ -175,35 +175,35 @@ class Zwei_Utils_Table
         $row = 1;
         
         //Titulos
-		foreach ($rowset[0] as $target => $value) 
-		{
-			if (!isset($this->_xml)) {
-				$worksheet->getCell($col.$row)->setValue($target);
-				$col++;
-			} else if(!empty($this->_name[$target])) {
-     		    $title = str_ireplace('\n', "", $this->_name[$target]);
-     		    $title = html_entity_decode($title, null, 'UTF-8');
-			    $worksheet->getCell($col.$row)->setValue($title);
-			    $col++;
-			}
-		}
-		
-		$worksheet->getStyle(1)->getFont()->setBold(true)->setUnderline("single")->setName("Arial");
+        foreach ($rowset[0] as $target => $value) 
+        {
+            if (!isset($this->_xml)) {
+                $worksheet->getCell($col.$row)->setValue($target);
+                $col++;
+            } else if(!empty($this->_name[$target])) {
+                 $title = str_ireplace('\n', "", $this->_name[$target]);
+                 $title = html_entity_decode($title, null, 'UTF-8');
+                $worksheet->getCell($col.$row)->setValue($title);
+                $col++;
+            }
+        }
+        
+        $worksheet->getStyle(1)->getFont()->setBold(true)->setUnderline("single")->setName("Arial");
 
         //Valores
-		$row = 2;
-		foreach ($rowset as $index => $tuple) {
-		    $col = "A";
-			foreach ($tuple as $target => $value) 
-    		{
-    			if(!empty($this->_name[$target]) || !isset($this->_xml)){
-    			    $value = html_entity_decode($value, null, 'UTF-8');	
-    			    $worksheet->getCell($col.$row)->setValue($value);
-    			    $col++;
-    			}    
-    		}
-		    $row ++;
-		} 
+        $row = 2;
+        foreach ($rowset as $index => $tuple) {
+            $col = "A";
+            foreach ($tuple as $target => $value) 
+            {
+                if(!empty($this->_name[$target]) || !isset($this->_xml)){
+                    $value = html_entity_decode($value, null, 'UTF-8');    
+                    $worksheet->getCell($col.$row)->setValue($value);
+                    $col++;
+                }    
+            }
+            $row ++;
+        } 
         
 
         ob_end_clean();
@@ -221,5 +221,5 @@ class Zwei_Utils_Table
         $objWriter->save('php://output');
         $excel->disconnectWorksheets();
         unset($excel);
-	}
+    }
 }
