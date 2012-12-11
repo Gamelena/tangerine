@@ -658,7 +658,7 @@ function redirectToModule(url, domPrefix){
     } else {    
         loadModuleByConfig(url, globalModuleId, '');
     }
-
+}
 
 function execFunctionPopup(method, params, must_select, primary, domPrefix){
     if (domPrefix == undefined) var domPrefix = ''; 
