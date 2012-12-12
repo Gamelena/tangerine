@@ -13,7 +13,7 @@
 class ObjectsController extends Zend_Controller_Action
 {
     /**
-     * Instancia Singleton
+     * Información de usuario Instancia Singleton.
      * @var Zend_Auth
      */
     private $_user_info;
@@ -23,10 +23,16 @@ class ObjectsController extends Zend_Controller_Action
      */
     private $_form;
     /**
-     * Arreglo que será parte de la respuesta en json, Dojo data store, u otro formato a definir
+     * Arreglo que será parte de la respuesta en json, Dojo data store, u otro formato a definir.
      * @var array()
      */
     private $_response_content=array();
+    
+    /**
+     * Modelo sobre el cual se trabajará.
+     * @var Zwei_Db_Table
+     */
+    private $_model;
 
     public function init()
     {
@@ -44,65 +50,60 @@ class ObjectsController extends Zend_Controller_Action
                                'todo'=>'goToLogin');//declarar dojo.admin.js y llamarla en TableDojo
             $this->view->content = Zend_Json::encode($data);
             $this->render('index'); 
-
         } else {
             $this->_redirect('index/login');
         }
-
         $this->_helper->layout()->disableLayout();
-
-
     }
-
+    
     /**
      * Retorna un json a partir de un objeto modelo,
      * enviar nombre de clase modelo separada por "_" y sin sufijo "Model",
      * ej: enviar "model=solicitud_th" en lugar de "model=SolicitudThModel"
      * @return excel|json
      */
-
+    
     public function indexAction()
     {
-
+        
         /**
          * [TODO] Validar segun perfil de usuario autorizado a obtener estos datos
-         * [TODO] En el caso de datos personales solo se debieran poder ver y editar los datos de UN reg.
          */
-
+        
         if ($this->_form->format == 'json') {
             $this->_helper->ContextSwitch
             ->setAutoJsonSerialization(false)
             ->addActionContext('index', 'json')
             ->initContext();
         }
-
+        
         //enviar nombre de clase modelo separada por "_" y sin sufijo "Model",
         //ej: enviar solicitud_th en lugar de SolicitudThModel"
-
-        $ClassModel = Zwei_Utils_String::toClassWord($this->_form->model)."Model";
-
-        if (class_exists($ClassModel)) {
+        
+        $classModel = Zwei_Utils_String::toClassWord($this->_form->model)."Model";
+        
+        if (class_exists($classModel)) {
             /**
              * 
              * @var Zwei_Db_Table
              */    
-            $oModel = new $ClassModel();
+            $this->_model = new $classModel();
             $this->view->collection = array();
-
+            
             if (isset($this->_form->action) && Zwei_Admin_Auth::getInstance()->hasIdentity()) {
                 $data = array();
-                $oModel->getAdapter()->getProfiler()->setEnabled(true);
-                $id = $oModel->getPrimary();
+                $this->_model->getAdapter()->getProfiler()->setEnabled(true);
+                $id = $this->_model->getPrimary();
                 if ($id === false) $id = "id";
-
+                
                 if ($this->_form->action == 'add') {
                      
                     foreach ($this->_form->data as $i=>$v) {
                         $data[$i] = $v;
                     }
-
+                    
                     try {
-                        $response = $oModel->insert($data);
+                        $response = $this->_model->insert($data);
                         if ($response) {
                             $this->_response_content['state'] = 'ADD_OK';
                         } else {
@@ -112,12 +113,12 @@ class ObjectsController extends Zend_Controller_Action
                         $this->_response_content['state'] = 'ADD_FAIL';
                         Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
                     }
-
+                    
                 } elseif ($this->_form->action == 'delete') {
                      
                     if (!empty($this->_form->id) || $this->_form->id === "0") {
-                        $where = $oModel->getAdapter()->quoteInto("$id = ?", $this->_form->id);
-                        $response = $oModel->delete($where);
+                        $where = $this->_model->getAdapter()->quoteInto("$id = ?", $this->_form->id);
+                        $response = $this->_model->delete($where);
                         if ($response) {
                             $this->_response_content['state'] = 'DELETE_OK';
                         } else {
@@ -136,32 +137,33 @@ class ObjectsController extends Zend_Controller_Action
                         $data[$i] = $v;
                         
                     }
-
+                    
                     //en caso de tener multiples PK [FIXME] capturar nombres de campos para que funcione
                     if (isset($this->_form->id)) {
                         if (is_array($this->_form->id)) {
                            $where = array();    
                            foreach ($this->_form->id as $i => $v) {
-                                $where[] = $oModel->getAdapter()->quoteInto("$id = ?", $v);     
-                           }   
+                                $where[] = $this->_model->getAdapter()->quoteInto("$id = ?", $v);
+                           }
                         } else {
-                           $where = $oModel->getAdapter()->quoteInto("id = ?", $this->_form->id);
+                           $where = $this->_model->getAdapter()->quoteInto("id = ?", $this->_form->id);
                         }   
                     } else {
                        if (is_array($this->_form->$id)) {
                            $where = array();    
                            foreach ($this->_form->$id as $i => $v) {
-                                $where[] = $oModel->getAdapter()->quoteInto("$id = ?", $v);
-                           }          
+                                $where[] = $this->_model->getAdapter()->quoteInto("$id = ?", $v);
+                           }
                        } else {
-                           $where = $oModel->getAdapter()->quoteInto("$id = ?", $this->_form->$id);
-                       }                        
+                           $where = $this->_model->getAdapter()->quoteInto("$id = ?", $this->_form->$id);
+                       } 
                     }
                     
                                         
                     try {
-                        $response = $oModel->update($data, $where);
+                        $response = $this->_model->update($data, $where);
                         if ($response) {
+                            Debug::write($response);
                             $this->_response_content['state'] = 'UPDATE_OK';
                         } else {
                             $this->_response_content['state'] = 'UPDATE_FAIL';
@@ -172,7 +174,7 @@ class ObjectsController extends Zend_Controller_Action
                     }
                     //Zwei_Utils_Debug::write($response);
                 }
-                $this->_response_content['todo'] = $oModel->getAjaxTodo();
+                $this->_response_content['todo'] = $this->_model->getAjaxTodo();
 
             }//if (isset($this->_form->action))
 
@@ -182,11 +184,11 @@ class ObjectsController extends Zend_Controller_Action
             
 
             if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) {
-                $adapter = $oModel->getZwAdapter();
+                $adapter = $this->_model->getZwAdapter();
 
-                if (isset($adapter) && !empty($adapter)) $oModel->setAdapter($adapter);
+                if (isset($adapter) && !empty($adapter)) $this->_model->setAdapter($adapter);
                 
-                $data = $oModel->fetchAll($oSelect);
+                $data = $this->_model->fetchAll($oSelect);
                 $paginator = Zend_Paginator::factory($oSelect);
                 $numRows = $paginator->getTotalItemCount();
             } else {
@@ -195,8 +197,8 @@ class ObjectsController extends Zend_Controller_Action
             $i = 0;
                
             //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
-            if ($oModel->overloadData($data) !== false) {
-                $data = $oModel->overloadData($data);
+            if ($this->_model->overloadData($data) !== false) {
+                $data = $this->_model->overloadData($data);
                 $numRows = count($data);
             }    
 
@@ -235,7 +237,7 @@ class ObjectsController extends Zend_Controller_Action
                 exit();
                 
             } else if (count($this->_response_content) > 0) {
-                $this->_response_content['message'] = $oModel->getMessage();
+                $this->_response_content['message'] = $this->_model->getMessage();
                 $data = array( 'id'=>'0',
                                'state'=>$this->_response_content['state'],
                                'message'=>$this->_response_content['message'],
@@ -256,10 +258,10 @@ class ObjectsController extends Zend_Controller_Action
                     $i++;
                 }
                 //Zwei_Utils_Debug::write($str_collection);
-                $id = $oModel->getPrimary();
+                $id = $this->_model->getPrimary();
                 
                 if ($id !== false && (!is_array($id) || count($id) == 1)) {
-                    $id = $oModel->getPrimary();
+                    $id = $this->_model->getPrimary();
                     $content = new Zend_Dojo_Data($id[1], @$collection);
                 } else {
                     /*
@@ -276,19 +278,19 @@ class ObjectsController extends Zend_Controller_Action
                 }
 
                 /**
-                 * Si esta especificado $oModel->_label se especifica el ÍNDICE del atributo label, standard dojo store,
-                 * Si esta especificado $oModel->_labels se especifica el ARRAY de labels, NO standard dojo store pero necesario para algunos casos.
+                 * Si esta especificado $this->_model->_label se especifica el ÍNDICE del atributo label, standard dojo store,
+                 * Si esta especificado $this->_model->_labels se especifica el ARRAY de labels, NO standard dojo store pero necesario para algunos casos.
                  */
-                if ($oModel->getLabel()) {
-                    $content->setLabel($oModel->getLabel());
+                if ($this->_model->getLabel()) {
+                    $content->setLabel($this->_model->getLabel());
                 } 
                 
-                if ($oModel->getLabels()) {
-                    $content->setMetadata(array("labels" => $oModel->getLabels()));
+                if ($this->_model->getLabels()) {
+                    $content->setMetadata(array("labels" => $this->_model->getLabels()));
                 }
                 
-                if ($oModel->getTitle()) {
-                    $content->setMetadata(array("title" => $oModel->getTitle()));
+                if ($this->_model->getTitle()) {
+                    $content->setMetadata(array("title" => $this->_model->getTitle()));
                 }
                 
                 if (isset($numRows)) $content->setMetadata('numRows', $numRows);
@@ -302,15 +304,15 @@ class ObjectsController extends Zend_Controller_Action
 
     public function multiUpdateAction()
     {
-        $ClassModel = Zwei_Utils_String::toClassWord($this->_form->model);
-        $oSettings = new $ClassModel();
+        $classModel = Zwei_Utils_String::toClassWord($this->_form->model);
+        $this->_model = new $classModel();
 
 
         foreach ($this->_form->id as $i=>$v) {
             $value = isset($this->_form->value[$i]) ? $this->_form->value[$i] : "";
-            $where = $oSettings->getAdapter()->quoteInto('id = ?', $v);
+            $where = $this->_model->getAdapter()->quoteInto('id = ?', $v);
             $data = array('value'=>$value);
-            $oSettings->update($data, $where);
+            $this->_model->update($data, $where);
         }
     }
 }
