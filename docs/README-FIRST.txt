@@ -1,4 +1,5 @@
-Nota: Este archivo se llama README-FIRST.txt y no README.txt, debido a "zf create project" ya crea un archivo llamado README.txt
+Nota: Este archivo se llama README-FIRST.txt y no README.txt debido a que el comando "zf create project" 
+ya crea un archivo llamado README.txt, por lo que este archivo sería pisado, por lo tanto este archivo NO DEBE RENOMBRARSE.
 
 README
 ======
@@ -9,14 +10,10 @@ Requerimientos Básicos
 http://www.zend.com/community/downloads.
 descomprimirlo en /usr/share/php/Zend y agregar /usr/share/php/ al include_path en php.ini.
 
-- Dojo Toolkit 1.7 ó 1.8.1 (se detectó un problema con Dojo 1.8.0) 
+- Dojo Toolkit 1.7 ó 1.8.1 (hay problemas con algunos botones al usar Dojo 1.8.0 por lo que no debe usarse) 
 http://download.dojotoolkit.org/
 
-- PHP Unit 3.5.15
-
-
-
-Y configurar Apache para ser accessible desde la url http://localhost/dojotoolkit. 
+Configurar Apache para ser accessible desde la url http://localhost/dojotoolkit. 
 Considerar el sig. ejemplo: 
 
 Alias /dojotoolkit/ "/usr/share/javascript/dojotoolkit/"
@@ -27,6 +24,9 @@ Order deny,allow
 Deny from all
 Allow from 127.0.0.0/255.0.0.0 ::1/128
 </Directory>
+
+
+- PHP Unit 3.5.15 (Opcional para hacer pruebas unitarias)
 
 
 Para crear un nuevo proyecto con AdmPortal:
