@@ -41,6 +41,7 @@ class Zwei_Utils_Db
             $whereAlias .= " ($prefix)";
         }
         Debug::writeBySettings($query, 'query_log');
+        //para que $this->getAdapter() exista, esto debe ser llamado dentro de un Zend_Db_Table o equivalente
         $realTables = $this->getAdapter()->fetchAll($query);
 
         $return = array();
