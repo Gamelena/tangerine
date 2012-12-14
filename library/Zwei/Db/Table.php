@@ -173,20 +173,31 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      */
     public function update($data, $where)
     {
-        $rowOrig = $this->fetchRow($where);
+        $rowOrig = false;
         $logMessage = '';
         $differences = '{Sin Cambios}';
         
-        $update = parent::update($data, $where);
-        
-        if ($update) {
-            $rowNew = $this->fetchRow($where);
-            $differences = Zwei_Utils_Array::getDifferences($rowOrig->toArray(), $rowNew->toArray());
-            $differences = print_r($differences, true);
+        try {
+            $this->select()->reset();
+            Debug::write($this->select()->__toString());
+            $rowOrig = $this->fetchRow($where);
+        } catch (Zend_Db_Exception $e) {
+            $differences = '{Ocurrió un error al obtener los datos originales.}';
+            Debug::write($e->getCode() . " " . $e->getMessage());
         }
         
-        //Nos aseguramos de que exista SettingsModel antes de intentar usar Debug::writeBySettings.
-        if (class_exists("SettingsModel")) { 
+        $update = parent::update($data, $where);
+        
+        if ($update && class_exists("SettingsModel")) {
+            if ($rowOrig) {
+                try {
+                    $rowNew = $this->fetchRow($where);
+                    $differences = Zwei_Utils_Array::getDifferences($rowOrig->toArray(), $rowNew->toArray());
+                    $differences = print_r($differences, true);
+                } catch (Zend_Db_Exception $e) {
+                    Debug::write($e->getCode() . " " . $e->getMessage());
+                }
+            }
             $userName = (isset($this->_user_info->user_name)) ? $this->_user_info->user_name : "NN"; 
             $ip = $_SERVER['REMOTE_ADDR'];
             
