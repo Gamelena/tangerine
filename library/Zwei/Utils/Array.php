@@ -31,4 +31,29 @@ class Zwei_Utils_Array
     
         return $results;
     }
+    
+    /**
+     * Compara 2 arrays con los mismos indices, retorna un array con los registros diferentes (o iguales según $returnDiffs). 
+     * 
+     * @param array
+     * @param array
+     * @param boolean. true devuelve registros diferentes, false devuelve registros iguales
+     * @return array
+     */
+    function getDifferences($array1, $array2, $returnDiffs = true)
+    {
+        $results = array();
+        
+        foreach ($array1 as $i => $v) {
+            if ($returnDiffs) {
+                if ($array2[$i] != $v) $results[$i] = $v; 
+            } else {
+                if ($array2[$i] == $v) $results[$i] = $v;
+            }
+        }
+        
+        return $results;
+    }
+    
+    
 }
