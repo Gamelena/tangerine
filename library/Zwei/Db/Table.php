@@ -176,11 +176,11 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $rowOrig = false;
         $logMessage = '';
         $differences = '{Sin Cambios}';
+        $select = new Zend_Db_Table_Select($this);
         
         try {
-            $this->select()->reset();
-            Debug::write($this->select()->__toString());
-            $rowOrig = $this->fetchRow($where);
+            Debug::write($select->__toString());
+            $rowOrig = $this->fetchRow($select->where($where));
         } catch (Zend_Db_Exception $e) {
             $differences = '{Ocurrió un error al obtener los datos originales.}';
             Debug::write($e->getCode() . " " . $e->getMessage());
@@ -191,7 +191,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         if ($update && class_exists("SettingsModel")) {
             if ($rowOrig) {
                 try {
-                    $rowNew = $this->fetchRow($where);
+                    $rowNew = $this->fetchRow($select->where($where));
                     $differences = Zwei_Utils_Array::getDifferences($rowOrig->toArray(), $rowNew->toArray());
                     $differences = print_r($differences, true);
                 } catch (Zend_Db_Exception $e) {
