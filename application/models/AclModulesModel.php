@@ -87,7 +87,7 @@ class AclModulesModel extends Zwei_Db_Table
      */
     public function getTree($parent_id = null)
     {
-        $root = $this->getChildrens($parent_id);
+        $root = $this->_acl->listGrantedResourcesByParentId($parent_id);
 
         $arrNodes = array();
       
@@ -96,22 +96,25 @@ class AclModulesModel extends Zwei_Db_Table
             if ($branch['tree'] == '1') {
                 $key = $branch['id'];
                 $arrNodes[$key]['id']  = $branch['id'];
+                $arrNodes[$key]['type']  = $branch['type'];
+                $arrNodes[$key]['linkable']  = $branch['linkable'];
                 $arrNodes[$key]['label'] = utf8_encode(html_entity_decode($branch['title']));
                 if ($branch['linkable'] == '1') {
                     $prefix = "";
-                    if ($branch['type'] == 'zend_module') $prefix = "";
-                    else if ($branch['type'] == 'xml') $prefix = "index/components?p=";
-                    else if ($branch['type'] == 'xml_mvc') $prefix = "index/components_mvc?p=";
-                    else if ($branch['type'] == 'legacy') $prefix = "index/legacy?p=";
-                    else if ($branch['type'] == 'iframe') $prefix = "index/iframe?p=";
+                    if ($branch['type'] == 'zend_module') {$prefix = "";}
+                    else if ($branch['type'] == 'xml') {$prefix = "index/components?p=";}
+                    else if ($branch['type'] == 'xml_mvc') {$prefix = "index/components_mvc?p=";}
+                    else if ($branch['type'] == 'legacy') {$prefix = "index/legacy?p=";}
+                    else if ($branch['type'] == 'iframe') {$prefix = "index/iframe?p=";}
                     
                     
                     if ($prefix != "") $branch['module'] = urlencode($branch['module']);
                     $arrNodes[$key]['url'] = $prefix.$branch['module'];
                 }
-
-                if ($aChildrens = $this->getChildrens($branch['id'])) {
-                    $arrNodes[$key]['children'] = $aChildrens;
+                
+                $childrens = $this->getTree($branch['id']);
+                if ($childrens) {
+                    $arrNodes[$key]['children'] = array_values($childrens);
                     //$i++;
                 }
             }
