@@ -291,7 +291,7 @@ form .login {
 }
 
 #popup_body table,#context_body table,#popup_body h2,#context_body h2,#popup_body h3,#context_body h3
-    {
+{
     color: #fff;
 }
 
@@ -363,6 +363,15 @@ a.settings_tab {
 }
 
 /*Dojo*/
+
+.claro{
+   color: #131313;
+   font-family: Verdana,Arial,Helvetica,sans-serif;
+   font-size: 0.688em;
+}
+	
+
+
 .dojoxGrid table {
     margin: 0;
 }
@@ -388,6 +397,10 @@ a.settings_tab {
 
 .claro table.dijitCalendarContainer {
     margin: 25px auto;
+}
+
+.claro .dijitTabPane, .tundra {
+	background-color: transparent !important; 
 }
 
 #formatted {
@@ -503,7 +516,7 @@ a.settings_tab {
 }
 
 /*Arbol*/
-.dijitLeaf{
+#menuExpand .dijitLeaf{
     background-image: url(/dojotoolkit/dijit/icons/images/commonIconsObjActEnabled.png) !important;
     background-position: -416px !important; 
 }
@@ -514,136 +527,17 @@ a.settings_tab {
     min-width: 33%;
 }
 
-/*Multi Selects*/
-
-.seccionBusquedaUsr {
-
-}
-
-.seccionBusquedaPerfil {
-    position: absolute; 
-    top: 0pt; 
-    left: 0pt;   
-}
-
-.seccionInfoUsr {
-    width: 320px;
-    height:467px;
-}
-
-.seccionInfoPerfil {
-    position: relative;
-    top: 0pt; 
-    left: 230px; 
-    width: 670px;
-    border: solid blue 1px;
-    padding: 2px;
-}
-
-.subseccionInfo {
-    margin-top : 10px;
-    padding: 5px;
-    border: solid gray 1px;
-    border-radius: 10px;
-    
-}
 
 
-#divLeftSwitch a {
-    margin: 0px 5px 8px 5px;
-    float: right;
-}
 
-#divLeftMainTitle {
-    color: #0066CC;
-    margin: 8px 5px 8px 5px;
-}
-
-.divSearch {
-    margin: 0px 5px 8px 5px;
-}
-
-#divLeftList {
-    margin: 8px 5px 8px 5px;
-    border: 1px solid #0066CC;
-    width: 250px;
-    height: 400px;
-    overflow-y: scroll;
-    overflow-x: auto;
-}
-
-.listLink {
-    font-size: 11px;
-}
-#divLeftAddTitle {
-    margin: 8px 5px 8px 5px;
-}
-
-#divLeftAdd {
-    margin: 8px 5px 8px 5px;
-}
-
-#divCenterMainTitle {
-    width: 264px;
-    height: 20px;
-    margin-left: 3px;
-}
-
-#divRightMainTitle {
-    width: 264px;
-    height: 20px;
-    margin-left: 3px;
-}
-
-#divCenterList {
-    width: 265px;
-    height: 470px;
-    border: 1px solid #0066CC;
-    overflow-y: scroll;
-    overflow-x: auto;
-    margin-left: 3px;
-    margin-right: 3px;
-}
-
-#divRightList {
-    width: 265px;
-    height: 470px;
-    border: 1px solid #0066CC;
-    overflow-y: scroll;
-    overflow-x: auto;
-    margin-left: 3px;
-    margin-right: 3px;
-}
-
-.borde3 th {
-    text-align: right;
-    font-weight: normal;
-}   
-#divLeftList table, #divCenterList table, #divRightListTable table {
-    border: 1px #ddeeff;
-}
-
-#divLeftList tr, #divCenterList tr, #divRightListTable tr {
-    border-bottom: 1px #0066cc;
-}
-
-#divLeftList td, #divCenterList td, #divRightListTable td {
-    border-bottom: 1px #0066cc;
-}
-
-.aux {
-    padding: 2px 2px 10px 8px;
-    color: #646464; 
-}
-
-.aux .tip {
-    float: right;
-}
-
-
-.tundra .dijitTabPaneWrapper, .claro .dijitTabPaneWrapper, .soria .dijitTabPaneWrapper, .nihilo .dijitTabPaneWrapper  {
+.soria .dijitTabPaneWrapper, .nihilo .dijitTabPaneWrapper {
     padding-top: 10px;
     background: url(i/bgmetal-light.png) #F0F0F0;
+}
+
+.claro .dijitTabPaneWrapper, .tundra .dijitTabPaneWrapper {
+    padding-top: 10px;
+    background: #F9F9F9;
 }
 
 .dojoxExpandoContent {
