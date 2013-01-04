@@ -6,85 +6,21 @@
 -->
 <!ELEMENT component (element*,tab*)>
 <!ATTLIST component
-    <!-- Nombre, titulo o etiqueta opcional para el despliegue. -->
     name CDATA #IMPLIED
-    <!-- 
-        Tipo de componente, referencia a clase base. 
-            Las clases base estan en los directorios 
-                - ROOT_DIR '/library/Zwei/Admin/Components' (Componentes Legacy)
-                - APPLICATION_PATH '/modules/components' (Components MVC)
-            - Los nuevos componentes que se desarrollen deben ser componentes MVC si es que no existe una razon para hacerlo de modo legacy.
-            - Es deseable migrar los Componentes Legacy a components MVC.
-    -->
     type (table|table_dojo|settings|settings_dojo|php_info|curl_dojo|google_chart|dojo-chart|dojo-chart.pie|dojo-chart.bars|dojo-chart.lines) #REQUIRED
-    <!--
-        Funciones auxiliares.
-            Funcion o Lista de funciones separadas por ";"
-            Si this.type=="table_dojo" se desplegara un boton auxiliar por cada funcion.
-            cada funcion debe estar declarada en Zwei_Utils_Customs_Functions 
-    -->
     functions CDATA #IMPLIED
-    <!--
-        Nivel de permisos necesarios para ejecutar funciones auxiliares, si this.functions != null
-            Si la funcion es unica se declara solo un permiso;
-            Si la funcion es una lista separada por ";", this.function_permisos debe ser una lista con misma cantidad de elementos de this.functions.
-    -->
     functions_permissions (list|add|edit|delete) #IMPLIED  
-    <!--
-        Exportar a Excel
-            Si this.type=="table_dojo" se desplegara un boton auxiliar para exportar el listado actual .
-    -->
     excel (true|false) #IMPLIED
-    <!--
-        Cambiar Password
-            Si this.type=="table_dojo" se desplegara un boton para cambiar password
-    -->
     change_password (true) #IMPLIED
-    <!--
-        [TODO] funcionalidad aun NO implementada!
-        Nombre del campo password, si this.change_password=="true".
-            Si es que se omite este atributo se asume que el nombre del campo es "password"
-    -->
-    change_password_field 
-    <!--
-        Atributo dojoType de grilla Dojo, si this.type='table_dojo'
-    -->
+    change_password_field CDATA #IMPLIED
     table_dojo_type (dojox.grid.EnhancedGrid|dojox.grid.DataGrid) #IMPLIED
-    <!--
-        String JSON de plugins para grilla tipo dojox.grid.EnhancedGrid 
-    -->
     plugins CDATA #IMPLIED
-    <!--
-        
-    -->
     id CDATA #IMPLIED
-    <!--
-        Referencia a entidad logica para componente.
-            Si type=="table_dojo|Settings|Table" se refiere a Modelo en directorio APPLICATION_PATH 'models'
-            Si type=="curl_dojo" Se refiere a URL
-    -->
     target CDATA #IMPLIED
-    <!--
-        Campo o lista de campos separados por ";" a traves de los cuales se realizara la busqueda, si type=="table_dojo"
-    -->
     search CDATA #IMPLIED
-    <!--
-        Tipo de buscador si this.search != null. 
-        Si this.search_type=="multiple" filtrara por multiples campos (usa conector SQL "AND"), 
-        si no solo buscara por UN campo (seleccionado por radio button, si this.search es una lista).
-    -->
     search_type CDATA #IMPLIED
-    <!--
-        Atributo dojoType de buscadores, si this.search != null
-    -->
     search_dojo_type CDATA #IMPLIED 
-    <!--
-        Mensaje de valor invalido en input, si this.search != null
-    -->
     search_invalid_message CDATA #IMPLIED
-    <!--
-        Mensaje tooltip en input, si this.search != null
-    -->
     search_prompt_message CDATA #IMPLIED
     search_constraints CDATA #IMPLIED
     search_table CDATA #IMPLIED
@@ -93,32 +29,10 @@
     search_table_target CDATA #IMPLIED
     search_display CDATA #IMPLIED   
     search_additional_validation (true) #IMPLIED
-    <!--
-        Esconder boton submit de buscador.
-            Se usa para no desplegar datos en grilla pero si desplegarlos en otro formato, por ejemplo un grafico dentro de un lightbox 
-    -->
     search_hide_submit (true) #IMPLIED
-    <!--
-        CSS adicional.
-    -->
     style CDATA #IMPLIED
-    <!--
-        [DEPRECATED] Se usa {this.target}::getAdditionalValidation() SIEMPRE, este por defecto retorna un string vacio, 
-        para activar esto debe sobreescribirse la funcion.
-         
-        Activar validacion adicional en javascript antes de hacer submit del formulario para agregar o editar.
-            Se invoca a metodo {this.target}::getAdditionalValidation() el cual retorna un string 
-    -->
     edit_additional_validation (true) #IMPLIED
-    <!--
-        Habilita paginacion del lado del servidor si type=="table_dojo".
-    -->
     server_pagination (true) #IMPLIED 
-    <!--
-        Indica que hereda datos de JSON usado en window.parent para desplegarlos de un modo diferente.
-            Ejemplo, graficar datos mostrados en la grilla.
-            Normalmente esto se usa en lightboxes (seudo popup ajax)
-    -->
     inherits_data (true) #IMPLIED
     cols CDATA #IMPLIED
     titles CDATA #IMPLIED
@@ -146,13 +60,7 @@
     chart_y_label CDATA #IMPLIED
     chart_y_target CDATA #IMPLIED
     chart_items CDATA #IMPLIED
-    <!--
-        Tipo de grafico Dojo.
-    -->
     chart_dojo_type (Areas|Bars|Base|Bubble|Candlesticks|CartesianBase|ClusteredBars|ClusteredColumns|Columns|Default|Grid|Lines|Markers|MarkesOnly|OHLC|Pie|Scatter|Spider|Stacked|StackedAreas|StackedBars|StackedColumns|StackedLines) #IMPLIED
-    <!--
-        Tema CSS de grafico Dojo.
-    -->
     chart_dojo_theme (Adobebricks|Algae|Bahamation|BlueDusk|Charged|Chris|Claro|CubanShirts|Desert|Distinctive|Dollar|Electric|Grasshoper|Grasslands|GreySkies|Harmony|IndigoNation|Ireland|Julie|MiamiNice|Midwest|Minty|PrimaryColors|PurpleRain|Renkoo|RoyalPurples|SageToLime|Shrooms|Threed|Tom|Tufte|WatersEdge|Wetland) #IMPLIED
     fields CDATA #IMPLIED
     order CDATA #IMPLIED
