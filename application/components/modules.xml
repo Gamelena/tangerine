@@ -2,7 +2,7 @@
 <!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
 <component name="M&amp;oacute;dulos" type="table_dojo" search="parent.title;acl_modules.title;acl_modules.module" table_dojo_type="dojox.grid.EnhancedGrid" target="acl_modules" list="true" edit="true" add="true" delete="true">
     <element name="ID" target="id" type="id_box" visible="false" edit="false" add="false"/>
-    <element name="M&amp;oacute;dulo Padre" target="parent_id" type="dojo_filtering_select" table="acl_modules" table_method="select_distinct" field="parent_title" visible="true" edit="true" add="true"/>
+    <element name="M&amp;oacute;dulo Padre" target="parent_id" type="dojo_filtering_select" table="acl_modules" table_method="select_distinct" default_value="" field="parent_title" visible="true" edit="true" add="true"/>
     <element name="M&amp;oacute;dulo Padre" target="parent.title" type="dojo_validation_textbox" visible="false" edit="false" add="false"/>                         
     <element name="M&amp;oacute;dulo" target="title" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>
     <element name="M&amp;oacute;dulo" target="acl_modules.title" type="dojo_validation_textbox" visible="false" edit="false" add="false"/> 
