@@ -48,7 +48,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
       
         if (!empty($this->layout[0]['JS'])) $out.="<script type=\"text/javascript\" src=\"".BASE_URL."js/".$this->layout[0]['JS']."?version={$this->_version}\"></script>";
       
-        $out .= "<div dojoType=\"dijit.form.Form\" id=\"{$domPrefix}tabForm\" class=\"tabForm$modeDom\" jsId=\"{$domPrefix}tabForm\" name=\"{$domPrefix}tabForm$modeDom\" encType=\"multipart/form-data\" action=\"\" method=\"\" onsubmit=\"return false\">\r\n";
+        $out .= "<div dojoType=\"dijit.form.Form\" id=\"{$domPrefix}tabForm{$modeDom}\" class=\"tabForm$modeDom\" jsId=\"{$domPrefix}tabForm\" name=\"{$domPrefix}tabForm$modeDom\" encType=\"multipart/form-data\" action=\"\" method=\"\" onsubmit=\"return false\">\r\n";
       
         
         if (!isset($this->id)) $this->id = array();
