@@ -1,13 +1,20 @@
-** APLICAR ESTO EN CASO DE TENER EL SIGUIENTE MENSAJE DE ERROR AL INSTALAR E INTENTAR EJECUTAR PHPUNIT:   
+** APLICAR ESTO EN CASO DE TENER EL SIGUIENTE MENSAJE DE ERROR AL INSTALAR E INTENTAR EJECUTAR PHPUNIT:
 
 PHP Fatal error:  Call to undefined method PHP_CodeCoverage_Filter::getInstance() in /usr/bin/phpunit on line 39
 
+Esto es un bug del instalador PHPUnit en PHP 5.3
+
+Aplicar los siguiente comandos que pueden resolver dependencias de pear
+
+sudo pear update-channels
+sudo pear channel-discover components.ez.no
+sudo pear install channel://components.ez.no/ConsoleTools-1.6
+
+Luego aplicar el siguiente workaround
 **
-Sacado de http://dustyreagan.com/downgrade-phpunit-3-6-to-3-5-15/
+Fuente http://dustyreagan.com/downgrade-phpunit-3-6-to-3-5-15/, si ocurre algún problema la solución puede estar en el foro de la página
 
 How to Downgrade PHPUnit 3.6 to 3.5.15
-Posted on November 3, 2011 by Dusty Reagan
-The newest release of PHPUnit 3.6 broke my unit test process in PHPStorm. PHPStorm is aware of the issue and is fixing it in the next update. However, in order to run my unit tests in the meantime I had to downgrade from PHPUnit 3.6 to 3.5.15, which was harder than it should’ve been.
 
 If you try installing PHPUnit-3.5.15 first, you’ll find PEAR forces you to install 3.6. The way around this is installing the old versions of all of the PHPUnit dependencies.
 
