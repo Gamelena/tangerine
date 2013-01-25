@@ -159,7 +159,7 @@ class ObjectsController extends Zend_Controller_Action
                        } 
                     }
                     
-                                        
+                    
                     try {
                         $response = $this->_model->update($data, $where);
                         if ($response) {
@@ -170,7 +170,7 @@ class ObjectsController extends Zend_Controller_Action
                         }
                     } catch (Zend_Db_Exception $e) {
                         $this->_response_content['state'] = 'UPDATE_FAIL';
-                        Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$ClassModel|".$e->getTraceAsString());
+                        Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$classModel|".$e->getTraceAsString());
                     }
                     //Zwei_Utils_Debug::write($response);
                 }
@@ -223,6 +223,7 @@ class ObjectsController extends Zend_Controller_Action
                     } else {
                         $content = $Table->rowsetToHtml($data);
                     }
+                    echo $content;
                 } else {
                   
                 
@@ -248,10 +249,13 @@ class ObjectsController extends Zend_Controller_Action
                 foreach ($data as $rowArray) {
                     $collection[$i]=array();
                     foreach ($rowArray as $column => $value) {
-                        if (!is_array($value)) $collection[$i][$column] = utf8_encode(html_entity_decode($value));
-                        else {
+                        if (!is_array($value)) {
+                            $collection[$i][$column] = html_entity_decode($value);
+                            if (PHP_VERSION_ID < 54) $collection[$i][$column] = utf8_encode($collection[$i][$column]);
+                        } else {
                             foreach ($value as $column2 => $value2) {
-                                $collection[$i][$column][$column2] = utf8_encode(html_entity_decode($value2));
+                                $collection[$i][$column][$column2] = html_entity_decode($value2);
+                                if (PHP_VERSION_ID < 54) $collection[$i][$column][$column2] = utf8_encode($collection[$i][$column][$column2]);
                             }
                         }
                     }
