@@ -412,7 +412,7 @@ function searchMultiple(model, fields, search_format,  between, response_format,
     if(search_format) search_format='&search_format='+search_format;    
     search_between=between!=false?'&between='+between:'';
     
-    var search_url = base_url+'objects?model='+model+'&search='+search+'&search_fields='+fields+'&format='+response_format+'&'+search_format+search_between+'&search_type=multiple';
+    var search_url = base_url+'objects?model='+model+'&search='+search+'&search_fields='+fields+'&format='+response_format+'&'+search_format+search_between+'&p='+component+'&search_type=multiple';
     
     try{
         dojo.byId(domPrefix+'data_url').value=search_url;
