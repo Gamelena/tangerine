@@ -737,6 +737,30 @@ function showtab(tab, area) {
     }    
 }
 
+
+var switchMainPane = function(){
+    if (contentPaneTop.domNode.style.display != 'none') {
+        maximizeMainPane();
+    } else {
+        minimizeMainPane();
+    }
+}
+
+var maximizeMainPane = function(){
+    contentPaneTop.domNode.style.display='none';
+    contentPaneBottom.domNode.style.display='none';
+    menuExpand.domNode.style.display='none';
+    dijit.byId('borderContainer').resize();
+}
+
+var minimizeMainPane = function(){
+    contentPaneTop.domNode.style.display='block';
+    contentPaneBottom.domNode.style.display='block';
+    menuExpand.domNode.style.display='block';
+    dijit.byId('borderContainer').resize();
+}
+
+
 /*
 window.alert = function(message) {
     myDialog = new dijit.Dialog({

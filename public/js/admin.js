@@ -40,6 +40,7 @@ function edit(id,count,p){
   var c_edit=document.getElementById('c_edit'+id);
   var c_update=document.getElementById('c_update'+id);
   var c_cancel=document.getElementById('c_cancel'+id);
+  console.debug('field'+id+'_1');
   var field=document.getElementById('field'+id+'_1');
   var param_str='';
   for(i=0; i<params.length; i++){
