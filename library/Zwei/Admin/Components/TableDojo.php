@@ -64,8 +64,9 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $search = isset($request['search']) ? $request['search'] : "";
 
 
-        //Zwei_Utils_Debug::write($viewtable->layout);
-        $out = "<h2>{$viewtable->layout[0]['NAME']}</h2>\r\n";
+        $out = "<img id=\"switchMainPaneButton\" src=\"http://localhost/promociones/images/expand.png\" onclick=\"switchMainPane()\" style=\"position: relative;float: left;\">";
+        $out .= "<script>if(typeof(switchMainPane) != \"function\") { dojo.byId('switchMainPaneButton').style.display='none'; }</script>";
+        $out .= "<h2>{$viewtable->layout[0]['NAME']}</h2>\r\n";
         if (!empty($viewtable->layout[0]['JS'])) $out.="<script type=\"text/javascript\" src=\"".BASE_URL."js/".$viewtable->layout[0]['JS']."?version={$this->_version}\"></script>";
         $out .= "
         <div id=\"{$domPrefix}content_dojo\" class=\"content_dojo\" style=\"width:100%\">\r\n";
