@@ -443,7 +443,6 @@ class Zwei_Admin_Acl extends Zend_Acl
         if( !self::$_ready ){
             self::_init();
         }
-
         return (self::$_acl->isAllowed(self::$_user, $_REQUEST['p'], $permission));
 
     }

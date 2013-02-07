@@ -41,9 +41,10 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
         $form = new Zwei_Utils_Form();
         $this->getLayout();
         $modelclass = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
-            $this->_model = new $modelclass();
-            $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
+        $this->_model = new $modelclass();
+        $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
         $primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : 'id';
+        if (is_array($primary)) $primary = implode(",", $primary);
         $count = count($this->layout);
         if (!isset($this->id)) $this->id = array();
         elseif (!is_array($this->id)) $this->id = array($this->id);
@@ -75,15 +76,15 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                     // de otra forma notifica como opción NO valida una opción SI válida y confunde a usuario
                     $clean_filtering_selects .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value', '');\r\n";
                 } else if ($node['TYPE'] == "dojo_checkbox") {  
-                            $defaultValue = isset($node['DEFAULT_VALUE']) ? $node['DEFAULT_VALUE'] : '1';
-                            $defaultEmpty = isset($node['DEFAULT_EMPTY']) ? $node['DEFAULT_VALUE'] : '0';
-                            //check checkbox
-                            if (isset($node['CHECKED']) && $node['CHECKED'] == 'true') {
-                                $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value','$defaultValue'); dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('checked', true);\r\n";
-                            } else {    
-                            //uncheck checkbox 
-                                $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value','$defaultEmpty'); dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('checked', false);\r\n";
-                            }                   
+                    $defaultValue = isset($node['DEFAULT_VALUE']) ? $node['DEFAULT_VALUE'] : '1';
+                    $defaultEmpty = isset($node['DEFAULT_EMPTY']) ? $node['DEFAULT_VALUE'] : '0';
+                    //check checkbox
+                    if (isset($node['CHECKED']) && $node['CHECKED'] == 'true') {
+                        $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value','$defaultValue'); dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('checked', true);\r\n";
+                    } else {    
+                    //uncheck checkbox 
+                        $this->_out .= "\t\t\t\t dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('value','$defaultEmpty'); dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').set('checked', false);\r\n";
+                    }
                 } else if ($node['TYPE'] == "select") {
                     $this->_out .= "\t\t\t\t selectValueSet('edit{$i}_{$domPrefix}{$pfx}{$j}', '0');\r\n";
                 } else if (!empty($this->layout[0]['SEARCH_TABLE_TARGET']) && ($this->layout[0]['SEARCH_TABLE_TARGET'] == $node['TARGET'])){

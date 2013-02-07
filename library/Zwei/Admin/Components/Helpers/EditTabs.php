@@ -26,7 +26,6 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
      * 
      * @var Zwei_Db_Table
      */
-
     private $_model;
     
     function display($mode = 'add')
@@ -72,7 +71,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         $hidden = '';
 
         $i=0;
-        $xhr_insert_data='';
+        $xhr_insert_data='';//[TODO] BORRAR variable backward compatibility
         
         //Loop por cada pestaña
         foreach ($tabs as $j => $tab) {
@@ -218,6 +217,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 if ($node_mode == "true" || $node_mode == "disabled" || $node_mode == "readonly") {
                     $out .= "\t\t<tr id=\"row_{$node['target']}\"><th><label for=\"{$node['target']}\">{$name}</label></th>";
                     $out .= "<td>".$element->edit('0', $domPrefix.$pfx.$k)."</td></tr>\r\n";
+                    //[TODO] BORRAR var $xhr_insert_data deprecated, existe para backward compatibility 
                     if (!empty($node['target'])) {
                         if ($node['type']=='dojo_filtering_select' || $node['type']=='dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
                             $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$domPrefix}{$pfx}{$k}').get('value'), \r\n";
@@ -225,6 +225,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                             $xhr_insert_data.="\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$domPrefix}{$pfx}{$k}').value, \r\n";
                         }
                     }
+                    //fin BORRAR
                 } elseif($mode == "edit" && $node_edit == "false" && $node_add == "true") {
                     //En caso de que sea agregable pero no editable, se mostrara en el formulario, sin input
                     $out.="\t\t<tr><th><label>{$name}</label></th><td>$value</td></tr>\r\n";

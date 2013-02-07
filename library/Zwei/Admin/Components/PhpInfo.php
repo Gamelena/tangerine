@@ -27,7 +27,10 @@ class Zwei_Admin_Components_PhpInfo implements Zwei_Admin_ComponentsInterface
     
     function display()
     {
-        $out = "<h2>Configuraci&oacute;n del Servidor</h2>\r\n";
+        $out = "<img id=\"phpInfoswitchMainPaneButton\" src=\"http://localhost/promociones/images/expand.png\" onclick=\"switchMainPane()\" style=\"position: relative;float: left;\">";
+        $out .= "<script>if(typeof(switchMainPane) != \"function\") { dojo.byId('phpInfoswitchMainPaneButton').style.display='none'; }</script>";
+        
+        $out .= "<h2>Configuraci&oacute;n del Servidor</h2>\r\n";
         
         ob_start();
         phpinfo(INFO_GENERAL);
