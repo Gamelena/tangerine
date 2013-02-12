@@ -19,7 +19,7 @@ class Zwei_Utils_Debug
    * @param string $message - texto a escribir en archivo. 
    * @param $file - ruta relativa del archivo a escribir.
    */    
-    function write($message = null, $file = "" )
+    static function write($message = null, $file = "" )
     {
         if( $file == "" ) $file = ROOT_DIR."/log/debug";
         $trace = debug_backtrace() ;
@@ -43,7 +43,7 @@ class Zwei_Utils_Debug
      * @param string $file - ruta relativa del archivo a escribir.
      * @return void
      */
-    function writeBySettings($message, $settings_id, $settings_value='SI', $file= "../log/debug")
+    static function writeBySettings($message, $settings_id, $settings_value='SI', $file= "../log/debug")
     {
         $oSettings = new SettingsModel();
         try {

@@ -37,7 +37,7 @@ class Zwei_Utils_Array
      * 
      * @param array
      * @param array
-     * @param boolean. true devuelve registros diferentes, false devuelve registros iguales
+     * @param boolean - true: devuelve registros diferentes, false: devuelve registros iguales
      * @return array
      */
     function getDifferences($array1, $array2, $returnDiffs = true)

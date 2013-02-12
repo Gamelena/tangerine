@@ -44,11 +44,11 @@ class Zwei_Utils_Menu
         ";
         $this->_out.='<ul class="topnav">';
         foreach($tree as $t){
-            $this->_out.='<li><a href="'.BASE_URL.@$t['url'].'">'.$t['label'].'</a>';
+            $this->_out.='<li><a href="'.BASE_URL.@$t['url'].'">'.htmlentities($t['label']).'</a>';
             if(isset($t['children'])){
                 $this->_out.='<ul class="subnav">';
                 foreach($t['children'] as $t2){
-                    $this->_out.='<li><a href="'.BASE_URL.@$t2['url'].'">'.$t2['label'].'</a>';
+                    $this->_out.='<li><a href="'.BASE_URL.@$t2['url'].'">'.htmlentities($t2['label']).'</a>';
                 }
                 $this->_out.='</ul>';
             }
