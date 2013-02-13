@@ -14,14 +14,50 @@
 class Zwei_Admin_Controller{
     //[TODO] asegurarse de que estos atributos public no sean usados como tales 
     //y cambiarlos a protected
+    /**
+     * 
+     * @var array
+     */
     public $layout;
+    /**
+     * 
+     * @var string
+     */
     public $page;
+    /**
+     * 
+     * @var int
+     */
     public $id;
+    /**
+     * 
+     * @var string
+     */
     public $name;
+    /**
+     * 
+     * @var string
+     */
     public $target;
+    /**
+     * 
+     * @var int
+     */
     public $maxsize;
+    /**
+     * 
+     * @var Zwei_Admin_Acl
+     */
     protected $_acl;
+    /**
+     * 
+     * @var Zend_Config
+     */
     protected $_config;
+    /**
+     * 
+     * @var string
+     */
     protected $_mainPane;
 
   /**
@@ -56,18 +92,19 @@ class Zwei_Admin_Controller{
 
     /**
      * Captura los elementos del componente XML
+     * @return void
      */
     function getLayout()
     {
         $oXml = new Zwei_Admin_XML();
         
-    
         $file = Zwei_Admin_XML::getFullPath($this->page);
         
         $oXml->parse($file);
         $this->layout = $oXml->elements;
         $this->name = @$this->layout[0]['NAME'];
         $this->target = @$this->layout[0]['TARGET'];
+        return $this->layout;
     }
     
     /**

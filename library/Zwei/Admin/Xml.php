@@ -11,7 +11,12 @@
  * echo $Xml->elements[0]['NAME'];
  * ?>
  * </code>
- * [FIXME] debe deprecarse xml_parser_create() y usar la clase SimpleXMLElement (extender Zwei_Utils_SimpleXml) que tiene utilidades mas avanzadas y un parseo más legible del XML.
+ * [FIXME]
+ * Se han duplicado metodos de Zwei_Utils_Xml ya que esa clase extiende de SimpleXMLElement e implementa un constructor final, no sobreescribible, 
+ * por lo tanto NO podemos heredar de Zwei_Utils_Xml (por ahora) ya que necesitamos un constructor personalizado para compatibilidad hacia atras.
+ *  
+ * Sin embargo es deseable heredar de Zwei_Utils_SimpleXML a futuro y borrar métodos duplicados.
+ * Esto se puede hacer cuando no usemos más xml_parser_create o lo que es lo mismo: cuando no se invoque más el constructor de esta clase sin parametros.
  *
  * @category Zwei
  * @package Zwei_Admin
@@ -26,9 +31,9 @@ class Zwei_Admin_Xml
     var $file;
     /**
      * Est var debiera ser ser siemple xml_parser_create, xml_parser_create es solo para backward compatibility
-     * @var Zwei_Utils_SimpleXML | xml_parser_create
+     * @var Zwei_Utils_SimpleXML
      */
-    var $xml_parser;
+    private $_parser;
     var $elements;
     var $parents;
     var $pos;
@@ -79,11 +84,11 @@ class Zwei_Admin_Xml
     {
         if (is_null($data)) {
             //[TODO] esto se debe deprecar
-            $this->xml_parser = xml_parser_create();
-            xml_set_object($this->xml_parser,$this);
-            xml_set_element_handler($this->xml_parser, "startElement", "endElement");
+            $this->_parser = xml_parser_create();
+            xml_set_object($this->_parser,$this);
+            xml_set_element_handler($this->_parser, "startElement", "endElement");
         } else {
-            $this->xml_parser = new Zwei_Utils_SimpleXML($data, $options, $data_is_url, $ns, $is_prefix);
+            $this->_parser = new Zwei_Utils_SimpleXML($data, $options, $data_is_url, $ns, $is_prefix);
         }    
     }
 
@@ -106,26 +111,27 @@ class Zwei_Admin_Xml
         }
 
         while ($data = fread($fp, 4096)) {
-            if (!xml_parse($this->xml_parser, $data, feof($fp))) {
+            if (!xml_parse($this->_parser, $data, feof($fp))) {
                 Debug::write(sprintf("XML error: %s at line %d",
-                xml_error_string(xml_get_error_code($this->xml_parser)),
-                xml_get_current_line_number($this->xml_parser)));
+                xml_error_string(xml_get_error_code($this->_parser)),
+                xml_get_current_line_number($this->_parser)));
                 Debug::write($file);
                 Debug::write(file_get_contents($file));
                 
                 
                 die(sprintf("XML error: %s at line %d",
-                xml_error_string(xml_get_error_code($this->xml_parser)),
-                xml_get_current_line_number($this->xml_parser)));
+                xml_error_string(xml_get_error_code($this->_parser)),
+                xml_get_current_line_number($this->_parser)));
             }
         }
-        xml_parser_free($this->xml_parser);
+        xml_parser_free($this->_parser);
     }
     
     /**
      * Obtiene el path completo del archivo xml, según las convenciones de admportal,
      * si el archivo xml termina con .php se buscará el archivo por http y no por ruta interna,
-     * si existe el atributo de tabla 'web_settings.url_from_local', buscara el archivo en host 'web_settings.url_from_local' en lugar de localhost. 
+     * si existe el atributo de tabla 'web_settings.url_from_local', buscara el archivo en host 'web_settings.url_from_local' en lugar de localhost,
+     * este último caso es util para cuando se use tunel http. 
      * 
      * @param string
      * @return string
@@ -154,32 +160,32 @@ class Zwei_Admin_Xml
     
     public function getAttribute($name)
     {
-        return $this->xml_parser->getAttribute($name);
+        return $this->_parser->getAttribute($name);
     }
     
     public function getChildrenCount()
     {
-        return $this->xml_parser->getChildrenCount();
+        return $this->_parser->getChildrenCount();
     }
     
     public function getChildrenCountName($name)
     {
-        return $this->xml_parser->getChildrenCountName($name);
+        return $this->_parser->getChildrenCountName($name);
     }
     
     
     public function existsChildren($name)
     {
-        return $this->xml_parser->existsChildren($name);
+        return $this->_parser->existsChildren($name);
     }
     
     public function getAttributeCount()
     {
-        return $this->xml_parser->getAttributeCount();
+        return $this->_parser->getAttributeCount();
     }
     
     public function getAttributesArray($names)
     {
-        return $this->xml_parser->getAttributesArray($names);
+        return $this->_parser->getAttributesArray($names);
     }
 }
