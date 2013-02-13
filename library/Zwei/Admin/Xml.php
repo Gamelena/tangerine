@@ -33,7 +33,7 @@ class Zwei_Admin_Xml
      * Est var debiera ser ser siemple xml_parser_create, xml_parser_create es solo para backward compatibility
      * @var Zwei_Utils_SimpleXML
      */
-    private $_parser;
+    public $_parser;
     var $elements;
     var $parents;
     var $pos;
@@ -187,5 +187,10 @@ class Zwei_Admin_Xml
     public function getAttributesArray($names)
     {
         return $this->_parser->getAttributesArray($names);
+    }
+    
+    public function children($ns = null, $is_prefix = null)
+    {
+        return $this->_parser->children($ns, $is_prefix);
     }
 }

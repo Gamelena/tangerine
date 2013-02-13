@@ -34,18 +34,18 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
 
         $file = Zwei_Admin_XML::getFullPath($this->page);
         
-        $string_xml = file_get_contents($file);
+        //$string_xml = file_get_contents($file);
 
-        $Xml = new Zwei_Utils_SimpleXML($string_xml);
-        $this->getLayout();
-        $model = Zwei_Utils_String::toClassWord($this->layout[0]['TARGET'])."Model";
+        $Xml = new Zwei_Admin_Xml($file, 0, 1);
+
+        $model = Zwei_Utils_String::toClassWord($Xml->getAttribute("target"))."Model";
         $this->_model = new $model();
 
         $out = '';        
         $modeDom = ($mode == 'add' || $mode == 'clone') ? 'add' : 'edit';
         $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
       
-        if (!empty($this->layout[0]['JS'])) $out.="<script type=\"text/javascript\" src=\"".BASE_URL."js/".$this->layout[0]['JS']."?version={$this->_version}\"></script>";
+        if ($Xml->getAttribute('js')) $out.="<script type=\"text/javascript\" src=\"".BASE_URL."js/".$Xml->getAttribute('js')."?version={$this->_version}\"></script>";
       
         $out .= "<div dojoType=\"dijit.form.Form\" id=\"{$domPrefix}tabForm{$modeDom}\" class=\"tabForm$modeDom\" jsId=\"{$domPrefix}tabForm\" name=\"{$domPrefix}tabForm$modeDom\" encType=\"multipart/form-data\" action=\"\" method=\"\" onsubmit=\"return false\">\r\n";
       
@@ -53,7 +53,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         if (!isset($this->id)) $this->id = array();
         elseif (!is_array($this->id)) $this->id = array($this->id);
       
-        $tabs = $Xml->children();
+        $tabs = ($Xml->existsChildren("tab")) ? $Xml->children() : array(null);
       
         $h = "style=\"background:#cccccc\"";
         $i = 0;
@@ -107,7 +107,9 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
              
             $j=0;
             //Loop por cada elemento dentro de una pestaña
-            foreach ($tab->children() as $node) {
+            $children = $tab != null ? $tab->children() : $Xml->children();
+            
+            foreach ($children as $node) {
                 $params = $this->getInputParams($node);
                 if ($mode == "edit") {
                     $params['ID'] = $this->id[0];
@@ -243,7 +245,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 <script type=\"dojo/method\" event=\"onSubmit\">
                     if (this.validate()) {
                         try {
-                            {$domPrefix}modify('{$this->layout[0]['TARGET']}', arguments[0], '$mode');
+                            {$domPrefix}modify('{$Xml->getAttribute('target')}', arguments[0], '$mode');
                         } catch (e) {
                             console.debug(e)    
                         }
