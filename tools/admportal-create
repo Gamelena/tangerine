@@ -63,7 +63,7 @@ echo Guardando configuracion de base de datos en $DEST_PATH/web/application/conf
 zf configure dbadapter "adapter=$DB_ADAPTER&username=$DB_USER&password=$DB_PASS&dbname=$DB_NAME"
 
 echo Creando definiciones de tablas ZF en $DEST_PATH/web/application/models/DbTable ...
-zf create dbtable.from-database
+zf create dbtable.from-database --force-overwrite=true
 
 echo " "
 read -p "¿Desea crear y poblar tablas básicas MySQL de AdmPortal? (S/N) (por defecto S):" CREATE_TABLES

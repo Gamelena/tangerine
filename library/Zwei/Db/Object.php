@@ -198,7 +198,7 @@ class Zwei_Db_Object
             $oSelect->reset(Zend_Db_Select::ORDER);
             if (preg_match("/^-(.*)/", $sort)) {
                 $sort = substr($sort, 1);
-                $oSelect->order("$sort DESC");    
+                $oSelect->order("$sort DESC");
             } else {
                 $oSelect->order($sort);
             }

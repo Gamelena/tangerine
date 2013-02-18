@@ -1,5 +1,25 @@
 <?php
-
+/**
+ * Controlador para generar gráficos con Dojo Toolkit.
+ * 
+ * @example
+ * <code>
+ * <?xml version="1.0"?>
+    <!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
+    <component 
+        name="Gráfico por Canal"
+        type="dojo-chart" 
+        chart_y_target="count"
+        chart_x_type="datetime"
+        chart_x_target="fecha"  
+        chart_dojo_type="Markers"
+        chart_dojo_theme="Shrooms"
+        target="counter_c_d_r_compras"
+    />
+ * </code>
+ * 
+ *
+ */
 class Components_DojoChartController extends Zend_Controller_Action
 {
     /**

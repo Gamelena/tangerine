@@ -157,7 +157,7 @@ class Zwei_Admin_Xml
     }
 
     
-    
+    //Metodos duplicados de Zwei_Utils_SimpleXML, se pueden borrara cuando esta clase herede directamente de Zwei_Utils_SimpleXML
     public function getAttribute($name)
     {
         return $this->_parser->getAttribute($name);
@@ -193,4 +193,5 @@ class Zwei_Admin_Xml
     {
         return $this->_parser->children($ns, $is_prefix);
     }
+    //FIN Metodos duplicados de Zwei_Utils_SimpleXML
 }

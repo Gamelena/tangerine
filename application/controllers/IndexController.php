@@ -165,11 +165,11 @@ class IndexController extends Zend_Controller_Action
         if (!empty($this->_template)) {
             $this->_helper->viewRenderer("index-$this->_template");
             if ($this->_template != 'dojo') { //en fase experimental
-                $Modules = new AclModulesModel();
-                $Modules->setApproved();
-                $tree = $Modules->getTree();
-                $Menu = new Zwei_Utils_Menu($tree);
-                $this->view->list=$Menu->display();
+                $modules = new AclModulesModel();
+                $modules->setApproved();
+                $tree = $modules->getTree();
+                $menu = new Zwei_Utils_Menu($tree);
+                $this->view->list=$menu->display();
                 $this->view->content = "<center><img width=\"960\" src=\"".BASE_URL."images/satelite.jpg\"/></center>";
             }
         }
@@ -188,6 +188,7 @@ class IndexController extends Zend_Controller_Action
      */    
     public function componentsAction()
     {
+        if (!empty($this->_template)) $this->enableDojo();
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         /*
@@ -204,22 +205,29 @@ class IndexController extends Zend_Controller_Action
             }
         }
 
-        $Xml = new Zwei_Admin_Xml();
+        //$Xml = new Zwei_Admin_Xml();
 
         if (isset($this->_request->p)) {
             if (Zwei_Admin_Acl::isUserAllowed($this->_request->p, "LIST") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "EDIT") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "ADD")) {
 
-                $file = Zwei_Admin_XML::getFullPath($this->_request->p);
-                $Xml->parse($file);
-
-                //parche para que cargue tabla html no dojo, si el layout no es dojo
-                if (TEMPLATE == 'urban' && $Xml->elements[0]['TYPE'] == 'table_dojo') {
-                    $Xml->elements[0]['TYPE'] = 'table';
+                $file = Zwei_Admin_Xml::getFullPath($this->_request->p);
+                if (!file_exists($file)) {
+                    $content = "<p>No se encuentra archivo <b>$file</b>.</p>";
+                } else {
+                    $Xml = new Zwei_Admin_Xml($file, 0, 1);
+                    //$Xml->parse($file);
+    
+                    //parche para que cargue tabla html no dojo, si el layout no es dojo
+                    if (TEMPLATE == 'urban' && $Xml->getAttribute("type") == 'table_dojo') {
+                        $component = 'table';
+                    } else {
+                        $component = $Xml->getAttribute("type");
+                    }
+                    $ComponentClass = "Zwei_Admin_Components_".Zwei_Utils_String::toClassWord($component);
+                    //Se pasa como parámetro $this->view para hacer posible la inclusión de librerías js y css auxiliares 
+                    $View = new $ComponentClass($this->_request->p, $this->view);
+                    $content = $View->display();
                 }
-                $ComponentClass = "Zwei_Admin_Components_".Zwei_Utils_String::toClassWord($Xml->elements[0]['TYPE']);
-                //Se pasa como parámetro $this->view para hacer posible la inclusión de librerías js y css auxiliares 
-                $View = new $ComponentClass($this->_request->p, $this->view);
-                $content = $View->display();
             } else {
                 $content = "Acceso denegado a módulo";
             }
@@ -240,18 +248,18 @@ class IndexController extends Zend_Controller_Action
      * 
      * @example
      * <code>
-	 *		<component type="some-controller" ...
-	 *		<component type="some-controller/some-action"
-	 *  </code>
-	 * some-controller se convierte a CanonicalCase (SomeController).
-	 * some-action se convierte a camelCase (someAction).   
+    *      <component type="some-controller" ...
+    *      <component type="some-controller/some-action"
+    *  </code>
+    * some-controller se convierte a CanonicalCase (SomeController).
+    * some-action se convierte a camelCase (someAction).   
      */  
     public function componentsMvcAction()
     {
         if (isset($this->_request->p)) {
             if (Zwei_Admin_Acl::isUserAllowed($this->_request->p, "LIST") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "EDIT") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "ADD")) {
                 $xml = new Zwei_Admin_Xml();
-                $file = Zwei_Admin_XML::getFullPath($this->_request->p);
+                $file = Zwei_Admin_Xml::getFullPath($this->_request->p);
                 $xml->parse($file);
                 
                 if (stristr($xml->elements[0]['TYPE'], '.')) {
@@ -275,35 +283,37 @@ class IndexController extends Zend_Controller_Action
      * Se asocia a un Zend Controller un objeto Zwei_Admin_Components_Helpers_EditTabs().
      * Para invocar a este action el segundo elemento del XML debe ser del tipo "tab".
      * 
+     * Actualización: se permite invocar elementos sin tabs. 
+     * 
      * @example
      * <code>
-     * 		<component (...)
-     * 			<tab (...) >
-	 *				<element (...)>
-	 *  </code>
+     *       <component (...)
+     *          <tab (...) >
+     *            <element (...)>
+     *  </code>
      */
     public function tabsAction()
     {
         if(!Zend_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
 
-        $Xml=new Zwei_Admin_Xml();
         $Form=new Zwei_Utils_Form();
 
         if (isset($this->_request->p)) {
             if (Zwei_Admin_Acl::isUserAllowed($this->_request->p, "LIST") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "EDIT") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "ADD")) {
 
-                $file = Zwei_Admin_XML::getFullPath($this->_request->p);
-                 
-                $Xml->parse($file);
-                $model = Zwei_Utils_String::toClassWord($Xml->elements[0]['TARGET']).'Model';
+                $file = Zwei_Admin_Xml::getFullPath($this->_request->p);
+                $Xml = new Zwei_Admin_Xml($file, 0, 1);
+                
+                $model = Zwei_Utils_String::toClassWord($Xml->getAttribute("target")).'Model';
+                
                 $this->_model = new $model;
                 $primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : "id";
 
                 //ComponentClass="Zwei_Admin_Components_".Zwei_Utils_String::toClassWord($Xml->elements[0]['TYPE']);
                 //Se pasa como parámetro $this->view para hacer posible la inclusión de librerías js y css auxiliares mediante un objeto Zend_View
-                $View = new Zwei_Admin_Components_Helpers_EditTabs($this->_request->p, $this->_request->$primary, $this->view);
-                $content = $View->display($Form->action);
+                $view = new Zwei_Admin_Components_Helpers_EditTabs($this->_request->p, $this->_request->$primary, $this->view);
+                $content = $view->display($Form->action);
             } else {
                 $content = "Acceso denegado a módulo";
             }
@@ -328,7 +338,7 @@ class IndexController extends Zend_Controller_Action
         if(isset($this->_request->p))
         {
             if (Zwei_Admin_Acl::isUserAllowed($this->_request->p, "LIST") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "EDIT") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "ADD")) {
-                $file = Zwei_Admin_XML::getFullPath($this->_request->p);
+                $file = Zwei_Admin_Xml::getFullPath($this->_request->p);
                 $Xml->parse($file);
                 //ComponentClass="Zwei_Admin_Components_".Zwei_Utils_String::toClassWord($Xml->elements[0]['TYPE']);
                 //Se pasa como parámetro $this->view para hacer posible la inclusión de librerías js y css auxiliares mediante un objeto Zend_View
@@ -354,16 +364,16 @@ class IndexController extends Zend_Controller_Action
         ->addActionContext('index', 'json')
         ->initContext();
 
-        $this->_helper->viewRenderer->setNoRender(true);
-        $Modules = new AclModulesModel();
-        $Modules->setApproved();
+        //$this->_helper->viewRenderer->setNoRender(true);
+        $modules = new AclModulesModel();
+        $modules->setApproved();
 
-        $tree=$Modules->getTree();
+        $tree = $modules->getTree();
 
         $treeObj = new Zend_Dojo_Data('id', $tree);
         $treeObj->setLabel('label');
 
-        echo Zend_Json::prettyPrint($treeObj->toJson());
+        $this->view->content = Zend_Json::prettyPrint($treeObj->toJson());
     }
 
     public function loginAction()
@@ -377,7 +387,6 @@ class IndexController extends Zend_Controller_Action
         {
             $this->_redirect(BASE_URL. 'index');
         }
-
         $request = $this->getRequest();
         $loginForm = $this->getLoginForm();
 
@@ -387,7 +396,6 @@ class IndexController extends Zend_Controller_Action
         {
             if($loginForm->isValid($request->getPost()))
             {
-
                 $authAdapter = $this->getAuthAdapter();
 
                 $username = $loginForm->getValue('username');

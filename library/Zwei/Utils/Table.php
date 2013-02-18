@@ -79,7 +79,7 @@ class Zwei_Utils_Table
     {
         $Xml = new Zwei_Admin_Xml();
         
-        $file = Zwei_Admin_XML::getFullPath($component);
+        $file = Zwei_Admin_Xml::getFullPath($component);
         
         $Xml->parse($file);
         $this->_xml = $Xml->elements;

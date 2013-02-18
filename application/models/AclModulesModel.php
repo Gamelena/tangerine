@@ -61,7 +61,7 @@ class AclModulesModel extends Zwei_Db_Table
         $childrens = $this->_acl->listGrantedResourcesByParentId($parent_id);
         if ($parent_id != 0) {
             foreach ($childrens as $i => $child) {
-                $childrens[$i]['label'] = utf8_encode(html_entity_decode($child['title']));
+                $childrens[$i]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($child['title']) : utf8_encode(html_entity_decode($child['title']));
                 unset($childrens[$i]['title']);
                 $prefix = "";
 
@@ -73,7 +73,7 @@ class AclModulesModel extends Zwei_Db_Table
                     
                 if ($prefix != "") $child['module'] = urlencode($child['module']);
 
-                $childrens[$i]['url'] = $prefix.utf8_encode(html_entity_decode($child['module']));
+                $childrens[$i]['url'] = $prefix.(PHP_VERSION_ID >= 50400 ? html_entity_decode($child['module']) : utf8_encode(html_entity_decode($child['module'])));
                 unset($childrens[$i]['module']);
             }
         }
@@ -98,8 +98,8 @@ class AclModulesModel extends Zwei_Db_Table
                 $arrNodes[$key]['id']  = $branch['id'];
                 $arrNodes[$key]['type']  = $branch['type'];
                 $arrNodes[$key]['linkable']  = $branch['linkable'];
-                $arrNodes[$key]['label'] = utf8_encode(html_entity_decode($branch['title']));
-                if ($branch['linkable'] == '1') {
+                $arrNodes[$key]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($branch['title']) : utf8_encode(html_entity_decode($branch['title']));
+                if ($branch['linkable'] == '1') { 
                     $prefix = "";
                     if ($branch['type'] == 'zend_module') {$prefix = "";}
                     else if ($branch['type'] == 'xml') {$prefix = "index/components?p=";}

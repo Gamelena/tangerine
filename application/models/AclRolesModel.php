@@ -197,13 +197,33 @@ class AclRolesModel extends Zwei_Db_Table
     
     public function addPermissions($acl_roles_id)
     {
-        $where = $this->getAdapter()->quoteInto("acl_roles_id = ?", $acl_roles_id);
         $aclPermissions = new AclPermissionsModel();
+        $where = array();
+        $where[] = $aclPermissions->getAdapter()->quoteInto("acl_roles_id = ?", $acl_roles_id);
+        
         $return = false;
         
+        $whereOr = array();
+        foreach ($this->_data_permissions as $i => $v) {
+            $mp = explode(';', $v);
+            $acl_modules_id = $mp[0];
+            $permission = $mp[1];
+            $whereOr[] = 
+                    "(".$aclPermissions->getAdapter()->quote($acl_modules_id) . ", " .
+                    $aclPermissions->getAdapter()->quote($permission).")";
+        }
+        
+        if (!empty($this->_data_permissions)) {
+            $list = implode(",", $whereOr);
+            $where[] = "(acl_modules_id, permission) NOT IN ($list)";
+        }
+        
+        
         $delete = $aclPermissions->delete($where);
+        
         if (empty($this->_data_permissions)) $return = $delete;
 
+        $insert =  false;
         foreach ($this->_data_permissions as $v) {
             $mp = explode(';', $v);
             $acl_modules_id = $mp[0];
@@ -213,7 +233,14 @@ class AclRolesModel extends Zwei_Db_Table
                'acl_modules_id' => $acl_modules_id, 
                'permission' => $permission
             );
-            $insert = $aclPermissions->insert($data);
+            try {
+                $insert = $aclPermissions->insert($data);
+            } catch (Zend_Db_Exception $e) {
+                if ($e->getCode() == 23000) {
+                    $printData = print_r($data, 1);
+                    Debug::write("Ya existe servicio_accion asociado a $printData");
+                }
+            }
             if ($insert) $return = true;
         }
         return $return;

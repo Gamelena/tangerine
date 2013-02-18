@@ -32,7 +32,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
     {
         $form = new Zwei_Utils_Form();
 
-        $file = Zwei_Admin_XML::getFullPath($this->page);
+        $file = Zwei_Admin_Xml::getFullPath($this->page);
         
         //$string_xml = file_get_contents($file);
 
@@ -245,6 +245,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 <script type=\"dojo/method\" event=\"onSubmit\">
                     if (this.validate()) {
                         try {
+                            console.debug(arguments);
                             {$domPrefix}modify('{$Xml->getAttribute('target')}', arguments[0], '$mode');
                         } catch (e) {
                             console.debug(e)    

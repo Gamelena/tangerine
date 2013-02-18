@@ -366,155 +366,166 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
          */
         if ($viewtable->layout[1]['_name'] == 'TAB')
         {       
-            $xhr_insert_data = '';
-            $xhr_update_data = '';
-            
-            $file = Zwei_Admin_Xml::getFullPath($this->page);
-            
-            $string_xml = file_get_contents($file);
-            $Xml = new SimpleXMLElement($string_xml);
-            $tabs = $Xml->children();
-            
-            $k = 1;
-            foreach ($tabs as $tab) {
-                foreach ($tab->children() as $node) {
-                    if (($node["add"] == "true" || $node["add"] == "readonly" || $node["clone"] == "true" || $node["clone"] == "readonly") && !empty($node['target'])) {
-                        $pfx = '_add';
-                        if ($node['type'] == 'dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
-                            $xhr_insert_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$domPrefix}{$pfx}{$k}').get('value'), \r\n";
-                        } else if (strstr($node['type'], "dojo_checked_multiselect")) {    
-                            $xhr_insert_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$domPrefix}{$pfx}{$k}').get('value').join(':::'), \r\n";
-                        } else {
-                            $xhr_insert_data .= "\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$domPrefix}{$pfx}{$k}').value, \r\n";
-                        }
-                    }
-                    
-                    if (($node["edit"] == "true" || $node["edit"] == "readonly") && !empty($node['target'])) {
-                        $pfx = '';
-                        if ($node['type'] == 'dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
-                            $xhr_update_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$domPrefix}{$pfx}{$k}').get('value'), \r\n";
-                        } else if (strstr($node['type'], "dojo_checked_multiselect")) { 
-                            // Se concatenan todos los campos de un multiselect en un string unico con valores delimitados por :::         
-                            $xhr_update_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$domPrefix}{$pfx}{$k}').get('value').join(':::'), \r\n";
-                        } else {
-                            $xhr_update_data .= "\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$domPrefix}{$pfx}{$k}').value, \r\n";
-                        }
-                    }
-                    $k++; 
-                }
-            }
-            
-            $modelclass = Zwei_Utils_String::toClassWord($viewtable->layout[0]['TARGET'])."Model";
-            $Model = new $modelclass();
-            $additional_validation = $Model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
-            
-            $out.="
-            <script type=\"text/javascript\">
-            //showtab('tab_ctrl1', '{$domPrefix}tab1');
-            function {$domPrefix}modify(model, items, mode) {
-                var resp = '';
-                console.log('{$domPrefix}modify');
-                $additional_validation
-                if(mode == 'add' || mode == 'clone') {
-                    resp = {$domPrefix}insertar(model,items);
-                } else if(mode == 'edit') {
-                    var items = dijit.byId('{$domPrefix}main_grid').selection.getSelected();
-                    var id = items[0].$primary;
-                    resp = {$domPrefix}actualizar(model, items, id);
-                }
-                   
-                if(resp.message != '' && resp.message != null){
-                    alert(resp.message);
-                }else if(resp.state == 'UPDATE_OK'){
-                    alert('Datos Actualizados');
-                    try {
-                        cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix');
-                    } catch (e) {
-                        console.debug(e)
-                    }
-                    dijit.byId('{$domPrefix}formDialogoEditar').hide();
-                }else if(resp.state == 'ADD_OK'){
-                    alert('Datos Ingresados');
-                    try {
-                        cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix');
-                    } catch (e) {
-                        console.debug(e);
-                    }                    
-                    dijit.byId('{$domPrefix}formDialogo').hide();
-                }else if(resp.state == 'UPDATE_FAIL'){
-                    alert('Ha ocurrido un error, o no ha modificado datos');
-                }else if(resp.state == 'ADD_FAIL'){
-                    alert('Ha ocurrido un error, verifique datos o intente más tarde');
-                }
-            }
-        
-        
-            function {$domPrefix}insertar(model, items) {
-                var res = '';
-                dojo.xhrPost( {
-                    url: base_url+'objects',
-                    content: {
-                    $xhr_insert_data
-                        'action'      :'add',
-                        'model'     : model,    
-                        'format'    : 'json'
-                    },
-                    handleAs: 'json',
-                    sync: true,
-                    preventCache: true,
-                    timeout: 5000,
-                    load: function(respuesta){
-            
-                        console.debug(dojo.toJson(respuesta));
-                        res = respuesta;
-            
-                        return respuesta;
-                    },
-                    error:function(err){
-                        alert('Error en comunicacion de datos. error: '+err);
-                        return err;
-                    }
-                });
-                console.log(res);
-                return res;
-            }
-        
-            function {$domPrefix}actualizar(model, items, id) {
-                console.log('actualizar');
-                var res = '';
-                dojo.xhrPost( {
-                    url: base_url+'objects',
-                    content: {
-                        $xhr_update_data
-                        '$primary'        : id,
-                        'action'    :'edit',
-                        'model'     : model,
-                        'format'    : 'json'    
-                    },
-                    handleAs: 'json',
-                    sync: true,
-                    preventCache: true,
-                    timeout: 5000,
-                    load: function(respuesta) {
-            
-                        console.debug(dojo.toJson(respuesta));
-                        res = respuesta;
-            
-                        return respuesta;
-                    },
-                    error:function(err){
-                        alert('Error en comunicacion de datos. error: '+err);
-                        return err;
-                    }
-                });
-                return res;
-            
-            }
-            ";
-                     
-                $out.="</script>
-            ";   
+            $out .= $this->getJsCrud($domPrefix, $primary);
         }   
         return $out; 
+    }
+    
+    /**
+     * 
+     * @param string $domPrefix
+     * @param string $primary
+     * @param string $jsFriend
+     * @return string
+     */
+    public function getJsCrud($domPrefix = '', $primary = 'id', $jsFriend = '' ) 
+    {
+        $xhr_insert_data = '';
+        $xhr_update_data = '';
+        $out = '';
+        
+        $file = Zwei_Admin_Xml::getFullPath($this->page);
+        $Xml = new Zwei_Admin_Xml($file, 0, 1);
+        //Si hay pestañas, obtenemos el array de pestañas para recorrerlas una por una, 
+        //si no hay pestañas creamos un array con UN elemento para que entre UNA vez al primer loop
+        $tabs = ($Xml->existsChildren("tab")) ? $Xml->children() : array(null);
+        
+        $k = 1;
+        foreach ($tabs as $tab) {
+            //Si hay pestañas se recorre cada elemento dentro cada pestaña 
+            //si no hay pestañas se recorre el xml completo de una vez
+            $children = ($Xml->existsChildren("tab")) ? $tab->children() : $Xml->children();
+            foreach ($children as $node) {
+                if (($node["add"] == "true" || $node["add"] == "readonly" || $node["clone"] == "true" || $node["clone"] == "readonly") && !empty($node['target'])) {
+                    $pfx = '_add';
+                    if ($node['type'] == 'dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
+                        $xhr_insert_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$domPrefix}{$pfx}{$k}').get('value'), \r\n";
+                    } else if (strstr($node['type'], "dojo_checked_multiselect")) {
+                        $xhr_insert_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$domPrefix}{$pfx}{$k}').get('value').join(':::'), \r\n";
+                    } else {
+                        $xhr_insert_data .= "\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$domPrefix}{$pfx}{$k}').value, \r\n";
+                    }
+                }
+        
+                if (($node["edit"] == "true" || $node["edit"] == "readonly") && !empty($node['target'])) {
+                    $pfx = '';
+                    if ($node['type'] == 'dojo_filtering_select' || $node['type'] == 'dojo_yes_no' || $node['type'] == 'dojo_checkbox') {
+                        $xhr_update_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$domPrefix}{$pfx}{$k}').get('value'), \r\n";
+                    } else if (strstr($node['type'], "dojo_checked_multiselect")) {
+                        // Se concatenan todos los campos de un multiselect en un string unico con valores delimitados por :::
+                        $xhr_update_data .= "\t\t\t\t'data[{$node['target']}]' : dijit.byId('edit0_{$domPrefix}{$pfx}{$k}').get('value').join(':::'), \r\n";
+                    } else {
+                        $xhr_update_data .= "\t\t\t\t'data[{$node['target']}]' : document.getElementById('edit0_{$domPrefix}{$pfx}{$k}').value, \r\n";
+                    }
+                }
+                $k++;
+            }
+        }
+        
+        $modelclass = Zwei_Utils_String::toClassWord($Xml->getAttribute("target"))."Model";
+        $this->_model = new $modelclass();
+        $additional_validation = $this->_model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
+        
+        $out.="
+        <script type=\"text/javascript\">
+        //showtab('tab_ctrl1', '{$domPrefix}tab1');
+        function {$domPrefix}modify(model, items, mode) {
+            var resp = '';
+            $additional_validation
+            if(mode == 'add' || mode == 'clone') {
+                resp = {$domPrefix}insertar(model,items);
+            } else if(mode == 'edit') {
+                var items = dijit.byId('{$domPrefix}main_grid').selection.getSelected();
+                var id = items[0].$primary;
+                resp = {$domPrefix}actualizar(model, items, id);
+            }
+         
+            if(resp.message != '' && resp.message != null){
+                alert(resp.message);
+            }else if(resp.state == 'UPDATE_OK'){
+                alert('Datos Actualizados');
+                try {
+                    cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix');
+                } catch (e) {
+                    console.debug(e)
+                }
+                dijit.byId('{$domPrefix}formDialogoEditar').hide();
+            }else if(resp.state == 'ADD_OK'){
+                alert('Datos Ingresados');
+                try {
+                    cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix');
+                } catch (e) {
+                    console.debug(e);
+                }
+                dijit.byId('{$domPrefix}formDialogo').hide();
+            }else if(resp.state == 'UPDATE_FAIL'){
+                alert('Ha ocurrido un error, o no ha modificado datos');
+            }else if(resp.state == 'ADD_FAIL'){
+                alert('Ha ocurrido un error, verifique datos o intente más tarde');
+            }
+        }
+        
+        
+        function {$domPrefix}insertar(model, items) {
+            var res = '';
+            dojo.xhrPost( {
+                url: base_url+'objects',
+                content: {
+                    $xhr_insert_data
+                    'action'      :'add',
+                    'model'     : model,
+                    'format'    : 'json'
+                },
+                handleAs: 'json',
+                sync: true,
+                preventCache: true,
+                timeout: 5000,
+                load: function(respuesta){
+                    $jsFriend
+                    return respuesta;
+                },
+                error:function(err){
+                    alert('Error en comunicacion de datos. error: '+err);
+                    return err;
+                }
+            });
+            return respuesta;
+        }
+        
+        function {$domPrefix}actualizar(model, items, id) {
+            console.log('actualizar');
+            var res = '';
+            dojo.xhrPost( {
+            url: base_url+'objects',
+            content: {
+                $xhr_update_data
+                '$primary'        : id,
+                'action'    :'edit',
+                'model'     : model,
+                'format'    : 'json'
+            },
+            handleAs: 'json',
+            sync: true,
+            preventCache: true,
+            timeout: 5000,
+            load: function(respuesta) {
+                $jsFriend
+                console.debug(dojo.toJson(respuesta));
+                res = respuesta;
+                return respuesta;
+            },
+            error:function(err) {
+                alert('Error en comunicacion de datos. error: '+err);
+                return err;
+            }
+        });
+        return res;
+        
+        }
+        ";
+         
+        $out.="</script>
+        ";
+        return $out;
     }
 }

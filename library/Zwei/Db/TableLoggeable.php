@@ -18,6 +18,7 @@ class Zwei_Db_TableLoggeable extends Zwei_Db_Table
     
     public function update($data, $where)
     {
+        $this->getAdapter()->getProfiler()->setEnabled(true);
     	$update = parent::update($data, $where);
     	if (is_array ($where)) {
     		$where = array_values($where);

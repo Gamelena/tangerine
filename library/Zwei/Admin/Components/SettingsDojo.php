@@ -35,9 +35,9 @@ class Zwei_Admin_Components_SettingsDojo implements Zwei_Admin_ComponentsInterfa
     public function __construct($page, $zend_view=null)
     {
         $this->page = $page;
-        $xml = new Zwei_Admin_XML();
+        $xml = new Zwei_Admin_Xml();
          
-        $file = Zwei_Admin_XML::getFullPath($this->page);
+        $file = Zwei_Admin_Xml::getFullPath($this->page);
 
         $xml->parse($file);
         $this->_model=isset($xml->elements[0]['TARGET']) ? Zwei_Utils_String::toClassWord($xml->elements[0]['TARGET'])."Model" : "SettingsModel";

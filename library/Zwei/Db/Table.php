@@ -92,8 +92,12 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      */
     protected $_title = false;
     
-    
-    
+    /**
+     * Variable auxiliar para retornar cualquier dato(s) que necesitemos durante la operación de un modelo.
+     * Si está inicializada, esta variable es retornada como parte de la respuesta Json en Zwei_Admin_Components_Helpers_EditTableDojo.
+     * @var array|false
+     */
+    protected $_more = null;
     
     /**
      * Post Constructor.
@@ -271,9 +275,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     }
 
     /**
-     * Setear el status de
-     * @param $result
-     * @param $description
+     * Setear un mensaje de retorno
+     * @param string $message
      */
     protected function setMessage($message)
     {
@@ -347,6 +350,15 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     public function getAjaxTodo()
     {
         return $this->_ajax_todo;
+    }
+    
+    /**
+     * 
+     * @return multitype:
+     */
+    public function getMore()
+    {
+        return $this->_more;
     }
     
     

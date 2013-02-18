@@ -96,9 +96,9 @@ class Zwei_Admin_Controller{
      */
     function getLayout()
     {
-        $oXml = new Zwei_Admin_XML();
+        $oXml = new Zwei_Admin_Xml();
         
-        $file = Zwei_Admin_XML::getFullPath($this->page);
+        $file = Zwei_Admin_Xml::getFullPath($this->page);
         
         $oXml->parse($file);
         $this->layout = $oXml->elements;

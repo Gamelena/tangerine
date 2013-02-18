@@ -122,7 +122,7 @@ class Zwei_Admin_Acl extends Zend_Acl
                 $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
                 self::$_db = $resource->getDb("auth");
             }
-         } else {
+        } else {
             $db_params = isset($config->resources->db) ? $config->resources->db : $config->db; //[TODO] backward compatibility, $config->db debe deprecarse.
             self::$_db = Zend_Db::factory($db_params);
         }

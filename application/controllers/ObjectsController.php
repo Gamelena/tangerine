@@ -175,6 +175,7 @@ class ObjectsController extends Zend_Controller_Action
                     //Zwei_Utils_Debug::write($response);
                 }
                 $this->_response_content['todo'] = $this->_model->getAjaxTodo();
+                $this->_response_content['more'] = $this->_model->getMore();
 
             }//if (isset($this->_form->action))
 
@@ -239,20 +240,22 @@ class ObjectsController extends Zend_Controller_Action
                 
             } else if (count($this->_response_content) > 0) {
                 $this->_response_content['message'] = $this->_model->getMessage();
-                $data = array( 'id'=>'0',
-                               'state'=>$this->_response_content['state'],
-                               'message'=>$this->_response_content['message'],
-                               'todo'=>$this->_response_content['todo']);
+                $data = array( 'id' => '0',
+                               'state' => $this->_response_content['state'],
+                               'message' => $this->_response_content['message'],
+                               'todo' => $this->_response_content['todo'],
+                               'more' => $this->_response_content['more']);
                 $content = Zend_Json::encode($data);
             } else {
 
                 foreach ($data as $rowArray) {
                     $collection[$i]=array();
                     foreach ($rowArray as $column => $value) {
-                        if (!is_array($value)) $collection[$i][$column] = utf8_encode(html_entity_decode($value));
-                        else {
+                        if (!is_array($value)) {
+                            $collection[$i][$column] = ((PHP_VERSION_ID >= 50400)) ? html_entity_decode($value) :  utf8_encode(html_entity_decode($value));
+                        } else {
                             foreach ($value as $column2 => $value2) {
-                                $collection[$i][$column][$column2] = utf8_encode(html_entity_decode($value2));
+                                $collection[$i][$column][$column2] = (PHP_VERSION_ID >= 50400) ? html_entity_decode($value2) : utf8_encode(html_entity_decode($value2));
                             }
                         }
                     }
