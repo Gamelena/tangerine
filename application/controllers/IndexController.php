@@ -211,9 +211,9 @@ class IndexController extends Zend_Controller_Action
             if (Zwei_Admin_Acl::isUserAllowed($this->_request->p, "LIST") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "EDIT") || Zwei_Admin_Acl::isUserAllowed($this->_request->p, "ADD")) {
 
                 $file = Zwei_Admin_Xml::getFullPath($this->_request->p);
-                if (!file_exists($file)) {
-                    $content = "<p>No se encuentra archivo <b>$file</b>.</p>";
-                } else {
+                //if (!file_exists($file)) {
+                //    $content = "<p>No se encuentra archivo <b>$file</b>.</p>";
+                //} else {
                     $Xml = new Zwei_Admin_Xml($file, 0, 1);
                     //$Xml->parse($file);
     
@@ -227,7 +227,7 @@ class IndexController extends Zend_Controller_Action
                     //Se pasa como parámetro $this->view para hacer posible la inclusión de librerías js y css auxiliares 
                     $View = new $ComponentClass($this->_request->p, $this->view);
                     $content = $View->display();
-                }
+                //}
             } else {
                 $content = "Acceso denegado a módulo";
             }
