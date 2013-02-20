@@ -69,7 +69,7 @@
 <!ELEMENT element (#PCDATA)>
 <!ATTLIST element
     name CDATA #IMPLIED
-    type (null|checkbox| dojo_combo_box|dojo_calendar|dojo_filtering_select|dojo_validation_textbox|dojo_checkbox|id_box|password|select|textarea|textfield|xml_list|yes_no|dojo_yes_no|element|permissions_modules|dojo_textarea|dojo_validation_textarea|ajax_box|list_files|hidden|pk_original|dojo_checked_multiselect|dojo_checked_multiselect_permissions) #REQUIRED
+    type (null|checkbox| dojo_combo_box|dojo_calendar|dojo_filtering_select|dojo_validation_textbox|dojo_checkbox|id_box|password|select|textarea|textfield|xml_list|yes_no|dojo_yes_no|element|permissions_modules|dojo_textarea|dojo_validation_textarea|ajax_box|list_files|hidden|pk_original|dojo_checked_multiselect|dojo_checked_multiselect_permissions|dojo_uploader) #REQUIRED
     target CDATA #IMPLIED
     trim (true|false) #IMPLIED
     reg_exp CDATA #IMPLIED

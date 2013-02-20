@@ -34,6 +34,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
      * @param $page string
      * @param $id string
      * @param $view Zend_View_Interface|false 
+     * @fixme la salida de $this->_out debe ser eliminada y usar en su lugar la salida Zwei_Admin_Components_TableDojo::getJsCrud(...), hay código duplicado
      */
     function __construct($page, $id=array(), $view=false)
     {
@@ -174,9 +175,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 if (items[0].i != undefined && items[0].r._items != undefined) { //Bug Dojo?
                    items[0] = items[0].i;
                 }
-                
                 var id = items[0].$primary;
-                               
                 resp = {$domPrefix}actualizar(model, items, id);
             }
         
@@ -184,10 +183,13 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 alert(resp.message);
             } else if(resp.state == 'UPDATE_OK') {
                 alert('Datos Actualizados');
+                
                 cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix');
+                dijit.byId('{$domPrefix}formDialogoEditar').hide();
             } else if(resp.state == 'ADD_OK') {
                 alert('Datos Ingresados');
                 cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix');
+                dijit.byId('{$domPrefix}formDialogo').hide();
             } else if(resp.state == 'UPDATE_FAIL') {
                 alert('Ha ocurrido un error, o no ha modificado datos');
             } else if(resp.state == 'ADD_FAIL') {
@@ -274,6 +276,16 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                     $pfx = '';
                     if ($node['TYPE'] == 'dojo_filtering_select' || $node['TYPE'] == 'dojo_yes_no'){
                         $this->_out.="     'data[{$node['TARGET']}]' : dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value'), \r\n";
+                    } else if ($node['TYPE'] == 'dojo_uploader') {
+                        $this->_out.="     'data[{$node['TARGET']}]' : typeof(dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value')[0]) != 'undefined' 
+                            ? dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value')[0].name 
+                            : null, \r\n";
+                        $this->_out.="     'metadata[{$node['TARGET']}][\"size\"]' : typeof(dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value')[0]) != 'undefined' 
+                            ? dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value')[0].size 
+                            : null, \r\n";
+                        $this->_out.="     'metadata[{$node['TARGET']}][\"type\"]' : typeof(dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value')[0]) != 'undefined' 
+                            ? dijit.byId('edit{$i}_{$domPrefix}{$pfx}{$j}').get('value')[0].type 
+                            : null, \r\n";
                     } else if ($node['TYPE'] == "pk_original") { 
                         $this->_out.="     'id[]' : document.getElementById('edit{$i}_{$domPrefix}zwei_pk_original').value, \r\n";                   
                     } else {
@@ -341,7 +353,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 url: base_url+'objects',
                 content: {
                     'data[password]':hex_md5(document.getElementById('{$domPrefix}password[0]').value),\r\n
-                    '$primary'        : id,
+                    '$primary'  : id,
                     'action'    :'edit',
                     'model'     : model,
                     'format'    : 'json'    
@@ -383,9 +395,32 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
     public function display($mode='EDIT')
     {
         $form = new Zwei_Utils_Form();
-            $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord(str_replace('.', '_', $form->p)) : '';
-             $out = $this->_out;
+        $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord(str_replace('.', '_', $form->p)) : '';
+        $out = $this->_out;
+        Debug::write($_SERVER);
         $this->_out = '';
+        $out .= "<div dojoType=\"dijit.form.Form\" method=\"post\" action=\"".BASE_URL."uploads?{$_SERVER['QUERY_STRING']}\" enctype=\"multipart/form-data\" target=\"ifrm_process\" id=\"{$domPrefix}tabFormInner{$mode}\" class=\"tabForm$mode\" jsId=\"{$domPrefix}tabFormInner$mode\" name=\"{$domPrefix}tabFormInner$mode\" >\r\n";
+
+        $out.="
+        <script type=\"dojo/method\" event=\"onSubmit\">
+        if (this.validate()) {
+            try {
+                console.debug(arguments);
+                {$this->_model->getEditValidation()}
+                {$domPrefix}modify('{$this->layout[0]['TARGET']}', arguments[0], '$mode');
+                return true;
+            } catch (e) {
+                console.debug(e)
+            }
+            return false;
+        } else {
+            alert('Por favor corrija los campos marcados.');
+            return false;
+        }
+        return true;
+        </script>\r\n";
+        
+        
         $out .= "<table>\r\n";
         $count = count($this->layout);
         if (!isset($this->id)) $this->id = array();
@@ -433,7 +468,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 <tr>
                             <td align=\"center\" colspan=\"2\">
                             <input type=\"hidden\" name=\"action\" id=\"action\" value=\"\" />
-                                <button dojoType=\"dijit.form.Button\" type=\"submit\" onClick=\"if (global_opc=='add') { return dijit.byId('{$domPrefix}formDialogo').validate(); } else { return dijit.byId('{$domPrefix}formDialogoEditar').validate(); }\">
+                                <button dojoType=\"dijit.form.Button\" type=\"submit\" onClick=\"if (global_opc=='add') { return dijit.byId('{$domPrefix}tabFormInnereditADD').validate(); } else { return dijit.byId('{$domPrefix}tabFormInnerEDIT').validate(); }\">
                                     Guardar
                                 </button>
                                 <button dojoType=\"dijit.form.Button\" type=\"button\" onClick=\"if (global_opc=='add') { dijit.byId('{$domPrefix}formDialogo').hide(); } else { dijit.byId('{$domPrefix}formDialogoEditar').hide(); }\">
@@ -445,6 +480,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             $out.="<tr><td>&nbsp;</td></tr>";
         }
         $out.="</table>\r\n";
+        $out.="</div>";
 
         return $out;
     }

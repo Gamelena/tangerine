@@ -41,13 +41,13 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         $model = Zwei_Utils_String::toClassWord($Xml->getAttribute("target"))."Model";
         $this->_model = new $model();
 
-        $out = '';        
+        $out = '';
         $modeDom = ($mode == 'add' || $mode == 'clone') ? 'add' : 'edit';
         $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($form->p) : '';
       
         if ($Xml->getAttribute('js')) $out.="<script type=\"text/javascript\" src=\"".BASE_URL."js/".$Xml->getAttribute('js')."?version={$this->_version}\"></script>";
       
-        $out .= "<div dojoType=\"dijit.form.Form\" id=\"{$domPrefix}tabForm{$modeDom}\" class=\"tabForm$modeDom\" jsId=\"{$domPrefix}tabForm\" name=\"{$domPrefix}tabForm$modeDom\" encType=\"multipart/form-data\" action=\"\" method=\"\" onsubmit=\"return false\">\r\n";
+        $out .= "<div dojoType=\"dijit.form.Form\" target=\"ifrm_process\" id=\"{$domPrefix}tabForm{$modeDom}\" class=\"tabForm$modeDom\" jsId=\"{$domPrefix}tabForm\" name=\"{$domPrefix}tabForm$modeDom\" encType=\"multipart/form-data\"  action=\"".BASE_URL."uploads?{$_SERVER['QUERY_STRING']}\" method=\"POST\" onsubmit=\"return false\">\r\n";
       
         
         if (!isset($this->id)) $this->id = array();
@@ -186,7 +186,6 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                         if ($e->getCode() != 0) {
                             Zwei_Utils_Debug::write("field:$node_field|target:$node_target|".$e->getMessage()."|".$select->__toString()."|error:".$e->getCode());
                         }
-                        //$value="";
                     }
                 } else {
                     if (!empty($node['value'][$i]) && is_array($form->{$node['target']})) {

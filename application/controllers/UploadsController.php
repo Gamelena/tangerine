@@ -71,6 +71,10 @@ class UploadsController extends Zend_Controller_Action
 
     public function indexAction()
     {
-
+        $form = new Zwei_Utils_Form();
+        
+        foreach ($_FILES as $i => $v) {
+            $form->upload($i, ROOT_DIR . '/upfiles');
+        }
     }
 }

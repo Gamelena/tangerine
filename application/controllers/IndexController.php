@@ -125,6 +125,8 @@ class IndexController extends Zend_Controller_Action
         ->requireModule("dojox.grid.enhanced.plugins.Pagination")
         ->requireModule("dojox.form.CheckedMultiSelect")
         ->requireModule("dojox.form.FileInput")
+        ->requireModule("dojox.form.Uploader")
+        ->requireModule("dojox.form.uploader.plugins.IFrame")
         ->requireModule("dojox.encoding.digests.MD5")
         ->requireModule("dojo.data.ItemFileWriteStore")
         ->requireModule("dojo.data.ItemFileReadStore")
