@@ -183,7 +183,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $select = new Zend_Db_Table_Select($this);
         
         try {
-            Debug::write($select->__toString());
+            Debug::writeBySettings($select->where($where)->__toString(), 'query_log');
             $rowOrig = $this->fetchRow($select->where($where));
         } catch (Zend_Db_Exception $e) {
             $differences = '{Ocurrió un error al obtener los datos originales.}';
