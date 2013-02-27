@@ -397,7 +397,6 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
         $form = new Zwei_Utils_Form();
         $domPrefix = (isset($this->_mainPane) && $this->_mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord(str_replace('.', '_', $form->p)) : '';
         $out = $this->_out;
-        Debug::write($_SERVER);
         $this->_out = '';
         $out .= "<div dojoType=\"dijit.form.Form\" method=\"post\" action=\"".BASE_URL."uploads?{$_SERVER['QUERY_STRING']}\" enctype=\"multipart/form-data\" target=\"ifrm_process\" id=\"{$domPrefix}tabFormInner{$mode}\" class=\"tabForm$mode\" jsId=\"{$domPrefix}tabFormInner$mode\" name=\"{$domPrefix}tabFormInner$mode\" >\r\n";
 
@@ -468,7 +467,7 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 <tr>
                             <td align=\"center\" colspan=\"2\">
                             <input type=\"hidden\" name=\"action\" id=\"action\" value=\"\" />
-                                <button dojoType=\"dijit.form.Button\" type=\"submit\" onClick=\"if (global_opc=='add') { return dijit.byId('{$domPrefix}tabFormInnereditADD').validate(); } else { return dijit.byId('{$domPrefix}tabFormInnerEDIT').validate(); }\">
+                                <button dojoType=\"dijit.form.Button\" type=\"submit\" onClick=\"if (global_opc=='add') { return dijit.byId('{$domPrefix}tabFormInnerADD').validate(); } else { return dijit.byId('{$domPrefix}tabFormInnerEDIT').validate(); }\">
                                     Guardar
                                 </button>
                                 <button dojoType=\"dijit.form.Button\" type=\"button\" onClick=\"if (global_opc=='add') { dijit.byId('{$domPrefix}formDialogo').hide(); } else { dijit.byId('{$domPrefix}formDialogoEditar').hide(); }\">
