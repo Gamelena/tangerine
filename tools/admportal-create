@@ -190,11 +190,12 @@ echo \*\*\* Si no desea usar VHOST considere el siguiente script para configurar
 echo " " 
 
 
-echo Alias /${PWD##*/} \"$DEST_PATH/web/public\"
-echo \<Directory \"$DEST_PATH/web/public\"\>
+echo Alias /${PWD##*/} \"$DEST_PATH/web/public/\"
+echo \<Directory \"$DEST_PATH/web/public/\"\>
 echo    Options Indexes MultiViews FollowSymLinks
 echo    AllowOverride All
-echo    DirectoryIndex index.html index.php
+echo    allow from all
+echo    SetEnv APPLICATION_ENV development
 echo \</Directory\>
 echo " "
 echo \*\*\* Si usa este ALIAS Apache deberá añadir la siguiente linea al comienzo de su archivo $DEST_PATH/web/public/.htaccess \*\*\*
