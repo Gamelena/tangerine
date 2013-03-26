@@ -75,6 +75,7 @@
     reg_exp CDATA #IMPLIED
     required (true|false) "true"
     visible (true|false) "true"
+    readonly (true|false) "true"
     edit (true|false|disabled|readonly) "false"
     add (true|false|disabled |readonly) "false"
     table CDATA #IMPLIED

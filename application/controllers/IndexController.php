@@ -132,7 +132,8 @@ class IndexController extends Zend_Controller_Action
         ->requireModule("dojo.data.ItemFileReadStore")
         ->requireModule("dojox.data.QueryReadStore")
         ->requireModule("dojo.date.locale")
-        ->requireModule("dojox.widget.DialogSimple");
+        ->requireModule("dojox.widget.DialogSimple")
+        ->requireModule("dojox.widget.Toaster");
 
 
         ;
