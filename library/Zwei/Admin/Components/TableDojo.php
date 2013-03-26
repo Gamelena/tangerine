@@ -448,14 +448,16 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $out.="
         <script type=\"text/javascript\">
         //showtab('tab_ctrl1', '{$domPrefix}tab1');
-        function {$domPrefix}modify(model, items, mode) {
+        function {$domPrefix}modify(model, items, mode, id ) {
             var resp = '';
             $additional_validation
-            if(mode == 'add' || mode == 'clone') {
+            if (mode == 'add' || mode == 'clone') {
                 resp = {$domPrefix}insertar(model,items);
             } else if(mode == 'edit') {
-                var items = dijit.byId('{$domPrefix}main_grid').selection.getSelected();
-                var id = items[0].$primary;
+                if (typeof(id) == 'undefined') {
+                    var items = dijit.byId('{$domPrefix}main_grid').selection.getSelected();
+                    var id = items[0].$primary;
+                }
                 resp = {$domPrefix}actualizar(model, items, id);
             }
          
@@ -487,6 +489,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         
         function {$domPrefix}insertar(model, items) {
             var res = '';
+            var id = null;
             dojo.xhrPost( {
                 url: base_url+'objects',
                 content: {
@@ -501,6 +504,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 timeout: 5000,
                 load: function(respuesta){
                     $jsFriend
+                    res = respuesta;
                     return respuesta;
                 },
                 error:function(err){
@@ -508,37 +512,37 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                     return err;
                 }
             });
-            return respuesta;
+            return res;
         }
         
         function {$domPrefix}actualizar(model, items, id) {
             console.log('actualizar');
             var res = '';
             dojo.xhrPost( {
-            url: base_url+'objects',
-            content: {
-                $xhr_update_data
-                '$primary'        : id,
-                'action'    :'edit',
-                'model'     : model,
-                'format'    : 'json'
-            },
-            handleAs: 'json',
-            sync: true,
-            preventCache: true,
-            timeout: 5000,
-            load: function(respuesta) {
-                $jsFriend
-                console.debug(dojo.toJson(respuesta));
-                res = respuesta;
-                return respuesta;
-            },
-            error:function(err) {
-                alert('Error en comunicacion de datos. error: '+err);
-                return err;
-            }
-        });
-        return res;
+                url: base_url+'objects',
+                content: {
+                    $xhr_update_data
+                    '$primary'        : id,
+                    'action'    :'edit',
+                    'model'     : model,
+                    'format'    : 'json'
+                },
+                handleAs: 'json',
+                sync: true,
+                preventCache: true,
+                timeout: 5000,
+                load: function(respuesta) {
+                    $jsFriend
+                    console.debug(dojo.toJson(respuesta));
+                    res = respuesta;
+                    return respuesta;
+                },
+                error:function(err) {
+                    alert('Error en comunicacion de datos. error: '+err);
+                    return err;
+                }
+            });
+            return res;
         
         }
         ";

@@ -47,6 +47,8 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
         $primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : 'id';
         if (is_array($primary)) $primary = implode(",", $primary);
         $count = count($this->layout);
+        if (isset($form->{$primary})) $this->id = $form->{$primary};
+        
         if (!isset($this->id)) $this->id = array();
         elseif (!is_array($this->id)) $this->id = array($this->id);
         if (!isset($this->layout[1]['VALUE'])) $this->layout[1]['VALUE'] = array("");
@@ -59,7 +61,6 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                 var formDlg = (opc=='edit') ? dijit.byId('{$domPrefix}formDialogoEditar') : dijit.byId('{$domPrefix}formDialogo');
                 console.log('opcion usr:'+ opc);
                 global_opc = opc;
-                
                     if (opc == 'add') {\r
                     ";
 
@@ -400,13 +401,16 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
         $this->_out = '';
         $out .= "<div dojoType=\"dijit.form.Form\" method=\"post\" action=\"".BASE_URL."uploads?{$_SERVER['QUERY_STRING']}\" enctype=\"multipart/form-data\" target=\"ifrm_process\" id=\"{$domPrefix}tabFormInner{$mode}\" class=\"tabForm$mode\" jsId=\"{$domPrefix}tabFormInner$mode\" name=\"{$domPrefix}tabFormInner$mode\" >\r\n";
 
+        $primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : 'id';
+        $id = isset($form->{$primary}) ? "'{$this->id[0]}'" : 'undefined'; 
+        
         $out.="
         <script type=\"dojo/method\" event=\"onSubmit\">
         if (this.validate()) {
             try {
                 console.debug(arguments);
                 {$this->_model->getEditValidation()}
-                {$domPrefix}modify('{$this->layout[0]['TARGET']}', arguments[0], '$mode');
+                {$domPrefix}modify('{$this->layout[0]['TARGET']}', arguments[0], '$mode', $id);
                 return true;
             } catch (e) {
                 console.debug(e)
@@ -422,8 +426,8 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
         
         $out .= "<table>\r\n";
         $count = count($this->layout);
-        if (!isset($this->id)) $this->id = array();
-        elseif (!is_array($this->id)) $this->id = array($this->id);
+        //if (!isset($this->id)) $this->id = array();
+        //elseif (!is_array($this->id)) $this->id = array($this->id);
         if (!isset($this->layout[1]['VALUE'])) $this->layout[1]['VALUE'] = array("");
         $vcount = count($this->layout[1]['VALUE']);
       

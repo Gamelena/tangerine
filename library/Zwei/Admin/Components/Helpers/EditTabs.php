@@ -40,6 +40,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
 
         $model = Zwei_Utils_String::toClassWord($Xml->getAttribute("target"))."Model";
         $this->_model = new $model();
+        $primary = $this->_model->getPrimary() ? $this->_model->getPrimary() : 'id';
 
         $out = '';
         $modeDom = ($mode == 'add' || $mode == 'clone') ? 'add' : 'edit';
@@ -50,6 +51,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         $out .= "<div dojoType=\"dijit.form.Form\" target=\"ifrm_process\" id=\"{$domPrefix}tabForm{$modeDom}\" class=\"tabForm$modeDom\" jsId=\"{$domPrefix}tabForm\" name=\"{$domPrefix}tabForm$modeDom\" encType=\"multipart/form-data\"  action=\"".BASE_URL."uploads?{$_SERVER['QUERY_STRING']}\" method=\"POST\" onsubmit=\"return false\">\r\n";
       
         
+        if (isset($form->{$primary})) $this->id = $form->{$primary};
         if (!isset($this->id)) $this->id = array();
         elseif (!is_array($this->id)) $this->id = array($this->id);
       
@@ -76,7 +78,11 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         //Loop por cada pestaña
         foreach ($tabs as $j => $tab) {
             if ($mode=='edit' || $mode=='clone') {
-                $ClassModel = Zwei_Utils_String::toClassWord($tab['target'])."Model";
+                if ($tab['target']) {
+                    $ClassModel = Zwei_Utils_String::toClassWord($tab['target'])."Model";
+                } else {
+                    $ClassModel = Zwei_Utils_String::toClassWord($Xml->getAttribute("target"))."Model";
+                }
                 $this->_model = new $ClassModel();
                 $select = $this->_model->select();
 
@@ -188,13 +194,15 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                         }
                     }
                 } else {
+                    //Si existe el atributo value y el $_REQUEST[$node['target']] es un array. [TODO] al parecer  esto no se usa
                     if (!empty($node['value'][$i]) && is_array($form->{$node['target']})) {
                         $value = $node['value'][$i];
                     } else {
+                        // Si existe un $_REQUEST con el mismo nombre del target, el valor por default será el del $_REQUEST
                         $value = isset($form->{$node['target']}) ? $form->{$node['target']}:'';
                     }
                 }
-                 
+                
                 $ClassElement = "Zwei_Admin_Elements_".Zwei_Utils_String::toClassWord($node['type']);
 
                 $element = new $ClassElement(
@@ -239,13 +247,13 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
             $out.="\t</div>\r\n";
             $i++;
         }
-      
+        $id = isset($form->{$primary}) ? "'{$this->id[0]}'" : 'undefined';
         $out.="
                 <script type=\"dojo/method\" event=\"onSubmit\">
                     if (this.validate()) {
                         try {
                             console.debug(arguments);
-                            {$domPrefix}modify('{$Xml->getAttribute('target')}', arguments[0], '$mode');
+                            {$domPrefix}modify('{$Xml->getAttribute('target')}', arguments[0], '$mode', $id);
                         } catch (e) {
                             console.debug(e)    
                         }
