@@ -84,8 +84,8 @@
            </div>
         </div>
         <!-- Panel central -->
-        <div id="panel_central" id="panelCentral" jsId="dojo_panel_central" dojoType="dojox.layout.ContentPane" splitter="true" region="center" style="padding-bottom: -20px;" executeScripts="true" scriptHasHooks="true">
-            <div dojoType="dijit.layout.TabContainer" id="tabContainer" data-dojo-props="executeScripts: true, scriptHasHooks: true" jsId="tabContainer" style="width:100%;height:100%;" tabPosition="top"></div>
+        <div id="panel_central" id="panelCentral" jsId="dojo_panel_central" dojoType="dojox.layout.ContentPane" splitter="true" region="center" executeScripts="true" scriptHasHooks="true">
+            <div dojoType="dijit.layout.TabContainer" id="tabContainer" data-dojo-props="executeScripts: true, scriptHasHooks: true" jsId="tabContainer" style="width:100%;height:100%;top:0px;" tabPosition="top"></div>
         </div>
         <div data-dojo-type="dojox.layout.ContentPane" jsId="contentPaneBottom" data-dojo-props='region:"bottom", style:"background-color: #b39b86; height: auto;"'>
             <span style="float:right;margin-right: 6px">
@@ -93,7 +93,7 @@
             </span>
         </div>
     </div>
-    <div data-dojo-type="dojox/widget/Toaster" jsId="firstToaster" data-dojo-props="positionDirection:'br-left'" id="first_toaster"></div>
+    <!--<div data-dojo-type="dojox/widget/Toaster" jsId="firstToaster" data-dojo-props="positionDirection:'br-left'" id="first_toaster"></div>-->
     <iframe name="ifrm_process" id="ifrm_process" style="display: none;"  src="" />
 </body>
 </html>

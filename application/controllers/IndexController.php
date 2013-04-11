@@ -57,7 +57,18 @@ class IndexController extends Zend_Controller_Action
         $this->view->addHelperPath('Zend/Dojo/View/Helper/', 'Zend_Dojo_View_Helper');
         $this->view->dojo()
         ->setLocalPath (PROTO.$_SERVER['HTTP_HOST'].$this->base_dojo_folder.'/dojo/dojo.js')
-        ->setDjConfig(array('parseOnLoad' => 'true', 'isDebug'=> 'false', 'locale'=>'es'));
+        ->setDjConfig(
+            array('parseOnLoad' => 'true', 
+                'isDebug'=> 'false', 
+                'locale'=>'es',
+                'packages'=>array(
+                     array('name'=>'dojo', 'location'=>$this->base_dojo_folder.'/dojo'),
+                     array('name'=>'dijit', 'location'=>$this->base_dojo_folder.'/dijit'),
+                     array('name'=>'dojox', 'location'=>$this->base_dojo_folder.'/dojox'),
+                     array('name'=>'zwei', 'location'=>BASE_URL.'/js/libs/zwei'),
+                )
+            )
+        );
 
         $this->view->headStyle()->appendStyle('
             @import "'.$this->base_dojo_folder.'/dijit/themes/'.$this->_dojo_theme.'/'.$this->_dojo_theme.'.css";
@@ -132,8 +143,8 @@ class IndexController extends Zend_Controller_Action
         ->requireModule("dojo.data.ItemFileReadStore")
         ->requireModule("dojox.data.QueryReadStore")
         ->requireModule("dojo.date.locale")
-        ->requireModule("dojox.widget.DialogSimple")
-        ->requireModule("dojox.widget.Toaster");
+        ->requireModule("dojox.widget.DialogSimple");
+        //->requireModule("dojox.widget.Toaster");
 
 
         ;
