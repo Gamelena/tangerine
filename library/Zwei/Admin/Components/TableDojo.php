@@ -444,6 +444,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $modelclass = Zwei_Utils_String::toClassWord($Xml->getAttribute("target"))."Model";
         $this->_model = new $modelclass();
         $additional_validation = $this->_model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
+        $storeType = $Xml->getAttribute("server_pagination") && $Xml->getAttribute("server_pagination") == 'true' ? "'query'" : 'false';
         
         $out.="
         <script type=\"text/javascript\">
@@ -454,7 +455,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
             if (mode == 'add' || mode == 'clone') {
                 resp = {$domPrefix}insertar(model,items);
             } else if(mode == 'edit') {
-                if (typeof(id) == 'undefined') {
+                if (typeof(id) == 'undefined' && typeof(dijit.byId('{$domPrefix}main_grid')) != 'undefined') {
                     var items = dijit.byId('{$domPrefix}main_grid').selection.getSelected();
                     var id = items[0].$primary;
                 }
@@ -465,19 +466,13 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 alert(resp.message);
             }else if(resp.state == 'UPDATE_OK'){
                 alert('Datos Actualizados');
-                try {
-                    cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix');
-                } catch (e) {
-                    console.debug(e)
-                }
+                if(typeof(dijit.byId('{$domPrefix}main_grid')) != 'undefined') 
+                    cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix', $storeType);
                 dijit.byId('{$domPrefix}formDialogoEditar').hide();
             }else if(resp.state == 'ADD_OK'){
                 alert('Datos Ingresados');
-                try {
-                    cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix');
-                } catch (e) {
-                    console.debug(e);
-                }
+                if(typeof(dijit.byId('{$domPrefix}main_grid')) != 'undefined') 
+                    cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix', $storeType);
                 dijit.byId('{$domPrefix}formDialogo').hide();
             }else if(resp.state == 'UPDATE_FAIL'){
                 alert('Ha ocurrido un error, o no ha modificado datos');
@@ -522,7 +517,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 url: base_url+'objects',
                 content: {
                     $xhr_update_data
-                    '$primary'        : id,
+                    '$primary'  : id,
                     'action'    :'edit',
                     'model'     : model,
                     'format'    : 'json'
@@ -543,7 +538,6 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
                 }
             });
             return res;
-        
         }
         ";
          

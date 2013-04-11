@@ -157,13 +157,20 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
                    }
                 formDlg.show();
             }\r\n";
+        
+        $storeType = isset ($this->layout[0]['SERVER_PAGINATION']) && $this->layout[0]['SERVER_PAGINATION'] == 'true' ? "'query'" : 'false';
 
         if (isset($this->layout[0]['EDIT_ADDITIONAL_VALIDATION'])) {
             $additional_validation = $this->_model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
         } else {
             $additional_validation = '';
         }
-                
+        
+        if (isset($this->layout[0]['EDIT_ADDITIONAL_VALIDATION'])) {
+            $additional_validation = $this->_model->getEditValidation();//usar en js var global_opc para discriminar entre 'edit' y add'
+        } else {
+            $additional_validation = '';
+        }
         
         $this->_out .= "
         function {$domPrefix}modify(model, items) {
@@ -185,11 +192,11 @@ class Zwei_Admin_Components_Helpers_EditTableDojo extends Zwei_Admin_Controller
             } else if(resp.state == 'UPDATE_OK') {
                 alert('Datos Actualizados');
                 
-                cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix');
+                cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix', $storeType);
                 dijit.byId('{$domPrefix}formDialogoEditar').hide();
             } else if(resp.state == 'ADD_OK') {
                 alert('Datos Ingresados');
-                cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix');
+                cargarDatos(model, false, false, false, false, 'json', false, '$domPrefix', $storeType);
                 dijit.byId('{$domPrefix}formDialogo').hide();
             } else if(resp.state == 'UPDATE_FAIL') {
                 alert('Ha ocurrido un error, o no ha modificado datos');

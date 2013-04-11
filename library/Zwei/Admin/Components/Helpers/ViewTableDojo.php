@@ -130,7 +130,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
         $invalid_message = @$this->layout[0]['SEARCH_INVALID_MESSAGE']? "invalidMessage=\"{$this->layout[0]['SEARCH_INVALID_MESSAGE']}\"" : '';
         $prompt_message = @$this->layout[0]['SEARCH_PROMPT_MESSAGE']? "promptMessage=\"{$this->layout[0]['SEARCH_PROMPT_MESSAGE']}\"" : '';
         $required = @$this->layout[0]['SEARCH_REQUIRED'] == "true"? "required=\"true\"" : '';
-        $storeType = isset ($node['SERVER_PAGINATION']) && $node['SERVER_PAGINATION'] == 'true' ? "'query'" : 'false';
+        $storeType = isset ($this->layout[0]['SERVER_PAGINATION']) && $this->layout[0]['SERVER_PAGINATION'] == 'true' ? "'query'" : 'false';
         
         if (@$this->layout[0]['SEARCH_DISPLAY']=='between') {
             $label1 = "Desde";
@@ -210,7 +210,7 @@ class Zwei_Admin_Components_Helpers_ViewTableDojo extends Zwei_Admin_Controller
             <script type=\"dojo/method\" event=\"onSubmit\">
                 if (this.validate()) {
                 $additional_validation
-                    cargarDatos('{$this->layout[0]['TARGET']}', $this->search_in_fields, $this->format_date, $this->search_format, $this->between, 'json', false, '$domPrefix');
+                    cargarDatos('{$this->layout[0]['TARGET']}', $this->search_in_fields, $this->format_date, $this->search_format, $this->between, 'json', false, '$domPrefix', $storeType);
                     return false;
                 } else {
                     alert('Por favor corrija los campos marcados.');

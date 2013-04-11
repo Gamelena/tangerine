@@ -224,7 +224,8 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                 //Zwei_Utils_Debug::("{$node['target']} $node_mode $mode $node_edit $node_add");
                 $name = str_replace('\n','<br/>',$node['name']);
                 if ($node_mode == "true" || $node_mode == "disabled" || $node_mode == "readonly") {
-                    $out .= "\t\t<tr id=\"row_{$node['target']}\"><th><label for=\"{$node['target']}\">{$name}</label></th>";
+                    $style = ($node['type'] && $node['type'] == 'hidden') ? 'style="display:none;"' : '';
+                    $out .= "\t\t<tr id=\"row_{$node['target']}\" $style><th><label for=\"{$node['target']}\">{$name}</label></th>";
                     $out .= "<td>".$element->edit('0', $domPrefix.$pfx.$k)."</td></tr>\r\n";
                     //[TODO] BORRAR var $xhr_insert_data deprecated, existe para backward compatibility 
                     if (!empty($node['target'])) {
@@ -235,7 +236,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                         }
                     }
                     //fin BORRAR
-                } elseif($mode == "edit" && $node_edit == "false" && $node_add == "true") {
+                } elseif($mode == "edit" && $node_edit == "false" && $node_add == "true" && $node['type'] != 'hidden') {
                     //En caso de que sea agregable pero no editable, se mostrara en el formulario, sin input
                     $out.="\t\t<tr><th><label>{$name}</label></th><td>$value</td></tr>\r\n";
                 }
@@ -265,19 +266,12 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                     return true;
                 </script>\r\n";
          
-         
-        $out.="
-                    <tr>
-                        <td align=\"center\" colspan=\"2\">
-                            <button dojoType=\"dijit.form.Button\" id=\"{$domPrefix}tabs_btn_save$modeDom\" type=\"submit\">
+        
+        $out.="        <button dojoType=\"dijit.form.Button\" id=\"{$domPrefix}tabs_btn_save$modeDom\" type=\"submit\">
                                 Guardar
-                            </button>
-                        </td>
-                    </tr>
-                    ";  
+                            </button>";
       
-      
-        $out.="</table>\r\n</div>\r\n";
+        $out.="\r\n</div>\r\n";
 
                  
         return $out;
