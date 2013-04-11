@@ -201,7 +201,6 @@ function cargarArbolMenu(layout)
             model: treeModel,
             showRoot: false,
             persist: true,
-            openOnClick: true,
             onClick: function(item){
                 if (item.url != undefined) {
                     if (layout == 'dijitTabs') {
@@ -213,6 +212,7 @@ function cargarArbolMenu(layout)
                     return false;
                 }     
             },
+            openOnClick: true,
             _createTreeNode: function(
                 args) {
                 var tnode = new dijit._TreeNode(args);
@@ -284,7 +284,7 @@ function cargarTabsPanelCentral(component, action, primary, domPrefix)
 
 
 
-function cargarDatos(model, search_in_fields, format_date, cast, between, formato, component, domPrefix) 
+function cargarDatos(model, search_in_fields, format_date, cast, between, formato, component, domPrefix, storeType) 
 {
     if(search_in_fields==undefined)var search_in_fields=false;
     if(format_date==undefined)var format_date=false;
@@ -292,7 +292,8 @@ function cargarDatos(model, search_in_fields, format_date, cast, between, format
     if(between==undefined)var between=false;
     if(formato==undefined)var formato='json';
     if(component==undefined)var component=false;
-    if(domPrefix==undefined)var domPrefix='';    
+    if(domPrefix==undefined)var domPrefix='';
+    if(storeType==undefined)var storeType=false;  
     
     try{
         var search = dijit.byId(domPrefix+"search").get("value");
@@ -358,11 +359,19 @@ function cargarDatos(model, search_in_fields, format_date, cast, between, format
         dojo.byId('ifrm_process').src=search_url;
     }else{
         console.debug(domPrefix+'main_grid');
-        var store = new dojo.data.ItemFileWriteStore({
-            url: search_url,
-            clearOnClose: true,
-            urlPreventCache: true
-        });
+        if (storeType == 'query') {
+            var store = new dojox.data.QueryReadStore({
+                url: search_url,
+                clearOnClose: true,
+                urlPreventCache: true
+            });
+        } else {
+            var store = new dojo.data.ItemFileReadStore({
+                url: search_url,
+                clearOnClose: true,
+                urlPreventCache: true
+            });            
+        }   
         console.debug(domPrefix+'main_grid');
         dijit.byId(domPrefix+'main_grid').setStore(store);       
     }    
