@@ -58,10 +58,10 @@ class Zwei_Utils_SimpleXML extends SimpleXMLElement
      */
     public function existsChildren($name)
     {
-        
         foreach ($this->children() as $node) {
-            if ($node->getName() == $name )
+            if ($node->getName() == $name ) {
                 return true;
+            }
         }
         return false;
     }

@@ -1,0 +1,14 @@
+<span dojoType="dojo.data.ItemFileReadStore" id="<?php echo $this->domPrefix?>storeGrid" jsId="<?php echo $this->domPrefix?>storeGrid" url="<?php echo BASE_URL?>crud-request?model=<?php echo $this->model?>&format=json"></span>
+<table data-dojo-type="dojox.grid.EnhancedGrid" data-dojo-props="store: <?php echo $this->domPrefix?>storeGrid, plugins:{pagination: {defaultPageSize:25, maxPageStep: 5 }}, clientSort:true, selectable: true, rowsPerPage: 10, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.'" jsId="campanas_xmlmain_grid" class="main_grid" id="<?php echo $this->domPrefix?>mainGrid" style="height: 50em;" onRowDblClick="<?php echo $this->domPrefix?>showDialog('edit')">
+    <thead>
+        <tr>
+<?php
+foreach ($this->elements as $e) :
+?>
+            <th field="<?php echo $e->getAttribute('field') ? $e->getAttribute('field') : $e->getAttribute('target') ?>" editable="false" formatter="<?php echo $e->getAttribute('formatter')?>" width="<?=$e->getAttribute('width')?>"><?php echo $e->getAttribute('name')?></th>
+<?php  
+endforeach;
+?>
+        </tr>
+    <thead>
+</table>

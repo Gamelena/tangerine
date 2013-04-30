@@ -16,7 +16,7 @@ class Zwei_Utils_Array
      * @param mixed - valor a buscar
      * @return array
      */
-    function search($array, $key, $value)
+    static function search($array, $key, $value)
     {
         $results = array();
     
@@ -40,7 +40,7 @@ class Zwei_Utils_Array
      * @param boolean - true: devuelve registros diferentes, false: devuelve registros iguales
      * @return array
      */
-    function getDifferences($array1, $array2, $returnDiffs = true)
+    static function getDifferences(array $array1, array $array2, $returnDiffs = true)
     {
         $results = array();
         
@@ -55,5 +55,20 @@ class Zwei_Utils_Array
         return $results;
     }
     
-    
+    /**
+     * 
+     * @param array $array
+     * @param SimpleXMLElement $xml
+     * @return SimpleXMLElement
+     */
+    static function toXml($array, $xml)
+    {
+        foreach ($array as $k => $v) {
+            if (is_object($v)) $v = (array) $v;
+            is_array($v)
+                ? self::toXml($v, $xml->addChild($k))
+                : $xml->addChild($k, $v);
+        }
+        return $xml;
+    }
 }

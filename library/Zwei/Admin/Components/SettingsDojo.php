@@ -58,10 +58,10 @@ class Zwei_Admin_Components_SettingsDojo implements Zwei_Admin_ComponentsInterfa
         $form = new Zwei_Utils_Form();
         $settings = new $this->_model();
         
-        $out = "<img id=\"settingsSwitchMainPaneButton\" src=\"http://localhost/promociones/images/expand.png\" onclick=\"switchMainPane()\" style=\"position: relative;float: left;\">";
-        $out .= "<script>if(typeof(switchMainPane) != \"function\") { dojo.byId('settingsSwitchMainPaneButton').style.display='none'; }</script>";
+        //$out = "<img id=\"settingsSwitchMainPaneButton\" src=\"http://localhost/promociones/images/expand.png\" onclick=\"switchMainPane()\" style=\"position: relative;float: left;\">";
+        //$out .= "<script>if(typeof(switchMainPane) != \"function\") { dojo.byId('settingsSwitchMainPaneButton').style.display='none'; }</script>";
         
-        $out .= "<h2>Configuraci&oacute;n del Sitio</h2>\r\n";
+        $out = "<h2>Configuraci&oacute;n del Sitio</h2>\r\n";
 
         if(isset($form->save)){
             foreach ($form->settings_id as $i=>$v){

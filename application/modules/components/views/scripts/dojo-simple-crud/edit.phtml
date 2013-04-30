@@ -1,0 +1,58 @@
+<div dojoType="dojox.widget.DialogSimple" executeScripts="true" id="campanas_xmlformDialogo" jsId="formDialogo" refreshOnShow="true" onHide="this.reset()"  title="Agregar Campa&ntilde;as"  execute="campanas_xmlmodify('campanas',arguments[0]);">
+    <div dojoType="dijit.form.Form" method="post" action="http://localhost/ussdllp2/uploads?dojo.preventCache=1366205624429" enctype="multipart/form-data" target="ifrm_process" id="campanas_xmltabFormInnerADD" class="tabFormADD" jsId="campanas_xmltabFormInnerADD" name="campanas_xmltabFormInnerADD" >
+        <script type="dojo/method" event="onSubmit">
+        if (this.validate()) {
+            try {
+                console.debug(arguments);
+                
+                campanas_xmlmodify('campanas', arguments[0], 'ADD', undefined);
+                return true;
+            } catch (e) {
+                console.debug(e)
+            }
+            return false;
+        } else {
+            alert('Por favor corrija los campos marcados.');
+            return false;
+        }
+        return true;
+        </script>
+    <table>
+        <tr>
+            <td>
+                <label for="nombre">Nombre</label>
+            </td>
+            <td>
+                <input dojoType="dijit.form.ValidationTextBox" type="text" style="display:block" id="edit0_campanas_xml_add2" name="nombre[0]" value="" required="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="codigoCampana">C&oacute;digo Campa&ntilde;a</label>
+            </td>
+            <td>
+                <input dojoType="dijit.form.ValidationTextBox" type="text" style="display:block" id="edit0_campanas_xml_add3" name="codigoCampana[0]" value="" required="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="codigoServicio">C&oacute;digo Servicio</label>
+            </td>
+            <td>
+                <input dojoType="dijit.form.ValidationTextBox" type="text" style="display:block" id="edit0_campanas_xml_add4" name="codigoServicio[0]" value="" required="true"/>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" colspan="2">
+            <input type="hidden" name="action" id="action" value="" />
+                <button dojoType="dijit.form.Button" type="submit" onClick="if (global_opc=='add') { return dijit.byId('campanas_xmltabFormInnerADD').validate(); } else { return dijit.byId('campanas_xmltabFormInnerEDIT').validate(); }">
+                    Guardar
+                </button>
+                <button dojoType="dijit.form.Button" type="button" onClick="if (global_opc=='add') { dijit.byId('campanas_xmlformDialogo').hide(); } else { dijit.byId('campanas_xmlformDialogoEditar').hide(); }">
+                    Cancelar
+                </button>
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr></table>
+    </div>
+</div>

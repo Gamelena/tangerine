@@ -20,7 +20,7 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
      * @var string Cache key
      */
     public $key;
-    
+
     /**
      * Constructor: inicializar cache
      * 
@@ -66,13 +66,13 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             self::$doNotCache = true;
         } else {
             $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-            
+
             if ($request->getControllerName() == "index" && $request->getActionName() == "components") {
-                $this->key = md5($request->getPathInfo().$request->getParam("p")) . "acl_roles_id_".$userInfo->acl_roles_id;
+                $this->key = md5(BASE_URL.$request->getPathInfo().$request->getParam("p")) . "acl_roles_id_".$userInfo->acl_roles_id;
             } else if ($request->getControllerName() == "objects" && $request->getParam('model') == "settings" && $request->getParam('format') == "json") {
-                $this->key = $userInfo->acl_roles_id."_settings"; 
+                $this->key = md5(BASE_URL.$userInfo->acl_roles_id."_settings"); 
             } else if ($request->getControllerName() == "index" && $request->getActionName() == "modules") {
-                $this->key = md5($userInfo->acl_roles_id."_modules"); 
+                $this->key = md5(BASE_URL.$userInfo->acl_roles_id."_modules"); 
             } else {
                 self::$doNotCache = true;
                 return;

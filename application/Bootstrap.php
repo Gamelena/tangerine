@@ -54,6 +54,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         set_include_path('.'
             . PATH_SEPARATOR . ROOT_DIR.'/library'
+            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/../library'
             . PATH_SEPARATOR . APPLICATION_PATH . '/models'
             . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/models'
             . PATH_SEPARATOR . APPLICATION_PATH . '/forms'

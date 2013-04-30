@@ -1,6 +1,6 @@
 <?php 
 /**
- * Valida sesión valida por admin web, evitando colisiones de sesión entre diferentes admin mediante flag
+ * Valida sesión por admin web, evitando colisiones de sesión entre diferentes admin mediante flag
  * Zend_Auth::getInstance()->getStorage()->read()->sessionNamespace
  * 
  * @category   Zwei

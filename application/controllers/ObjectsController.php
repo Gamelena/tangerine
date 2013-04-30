@@ -94,6 +94,7 @@ class ObjectsController extends Zend_Controller_Action
                 $data = array();
                 $this->_model->getAdapter()->getProfiler()->setEnabled(true);
                 $id = $this->_model->getPrimary();
+                Debug::write($id);
                 if ($id === false) $id = "id";
                 
                 if ($this->_form->action == 'add') {
@@ -116,8 +117,8 @@ class ObjectsController extends Zend_Controller_Action
                     
                 } elseif ($this->_form->action == 'delete') {
                      
-                    if (!empty($this->_form->id) || $this->_form->id === "0") {
-                        $where = $this->_model->getAdapter()->quoteInto("$id = ?", $this->_form->id);
+                    if (!empty($this->_form->$id) || $this->_form->$id === "0") {
+                        $where = $this->_model->getAdapter()->quoteInto("$id = ?", $this->_form->$id);
                         $response = $this->_model->delete($where);
                         if ($response) {
                             $this->_response_content['state'] = 'DELETE_OK';
@@ -146,7 +147,7 @@ class ObjectsController extends Zend_Controller_Action
                                 $where[] = $this->_model->getAdapter()->quoteInto("$id = ?", $v);
                            }
                         } else {
-                           $where = $this->_model->getAdapter()->quoteInto("id = ?", $this->_form->id);
+                           $where = $this->_model->getAdapter()->quoteInto("id = ?", $this->_form->$id);
                         }   
                     } else {
                        if (is_array($this->_form->$id)) {

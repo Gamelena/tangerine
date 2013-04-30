@@ -552,3 +552,24 @@ a.settings_tab {
 /* Loader */
 .appLoader { background: #ededed url(i/loading.gif) center center no-repeat; display: "none"; height: 100%; left: 0; margin: 0; padding: 0; position: absolute; top: 0; vertical-align: middle; width: 100%; z-index: 999; }
 .appLoader div:first-child { font-size: 1.364em; margin: 0 auto; margin-top: 42px; position: absolute; text-align: center; top: 50%; width: 100%; }
+
+.formSearch {
+    padding: 4px;
+    overflow: hidden;
+}
+
+.formSearchItemContainer{
+    width: 33%;
+    float: left;
+}
+
+.formSearchSelectors{
+	
+}
+
+.formSearchSelectorItem{
+    width: 33%;
+    float: left;
+}
+
+

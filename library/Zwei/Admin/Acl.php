@@ -101,29 +101,15 @@ class Zwei_Admin_Acl extends Zend_Acl
 
         self::$_acl = new Zwei_Admin_Acl();
 
-        if (Zend_Controller_Front::getInstance()->getParam('bootstrap')) {
-            $configOptions = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
-            $config = new Zend_Config($configOptions);
-        } else {
-            //[TODO] This is backward compatibility
-            $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);   
-        }  
-        
+        $configOptions = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
+        $config = new Zend_Config($configOptions);
 
-        /**
-         * [TODO] codigo backward compatibility, debiera ser reducido en la version 2 de AdmPortal
-         */
-        if (isset($config->resources->multidb->auth)) {
-            if (isset($config->resources->multidb->auth->params)) {
-                //Este bloque debe deprecarse
-                $db_params = $config->resources->multidb->auth;
-                self::$_db = Zend_Db::factory($db_params);
-            } else {
-                $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
-                self::$_db = $resource->getDb("auth");
-            }
+        
+        if (Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb")) {
+            $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
+            self::$_db = $resource->getDb("auth");
         } else {
-            $db_params = isset($config->resources->db) ? $config->resources->db : $config->db; //[TODO] backward compatibility, $config->db debe deprecarse.
+            $db_params = $config->resources->db;
             self::$_db = Zend_Db::factory($db_params);
         }
 

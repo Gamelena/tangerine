@@ -55,7 +55,7 @@ class Zwei_Db_Object
             $this->_form = new Zwei_Utils_Form($form);
         }    
         if (!empty($form->model)) {
-            $model = Zwei_Utils_String::toClassWord($form->model)."Model";
+            $model = $form->model;
             $this->_model = new $model;
         }
         if ($select) $this->_select = $select;
@@ -194,7 +194,7 @@ class Zwei_Db_Object
         $count = (isset($this->_form->count)) ? $this->_form->count : $count;//dojo.data.QueryReadStore usa count en lugar de limit
         $sort = (isset($this->_form->sort)) ? $this->_form->sort : false;
         
-        if ( (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) && $sort) {
+        if ($sort && (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select"))) {
             $oSelect->reset(Zend_Db_Select::ORDER);
             if (preg_match("/^-(.*)/", $sort)) {
                 $sort = substr($sort, 1);

@@ -165,6 +165,7 @@ class Zwei_Admin_Components_Table implements Zwei_Admin_ComponentsInterface
                 }
         }
         $out .= "</div>\r\n";
+        Debug::write($out);
       
         return $out;
     }

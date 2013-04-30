@@ -67,9 +67,9 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $search = isset($request['search']) ? $request['search'] : "";
 
 
-        $out = "<img id=\"{$domPrefix}switchMainPaneButton\" src=\"http://localhost/promociones/images/expand.png\" onclick=\"switchMainPane()\" style=\"position: relative;float: left;\"/>";
-        $out .= "<script>if(typeof(switchMainPane) != \"function\") { dojo.byId('{$domPrefix}switchMainPaneButton').style.display='none'; }</script>";
-        $out .= "<h2>{$viewtable->layout[0]['NAME']}</h2>\r\n";
+        //$out = "<img id=\"{$domPrefix}switchMainPaneButton\" src=\"http://localhost/promociones/images/expand.png\" onclick=\"switchMainPane()\" style=\"position: relative;float: left;\"/>";
+        //$out .= "<script>if(typeof(switchMainPane) != \"function\") { dojo.byId('{$domPrefix}switchMainPaneButton').style.display='none'; }</script>";
+        $out = "<h2>{$viewtable->layout[0]['NAME']}</h2>\r\n";
         if (!empty($viewtable->layout[0]['JS'])) $out.="<script type=\"text/javascript\" src=\"".BASE_URL."js/".$xml->getAttribute('js')."?version={$this->_version}\"></script>";
         $out .= "
         <div id=\"{$domPrefix}content_dojo\" class=\"content_dojo\" style=\"width:100%\">\r\n";
@@ -79,6 +79,8 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $getPk = $this->_model->getPrimary();
         
         $primary = ($getPk && !@stristr($getPk, ".")) ? $getPk : "id";
+        
+        if (is_array($primary)) $primary = implode(";", $primary);
         
         if ($xml->existsChildren('tab')) {
             $edittable = new Zwei_Admin_Components_Helpers_EditTabs($this->page);
@@ -171,13 +173,9 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
             }
         }
         
-        $executeScripts = explode(";",(@$xml->getAttribute("popups_execute_scripts")));
-        $dialogDojoType = "dijit.Dialog";
-        $execute = "";
-        if ($dojoVersion >= '1.8.0') {
-            $dialogDojoType = "dojox.widget.DialogSimple";
-            $execute = 'executeScripts="true"';
-        } 
+
+        $dialogDojoType = "dojox.widget.DialogSimple";
+        $execute = 'executeScripts="true"';
         
         $permissions = false;
         if ($xml->getAttribute("links")) {
@@ -202,6 +200,7 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
         $permissions = false;
         
         $popups = array();
+        $i = 0;
         if ($xml->getAttribute("popups")) {
             $CustomFunctions = new Zwei_Utils_CustomFunctions();
             $params = '';
@@ -216,15 +215,15 @@ class Zwei_Admin_Components_TableDojo extends Zwei_Admin_Controller implements Z
              * para no generar errores en instalaciones anteriores de AdmPortal ya que necesita el módulo "dojox.widget.DialogSimple" para funcionar.
              */
             $executeScripts = explode(";",(@$xml->getAttribute("popups_execute_scripts")));
-            if ((!empty($executeScripts[$i]) && $executeScripts[$i] === "true")) {
-                $dojoDojoType = "dojox.widget.DialogSimple";
-                $execute = 'executeScripts="true"';
-            }
+
+            $dojoDojoType = "dojox.widget.DialogSimple";
+            $execute = 'executeScripts="true"';
+
             
             $popups_width = explode(";",(@$xml->getAttribute("popups_width")));
             $popups_height = explode(";",(@$xml->getAttribute("popups_height")));
             
-            $i = 0;
+
             foreach ($items as $f) {
                 $sIcon = (!empty($icons[$i]) && $icons[$i] != "null") ? $icons[$i] : "dijitIconApplication"; 
                 $sIframe = (!empty($iframes[$i]) && $iframes[$i]=="true") ? 'true' : 'false';

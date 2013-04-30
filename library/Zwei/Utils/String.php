@@ -39,7 +39,7 @@ class Zwei_Utils_String {
         $string = ereg_replace("[ÓÒÔÕÖ]","O",$string);
         $string = ereg_replace("[úùûü]","u",$string);
         $string = ereg_replace("[ÚÙÛÜ]","U",$string);
-        $string = ereg_replace("[^´`¨~]","",$string);
+        //$string = ereg_replace("[^´`¨~]","",$string);
         $string = str_replace("ç","c",$string);
         $string = str_replace("Ç","C",$string);
         $string = str_replace("ñ","n",$string);

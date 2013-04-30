@@ -1,0 +1,25 @@
+<?php 
+if ($this->mainPane != 'dijitTabs') {
+?>
+<h2><?php echo $this->name?></h2>
+<?php 
+}
+?>
+<?php echo $this->includeJs?>
+<div id="<?php echo $this->domPrefix?>content_dojo" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false" class="content_dojo" style="width:100%">
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:true">
+        <?php echo $this->action('search', 'dojo-simple-crud', 'components', $_REQUEST); ?>
+
+
+        <?php echo $this->action('list', 'dojo-simple-crud', 'components', $_REQUEST); ?>
+    </div>
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?php echo $this->domPrefix?>contentBottom" >
+        <?php //echo $this->action('edit', 'dojo-simple-crud', 'components', $_REQUEST)?>
+    </div>
+</div>
+<script type="text/javascript">
+    function initModule(){
+        if (typeof('<?php echo $this->domPrefix?>Init') == 'function') <?php echo $this->domPrefix?>Init();
+    }
+    initModule();  
+</script>

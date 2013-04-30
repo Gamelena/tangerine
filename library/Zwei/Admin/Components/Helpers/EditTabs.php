@@ -60,7 +60,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         $h = "style=\"background:#cccccc\"";
         $i = 0;
         $k = 1;
-        foreach($tabs as $tab) {
+        foreach ($tabs as $tab) {
             $i++;
             $node_tab_mode = (string) $tab[$mode];
             if ($node_tab_mode == "true") {

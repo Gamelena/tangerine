@@ -3,7 +3,16 @@
  * Plugin que hace convivir modulos y controladores de la aplicacion final con los en AdmPortal.
  * Primero se busca que estos existan en aplicación final, si no existen se buscan en AdmPortal.
  * 
- * @author rodrigo
+ * Las rutas modulos deben estar declarados en application.ini de esta forma:
+ * 
+ * resources.frontController.moduleDirectory[] = {Ruta modulos ZF admportal}
+ * resources.frontController.moduleDirectory[] = {Ruta modulos ZF aplicacion}
+ * 
+ * Hacerlo para cada ambiente si es que las rutas cambian.
+ * 
+ * @author rodrigo.riquelme@zweicom.com
+ * @since 0.9
+ * @version 1
  *
  */
 
@@ -14,7 +23,6 @@ class Zwei_Controller_Plugin_ApplicationPath extends Zend_Controller_Plugin_Abst
         $controller = $request->getControllerName();
         $module = $request->getModuleName();
         $frontController = Zend_Controller_Front::getInstance();
-        //Debug::write("controller:$controller-module:$module");
         
         if (file_exists(APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php')) {
             //Debug::write("Existe ". APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');
