@@ -241,6 +241,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $this->_label = $value;
     }
 
+    
     /**
      * Retorna los campos según los cuales se realiza la búsqueda por defecto 
      * @return array()

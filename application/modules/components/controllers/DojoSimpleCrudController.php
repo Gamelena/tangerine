@@ -68,9 +68,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->model = $this->_xml->getAttribute('target');
         $this->view->xml = $this->_xml;
-        $groups = $this->_xml->getSearchers();
-        Debug::write($groups);
-        $this->view->groups = $groups;
+        $this->view->elements = $this->_xml->getElements();
+        $this->view->groups = $this->_xml->getSearchers(true);
     }
 
     public function editAction()

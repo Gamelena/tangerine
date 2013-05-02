@@ -76,7 +76,7 @@ class Zwei_Utils_SimpleXML extends SimpleXMLElement
         foreach ($this->attributes() as $key=>$val) {
             $cnt++;
         }
-        return (int)$cnt;
+        return (int) $cnt;
     }
     
     /**
@@ -84,7 +84,7 @@ class Zwei_Utils_SimpleXML extends SimpleXMLElement
      * @param array
      * @return array
      */
-    public function getAttributesArray($names)
+    public function getAttributesArray(string $names)
     {
         $len = count($names);
         $arrTemp = array();

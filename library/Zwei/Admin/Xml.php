@@ -3,21 +3,6 @@
 /**
  * Parseo de componentes XML del back-office
  *
- * Ejemplo:
- * <code>
- * <?php
- * $Xml=new Zwei_Admin_Xml();
- * $Xml->parse('file.xml');
- * echo $Xml->elements[0]['NAME'];
- * ?>
- * </code>
- * [FIXME]
- * Se han duplicado metodos de Zwei_Utils_Xml ya que esa clase extiende de SimpleXMLElement e implementa un constructor final, no sobreescribible, 
- * por lo tanto NO podemos heredar de Zwei_Utils_Xml (por ahora) ya que necesitamos un constructor personalizado para compatibilidad hacia atras.
- *  
- * Sin embargo es deseable heredar de Zwei_Utils_SimpleXML a futuro y borrar métodos duplicados.
- * Esto se puede hacer cuando no usemos más xml_parser_create o lo que es lo mismo: cuando no se invoque más el constructor de esta clase sin parametros.
- *
  * @category Zwei
  * @package Zwei_Admin
  * @version $Id:$
@@ -28,9 +13,6 @@
 
 class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
 {
-    public $_parser;
-    
-    
     /**
      * Obtiene el path completo del archivo xml, según las convenciones de admportal,
      * si el archivo xml termina con .php se buscará el archivo por http y no por ruta interna,
@@ -97,26 +79,69 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
         return $xml;
     }
     
+    /**
+     * @param string $index
+     * @param Zwei_Utils_SimpleXML $son
+     * @param Zwei_Utils_SimpleXML $father
+     */
+    public function inheritAttributes($index, $son, $father, $override = false)
+    {
+        if ($father == null) $father = $this;
+        
+        //Debug::write($son);
+        //Debug::write($father);
+
+        foreach ($father as $elementFather) {
+            foreach ($elementFather->attributes() as $key => $val) {
+                //if ($son->xpath(''))
+                    //Debug::write("$key:$val");
+    
+            }
+        }
+    
+        /*
+         foreach ($father->attributes() as $key => $val) {
+        if ($son->getAttribute($key) && !$override) {
+        continue;
+        } else if (isset($father->getElements("@$index='{$son->getAttribute($index)}'")[0])) {
+        $son->addAttribute($key, $val );
+        }
+        }
+        */
+        return $son;
+    }
     
     /**
      * 
+     * @param $inheritFromElements boolean
      * @return array|false
      */
-    public function getSearchers()
+    public function getSearchers($inheritFromElements  = false)
     {
         $elements = array();
         
         if ($this->existsChildren('searchers')) {
             if ($this->xpath('/component/searchers/group')) {
                 for ($i = 0; $i < $this->searchers->group->count(); $i++) {
+                    if (!$this->searchers->group[$i]->getAttribute('type')) 
+                        $this->searchers->group[$i]->addAttribute('type', 'dijit-form-validation-text-box');
+                    
+                    if (!$this->searchers->group[$i]->getAttribute('target'))
+                        $this->searchers->group[$i]->addAttribute('target', $this->searchers->group[$i]->element->getAttribute('target'));
+                    
                     $elements[$i] = $this->searchers->group[$i];
                 }
             } else {
                 for ($i = 0; $i < $this->searchers->element->count(); $i++) {
                     $elements[$i] = $this->searchers->element[$i];
                 }
+                
+                if ($inheritFromElements) {
+                    $elements = $this->inheritAttributes('target', $this->searchers->element, $this->elements->element);
+                }
             }
         }
+        //Debug::write($elements);
         return $elements;
     }
 }

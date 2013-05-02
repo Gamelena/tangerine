@@ -36,6 +36,7 @@ class CrudRequestController extends Zend_Controller_Action
 
     public function init()
     {
+        Debug::write($this->getRequest()->getParams());
         $this->_form = new Zwei_Utils_Form();
         if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
@@ -69,8 +70,9 @@ class CrudRequestController extends Zend_Controller_Action
         /**
          * [TODO] Validar segun perfil de usuario autorizado a obtener estos datos
          */
+        $r = $this->getRequest();
         
-        if ($this->_form->format == 'json') {
+        if ($r->getParam('format') == 'json') {
             $this->_helper->ContextSwitch
             ->setAutoJsonSerialization(false)
             ->addActionContext('index', 'json')
@@ -80,26 +82,26 @@ class CrudRequestController extends Zend_Controller_Action
         //enviar nombre de clase modelo separada por "_" y sin sufijo "Model",
         //ej: enviar solicitud_th en lugar de SolicitudThModel"
         
-        $classModel = $this->getRequest()->getParam('model');
+        $classModel = $r->getParam('model');
         
         if (class_exists($classModel)) {
             /**
              * 
              * @var Zwei_Db_Table
-             */    
+             */
             $this->_model = new $classModel();
             $this->view->collection = array();
             
-            if (isset($this->_form->action) && Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+            if ($r->getParam('action', false) && Zwei_Admin_Auth::getInstance()->hasIdentity()) {
                 $data = array();
                 $this->_model->getAdapter()->getProfiler()->setEnabled(true);
                 $id = $this->_model->getPrimary();
-                Debug::write($id);
+
                 if ($id === false) $id = "id";
                 
-                if ($this->_form->action == 'add') {
+                if ($r->getParam('action') == 'add') {
                      
-                    foreach ($this->_form->data as $i=>$v) {
+                    foreach ($r->getParam('data') as $i => $v) {
                         $data[$i] = $v;
                     }
                     
@@ -115,10 +117,10 @@ class CrudRequestController extends Zend_Controller_Action
                         Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
                     }
                     
-                } elseif ($this->_form->action == 'delete') {
+                } elseif ($r->getParam('action') == 'delete') {
                      
-                    if (!empty($this->_form->$id) || $this->_form->$id === "0") {
-                        $where = $this->_model->getAdapter()->quoteInto("$id = ?", $this->_form->$id);
+                    if ($r->getParam($id, false)) {
+                        $where = $this->_model->getAdapter()->quoteInto("$id = ?", $r->getParam($id));
                         $response = $this->_model->delete($where);
                         if ($response) {
                             $this->_response_content['state'] = 'DELETE_OK';
@@ -129,34 +131,34 @@ class CrudRequestController extends Zend_Controller_Action
                         $this->_response_content['state'] = 'DELETE_FAIL';
                     }
                     //Zwei_Utils_Debug::write($response);
-                } else if ($this->_form->action == 'edit') {
+                } else if ($r->getParam('action') == 'edit') {
                     
-                    foreach ($this->_form->data as $i=>$v) {
+                    foreach ($this->_form->data as $i => $v) {
                         if ($i == $id) { // si es pk, tratar como pk
-                            $this->_form->$id = $v;
+                            $r->getParam($id) = $v;
                         } 
                         $data[$i] = $v;
                         
                     }
                     
                     //en caso de tener multiples PK [FIXME] capturar nombres de campos para que funcione
-                    if (isset($this->_form->id)) {
-                        if (is_array($this->_form->id)) {
+                    if ($r->getParam('id', false)) {
+                        if (is_array($r->getParam('id'))) {
                            $where = array();    
-                           foreach ($this->_form->id as $i => $v) {
+                           foreach ($r->getParam('id') as $i => $v) {
                                 $where[] = $this->_model->getAdapter()->quoteInto("$id = ?", $v);
                            }
                         } else {
-                           $where = $this->_model->getAdapter()->quoteInto("id = ?", $this->_form->$id);
+                           $where = $this->_model->getAdapter()->quoteInto("id = ?", $r->getParam($id));
                         }   
                     } else {
-                       if (is_array($this->_form->$id)) {
+                       if (is_array($r->getParam($id))) {
                            $where = array();    
                            foreach ($this->_form->$id as $i => $v) {
                                 $where[] = $this->_model->getAdapter()->quoteInto("$id = ?", $v);
                            }
                        } else {
-                           $where = $this->_model->getAdapter()->quoteInto("$id = ?", $this->_form->$id);
+                           $where = $this->_model->getAdapter()->quoteInto("$id = ?", $r->getParam($id));
                        } 
                     }
                     

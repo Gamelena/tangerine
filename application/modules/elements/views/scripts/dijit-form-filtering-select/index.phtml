@@ -1,4 +1,1 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>DijitFormFilteringSelect</b> and script/action name <b>index</b></p>
-</div>
+<select dojoType="dijit.form.FilteringSelect" id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" onload="dijit.byId('<?php echo $this->domId . $this->i?>').set('value', dijit.byId('<?php echo $this->domId . $this->i?>').get('value'))" <?php echo $this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur.$this->value ?>><?php echo $this->options ?></select>
