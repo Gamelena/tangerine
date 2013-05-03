@@ -150,7 +150,9 @@ class AdminController extends Zend_Controller_Action
         ->requireModule("dojox.data.QueryReadStore")
         ->requireModule("dojo.date.locale")
         ->requireModule("dojox.widget.DialogSimple")
-        ->requireModule("dojox.widget.Toaster");
+        ->requireModule("dojox.widget.Toaster")
+        ->requireModule("zwei.form.ValidationTextarea")
+        ;
     
         $this->view->headStyle()->appendStyle('
             @import "'.$this->baseDojoFolder.'/dojox/grid/resources/Grid.css";
@@ -192,12 +194,23 @@ class AdminController extends Zend_Controller_Action
 
     public function componentsAction()
     {
+        $logger = new Zend_Log();
+        $writer = new Zend_Log_Writer_Stream('php://output');
+        $logger->addWriter($writer);
+        
         if ($this->getRequest()->getParam('p')) {
             $component = $this->getRequest()->getParam('p');
 
             if (Zwei_Admin_Acl::isUserAllowed($component, "LIST") || Zwei_Admin_Acl::isUserAllowed($component, "EDIT") || Zwei_Admin_Acl::isUserAllowed($component, "ADD")) {
                 $file = Zwei_Admin_Xml::getFullPath($component);
-                $xml = new Zwei_Admin_Xml($file, 0, 1);
+                
+                try {
+                    $xml = new Zwei_Admin_Xml($file, 0, 1);
+                } catch (Exception $e) {
+                    $logger->log($e->getCode()."-".$e->getMessage(), Zend_Log::ERR);
+                    $this->view->content = "Error al parsear $file";
+                    $this->render();
+                }
 
                 if (stristr($xml->getAttribute('type'), '.')) {
                     list($controller, $action) = explode('.', $xml->getAttribute('type'));
@@ -207,9 +220,8 @@ class AdminController extends Zend_Controller_Action
                 }
                 $this->view->content =  $this->view->action($action, $controller, 'components', $this->getRequest()->getParams());
             } else {
-                $this->view->content = "Acceso denegado a módulo";
+                $this->view->content = "Acceso denegado a módulo $component";
             }
-
         } else {
             $this->view->component = "index";
         }

@@ -54,9 +54,9 @@ class Zwei_Db_Object
         } else { //en este punto $form debe ser array
             $this->_form = new Zwei_Utils_Form($form);
         }    
-        if (!empty($form->model)) {
-            $model = $form->model;
-            $this->_model = new $model;
+        if (!empty($this->_form->model)) {
+            $model = $this->_form->model;
+            $this->_model = new $model();
         }
         if ($select) $this->_select = $select;
     }
@@ -69,112 +69,44 @@ class Zwei_Db_Object
         $oModel = $this->_model;
         $oSelect = isset($this->_select) ? $this->_select : $oModel->select();
         
-        if (isset($this->_form->search) && (!empty($this->_form->search) || $this->_form->search === "0") && (!isset($oModel) || !$oModel->isFiltered())) {
-            if (!empty($this->_form->search_fields) || @$this->_form->search_fields === "0") {
-                $search_fields = @explode(";",$this->_form->search_fields);
+        if (isset($this->_form->search) && !$oModel->isFiltered()) {
+            $search = $this->_form->search;
+            $allowedOperators = array('LIKE', '=', '<>', '<', '>', '<=', '>=', '<>', '!=', 'BETWEEN');
 
-                if (!is_array($search_fields))
-                    $search_fields = array($this->_form->search_fields);
-                if (@$this->_form->search_type == 'multiple') {
-                    $aSearchKeys = explode(';',$this->_form->search);
-                    $search_format = explode(';',@$this->_form->search_format);
-                    $search_between = explode(';',@$this->_form->search_between);
+            foreach ($search as $i => $s) {
+                $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
+                if (isset($s['operator'])) {
+                    $op = in_array($s['operator'], $allowedOperators) ? $s['operator'] : 'LIKE';
+                } else {
+                    $op = 'LIKE';
+                    $sufix = '%';
+                    $prefix = '%';
                 }
-  
-                $i = 0;
-                $auxI = $i;
-                foreach ($search_fields as $sSearchField) {
-                    $sSearchField = trim($sSearchField);
-                    $sSearchFieldFormatted = !strstr($sSearchField, ".") && !empty($sSearchField) ? "`$sSearchField`" :  $sSearchField;
-                                        
-                    if ((!empty($sSearchField) || $sSearchField === "0") && (!empty($aSearchKeys[$i]) || @$aSearchKeys[$i] === "0" || empty($this->_form->search_type))) {
-                        if (@$this->_form->search_type == 'multiple') {
-                            if (isset($search_format[$auxI])) $search_format[$auxI] = preg_replace('/[^(\x20-\x7F)]*/', '', $search_format[$auxI]);
-
-                            if (preg_match("/^date_format(.*)/", @$search_format[$auxI], $match)) {
-                                $mask='%Y-%m-%d';
-                                if (@$this->_form->between ==  $sSearchField) {
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchFieldFormatted,'$mask') >= ?", $aSearchKeys[$i]));
-                                    $i++;
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchFieldFormatted,'$mask') <= ?", $aSearchKeys[$i]));
-                                    //$auxI++;
-                                } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchFieldFormatted,'$mask') = ?", $aSearchKeys[$i]));
-                                }
-                            } else if ($search_format[$auxI] == 'date_to_datetime') {
-                                if (@$this->_form->between ==  $sSearchField) {
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[$i] . " 00:00:00"));
-                                    $i++;
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[$i] . " 23:59:59"));     
-                                } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[$i] . " 00:00:00"));
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[$i] . " 23:59:59"));
-                                }
-                            } else if (@$this->_form->between ==  $sSearchField) {    
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[$i]));
-                                $i++;
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[$i]));
-                            } else if ($search_format[$auxI] == 'equals') {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted = ?", $aSearchKeys[$i]));
-                            } else if ($search_format[$auxI] == 'lesserorequals') {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[$i]));
-                            } else if ($search_format[$auxI] == 'greaterorequals') {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[$i]));
-                            } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted LIKE ?", "%{$aSearchKeys[$i]}%"));
-                            }
-                            $i++;
-
-                            $auxI++;
-                        } else {
-                            if (isset($this->_form->search_format)) $this->_form->search_format = preg_replace('/[^(\x20-\x7F)]*/', '', $this->_form->search_format);    
-                            
-                            if (preg_match("/^date_format(.*)/", @$this->_form->search_format, $match)) {
-                                $mask=($match[1]) ? $match[1] : '%Y-%m-%d';//[FIXME] esto debiera ser parametrizable pero hay que solucionar el url_encode de "%"
-                                $mask = '%Y-%m-%d';
-                                if (@$this->_form->between === '1') {
-                                    $aSearchKeys=explode(";",$this->_form->search);
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchFieldFormatted,'$mask') >= ?", $aSearchKeys[0]));
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchFieldFormatted,'$mask') <= ?", $aSearchKeys[1]));
-                                } else {
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("DATE_FORMAT($sSearchFieldFormatted,'$mask') = ?", $this->_form->search));
-                                }
-                           } else if (@$this->_form->search_format == 'date_to_datetime') {
-                                if (@$this->_form->between ==  $sSearchField) {
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[0] . " 00:00:00"));
-                                    $i++;
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[1] . " 23:59:59"));     
-                                } else if (!empty($aSearchKeys[$i]) || $aSearchKeys[$i] === "0") {
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted >= ?", $aSearchKeys[0] . " 00:00:00"));
-                                    $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted <= ?", $aSearchKeys[0] . " 23:59:59"));
-                                }    
-                            } else {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("$sSearchFieldFormatted LIKE ?", "%{$this->_form->search}%"));
-                            }
-                        }
-                    } else {$i++;}
-                }//foreach
-             } else {
-                if (isset($oModel) && $oModel->getSearchFields()) {
-                    $search_fields = $oModel->getSearchFields();
-                    foreach ($search_fields as $sSearchField) {
-                        if (@$this->_form->search_type == "multiple") {
-                            foreach ($aSearchKeys as $f) {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("`$sSearchField` = ? ", $f));
-                            }
-                        } else {
-                            //Zwei_Utils_Debug::write($sSearchField);
-                            if ($sSearchField == 'id' || preg_match("/^id_/", $sSearchField) ||  preg_match("/_id$/", $sSearchField)) {
-                                $oSelect->where($oModel->getAdapter()->quoteInto("`$sSearchField` = ? ", $this->_form->search));
-                            } else {
-                                $oSelect->orWhere($oModel->getAdapter()->quoteInto("`$sSearchField` LIKE ?", "%{$this->_form->search}%"));
-                            }
-                        }
-                    }
+                
+                /**
+                 * BETWEEN se aplica sobre un campo único, la diferencia en los valores las hacen los sufijos y prefijos concatenados al valor del campo
+                 * @example " BETWEEN $fecha 00:00:00 AND $fecha 23:59:59 ", 
+                 * la unica razón del soporte de BETWEEN es poder sacar un rango de valores o intérvalo 
+                 * a partir de un campo único + sufijos y prefijos.
+                 * 
+                 * NO se puede usar BETWEEN entre campos diferentes, para esto deben usarse los operadores <, >, <=, >= que hacen lo mismo.
+                 */
+                if ($op == 'BETWEEN') {
+                    $sufix0 = isset($s['sufix'][0]) ? $s['sufix'][0] : '';
+                    $prefix0 = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
+                    $sufix1 = isset($s['sufix'][1]) ? $s['sufix'][1] : '';
+                    $prefix1 = isset($s['prefix'][1]) ? $s['prefix'][1] : '';
+                    
+                    $oSelect->where($oModel->getAdapter()->quoteInto("$field >= ?", "{$prefix0}{$s['value']}{$sufix0}%"));
+                    $oSelect->where($oModel->getAdapter()->quoteInto("$field <= ?", "{$prefix1}{$s['value']}{$sufix1}%"));
+                } else {
+                    $sufix = isset($s['sufix']) ? $s['sufix'] : '';
+                    $prefix = isset($s['prefix']) ? $s['prefix'] : '';
+                    
+                    $oSelect->where($oModel->getAdapter()->quoteInto("$field $op ?", "{$prefix}{$s['value']}{$sufix}%"));
                 }
             }
-
-        }//if (isset($this->_form->search) && (!empty($this->_form->search) || $this->_form->search === "0"))
+        }
 
         if (isset($this->_form->group)) {
             $groups = explode(';', $this->_form->group);
@@ -189,9 +121,8 @@ class Zwei_Db_Object
 
         }
 
-        $count = (isset($this->_form->limit)) ? $this->_form->limit : 20000;//[TODO] deprecar esto y dejar solo $this->_form->count 
         $start = (isset($this->_form->start)) ? $this->_form->start : 0; 
-        $count = (isset($this->_form->count)) ? $this->_form->count : $count;//dojo.data.QueryReadStore usa count en lugar de limit
+        $count = (isset($this->_form->count)) ? $this->_form->count : 20000;//dojo.data.QueryReadStore usa count en lugar de limit
         $sort = (isset($this->_form->sort)) ? $this->_form->sort : false;
         
         if ($sort && (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select"))) {

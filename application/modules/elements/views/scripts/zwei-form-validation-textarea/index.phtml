@@ -1,4 +1,18 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>ZweiFormValidationTextarea</b> and script/action name <b>index</b></p>
-</div>
+<textarea id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" dojoType="zwei.form.ValidationTextarea" <?php echo $this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur ?>
+<?php 
+if ($this->view->maxlenght) :
+?>
+        onKeyDown="limitText(document.getElementById('<?php echo $this->domId . $this->i?>'), document.getElementById('<?php echo $this->domId . $this->i?>_countdown'), $maxlength);"
+        onKeyUp="limitText(document.getElementById('<?php echo $this->domId . $this->i?>'), document.getElementById('<?php echo $this->domId . $this->i?>_countdown'), $maxlength);" 
+        onclick="setTimeout('limitText(document.getElementById(\'<?php echo $this->domId . $this->i?>\'), document.getElementById(\'<?php echo $this->domId . $this->i?>_countdown\'), <?php echo $this->maxlenght ?>)', 100);" 
+<?php 
+endif;
+?>>
+<?php echo str_replace('"','&quot;',$this->value)?></textarea>
+<?php 
+if ($this->view->maxlenght) :
+?>
+    <div class="aux"><input type="text" name="<?php echo $this->domId . $this->i?>_countdown" style="width:35px; float:left;" id="<?php echo $this->domId . $this->i?>_countdown" dojoType="dijit.form.ValidationTextBox" size="3" value="" readonly="" /><label class="tip">caracteres disponibles.</label></div>
+<?php 
+endif;
+?>

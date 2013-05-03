@@ -1,4 +1,14 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>DojoxFormCheckedMultiSelect</b> and script/action name <b>index</b></p>
-</div>
+<select dojoType="dojox.form.CheckedMultiSelect" multiple="true" id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" <?php echo $this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur.$this->value ?>>
+    <?php echo $this->options ?>
+</select>
+<?php 
+if (!empty($this->style)) :
+?>
+<style type="text/css">
+.dojoxCheckedMultiSelectWrapper {
+    <?php echo $this->style?>
+}
+</style>";
+<?php 
+endif;
+?>

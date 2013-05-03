@@ -1,4 +1,1 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>DijitFormCheckBox</b> and script/action name <b>index</b></p>
-</div>
+<input type="checkbox" dojoType="dijit.form.CheckBox" id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" onChange="if(dijit.byId('<?php echo $this->domId . $this->i?>').get('checked')){dijit.byId('<?php echo $this->domId . $this->i?>').set('value','<?php echo $this->defaultValue ?>')}else{dijit.byId('<?php echo $this->domId . $this->i?>').set('value', <?php echo $this->defaultEmpty?>');dijit.byId('<?php echo $this->domId . $this->i?>').set('checked', false);}<?php $this->onchange?>" value="<?php echo $this->defaultValue ?>" <?php echo $this->checked.$this->disabled.$this->onclick?> />

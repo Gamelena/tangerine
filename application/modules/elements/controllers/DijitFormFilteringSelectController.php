@@ -62,9 +62,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
             
             Zwei_Utils_Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $model->fetchAll($select);
-            
-            Debug::write($r->getParam('defaultValue'));
-    
+
             if ($r->getParam('defaultValue') !== false || $r->getParam('defaultText') !== false) {
                 $options .= "<option value=\"{$r->getParam('defaultValue', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
             }

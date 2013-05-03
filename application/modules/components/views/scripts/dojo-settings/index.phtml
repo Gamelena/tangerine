@@ -1,4 +1,62 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>DojoSettings</b> and script/action name <b>index</b></p>
+<div dojoType="dijit.layout.TabContainer" style="width: 100%; height: 100%;" tabStrip="true">
+<?php
+$h = 'style="background:#cccccc"';
+$i = 0;
+foreach ($this->groupies as $group) :
+    $g = !empty($group['group']) ? $group['group'] : 'General';
+    $groups[] = $group['group'];
+    $selected = ($i == 0) ? ' selected="true"' : '';
+?>
+<div dojoType="dijit.layout.ContentPane" title="<?php echo $group['group']?>" $selected>
+    <div dojoType="dijit.form.Form" id="<?php echo $this->domPrefix . $i?>_form" jsId="<?php echo $this->domPrefix . $i?>_form" encType="multipart/form-data" target="ifrm_process" action="<?php echo BASE_URL.'crud-request/multi-update' ?>" method="post">
+<?php 
+    $select = $this->model->select()
+        ->where($this->model->getAdapter()->quoteInto('group = ?', $group['group']))
+        ->order('ord ASC');
+    $subgroups = $settings->fetchAll($select);
+    foreach ($subgroups as $sg) :
+?>
+        <input type="hidden" id="id[<?php echo $i ?>]" name="id[<?php echo $i ?>]" value="<?php echo $sg['id'] ?>" />
+        <b>"<?php echo $sg['id'] ?>:</b>
+<?php 
+        $className = $sg['type'];
+        $e = new $ClassElement(true, true, "", "value", $sg['value']);
+
+        if (!empty($sg['enum'])) {
+            $out .= $this->_select("value[$i]", $sg['enum'], $sg['value']);
+        }else{
+            $out .= $e->edit($i,0);
+        }
+
+        if (!empty($sg['function'])&&class_exists($sg['function'])) {
+            $f = new $sg['function'];
+            $f->setId($i);
+            $out .= $f->display();
+        }
+?>
+        <?php echo ''?>
+        <br /><?php echo nl2br($sg['description'])?>;
+        <br /><br />
+        
+<?php 
+        $i++;
+    endforeach;
+?>
+    
+        <script type="dojo/method" event="onSubmit">
+        if (this.validate()) {
+            this.submit();
+        } else {
+            alert('Por favor favor corrija los campos marcados');
+            return false;
+        }
+        </script>
+        <button type="submit" dojoType="dijit.form.Button" iconClass="dijitIconSave" id="btnSaveSettings$i">Guardar</button>
+        <input type="hidden" name="save" value="save" />
+        <input type="hidden" name="model" value="$this->_model" />
+    </div>
+</div>
+<?php 
+endforeach;
+?>
 </div>

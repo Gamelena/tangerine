@@ -46,7 +46,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      */
     private $_config = null;
     
-     public function init()
+    public function init()
     {
         $this->_helper->layout->disableLayout();
         

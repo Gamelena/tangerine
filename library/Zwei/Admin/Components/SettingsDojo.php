@@ -88,11 +88,11 @@ class Zwei_Admin_Components_SettingsDojo implements Zwei_Admin_ComponentsInterfa
         $h = 'style="background:#cccccc"';
         $i = 0;
         foreach ($groupies as $group) {
-            $g = !empty($group['group']) ? $group['group'] : 'General';
-            $groups[] = $group['group'];
-            $selected = ($i == 0) ? ' selected="true"' : '';
-            $out .= "\t<div dojoType=\"dijit.layout.ContentPane\" title=\"{$group['group']}\" $selected>\r\n";
-            $out .= "\t\t<div dojoType=\"dijit.form.Form\" id=\"settings{$i}_form\" jsId=\"settings{$i}_form\" encType=\"multipart/form-data\" target=\"ifrm_process\" action=\"".BASE_URL."objects/multi-update\" method=\"post\">\r\n";
+            //$g = !empty($group['group']) ? $group['group'] : 'General';
+            //$groups[] = $group['group'];
+            //$selected = ($i == 0) ? ' selected="true"' : '';
+            //$out .= "\t<div dojoType=\"dijit.layout.ContentPane\" title=\"{$group['group']}\" $selected>\r\n";
+            //$out .= "\t\t<div dojoType=\"dijit.form.Form\" id=\"settings{$i}_form\" jsId=\"settings{$i}_form\" encType=\"multipart/form-data\" target=\"ifrm_process\" action=\"".BASE_URL."objects/multi-update\" method=\"post\">\r\n";
 
             //Subgrupos
             $settings = new $this->_model();
@@ -126,6 +126,7 @@ class Zwei_Admin_Components_SettingsDojo implements Zwei_Admin_ComponentsInterfa
                 $i++;
             }
 
+            /*
             $out .="
         	<script type=\"dojo/method\" event=\"onSubmit\">
                 if (this.validate())
@@ -144,8 +145,9 @@ class Zwei_Admin_Components_SettingsDojo implements Zwei_Admin_ComponentsInterfa
             $out.="<button type=\"submit\" dojoType=\"dijit.form.Button\" iconClass=\"dijitIconSave\" id=\"btnSaveSettings$i\">Guardar</button>";
             $out.="<input type=\"hidden\" name=\"save\" value=\"save\" />\r\n";
             $out.="<input type=\"hidden\" name=\"model\" value=\"$this->_model\" />\r\n";
-            $out.="\t\t</div>\r\n";
-            $out.="\t</div>\r\n";
+            */
+            //$out.="\t\t</div>\r\n";
+            //$out.="\t</div>\r\n";
         }
 
         $out.="</div>\r\n";
