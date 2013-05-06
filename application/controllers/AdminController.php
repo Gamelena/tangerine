@@ -109,7 +109,7 @@ class AdminController extends Zend_Controller_Action
 
     private function enableDojo()
     {
-        $this->view->body_class = $this->_dojoTheme;
+        $this->view->bodyClass = $this->_dojoTheme;
         
         $this->view->dojo()
         ->requireModule("dojox.widget.Standby")
@@ -260,6 +260,9 @@ class AdminController extends Zend_Controller_Action
         {
             $this->_redirect(BASE_URL. 'admin');
         }
+        
+        $this->view->bodyClass = $this->_dojoTheme;
+        
         $request = $this->getRequest();
         $loginForm = $this->getLoginForm();
     

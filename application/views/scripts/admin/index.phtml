@@ -16,9 +16,9 @@
         overflow: hidden;
     }
     </style>
-    <?=$this->headStyle()?>
-    <?=$this->dojo()?>
-    <?=$this->list?>
+    <?php echo $this->headStyle()?>
+    <?php echo $this->dojo()?>
+    <?php echo $this->list?>
     <script type="text/javascript" src="<?=$this->base_url?>js/dojo.admin.js?v=7"></script>
     <script type="text/javascript" src="<?=$this->base_url?>js/ajax.js"></script>
     <script type="text/javascript" src="<?=$this->base_url?>js/admin.js?v=6"></script>
@@ -32,7 +32,7 @@
         });
         document.body.appendChild(appStandBy.domNode);
         appStandBy.startup();
-    	initLoad(<?=$this->layout?>);
+    	initLoad(<?php echo $this->layout?>);
         // Add pre-loading
     });
 
@@ -49,7 +49,7 @@
     }   
     </script>
 </head>
-<body class="<?=$this->body_class?>" onload="preLoading();">
+<body class="<?php echo $this->bodyClass?>" onload="preLoading();">
     <!--[if lt IE 7]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0012_spanish_LATAM.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div> <![endif]-->
         <!-- Loader -->
     <div id="appLoader" class="appLoader">
@@ -65,14 +65,14 @@
                     <div data-dojo-type="dijit.Menu" id="confMenu" style="display: none;">
                         <div data-dojo-type="dijit.MenuItem" id="btnConfPersonal"
                             iconClass="dijitIconTask"
-                            onclick="<?=$this->jsLoadModuleFunction?>('index/components?p=personal-info.xml', '<?= uniqid() ?>', 'Datos Personales')">
+                            onclick="<?=$this->jsLoadModuleFunction?>('admin/components?p=personal-info.xml', '<?= uniqid() ?>', 'Datos Personales')">
                         Personal</div>
                    </div>
                 </button>
                 <button type="button" data-dojo-type="dijit.form.Button" name="btnSalir" id="btnSalir" iconClass="dijitIconFilter">Salir</button>
             </div>
             <div id="infoUsr" style="text-align: right; float: right; padding-right: 20px; padding-top:6px; font-weight: bold">Bienvenido
-			<?=$this->user_name?>
+			<?php echo $this->user_name?>
             </div>
         </div>
         <!-- Panel derecho -->
@@ -87,11 +87,11 @@
         </div>
         <div data-dojo-type="dojox.layout.ContentPane" jsId="contentPaneBottom" data-dojo-props='region:"bottom", style:"background-color: #b39b86; height: auto;"'>
             <span style="float:right;margin-right: 6px">
-                <span style="float: left">&nbsp; &copy; Zweicom 2012 &nbsp; </span> <img src="<?=BASE_URL?>/images/logo_zweicom26x15.png" />  
+                <span style="float: left">&nbsp; &copy; Zweicom 2012 &nbsp; </span> <img src="<?php echo BASE_URL?>/images/logo_zweicom26x15.png" />  
             </span>
         </div>
     </div>
-    <div data-dojo-type="dojox/widget/Toaster" jsId="firstToaster" data-dojo-props="positionDirection:'br-left'" id="first_toaster"></div>
-    <iframe name="ifrm_process" id="ifrm_process" style="display: none;"  src="" />
+    <div data-dojo-type="dojox/widget/Toaster" jsId="firstToaster" data-dojo-props="positionDirection:'br-left'" id="firstToaster"></div>
+    <iframe name="ifrm_process" id="ifrm_process" style="display: none;"  src="" ></iframe>
 </body>
 </html>

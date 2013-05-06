@@ -15,6 +15,7 @@ class Elements_DijitFormValidationTextBoxController extends Zend_Controller_Acti
         $this->view->domId =  $r->getParam('domId');
         $this->view->target =  $r->getParam('target');
         
+        $this->view->value =  $r->getParam('value', '');
         $this->view->readonly = $r->getParam('readonly', '') === 'true' ? "readonly=\"readonly\"" : '';
         $this->view->disabled = $r->getParam('disabled', '') === 'true' ? "disabled=\"disabled\"" : '';
         $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';

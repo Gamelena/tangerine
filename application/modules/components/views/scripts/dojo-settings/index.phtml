@@ -1,59 +1,60 @@
-<div dojoType="dijit.layout.TabContainer" style="width: 100%; height: 100%;" tabStrip="true">
+<div dojoType="dijit.layout.TabContainer" style="width: 100%; height: 100%;" tabStrip="true" class="mainContent">
 <?php
 $h = 'style="background:#cccccc"';
 $i = 0;
-foreach ($this->groupies as $group) :
-    $g = !empty($group['group']) ? $group['group'] : 'General';
+foreach ($this->groups as $group) :
     $groups[] = $group['group'];
     $selected = ($i == 0) ? ' selected="true"' : '';
 ?>
-<div dojoType="dijit.layout.ContentPane" title="<?php echo $group['group']?>" $selected>
-    <div dojoType="dijit.form.Form" id="<?php echo $this->domPrefix . $i?>_form" jsId="<?php echo $this->domPrefix . $i?>_form" encType="multipart/form-data" target="ifrm_process" action="<?php echo BASE_URL.'crud-request/multi-update' ?>" method="post">
+<div dojoType="dijit.layout.ContentPane" title="<?php echo $group['group']?>" <?php echo $selected?>>
+    <div dojoType="dijit.form.Form" id="<?php echo $this->domPrefix . $i?>_form" jsId="<?php echo $this->domPrefix . $i?>_form"  class="formSearch" encType="multipart/form-data" target="ifrm_process" action="<?php echo BASE_URL.'crud-request/multi-update' ?>" method="post">
+        <div class="formSettingsInputs">
 <?php 
-    $select = $this->model->select()
-        ->where($this->model->getAdapter()->quoteInto('group = ?', $group['group']))
-        ->order('ord ASC');
-    $subgroups = $settings->fetchAll($select);
+    $subgroups = $this->model->getSubGroups($group['group']);
     foreach ($subgroups as $sg) :
+        $sg['domPrefix'] = $this->domPrefix;
+        $sg['i'] = $i;
 ?>
-        <input type="hidden" id="id[<?php echo $i ?>]" name="id[<?php echo $i ?>]" value="<?php echo $sg['id'] ?>" />
-        <b>"<?php echo $sg['id'] ?>:</b>
+            <div class="formSettingsItemContainer">
+                <div class="item">
+                    <label class="formSearchItemLabel"><?php echo $sg['id'] ?></label>
 <?php 
-        $className = $sg['type'];
-        $e = new $ClassElement(true, true, "", "value", $sg['value']);
-
-        if (!empty($sg['enum'])) {
-            $out .= $this->_select("value[$i]", $sg['enum'], $sg['value']);
-        }else{
-            $out .= $e->edit($i,0);
-        }
-
         if (!empty($sg['function'])&&class_exists($sg['function'])) {
             $f = new $sg['function'];
             $f->setId($i);
-            $out .= $f->display();
         }
+        $sg['target'] = "data['{$sg['id']}']";
 ?>
-        <?php echo ''?>
-        <br /><?php echo nl2br($sg['description'])?>;
-        <br /><br />
-        
+                    <?php echo $this->action('index', $sg['type'], 'elements', $sg);?>
+                    <div class="tip"><?php echo nl2br($sg['description'])?></div>
+                </div>
+            </div>
 <?php 
         $i++;
     endforeach;
 ?>
-    
+        </div>
         <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
-            this.submit();
+            var iframe = dojo.byId('ifrm_process');
+
+            iframe.onload = function(){
+                dojo.require('dojo.json');
+                response = dojo.json.parse(dojo.byId('ifrm_process').contentDocument.body.innerHTML);
+                alert(response.message);
+                iframe.onload = null;
+            };
+
+            dojo.byId(this.id).submit();
+            return false;
         } else {
             alert('Por favor favor corrija los campos marcados');
             return false;
         }
         </script>
-        <button type="submit" dojoType="dijit.form.Button" iconClass="dijitIconSave" id="btnSaveSettings$i">Guardar</button>
-        <input type="hidden" name="save" value="save" />
-        <input type="hidden" name="model" value="$this->_model" />
+        <button type="submit" dojoType="dijit.form.Button" iconClass="dijitIconSave" id="<?php echo $this->domPrefix ?>btnSaveSettings<?php echo $i?>">Guardar</button>
+        <input type="hidden" name="model" value="<?php echo get_class($this->model) ?>" />
+        <input type="hidden" name="nocache" value="<?php echo uniqid('nocache') ?>" />
     </div>
 </div>
 <?php 

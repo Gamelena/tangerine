@@ -84,30 +84,16 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
      * @param Zwei_Utils_SimpleXML $son
      * @param Zwei_Utils_SimpleXML $father
      */
-    public function inheritAttributes($index, $son, $father, $override = false)
+    public function inheritAttributes($son, $fatherLevel = '//elements/element', $index='target', $override = false)
     {
-        if ($father == null) $father = $this;
+        $father = $this->xpath($fatherLevel."[@$index='{$son->getAttribute('target')}']")[0];
         
-        //Debug::write($son);
-        //Debug::write($father);
+        foreach ($father->attributes() as $key => $value) {
+            if ($override || !$son->getAttribute($key)) 
+                $son->addAttribute($key, $value);
+        }
+    
 
-        foreach ($father as $elementFather) {
-            foreach ($elementFather->attributes() as $key => $val) {
-                //if ($son->xpath(''))
-                    //Debug::write("$key:$val");
-    
-            }
-        }
-    
-        /*
-         foreach ($father->attributes() as $key => $val) {
-        if ($son->getAttribute($key) && !$override) {
-        continue;
-        } else if (isset($father->getElements("@$index='{$son->getAttribute($index)}'")[0])) {
-        $son->addAttribute($key, $val );
-        }
-        }
-        */
         return $son;
     }
     
@@ -116,12 +102,13 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
      * @param $inheritFromElements boolean
      * @return array|false
      */
-    public function getSearchers($inheritFromElements  = false)
+    public function getSearchers($inherit = false, $xpath = null)
     {
         $elements = array();
+        if ($xpath != null) $xpath = "[$xpath]";
         
         if ($this->existsChildren('searchers')) {
-            if ($this->xpath('/component/searchers/group')) {
+            if ($this->xpath('//component/searchers/group'.$xpath)) {
                 for ($i = 0; $i < $this->searchers->group->count(); $i++) {
                     if (!$this->searchers->group[$i]->getAttribute('type')) 
                         $this->searchers->group[$i]->addAttribute('type', 'dijit-form-validation-text-box');
@@ -129,19 +116,20 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
                     if (!$this->searchers->group[$i]->getAttribute('target'))
                         $this->searchers->group[$i]->addAttribute('target', $this->searchers->group[$i]->element->getAttribute('target'));
                     
-                    $elements[$i] = $this->searchers->group[$i];
+                    $elements[] = $this->searchers->group[$i];
                 }
-            } else {
+            } 
+            
+            if ($this->xpath('//component/searchers/element'.$xpath)) {
                 for ($i = 0; $i < $this->searchers->element->count(); $i++) {
-                    $elements[$i] = $this->searchers->element[$i];
-                }
-                
-                if ($inheritFromElements) {
-                    $elements = $this->inheritAttributes('target', $this->searchers->element, $this->elements->element);
+                    
+                    $this->inheritAttributes($this->searchers->element[$i]);
+                        
+           
+                    $elements[] = $this->searchers->element[$i];
                 }
             }
         }
-        //Debug::write($elements);
         return $elements;
     }
 }

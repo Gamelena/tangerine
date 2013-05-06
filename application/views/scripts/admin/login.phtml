@@ -4,13 +4,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="content-language" content="es" />
 <title>Ingreso de usuario</title>
-<?=$this->headStyle()?>
-<?=$this->dojo()?>
+<?php echo $this->headStyle()?>
+<?php echo $this->dojo()?>
 <script type="text/javascript" src="/dojotoolkit/dojo/dojo.js"
 	djConfig="parseOnLoad:true, isDebug:false"></script>
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />	
 </head>
-<body class="claro login">
+<body class="<?php echo $this->bodyClass?> login">
 <!--[if lt IE 7]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0012_spanish_LATAM.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div> <![endif]-->
 <div id="wrapper">
 <div id="header"></div>
@@ -22,7 +22,8 @@
 		</th>
 	</tr>
 	<tr>
-		<td><?php if($this->errorMessage != ""): ?>
+		<td>
+		<?php if($this->errorMessage != ""): ?>
 		<p class="error"><?php echo $this->errorMessage;?></p>
 		<?php endif; ?> <?php echo $this->loginForm;?></td>
 	</tr>

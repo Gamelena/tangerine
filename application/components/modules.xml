@@ -1,23 +1,26 @@
 <?xml version="1.0"?> 
-<!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
-<component name="M&amp;oacute;dulos" type="Components_DojoSimpleCrudController" target="AclModulesModel" list="true" edit="true" add="true" delete="true">
-    <element name="ID" target="id" type="id_box" visible="false" edit="false" add="false"/>
-    <element name="M&amp;oacute;dulo Padre" target="parent_id" type="dojo_filtering_select" table="acl_modules" table_method="select_distinct" default_value="" field="parent_title" visible="true" edit="true" add="true"/>
-    <element name="M&amp;oacute;dulo Padre" target="parent.title" type="dojo_validation_textbox" visible="false" edit="false" add="false">
-        <search type="simple"></search>
-    </element>                         
-    <element name="M&amp;oacute;dulo" target="title" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>
-    <element name="M&amp;oacute;dulo" target="acl_modules.title" type="dojo_validation_textbox" visible="false" edit="false" add="false" search="true">
-        <search type="simple"></search>
-    </element> 
-    <element name="Componente" target="module" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>
-    <element name="Componente" target="acl_modules.module" type="dojo_validation_textbox" visible="false" edit="false" add="false">
-        <search type="simple"></search>
-    </element>
-    <element name="En &amp;Aacute;rbol" target="tree" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
-    <element name="Enlazable" target="linkable" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
-    <element name="Tipo" target="type" type="dojo_filtering_select" list="xml,xml_mvc,zend_module,legacy,iframe" visible="true" edit="true" add="true"/>        
-    <element name="Aprobado" target="approved" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
-    <element name="Root" target="root" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>
-    <element name="Orden" target="order" type="dojo_validation_textbox" reg_exp="[\d]+" invalid_message="Solo números" visible="false" edit="true" add="true"/>    
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="components.xsd"
+name="M&amp;oacute;dulos" type="dojo-simple-crud" target="AclModulesModel" list="true" edit="true" add="true" delete="true">
+    <elements>
+        <element name="ID" target="id" type="id-box" visible="false" edit="false" add="false"/>
+        <element name="M&amp;oacute;dulo Padre" target="parent_id" type="dijit-form-filtering-select" table="acl_modules" tableMethod="selectDistinct" defaultValue="" field="parent_title" visible="true" edit="true" add="true"/>
+        <element name="M&amp;oacute;dulo Padre" target="parent.title" type="dijit-form-validation-text-box" visible="false" edit="false" add="false"/>
+        <element name="M&amp;oacute;dulo" target="title" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
+        <element name="M&amp;oacute;dulo" target="acl_modules.title" type="dijit-form-validation-text-box" visible="false" edit="false" add="false" />
+        <element name="Componente" target="module" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
+        <element name="Componente" target="acl_modules.module" type="dijit-form-validation-text-box" visible="false" edit="false" add="false"/>
+        <element name="En &amp;Aacute;rbol" target="tree" type="dijit-form-check-box" formatter="formatYesNo" visible="true" edit="true" add="true"/>
+        <element name="Enlazable" target="linkable" type="dijit-form-check-box" formatter="formatYesNo" visible="true" edit="true" add="true"/>
+        <element name="Tipo" target="type" type="dijit-form-filtering-select" list="xml;zend_module;legacy;iframe" visible="true" edit="true" add="true"/>        
+        <element name="Aprobado" target="approved" type="dijit-form-check-box" formatter="formatYesNo" visible="true" edit="true" add="true"/>
+        <element name="Root" target="root" type="dijit-form-check-box" formatter="formatYesNo" visible="true" edit="true" add="true"/>
+        <element name="Orden" target="order" type="dijit-form-validation-text-box" regExp="[\d]+" invalidMessage="Solo números" visible="false" edit="true" add="true"/>
+    </elements>
+    <searchers>
+        <group>
+            <element target="parent.title"/>
+            <element target="acl_modules.title"/>
+            <element target="acl_modules.module"/>
+        </group>
+    </searchers>
 </component>

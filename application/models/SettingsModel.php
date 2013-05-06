@@ -40,36 +40,22 @@
 class SettingsModel extends Zwei_Db_Table
 {
     protected $_name = "web_settings";
-     
+    
     public function loadGroups()
     {
         $select = new Zend_Db_Table_Select($this);
         $select->distinct();
         $select->from(array('s' => $this->_name), 'group');
-
-        $data = $this->fetchAll($select);
-        return $data->toArray();
+        Debug::writeBySettings($select->__toString(), 'query_log');
+        return $this->fetchAll($select)->toArray();
     }
     
-    public function select()
+    public function getSubGroups($group)
     {
         $select = new Zend_Db_Table_Select($this);
-        $select->from($this->_name);
-        return $select;
+        $select->where($this->getAdapter()->quoteInto('`group` = ?', $group))
+        ->order('ord ASC');
+        Debug::writeBySettings($select->__toString(), 'query_log');
+        return $this->fetchAll($select)->toArray();
     }
-    
-    public function insert($data)
-    {
-        return parent::insert($data);
-    }
-    
-    public function update($data, $where)
-    {
-        return parent::update($data, $where);
-    }
-    
-    public function delete($where)
-    {
-        return parent::delete($where);
-    }    
 }

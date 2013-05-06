@@ -1,5 +1,5 @@
-<span dojoType="dojo.data.ItemFileReadStore" id="<?php echo $this->domPrefix?>storeGrid" jsId="<?php echo $this->domPrefix?>storeGrid" url="<?php echo BASE_URL?>crud-request?model=<?php echo $this->model?>&format=json"></span>
-<table data-dojo-type="dojox.grid.EnhancedGrid" data-dojo-props="store: <?php echo $this->domPrefix?>storeGrid, plugins:{pagination: {defaultPageSize:25, maxPageStep: 5 }}, clientSort:true, selectable: true, rowsPerPage: 10, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.'" jsId="campanas_xmlmain_grid" class="main_grid" id="<?php echo $this->domPrefix?>mainGrid" style="height: 50em;" onRowDblClick="<?php echo $this->domPrefix?>showDialog('edit')">
+<span dojoType="<?php echo $this->dataDojoType ?>" id="<?php echo $this->domPrefix?>storeGrid" jsId="<?php echo $this->domPrefix?>storeGrid" url="<?php echo BASE_URL?>crud-request?model=<?php echo $this->model?>&format=json"></span>
+<table data-dojo-type="<?php echo $this->gridDojoType ?>" data-dojo-props="store: <?php echo $this->domPrefix?>storeGrid, plugins:<?php echo $this->plugins ?>, clientSort:true, selectable: true, rowsPerPage: 10, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.'" jsId="<?php echo $this->domPrefix?>main_grid" class="main_grid" id="<?php echo $this->domPrefix?>mainGrid" style="height: 50em;" onRowDblClick="<?php echo $this->domPrefix?>showDialog('edit')">
     <thead>
         <tr>
 <?php

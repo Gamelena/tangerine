@@ -62,6 +62,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->view->name = $this->_xml->getAttribute('name');
+        $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>" : '';
     }
 
     public function searchAction()
@@ -80,6 +81,11 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function listAction()
     {
         $this->view->model = $this->_xml->getAttribute('target');
+        $this->view->dataDojoType = $this->_xml->getAttribute('serverPagination') === "true" ? 'dojox.data.QueryReadStore' : 'dojo.data.ItemFileReadStore';
+        $this->view->gridDojoType = $this->_xml->getAttribute('gridDojoType') ? $this->_xml->getAttribute('gridDojoType') : 'dojox.grid.EnhancedGrid';
+        $this->view->plugins = $this->_xml->getAttribute('plugins') ? $this->_xml->getAttribute('plugins') : "{pagination: {defaultPageSize:25, maxPageStep: 5 }}";
+        $this->view->onRowClick = $this->_xml->getAttribute('onRowClick') ? "onRowClick:{$this->_xml->getAttribute('onRowClick')}," : "";
+        $this->view->searchHideSubmit = $this->_xml->getAttribute('searchHideSubmit') === "true" ? true : false;
         $this->view->elements = $this->_xml->getElements('@visible="true"');
         
         $numElements = count($this->view->elements);

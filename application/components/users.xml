@@ -1,13 +1,22 @@
 <?xml version="1.0"?> 
-<!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
-<component name="Usuarios" type="Components_DojoSimpleCrudController" target="acl_users" list="true" edit="true" add="true" delete="true">
-   	<element name="ID" target="id" type="id_box" visible="false" edit="false" add="false"/>
-    <element name="Usuario" target="user_name" type="dojo_validation_textbox" visible="true" edit="false" add="true">
-        <search type="simple">Username</search>
-    </element>
-    <element name="Nombres" target="first_names" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>
-    <element name="Apellidos" target="last_names" type="dojo_validation_textbox" visible="true" edit="true" add="true"/>
-    <element name="E-Mail" target="email" reg_exp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}" invalid_message="mail no valido" type="dojo_validation_textbox" visible="true" edit="true" add="true" />
-	<element name="Perfil" target="acl_roles_id" default_value="" type="dojo_filtering_select" table="acl_roles" field="role_name" visible="true" edit="true" add="true"/>
-	<element name="Activo" target="approved" type="dojo_checkbox" formatter="formatYesNo" visible="true" edit="true" add="true"/>        
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="components.xsd" 
+name="Usuarios" type="dojo-simple-crud" target="AclUsersModel" list="true" edit="true" add="true" delete="true">
+    <elements>
+        <element name="ID" target="id" type="id-box" visible="false" edit="false" add="false"/>
+        <element name="Usuario" target="user_name" type="dijit-form-validation-text-box" visible="true" edit="false" add="true"/>
+        <element name="Nombres" target="first_names" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
+        <element name="Apellidos" target="last_names" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
+        <element name="E-Mail" target="email" regExp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}" invalidMessage="mail no valido" type="dijit-form-validation-text-box" visible="true" edit="true" add="true" />
+        <element name="Perfil" target="acl_roles_id" defaultValue="" type="dijit-form-filtering-select" table="AclRolesModel" field="role_name" visible="true" edit="true" add="true"/>
+        <element name="Activo" target="approved" type="dijit-form-check-box" formatter="formatYesNo" visible="true" edit="true" add="true"/>
+    </elements>
+    <searchers>
+        <group>
+            <element target="user_name"/>
+            <element target="first_names"/>
+            <element target="last_names"/>
+            <element target="email"/>
+        </group>
+        <element target="acl_roles_id" defaultText="Todo"/>
+    </searchers>
 </component>

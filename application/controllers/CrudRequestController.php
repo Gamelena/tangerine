@@ -309,15 +309,30 @@ class CrudRequestController extends Zend_Controller_Action
 
     public function multiUpdateAction()
     {
-        $classModel = $this->getRequest()->getParam('model');
+        $r = $this->getRequest();
+        $classModel = $r->getParam('model');
         $this->_model = new $classModel();
 
-
-        foreach ($this->_form->id as $i=>$v) {
-            $value = isset($this->_form->value[$i]) ? $this->_form->value[$i] : "";
-            $where = $this->_model->getAdapter()->quoteInto('id = ?', $v);
-            $data = array('value'=>$value);
-            $this->_model->update($data, $where);
+        $updated = 0;
+        $failed = 0;
+        $message = '';
+        
+        foreach ($r->getParam('data') as $i => $v) {
+            $i = str_replace("'", '', $i);
+            $where = $this->_model->getAdapter()->quoteInto('id = ?', $i);
+            $data = array('value' => $v);
+            if ($this->_model->update($data, $where)) $updated++;
         }
+        
+        $message .= "Actualizados $updated registros";
+        
+        
+        $data = array( 'id' => '0',
+                'state' => 0,
+                'message' => $message,
+                'todo' => '',
+                'more' => '');
+        
+        $this->view->content = Zend_Json::encode($data);
     }
 }
