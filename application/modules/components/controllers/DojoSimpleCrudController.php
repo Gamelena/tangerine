@@ -4,30 +4,48 @@
  * Tabla HTML, interfaz para operaciones CRUD
  *
  * Ejemplo:
- * <code>
- *  <section name="Detalles" type="dojo-simple-crud" target="SolicitudCdrModel"
- * excel="true" list="true"  edit="false" add="false" delete="false">
- *    <field name="ID" target="id_solicitud" type="id_box" visible="false"
- * edit="false" add="false"/>
- *    <field name="M&amp;oacute;vil" target="msisdn" type="dojo_validation_textbox"
- * trim="true" visible="true" edit="false" add="false"/>
- *    <field name="Fijo" target="fijo" type="dojo_validation_textbox" trim="true"
- * visible="true" edit="false" add="false"/>
- *    <field name="Fecha" target="fecha_ejecucion" trim="true" type="dojo_calendar"
- * constraints="{datePattern:'yyyy-MM-dd'}" visible="true" edit="false"
+ * <?xml version="1.0"?> 
+ * <component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ * xsi:noNamespaceSchemaLocation="components.xsd" 
+ * name="Usuarios" type="dojo-simple-crud" target="AclUsersModel" list="true"
+ * edit="true" add="true" delete="true">
+ * <elements>
+ * <element name="ID" target="id" type="id-box" visible="false" edit="false"
  * add="false"/>
- *    <field name="Intento" target="intento" type="dojo_validation_textbox"
- * trim="true" visible="true" edit="false" add="false"/>
- *    <field name="Resultado" target="desc_error" trim="true"
- * type="dojo_validation_textbox" visible="true" edit="false" add="false"/>
- *  </section>
- * </code>
+ * <element name="Usuario" target="user_name" type="dijit-form-validation-text-box"
+ * visible="true" edit="false" add="true"/>
+ * <element name="Nombres" target="first_names"
+ * type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
+ * <element name="Apellidos" target="last_names"
+ * type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
+ * <element name="E-Mail" target="email"
+ * regExp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}" invalidMessage="mail
+ * no valido" type="dijit-form-validation-text-box" visible="true" edit="true"
+ * add="true" />
+ * <element name="Perfil" target="acl_roles_id" defaultValue=""
+ * type="dijit-form-filtering-select" table="AclRolesModel" field="role_name"
+ * visible="true" edit="true" add="true"/>
+ * <element name="Activo" target="approved" type="dijit-form-check-box"
+ * formatter="formatYesNo" visible="true" edit="true" add="true"/>
+ * </elements>
+ * <searchers>
+ * <group>
+ * <element target="user_name"/>
+ * <element target="first_names"/>
+ * <element target="last_names"/>
+ * <element target="email"/>
+ * </group>
+ * <element target="acl_roles_id" defaultText="Todo"/>
+ * </searchers>
+ * </component>
  *
  * @category Zwei
  * @package Zwei_Admin
  * @subpackage Components
  * @version $Id:$
  * @since 0.1
+ *
+ *
  *
  */
 
@@ -37,15 +55,19 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     /**
      * @var Zwei_Admin_Xml
      *
+     *
+     *
      */
     private $_xml = null;
 
     /**
      * @var Zend_Config
      *
+     *
+     *
      */
     private $_config = null;
-    
+
     public function init()
     {
         $this->_helper->layout->disableLayout();
@@ -53,8 +75,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $configParams = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
         $this->_config = new Zend_Config($configParams);
         
-        $file = Zwei_Admin_Xml::getFullPath($this->getRequest()->getParam('p'));
-        $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+        if ($this->getRequest()->getParam('p')) {
+            $file = Zwei_Admin_Xml::getFullPath($this->getRequest()->getParam('p'));
+            $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+        }
         $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
         $this->view->domPrefix  = (isset($this->view->mainPane) && $this->view->mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($this->getRequest()->getParam('p')) : '';
     }
@@ -75,9 +99,15 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function editAction()
     {
-        // action body    }
+        $this->view->mode = 'edit';    
     }
-    
+
+    public function addAction()
+    {
+        $this->view->mode = 'add';
+        $this->render('edit');
+    }
+
     public function listAction()
     {
         $this->view->model = $this->_xml->getAttribute('target');
@@ -93,8 +123,16 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         for ($i = 1; $i < $numElements; $i++) {
             if (!$this->_xml->getElements()[$i]->getAttribute('width')) {
                 $this->_xml->getElements()[$i]->addAttribute('width', $widthCol);
-            } 
-        }
+            }
+        } 
+        
     }
+
+    public function keypadAction()
+    {
+        // action body
+    }
+
+
 }
 

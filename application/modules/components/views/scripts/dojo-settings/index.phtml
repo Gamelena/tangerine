@@ -12,17 +12,14 @@ foreach ($this->groups as $group) :
 <?php 
     $subgroups = $this->model->getSubGroups($group['group']);
     foreach ($subgroups as $sg) :
-        $sg['domPrefix'] = $this->domPrefix;
+        $sg['domId'] = $this->domPrefix.'_edit_';
         $sg['i'] = $i;
 ?>
             <div class="formSettingsItemContainer">
                 <div class="item">
                     <label class="formSearchItemLabel"><?php echo $sg['id'] ?></label>
 <?php 
-        if (!empty($sg['function'])&&class_exists($sg['function'])) {
-            $f = new $sg['function'];
-            $f->setId($i);
-        }
+        //if (!empty($sg['function'])&&class_exists($sg['function'])) {$f = new $sg['function'];$f->setId($i);}
         $sg['target'] = "data['{$sg['id']}']";
 ?>
                     <?php echo $this->action('index', $sg['type'], 'elements', $sg);?>
@@ -36,16 +33,9 @@ foreach ($this->groups as $group) :
         </div>
         <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
-            var iframe = dojo.byId('ifrm_process');
-
-            iframe.onload = function(){
-                dojo.require('dojo.json');
-                response = dojo.json.parse(dojo.byId('ifrm_process').contentDocument.body.innerHTML);
-                alert(response.message);
-                iframe.onload = null;
-            };
-
-            dojo.byId(this.id).submit();
+            dojo.require('zwei.crud.AdmPortal');
+            var crud = new zwei.crud.Form({dijitForm:this, iframe: dojo.byId('ifrm_process')});
+            crud.save();
             return false;
         } else {
             alert('Por favor favor corrija los campos marcados');

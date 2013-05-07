@@ -8,9 +8,9 @@
             <xsd:element name="searchers" type="searchersType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="forms" type="formsType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
-        <xsd:attribute name="target" use="required"/>
+        <xsd:attribute name="target" use="required" type="xsd:normalizedString"/>
         <xsd:attribute name="type" use="required" type="componentTypeType" />
-        <xsd:attribute name="name" />
+        <xsd:attribute name="name" type="xsd:normalizedString" />
         <xsd:attribute name="list" />
         <xsd:attribute name="edit" />
         <xsd:attribute name="add" />
@@ -86,6 +86,7 @@
         <xsd:attribute name="formatter"/>
         <xsd:attribute name="maxlength"/>
         <xsd:attribute name="width"/>
+        <xsd:attribute name="operator" type="operatorType"/>
     </xsd:complexType>
     <xsd:complexType name="elementType">
         <xsd:attribute name="target" use="required"/>
@@ -111,7 +112,21 @@
         <xsd:attribute name="formatter"/>
         <xsd:attribute name="maxlength"/>
         <xsd:attribute name="width"/>
+        <xsd:attribute name="operator" type="operatorType"/>
     </xsd:complexType>
+    <xsd:simpleType name="operatorType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="like"/>
+            <xsd:enumeration value="between"/>
+            <xsd:enumeration value="="/>
+            <xsd:enumeration value="!="/>
+            <xsd:enumeration value="&lt;&gt;"/>
+            <xsd:enumeration value="&gt;"/>
+            <xsd:enumeration value="&lt;"/>
+            <xsd:enumeration value="&gt;="/>
+            <xsd:enumeration value="&lt;="/>
+        </xsd:restriction>
+    </xsd:simpleType>
     <xsd:simpleType name="componentTypeType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="dojo-chart"/>

@@ -1,10 +1,13 @@
-<div dojoType="dijit.form.Form" target="ifrm_process" id="<?php echo $this->domPrefix?>tabForm<?php echo $this->mode?>" class="tabForm" jsId="<?php echo $this->domPrefix?>tabForm" name="<?php echo $this->domPrefix?>tabForm<?php echo $this->mode?>" encType="multipart/form-data"  action="<?php echo BASE_URL?>crud-request" method="post">
+<div dojoType="dijit.form.Form" target="ifrm_process" id="<?php echo $this->domPrefix?>form_<?php echo $this->mode?>" class="tabForm" jsId="<?php echo $this->domPrefix?>tabForm" name="<?php echo $this->domPrefix?>form_<?php echo $this->mode?>" encType="multipart/form-data"  action="<?php echo BASE_URL?>crud-request" method="post">
 <?php 
 $h = "style=\"background:#cccccc\"";
 $i = 0;
 $k = 1;
+$tableWrapperClass = '';
+$hidden = '';
 
 if (count($this->tabs) > 1) :
+    $tableWrapperClass = "settingsArea";
     foreach ($this->tabs as $tab) :
         $i++;
         if ($tab->getAttribute($this->mode) === "true") :
@@ -15,17 +18,37 @@ if (count($this->tabs) > 1) :
         endif;
     endforeach;
 endif;
-    
 ?>
-    <div class="brclear"></div><br />
+<?php
+$i=0; 
+foreach ($this->tabs as $tab) :
+    $i++;
+?>
+    <div id="<?php echo $this->domPrefix.'Tab_'.$mode.$i?>" class="<?php echo $tableWrapperClass ?>" <?php echo $hidden ?>>
+        <table>
+<?php 
+    foreach ($tab->children() as $element) :
+        $params = (array) $group->attributes();
+        $params = $params['@attributes'];
+        $params['domId'] =  $this->domPrefix . '_edit_';
+        $params['i'] = $i;
+?>
+            <tr>
+                <th><label for="<?php echo $element->getAttribute('target')?>"><?php echo $element->getAttribute('name')?></label></th>
+                <td><?php echo $this->action('index', $element->getAttribute('type'), 'elements', $params); ?></td>
+            </tr>
+<?php 
+    endforeach;
+?>
+        </table>
+    <div>
+<?php
+endforeach;
+?>
+    <div class="brclear"></div>
     <script type="dojo/method" event="onSubmit">
     if (this.validate()) {
-        try {
-            console.debug(arguments);
-            <?php echo $this->domPrefix?>modify('<?php echo $this->model ?>', arguments[0], '<?php echo $this->mode ?>', '<?php echo $this->primary ?>');
-        } catch (e) {
-            console.debug(e)    
-        }
+        var form = new zwei.crud.Form({iframe: 'ifrm_process', dijitForm:this});
         return false;
     } else {
         alert('Por favor corrija los campos marcados.');
@@ -33,5 +56,9 @@ endif;
     }
     return true;
     </script>
-    <button dojoType="dijit.form.Button" id="<?php echo $this->domPrefix?>tabs_btn_save<?php echo $this->mode?>" type="submit" value="Guardar"/>
-</div>
+    <button dojoType="dijit.form.Button" id="<?php echo $this->domPrefix?>tabs_btn_save<?php echo $this->mode?>" type="submit"/>Guardar</div>
+    <script type="text/javascript">
+    function <?php echo $this->domPrefix?>modify() {
+        
+    }
+    </script>

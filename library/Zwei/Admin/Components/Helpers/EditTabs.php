@@ -48,7 +48,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
       
         if ($Xml->getAttribute('js')) $out.="<script type=\"text/javascript\" src=\"".BASE_URL."js/".$Xml->getAttribute('js')."?version={$this->_version}\"></script>";
       
-        $out .= "<div dojoType=\"dijit.form.Form\" target=\"ifrm_process\" id=\"{$domPrefix}tabForm{$modeDom}\" class=\"tabForm$modeDom\" jsId=\"{$domPrefix}tabForm\" name=\"{$domPrefix}tabForm$modeDom\" encType=\"multipart/form-data\"  action=\"".BASE_URL."uploads?{$_SERVER['QUERY_STRING']}\" method=\"POST\" onsubmit=\"return false\">\r\n";
+        //$out .= "<div dojoType=\"dijit.form.Form\" target=\"ifrm_process\" id=\"{$domPrefix}tabForm{$modeDom}\" class=\"tabForm$modeDom\" jsId=\"{$domPrefix}tabForm\" name=\"{$domPrefix}tabForm$modeDom\" encType=\"multipart/form-data\"  action=\"".BASE_URL."uploads?{$_SERVER['QUERY_STRING']}\" method=\"POST\" onsubmit=\"return false\">\r\n";
       
         
         if (isset($form->{$primary})) $this->id = $form->{$primary};
@@ -64,12 +64,12 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
             $i++;
             $node_tab_mode = (string) $tab[$mode];
             if ($node_tab_mode == "true") {
-                $out .= "<a id=\"tab{$mode}_ctrl$i\" class=\"settings_tab\" $h onclick=\"showtab(this.id, '{$domPrefix}tab{$modeDom}{$i}')\">{$tab['name']}</a>";
+                //$out .= "<a id=\"tab{$mode}_ctrl$i\" class=\"settings_tab\" $h onclick=\"showtab(this.id, '{$domPrefix}tab{$modeDom}{$i}')\">{$tab['name']}</a>";
                 $h = '';
             }
 
         }
-        $out .= "<div class=\"brclear\"></div><br />\r\n";
+        //$out .= "<div class=\"brclear\"></div><br />\r\n";
         $hidden = '';
 
         $i=0;
@@ -157,7 +157,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
                      * Parámetro xml offset="$int", para seleccionar registro por registro
                      * en caso de que tenga que buscarlos en una tabla auxiliar 1:1. 
                      * Normalmente son unos cuantos registros con $int correlativo partiendo de 0
-                     * en teoría con una correcta normalización de tablas esto no sería necesario de usar.
+                     * con una correcta normalización de tablas este arreglo no sería necesario.
                      */
                     
                     if (isset($node['offset'])) {
@@ -249,6 +249,7 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
             $i++;
         }
         $id = isset($form->{$primary}) ? "'{$this->id[0]}'" : 'undefined';
+        /*
         $out.="
                 <script type=\"dojo/method\" event=\"onSubmit\">
                     if (this.validate()) {
@@ -270,8 +271,8 @@ class Zwei_Admin_Components_Helpers_EditTabs extends Zwei_Admin_Controller
         $out.="        <button dojoType=\"dijit.form.Button\" id=\"{$domPrefix}tabs_btn_save$modeDom\" type=\"submit\">
                                 Guardar
                             </button>";
-      
-        $out.="\r\n</div>\r\n";
+      */
+        //$out.="\r\n</div>\r\n";
 
                  
         return $out;

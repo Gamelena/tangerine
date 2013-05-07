@@ -152,6 +152,7 @@ class AdminController extends Zend_Controller_Action
         ->requireModule("dojox.widget.DialogSimple")
         ->requireModule("dojox.widget.Toaster")
         ->requireModule("zwei.form.ValidationTextarea")
+        ->requireModule("zwei.crud.Form")
         ;
     
         $this->view->headStyle()->appendStyle('

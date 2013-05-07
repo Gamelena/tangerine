@@ -16,6 +16,9 @@ if (count($this->groups) > 0) {
                 <label for="search" class="formSearchItemLabel"><?php echo $group->getAttribute('name') ?></label>
                 <?php echo $this->action('index', $group->getAttribute('type'), 'elements', $params); ?>
                 <input type="hidden" value="<?php echo $group->getAttribute('format') ?>" id="<?php echo $this->domPrefix . '_search_' . $i ?>_format" name="<?php echo $group->getAttribute('target') ?>_format" />
+                <input type="hidden" value="<?php echo $group->getAttribute('operator') ?>" id="<?php echo $this->domPrefix . '_search_' . $i ?>_operator" name="<?php echo $group->getAttribute('target') ?>_operator" />
+                <input type="hidden" value="<?php echo $group->getAttribute('sufix') ?>" id="<?php echo $this->domPrefix . '_search_' . $i ?>_sufix" name="<?php echo $group->getAttribute('target') ?>_sufix" />
+                <input type="hidden" value="<?php echo $group->getAttribute('prefix') ?>" id="<?php echo $this->domPrefix . '_search_' . $i ?>_prefix" name="<?php echo $group->getAttribute('target') ?>_prefix" />
             </div>
 <?php 
        $k = 0;
@@ -23,7 +26,7 @@ if (count($this->groups) > 0) {
 ?>
            <div class="formSearchSelectors">
 <?php
-           foreach ($group->children() as $j => $element) :
+           foreach ($group->children() as $element) :
                $eName = $element->getAttribute('name')
                ? $element->getAttribute('name')
                : $this->xml->getElements("@target='{$element->getAttribute('target')}'")[0]->getAttribute('name');
@@ -56,11 +59,12 @@ if (count($this->groups) > 0) {
 
     <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
-            try{
-                dojo.require('zwei.crud.AdmPortal');
-                var crud = new zwei.crud.AdmPortal();
-                crud.loadData(dijit.byId(this.id));
-            }catch(e){alert(e.message)}
+            try {
+                var crud = new zwei.crud.Form({dijitForm: this});
+                crud.loadData();
+            } catch(e) {
+                alert(e.message)
+            }
             return false;
         } else {
             alert('Por favor corrija los campos marcados.');

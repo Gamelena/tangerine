@@ -71,39 +71,50 @@ class Zwei_Db_Object
         
         if (isset($this->_form->search) && !$oModel->isFiltered()) {
             $search = $this->_form->search;
-            $allowedOperators = array('LIKE', '=', '<>', '<', '>', '<=', '>=', '<>', '!=', 'BETWEEN');
+            $allowedOperators = array('like',  'between', '=', '!=', '<>', '<', '>', '<=', '>=');
 
             foreach ($search as $i => $s) {
                 $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
-                if (isset($s['operator'])) {
-                    $op = in_array($s['operator'], $allowedOperators) ? $s['operator'] : 'LIKE';
-                } else {
-                    $op = 'LIKE';
-                    $sufix = '%';
-                    $prefix = '%';
-                }
                 
-                /**
-                 * BETWEEN se aplica sobre un campo único, la diferencia en los valores las hacen los sufijos y prefijos concatenados al valor del campo
-                 * @example " BETWEEN $fecha 00:00:00 AND $fecha 23:59:59 ", 
-                 * la unica razón del soporte de BETWEEN es poder sacar un rango de valores o intérvalo 
-                 * a partir de un campo único + sufijos y prefijos.
-                 * 
-                 * NO se puede usar BETWEEN entre campos diferentes, para esto deben usarse los operadores <, >, <=, >= que hacen lo mismo.
-                 */
-                if ($op == 'BETWEEN') {
-                    $sufix0 = isset($s['sufix'][0]) ? $s['sufix'][0] : '';
-                    $prefix0 = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
-                    $sufix1 = isset($s['sufix'][1]) ? $s['sufix'][1] : '';
-                    $prefix1 = isset($s['prefix'][1]) ? $s['prefix'][1] : '';
+                if (!empty($s['value']) || $s['value'] === '0') {
+                    if (isset($s['operator'])) {
+                        $op = in_array($s['operator'], $allowedOperators) ? $s['operator'] : 'like';
+                    } else {
+                        $op = 'like';
+                        $sufix = '%';
+                        $prefix = '%';
+                    }
                     
-                    $oSelect->where($oModel->getAdapter()->quoteInto("$field >= ?", "{$prefix0}{$s['value']}{$sufix0}%"));
-                    $oSelect->where($oModel->getAdapter()->quoteInto("$field <= ?", "{$prefix1}{$s['value']}{$sufix1}%"));
-                } else {
                     $sufix = isset($s['sufix']) ? $s['sufix'] : '';
                     $prefix = isset($s['prefix']) ? $s['prefix'] : '';
                     
-                    $oSelect->where($oModel->getAdapter()->quoteInto("$field $op ?", "{$prefix}{$s['value']}{$sufix}%"));
+                    /**
+                     * BETWEEN se aplica sobre un campo único, la diferencia en los valores las hacen los sufijos y prefijos concatenados al valor del campo
+                     * La razón del soporte de BETWEEN es poder usar un CAMPO ÚNICO + sufijos y prefijos.
+                     * 
+                     * NO se puede usar BETWEEN entre campos diferentes, para esto deben usarse los operadores <, >, <=, >= que hacen lo mismo con la misma performance.
+                     * 
+                     * @example 
+                     * "BETWEEN $fecha 00:00:00 AND $fecha 23:59:59 ", 
+                     * <group operator="between">
+                     *     <element target="fecha" sufix=" 00:00:00"/>
+                     *     <element target="fecha" sufix=" 23:59:59"/>
+                     * </group>
+                     */
+                    if ($op == 'between') {
+                        $sufix0 = isset($s['sufix'][0]) ? $s['sufix'][0] : '';
+                        $prefix0 = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
+                        $sufix1 = isset($s['sufix'][1]) ? $s['sufix'][1] : '';
+                        $prefix1 = isset($s['prefix'][1]) ? $s['prefix'][1] : '';
+                        
+                        $oSelect->where($oModel->getAdapter()->quoteInto("$field >= ?", "{$prefix0}{$s['value']}{$sufix0}"));
+                        $oSelect->where($oModel->getAdapter()->quoteInto("$field <= ?", "{$prefix1}{$s['value']}{$sufix1}"));
+                    } else {
+                        $sufix = isset($s['sufix']) ? $s['sufix'] : '';
+                        $prefix = isset($s['prefix']) ? $s['prefix'] : '';
+                        
+                        $oSelect->where($oModel->getAdapter()->quoteInto("$field $op ?", "{$prefix}{$s['value']}{$sufix}"));
+                    }
                 }
             }
         }

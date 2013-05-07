@@ -118,7 +118,7 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
                     
                     $elements[] = $this->searchers->group[$i];
                 }
-            } 
+            }
             
             if ($this->xpath('//component/searchers/element'.$xpath)) {
                 for ($i = 0; $i < $this->searchers->element->count(); $i++) {
