@@ -163,6 +163,7 @@ class AdminController extends Zend_Controller_Action
             @import "'.$this->baseDojoFolder.'/dojox/form/resources/CheckedMultiSelect.css";
             @import "'.$this->baseDojoFolder.'/dojox/layout/resources/ExpandoPane.css";
             @import "'.$this->baseDojoFolder.'/dojox/form/resources/FileInput.css";
+            @import "'.$this->baseDojoFolder.'/dojox/widget/Toaster/Toaster.css";
             @import "'.BASE_URL.'css/admin.css?version='.$this->_version.'";
         ');
     }

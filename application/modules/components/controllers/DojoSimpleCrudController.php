@@ -93,18 +93,25 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->model = $this->_xml->getAttribute('target');
         $this->view->xml = $this->_xml;
-        $this->view->elements = $this->_xml->getElements();
+       // $this->view->elements = $this->_xml->getElements();
         $this->view->groups = $this->_xml->getSearchers(true);
     }
 
+    public function initForm($mode){
+        $this->view->xml = $this->_xml;
+        $this->view->mode = $mode;
+        $this->view->tabs = $this->_xml->getTabs(true, "@$mode='true'");
+        $this->view->mode = 'add';
+    }
+    
     public function editAction()
     {
-        $this->view->mode = 'edit';    
+        $this->initForm('edit');
     }
 
     public function addAction()
     {
-        $this->view->mode = 'add';
+        $this->initForm('add');
         $this->render('edit');
     }
 
@@ -116,11 +123,12 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->plugins = $this->_xml->getAttribute('plugins') ? $this->_xml->getAttribute('plugins') : "{pagination: {defaultPageSize:25, maxPageStep: 5 }}";
         $this->view->onRowClick = $this->_xml->getAttribute('onRowClick') ? "onRowClick:{$this->_xml->getAttribute('onRowClick')}," : "";
         $this->view->searchHideSubmit = $this->_xml->getAttribute('searchHideSubmit') === "true" ? true : false;
-        $this->view->elements = $this->_xml->getElements('@visible="true"');
+        $this->view->elements = $this->_xml->getElements("@visible='true'");
         
         $numElements = count($this->view->elements);
-        $widthCol = (100/$numElements)."%";
+        $widthCol = round((100/$numElements), 1) . "%";//Se le asigna a cada columna de la grilla un ancho proporcional a su cantidad en porcentaje
         for ($i = 1; $i < $numElements; $i++) {
+            //Para cada columna se permite sobreescribir el ancho asignado por defecto, se sugiere trabajar con porcentajes
             if (!$this->_xml->getElements()[$i]->getAttribute('width')) {
                 $this->_xml->getElements()[$i]->addAttribute('width', $widthCol);
             }

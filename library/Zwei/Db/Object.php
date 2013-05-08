@@ -75,18 +75,23 @@ class Zwei_Db_Object
 
             foreach ($search as $i => $s) {
                 $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
+                $op = 'like';
+                $sufix = '%';
+                $prefix = '%';
                 
                 if (!empty($s['value']) || $s['value'] === '0') {
-                    if (isset($s['operator'])) {
-                        $op = in_array($s['operator'], $allowedOperators) ? $s['operator'] : 'like';
+                    if (!empty($s['operator'])) {
+                        if (in_array($s['operator'], $allowedOperators)) {
+                            Debug::write('FUU');
+                            $op = $s['operator'];
+                            $sufix = $s['sufix'];
+                            $prefix = $s['prefix'];
+                        }
                     } else {
-                        $op = 'like';
-                        $sufix = '%';
-                        $prefix = '%';
+                        if (!empty($s['sufix'])) $sufix = $s['sufix'];
+                        if (!empty($s['prefix'])) $sufix = $s['prefix'];
                     }
                     
-                    $sufix = isset($s['sufix']) ? $s['sufix'] : '';
-                    $prefix = isset($s['prefix']) ? $s['prefix'] : '';
                     
                     /**
                      * BETWEEN se aplica sobre un campo único, la diferencia en los valores las hacen los sufijos y prefijos concatenados al valor del campo
@@ -110,9 +115,6 @@ class Zwei_Db_Object
                         $oSelect->where($oModel->getAdapter()->quoteInto("$field >= ?", "{$prefix0}{$s['value']}{$sufix0}"));
                         $oSelect->where($oModel->getAdapter()->quoteInto("$field <= ?", "{$prefix1}{$s['value']}{$sufix1}"));
                     } else {
-                        $sufix = isset($s['sufix']) ? $s['sufix'] : '';
-                        $prefix = isset($s['prefix']) ? $s['prefix'] : '';
-                        
                         $oSelect->where($oModel->getAdapter()->quoteInto("$field $op ?", "{$prefix}{$s['value']}{$sufix}"));
                     }
                 }
@@ -126,7 +128,7 @@ class Zwei_Db_Object
             } 
             
             foreach ($groups as $g) {
-                $g = preg_replace('/[^(\x20-\x7F)]*/', '', $g);
+                $g = preg_replace('/[^(\x20-\x7F)]*/', '', $g);//Truco para eliminar caracteres no texto
                 $oSelect->group($g);
             }
 

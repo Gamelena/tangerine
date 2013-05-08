@@ -26,6 +26,7 @@ if (count($this->groups) > 0) {
 ?>
            <div class="formSearchSelectors">
 <?php
+           
            foreach ($group->children() as $element) :
                $eName = $element->getAttribute('name')
                ? $element->getAttribute('name')

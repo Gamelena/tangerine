@@ -43,21 +43,12 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
     }
     
     
-    public function getTabs($xpath = null)
-    {
-        $elements = false;
-        if ($this->existsChildren('tabs')) {
-            for ($i = 0; $i < $this->tabs->element->count(); $i++) {
-                $elements[] = $this->tabs->element[$i];
-            }
-        }
-        return $elements;
-    }
-    
     /**
      * 
      * @param string $xpath
-     * @return array:
+     * @param string $root
+     * @param string $toXml
+     * @return Ambigous <multitype:, Zwei_Admin_Xml, SimpleXMLElement>
      */
     public function getElements($xpath = null, $root = '/elements', $toXml = false)
     {
@@ -69,6 +60,29 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
         return $elements;
     }
     
+    
+    /**
+     * 
+     * @param boolean $inherit
+     * @param string $xpath
+     * @return array(SimpleXMLElement)
+     */
+    public function getTabs($inherits = false, $xpath = null)
+    {
+        $elements = array();
+        if ($xpath != null) $xpath = "[$xpath]";
+        
+        if ($this->xpath('//component/forms/tabs/tab'.$xpath)) {
+            for ($i = 0; $i < $this->forms->tabs->tab->count(); $i++) {
+                if ($inherits) $this->inheritAttributes($this->forms->tabs->tab[$i]);
+                $elements[] = $this->forms->tabs->tab[$i];
+            }
+        } else {
+            Debug::write('//component/elements/element'.$xpath);
+            $elements = array($this->elements[0]->xpath('//component/elements/element'.$xpath));
+        }
+        return $elements;
+    }
     /**
      * 
      * @param array $array
@@ -92,17 +106,16 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
             if ($override || !$son->getAttribute($key)) 
                 $son->addAttribute($key, $value);
         }
-    
-
         return $son;
     }
     
     /**
      * 
-     * @param $inheritFromElements boolean
-     * @return array|false
+     * @param boolean $inherit
+     * @param string $xpath
+     * @return array(SimpleXMLElement)
      */
-    public function getSearchers($inherit = false, $xpath = null)
+    public function getSearchers($inherits = false, $xpath = null)
     {
         $elements = array();
         if ($xpath != null) $xpath = "[$xpath]";
@@ -122,10 +135,7 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
             
             if ($this->xpath('//component/searchers/element'.$xpath)) {
                 for ($i = 0; $i < $this->searchers->element->count(); $i++) {
-                    
-                    $this->inheritAttributes($this->searchers->element[$i]);
-                        
-           
+                    if ($inherits) $this->inheritAttributes($this->searchers->element[$i]);
                     $elements[] = $this->searchers->element[$i];
                 }
             }

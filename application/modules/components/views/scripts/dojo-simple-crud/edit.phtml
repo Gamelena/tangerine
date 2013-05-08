@@ -5,7 +5,7 @@ $i = 0;
 $k = 1;
 $tableWrapperClass = '';
 $hidden = '';
-
+Debug::write($this->tabs);
 if (count($this->tabs) > 1) :
     $tableWrapperClass = "settingsArea";
     foreach ($this->tabs as $tab) :
@@ -20,21 +20,24 @@ if (count($this->tabs) > 1) :
 endif;
 ?>
 <?php
-$i=0; 
+$i=0;
+
 foreach ($this->tabs as $tab) :
     $i++;
 ?>
-    <div id="<?php echo $this->domPrefix.'Tab_'.$mode.$i?>" class="<?php echo $tableWrapperClass ?>" <?php echo $hidden ?>>
+    <div id="<?php echo $this->domPrefix.'Tab_'.$this->mode.$i?>" class="<?php echo $tableWrapperClass ?>" <?php echo $hidden ?>>
         <table>
 <?php 
-    foreach ($tab->children() as $element) :
-        $params = (array) $group->attributes();
+    $j=0;
+    foreach ($tab as $element) :
+        $j++;
+        $params = (array) $element->attributes();
         $params = $params['@attributes'];
-        $params['domId'] =  $this->domPrefix . '_edit_';
-        $params['i'] = $i;
+        $params['domId'] =  $this->domPrefix . "_{$this->mode}_";
+        $params['i'] = $j;
 ?>
             <tr>
-                <th><label for="<?php echo $element->getAttribute('target')?>"><?php echo $element->getAttribute('name')?></label></th>
+                <th><label for="<?php echo $element->getAttribute('target')?>"><?php echo $element->getAttribute('name') ?></label></th>
                 <td><?php echo $this->action('index', $element->getAttribute('type'), 'elements', $params); ?></td>
             </tr>
 <?php 
