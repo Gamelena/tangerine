@@ -33,9 +33,8 @@ foreach ($this->groups as $group) :
         </div>
         <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
-            dojo.require('zwei.crud.AdmPortal');
-            var crud = new zwei.crud.Form({dijitForm:this, iframe: dojo.byId('ifrm_process')});
-            crud.save();
+            var form = new zwei.Form({dijitForm:this, iframe: dojo.byId('ifrm_process')});
+            form.save();
             return false;
         } else {
             alert('Por favor favor corrija los campos marcados');

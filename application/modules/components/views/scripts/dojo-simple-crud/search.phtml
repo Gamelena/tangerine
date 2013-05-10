@@ -54,15 +54,14 @@ if (count($this->groups) > 0) {
         <input type="hidden" name="model" value="<?php echo $this->model ?>" />
         <input type="hidden" name="format" value="json" />
         <input type="hidden" name="storeType" value="query" />
-        <input type="hidden" name="storeGrid" value="<?php echo $this->domPrefix ?>mainGrid" />
         <button type="submit" class="submit" dojoType="dijit.form.Button" iconClass="dijitIconSearch" id="<?=$this->domPrefix?>btnBuscar">Buscar</button>
     </div>
 
     <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
             try {
-                var crud = new zwei.crud.Form({dijitForm: this});
-                crud.loadData();
+                var form = new zwei.Form({dijitFormSearch: this, dijitDataGrid: dijit.byId('<?php echo $this->domPrefix ?>dataGrid')});
+                form.loadData();
             } catch(e) {
                 alert(e.message)
             }

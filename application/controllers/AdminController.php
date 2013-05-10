@@ -152,7 +152,8 @@ class AdminController extends Zend_Controller_Action
         ->requireModule("dojox.widget.DialogSimple")
         ->requireModule("dojox.widget.Toaster")
         ->requireModule("zwei.form.ValidationTextarea")
-        ->requireModule("zwei.crud.Form")
+        ->requireModule("zwei.Form")
+        ->requireModule("zwei.Utils")
         ;
     
         $this->view->headStyle()->appendStyle('
@@ -370,8 +371,3 @@ class AdminController extends Zend_Controller_Action
         return $loginForm;
     }
 }
-
-
-
-
-

@@ -24,7 +24,7 @@ class CrudRequestController extends Zend_Controller_Action
     private $_form;
     /**
      * Arreglo que será parte de la respuesta en json, Dojo data store, u otro formato a definir.
-     * @var array()
+     * @var array
      */
     private $_response_content=array();
     
@@ -39,7 +39,7 @@ class CrudRequestController extends Zend_Controller_Action
         $this->_form = new Zwei_Utils_Form();
         if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
-        } else if ($this->_form->format == 'json') {
+        } else if (isset($this->_form->format) && $this->_form->format == 'json') {
             $this->_helper->ContextSwitch
             ->setAutoJsonSerialization(false)
             ->addActionContext('index', 'json')
@@ -47,7 +47,7 @@ class CrudRequestController extends Zend_Controller_Action
             $data = array( 'id'=>'0',
                                'state'=>'AUTH_FAILED',
                                'message'=>'Su sesión a expirado, por favor vuelva a ingresar.',
-                               'todo'=>'goToLogin');//declarar dojo.admin.js y llamarla en TableDojo
+                               'todo'=>'goToLogin');
             $this->view->content = Zend_Json::encode($data);
             $this->render('index'); 
         } else {
@@ -70,7 +70,7 @@ class CrudRequestController extends Zend_Controller_Action
          * [TODO] Validar segun perfil de usuario autorizado a obtener estos datos
          */
         
-        if ($this->_form->format == 'json') {
+        if (isset($this->_form->format) && $this->_form->format == 'json') {
             $this->_helper->ContextSwitch
             ->setAutoJsonSerialization(false)
             ->addActionContext('index', 'json')
@@ -88,14 +88,12 @@ class CrudRequestController extends Zend_Controller_Action
              * @var Zwei_Db_Table
              */    
             $this->_model = new $classModel();
+            $a = $this->_model->getAdapter();
             $this->view->collection = array();
             
             if (isset($this->_form->action) && Zwei_Admin_Auth::getInstance()->hasIdentity()) {
                 $data = array();
-                $this->_model->getAdapter()->getProfiler()->setEnabled(true);
-                $id = $this->_model->getPrimary();
-
-                if ($id === false) $id = "id";
+                $where = array();
                 
                 if ($this->_form->action == 'add') {
                      
@@ -116,55 +114,32 @@ class CrudRequestController extends Zend_Controller_Action
                     }
                     
                 } elseif ($this->_form->action == 'delete') {
-                     
-                    if (!empty($this->_form->$id) || $this->_form->$id === "0") {
-                        $where = $this->_model->getAdapter()->quoteInto("$id = ?", $this->_form->$id);
-                        $response = $this->_model->delete($where);
-                        if ($response) {
-                            $this->_response_content['state'] = 'DELETE_OK';
-                        } else {
-                            $this->_response_content['state'] = 'DELETE_FAIL';
-                        }
+                    foreach ($this->_form->primary as $i => $v) {
+                        $where[] = $a->quoteInto($a->quoteIdentifier($i)." = ?", $v);
+                    }
+                    if (count($where) == 1) $where = $where[0];
+                    
+                    $response = $this->_model->delete($where);
+                    if ($response) {
+                        $this->_response_content['state'] = 'DELETE_OK';
                     } else {
                         $this->_response_content['state'] = 'DELETE_FAIL';
                     }
                     //Zwei_Utils_Debug::write($response);
                 } else if ($this->_form->action == 'edit') {
+                    foreach ($this->_form->primary as $i => $v) {
+                        $where[] = $a->quoteInto($a->quoteIdentifier($i)." = ?", $v);
+                    }
+                    if (count($where) == 1) $where = $where[0];
+                    
                     
                     foreach ($this->_form->data as $i=>$v) {
-                        if ($i == $id) { // si es pk, tratar como pk
-                            $this->_form->$id = $v;
-                        } 
                         $data[$i] = $v;
-                        
                     }
-                    
-                    //en caso de tener multiples PK [FIXME] capturar nombres de campos para que funcione
-                    if (isset($this->_form->id)) {
-                        if (is_array($this->_form->id)) {
-                           $where = array();    
-                           foreach ($this->_form->id as $i => $v) {
-                                $where[] = $this->_model->getAdapter()->quoteInto("$id = ?", $v);
-                           }
-                        } else {
-                           $where = $this->_model->getAdapter()->quoteInto("id = ?", $this->_form->$id);
-                        }   
-                    } else {
-                       if (is_array($this->_form->$id)) {
-                           $where = array();    
-                           foreach ($this->_form->$id as $i => $v) {
-                                $where[] = $this->_model->getAdapter()->quoteInto("$id = ?", $v);
-                           }
-                       } else {
-                           $where = $this->_model->getAdapter()->quoteInto("$id = ?", $this->_form->$id);
-                       } 
-                    }
-                    
                     
                     try {
                         $response = $this->_model->update($data, $where);
                         if ($response) {
-                            Debug::write($response);
                             $this->_response_content['state'] = 'UPDATE_OK';
                         } else {
                             $this->_response_content['state'] = 'UPDATE_FAIL';
@@ -177,8 +152,11 @@ class CrudRequestController extends Zend_Controller_Action
                 }
                 $this->_response_content['todo'] = $this->_model->getAjaxTodo();
                 $this->_response_content['more'] = $this->_model->getMore();
-
-            }//if (isset($this->_form->action))
+                
+                
+            } else {
+                //[TODO] validar permisos para listar
+            }
 
             $oDbObject = new Zwei_Db_Object($this->_form);
             $oSelect = $oDbObject->select();
@@ -303,8 +281,7 @@ class CrudRequestController extends Zend_Controller_Action
             }
             $this->view->content = $content;
 
-        }//if (class_exists($ClassModel))
-
+        }
     }//public function indexAction()
 
     public function multiUpdateAction()
