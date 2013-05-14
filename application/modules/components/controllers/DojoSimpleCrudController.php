@@ -105,18 +105,46 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     }
 
     public function initForm($mode){
+
+        $r = $this->getRequest();
         $this->view->p = $this->_component;
         $this->view->xml = $this->_xml;
         $this->view->mode = $mode;
+
+        $this->view->onPostSubmit = $this->_xml->xpath('//forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
+        $this->view->onSubmit = $this->_xml->xpath('//forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
+
         $className = $this->_xml->getAttribute('target');
         $this->view->model = $className;
         $this->_model = new $className();
         $this->view->modelPrimary = $this->_model->info('primary');
         $this->view->tabs = $this->_xml->getTabs(true, "@$mode='true'");
+        
+        if ($mode == 'edit' && $this->view->ajax) {
+            $a = $this->_model->getAdapter();
+            
+            $select = $this->_model->select();
+            $primaries = $r->getParam('primary');
+
+            /**
+             * Evaluar: esto podría ser mas seguro pero menos flexible usando "foreach($this->_model->info(Zend_Db_Table::PRIMARY) as $i)"
+             * en lugar de "foreach($r->getParam('primary') as $i => $v)"
+             */
+            foreach ($r->getParam('primary') as $i => $v) { 
+                if (in_array($i, $this->_model->info(Zend_Db_Table::COLS))) $i = $this->_model->info(Zend_Db_Table::NAME) . ".$i";
+                $select->where($a->quoteInto($a->quoteIdentifier($i). " = ?", $v));
+            }
+            Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
+            $this->view->data = $this->_model->fetchRow($select)->toArray();
+        }
+        
     }
     
     public function editAction()
     {
+        $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
+        if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
+        $this->view->ajax = $ajax === 'true' ? true : false;
         $this->initForm('edit');
     }
 
@@ -134,18 +162,28 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->gridDojoType = $this->_xml->getAttribute('gridDojoType') ? $this->_xml->getAttribute('gridDojoType') : 'dojox.grid.EnhancedGrid';
         $this->view->plugins = $this->_xml->getAttribute('plugins') ? $this->_xml->getAttribute('plugins') : "{pagination: {defaultPageSize:25, maxPageStep: 5 }}";
         $this->view->onRowClick = $this->_xml->getAttribute('onRowClick') ? "onRowClick:{$this->_xml->getAttribute('onRowClick')}," : "";
+        $this->view->searchHideSubmit = $this->_xml->getAttribute('searchHideSubmit') === "true" ? true : false;
+        $this->view->elements = $this->_xml->getElements("@visible='true'");
+        $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
+        if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
+        
         $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick') 
             ? $this->_xml->getAttribute('onRowDblClick') : 
                 $this->_acl->isUserAllowed($this->_component, 'EDIT') ? 
-                    "var form = new zwei.Form({dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')}); form.showDialog()" : "";
-        
-        $this->view->searchHideSubmit = $this->_xml->getAttribute('searchHideSubmit') === "true" ? true : false;
-        $this->view->elements = $this->_xml->getElements("@visible='true'");
+                    "var form = new zwei.Form({
+                        ajax: $ajax,
+                        component: '{$this->_component}',
+                        action: 'edit',
+                        dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
+                        dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
+                        dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
+                    }); 
+                    form.showDialog()" : "";
         
         $numElements = count($this->view->elements);
-        $widthCol = round((100/$numElements), 1) . "%";//Se le asigna a cada columna de la grilla un ancho proporcional a su cantidad en porcentaje
+        $widthCol = round((100/$numElements), 1) . "%";//Se le asigna a cada columna de la grilla un ancho proporcional a su cantidad en porcentaje.
         for ($i = 1; $i < $numElements; $i++) {
-            //Para cada columna se permite sobreescribir el ancho asignado por defecto, se sugiere trabajar con porcentajes
+            //Para cada columna se permite sobreescribir el ancho asignado por defecto, se sugiere trabajar con porcentajes para aprovechar toda la pantalla.
             if (!$this->_xml->getElements()[$i]->getAttribute('width')) {
                 $this->_xml->getElements()[$i]->addAttribute('width', $widthCol);
             }

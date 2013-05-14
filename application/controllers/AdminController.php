@@ -154,6 +154,7 @@ class AdminController extends Zend_Controller_Action
         ->requireModule("zwei.form.ValidationTextarea")
         ->requireModule("zwei.Form")
         ->requireModule("zwei.Utils")
+        ->requireModule("zwei.Menu")
         ;
     
         $this->view->headStyle()->appendStyle('

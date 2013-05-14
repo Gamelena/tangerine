@@ -4,9 +4,9 @@
     </xsd:element>
     <xsd:complexType name="componentType">
         <xsd:sequence>
-            <xsd:element name="elements" type="elementsType" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="searchers" type="searchersType" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="forms" type="formsType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="elements" type="elementsType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="searchers" type="searchersType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="forms" type="formsType" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
         <xsd:attribute name="target" use="required" type="xsd:normalizedString"/>
         <xsd:attribute name="type" use="required" type="componentTypeType" />
@@ -45,6 +45,8 @@
         <xsd:choice minOccurs="1" maxOccurs="unbounded">
             <xsd:element name="edit" type="formType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="add" type="formType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="onPostSubmit" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="onSubmit" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="tabs" type="tabsType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:choice>
         <xsd:attribute name="ajax" />
@@ -112,6 +114,7 @@
         <xsd:attribute name="formatter"/>
         <xsd:attribute name="maxlength"/>
         <xsd:attribute name="width"/>
+        <xsd:attribute name="checked"/>
         <xsd:attribute name="operator" type="operatorType"/>
     </xsd:complexType>
     <xsd:simpleType name="operatorType">

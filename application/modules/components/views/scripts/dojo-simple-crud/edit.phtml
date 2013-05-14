@@ -5,11 +5,12 @@ $i = 0;
 $k = 1;
 $tableWrapperClass = '';
 $hidden = '';
+
 if (count($this->tabs) > 1) :
     $tableWrapperClass = "settingsArea";
     foreach ($this->tabs as $tab) :
         $i++;
-        if ($tab->getAttribute($this->mode) === "true") :
+        if ($tab->getAttribute($this->mode) === 'true') :
 ?>
         <a id="tab<?php echo $this->mode ?>_ctrl<?php echo $i?>" class="settings_tab" <?php echo $h ?> onclick="showtab(this.id, '<?php echo $this->domPrefix?>tab<?php echo $this->mode.$i?>')"><?php echo $tab->getAttribute('name') ?></a>
 <?php 
@@ -34,6 +35,9 @@ foreach ($this->tabs as $tab) :
         $params = $params['@attributes'];
         $params['domId'] =  $this->domPrefix . "_{$this->mode}_";
         $params['i'] = $j;
+        
+        if (isset($this->data[$params['target']])) $params['value'] = $this->data[$params['target']];
+        
         $params['target'] = "data[{$params['target']}]";
 ?>
             <tr>
@@ -55,7 +59,6 @@ endforeach;
     <input type="hidden" name="p" value="<?php echo $this->p ?>" nosave="true" />
 <?php 
 if ($this->mode == 'edit') :
-    Debug::write($this->modelPrimary);
     foreach ($this->modelPrimary as $p) :
 ?>
     <input type="hidden" name="primary[<?php echo $p?>]" value="" nosave="true" />
@@ -73,11 +76,19 @@ endif;
                 dijitFormSearch: dijit.byId('<?php echo $this->domPrefix?>formSearch'),
                 iframe: dojo.byId('ifrm_process')
             });
+            <?php echo $this->onSubmit ?>
+            
+            var observer = form.watch("response", function(name, oldValue, response){
+                if (response != null) {
+                    <?php echo $this->onPostSubmit ?>
+                    this.set("response", null);
+                }
+            });
             form.save();
         } catch (e) {
+            console.debug(e);
             alert(e.message);
         }
-        
         return false;
     } else {
         alert('Por favor corrija los campos marcados.');

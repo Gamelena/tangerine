@@ -1,2 +1,3 @@
 <?xml version="1.0"?>
-<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="components.xsd" name="Configuraci&amp;oacute;n" type="dojo-settings" target="SettingsModel" />
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="components.xsd" 
+name="Configuraci&amp;oacute;n" type="dojo-settings" target="SettingsModel" />

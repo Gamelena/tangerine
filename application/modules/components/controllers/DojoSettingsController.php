@@ -36,8 +36,5 @@ class Components_DojoSettingsController extends Zend_Controller_Action
         $this->view->model = $this->_model;
         $this->view->groups = $this->_model->loadGroups();
     }
-    
-    
-
 }
 
