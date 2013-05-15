@@ -31,16 +31,18 @@ foreach ($this->tabs as $tab) :
     $j=0;
     foreach ($tab as $element) :
         $j++;
+        $hidden;
         $params = (array) $element->attributes();
         $params = $params['@attributes'];
         $params['domId'] =  $this->domPrefix . "_{$this->mode}_";
         $params['i'] = $j;
+        if ($params['type'] == 'hidden') $hidden = ' style="display:none"';
         
         if (isset($this->data[$params['target']])) $params['value'] = $this->data[$params['target']];
         
         $params['target'] = "data[{$params['target']}]";
 ?>
-            <tr>
+            <tr<?php echo $hidden?>>
                 <th><label for="<?php echo $element->getAttribute('target')?>"><?php echo $element->getAttribute('name') ?></label></th>
                 <td><?php echo $this->action('index', $element->getAttribute('type'), 'elements', $params); ?></td>
             </tr>

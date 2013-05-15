@@ -1,8 +1,6 @@
 <?php
-
 class Elements_TinyMceController extends Zend_Controller_Action
 {
-
     public function init()
     {
         /* Initialize action controller here */
@@ -10,9 +8,12 @@ class Elements_TinyMceController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        // action body
+        $r = $this->getRequest();
+        $this->view->i =  $r->getParam('i');
+        $this->view->domId =  $r->getParam('domId');
+        $this->view->target =  $r->getParam('target');
+        
+        $this->view->value =  $r->getParam('value', '');
     }
-
-
 }
 

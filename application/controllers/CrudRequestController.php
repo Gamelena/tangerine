@@ -150,6 +150,12 @@ class CrudRequestController extends Zend_Controller_Action
                     }
                     //Zwei_Utils_Debug::write($response);
                 }
+                
+                foreach ($_FILES as $i => $v) {
+                    $this->_form->upload($i, ROOT_DIR . '/upfiles');
+                }
+                
+                
                 $this->_response_content['todo'] = $this->_model->getAjaxTodo();
                 $this->_response_content['more'] = $this->_model->getMore();
                 

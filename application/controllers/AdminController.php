@@ -155,6 +155,7 @@ class AdminController extends Zend_Controller_Action
         ->requireModule("zwei.Form")
         ->requireModule("zwei.Utils")
         ->requireModule("zwei.Menu")
+        ->requireModule("zwei.Admportal")
         ;
     
         $this->view->headStyle()->appendStyle('

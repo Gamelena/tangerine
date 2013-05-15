@@ -27,27 +27,26 @@ class Zwei_Utils_Form {
         if ($array) {
             foreach ($array as $k=>$v) {
                 if (is_array($v)) {
-                    $temp=array();
-                    foreach($v as $k1=>$v1)$temp[$k1]=$this->encode($v1);
-                    $this->$k=$temp;
-                } else $this->$k=$this->encode($v);
-            }          
-            
+                    $temp = array();
+                    foreach ($v as $k1 => $v1) $temp[$k1] = $this->encode($v1);
+                    $this->$k = $temp;
+                } else $this->$k = $this->encode($v);
+            }
         } else {
-           foreach ($_GET as $k=>$v) {
-               if (is_array($v)) {
-                   $temp=array();
-                   foreach($v as $k1=>$v1)$temp[$k1]=$this->encode($v1);
-                   $this->$k=$temp;
-               } else $this->$k=$this->encode($v);
-           }
-           foreach ($_POST as $k=>$v) {
-               if (is_array($v)) {
-                   $temp=array();
-                   foreach($v as $k1=>$v1)$temp[$k1]=$this->encode($v1);
-                   $this->$k=$temp;
-               } else $this->$k=$this->encode($v);
-           }
+            foreach ($_GET as $k => $v) {
+                if (is_array($v)) {
+                    $temp = array();
+                    foreach ($v as $k1 => $v1) $temp[$k1] = $this->encode($v1);
+                    $this->$k = $temp;
+                } else $this->$k = $this->encode($v);
+            }
+            foreach ($_POST as $k => $v) {
+                if (is_array($v)) {
+                    $temp = array();
+                    foreach ($v as $k1 => $v1) $temp[$k1] = $this->encode($v1);
+                    $this->$k = $temp;
+                } else $this->$k = $this->encode($v);
+            }
         }
     }
     /**
@@ -63,7 +62,7 @@ class Zwei_Utils_Form {
   
     function getInstance(){
          static $me;
-         if(!$me) {
+         if (!$me) {
              $me=array(new Zwei_Utils_Form());
          }
          return $me[0];
@@ -79,32 +78,32 @@ class Zwei_Utils_Form {
   
     function upload ($file, $dest, $max_size=999999999999)
     {
-         if (!empty($_FILES[$file]['name'])&&is_array($_FILES[$file]['name'])) {
-             $info=array();
-             foreach($_FILES[$file]['name'] as $i=>$f){
-               if($_FILES[$file]['size'][$i]>0 && $_FILES[$file]['size'][$i]<$max_size && substr($_FILES[$file]['name'][$i],-3,3)!='php'){
-                 $fp=explode(".",$_FILES[$file]['name'][$i]);
-                 $ext=$fp[count($fp)-1];
-                 $filename=substr(md5(microtime().$_FILES[$file]['tmp_name'][$i]),0,8).".$ext";
-                 @move_uploaded_file($_FILES[$file]['tmp_name'][$i],$dest."/".$filename);
-                 $info[$i]['size']=$_FILES[$file]['size'][$i];
-                 $info[$i]['filename']=$filename;
-                 $info[$i]['ext']=$ext;
+        if (!empty($_FILES[$file]['name']) && is_array($_FILES[$file]['name'])) {
+            $info = array();
+            foreach ($_FILES[$file]['name'] as $i =>$f) {
+                if ($_FILES[$file]['size'][$i] > 0 && $_FILES[$file]['size'][$i] < $max_size && substr($_FILES[$file]['name'][$i], -3, 3) != 'php'){
+                    $fp = explode(".",$_FILES[$file]['name'][$i]);
+                    $ext = $fp[count($fp) - 1];
+                    $filename = substr(md5(microtime().$_FILES[$file]['tmp_name'][$i]),0,8).".$ext";
+                    @move_uploaded_file($_FILES[$file]['tmp_name'][$i],$dest."/".$filename);
+                    $info[$i]['size'] = $_FILES[$file]['size'][$i];
+                    $info[$i]['filename'] = $filename;
+                    $info[$i]['ext'] = $ext;
                 }
-             }
-             return $info;
-         } else {
-           if ($_FILES[$file]['size']>0 && $_FILES[$file]['size']<$max_size && substr($_FILES[$file]['name'],-3,3)!='php'){
-             $fp=explode(".",$_FILES[$file]['name']);
-             $ext=$fp[count($fp)-1];
-             $filename=substr(md5(microtime().$_FILES[$file]['tmp_name']),0,8).".$ext";
-             @move_uploaded_file($_FILES[$file]['tmp_name'],$dest."/".$filename);
-             $info=$_FILES[$file];
-             $info['filename']=$filename;
-             $info['ext']=$ext;
-             return $info;
+            }
+            return $info;
+        } else {
+            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $max_size && substr($_FILES[$file]['name'], -3, 3) != 'php') {
+                $fp = explode(".", $_FILES[$file]['name']);
+                $ext = $fp[count($fp) - 1];
+                $filename = substr(md5(microtime() . $_FILES[$file]['tmp_name']), 0, 8) . ".$ext";
+                @move_uploaded_file($_FILES[$file]['tmp_name'], $dest."/".$filename);
+                $info = $_FILES[$file];
+                $info['filename'] = $filename;
+                $info['ext'] = $ext;
+                return $info;
             } else return false;
-         }
+        }
     }
   /**
    * Codifica a UTF-8
@@ -112,13 +111,13 @@ class Zwei_Utils_Form {
    * @return unknown_type
    */
   
-    function encode($value){
-       if(get_magic_quotes_gpc()==1)$value=stripslashes($value);
+    function encode($value) {
+       if (get_magic_quotes_gpc() == 1) $value = stripslashes($value);
        if (!is_array($value)) {
              if(strlen($value)<64){
-               $value=htmlentities($this->_unescape($value),null,'UTF-8');
+               $value = htmlentities($this->_unescape($value), null, 'UTF-8');
            }else{
-               $value=htmlentities($value,null,'UTF-8');
+               $value = htmlentities($value, null, 'UTF-8');
            }
        }
        return $value;
@@ -140,15 +139,13 @@ class Zwei_Utils_Form {
                    $unicode = hexdec ($unicodeHexVal);
                    $decodedStr .= $this->_code2utf($unicode);
                    $pos += 4;
-               }
-               else {
+               } else {
                    // we have an escaped ascii character
                    $hexVal = substr ($source, $pos, 2);
                    $decodedStr .= chr (hexdec ($hexVal));
                    $pos += 2;
                }
-           }
-           else {
+           } else {
                $decodedStr .= $this->_isUTF8($source)?$charAt:utf8_encode($charAt);
                $pos++;
            }
@@ -161,11 +158,11 @@ class Zwei_Utils_Form {
        return $decodedStr;
     }
     
-    function _code2utf($num){
-       if($num<128)return chr($num);
-       if($num<2048)return chr(($num>>6)+192).chr(($num&63)+128);
-       if($num<65536)return chr(($num>>12)+224).chr((($num>>6)&63)+128).chr(($num&63)+128);
-       if($num<2097152)return chr(($num>>18)+240).chr((($num>>12)&63)+128).chr((($num>>6)&63)+128) .chr(($num&63)+128);
+    function _code2utf($num) {
+       if ($num<128) return chr($num);
+       if ($num<2048) return chr(($num>>6)+192) . chr(($num&63)+128);
+       if ($num<65536) return chr(($num>>12)+224) . chr((($num>>6)&63)+128) . chr(($num&63)+128);
+       if ($num<2097152) return chr(($num>>18)+240) . chr((($num>>12)&63)+128) . chr((($num>>6)&63)+128) . chr(($num&63)+128);
        return '';
     }
     
