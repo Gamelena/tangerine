@@ -74,7 +74,7 @@ class AdminController extends Zend_Controller_Action
                      array('name' => 'dojo', 'location' => $this->baseDojoFolder . '/dojo'),
                      array('name' => 'dijit', 'location' => $this->baseDojoFolder . '/dijit'),
                      array('name' => 'dojox', 'location' => $this->baseDojoFolder . '/dojox'),
-                     array('name' => 'zwei', 'location' => BASE_URL.'/js/libs/zwei'),
+                     array('name' => 'zwei', 'location' => '/libs/zwei'),
                 )
             )
         );
