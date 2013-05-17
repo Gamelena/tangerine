@@ -54,6 +54,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      */
     loadData: function() {
         var domForm = this.dijitFormSearch != null ? dojo.byId(this.dijitFormSearch.id) : dojo.byId(this.dijitForm.id);
+        console.debug(domForm);
         var searchUrl = base_url+'crud-request?model=' + domForm['model'].value + '&format=' + domForm['format'].value;
         
         if (this.dijitFormSearch != null) {
@@ -75,7 +76,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             this.iframe.src = searchUrl;
         } else {
             var params = {url: searchUrl, clearOnClose: true, urlPreventCache:true};
-            var store = (domForm['storeType'].value == 'query') ? new dojox.data.QueryReadStore(params) : dojo.data.ItemFileReadStore(params);
+            var store = (domForm['storeType'] != undefined && domForm['storeType'].value == 'query') ? new dojox.data.QueryReadStore(params) : dojo.data.ItemFileReadStore(params);
             this.dijitDataGrid.setStore(store);    
         }
     },
@@ -90,7 +91,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         var fakeChecked = [];
         var iframeId = this.iframe.id;
-        var utils = this.utils;
         var self = this;
 
         //escuchar al iframe, como si el post normal hablara en ajax pero con posibilidad de hacer file uploads :)
@@ -110,17 +110,22 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             var response = dojo.json.parse(rawResponse);
             
             if (response.message != '' && response.message != null) {
-                utils.showMessage(response.message);
+                self.utils.showMessage(response.message);
             } else if(response.state == 'UPDATE_OK') {
-                utils.showMessage('Datos Actualizados');
+                self.utils.showMessage('Datos Actualizados');
                 self.postSave();
             } else if(response.state == 'ADD_OK') {
-                utils.showMessage('Datos Ingresados');
+                self.utils.showMessage('Datos Ingresados');
                 self.postSave();
             } else if(response.state == 'UPDATE_FAIL') {
-                utils.showMessage('Ha ocurrido un error, o no ha modificado datos');
+                self.utils.showMessage('Ha ocurrido un error, o no ha modificado datos');
             } else if(response.state == 'ADD_FAIL') {
-                utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde');
+                self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde');
+            } else if(response.state == 'DELETE_OK') {
+                self.utils.showMessage('Se ha borrado correctamente.');
+                self.postSave();
+            } else if(response.state == 'DELETE_FAIL') {
+                self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde');
             }
             dojo.disconnect(listener);
             self.set("response", response);
@@ -153,35 +158,50 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         domForm.submit();
     },
-    'delete': function(model, id) {
-        var items = this.dijitDatagrid.selection.getSelected();
-        var id = items[0].id;
-        if(confirm('Desea eliminar el registro seleccionado?')) {
+    'delete': function() {
+        var domForm = dojo.byId(this.dijitForm.id);
+        var items = this.dijitDataGrid.selection.getSelected();
+        if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+        
+        var xhrContent = {
+            'model': domForm['model'].value,
+            'action': 'delete',
+            'format': 'json' 
+        }
+        
+        dojo.forEach(dojo.query("#"+this.dijitForm.id+" input[name^=primary]"), function(entry, i){
+            name = entry.name.replace('primary[', '').replace(']', '');
+            if (typeof(items[0][name]) != 'undefined') {
+                entry.value = items[0][name];
+                xhrContent['primary['+name+']'] = entry.value;
+            }
+        });
+        console.debug(xhrContent);
+
+        
+        if (confirm('\u00BFDesea eliminar el registro seleccionado?')) {
+            var self = this;
+            
             dojo.xhrPost( {
-                url: base_url+'objects',
-                content: {
-                    'action' :'delete',
-                    'id'  : id,
-                    'model': model,
-                    'format': 'json' 
-                },
+                url: base_url+'crud-request',
+                content: xhrContent,
                 handleAs: 'json',
                 sync: true,
                 preventCache: true,
                 timeout: 5000,
                 load: function(response){
                     if(response.message != "" && response.message != null){
-                        this.utils.showMessage(response.message);
-                    }else if(resp.state == 'DELETE_OK'){
-                        this.utils.showMessage('Se ha borrado correctamente.');
-                        this.postSave();
-                    }else if(resp.state == 'DELETE_FAIL'){
-                        this.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde');
+                        self.utils.showMessage(response.message);
+                    }else if(response.state == 'DELETE_OK'){
+                        self.utils.showMessage('Se ha borrado correctamente.');
+                        self.postSave();
+                    }else if(response.state == 'DELETE_FAIL'){
+                        self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde');
                     }
                     return response;
                 },
                 error:function(err){
-                    this.utils.showMessage('Error en comunicacion de datos. error: '+err);
+                    self.utils.showMessage('Error en comunicacion de datos. error: '+err);
                     return err;
                 }
             });
@@ -202,56 +222,60 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         
         if (this.dijitDataGrid != null && this.dijitForm != null) {
-            var items = this.dijitDataGrid.selection.getSelected();
+            console.debug(this);
             var name;
-            
-            if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-            
-            dojo.forEach(dojo.query("#"+this.dijitForm.id+" input[name^=primary]"), function(entry, i){
-                name = entry.name.replace('primary[', '').replace(']', '');
-                if (typeof(items[0][name]) != 'undefined') {
-                    entry.value = items[0][name];
-                    primaries[name] = entry.value;
-                }
-            });
-            
-            if (this.ajax) {
-                for (var primary in primaries) {
-                    ids += '&primary['+primary + "]=" + primaries[primary];
-                }
-            } else {
-                dojo.forEach(this.dijitForm.getChildren(), function(entry, i){
-                    name = entry.get('name').replace('data[', '').replace(']', '');
+            if (this.action != 'add') {
+                var items = this.dijitDataGrid.selection.getSelected();
+                if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+                
+                dojo.forEach(dojo.query("#"+this.dijitForm.id+" input[name^=primary]"), function(entry, i){
+                    name = entry.name.replace('primary[', '').replace(']', '');
                     if (typeof(items[0][name]) != 'undefined') {
-                        if (entry.baseClass != 'dijitCheckBox') {
-                            entry.set('value', items[0][name]);
-                        } else {
-                            entry.set('checked', entry.value == items[0][name]);
-                        }
+                        entry.value = items[0][name];
+                        primaries[name] = entry.value;
                     }
                 });
+                
+                if (this.ajax) {
+                    for (var primary in primaries) {
+                        ids += '&primary['+primary + "]=" + primaries[primary];
+                    }
+                } else {
+                    dojo.forEach(this.dijitForm.getChildren(), function(entry, i){
+                        name = entry.get('name').replace('data[', '').replace(']', '');
+                        if (typeof(items[0][name]) != 'undefined') {
+                            if (entry.baseClass != 'dijitCheckBox') {
+                                entry.set('value', items[0][name]);
+                            } else {
+                                entry.set('checked', entry.value == items[0][name]);
+                            }
+                        }
+                    });
+                }
             }
         }
         
         if (this.ajax) {
             if (dojo.objectToQuery(this.primary) != '') {
-                var primary = this.primary;
-                var dijitForm = this.dijitForm;
-                
-                for (var id in this.primary) {
-                    ids += '&primary['+ id + ']=' + this.primary[id];
+                if (this.mode == 'edit') {
+                    var primary = this.primary;
+                    var dijitForm = this.dijitForm;
+                    
+                    for (var id in this.primary) {
+                        ids += '&primary['+ id + ']=' + this.primary[id];
+                    }
+                    
+                    var listener = dojo.connect(this.dijitDialog, "onLoad", function(){
+                         var domForm = dojo.byId(dijitForm.id);
+                         for (var id in primary) {
+                             console.debug(id);
+                             console.debug(primary[id]);
+                             console.debug(domForm);
+                             domForm['primary['+ id + ']'].value = primary[id];
+                         }
+                         dojo.disconnect(listener);
+                    });
                 }
-                
-                var listener = dojo.connect(this.dijitDialog, "onLoad", function(){
-                     var domForm = dojo.byId(dijitForm.id);
-                     for (var id in primary) {
-                         console.debug(id);
-                         console.debug(primary[id]);
-                         console.debug(domForm);
-                         domForm['primary['+ id + ']'].value = primary[id];
-                     }
-                     dojo.disconnect(listener);
-                });
             }
             this.dijitDialog.set('href',base_url+'components/dojo-simple-crud/edit?p='+this.component+'&action='+this.action+ids+'&'+this.queryParams);
             console.debug(this.dijitDialog);

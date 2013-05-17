@@ -95,6 +95,13 @@ class CrudRequestController extends Zend_Controller_Action
                 $data = array();
                 $where = array();
                 
+                $infoFiles = array();
+                foreach ($_FILES as $i => $v) {
+                    $infoFiles[] = $this->_form->upload($i, ROOT_DIR . '/upfiles');
+                }
+                Debug::write($this->_form);
+                Debug::write($infoFiles);
+                
                 if ($this->_form->action == 'add') {
                      
                     foreach ($this->_form->data as $i=>$v) {
@@ -150,10 +157,7 @@ class CrudRequestController extends Zend_Controller_Action
                     }
                     //Zwei_Utils_Debug::write($response);
                 }
-                
-                foreach ($_FILES as $i => $v) {
-                    $this->_form->upload($i, ROOT_DIR . '/upfiles');
-                }
+
                 
                 
                 $this->_response_content['todo'] = $this->_model->getAjaxTodo();
@@ -183,8 +187,8 @@ class CrudRequestController extends Zend_Controller_Action
             $i = 0;
                
             //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
-            if ($this->_model->overloadData($data) !== false) {
-                $data = $this->_model->overloadData($data);
+            if ($this->_model->overloadDataList($data)) {
+                $data = $this->_model->overloadDataList($data);
                 $numRows = count($data);
             }    
 
@@ -255,8 +259,6 @@ class CrudRequestController extends Zend_Controller_Action
                 } else {
                     /*
                      * En caso de que no exista ninguna PK simple, inventamos un ID aca para que funcione el datastore
-                     * (SOLO PARA LISTAR, NO USAR ESTA ID PARA EDITAR, MODIFICAR O ELIMINAR) 
-                     * [TODO] aunque un dojo datastore no lo permita nativamente se debe emular PK multiple de ser necesario, ¿primary separada por ';'?
                      */
                     if (!isset($collection[0]['id'])) {
                         for($j=0;$j<$i;$j++) {

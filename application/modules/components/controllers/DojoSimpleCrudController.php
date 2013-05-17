@@ -126,16 +126,19 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $select = $this->_model->select();
             $primaries = $r->getParam('primary');
 
-            /**
-             * Evaluar: esto podría ser mas seguro pero menos flexible usando "foreach($this->_model->info(Zend_Db_Table::PRIMARY) as $i)"
-             * en lugar de "foreach($r->getParam('primary') as $i => $v)"
-             */
+            // tambien sería posible usar "foreach($this->_model->info(Zend_Db_Table::PRIMARY) as $i) { $v = $primaries[$i]}" 
             foreach ($r->getParam('primary') as $i => $v) { 
-                if (in_array($i, $this->_model->info(Zend_Db_Table::COLS))) $i = $this->_model->info(Zend_Db_Table::NAME) . ".$i";
+                //Concatenar nombre de campo con tabla principal en caso de que campo exista en la tabla,
+                //esto previene posibles errores de ambiguedad de nombre de campo cuando se use join
+                if (in_array($i, $this->_model->info(Zend_Db_Table::COLS))) { 
+                    $i = $this->_model->info(Zend_Db_Table::NAME) . ".$i";
+                }
                 $select->where($a->quoteInto($a->quoteIdentifier($i). " = ?", $v));
             }
             Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
-            $this->view->data = $this->_model->fetchRow($select)->toArray();
+            $data = $this->_model->fetchRow($select);
+            //Es posible añadir más valores al retorno de la query principal sobrecargando este método.
+            $this->view->data = $this->_model->overloadDataForm($data);
         }
         
     }
@@ -193,7 +196,16 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function keypadAction()
     {
-        // action body
+        $this->view->name = $this->_xml->getAttribute('name');
+        $this->view->add = $this->_xml->getAttribute("add") && $this->_xml->getAttribute("add") == "true" && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
+        $this->view->edit = $this->_xml->getAttribute("edit") && $this->_xml->getAttribute("edit") == "true"  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
+        $this->view->clone = $this->_xml->getAttribute("clone") && $this->_xml->getAttribute("clone") == "true"  && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
+        $this->view->delete= $this->_xml->getAttribute("delete") && $this->_xml->getAttribute("delete") == "true" && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
+        
+        $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
+        //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
+        $this->view->ajax = $ajax === 'true' ? 'true' : 'false';
+        //$this->view->changePassword = $this->_xml->getAttribute("changePassword") && $this->_xml->getAttribute("changePassword") == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT');
     }
 
 

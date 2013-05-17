@@ -67,10 +67,10 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
                 $select = $model->select(array($title, $id));
             }
             Debug::writeBySettings($select->__toString(), 'query_log');
-            $rows = $model->fetchAll($select); //Query para pintar (no seleccionar) todas las opciones disponibles.
+            $rows = $model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.
         
             if ($r->getParam('value')) {
-                $value = $this->value;
+                $value = $r->getParam('value');
             } else {
                 $value = $r->getParam('target') ? $r->getParam('target') : null;
             }
@@ -82,7 +82,7 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
         
             foreach ($rows as $row) {
                 $selected = "";
-                if (is_array($r->getParam('value', null)) && in_array($row->$primary, is_array($r->getParam('value')))) {
+                if (is_array($r->getParam('value', null)) && in_array($row->$primary, $r->getParam('value'))) {
                     $selected = "selected=\"selected\"";
                 }
         
@@ -96,10 +96,10 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
                 }
             }
         } else {
-            if ($this->value == null) {
+            if (!$r->getParam('value')) {
                 $value = (isset($request->{$this->target})) ? $request->{$this->target} : null;
             } else {
-                $value = $this->value;
+                $value = $r->getParam('value');
             }
         
             $options = "";

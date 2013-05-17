@@ -68,19 +68,6 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     * @var string 
     */
     protected $_adapter;
-    
-    /**
-     * array $data de Zend_Db_Table_Select sobrecargado en $this->overloadData($data). 
-     * @var array|false 
-     */
-    protected $_overloaded_data = false;
-        
-     /**
-     * array $data de Zend_Db_Table_Select sobrecargado en $this->overloadDataTabs($data) 
-     * @var array|false
-     */
-    protected $_overloaded_data_tabs = false;
-    
     /**
      * parámetros de búsqueda llave:valor enviados por request
      * @var array
@@ -424,22 +411,22 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     
     /**
      * Extiende arreglo de datos nativo de $self::select() para el despliegue en listado. 
-     * @param Zend_Db_Rowset retorno de $self::select()
-     * @return array
+     * @param array - retorno de $self::select()
+     * @return Zend_Db_Rowset|array|false
      */
-    public function overloadData($data) 
+    public function overloadDataList($data) 
     {
-        return $this->_overloaded_data;
+        return false;
     }
     
     /**
-     * Extiende arreglo de datos nativo de $self::select() para el despliegue en pestañas. 
+     * Extiende arreglo de datos nativo de $self::select() para el despliegue en formulario cargado via ajax. 
      * @param Zend_Db_Rowset retorno de $self::select()
-     * @return array
+     * @return Zend_Db_Rowset|array
      */    
-    public function overloadDataTabs($data)
+    public function overloadDataForm($data)
     {
-        return $this->_overloaded_data_tabs;
+        return $data;
     }
     
     /**

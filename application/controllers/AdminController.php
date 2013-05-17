@@ -56,7 +56,7 @@ class AdminController extends Zend_Controller_Action
         
         if (!empty($confLayout->dojoTheme)) $this->_dojoTheme = $confLayout->dojoTheme;
         if (!empty($confLayout->template)) $this->_dojoTheme = $confLayout->layout->template;
-        $this->view->jsLoadModuleFunction = isset($confLayout->mainPane) && $confLayout->mainPane == 'dijitTabs' ? 'loadModuleTab' : 'cargarPanelCentral';
+        $this->view->jsLoadModuleFunction = isset($confLayout->mainPane) && $confLayout->mainPane == 'dijitTabs' ? 'admportal.loadModuleTab' : 'admportal.loadModuleSingle';
         
         if (!empty($this->_request->theme)) $this->_dojoTheme = $this->_request->theme;
         if (!empty($this->_request->template)) $this->_template = $this->_request->template;

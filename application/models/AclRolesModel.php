@@ -36,21 +36,23 @@ class AclRolesModel extends Zwei_Db_Table
      * @return array
      */
 
-    public function overloadDataTabs($data) {
+    public function overloadDataForm($data) {
         $data = $data->toArray();
 
-        $i = 0;
-        foreach ($data as $v) {
-            $select = $this->selectPermissions($v['id']);
-            Debug::writeBySettings($select->__toString(), 'query_log');
-            $permissions = $this->fetchAll($select);
-            
-            if (count($permissions) > 0) {
-               foreach ($permissions as $v) { //  $permissions->id = $permission->permission
-                   $data[$i]["permissions"][$v['id']][] = $v['permission'];
-               }     
+        Debug::write($data);
+
+        foreach ($data as $i => $v) {
+            if ($i == 'id') {
+                $select = $this->selectPermissions($v);
+                Debug::writeBySettings($select->__toString(), 'query_log');
+                $permissions = $this->fetchAll($select);
+                
+                if (count($permissions) > 0) {
+                   foreach ($permissions as $perm) { //  $permissions->id = $permission->permission
+                       $data["permissions"][] = $perm['id'];
+                   }     
+                }
             }
-            $i++;   
         }
         Debug::write($data);
         return $data;
@@ -140,7 +142,7 @@ class AclRolesModel extends Zwei_Db_Table
     public function cleanDataParams($data)
     {
         if (!empty($data['permissions'])) {
-            $this->_data_permissions = explode(':::', $data['permissions']);
+            $this->_data_permissions = $data['permissions'];
             unset($data['permissions']);
         } else {
             $this->_data_permissions = array();

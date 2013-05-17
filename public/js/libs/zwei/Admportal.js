@@ -13,14 +13,12 @@ dojo.declare("zwei.Admportal", null, {
     },
     loadLayoutSettings: function(domLogo, domTitle) 
     {
-        //Obtencion via AJAX de datos basicos del administrador web
         var store = new dojo.data.ItemFileReadStore({
             url: base_url+'crud-request?model=SettingsModel&format=json'
         });
         
         store.fetch({
             onError:function(errData, request){
-                //console.log(errData+"-"+request);
                 alert(errData);
             },
             onComplete:function(items){
@@ -49,29 +47,19 @@ dojo.declare("zwei.Admportal", null, {
             label: 'label',
             urlPreventCache:true
         });
-        
         store.fetch({
             onComplete: function(items, request){
                 if(items) {
                     var i;
-                    /*
-                    for (i = 0; i < items.length; i++) {
-                        var item = items[i];
-                    }
-                    */
                 }
             },
             queryOptions: {
                 deep: true
             }
         });
-        
-        
         var treeModel = new dijit.tree.ForestStoreModel({
             store: store
         });
-        
-        
         if (!dijit.byId('arbolPrincipal')) {
             var treeControl = new dijit.Tree({
                 model: treeModel,
@@ -133,9 +121,9 @@ dojo.declare("zwei.Admportal", null, {
     },
     switchMainPane: function(){
         if (contentPaneTop.domNode.style.display != 'none') {
-            maximizeMainPane();
+            this.maximizeMainPane();
         } else {
-            minimizeMainPane();
+            this.minimizeMainPane();
         }
     },
     maximizeMainPane: function(){
@@ -178,5 +166,10 @@ dojo.declare("zwei.Admportal", null, {
             //dijit.byId('mainTabModule'+moduleId).set('selected', true);
             tabContainer.selectChild(dijit.byId('mainTabModule'+moduleId));
         }
+    },
+    loadModuleSingle: function(url, moduleId, moduleTitle) 
+    {
+        var widget = dijit.byId("panel_central");
+        widget.set('href', base_url+url);
     }
 });
