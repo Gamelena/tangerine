@@ -39,8 +39,6 @@ class AclRolesModel extends Zwei_Db_Table
     public function overloadDataForm($data) {
         $data = $data->toArray();
 
-        Debug::write($data);
-
         foreach ($data as $i => $v) {
             if ($i == 'id') {
                 $select = $this->selectPermissions($v);
@@ -54,7 +52,6 @@ class AclRolesModel extends Zwei_Db_Table
                 }
             }
         }
-        Debug::write($data);
         return $data;
     }
 
@@ -230,19 +227,22 @@ class AclRolesModel extends Zwei_Db_Table
             $mp = explode(';', $v);
             $acl_modules_id = $mp[0];
             $permission = $mp[1];
+            
             $data = array(
                'acl_roles_id' => $acl_roles_id, 
                'acl_modules_id' => $acl_modules_id, 
                'permission' => $permission
             );
+            
             try {
                 $insert = $aclPermissions->insert($data);
             } catch (Zend_Db_Exception $e) {
                 if ($e->getCode() == 23000) {
                     $printData = print_r($data, 1);
-                    Debug::write("Ya existe servicio_accion asociado a $printData");
+                    Debug::write("Ya existe permiso asociado a $printData");
                 }
             }
+            
             if ($insert) $return = true;
         }
         return $return;

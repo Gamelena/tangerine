@@ -141,13 +141,14 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             }
         });
         
-        /*
+        /*//Esto siempre toma el camino function(err) aunque la respuesta se vea bien
+         * 
         require(["dojo/request/iframe"], function(iframe){
             iframe.post(base_url+'crud-request', {
               form: dojo.byId(formId)
             }).then(function(data){
                 console.debug(data);
-              // Do something with the XML document
+              // Do something with the document
             }, function(err){
                 console.debug(err);
               // Handle the error condition
@@ -277,7 +278,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     });
                 }
             }
-            this.dijitDialog.set('href',base_url+'components/dojo-simple-crud/edit?p='+this.component+'&action='+this.action+ids+'&'+this.queryParams);
+            this.dijitDialog.set('href',base_url+'components/dojo-simple-crud/'+this.action+'?p='+this.component+'&action='+this.action+ids+'&'+this.queryParams);
             console.debug(this.dijitDialog);
 
         }

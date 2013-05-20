@@ -3,20 +3,21 @@
     <xsd:element name="component" type="componentType">
     </xsd:element>
     <xsd:complexType name="componentType">
-        <xsd:sequence>
+        <xsd:choice minOccurs="1" maxOccurs="unbounded">
             <xsd:element name="elements" type="elementsType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="searchers" type="searchersType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="forms" type="formsType" minOccurs="0" maxOccurs="1"/>
-        </xsd:sequence>
+            <xsd:element name="excel" minOccurs="0" maxOccurs="1"/>
+        </xsd:choice>
         <xsd:attribute name="target" use="required" type="xsd:normalizedString"/>
         <xsd:attribute name="type" use="required" type="componentTypeType" />
         <xsd:attribute name="name" type="xsd:normalizedString" />
-        <xsd:attribute name="list" />
-        <xsd:attribute name="edit" />
-        <xsd:attribute name="add" />
-        <xsd:attribute name="delete" />
-        <xsd:attribute name="clone" />
-        <xsd:attribute name="changePassword" />
+        <xsd:attribute name="list" type="xsd:boolean" />
+        <xsd:attribute name="edit" type="xsd:boolean" />
+        <xsd:attribute name="add" type="xsd:boolean"/>
+        <xsd:attribute name="delete" type="xsd:boolean"/>
+        <xsd:attribute name="clone" type="xsd:boolean"/>
+        <xsd:attribute name="changePassword" type="xsd:boolean" />
         <xsd:attribute name="js" />
         <xsd:attribute name="style" />
         <xsd:attribute name="plugins" />
@@ -26,6 +27,13 @@
         <xsd:attribute name="chartYTarget" />
         <xsd:attribute name="chartYLabel" />
         <xsd:attribute name="chartItems" />
+        <xsd:attribute name="onRowClick" />
+        <xsd:attribute name="onRowDblClick" />
+        <xsd:attribute name="cols" />
+        <xsd:attribute name="titles" />
+        <xsd:attribute name="items" />
+        <xsd:attribute name="serverPagination" type="xsd:boolean" />
+        <xsd:attribute name="inheritsData" type="xsd:boolean" />
         <xsd:attribute name="chartDojoType" type="chartDojoTypeType" />
         <xsd:attribute name="chartDojoTheme" type="chartDojoThemeType" />
     </xsd:complexType>
@@ -50,6 +58,7 @@
             <xsd:element name="tabs" type="tabsType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:choice>
         <xsd:attribute name="ajax" />
+        <xsd:attribute name="style"/>
     </xsd:complexType>
     <xsd:complexType name="formType">
         <xsd:sequence>
@@ -76,6 +85,8 @@
         <xsd:attribute name="defaultText" />
         <xsd:attribute name="field" />
         <xsd:attribute name="required" />
+        <xsd:attribute name="disabled" />
+        <xsd:attribute name="readonly" />
         <xsd:attribute name="regExp"/>
         <xsd:attribute name="trim"/>
         <xsd:attribute name="table"/>
@@ -91,6 +102,9 @@
         <xsd:attribute name="operator" type="operatorType"/>
     </xsd:complexType>
     <xsd:complexType name="elementType">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="tinyMceInit" minOccurs="0" maxOccurs="1"/>
+        </xsd:choice>
         <xsd:attribute name="target" use="required"/>
         <xsd:attribute name="type" type="elementTypeType"/>
         <xsd:attribute name="name" />
@@ -99,8 +113,12 @@
         <xsd:attribute name="add" />
         <xsd:attribute name="clone" />
         <xsd:attribute name="defaultValue" />
+        <xsd:attribute name="uncheckedValue" />
         <xsd:attribute name="defaultText" />
         <xsd:attribute name="field" />
+        <xsd:attribute name="onchange" />
+        <xsd:attribute name="onclick" />
+        <xsd:attribute name="onblur" />
         <xsd:attribute name="required" />
         <xsd:attribute name="regExp"/>
         <xsd:attribute name="trim"/>
@@ -115,6 +133,9 @@
         <xsd:attribute name="maxlength"/>
         <xsd:attribute name="width"/>
         <xsd:attribute name="checked"/>
+        <xsd:attribute name="sufix"/>
+        <xsd:attribute name="prefix"/>
+        <xsd:attribute name="tinyMceTemplate" />
         <xsd:attribute name="operator" type="operatorType"/>
     </xsd:complexType>
     <xsd:simpleType name="operatorType">

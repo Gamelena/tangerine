@@ -94,6 +94,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>" : '';
+        $this->view->styleDialog = $this->_xml->xpath("//forms/style") ? $this->_xml->xpath("//forms/style")[0] : '';
+        $this->view->ajax = $this->_xml->xpath("//forms[@ajax='true']") ? true : false;
     }
 
     public function searchAction()
@@ -110,6 +112,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->p = $this->_component;
         $this->view->xml = $this->_xml;
         $this->view->mode = $mode;
+        $this->view->loadPartial = $r->getParam('loadPartial', false);
 
         $this->view->onPostSubmit = $this->_xml->xpath('//forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
         $this->view->onSubmit = $this->_xml->xpath('//forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
@@ -167,6 +170,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->onRowClick = $this->_xml->getAttribute('onRowClick') ? "onRowClick:{$this->_xml->getAttribute('onRowClick')}," : "";
         $this->view->searchHideSubmit = $this->_xml->getAttribute('searchHideSubmit') === "true" ? true : false;
         $this->view->elements = $this->_xml->getElements("@visible='true'");
+        $this->view->dialogStyle = $this->_xml->xpath("//forms") && $this->_xml->xpath("//forms")[0]->getAttribute('style') ? "style=\"{$this->_xml->xpath("//forms")[0]->getAttribute('style')}\"": '';
+                
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
         if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         
@@ -200,7 +205,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->add = $this->_xml->getAttribute("add") && $this->_xml->getAttribute("add") == "true" && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
         $this->view->edit = $this->_xml->getAttribute("edit") && $this->_xml->getAttribute("edit") == "true"  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
         $this->view->clone = $this->_xml->getAttribute("clone") && $this->_xml->getAttribute("clone") == "true"  && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
-        $this->view->delete= $this->_xml->getAttribute("delete") && $this->_xml->getAttribute("delete") == "true" && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
+        $this->view->delete = $this->_xml->getAttribute("delete") && $this->_xml->getAttribute("delete") == "true" && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
+        $this->view->component = $this->_component;
         
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
         //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';

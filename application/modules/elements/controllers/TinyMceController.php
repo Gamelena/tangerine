@@ -12,6 +12,8 @@ class Elements_TinyMceController extends Zend_Controller_Action
         $this->view->i =  $r->getParam('i');
         $this->view->domId =  $r->getParam('domId');
         $this->view->target =  $r->getParam('target');
+        $this->view->tinyMceInit =  $r->getParam('tinyMceInit', false);
+        $this->view->tinyMceTemplate =  $r->getParam('tinyMceTemplate', 'simple');
         
         $this->view->value =  $r->getParam('value', '');
     }

@@ -6,64 +6,71 @@ $k = 1;
 $tableWrapperClass = '';
 $hidden = '';
 
-if (count($this->tabs) > 1) :
-    $tableWrapperClass = "settingsArea";
-    foreach ($this->tabs as $tab) :
-        $i++;
-        if ($tab->getAttribute($this->mode) === 'true') :
+
+if (!$this->loadPartial) :
+    if (count($this->tabs) > 1) :
+        $tableWrapperClass = "settingsArea";
+        foreach ($this->tabs as $tab) :
+            $i++;
+            if ($tab->getAttribute($this->mode) === 'true') :
 ?>
-        <a id="tab<?php echo $this->mode ?>_ctrl<?php echo $i?>" class="settings_tab" <?php echo $h ?> onclick="showtab(this.id, '<?php echo $this->domPrefix?>tab<?php echo $this->mode.$i?>')"><?php echo $tab->getAttribute('name') ?></a>
+    <a id="tab<?php echo $this->mode ?>_ctrl<?php echo $i?>" class="settings_tab" <?php echo $h ?> onclick="showtab(this.id, '<?php echo $this->domPrefix?>tab<?php echo $this->mode.$i?>')"><?php echo $tab->getAttribute('name') ?></a>
 <?php 
         $h = '';
-        endif;
-    endforeach;
-endif;
+            endif;
+        endforeach;
+    endif;
 ?>
 <?php
-$i=0;
-foreach ($this->tabs as $tab) :
-    $i++;
+    $i=0;
+    foreach ($this->tabs as $tab) :
+        $i++;
 ?>
     <div id="<?php echo $this->domPrefix.'Tab_'.$this->mode.$i?>" class="<?php echo $tableWrapperClass ?>" <?php echo $hidden ?>>
         <table>
 <?php 
-    $j=0;
-    foreach ($tab as $element) :
-        $j++;
-        $hidden;
-        $params = (array) $element->attributes();
-        $params = $params['@attributes'];
-        $params['domId'] =  $this->domPrefix . "_{$this->mode}_";
-        $params['i'] = $j;
-        if ($params['type'] == 'hidden') $hidden = ' style="display:none"';
-
-        if (isset($this->data[$params['target']])) $params['value'] = $this->data[$params['target']];
-        
-        $params['target'] = "data[{$params['target']}]";
+        $j=0;
+        foreach ($tab as $element) :
+            $j++;
+            $hidden;
+            $params = (array) $element->attributes();
+            $params = $params['@attributes'];
+            if ($element->existsChildren('tinyMceInit')) {
+                $params['tinyMceInit'] = dom_import_simplexml($element->tinyMceInit)->textContent;
+            }
+            
+            $params['domId'] =  $this->domPrefix . "_{$this->mode}_";
+            $params['i'] = $j;
+            if ($params['type'] == 'hidden') $hidden = ' style="display:none"';
+    
+            if (isset($this->data[$params['target']])) $params['value'] = $this->data[$params['target']];
+            
+            $params['target'] = "data[{$params['target']}]";
 ?>
             <tr<?php echo $hidden?>>
                 <th><label for="<?php echo $element->getAttribute('target')?>"><?php echo $element->getAttribute('name') ?></label></th>
                 <td><?php echo $this->action('index', $element->getAttribute('type'), 'elements', $params); ?></td>
             </tr>
 <?php 
-    endforeach;
+        endforeach;
 ?>
         </table>
     </div>
 <?php
-endforeach;
+    endforeach;
+endif;
 ?>
     <div class="brclear"></div>
-    <input type="hidden" name="format" value="json" nosave="true" />
-    <input type="hidden" name="action" value="<?php echo $this->mode?>" nosave="true" />
-    <input type="hidden" name="model" value="<?php echo $this->model?>" nosave="true" />
-    <input type="hidden" name="p" value="<?php echo $this->p ?>" nosave="true" />
+    <input type="hidden" name="format" value="json" />
+    <input type="hidden" name="action" value="<?php echo $this->mode?>" />
+    <input type="hidden" name="model" value="<?php echo $this->model?>" />
+    <input type="hidden" name="p" value="<?php echo $this->p ?>" />
 <?php 
 if ($this->mode == 'edit') :
     foreach ($this->modelPrimary as $p) :
         $value = isset($_REQUEST['primary']) ? $_REQUEST['primary'][$p] : '';
 ?>
-    <input type="hidden" name="primary[<?php echo $p?>]" value="<?php echo $value ?>" nosave="true" />
+    <input type="hidden" name="primary[<?php echo $p?>]" value="<?php echo $value ?>" />
 <?php 
     endforeach;
 endif;
@@ -98,5 +105,5 @@ endif;
     }
     return true;
     </script>
-    <button dojoType="dijit.form.Button" id="<?php echo $this->domPrefix?>tabs_btn_save<?php echo $this->mode?>" type="submit" nosave="true"/>Guardar</button>
+    <button dojoType="dijit.form.Button" id="<?php echo $this->domPrefix?>tabs_btn_save<?php echo $this->mode?>" type="submit" />Guardar</button>
 </form>

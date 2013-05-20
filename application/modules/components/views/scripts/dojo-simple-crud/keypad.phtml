@@ -6,6 +6,7 @@ if ($this->add) :
         <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconNewTask" id="<?php echo $this->domPrefix?>btnAdd" onClick="
                     var form = new zwei.Form({
                         component: '<?php echo $this->component?>',
+                        ajax: <?php echo $this->ajax ?>,
                         action: 'add',
                         dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_add'), 
                         dijitForm: dijit.byId('<?php echo $this->domPrefix?>form_add'), 
