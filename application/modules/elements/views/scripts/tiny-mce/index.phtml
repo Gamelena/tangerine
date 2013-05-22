@@ -11,6 +11,7 @@ elseif ($this->tinyMceTemplate == 'simple') :
         theme: "simple",
         elements : "<?php echo $this->target?>",
         theme : "simple",
+        auto_focus: "<?php echo $this->domId . $this->i?>",
         setup : function(ed) {
             ed.onClick.add(function(ed, e) {
                 this.focus();
@@ -88,6 +89,7 @@ elseif ($this->tinyMceTemplate == 'fullAdvanced') :
 endif;
 ?>
     });
+    
 </script>
 <div>
     <textarea id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" rows="15" cols="80" style="width: 80%" class="mceEditor">

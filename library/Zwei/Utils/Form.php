@@ -83,24 +83,40 @@ class Zwei_Utils_Form {
             foreach ($_FILES[$file]['name'] as $i =>$f) {
                 if ($_FILES[$file]['size'][$i] > 0 && $_FILES[$file]['size'][$i] < $max_size && substr($_FILES[$file]['name'][$i], -3, 3) != 'php'){
                     $fp = explode(".",$_FILES[$file]['name'][$i]);
+                    $oldname = array();
+                    foreach ($fp as $j => $v) {
+                        if ($j < count($fp) - 1) $oldname[] = $v;
+                    }
+                    $oldname = implode(".", $oldname);
                     $ext = $fp[count($fp) - 1];
-                    $filename = substr(md5(microtime().$_FILES[$file]['tmp_name'][$i]),0,8).".$ext";
-                    @move_uploaded_file($_FILES[$file]['tmp_name'][$i],$dest."/".$filename);
-                    $info[$i]['size'] = $_FILES[$file]['size'][$i];
-                    $info[$i]['filename'] = $filename;
-                    $info[$i]['ext'] = $ext;
+                    $filename = substr(md5(microtime().$_FILES[$file]['tmp_name'][$i]),0,8) . $oldname.".$ext";
+                    if (@move_uploaded_file($_FILES[$file]['tmp_name'][$i],$dest."/".$filename)) {
+                        $info[$i]['size'] = $_FILES[$file]['size'][$i];
+                        $info[$i]['filename'] = $filename;
+                        $info[$i]['ext'] = $ext;
+                    } else {
+                        $info = false;
+                    }
                 }
             }
             return $info;
         } else {
             if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $max_size && substr($_FILES[$file]['name'], -3, 3) != 'php') {
                 $fp = explode(".", $_FILES[$file]['name']);
+                $oldname = array();
+                foreach ($fp as $j => $v) {
+                    if ($j < count($fp) - 1) $oldname[] = $v;
+                }
+                $oldname = implode(".", $oldname);
                 $ext = $fp[count($fp) - 1];
-                $filename = substr(md5(microtime() . $_FILES[$file]['tmp_name']), 0, 8) . ".$ext";
-                @move_uploaded_file($_FILES[$file]['tmp_name'], $dest."/".$filename);
-                $info = $_FILES[$file];
-                $info['filename'] = $filename;
-                $info['ext'] = $ext;
+                $filename = substr(md5(microtime() . $_FILES[$file]['tmp_name']), 0, 8) . $oldname . ".$ext";
+                if (@move_uploaded_file($_FILES[$file]['tmp_name'], $dest."/".$filename)) {
+                    $info = $_FILES[$file];
+                    $info['filename'] = $filename;
+                    $info['ext'] = $ext;
+                } else {
+                    $info = false;
+                }
                 return $info;
             } else return false;
         }

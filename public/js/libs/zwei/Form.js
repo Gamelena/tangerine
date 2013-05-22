@@ -229,6 +229,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 var items = this.dijitDataGrid.selection.getSelected();
                 if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
                 
+                //Buscar inputs (hidden) con nombre primary[$idCampo] para obtener las PKs
                 dojo.forEach(dojo.query("#"+this.dijitForm.id+" input[name^=primary]"), function(entry, i){
                     name = entry.name.replace('primary[', '').replace(']', '');
                     if (typeof(items[0][name]) != 'undefined') {
@@ -242,6 +243,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                         ids += '&primary['+primary + "]=" + primaries[primary];
                     }
                 } else {
+                    //Poblar campos con datos fila de datagrid seleccionada
                     dojo.forEach(this.dijitForm.getChildren(), function(entry, i){
                         name = entry.get('name').replace('data[', '').replace(']', '');
                         if (typeof(items[0][name]) != 'undefined') {

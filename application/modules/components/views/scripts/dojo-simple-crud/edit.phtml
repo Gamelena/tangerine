@@ -12,12 +12,12 @@ if (!$this->loadPartial) :
         $tableWrapperClass = "settingsArea";
         foreach ($this->tabs as $tab) :
             $i++;
-            if ($tab->getAttribute($this->mode) === 'true') :
+            //if ($tab->getAttribute($this->mode) === 'true') :
 ?>
     <a id="tab<?php echo $this->mode ?>_ctrl<?php echo $i?>" class="settings_tab" <?php echo $h ?> onclick="showtab(this.id, '<?php echo $this->domPrefix?>tab<?php echo $this->mode.$i?>')"><?php echo $tab->getAttribute('name') ?></a>
 <?php 
         $h = '';
-            endif;
+            //endif;
         endforeach;
     endif;
 ?>

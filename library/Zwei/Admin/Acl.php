@@ -344,7 +344,7 @@ class Zwei_Admin_Acl extends Zend_Acl
         $select->where(self::$_tb_modules.'.tree = ?', '1'); //[TODO] externalizar la condicion tree segun el caso
         $select->order("order");
 
-        Debug::write($select->__toString());
+        Debug::writeBySettings($select->__toString(), 'query_log');
         
         return(self::$_db->fetchAll($select));
     }

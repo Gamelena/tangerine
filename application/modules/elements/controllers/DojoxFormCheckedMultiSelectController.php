@@ -75,10 +75,11 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
                 $value = $r->getParam('target') ? $r->getParam('target') : null;
             }
         
-        
-            if ($r->getParam('defaultValue') !== false || $r->getParam('defaultText') !== false) {
+            
+            if ($r->getParam('defaultValue') || $r->getParam('defaultText')) {
                 $options .= "<option value=\"{$r->getParam('defaultValue', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
             }
+           
         
             foreach ($rows as $row) {
                 $selected = "";

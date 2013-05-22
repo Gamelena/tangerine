@@ -86,7 +86,7 @@ class CrudRequestController extends Zend_Controller_Action
             /**
              * 
              * @var Zwei_Db_Table
-             */    
+             */
             $this->_model = new $classModel();
             $a = $this->_model->getAdapter();
             $this->view->collection = array();
@@ -95,12 +95,28 @@ class CrudRequestController extends Zend_Controller_Action
                 $data = array();
                 $where = array();
                 
-                $infoFiles = array();
                 foreach ($_FILES as $i => $v) {
-                    $infoFiles[] = $this->_form->upload($i, ROOT_DIR . '/upfiles');
+                    $path = $this->_form->pathdata[array_keys($v['name'])[0]];
+                    $infoFiles = $this->_form->upload($i, $path);
+                    if ($infoFiles) {
+                        foreach ($infoFiles as $i => $v) {
+                            $this->_form->data[$i] = $v['filename'];
+                        }
+                        
+                    } else {
+                        Debug::write("error al subir archivo a $path");
+                    }
                 }
-                Debug::write($this->_form);
-                Debug::write($infoFiles);
+                
+                if (isset($this->_form->deletedata )) {
+                    foreach ($this->_form->deletedata as $i => $v) {
+                        if (!unlink($this->_form->pathdata[$i]. $v)) {
+                            Debug::write("no se pudo borrar " . ROOT_DIR . '/upfiles/'. $v);
+                        }
+                        $this->_form->data[$i] = '';
+                    }
+                }
+                
                 
                 if ($this->_form->action == 'add') {
                      
@@ -302,7 +318,31 @@ class CrudRequestController extends Zend_Controller_Action
         $failed = 0;
         $message = '';
         
-        foreach ($r->getParam('data') as $i => $v) {
+        foreach ($_FILES as $i => $v) {
+            $path = $this->_form->pathdata[array_keys($v['name'])[0]];
+            $infoFiles = $this->_form->upload($i, $path);
+            if ($infoFiles) {
+                foreach ($infoFiles as $i => $v) {
+                    $this->_form->data[$i] = $v['filename'];
+                }
+        
+            } else {
+                Debug::write("error al subir archivo a $path");
+            }
+        }
+        
+        if (isset($this->_form->deletedata )) {
+            foreach ($this->_form->deletedata as $i => $v) {
+                if (!unlink($this->_form->pathdata[$i]. $v)) {
+                    Debug::write("no se pudo borrar " . ROOT_DIR . '/upfiles/'. $v);
+                }
+                $this->_form->data[$i] = '';
+            }
+        }
+        
+        
+        
+        foreach ($this->_form->data as $i => $v) {
             $i = str_replace("'", '', $i);
             $where = $this->_model->getAdapter()->quoteInto('id = ?', $i);
             $data = array('value' => $v);

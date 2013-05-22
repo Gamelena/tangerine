@@ -74,11 +74,15 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
         
         if ($this->xpath('//component/forms/tabs/tab'.$xpath)) {
             for ($i = 0; $i < $this->forms->tabs->tab->count(); $i++) {
-                if ($inherits) $this->inheritAttributes($this->forms->tabs->tab[$i]);
-                $elements[] = $this->forms->tabs->tab[$i];
+                for ($j = 0; $j < $this->forms->tabs->tab[$i]->count(); $j++) {
+                    if ($inherits) $this->inheritAttributes($this->forms->tabs->tab[$i]->element[$j]);
+                    $elements[$i][] = $this->forms->tabs->tab[$i]->element[$j];
+                }
+                 
+
             }
+            Debug::write($elements);
         } else {
-            Debug::write('//component/elements/element'.$xpath);
             $elements = array($this->elements[0]->xpath('//component/elements/element'.$xpath));
         }
         return $elements;
@@ -100,6 +104,7 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
      */
     public function inheritAttributes($son, $fatherLevel = '//elements/element', $index='target', $override = false)
     {
+        Debug::write($fatherLevel."[@$index='{$son->getAttribute('target')}']");
         $father = $this->xpath($fatherLevel."[@$index='{$son->getAttribute('target')}']")[0];
         
         foreach ($father->attributes() as $key => $value) {

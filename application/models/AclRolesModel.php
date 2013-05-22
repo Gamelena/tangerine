@@ -152,12 +152,16 @@ class AclRolesModel extends Zwei_Db_Table
         $data = $this->cleanDataParams($data);
         
         try {
+            Debug::write($data);
+            Debug::write($where);
             $update = parent::update($data, $where);
         } catch (Zend_Db_Exception $e) {
             $update = false;
             if ($e->getCode() == 23000) {
                 $this->setMessage("Nombre de Perfil en uso, por favor escoja otro.");
                 return false;
+            } else {
+                Debug::write($e->getMessage()."-".$e->getCode());
             }
         }
         

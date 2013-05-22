@@ -1,1 +1,25 @@
-<input type="file" data-dojo-type="dojox.form.Uploader" id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" value="fuu" label="Seleccionar" data-dojo-props="showInput:'before',isDebug:true" <?php echo $this->disabled.$this->url.$this->required.$this->onblur.$this->invalid_message.$this->prompt_message ?>/>
+<input type="file" data-dojo-type="dojox.form.Uploader" id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" value="<?php echo $this->value ?>" label="Seleccionar" data-dojo-props="showInput:'before',isDebug:true" <?php echo $this->disabled.$this->url.$this->required.$this->onblur.$this->invalid_message.$this->prompt_message ?>/>
+<?php 
+if (!empty($this->value)) :
+?>
+<div class="fileDetails">
+<?php 
+    if ($this->formatter == 'formatImage') :
+?>
+    <img alt="<?php echo $this->value?>" src="<?php echo BASE_URL?>/upfiles/<?php echo $this->value?>">
+<?php 
+
+?>
+    <span class="fileName"><i><?php echo $this->value?></i></span>
+<?php 
+    endif;
+?>
+    <span class="fileDelete">
+        <label for="delete<?php echo $this->target?>" style="padding-left: 18px;">Eliminar</label>
+        <input type="checkbox" id="delete_<?php echo $this->domId . $this->i?>" data-dojo-type="dijit.form.CheckBox" name="delete<?php echo $this->target?>" value="<?php echo $this->value ?>" />
+    </span>
+</div>
+<?php 
+endif;
+?>
+<input type="hidden" data-dojo-type="dijit.form.ValidationTextBox" id="path_<?php echo $this->domId . $this->i?>" name="path<?php echo $this->target?>" value="<?php echo $this->path ?>"/>

@@ -11,7 +11,7 @@ dojo.declare("zwei.Admportal", null, {
             globalModuleId = parseInt(page.id.match(/\d+$/)); 
         });
     },
-    loadLayoutSettings: function(domLogo, domTitle) 
+    loadLayoutSettings: function(domLogo, domTitle, domFooter) 
     {
         var store = new dojo.data.ItemFileReadStore({
             url: base_url+'crud-request?model=SettingsModel&format=json'
@@ -26,7 +26,7 @@ dojo.declare("zwei.Admportal", null, {
                 dojo.forEach(items, function(i)
                 {
                     if (store.getValue(i, "id") == "url_logo_oper"){
-                        images += "<img src=\""+base_url+ store.getValue(i, "value")+ "\" />";
+                        images += "<img src=\""+base_url+ '/upfiles/' +store.getValue(i, "value")+ "\" />";
                     } else if(store.getValue(i, "id") == "titulo_adm") {
                         domTitle.innerHTML = store.getValue(i, "value");
                     }    

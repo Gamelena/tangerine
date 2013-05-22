@@ -14,12 +14,22 @@ class Elements_DojoxFormUploaderController extends Zend_Controller_Action
         $this->view->i =  $r->getParam('i');
         $this->view->domId =  $r->getParam('domId');
         $this->view->target =  $r->getParam('target');
+        $this->view->formatter =  $r->getParam('formatter', '');
         
         $this->view->value =  $r->getParam('value', '');
         $this->view->readonly = $r->getParam('readonly', '') === 'true' ? "readonly=\"readonly\"" : '';
         $this->view->disabled = $r->getParam('disabled', '') === 'true' ? "disabled=\"disabled\"" : '';
         $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
         $this->view->url = $r->getParam('url') ? "url=\"{$r->getParam('url')}\"" : '';
+        
+        $this->view->path = $r->getParam('path');
+        
+        if (preg_match("/^\{ROOT_DIR\}(.*)$/", $this->view->path, $matches)) {
+            $this->view->path = ROOT_DIR . $matches[1];
+        } else if (preg_match("/^\{APPLICATION_PATH\}(.*)$/", $this->view->path, $matches)) {
+            $this->view->path = APPLICATION_PATH . $matches[1];
+        } 
+        
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? "promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
