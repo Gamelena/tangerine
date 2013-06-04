@@ -97,13 +97,17 @@ endif;
             });
             <?php echo $this->onSubmit ?>
             
-            var observer = form.watch("response", function(name, oldValue, response){
+            var observer = form.watch("response", function(name, oldValue, response) {
+                console.debug(response);
                 if (response != null) {
                     <?php echo $this->onPostSubmit ?>
+                    if (response.todo == 'goToLogin') window.location.href = base_url + '/login';
+                    else if (response.todo == 'cargarArbolMenu') admportal.loadMainMenu();
                     this.set("response", null);
                 }
             });
             form.save();
+            
         } catch (e) {
             console.debug(e);
             alert(e.message);

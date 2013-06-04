@@ -89,6 +89,7 @@ dojo.declare("zwei.Admportal", null, {
                     return tnode;
                 },
                 getIconStyle:function(item, opened){
+                    console.debug(opened);
                     if (item.image != undefined && item.image[0] != null) {
                         console.debug( base_url + 'upfiles/16/' + encodeURIComponent(item.image[0]));
                         return {

@@ -54,7 +54,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      */
     loadData: function() {
         var domForm = this.dijitFormSearch != null ? dojo.byId(this.dijitFormSearch.id) : dojo.byId(this.dijitForm.id);
-        console.debug(domForm);
         var searchUrl = base_url+'crud-request?model=' + domForm['model'].value + '&format=' + domForm['format'].value;
         
         if (this.dijitFormSearch != null) {
