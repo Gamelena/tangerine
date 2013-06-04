@@ -52,9 +52,11 @@ class Components_NodesGraphController extends Zend_Controller_Action
         $this->view->paramsLinks = $params;
         $this->view->paramsLinks['group_id'] = $this->view->idCampana;
         $this->view->paramsLinks['p'] = $this->_xmlLinks;
+        $this->view->paramsLinks['loadPartial'] = 'true';
         
         $this->view->paramsNodes = $params;
         $this->view->paramsNodes['p'] = $this->_xmlNodes;
+        $this->view->paramsNodes['loadPartial'] = 'true';
         
         $this->view->request = $r;
         

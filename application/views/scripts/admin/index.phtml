@@ -67,7 +67,7 @@
                     <div data-dojo-type="dijit.Menu" id="confMenu" style="display: none;">
                         <div data-dojo-type="dijit.MenuItem" id="btnConfPersonal"
                             iconClass="dijitIconTask"
-                            onclick="<?=$this->jsLoadModuleFunction?>('admin/components?p=personal-info.xml', '<?= uniqid() ?>', 'Datos Personales')">
+                            onclick="<?php echo $this->jsLoadModuleFunction?>('admin/components?p=personal-info.xml', '<?php echo uniqid() ?>', 'Datos Personales')">
                         Personal</div>
                    </div>
                 </button>
@@ -89,7 +89,7 @@
         </div>
         <div data-dojo-type="dojox.layout.ContentPane" jsId="contentPaneBottom" data-dojo-props='region:"bottom", style:"background-color: #b39b86; height: auto;"'>
             <span style="float:right;margin-right: 6px">
-                <span style="float: left">&nbsp; &copy; Zweicom 2012 &nbsp; </span> <img src="<?php echo BASE_URL?>/images/logo_zweicom26x15.png" />  
+                <span style="float: left; padding-right: 10px;" id="zweicomLegend">&nbsp;</span> <img id="zweicomLogo" src="" />  
             </span>
         </div>
     </div>

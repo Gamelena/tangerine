@@ -13,17 +13,44 @@
 
 class AclRolesModel extends Zwei_Db_Table
 {
+    /**
+     * 
+     * @var string
+     */
     protected $_name = "acl_roles";
+    /**
+     * 
+     * @var string
+     */
     protected $_name_modules = "acl_modules";
+    /**
+     * 
+     * @var string
+     */
     protected $_name_permissions = "acl_permissions";
+    /**
+     * 
+     * @var array
+     */
     protected $_data_permissions = array();
+    
+    /**
+     * 
+     * @var AclModulesModel
+     */
+    protected $_aclModulesActions;
 
+    public function init() {
+        $this->_aclModulesActions = new AclModulesActionsModel();
+        parent::init();
+    }
+    
     public function select()
     {
-        $select=new Zend_Db_Table_Select($this);
+        $select = new Zend_Db_Table_Select($this);
 
         //Si no pertenece al role_id 1, no puede ver a otros usuarios con ese perfil
-        if($this->_user_info->acl_roles_id != '1'){
+        if ($this->_user_info->acl_roles_id != '1') {
             $select->where('id <> ?', '1');
         }
 
@@ -39,19 +66,18 @@ class AclRolesModel extends Zwei_Db_Table
     public function overloadDataForm($data) {
         $data = $data->toArray();
 
-        foreach ($data as $i => $v) {
-            if ($i == 'id') {
-                $select = $this->selectPermissions($v);
-                Debug::writeBySettings($select->__toString(), 'query_log');
-                $permissions = $this->fetchAll($select);
-                
-                if (count($permissions) > 0) {
-                   foreach ($permissions as $perm) { //  $permissions->id = $permission->permission
-                       $data["permissions"][] = $perm['id'];
-                   }     
-                }
-            }
+        //$select = $this->selectPermissions($data['id']);
+        $select = $this->_aclModulesActions->selectAllActions($data['id']);
+        Debug::writeBySettings($select->__toString(), 'query_log');
+        $permissions = $this->fetchAll($select);
+        
+        if (count($permissions) > 0) {
+           foreach ($permissions as $perm) { //  $permissions->id = $permission->permission
+               $data["permissions"][] = $perm['id'];
+           }     
         }
+
+        Debug::write($data);
         return $data;
     }
 
@@ -84,6 +110,7 @@ class AclRolesModel extends Zwei_Db_Table
                     'permission' => new Zend_Db_Expr("'$v->id'")
                 )
             );
+            
             $selectTmp->joinLeft(array('parent'=>$this->_name_modules), "$this->_name_modules.parent_id = parent.id",
                 array(
                     "title" => new Zend_Db_Expr(
@@ -152,8 +179,6 @@ class AclRolesModel extends Zwei_Db_Table
         $data = $this->cleanDataParams($data);
         
         try {
-            Debug::write($data);
-            Debug::write($where);
             $update = parent::update($data, $where);
         } catch (Zend_Db_Exception $e) {
             $update = false;

@@ -134,6 +134,7 @@ class AdminController extends Zend_Controller_Action
         ->requireModule("dijit.form.SimpleTextarea")
         ->requireModule("dijit.form.Button")
         ->requireModule("dijit.form.DateTextBox")
+        ->requireModule("dijit.form.Select")
         ->requireModule("dijit.form.FilteringSelect")
         ->requireModule("dijit.form.TimeTextBox")
         ->requireModule("dijit.form.ComboBox")

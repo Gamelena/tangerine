@@ -20,6 +20,7 @@ class Elements_DijitFormValidationTextBoxController extends Zend_Controller_Acti
         $this->view->disabled = $r->getParam('disabled', '') === 'true' ? "disabled=\"disabled\"" : '';
         $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
+        $this->view->style = $r->getParam('onblur') ? "style=\"{$r->getParam('style')}\"" : '';
         $this->view->regExp = $r->getParam('regExp') ? "regExp=\"{$r->getParam('regExp')}\"" : '';
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? "promptMessage=\"{$r->getParam('promptMessage')}\"" : '';

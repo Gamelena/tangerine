@@ -4,6 +4,25 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     protected $_config;
     
+    protected function _initAutoLoad()
+    {
+        require_once 'Zend/Loader/Autoloader.php';
+        $this->loadConstants();
+        
+        $loader = Zend_Loader_Autoloader::getInstance();
+        $loader->setFallbackAutoloader(true);
+        set_include_path('.'
+            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/../library'
+            . PATH_SEPARATOR . ROOT_DIR.'/library'
+            . PATH_SEPARATOR . APPLICATION_PATH . '/models'
+            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/models'
+            . PATH_SEPARATOR . APPLICATION_PATH . '/forms'
+            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/forms'
+            . PATH_SEPARATOR . get_include_path()
+        );
+        $loader->pushAutoloader(new Zwei_Autoloader_PhpThumb());
+    }
+    
     public function loadConstants()
     {
         if (!defined('PHP_VERSION_ID')) {
@@ -23,7 +42,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         defined('APPLICATION_PATH') || define('APPLICATION_PATH', ROOT_DIR . '/application');
         defined('COMPONENTS_ADMIN_PATH') || define('COMPONENTS_ADMIN_PATH', APPLICATION_PATH.'/components');
         defined('BASE_URL') || define('BASE_URL', PROTO.$_SERVER['HTTP_HOST'].dirname($_SERVER["SCRIPT_NAME"]).$eop);
-        defined('TEMPLATE') || define('TEMPLATE', '');//si es 'urban' se encontrará un huevito de pascua (en desarrollo) 
+
         
         // Define application environment
         defined('APPLICATION_ENV')
@@ -44,29 +63,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
     }
     
-    public function confAutoLoader()
-    {
-        require_once 'Zend/Loader/Autoloader.php';
-        $this->loadConstants();
-        
-        $loader = Zend_Loader_Autoloader::getInstance();
-        $loader->setFallbackAutoloader(true);
-        
-        set_include_path('.'
-            . PATH_SEPARATOR . ROOT_DIR.'/library'
-            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/../library'
-            . PATH_SEPARATOR . APPLICATION_PATH . '/models'
-            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/models'
-            . PATH_SEPARATOR . APPLICATION_PATH . '/forms'
-            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/forms'
-            . PATH_SEPARATOR . get_include_path()
-        );
-    }
-    
     public function run()
     {
-        $this->confAutoLoader();
-       
         try {
             Zend_Session::start();
         } catch (Zend_Session_Exception $e) {

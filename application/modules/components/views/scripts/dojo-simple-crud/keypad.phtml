@@ -49,9 +49,9 @@ if ($this->clone) :
                 var form = new zwei.Form({
                     ajax: <?php echo $this->ajax ?>,
                     component: '<?php echo $this->component?>',
-                    action: 'add',
-                    dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_edit'), 
-                    dijitForm: dijit.byId('<?php echo $this->domPrefix?>form_edit'), 
+                    action: 'clone',
+                    dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_add'), 
+                    dijitForm: dijit.byId('<?php echo $this->domPrefix?>form_add'), 
                     dijitDataGrid: dijit.byId('<?php echo $this->domPrefix?>dataGrid')
                 }); 
                 form.showDialog()">

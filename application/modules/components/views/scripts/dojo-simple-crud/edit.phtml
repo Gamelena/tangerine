@@ -1,48 +1,59 @@
-<form dojoType="dijit.form.Form" target="ifrm_process" id="<?php echo $this->domPrefix?>form_<?php echo $this->mode?>" class="tabForm" jsId="<?php echo $this->domPrefix?>tabForm" name="<?php echo $this->domPrefix?>form_<?php echo $this->mode?>" encType="multipart/form-data"  action="<?php echo BASE_URL?>crud-request" method="post">
 <?php 
-$h = "style=\"background:#cccccc\"";
+$modAux = $this->mode != 'clone' ? $this->mode : 'add';
+?>
+<form dojoType="dijit.form.Form" target="ifrm_process" id="<?php echo $this->domPrefix?>form_<?php echo $modAux?>" class="tabForm" jsId="<?php echo $this->domPrefix?>form_<?php echo $modAux?>" name="<?php echo $this->domPrefix?>form_<?php echo $this->mode?>" encType="multipart/form-data"  action="<?php echo BASE_URL?>crud-request" method="post">
+<?php 
 $i = 0;
-$k = 1;
 $tableWrapperClass = '';
-$hidden = '';
-
 
 if (!$this->loadPartial) :
     if (count($this->tabs) > 1) :
         $tableWrapperClass = "settingsArea";
         foreach ($this->tabs as $tab) :
-            $i++;
             //if ($tab->getAttribute($this->mode) === 'true') :
+            $style = $i == 0 ? 'style="background-image: url(/dojotoolkit/dijit/themes/claro/images/activeGradient.png); background-color: rgb(207, 229, 250); background-position: initial initial; background-repeat: repeat no-repeat;"' : '';
+            $i++;
 ?>
-    <a id="tab<?php echo $this->mode ?>_ctrl<?php echo $i?>" class="settings_tab" <?php echo $h ?> onclick="showtab(this.id, '<?php echo $this->domPrefix?>tab<?php echo $this->mode.$i?>')"><?php echo $tab->getAttribute('name') ?></a>
+    <a id="<?php echo $this->domPrefix ?>tab<?php echo $this->mode ?>_ctrl<?php echo $i?>" class="settingsTab" <?php echo $style ?> onclick="admportal.switchTabs('<?php echo $this->domPrefix?>form_<?php echo $modAux?>', this.id, '<?php echo $this->domPrefix.'Tab_'.$this->mode.$i?>')"><?php echo $tab->getAttribute('name') ?></a>
 <?php 
-        $h = '';
             //endif;
         endforeach;
     endif;
 ?>
+    <div class="brclear"></div>
 <?php
     $i=0;
+    $j=0;
     foreach ($this->tabs as $tab) :
+        $style = $i == 0 ? 'style="display:block"' : 'style="display:none"'; 
         $i++;
 ?>
-    <div id="<?php echo $this->domPrefix.'Tab_'.$this->mode.$i?>" class="<?php echo $tableWrapperClass ?>" <?php echo $hidden ?>>
+    <div id="<?php echo $this->domPrefix.'Tab_'.$this->mode.$i?>" class="settingsArea" <?php echo $style ?>>
         <table>
 <?php 
-        $j=0;
+        $k=0;
         foreach ($tab as $element) :
             $j++;
-            $hidden;
+            $k++;
+            $hidden = '';
             $params = (array) $element->attributes();
             $params = $params['@attributes'];
             if ($element->existsChildren('tinyMceInit')) {
                 $params['tinyMceInit'] = dom_import_simplexml($element->tinyMceInit)->textContent;
             }
             
-            $params['domId'] =  $this->domPrefix . "_{$this->mode}_";
+            if ($element->existsChildren('thumb')) {
+                $params['thumbs'] = array();
+                foreach ($this->xml->xpath("//elements/element[@target='{$params['target']}']/thumb") as $t) {
+                    $params['thumbs'][] = $t;
+                }
+            }
+            
+            $params['domId'] = $this->domPrefix . "_{$this->mode}_";
             $params['i'] = $j;
-            if ($params['type'] == 'hidden') $hidden = ' style="display:none"';
-    
+            $hidden = $params['type'] == 'hidden' ? ' style="display:none"' : '';
+            
+            if (isset($_REQUEST[$params['target']])) $params['value'] = $_REQUEST[$params['target']]; //Esto aplica para formularios cargados vía ajax
             if (isset($this->data[$params['target']])) $params['value'] = $this->data[$params['target']];
             
             $params['target'] = "data[{$params['target']}]";
@@ -60,13 +71,12 @@ if (!$this->loadPartial) :
     endforeach;
 endif;
 ?>
-    <div class="brclear"></div>
     <input type="hidden" name="format" value="json" />
-    <input type="hidden" name="action" value="<?php echo $this->mode?>" />
+    <input type="hidden" name="action" value="<?php echo $modAux ?>" />
     <input type="hidden" name="model" value="<?php echo $this->model?>" />
     <input type="hidden" name="p" value="<?php echo $this->p ?>" />
 <?php 
-if ($this->mode == 'edit') :
+if ($this->mode == 'edit' || $this->mode == 'clone') :
     foreach ($this->modelPrimary as $p) :
         $value = isset($_REQUEST['primary']) ? $_REQUEST['primary'][$p] : '';
 ?>
@@ -80,7 +90,7 @@ endif;
         try {
             var form = new zwei.Form({
                 dijitForm: this, 
-                dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_<?php echo $this->mode ?>'),
+                dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_<?php echo $this->mode != 'clone' ? $this->mode : 'add'?>'),
                 dijitDataGrid: dijit.byId('<?php echo $this->domPrefix?>dataGrid'),
                 dijitFormSearch: dijit.byId('<?php echo $this->domPrefix?>formSearch'),
                 iframe: dojo.byId('ifrm_process')
@@ -105,5 +115,5 @@ endif;
     }
     return true;
     </script>
-    <button dojoType="dijit.form.Button" id="<?php echo $this->domPrefix?>tabs_btn_save<?php echo $this->mode?>" type="submit" />Guardar</button>
+    <button dojoType="dijit.form.Button" id="<?php echo $this->domPrefix?>tabs_btn_save<?php echo $this->mode != 'clone' ? $this->mode : 'add'?>" type="submit" />Guardar</button>
 </form>

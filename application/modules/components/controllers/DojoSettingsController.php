@@ -31,7 +31,7 @@ class Components_DojoSettingsController extends Zend_Controller_Action
     public function indexAction()
     {
         $r = $this->getRequest();
-        $model = $this->_xml->getAttribute('target', 'SettingsModel');
+        $model = $this->_xml->getAttribute('target');
         $this->_model = new $model();
         $this->view->model = $this->_model;
         $this->view->groups = $this->_model->loadGroups();

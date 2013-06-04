@@ -33,10 +33,17 @@ class CrudRequestController extends Zend_Controller_Action
      * @var Zwei_Db_Table
      */
     private $_model;
+    
+    /**
+     * Archivo XML para obtener atributos adicionales y validar permisos
+     * @var Zwei_Admin_Xml
+     */
+    private $_xml;
 
     public function init()
     {
         $this->_form = new Zwei_Utils_Form();
+        
         if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
         } else if (isset($this->_form->format) && $this->_form->format == 'json') {
@@ -54,6 +61,11 @@ class CrudRequestController extends Zend_Controller_Action
             $this->_redirect('index/login');
         }
         $this->_helper->layout()->disableLayout();
+        
+        if (isset($this->_form->p)) {
+            $file = Zwei_Admin_Xml::getFullPath($this->_form->p);
+            $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+        }
     }
     
     /**
@@ -77,9 +89,6 @@ class CrudRequestController extends Zend_Controller_Action
             ->initContext();
         }
         
-        //enviar nombre de clase modelo separada por "_" y sin sufijo "Model",
-        //ej: enviar solicitud_th en lugar de SolicitudThModel"
-        
         $classModel = $this->getRequest()->getParam('model');
         
         if (class_exists($classModel)) {
@@ -96,13 +105,38 @@ class CrudRequestController extends Zend_Controller_Action
                 $where = array();
                 
                 foreach ($_FILES as $i => $v) {
-                    $path = $this->_form->pathdata[array_keys($v['name'])[0]];
+                    $path = !empty($this->_form->pathdata[array_keys($v['name'])[0]]) ? $this->_form->pathdata[array_keys($v['name'])[0]] : ROOT_DIR . '/public/upfiles';
+                    $element = $this->_xml->getElements("@target='".array_keys($v['name'])[0]."'");
+                    
                     $infoFiles = $this->_form->upload($i, $path);
                     if ($infoFiles) {
+                        $j = 0;
                         foreach ($infoFiles as $i => $v) {
                             $this->_form->data[$i] = $v['filename'];
+                            if ($element[$j]->existsChildren('thumb')) {
+                                foreach ($element[$j]->thumb as $t) {
+                                    try {
+                                        if (preg_match("/^\{ROOT_DIR\}(.*)$/", $t->getAttribute('path'), $matches)) {
+                                            $thumbPath = ROOT_DIR . $matches[1];
+                                        } else if (preg_match("/^\{APPLICATION_PATH\}(.*)$/", $t->getAttribute('path'), $matches)) {
+                                            $thumbPath = APPLICATION_PATH . $matches[1];
+                                        } else {
+                                            $thumbPath = $t->getAttribute('path');
+                                        }
+
+                                        //[TODO] revisar configuracion de Autoloader en Bootstrap para no usar require_once
+                                        require_once ADMPORTAL_APPLICATION_PATH .'/../library/PhpThumb/ThumbLib.inc.php';
+                                        
+                                        $thumb = PhpThumbFactory::create($path."/".$v['filename']);
+                                        $thumb->resize($t->getAttribute('width'), $t->getAttribute('height'));
+                                        $thumb->save($thumbPath."/".$v['filename']);
+                                    } catch (Exception $e) {
+                                        Debug::write($e->getMessage() . '-' . $e->getCode() . $e->getTraceAsString());
+                                    }
+                                }
+                            }
+                            $j++;
                         }
-                        
                     } else {
                         Debug::write("error al subir archivo a $path");
                     }
@@ -110,8 +144,8 @@ class CrudRequestController extends Zend_Controller_Action
                 
                 if (isset($this->_form->deletedata )) {
                     foreach ($this->_form->deletedata as $i => $v) {
-                        if (!unlink($this->_form->pathdata[$i]. $v)) {
-                            Debug::write("no se pudo borrar " . ROOT_DIR . '/upfiles/'. $v);
+                        if (!@unlink($path. $v)) {
+                            Debug::write("no se pudo borrar " . $this->_form->pathdata[$i] . $v);
                         }
                         $this->_form->data[$i] = '';
                     }
@@ -119,7 +153,6 @@ class CrudRequestController extends Zend_Controller_Action
                 
                 
                 if ($this->_form->action == 'add') {
-                     
                     foreach ($this->_form->data as $i=>$v) {
                         $data[$i] = $v;
                     }
@@ -135,7 +168,6 @@ class CrudRequestController extends Zend_Controller_Action
                         $this->_response_content['state'] = 'ADD_FAIL';
                         Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
                     }
-                    
                 } elseif ($this->_form->action == 'delete') {
                     foreach ($this->_form->primary as $i => $v) {
                         $where[] = $a->quoteInto($a->quoteIdentifier($i)." = ?", $v);
@@ -154,7 +186,6 @@ class CrudRequestController extends Zend_Controller_Action
                         $where[] = $a->quoteInto($a->quoteIdentifier($i)." = ?", $v);
                     }
                     if (count($where) == 1) $where = $where[0];
-                    
                     
                     foreach ($this->_form->data as $i=>$v) {
                         $data[$i] = $v;
@@ -186,8 +217,6 @@ class CrudRequestController extends Zend_Controller_Action
 
             $oDbObject = new Zwei_Db_Object($this->_form);
             $oSelect = $oDbObject->select();
-
-            
 
             if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) {
                 $adapter = $this->_model->getZwAdapter();
@@ -231,15 +260,12 @@ class CrudRequestController extends Zend_Controller_Action
                     }
                     echo $content;
                 } else {
-                  
-                
                     if (isset($this->_form->p)) {
                         $content = $Table->rowsetToExcel($data, $this->_form->p);
                     } else {
                         $content = $Table->rowsetToExcel($data);
                     }
-                }    
-                    
+                }
 
                 exit();
                 
@@ -325,7 +351,6 @@ class CrudRequestController extends Zend_Controller_Action
                 foreach ($infoFiles as $i => $v) {
                     $this->_form->data[$i] = $v['filename'];
                 }
-        
             } else {
                 Debug::write("error al subir archivo a $path");
             }
@@ -339,7 +364,6 @@ class CrudRequestController extends Zend_Controller_Action
                 $this->_form->data[$i] = '';
             }
         }
-        
         
         
         foreach ($this->_form->data as $i => $v) {

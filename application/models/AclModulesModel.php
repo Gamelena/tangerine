@@ -15,29 +15,93 @@ class AclModulesModel extends Zwei_Db_Table
 {
     protected $_name = "acl_modules";
     protected $_label = "title";
+    protected $_dataActions = array();
     private $_approved = null;
 
     public function update($data, $where) 
     {
-        if (empty($data['module'])) $data['module'] = NULL;
-        if (empty($data['parent_id'])) $data['parent_id'] = NULL;
+        $data = $this->cleanDataParams($data);
+        $myWhere = $this->where2Array($where);
+        
+        $saveActions = $this->saveDataActions($myWhere['id']);
         
         $this->_ajax_todo = 'cargarArbolMenu';
+        
+        $update = parent::update($data, $where);
         Zwei_Utils_File::clearRecursive(ROOT_DIR ."/cache");
         
-        return parent::update($data, $where);
+        return $saveActions || $update;
     }
     
     public function insert($data)
     {
-        if (empty($data['module'])) $data['module'] = NULL;
-        if (empty($data['parent_id'])) $data['parent_id'] = NULL;
-        
+        $data = $this->cleanDataParams($data);
         $this->_ajax_todo = 'cargarArbolMenu';
-        Zwei_Utils_File::clearRecursive(ROOT_DIR ."/cache");
 
-        return parent::insert($data);        
+        $lastInsertedId = parent::insert($data);
+        $saveActions = $this->saveDataActions($lastInsertedId);
+        
+        return $lastInsertedId;
+        
     } 
+    
+    protected function cleanDataParams($data) {
+        if (empty($data['module'])) $data['module'] = null;
+        if (empty($data['parent_id'])) $data['parent_id'] = null;
+        if (isset($data['actions'])) {
+            $this->_dataActions = $data['actions'];
+            unset($data['actions']);
+        }
+        return $data;
+    }
+    
+    protected function saveDataActions($aclModulesId) {
+        $modulesAction = new DbTable_AclModulesActions();
+        $ad = $modulesAction->getAdapter();
+        $insert = false;
+        $return = false;
+        
+        //Borrar Todas las acciones del modulo, excepto los marcados
+        $unquotedList = !empty($this->_dataActions) ?
+            implode(",", $this->_dataActions) :
+            false;
+        
+        $list = array();
+        foreach ($list as $a) {
+            $list[] = $ad->quote($a);
+        }
+        
+        $where = array();
+        
+        $where[] =$ad->quoteInto('acl_modules_id = ?', $aclModulesId);
+        if ($list) $where[] = "acl_actions_id NOT IN ($list)";    
+            
+        $delete = $modulesAction->delete($where);
+         
+        if ($delete) $return = true;
+        //Fin Borrar
+        
+        foreach ($this->_dataActions as $v) {
+            $data = array(
+                    'acl_actions_id' => $v,
+                    'acl_modules_id' => $aclModulesId
+            );
+        
+            try {
+                $insert = $modulesAction->insert($data);
+            } catch (Zend_Db_Exception $e) {
+                if ($e->getCode() == '23000') {
+                    $printData = print_r($data, 1);
+                    Debug::write("Ya existe modulo_accion asociado a $printData");
+                }
+            }
+            if ($insert) $return = true;
+        }
+        
+        
+        return $return;
+    }
+    
     
     public function delete($where)
     {
@@ -141,6 +205,30 @@ class AclModulesModel extends Zwei_Db_Table
         
         return $select;
     }
+    
+    /**
+     * @param $data Zend_Db_Table_Rowset
+     * (non-PHPdoc)
+     * @see Zwei_Db_Table::overloadDataForm()
+     */
+    public function overloadDataForm($data)
+    {
+        $data = $data->toArray();
+        $modulesActions = new DbTable_AclModulesActions();
+        $select = $modulesActions->select()->where($modulesActions->getAdapter()->quoteInto("acl_modules_id = ?", $data['id']));
+        
+        Debug::writeBySettings($select->__toString(), 'query_log');
+        
+        $data['actions'] = array();
+        $actions = $modulesActions->fetchAll($select);
+        if ($actions->count() > 0) {
+            foreach ($actions as $a) {
+                $data['actions'][] = $a['acl_actions_id'];
+            }
+        }
+        return $data;
+    }
+    
 
     /**
      * Selecciona diferentes módulos, mostrando modulo padre 

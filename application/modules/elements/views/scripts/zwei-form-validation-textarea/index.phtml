@@ -1,6 +1,6 @@
-<textarea id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" dojoType="zwei.form.ValidationTextarea" <?php echo $this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur ?>
+<textarea id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" data-dojo-type="zwei.form.ValidationTextarea" <?php echo $this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur.$this->style ?>
 <?php 
-if ($this->view->maxlenght) :
+if (!empty($this->maxlenght)) :
 ?>
         onKeyDown="limitText(document.getElementById('<?php echo $this->domId . $this->i?>'), document.getElementById('<?php echo $this->domId . $this->i?>_countdown'), $maxlength);"
         onKeyUp="limitText(document.getElementById('<?php echo $this->domId . $this->i?>'), document.getElementById('<?php echo $this->domId . $this->i?>_countdown'), $maxlength);" 
@@ -8,9 +8,10 @@ if ($this->view->maxlenght) :
 <?php 
 endif;
 ?>>
-<?php echo str_replace('"','&quot;',$this->value)?></textarea>
+    <?php echo str_replace('"','&quot;',$this->value)?>
+</textarea>
 <?php 
-if ($this->view->maxlenght) :
+if (!empty($this->maxlenght)) :
 ?>
     <div class="aux"><input type="text" name="<?php echo $this->domId . $this->i?>_countdown" style="width:35px; float:left;" id="<?php echo $this->domId . $this->i?>_countdown" dojoType="dijit.form.ValidationTextBox" size="3" value="" readonly="" /><label class="tip">caracteres disponibles.</label></div>
 <?php 

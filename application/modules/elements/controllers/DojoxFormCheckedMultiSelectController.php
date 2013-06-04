@@ -32,7 +32,7 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
         $this->view->disabled = $r->getParam('disabled', '') === 'true' ? "disabled=\"disabled\"" : '';
         $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
-        $this->view->regExp = $r->getParam('regExp') ? "regExp=\"{$r->getParam('regExp')}\"" : '';
+        $this->view->style = $r->getParam('style') ? $r->getParam('style') : '';
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? "promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         
@@ -64,7 +64,6 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
                 } else {
                     $select = $model->select(array("title", $id));
                 }
-                $select = $model->select(array($title, $id));
             }
             Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.
@@ -93,7 +92,7 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
                 } else if ($r->getParam('field')) {
                     $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$r->getParam('field')]}</option>\r\n";
                 } else {
-                    $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$title]}</option>\r\n";
+                    $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row["title"]}</option>\r\n";
                 }
             }
         } else {

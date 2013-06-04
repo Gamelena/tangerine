@@ -17,10 +17,10 @@ if ($this->ajax) {
     </div>
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?php echo $this->domPrefix?>contentBottom" class="contentBottom">
         <?php echo $this->action('keypad', 'dojo-simple-crud', 'components', $_REQUEST)?>
-        <div dojoType="dojox.widget.DialogSimple" executeScripts="true" id="<?php echo $this->domPrefix ?>dialog_edit" jsId="<?php echo $this->domPrefix ?>dialog_edit" title="Editar <?php echo $this->name ?>" <?php echo $this->styleDialog?>>
+        <div data-dojo-type="dojox.widget.DialogSimple" executeScripts="true" id="<?php echo $this->domPrefix ?>dialog_edit" jsId="<?php echo $this->domPrefix ?>dialog_edit" title="Editar <?php echo $this->name ?>" <?php echo $this->styleDialog?> <?php echo $this->onloadDialog?> <?php echo $this->onshowDialog?> <?php echo $this->onhideDialog?>>
             <?php echo $this->action('edit', 'dojo-simple-crud', 'components', $requestForm)?>
         </div>
-        <div dojoType="dojox.widget.DialogSimple" executeScripts="true" id="<?php echo $this->domPrefix ?>dialog_add" jsId="<?php echo $this->domPrefix ?>dialog_add" title="Agregar <?php echo $this->name ?>" <?php echo $this->styleDialog?>>
+        <div data-dojo-type="dojox.widget.DialogSimple" executeScripts="true" id="<?php echo $this->domPrefix ?>dialog_add" jsId="<?php echo $this->domPrefix ?>dialog_add" title="Agregar <?php echo $this->name ?>" <?php echo $this->styleDialog?> <?php echo $this->onloadDialog?> <?php echo $this->onshowDialog?> <?php echo $this->onhideDialog?>>
             <?php echo $this->action('add', 'dojo-simple-crud', 'components', $requestForm)?>
         </div>
     </div>

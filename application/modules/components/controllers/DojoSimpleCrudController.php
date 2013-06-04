@@ -8,19 +8,31 @@
  * @version 2013-05-09
  * @since 1.0
  * @author rodrigo.riquelme@zweicom.com
- * 
+ *
  * <code>
  * <?xml version="1.0"?> 
- * <component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="components.xsd" 
- * name="Usuarios" type="dojo-simple-crud" target="AclUsersModel" list="true" edit="true" add="true" delete="true">
+ * <component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ * xsi:noNamespaceSchemaLocation="components.xsd" 
+ * name="Usuarios" type="dojo-simple-crud" target="AclUsersModel" list="true"
+ * edit="true" add="true" delete="true">
  *     <elements>
- *         <element name="ID" target="id" type="id-box" visible="false" edit="false" add="false"/>
- *         <element name="Usuario" target="user_name" type="dijit-form-validation-text-box" visible="true" edit="false" add="true"/>
- *         <element name="Nombres" target="first_names" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
- *         <element name="Apellidos" target="last_names" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
- *         <element name="E-Mail" target="email" regExp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}" invalidMessage="mail no valido" type="dijit-form-validation-text-box" visible="true" edit="true" add="true" />
- *         <element name="Perfil" target="acl_roles_id" defaultValue="" type="dijit-form-filtering-select" table="AclRolesModel" field="role_name" visible="true" edit="true" add="true"/>
- *         <element name="Activo" target="approved" type="dijit-form-check-box" formatter="formatYesNo" visible="true" edit="true" add="true"/>
+ *         <element name="ID" target="id" type="id-box" visible="false"
+ * edit="false" add="false"/>
+ *         <element name="Usuario" target="user_name"
+ * type="dijit-form-validation-text-box" visible="true" edit="false" add="true"/>
+ *         <element name="Nombres" target="first_names"
+ * type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
+ *         <element name="Apellidos" target="last_names"
+ * type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
+ *         <element name="E-Mail" target="email"
+ * regExp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}" invalidMessage="mail
+ * no valido" type="dijit-form-validation-text-box" visible="true" edit="true"
+ * add="true" />
+ *         <element name="Perfil" target="acl_roles_id" defaultValue=""
+ * type="dijit-form-filtering-select" table="AclRolesModel" field="role_name"
+ * visible="true" edit="true" add="true"/>
+ *         <element name="Activo" target="approved" type="dijit-form-check-box"
+ * formatter="formatYesNo" visible="true" edit="true" add="true"/>
  *     </elements>
  *     <searchers>
  *         <group>
@@ -34,6 +46,7 @@
  * </component>
  * </code>
  *
+ *
  */
 
 class Components_DojoSimpleCrudController extends Zend_Controller_Action
@@ -44,37 +57,40 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      *
      *
      *
+     *
      */
     private $_xml = null;
-    
+
     /**
-     * 
      * @var string
+     *
      */
-    private $_component;
+    private $_component = null;
 
     /**
      * @var Zend_Config
      *
      *
      *
+     *
      */
     private $_config = null;
-    
+
     /**
-     * 
      * @var Zwei_Admin_Acl
+     *
      */
-    private $_acl;
-    
+    private $_acl = null;
+
     /**
-     * 
      * @var Zwei_Db_Table
+     *
      */
-    private $_model;
-    
+    private $_model = null;
+
     public function init()
     {
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
         
@@ -94,7 +110,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>" : '';
-        $this->view->styleDialog = $this->_xml->xpath("//forms/style") ? $this->_xml->xpath("//forms/style")[0] : '';
+        $this->view->styleDialog = $this->_xml->xpath("//forms[@style]") ? "style=\"{$this->_xml->xpath("//forms")[0]->getAttribute('style')}\"" : '';
+        $this->view->onloadDialog = $this->_xml->xpath("//forms[@onload]") ? "onload=\"{$this->_xml->xpath("//forms")[0]->getAttribute('onload')}\"" : '';
+        $this->view->onshowDialog = $this->_xml->xpath("//forms[@onshow]") ? "onshow=\"{$this->_xml->xpath("//forms")[0]->getAttribute('onshow')}\"" : '';
+        $this->view->onhideDialog = $this->_xml->xpath("//forms[@onhide]") ? "onhide=\"{$this->_xml->xpath("//forms")[0]->getAttribute('onhide')}\"" : '';
         $this->view->ajax = $this->_xml->xpath("//forms[@ajax='true']") ? true : false;
     }
 
@@ -106,7 +125,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->groups = $this->_xml->getSearchers(true);
     }
 
-    public function initForm($mode){
+    public function initForm($mode)
+    {
 
         $r = $this->getRequest();
         $this->view->p = $this->_component;
@@ -121,15 +141,14 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->model = $className;
         $this->_model = new $className();
         $this->view->modelPrimary = $this->_model->info('primary');
-        $this->view->tabs = $this->_xml->getTabs(true, "@$mode='true'");
+        $this->view->tabs = $this->_xml->getTabsWithElements(true, "@$mode='true' or @$mode='readonly' or @$mode='disabled'");
         
-        if ($mode == 'edit' && $this->view->ajax) {
+        if (($mode == 'edit' || $mode == 'clone') && $this->view->ajax && !$this->view->loadPartial) {
             $a = $this->_model->getAdapter();
             
             $select = $this->_model->select();
             $primaries = $r->getParam('primary');
 
-            // tambien sería posible usar "foreach($this->_model->info(Zend_Db_Table::PRIMARY) as $i) { $v = $primaries[$i]}" 
             foreach ($r->getParam('primary') as $i => $v) { 
                 //Concatenar nombre de campo con tabla principal en caso de que campo exista en la tabla,
                 //esto previene posibles errores de ambiguedad de nombre de campo cuando se use join
@@ -145,7 +164,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         }
         
     }
-    
+
     public function editAction()
     {
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
@@ -160,6 +179,15 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->render('edit');
     }
 
+    public function cloneAction()
+    {
+        $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
+        if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
+        $this->view->ajax = $ajax === 'true' ? true : false;
+        $this->initForm('clone');
+        $this->render('edit');
+    }
+    
     public function listAction()
     {
         $this->view->p = $this->_component;
@@ -170,8 +198,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->onRowClick = $this->_xml->getAttribute('onRowClick') ? "onRowClick:{$this->_xml->getAttribute('onRowClick')}," : "";
         $this->view->searchHideSubmit = $this->_xml->getAttribute('searchHideSubmit') === "true" ? true : false;
         $this->view->elements = $this->_xml->getElements("@visible='true'");
-        $this->view->dialogStyle = $this->_xml->xpath("//forms") && $this->_xml->xpath("//forms")[0]->getAttribute('style') ? "style=\"{$this->_xml->xpath("//forms")[0]->getAttribute('style')}\"": '';
-                
+        
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
         if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         
@@ -213,6 +240,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->ajax = $ajax === 'true' ? 'true' : 'false';
         //$this->view->changePassword = $this->_xml->getAttribute("changePassword") && $this->_xml->getAttribute("changePassword") == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT');
     }
+
+
 
 
 }

@@ -2,6 +2,8 @@
 <script>
     var campanaId = '<?php echo $this->idCampana?>';
     var campanaGroups = [], storeNodes, storeLinks;
+    dojo.require("dijit/MenuBar");
+    dojo.require("dijit/PopupMenuBarItem");
 </script>
 <style type="text/css">
 @import "/dojotoolkit/dojox/widget/Toaster/Toaster.css"; 
@@ -18,45 +20,87 @@ body * { visibility: hidden; }
     #<?php echo $this->domPrefix ?>gfx_holder { position: absolute; top: 0px; left: -130px; }
 }
 </style>
-<img id="<?php echo $this->domPrefix ?>switchMainPaneButtonY" src="<?php echo BASE_URL?>images/add_new2.png" onclick="cargarTabsPanelCentral('mensajes.xml&idCampana=<?php echo $this->idCampana?>', 'add', 'id', '<?php echo $this->domPrefix ?>');globalNodeType = 2" style="width: 27px;"/>&nbsp;
-<div id="<?php echo $this->domPrefix ?>verticalSlider" data-dojo-type="dijit/form/VerticalSlider"
-    value="1" minimum="0.2" maximum="1" discreteValues="9"
-    intermediateChanges="true"
-    showButtons="false" style="height:200px;position:absolute;top:50px;" name="verticalSlider" onchange="zoomCanvas(this.value, <?php echo $this->idCampana?>, '<?php echo $this->domPrefix ?>gfx_holder')">
-    <ol data-dojo-type="dijit/form/VerticalRuleLabels" container="leftDecoration"
-        style="width:1.5em;font-size:75%;color:gray;">
-        <li></li>
-        <li>40%</li>
-        <li></li>
-        <li>80%</li>
-        <li></li>
-    </ol>
-    <div data-dojo-type="dijit/form/VerticalRule" container="rightDecoration"
-        count="9" style="width:5px;"></div>
-    <ol data-dojo-type="dijit/form/VerticalRuleLabels" container="rightDecoration"
-        style="width:1.5em;font-size:75%;color:gray;">
-        <li>20%</li>
-        <li></li>
-        <li>60%</li>
-        <li></li>
-        <li>100%</li>
-    </ol>
+<!-- Menu -->
+<div id="mainMenu" data-dojo-type="dijit/MenuBar" style="position:fixed;">
+    <div data-dojo-type="dijit/PopupMenuBarItem">
+        <span>Zoom</span>
+        <div data-dojo-type="dijit/Menu" onclick="">
+            <div id="<?php echo $this->domPrefix ?>verticalSlider" data-dojo-type="dijit/form/VerticalSlider"
+                value="1" minimum="0.2" maximum="1" 
+                intermediateChanges="true"
+                showButtons="true" style="height:200px;" name="verticalSlider" onchange="zoomCanvas(this.value, <?php echo $this->idCampana?>, '<?php echo $this->domPrefix ?>gfx_holder')">
+                <ol data-dojo-type="dijit/form/VerticalRuleLabels" container="leftDecoration"
+                    style="width:1.5em;font-size:75%;color:gray;">
+                    <li></li>
+                    <li>40%</li>
+                    <li></li>
+                    <li>80%</li>
+                    <li></li>
+                </ol>
+                <div data-dojo-type="dijit/form/VerticalRule" container="rightDecoration"
+                    count="9" style="width:5px;"></div>
+                <ol data-dojo-type="dijit/form/VerticalRuleLabels" container="rightDecoration"
+                    style="width:1.5em;font-size:75%;color:gray;">
+                    <li>20%</li>
+                    <li></li>
+                    <li>60%</li>
+                    <li></li>
+                    <li>100%</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div data-dojo-type="dijit/PopupMenuBarItem">
+        <span>Nodos</span>
+        <div data-dojo-type="dijit/Menu">
+            <div data-dojo-type="dijit/MenuItem" onclick="
+                var form = new zwei.Form({
+                    component: 'mensajes.xml',
+                    ajax: true,
+                    action: 'add',
+                    dijitDialog: dijit.byId('mensajes_xmldialog_add'), 
+                    dijitForm: dijit.byId('mensajes_xmlform_add'),
+                    queryParams: 'idCampana=' + campanaId
+                }); 
+                form.showDialog();
+                ">
+                Nuevo Nodo...
+            </div>
+        </div>
+    </div>
+    <div data-dojo-type="dijit/PopupMenuBarItem">
+        <span>Enlaces</span>
+        <div data-dojo-type="dijit/Menu">
+            <div data-dojo-type="dijit/MenuItem" onclick="
+                var form = new zwei.Form({
+                    component: 'enlaces.xml',
+                    ajax: true,
+                    action: 'add',
+                    dijitDialog: dijit.byId('enlaces_xmldialog_add'), 
+                    dijitForm: dijit.byId('enlaces_xmlform_add'),
+                    queryParams: 'group_id=' + campanaId
+                }); 
+                form.showDialog();
+                ">
+                Nuevo Enlace...
+            </div>
+        </div>
+    </div>
+    <div data-dojo-type="dijit/MenuBarItem" onclick="window.print();">
+        Imprimir...
+    </div>
 </div>
-<button type="button" class="dijitIconPrint" style="width:21px;position:absolute;top:266px;left:10px;" iconClass="dijitIconPrint" id="btnPrint" title="Imprimir" onClick="window.print();"></button>
+<!-- /Menu -->
 <!-- Dialogos Formularios Mensajes -->
 <div id="<?php echo $this->domPrefix ?>gfx_holder" jsId="gfxHolder" style="width: 100%; height: 100%;"></div>
 <div dojoType="dijit.Dialog" id="<?php echo $this->domPrefix ?>dialog_add" jsId="<?php echo $this->domPrefix ?>dialog_add" title="Nuevo Nodo" onload="global_opc='add';" >
-<?php echo $this->action('add', 'dojo-simple-crud', 'components', $this->paramsNodes)?>
 </div>
 <div dojoType="dijit.Dialog" id="<?php echo $this->domPrefix ?>dialog_edit" jsId="<?php echo $this->domPrefix ?>dialog_edit" refreshOnShow="true" title="Editar Nodo"  onload="global_opc='edit';"  >
-<?php echo $this->action('edit', 'dojo-simple-crud', 'components', $this->paramsNodes)?>
 </div>
 <!-- Dialogos Formularios Enlaces -->
 <div dojoType="dijit.Dialog" id="<?php echo $this->domPrefix2 ?>dialog_add" jsId="<?php echo $this->domPrefix2 ?>dialog_add" title="Nuevo Enlace" onload="global_opc='add';" >
-<?php echo $this->action('add', 'dojo-simple-crud', 'components', $this->paramsLinks)?>
 </div>
 <div dojoType="dijit.Dialog" id="<?php echo $this->domPrefix2 ?>dialog_edit" jsId="<?php echo $this->domPrefix2 ?>dialog_edit" refreshOnShow="true" title="Editar Nodo"  onload="global_opc='edit';"  >
-<?php echo $this->action('edit', 'dojo-simple-crud', 'components', $this->paramsLinks)?>
 </div>
 <div id="log" style="width:600px;height:300px;overflow: auto;"></div>
 <script>
@@ -67,7 +111,7 @@ dojo.addOnLoad(function(){
     var response = {'more': {'data' : {'nombre' : ''}} };
     /*
     storeNodes = new dojo.data.ItemFileReadStore({
-        url: base_url + 'crud-request?model=mensajes&idCampana=<?php echo $this->idCampana?>&format=json&p=mensajes.xml'
+        url: base_url + 'crud-request?model=MensajesModel&primary[idCampana]=<?php echo $this->idCampana?>&format=json&p=mensajes.xml'
     });
     
     storeNodes.fetch({
@@ -97,7 +141,7 @@ dojo.addOnLoad(function(){
     foreach ($this->nodes as $v) :
 ?>
     response.more.data.nombre = '<?php echo $v->nombre ?>';
-    addNode(response, '<?php echo $v->id ?>', <?php echo $this->idCampana?>, <?php echo $v->x?>, <?php echo $v->y?>, true);
+    addNode(response, <?php echo $this->idCampana?>, '<?php echo $v->id ?>', <?php echo $v->x?>, <?php echo $v->y?>, true);
 <?php 
     endforeach;
 ?>

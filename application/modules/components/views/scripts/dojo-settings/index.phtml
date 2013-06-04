@@ -1,9 +1,7 @@
 <div dojoType="dijit.layout.TabContainer" style="width: 100%; height: 100%;" tabStrip="true" class="mainContent">
 <?php
-$h = 'style="background:#cccccc"';
 $i = 0;
 foreach ($this->groups as $group) :
-    $groups[] = $group['group'];
     $selected = ($i == 0) ? ' selected="true"' : '';
 ?>
 <div dojoType="dijit.layout.ContentPane" title="<?php echo $group['group']?>" <?php echo $selected?>>
@@ -14,6 +12,10 @@ foreach ($this->groups as $group) :
     foreach ($subgroups as $sg) :
         $sg['domId'] = $this->domPrefix.'_edit_';
         $sg['i'] = $i;
+        if (!empty($sg['xml_children'])) {
+            $xmlChildren = new Zwei_Admin_Xml(html_entity_decode($sg['xml_children']));
+            Debug::write($xmlChildren);
+        }
 ?>
             <div class="formSettingsItemContainer">
                 <div class="item">
