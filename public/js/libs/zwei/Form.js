@@ -221,7 +221,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         var ids = '';
         var primaries = {};
         
-        
         if (this.dijitDataGrid != null && this.dijitForm != null) {
             console.debug(this);
             var name;
@@ -260,7 +259,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         if (this.ajax) {
             if (dojo.objectToQuery(this.primary) != '') {
-                if (this.mode == 'edit') {
+                if (this.action == 'edit' || this.action == 'clone') {
                     var primary = this.primary;
                     var dijitForm = this.dijitForm;
                     
@@ -268,21 +267,21 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                         ids += '&primary['+ id + ']=' + this.primary[id];
                     }
                     
-                    var listener = dojo.connect(this.dijitDialog, "onLoad", function(){
-                         var domForm = dojo.byId(dijitForm.id);
-                         for (var id in primary) {
-                             console.debug(id);
-                             console.debug(primary[id]);
-                             console.debug(domForm);
-                             domForm['primary['+ id + ']'].value = primary[id];
-                         }
-                         dojo.disconnect(listener);
-                    });
+                    if (dijitForm != null) {
+                        var listener = dojo.connect(this.dijitDialog, "onLoad", function(){
+                             if (dijitForm)
+                             var domForm = dojo.byId(dijitForm.id);
+                             for (var id in primary) {
+                                 domForm['primary['+ id + ']'].value = primary[id];
+                             }
+                             dojo.disconnect(listener);
+                        });
+                    }
                 }
             }
-            this.dijitDialog.set('href',base_url+'components/dojo-simple-crud/'+this.action+'?p='+this.component+'&action='+this.action+ids+'&'+this.queryParams);
+            
+            this.dijitDialog.set('href', base_url+'components/dojo-simple-crud/'+this.action+'?p='+this.component+'&'+ids+'&'+this.queryParams);
             console.debug(this.dijitDialog);
-
         }
         
         this.dijitDialog.show();

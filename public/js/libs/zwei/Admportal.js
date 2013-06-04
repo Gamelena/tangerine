@@ -11,7 +11,7 @@ dojo.declare("zwei.Admportal", null, {
             globalModuleId = parseInt(page.id.match(/\d+$/)); 
         });
     },
-    loadLayoutSettings: function(domLogo, domTitle, domFooter) 
+    loadLayoutSettings: function(domLogo, domTitle, domFooterImg, domFooterLegend) 
     {
         var store = new dojo.data.ItemFileReadStore({
             url: base_url+'crud-request?model=SettingsModel&format=json'
@@ -29,7 +29,12 @@ dojo.declare("zwei.Admportal", null, {
                         images += "<img src=\""+base_url+ '/upfiles/' +store.getValue(i, "value")+ "\" />";
                     } else if(store.getValue(i, "id") == "titulo_adm") {
                         domTitle.innerHTML = store.getValue(i, "value");
-                    }    
+                    } else if(store.getValue(i, "id") == "url_logo_zweicom") {
+                        domFooterImg.src = base_url+ '/upfiles/' +store.getValue(i, "value");
+                    } else if(store.getValue(i, "id") == "credits") {
+                        domFooterLegend.innerHTML = store.getValue(i, "value");
+                    }
+                    
                 });
                 domLogo.innerHTML = images;
             }
@@ -84,12 +89,11 @@ dojo.declare("zwei.Admportal", null, {
                     return tnode;
                 },
                 getIconStyle:function(item, opened){
-                    console.debug(item);
-                    console.debug(opened);
-                    if (item.icon) {
+                    if (item.image != undefined && item.image[0] != null) {
+                        console.debug( base_url + 'upfiles/16/' + encodeURIComponent(item.image[0]));
                         return {
                             backgroundPosition: 0,
-                            backgroundImage: base_url + 'upfiles/' +item.icon
+                            backgroundImage: 'url('+base_url + 'upfiles/16/' + item.image[0] +')'
                         }
                     }
                 }
@@ -171,5 +175,21 @@ dojo.declare("zwei.Admportal", null, {
     {
         var widget = dijit.byId("panel_central");
         widget.set('href', base_url+url);
+    },
+    switchTabs: function(containerId, tabId, areaId) {
+        var tabs = dojo.query('#' + containerId + ' > .settingsTab');
+        var areas = dojo.query('#' + containerId + ' > .settingsArea');
+        
+        for (var i=0; i < tabs.length; i++) {
+            tabs[i].style.background = '';
+            areas[i].style.display = 'none';
+        }
+        
+        try {
+            dojo.byId(areaId).style.display='block';
+            dojo.byId(tabId).style.background='url("/dojotoolkit/dijit/themes/claro/images/activeGradient.png") #CFE5FA repeat-x';
+        } catch (e) {
+            console.debug(e.message);
+        }    
     }
 });

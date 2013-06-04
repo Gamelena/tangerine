@@ -14,6 +14,7 @@
 class AclModulesModel extends Zwei_Db_Table
 {
     protected $_name = "acl_modules";
+    protected $_nameIcons = "web_icons";
     protected $_label = "title";
     protected $_dataActions = array();
     private $_approved = null;
@@ -161,6 +162,8 @@ class AclModulesModel extends Zwei_Db_Table
                 $arrNodes[$key]['id']  = $branch['id'];
                 $arrNodes[$key]['type']  = $branch['type'];
                 $arrNodes[$key]['linkable']  = $branch['linkable'];
+                $arrNodes[$key]['image']  = $branch['image'];
+                
                 $arrNodes[$key]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($branch['title']) : utf8_encode(html_entity_decode($branch['title']));
                 if ($branch['linkable'] == '1') { 
                     $prefix = "";
@@ -195,6 +198,7 @@ class AclModulesModel extends Zwei_Db_Table
         $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
         $select->from($this->_name)
         ->joinLeft(array('parent'=>$this->_name), "$this->_name.parent_id = parent.id", array("parent_title"=>"title", "parent_module"=>"module"))
+        ->joinLeft($this->_nameIcons, "$this->_name.icons_id=$this->_nameIcons.id", array('icon_title' => 'title', 'image'))
         ->where("$this->_name.id != ?", 0)
         ;
         

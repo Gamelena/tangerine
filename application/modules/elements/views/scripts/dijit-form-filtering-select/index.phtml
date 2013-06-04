@@ -1,3 +1,19 @@
-<select dojoType="dijit.form.FilteringSelect" id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" onload="dijit.byId('<?php echo $this->domId . $this->i?>').set('value', dijit.byId('<?php echo $this->domId . $this->i?>').get('value'))" <?php echo $this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur.$this->value ?> searchAttr="name" labelAttr="label" labelType="html">
+<script>
+<?php 
+if ($this->formatter) :
+?>
+setTimeout(function () {
+    dojo.forEach(dijit.byId('<?php echo $this->domId . $this->i?>').store.data, function(e) {
+        e.label = <?php echo $this->formatter?>(e.name)
+    });
+}, 1000);
+
+<?php 
+endif;
+?>
+</script>
+<select dojoType="dijit.form.FilteringSelect" id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" onload="dijit.byId('<?php echo $this->domId . $this->i?>').set('value', dijit.byId('<?php echo $this->domId . $this->i?>').get('value'))" 
+    <?php echo $this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.
+    $this->prompt_message.$this->onblur.$this->value ?> <?php if ($this->formatter) echo ' searchAttr="name" labelAttr="label" labelType="html"'?>>
     <?php echo $this->options ?>
 </select>

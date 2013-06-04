@@ -48,7 +48,7 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
      * @param string $xpath
      * @param string $root
      * @param string $toXml
-     * @return Ambigous <multitype:, Zwei_Admin_Xml, SimpleXMLElement>
+     * @return <multitype:, Zwei_Admin_Xml, SimpleXMLElement>
      */
     public function getElements($xpath = null, $root = '/elements', $toXml = false)
     {
@@ -67,23 +67,26 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
      * @param string $xpath
      * @return array(SimpleXMLElement)
      */
-    public function getTabs($inherits = false, $xpath = null)
+    public function getTabsWithElements($inherits = false, $xpath = null)
     {
         $elements = array();
+        
         if ($xpath != null) $xpath = "[$xpath]";
         
-        if ($this->xpath('//component/forms/tabs/tab'.$xpath)) {
+        if ($this->xpath('//component/forms/tabs/tab'/*.$xpath*/)) {
             for ($i = 0; $i < $this->forms->tabs->tab->count(); $i++) {
                 for ($j = 0; $j < $this->forms->tabs->tab[$i]->count(); $j++) {
                     if ($inherits) $this->inheritAttributes($this->forms->tabs->tab[$i]->element[$j]);
-                    $elements[$i][] = $this->forms->tabs->tab[$i]->element[$j];
                 }
-                 
-
             }
-            Debug::write($elements);
+            
+            foreach ($this->forms->tabs->tab as $i => $v) {
+                
+            }
+            
+            $elements = $this->forms->tabs->tab;
         } else {
-            $elements = array($this->elements[0]->xpath('//component/elements/element'.$xpath));
+            $elements = array($this->xpath('//component/elements/element'.$xpath));
         }
         return $elements;
     }
@@ -104,7 +107,6 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
      */
     public function inheritAttributes($son, $fatherLevel = '//elements/element', $index='target', $override = false)
     {
-        Debug::write($fatherLevel."[@$index='{$son->getAttribute('target')}']");
         $father = $this->xpath($fatherLevel."[@$index='{$son->getAttribute('target')}']")[0];
         
         foreach ($father->attributes() as $key => $value) {

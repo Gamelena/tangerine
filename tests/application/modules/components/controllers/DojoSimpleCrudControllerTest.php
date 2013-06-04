@@ -77,8 +77,27 @@ class Components_DojoSimpleCrudControllerTest extends Zend_Test_PHPUnit_Controll
             );
     }
 
+    public function testCloneAction()
+    {
+        $params = array('action' => 'clone', 'controller' => 'DojoSimpleCrud', 'module' => 'components');
+        $urlParams = $this->urlizeOptions($params);
+        $url = $this->url($urlParams);
+        $this->dispatch($url);
+        
+        // assertions
+        $this->assertModule($urlParams['module']);
+        $this->assertController($urlParams['controller']);
+        $this->assertAction($urlParams['action']);
+        $this->assertQueryContentContains(
+            'div#view-content p',
+            'View script for controller <b>' . $params['controller'] . '</b> and script/action name <b>' . $params['action'] . '</b>'
+            );
+    }
+
 
 }
+
+
 
 
 

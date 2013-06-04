@@ -71,13 +71,13 @@ class Zwei_Db_Object
         
         if (isset($this->_form->search) && !$oModel->isFiltered()) {
             $search = $this->_form->search;
-            $allowedOperators = array('like',  'between', '=', '!=', '<>', '<', '>', '<=', '>=');
+            $allowedOperators = array('like', 'between', '=', '!=', '<>', '<', '>', '<=', '>=');
 
             foreach ($search as $i => $s) {
                 $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
-                $op = 'like';
-                $sufix = '%';
-                $prefix = '%';
+                $op = 'like';//Operador por defecto
+                $sufix = '%';//Sufijo por defecto
+                $prefix = '%';//Prefijo por defecto
                 
                 if (!empty($s['value']) || $s['value'] === '0') {
                     if (!empty($s['operator'])) {
@@ -95,12 +95,13 @@ class Zwei_Db_Object
                     
                     /**
                      * BETWEEN se aplica sobre un campo único, la diferencia en los valores las hacen los sufijos y prefijos concatenados al valor del campo
-                     * La razón del soporte de BETWEEN es poder usar un CAMPO ÚNICO + sufijos y prefijos.
+                     * La razón del soporte de BETWEEN es poder usar un CAMPO ÚNICO + sufijos y prefijos, 
+                     * esto es preferible a usar funciones sobre columnas (como DATE_FORMAT) ya que al tranformar la columna inutilizamos sus índices.
                      * 
                      * NO se puede usar BETWEEN entre campos diferentes, para esto deben usarse los operadores <, >, <=, >= que hacen lo mismo con la misma performance.
                      * 
                      * @example 
-                     * "BETWEEN $fecha 00:00:00 AND $fecha 23:59:59 ", 
+                     * "WHERE fecha >= '$fecha 00:00:00' AND fecha <= '$fecha 23:59:59' ", 
                      * <group operator="between">
                      *     <element target="fecha" sufix=" 00:00:00"/>
                      *     <element target="fecha" sufix=" 23:59:59"/>

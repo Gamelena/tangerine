@@ -387,7 +387,6 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 
     public function where2Array($where)
     {
-        Debug::write($where);
         $where = (array) $where;
         $return = array();
         
@@ -400,7 +399,6 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             
             $return[trim(str_replace("`", "", $array[0]))] = str_replace("'", "",$array[1]);
         }
-        Debug::write($return);
         return $return;
     }
     

@@ -17,14 +17,16 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         $this->view->domId =  $r->getParam('domId');
         $this->view->target =  $r->getParam('target');
         
+        $this->view->formatter = $r->getParam('formatter', false);
         $this->view->readonly = $r->getParam('readonly', '') === 'true' ? "readonly=\"readonly\"" : '';
         $this->view->disabled = $r->getParam('disabled', '') === 'true' ? "disabled=\"disabled\"" : '';
         $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
         $this->view->regExp = $r->getParam('regExp') ? "regExp=\"{$r->getParam('regExp')}\"" : '';
+        $this->view->label = $r->getParam('label') ? "label=\"{$r->getParam('label')}\"" : '';
         
         if (preg_match("/^\{BASE_URL\}(.*)$/", $r->getParam('label'), $matches)) {
-            //$this->view->label = "url=\"".BASE_URL . $matches[1]."\"";
+            $this->view->label = "url=\"".BASE_URL . $matches[1]."\"";
         }
         
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
@@ -80,7 +82,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
                 } else if ($r->getParam('field')) {
                     $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$r->getParam('field')]}</option>\r\n";
                 } else {
-                    $options .= "<option value=\"".$row[$id]."\" ".$selected." label=\"<i>we</i> <img src='http://placekitten.com/50/70' />\">{$row["title"]}</option>\r\n";
+                    $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row["title"]}</option>\r\n";
                 }
             }
         } else {

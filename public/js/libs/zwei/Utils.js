@@ -215,6 +215,22 @@ dojo.declare("zwei.Utils", null, {
 
         return tmp_str;
     },
+    formatImage: function(value) {
+        return value != '' ? "<img src=\"" + base_url + '/upfiles/' + value + "\" />" : '';
+    },
+    formatImage16: function(value) {
+        return value != '' ? "<img src=\"" + base_url + '/upfiles/16/' + value + "\" />" : '';
+    },
+    formatImage32: function(value) {
+        return value != '' ? "<img src=\"" + base_url + '/upfiles/32/' + value + "\" />" : '';
+    },
+    
+    formatYesNo: function(value) {
+        if (typeof value  == "undefined"){
+            return value;
+        }
+        return (value == '1') ? 'Sí' : 'No';
+    },
     zoom: function(id, scale){
         console.debug(dojo.byId(id));
         if (dojo.byId(id).style.zoom != undefined) dojo.byId(id).style.zoom = scale;
