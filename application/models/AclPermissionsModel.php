@@ -17,7 +17,7 @@ class AclPermissionsModel extends Zwei_Db_Table
     protected $_name_roles = "acl_roles";
     protected $_name_modules = "acl_modules";
     protected $_name_permissions = "web_permissions";
-        protected $_primary = 'id';
+    protected $_primary = 'id';
 
     public function select()
     {

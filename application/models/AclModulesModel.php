@@ -22,7 +22,7 @@ class AclModulesModel extends Zwei_Db_Table
     public function update($data, $where) 
     {
         $data = $this->cleanDataParams($data);
-        $myWhere = $this->where2Array($where);
+        $myWhere = $this->whereToArray($where);
         
         $saveActions = $this->saveDataActions($myWhere['id']);
         
@@ -103,9 +103,18 @@ class AclModulesModel extends Zwei_Db_Table
         return $return;
     }
     
-    
+    /**
+     * (non-PHPdoc)
+     * @see Zwei_Db_Table::delete()
+     */
     public function delete($where)
     {
+        $modulesActions = new AclModulesActionsModel();
+        
+        $whereArray = self::whereToArray($where);
+        $whereAclModulesId = "acl_modules_id={$whereArray['id']}";
+        $modulesActions->delete($whereAclModulesId);
+        
         return parent::delete($where);
     }
     

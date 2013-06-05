@@ -39,7 +39,7 @@ class AclUsersModel extends Zwei_Db_Table
      */
     public function delete($where)
     {
-        $aWhere = $this->where2Array($where);
+        $aWhere = $this->whereToArray($where);
         $id = $aWhere['id'];
         
         if ($id == $this->_user_info->id) {

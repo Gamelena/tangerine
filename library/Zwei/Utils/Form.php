@@ -89,7 +89,7 @@ class Zwei_Utils_Form {
                     }
                     $oldname = implode(".", $oldname);
                     $ext = $fp[count($fp) - 1];
-                    $filename = substr(md5(microtime().$_FILES[$file]['tmp_name'][$i]),0,8) . $oldname.".$ext";
+                    $filename = substr(md5(microtime().$_FILES[$file]['tmp_name'][$i]),0,8) . Zwei_Utils_String::slugify($oldname).".$ext";
                     if (@move_uploaded_file($_FILES[$file]['tmp_name'][$i],$dest."/".$filename)) {
                         $info[$i]['size'] = $_FILES[$file]['size'][$i];
                         $info[$i]['filename'] = $filename;
@@ -109,7 +109,7 @@ class Zwei_Utils_Form {
                 }
                 $oldname = implode(".", $oldname);
                 $ext = $fp[count($fp) - 1];
-                $filename = substr(md5(microtime() . $_FILES[$file]['tmp_name']), 0, 8) . $oldname . ".$ext";
+                $filename = substr(md5(microtime() . $_FILES[$file]['tmp_name']), 0, 8) . Zwei_Utils_String::slugify($oldname) . ".$ext";
                 if (@move_uploaded_file($_FILES[$file]['tmp_name'], $dest."/".$filename)) {
                     $info = $_FILES[$file];
                     $info['filename'] = $filename;

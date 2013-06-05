@@ -19,10 +19,10 @@
     <?php echo $this->headStyle()?>
     <?php echo $this->dojo()?>
     <?php echo $this->list?>
-    <script type="text/javascript" src="<?=$this->base_url?>js/dojo.admin.js?v=7"></script>
-    <script type="text/javascript" src="<?=$this->base_url?>js/ajax.js"></script>
-    <script type="text/javascript" src="<?=$this->base_url?>js/admin.js?v=6"></script>
-    <script type="text/javascript" src="<?=$this->base_url?>js/md5.js"></script>
+    <script type="text/javascript" src="<?php echo $this->base_url?>js/dojo.admin.js?v=7"></script>
+    <script type="text/javascript" src="<?php echo $this->base_url?>js/ajax.js"></script>
+    <script type="text/javascript" src="<?php echo $this->base_url?>js/admin.js?v=6"></script>
+    <script type="text/javascript" src="<?php echo $this->base_url?>js/md5.js"></script>
     <script type="text/javascript">
     var utils=new zwei.Utils();
     var admportal=new zwei.Admportal();
@@ -87,7 +87,7 @@
         <div id="panel_central" id="panelCentral" jsId="dojo_panel_central" dojoType="dojox.layout.ContentPane" splitter="true" region="center" executeScripts="true" scriptHasHooks="true">
             <div dojoType="dijit.layout.TabContainer" id="tabContainer" data-dojo-props="executeScripts: true, scriptHasHooks: true" jsId="tabContainer" style="width:100%;height:100%;top:0px;" tabPosition="top"></div>
         </div>
-        <div data-dojo-type="dojox.layout.ContentPane" jsId="contentPaneBottom" data-dojo-props='region:"bottom", style:"background-color: #b39b86; height: auto;"'>
+        <div data-dojo-type="dojox.layout.ContentPane" jsId="contentPaneBottom" data-dojo-props='region:"bottom"'>
             <span style="float:right;margin-right: 6px">
                 <span style="float: left; padding-right: 10px;" id="zweicomLegend">&nbsp;</span> <img id="zweicomLogo" src="" />  
             </span>

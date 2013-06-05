@@ -54,6 +54,16 @@ class Zwei_Admin_Acl extends Zend_Acl
      */
     private static $_tb_permissions = null;
     /**
+     * Tabla de permisos.
+     * @var string
+     */
+    private static $_tb_modules_actions = null;
+    /**
+     * Tabla de permisos.
+     * @var string
+     */
+    private static $_tb_roles_modules_actions = null;
+    /**
      * Campo nombre de perfil de sesión activa.
      * @var string
      */
@@ -91,7 +101,6 @@ class Zwei_Admin_Acl extends Zend_Acl
     public static function _init()
     {
         //throw new Exception("Error");
-        
         if (!Zend_Auth::getInstance()->hasIdentity()) {
             Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoAndExit('login');
         } else {
@@ -119,6 +128,8 @@ class Zwei_Admin_Acl extends Zend_Acl
         self::$_tb_users = 'acl_users';
         self::$_tb_modules = 'acl_modules';
         self::$_tb_permissions = 'acl_permissions';
+        self::$_tb_roles_modules_actions = 'acl_roles_modules_actions';
+        self::$_tb_modules_actions = 'acl_modules_actions';
         self::$_user_login = 'user_name';
         self::$_user_role_id = 'acl_roles_id';
 
@@ -326,14 +337,12 @@ class Zwei_Admin_Acl extends Zend_Acl
         
         if (self::$_userInfo->{self::$_user_role_id} != '1') {
             $select
-                ->distinct()  
-                ->from(self::$_tb_permissions, array())
-                ->from(self::$_tb_roles, array())
-                ->from(self::$_tb_users, array())
-                ->where(self::$_tb_modules."_id = ".self::$_tb_modules.".id")
-                ->where(self::$_tb_permissions.".".self::$_tb_roles."_id = ".self::$_tb_roles.".id")
-                ->where(self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_permissions.".".self::$_tb_roles."_id")
-                ->where(self::$_tb_users.".".self::$_user_login." = '".self::$_user."'");
+            ->joinLeft(self::$_tb_modules_actions, self::$_tb_modules_actions.".acl_modules_id=".self::$_tb_modules.".id", array())
+            ->joinLeft(self::$_tb_roles_modules_actions, self::$_tb_roles_modules_actions.".acl_modules_actions_id=".self::$_tb_modules_actions.".id", array())
+            ->joinLeft(self::$_tb_roles, self::$_tb_roles_modules_actions.".acl_roles_id = ".self::$_tb_roles.".id", array())
+            ->joinLeft(self::$_tb_users, self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_permissions.".".self::$_tb_roles."_id", array())
+            ->where(self::$_tb_modules."_id = ".self::$_tb_modules.".id")
+            ->where(self::$_tb_users.".".self::$_user_login." = '".self::$_user."'");
         } 
         if (is_null($parent_id)) {
             $select->where('parent_id IS NULL');
@@ -449,12 +458,13 @@ class Zwei_Admin_Acl extends Zend_Acl
 
         $select = self::$_db->select()
         ->from(self::$_tb_modules, array('id'))
+        ->joinLeft(self::$_tb_modules_actions, self::$_tb_modules_actions.".acl_modules_id=".self::$_tb_modules.".id", array())
+        ->joinLeft(self::$_tb_roles_modules_actions, self::$_tb_roles_modules_actions.".acl_modules_actions_id=".self::$_tb_modules_actions.".id", array())
+        ->joinLeft(self::$_tb_roles, self::$_tb_roles_modules_actions.".acl_roles_id = ".self::$_tb_roles.".id", array())
+        ->joinLeft(self::$_tb_users, self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_permissions.".".self::$_tb_roles."_id", array())
         ->from(self::$_tb_permissions, array())
-        ->from(self::$_tb_roles, array())
-        ->from(self::$_tb_users, array())
-        ->where(self::$_tb_modules."_id = ".self::$_tb_modules.".id" )
         ->where(self::$_tb_permissions.".".self::$_tb_roles."_id = ".self::$_tb_roles.".id")
-        ->where(self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_permissions.".".self::$_tb_roles."_id")
+        ->where(self::$_tb_users.".".self::$_user_login." = '".self::$_user."'")
         ->where(self::$_tb_modules.".module ='$resource'");
 
 

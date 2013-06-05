@@ -4,7 +4,7 @@ class AclModulesActionsModel extends DbTable_AclModulesActions
 {
     protected $_nameModules = 'acl_modules';
     protected $_nameActions = 'acl_actions';
-    protected $_namePermissions = 'acl_permissions';
+    protected $_nameModulesAction = 'acl_roles_modules_actions';
     
     public function select(){
         $select = new Zend_Db_Table_Select($this);
@@ -22,7 +22,7 @@ class AclModulesActionsModel extends DbTable_AclModulesActions
         $select->setIntegrityCheck(false);
     
         $select->from($this->_name, array('id', 'acl_modules_id', 'acl_actions_id'));
-        $select->joinLeft($this->_nameModules, "$this->_name.acl_modules_id=$this->_nameModules.id");
+        $select->joinLeft($this->_nameModules, "$this->_name.acl_modules_id=$this->_nameModules.id", array('module'));
         $select->joinLeft(array('parent' => $this->_nameModules), "$this->_nameModules.parent_id = parent.id", array('parent_title' => 'title'));
         $select->joinLeft($this->_nameActions, 
             "$this->_name.acl_actions_id=$this->_nameActions.id", 
@@ -37,14 +37,14 @@ class AclModulesActionsModel extends DbTable_AclModulesActions
         
         if ($aclRolesId) {
             $select->joinLeft(
-                    $this->_namePermissions, 
-                    "$this->_nameModules.id = $this->_namePermissions.acl_modules_id AND $this->_nameActions.id = $this->_namePermissions.permission ", 
-                    array());
-            $select->where("$this->_namePermissions.acl_roles_id = ?", $aclRolesId);
+                $this->_nameModulesAction, 
+                "$this->_name.id = $this->_nameModulesAction.acl_modules_actions_id  ", 
+                array());
+            $select->where("$this->_nameModulesAction.acl_roles_id = ?", $aclRolesId);
         }
         
         if ($this->_user_info->acl_roles_id != '1') {
-            $selectTmp->where("$this->_name_modules.root != ?", "1");
+            $selectTmp->where("$this->_nameModules.root != ?", "1");
         } else {
             $select->order("parent_title");
             $select->order("module");
