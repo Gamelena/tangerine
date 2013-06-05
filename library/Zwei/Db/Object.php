@@ -78,6 +78,7 @@ class Zwei_Db_Object
                 $op = 'like';//Operador por defecto
                 $sufix = '%';//Sufijo por defecto
                 $prefix = '%';//Prefijo por defecto
+                $s['value'] = htmlentities($s['value']);//[TODO] evaluar si esto sirve para todos los casos, en caso de no serlo debe ser paramatrizable
                 
                 if (!empty($s['value']) || $s['value'] === '0') {
                     if (!empty($s['operator'])) {
