@@ -88,6 +88,7 @@ class AdminController extends Zend_Controller_Action
             $result = $settings->find('titulo_adm')->current();
             $this->_sitename = $result->value;
             $this->view->adminTitle = $result->value;
+            $this->view->adminTitle = $result->value;
         } catch (Zend_Db_Exception $e){
             Debug::write($e->getMessage());
         }
@@ -100,8 +101,8 @@ class AdminController extends Zend_Controller_Action
             $this->view->headStyle()->appendStyle('
                 .'.$this->_dojoTheme.'{
                    color: #131313;
-                   font-family: Verdana,Arial,Helvetica,sans-serif;
-                   font-size: 0.688em;
+                   font-family: Arial,Verdana, Helvetica,sans-serif;
+                   font-size: 0.75em;
                 }
             ');
         }
@@ -351,21 +352,39 @@ class AdminController extends Zend_Controller_Action
      */
     protected function getLoginForm()
     {
+        $this->view->dojo()->requireModule("dijit.form.Form");
+        $this->view->dojo()->requireModule("dijit.form.ValidationTextBox");
+        
         $username = new Zend_Dojo_Form_Element_ValidationTextBox('username');
-        $username->setLabel('Usuario:')
-        ->setRequired(true);
+        //$username->setLabel('Usuario:');
+        $username->setAttrib("class", "input");
+        $username->setAttrib("dojoType", "dijit.form.ValidationTextBox");
+        $username->setAttrib("promptMessage", "Ingrese Usuario");
+        $username->setAttrib("placeHolder", "Usuario");
+        $username->setRequired(true);
     
         $password = new Zend_Dojo_Form_Element_PasswordTextBox('password');
-        $password->setLabel('Contraseña:')
-        ->setRequired(true);
+        $password->setAttrib("dojoType", "dijit.form.ValidationTextBox");
+        //$password->setLabel('Contraseña:');
+        $password->setAttrib("class", "input");
+        $password->setAttrib("placeHolder", "Contraseña");
+        $password->setAttrib("promptMessage", "Ingrese Contrase&ntilde;a");
+        $password->setRequired(true);
     
         $submit = new Zend_Form_Element_Submit('login');
         $submit->setLabel('Login');
+        $submit->setAttrib("class", "button");
     
         $loginForm = new Zend_Dojo_Form();
         $loginForm->setTranslator();
         $loginForm->setAction($this->_request->getBaseUrl().'/admin/login/')
         ->setTranslator(new Zend_Translate('array',array("Value is required and can't be empty"=>"Este valor no puede ir vacío"),'es'))
+        ->setAttribs(
+            array(
+                "class" => "login-form",
+                "dojoType" => "dijit.form.Form"
+            )
+        )
         ->setMethod('post')
         ->addElement($username)
         ->addElement($password)

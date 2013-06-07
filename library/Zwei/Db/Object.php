@@ -83,7 +83,6 @@ class Zwei_Db_Object
                 if (!empty($s['value']) || $s['value'] === '0') {
                     if (!empty($s['operator'])) {
                         if (in_array($s['operator'], $allowedOperators)) {
-                            Debug::write('FUU');
                             $op = $s['operator'];
                             $sufix = $s['sufix'];
                             $prefix = $s['prefix'];
