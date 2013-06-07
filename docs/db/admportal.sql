@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `acl_roles` (
 -- Structure for table `acl_users`
 -- 
 
-DROP TABLE IF EXISTS `acl_users`;
+
 CREATE TABLE IF NOT EXISTS `acl_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `acl_roles_id` int(4) NOT NULL,
@@ -62,9 +62,10 @@ CREATE TABLE IF NOT EXISTS `acl_users` (
   `last_names` char(50) NOT NULL,
   `email` char(50) NOT NULL,
   `approved` enum('0','1') NOT NULL,
+  `foto` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name` (`user_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 
 -- 
@@ -79,13 +80,32 @@ CREATE TABLE IF NOT EXISTS `web_permissions` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
--- 
--- Structure for table `web_settings`
--- 
+-- phpMyAdmin SQL Dump
+-- version 3.4.11.1deb1
+-- http://www.phpmyadmin.net
+--
+-- Servidor: localhost
+-- Tiempo de generación: 07-06-2013 a las 15:49:34
+-- Versión del servidor: 5.5.31
+-- Versión de PHP: 5.4.6-1ubuntu1.2
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Base de datos: `USSD`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `web_settings`
+--
+
 DROP TABLE IF EXISTS `web_settings`;
 CREATE TABLE IF NOT EXISTS `web_settings` (
   `id` char(255) NOT NULL DEFAULT '',
-  `enum` char(255) NOT NULL,
+  `list` char(255) NOT NULL,
   `value` char(255) NOT NULL DEFAULT '0',
   `type` char(255) NOT NULL DEFAULT '',
   `description` text NOT NULL,
@@ -93,9 +113,15 @@ CREATE TABLE IF NOT EXISTS `web_settings` (
   `group` char(255) NOT NULL,
   `function` char(255) NOT NULL,
   `approved` enum('0','1') NOT NULL,
-  PRIMARY KEY (`id`)
+  `path` varchar(50) NOT NULL,
+  `regExp` varchar(60) NOT NULL,
+  `invalidMessage` varchar(50) NOT NULL,
+  `promptMessage` varchar(50) NOT NULL,
+  `formatter` varchar(25) NOT NULL,
+  `xml_children` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group` (`group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
 
 -- 
 -- Structure for table `log_book`

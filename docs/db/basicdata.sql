@@ -223,7 +223,7 @@ INSERT INTO `web_permissions` (`id`, `title`) VALUES
 DROP TABLE IF EXISTS `web_settings`;
 CREATE TABLE IF NOT EXISTS `web_settings` (
   `id` char(255) NOT NULL DEFAULT '',
-  `enum` char(255) NOT NULL,
+  `list` char(255) NOT NULL,
   `value` char(255) NOT NULL DEFAULT '0',
   `type` char(255) NOT NULL DEFAULT '',
   `description` text NOT NULL,
@@ -231,19 +231,27 @@ CREATE TABLE IF NOT EXISTS `web_settings` (
   `group` char(255) NOT NULL,
   `function` char(255) NOT NULL,
   `approved` enum('0','1') NOT NULL,
-  PRIMARY KEY (`id`)
+  `path` varchar(50) NOT NULL,
+  `regExp` varchar(60) NOT NULL,
+  `invalidMessage` varchar(50) NOT NULL,
+  `promptMessage` varchar(50) NOT NULL,
+  `formatter` varchar(25) NOT NULL,
+  `xml_children` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group` (`group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `web_settings`
 --
 
-INSERT INTO `web_settings` (`id`, `enum`, `value`, `type`, `description`, `ord`, `group`, `function`, `approved`) VALUES
-('query_log', 'SI,NO', 'SI', 'dojo_filtering_select', '', 1, 'Debug', '', '1'),
-('transactions_log', 'SI,NO', 'SI', 'dojo_filtering_select', '', 1, 'Debug', '', '1'),
-('titulo_adm', '', 'Admin Portal Base', 'dojo_validation_textbox', '', 0, 'Admin', '', '1'),
-('url_logo_oper', '', 'images/logo_movistar60x44.png', 'dojo_validation_textbox', '', 0, 'Admin', '', '1'),
-('url_logo_zweicom', '', 'images/logo_zweicom26x15.png', 'dojo_validation_textbox', '', 0, 'Admin', '', '1');
+INSERT INTO `web_settings` (`id`, `list`, `value`, `type`, `description`, `ord`, `group`, `function`, `approved`, `path`, `regExp`, `invalidMessage`, `promptMessage`, `formatter`, `xml_children`) VALUES
+('query_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', '', '', '', '', ''),
+('transactions_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', '', '', '', '', ''),
+('titulo_adm', '', 'Gateway USSD', 'dijit-form-validation-text-box', '', 1, 'Admin', '', '1', '', '', '', '', '', ''),
+('url_logo_oper', '', '4fcd081blogo_movistar68x50.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '', '', '', 'formatImage', '&lt;thumb height=&quot;56px&quot; path=&quot;{ROOT_DIR}/upfiles/settings/&quot;/&gt;'),
+('url_logo_zweicom', '', '3702066dlogo-zweicom-20x26.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '', '', '', 'formatImage', '&lt;thumb height=&quot;18px&quot; path=&quot;{ROOT_DIR}/upfiles/settings/&quot;/&gt;'),
+('credits', '', '&copy; Zweicom 2012', 'dijit-form-validation-text-box', '', 2, 'Admin', '', '1', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 

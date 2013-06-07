@@ -342,6 +342,7 @@ class AdminController extends Zend_Controller_Action
         ->setIdentityColumn($authUserName)
         ->setCredentialColumn($authPassword)
         ->setCredentialTreatment('MD5(?) and approved="1"');
+        Debug::write($authAdapter->getDbSelect()->__toString());
         return $authAdapter;
     }
     
