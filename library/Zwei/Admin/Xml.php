@@ -107,7 +107,8 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
      */
     public function inheritAttributes($son, $fatherLevel = '//elements/element', $index='target', $override = false)
     {
-        $father = $this->xpath($fatherLevel."[@$index='{$son->getAttribute('target')}']")[0];
+        $tmpFathers = $this->xpath($fatherLevel."[@$index='{$son->getAttribute('target')}']");
+        $father = $tmpFathers[0];
         
         foreach ($father->attributes() as $key => $value) {
             if ($override || !$son->getAttribute($key)) 
