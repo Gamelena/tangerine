@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Dijkstra</title>
+        <style type="text/css">
+            body {
+                font-family: arial,sans-serif;
+            }
+            
+            form {
+                border: ridge 2px;
+            }
+            
+            form table {
+                margin: 0 auto;
+                padding: 10px;
+            }
+            
+            form th {
+            
+            }
+            
+            td, th{
+                white-space: nowrap;
+            }
+            
+            input {
+                text-align:right;
+            }
+            
+            #wrapper {
+                width: 960px;
+                padding: 8px;
+                margin: 0 auto;
+            }
+            
+            #myform, #reducedMatrix {
+                overflow: auto;
+            }
+            
+            .sign {
+                text-align: right;
+                margin: 0px;
+                font-size: 1em;
+            }
+            
+            .auxLink{
+                float: right;
+                padding: 0px 13px 3px 0;
+                font-size: 10pt;
+                display: inline;
+                top: -16px;
+                position: relative;
+            }
+            
+        </style>
+        <script>
+        /**
+        * Clase Graph
+        */
+        var Graph = (function () {
+
+            /**
+            * Constructor
+            * @param Object map 
+            */
+            var Graph = function (map) {
+                this.map = map;
+            }
+            
+            /**
+            * Extrae los nombres de los atributos de un objeto
+            * @param Object obj
+            */
+            var extractKeys = function (obj) {
+                var keys = [], key;
+                for (key in obj) {
+                    keys.push(key);
+                }
+                return keys;
+            }
+
+            /**
+            * Metodo auxiliar de ordenamiento numerico para Array.prototipe.sort()
+            * @param float a
+            * @param float b
+            * @returns float
+            */
+            var sorter = function (a, b) {
+                return parseFloat (a) - parseFloat (b);
+            }
+
+            /**
+            * Recorre todos los caminos posibles entre origen y destino
+            * @param map Object
+            * @param start string
+            * @param end string
+            * @returns Object
+            */
+            
+            var findPaths = function (map, start, end) {
+                console.log('Buscando caminos entre ' + start + ' y ' +end);
+                
+                var costs = {},
+                    open = {'0': [start]},
+                    predecessors = {},
+                    keys;
+
+                var addToOpen = function (cost, vertex, end) {
+                    var key = "" + cost;
+                    if (!open[key]) open[key] = [];
+                    open[key].push(vertex);
+                }
+
+                costs[start] = 0;
+
+                while (open) {
+                    if(!(keys = extractKeys(open)).length) break;
+
+                    keys.sort(sorter);
+
+                    var key = keys[0],
+                        bucket = open[key],
+                        node = bucket.shift(),
+                        currentCost = parseFloat(key),
+                        adjacentNodes = map[node] || {};
+
+                    if (!bucket.length) delete open[key];
+	
+                    for (var vertex in adjacentNodes) {
+                        if (Object.prototype.hasOwnProperty.call(adjacentNodes, vertex)) {
+                            var cost = adjacentNodes[vertex],
+                                totalCost = cost + currentCost,
+                                vertexCost = costs[vertex];
+
+                            if ((vertexCost === undefined) || (vertexCost > totalCost)) {
+                                costs[vertex] = totalCost;
+                                addToOpen(totalCost, vertex, end);
+                                predecessors[vertex] = node;
+                            }
+                        }
+                    }
+                }
+
+                if (costs[end] === undefined) {
+                    return null;
+                } else {
+                    return predecessors;
+                }
+            }
+
+            /**
+            * Selecciona camino más corto entre diferentes caminos mapeados en Objeto javascript 
+            *
+            * @param predecessors Object
+            * @param end string
+            * @returns Object
+            */
+            
+            var extractShortest = function (predecessors, end) {
+                var nodes = [],
+                    u = end;
+
+                while (u) {
+                    nodes.push(u);
+                    predecessor = predecessors[u];
+                    u = predecessors[u];
+                }
+
+                nodes.reverse();
+                return nodes;
+            }
+
+            /**
+            * Método privado que invoca subrutinas para encontrar camino más corto
+            * @param map Object
+            * @param nodes Array
+            * @returns Array
+            */
+            var findShortestPath = function (map, nodes) {
+                var start = nodes.shift(),
+                    end,
+                    predecessors,
+                    path = [],
+                    shortest;
+                
+                while (nodes.length) { //for (var i=0; i<nodes.length; i++)
+                    end = nodes.shift();
+                    predecessors = findPaths(map, start, end);
+
+                    if (predecessors) {
+                        shortest = extractShortest(predecessors, end);
+                        if (nodes.length) {
+                            //path.push.apply(path, shortest.slice(0, -1));
+                            path.concat(shortest.slice(0, -1));
+                        } else {
+                            return path.concat(shortest);
+                        }
+                    } else {
+                        return null;
+                    }
+
+                    start = end;
+                }
+            }
+
+            /**
+            * Convierte una lista de argumentos a un Array.
+            * @param list Object
+            * @param offset int
+            * @returns Array
+            */
+            var toArray = function (list, offset) {
+                try {
+                    return Array.prototype.slice.call(list, offset);
+                } catch (e) {
+                    var a = [];
+                    for (var i = offset || 0, l = list.length; i < l; ++i) {
+                        a.push(list[i]);
+                    }
+                    return a;
+                }
+            }
+
+            /**
+            * Método publico de clase Graph que normaliza parámetros e invoca método privado para encontrar el camino mas corto.
+            * @param start string||Array
+            * @param end string||Array
+            * @returns Array
+            */
+            Graph.prototype.findShortestPath = function (start, end) {
+                if (Object.prototype.toString.call(start) === '[object Array]') {
+                    return findShortestPath(this.map, start);
+                } else if (arguments.length === 2) {
+                    return findShortestPath(this.map, [start, end]);
+                } else {
+                    return findShortestPath(this.map, toArray(arguments));
+                }
+            }
+
+
+            return Graph;
+        })();
+        </script>
+    </head>
+    <body>
+         <div id="wrapper">
+            <h1>Taller #3</h1>
+            <p class="sign">Sebastián Indo</p>
+            <p class="sign">Rodrigo Riquelme</p>
+            <p class="sign">David Araya</p>
+            <form onsubmit="return createMatrix(this);">
+                <table>
+                    <tr>
+                        <th>
+                            N&uacute;mero de Nodos:
+                        </th>
+                        <td>
+                            <input type="text" name="rowsCols" id="rowsCols" size="1" maxlength="2" onblur="this.value=toInt(this.value)" />
+                        <td>
+                        <th colspan="2">
+                            <input type="submit" value="Crear Matriz" />
+                        </th>
+                    </tr>
+                </table>
+            </form>
+           
+            <form onsubmit="return readMatrix(this);" id="myForm" name="myForm">
+               <table id="myTableForm">
+               </table>
+            </form>
+            <div id="solution"></div>
+        </div>
+
+        <script>
+            //var map = {a:{b:3,c:1},b:{a:2,c:1},c:{a:4,b:1}},
+            
+            var map = {};
+            var graph = new Graph(map);
+            
+            /**
+            * Número de filas y columnas
+            * @var int
+            */
+            var rowsCols = 0;
+            /**
+            * Nodos posibles, si se quiere cambiar de la cantidad de estos se puede modificar en forma segura
+            * var @Array
+            */
+            var nodes = [
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+                'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+            ];
+            
+            /**
+            * Extrae el índice de un elemento de array
+            *
+            * @param array input
+            * @param search_value string
+            * @param argStrict boolean
+            * @return array
+            */
+            var array_keys = function (input, search_value, argStrict) {
+                var search = typeof search_value !== 'undefined',
+                tmp_arr = [],
+                strict = !!argStrict,
+                include = true,
+                key = '';
+
+                if (input && typeof input === 'object' && input.change_key_case) { 
+                    return input.keys(search_value, argStrict);
+                }
+
+                for (key in input) {
+                    if (input.hasOwnProperty(key)) {
+                        include = true;
+                        if (search) {
+                            if (strict && input[key] !== search_value) {
+                                include = false;
+                            }
+                            else if (input[key] != search_value) {
+                                include = false;
+                            }
+                        }
+                        if (include) {
+                            tmp_arr[tmp_arr.length] = key;
+                        }
+                    }
+                }
+                return tmp_arr;
+            }
+            
+            /**
+            * Convierte un numero a entero usando expresión regular
+            * @param mixed
+            * @returns int
+            */
+            var toInt = function(value) {
+                var expr = /^(-)?[0-9]+$/;
+                return (expr.test(value)) ? value : 0;
+            }
+            
+            /**
+             * Convierte un numero a float usando expresión regular
+             * @param mixed
+             * @returns float
+             */
+            var toFloat = function(value) {
+                var expr = /^-?\d+(\.\d+)?$/;
+                return (expr.test(value)) ? value : 0;
+            }
+            
+            /**
+             * Permite insertar nuevo elemento DOM al final de otro elemento DOM de referencia 
+             * @param newElement DOM element
+             * @param targetElement DOM element
+             */
+            var insertAfter = function(newElement, targetElement) {
+                var parent = targetElement.parentNode;
+                if (parent.lastchild == targetElement) {
+                    parent.appendChild(newElement);
+                } else {
+                    parent.insertBefore(newElement, targetElement.nextSibling);
+                }
+            }
+            
+            /**
+            * Llena formulario con números aleatorios
+            * @param form DOM element form
+            */
+            var randomFill = function(form) {
+                if (form == undefined) form = document.getElementById('myForm');
+                var inputs = form.getElementsByTagName('input');
+                var n = inputs.length - 1;
+                var rand;
+                for (var i = 0; i < n; i ++) {
+                    rand = Math.floor(Math.random()*10);
+                    if (!inputs[i].disabled) inputs[i].value = rand <= 5 ? rand : 0;
+                }
+                readMatrix(document.getElementById('myForm'));
+            }
+            
+            /**
+             * Recibe parametros e invoca metodos para crear tabla HTML en el que se ingresa matriz principal
+             * @param form DOM element form
+             */
+            var createMatrix = function (form) {
+                try {
+                    form['rowsCols'].value = toInt(form['rowsCols'].value);
+                    rowsCols = form['rowsCols'].value*1;
+                    
+                    if (rowsCols < 1) {
+                        alert('La matriz debe tener por lo menos dos elementos.');
+                    } else if (rowsCols > nodes.length) {
+                        alert('La matriz puede tener hasta ' + nodes.length + ' elementos.');
+                    } else {
+                        createTableMatrix(rowsCols, 'myTableForm');
+                    }
+                    return false;
+                } catch (e) {
+                    console.log(e.message);
+                }
+            }
+            
+            /**
+            * Crea tabla HTML en el que se ingresa matriz principal
+            * @param int rowsCols
+            * @param string tableId
+            */
+            var createTableMatrix = function(rowsCols, tableId) {
+                try {
+                    var myTableForm = document.getElementById(tableId);
+                     
+                    var row;
+                    var cell;
+                    var input;
+                    var submit;
+                    var header;
+                    
+                    myTableForm.innerHTML = '';
+                    
+                    row = document.createElement("tr");
+                    header = document.createElement("th");
+                    row.appendChild(header);
+                    
+                    for (var i=0; i<rowsCols; i++) {
+                        header = document.createElement("th");
+                        header.innerHTML = nodes[i];
+                        row.appendChild(header);
+                    }
+                    myTableForm.appendChild(row);
+                    
+                    for (var i=0; i<rowsCols; i++) {
+                        row = document.createElement("tr");
+                        header = document.createElement("th");
+                        header.innerHTML = nodes[i];
+                        row.appendChild(header);
+                        for (var j=0; j<rowsCols; j++) {
+                            input = document.createElement("input");
+                            input.setAttribute("type", "text");
+                            input.setAttribute("size", "1");
+                            input.setAttribute("maxlenght", "10");
+                            input.setAttribute("onchange", "this.value=toInt(this.value);readMatrix(document.getElementById('myForm'))");
+                            input.setAttribute("name", "input["+i+"]["+j+"]");
+                            input.setAttribute("id", "input["+i+"]["+j+"]");
+                            
+                            if (i == j) {
+                                input.setAttribute("value", "0");
+                                input.setAttribute("disabled", "disabled");
+                                
+                            }
+                           
+                            cell = document.createElement("td");
+                            cell.appendChild(input);
+                            
+                            row.appendChild(cell);
+                            
+                        }
+                        myTableForm.appendChild(row);
+                    }
+                    
+                    row = document.createElement("tr");
+                    cell = document.createElement("th");
+                    cell.setAttribute("colspan", rowsCols + 1);
+                    submit = document.createElement("input");
+                    submit.setAttribute("type", "submit");
+                    submit.setAttribute("value", "Aceptar");
+                    
+                    cell.appendChild(submit);
+                    row.appendChild(cell);
+                    myTableForm.appendChild(row);
+                    
+                    if (document.getElementById('randomizeLink') == undefined) {
+                        myA = document.createElement("a");
+                        myA.setAttribute('id', 'randomizeLink');
+                        myA.setAttribute("href", "javascript:randomFill()");
+                        myA.setAttribute("class", "auxLink");
+                        myA.innerHTML = 'Números aleatorios';
+                        insertAfter(myA, myTableForm);
+                    }
+                } catch (e) {
+                    console.debug(e.message);
+                }
+                return false;
+            }
+            
+            /**
+             * Lee matriz principal e inicializa clase Graph
+             * @param form DOM element form
+             */
+            var readMatrix = function(form) {
+                var value;
+                try {
+                    map = {};
+                    for (var i=0; i<rowsCols; i++) {
+                        map[nodes[i]] = {}; 
+                        for (var j=0; j<rowsCols; j++) {
+                            value = parseInt(form['input['+i+']['+j+']'].value);
+                            if (value > 0) {
+                                map[nodes[i]][nodes[j]] = value;
+                                form['input['+i+']['+j+']'].value = value;
+                            }
+                        }
+                    }
+                    createDistancesForm(map);
+                    
+                    console.log('Leido map:');
+                    console.log(map);
+                    graph = new Graph(map);
+                } catch (e) {
+                    console.log(e);
+                }
+                
+                return false;
+            }
+            
+            /**
+            * Elimina elemento DOM por identificador, si es que existe.
+            * @param id string
+            */
+            var dropElementById = function(id) {
+                if (document.getElementById(id) != undefined) {
+                    var dropMe = document.getElementById(id);
+                    dropMe.parentNode.removeChild(dropMe);
+                }
+            }
+            
+            /**
+             * Encuentra camino mas corto según origen y destino ingresados en formulario
+             * @param form DOM element form
+             */
+            var findShortestPath = function(form) {
+                try {
+                    var from = form['from'].value;
+                    var to = form['to'].value;
+                    
+                    if (from == to) {
+                        alert('El origen es el destino');
+                    } else {
+                        var nodesResult = graph.findShortestPath(from, to);
+                        console.log(nodesResult);
+                        var path='';
+                        var current;
+                        var previous;
+                        var total=0;
+                        var input;
+                        
+                        if (nodesResult != null) {
+                            for (var i=0; i<nodesResult.length; i ++) {
+                                console.debug(nodesResult[i]);
+                                if (i <= 0) {
+                                    path += nodesResult[i] + '\n';
+                                    cost = 0;
+                                } else {
+                                    current = array_keys(nodes, nodesResult[i])[0];
+                                    previous = array_keys(nodes, nodesResult[i-1])[0];
+                                    console.debug(current + "-" + previous);
+                                    
+                                    input = document.getElementById('input['+previous+']['+current+']');
+                                    cost = parseInt(input.value);
+                                    console.debug(cost);
+                                    path += nodesResult[i] + ' (costo '+cost+')\n';
+                                }
+                                total += cost;
+                            }
+                        }
+                        alert( (nodesResult != null) ? 'El recorrido más corto es :\n' + path + '\nCosto total: ' + total : 'No hay camino' );
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+                return false;
+            }
+            
+            /**
+             * Crea formulario para ingresar origen y destino
+             * @param map Object
+             */
+            var createDistancesForm = function (map) {
+                dropElementById("distancesForm");
+                
+                var form = document.createElement("form");
+                var table = document.createElement("table");
+                var row = document.createElement("tr");
+                var cell;
+                var options = [];
+                var option;
+                var select;
+                var submit;
+                
+                form.setAttribute("onsubmit", "return findShortestPath(this)");
+                form.setAttribute("id", "distancesForm");
+                form.appendChild(table);
+
+                
+                var i = 0;
+                for (var property in map) {
+                    option = new Option(property, property);
+                    if (i == 0) option.selected = true;
+                    options.push(option);
+                    i++;
+                }
+                
+                cell = document.createElement("th");
+                cell.innerHTML = 'desde:';
+                row.appendChild(cell);
+                
+                cell = document.createElement("td");
+                select = document.createElement('select');
+                select.setAttribute('name', 'from');
+                
+                for (var i=0; i<options.length; i++) {
+                    select.appendChild(options[i]);
+                }
+                cell.appendChild(select);
+                row.appendChild(cell);
+
+                options = [];
+
+                for (var property in map) {
+                    option = new Option(property, property);
+                    if (i == 0) option.selected = true;
+                    options.push(option);
+                    i++;
+                }
+                
+                
+                cell = document.createElement("th");
+                cell.innerHTML = 'hasta:';
+                row.appendChild(cell);
+                
+                cell = document.createElement("td");
+                select = document.createElement('select');
+                select.setAttribute('name', 'to');
+                for (var i=0; i<options.length; i++) {
+                    select.appendChild(options[i]);
+                }
+                cell.appendChild(select);
+                row.appendChild(cell);
+                
+                submit = document.createElement("input");
+                submit.setAttribute("type", "submit");
+                submit.setAttribute("value", "Recorrer");
+                
+                cell = document.createElement("th");
+                cell.appendChild(submit);
+                
+                row.appendChild(cell);
+                
+                table.appendChild(row);
+                
+                document.getElementById('wrapper').appendChild(form);
+                
+            }
+        </script>
+    </body>
+</html>

@@ -25,7 +25,7 @@ class AclUsersModel extends Zwei_Db_Table
         ;
 
         //[TODO] esto está en duro, debiera ser dinámico via campo root en acl_roles
-        if ($this->_user_info->acl_roles_id != '1') {
+        if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where('acl_roles_id <> ?', '1');
         }
 

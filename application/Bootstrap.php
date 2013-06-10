@@ -52,6 +52,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         if (isset($this->_config->zwei->date->defaultTimezone)) date_default_timezone_set($this->_config->zwei->date->defaultTimezone);
         
         defined('ADMPORTAL_APPLICATION_PATH') || define('ADMPORTAL_APPLICATION_PATH', $this->_config->zwei->admportal->applicationPath);
+        
+        //Define ACL root role id
+        defined('ROLES_ROOT_ID')
+        || define('ROLES_ROOT_ID', (isset($this->_config->zwei->roles->rootId) ? $this->_config->zwei->roles->rootId : '1'));
     }
     
     /**

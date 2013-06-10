@@ -34,7 +34,7 @@ class AclPermissionsComboModel extends Zwei_Db_Table
         ->joinLeft($this->_name_modules, "$this->_name.{$this->_name_modules}_id = $this->_name_modules.id", array());
         
         //Si no es root no puede ver a usuarios root
-        if ($this->_user_info->acl_roles_id != '1') {
+        if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where("$this->_name_roles.id != ?", "1");
         }
         //Zwei_Utils_Debug::write($select->__toString());

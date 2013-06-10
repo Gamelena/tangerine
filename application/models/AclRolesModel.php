@@ -59,7 +59,7 @@ class AclRolesModel extends Zwei_Db_Table
         $select = new Zend_Db_Table_Select($this);
 
         //Si no pertenece al role_id 1, no puede ver a otros usuarios con ese perfil
-        if ($this->_user_info->acl_roles_id != '1') {
+        if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where('id <> ?', '1');
         }
 

@@ -212,7 +212,7 @@ class AclModulesModel extends Zwei_Db_Table
         ;
         
         //Si no pertenece al role_id 1, no puede ver módulos root
-        if ($this->_user_info->acl_roles_id != '1') {
+        if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where("$this->_name.root != ?", "1");
         }
         
@@ -259,7 +259,7 @@ class AclModulesModel extends Zwei_Db_Table
         ->order("title")
         ;
 
-        if ($this->_user_info->acl_roles_id != '1') {
+        if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where("$this->_name.root != ?", "1");
         }
         return $select;
@@ -282,7 +282,7 @@ class AclModulesModel extends Zwei_Db_Table
         ->order("title")
         ;
 
-        if ($this->_user_info->acl_roles_id != '1') {
+        if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where("$this->_name.root != ?", "1");
         }
         return $select;
