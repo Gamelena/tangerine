@@ -357,19 +357,19 @@ class AdminController extends Zend_Controller_Action
         $this->view->dojo()->requireModule("dijit.form.ValidationTextBox");
         
         $username = new Zend_Dojo_Form_Element_ValidationTextBox('username');
-        //$username->setLabel('Usuario:');
         $username->setAttrib("class", "input");
         $username->setAttrib("dojoType", "dijit.form.ValidationTextBox");
-        $username->setAttrib("promptMessage", "Ingrese Usuario");
+        $username->setAttrib("invalidMessage", "Ingrese Usuario");
         $username->setAttrib("placeHolder", "Usuario");
+        $username->setAttrib("required", "true");
         $username->setRequired(true);
     
         $password = new Zend_Dojo_Form_Element_PasswordTextBox('password');
         $password->setAttrib("dojoType", "dijit.form.ValidationTextBox");
-        //$password->setLabel('Contraseña:');
         $password->setAttrib("class", "input");
         $password->setAttrib("placeHolder", "Contraseña");
-        $password->setAttrib("promptMessage", "Ingrese Contrase&ntilde;a");
+        $password->setAttrib("invalidMessage", "Ingrese Contrase&ntilde;a");
+        $password->setAttrib("required", "true");
         $password->setRequired(true);
     
         $submit = new Zend_Form_Element_Submit('login');
@@ -377,15 +377,9 @@ class AdminController extends Zend_Controller_Action
         $submit->setAttrib("class", "button");
     
         $loginForm = new Zend_Dojo_Form();
-        $loginForm->setTranslator();
         $loginForm->setAction($this->_request->getBaseUrl().'/admin/login/')
         ->setTranslator(new Zend_Translate('array',array("Value is required and can't be empty"=>"Este valor no puede ir vacío"),'es'))
-        ->setAttribs(
-            array(
-                "class" => "login-form",
-                "dojoType" => "dijit.form.Form"
-            )
-        )
+
         ->setMethod('post')
         ->addElement($username)
         ->addElement($password)
