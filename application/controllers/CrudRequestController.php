@@ -350,7 +350,9 @@ class CrudRequestController extends Zend_Controller_Action
         $message = '';
         
         foreach ($_FILES as $i => $v) {
-            $path = $this->_form->pathdata[array_keys($v['name'])[0]];
+            $tmpTargets = array_keys($v['name']);
+            $target = $tmpTargets[0];
+            $path = $this->_form->pathdata[$target];
             $infoFiles = $this->_form->upload($i, $path);
             if ($infoFiles) {
                 foreach ($infoFiles as $i => $v) {
