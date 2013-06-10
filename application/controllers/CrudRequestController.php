@@ -105,7 +105,8 @@ class CrudRequestController extends Zend_Controller_Action
                 $where = array();
                 
                 foreach ($_FILES as $i => $v) {
-                    $target = array_keys($v['name'])[0];
+                    $tmpTargets = array_keys($v['name']);
+                    $target = $tmpTargets[0];
                     $path = !empty($this->_form->pathdata[$target]) ? 
                         $this->_form->pathdata[$target] : 
                         ROOT_DIR . '/public/upfiles';
