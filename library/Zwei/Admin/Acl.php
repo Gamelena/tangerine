@@ -461,8 +461,6 @@ class Zwei_Admin_Acl extends Zend_Acl
         ->joinLeft(self::$_tb_roles_modules_actions, self::$_tb_roles_modules_actions.".acl_modules_actions_id=".self::$_tb_modules_actions.".id", array())
         ->joinLeft(self::$_tb_roles, self::$_tb_roles_modules_actions.".acl_roles_id = ".self::$_tb_roles.".id", array())
         ->joinLeft(self::$_tb_users, self::$_tb_users.".".self::$_user_role_id." = ".self::$_tb_roles_modules_actions.".".self::$_tb_roles."_id", array())
-        ->from(self::$_tb_roles_modules_actions, array())
-        ->where(self::$_tb_roles_modules_actions.".".self::$_tb_roles."_id = ".self::$_tb_roles.".id")
         ->where(self::$_tb_users.".".self::$_user_login." = '".self::$_user."'")
         ->where(self::$_tb_modules.".module ='$resource'");
 
@@ -471,9 +469,8 @@ class Zwei_Admin_Acl extends Zend_Acl
             $select->where(self::$_tb_modules_actions.".acl_actions_id = '$permission'");
         }
 
-        $select->where( self::$_tb_users.".".self::$_user_login." = '".$user."'")
-            ->group( self::$_tb_modules.".id" );
-            
+        $select->where( self::$_tb_users.".".self::$_user_login." = '".$user."'");
+        
         Debug::writeBySettings($select->__toString(), 'query_log');
             
         $result = self::$_db->fetchAll($select);//Todo acá podía usarse $_db->fetchRow($select).

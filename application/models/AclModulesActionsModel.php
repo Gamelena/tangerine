@@ -44,7 +44,7 @@ class AclModulesActionsModel extends DbTable_AclModulesActions
         }
         
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
-            $selectTmp->where("$this->_nameModules.root != ?", "1");
+            $select->where("$this->_nameModules.root != ?", "1");
         } else {
             $select->order("parent_title");
             $select->order("module");
