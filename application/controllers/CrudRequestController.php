@@ -105,8 +105,12 @@ class CrudRequestController extends Zend_Controller_Action
                 $where = array();
                 
                 foreach ($_FILES as $i => $v) {
-                    $path = !empty($this->_form->pathdata[array_keys($v['name'])[0]]) ? $this->_form->pathdata[array_keys($v['name'])[0]] : ROOT_DIR . '/public/upfiles';
-                    $element = $this->_xml->getElements("@target='".array_keys($v['name'])[0]."'");
+                    $target = array_keys($v['name'])[0];
+                    $path = !empty($this->_form->pathdata[$target]) ? 
+                        $this->_form->pathdata[$target] : 
+                        ROOT_DIR . '/public/upfiles';
+                    
+                    $element = $this->_xml->getElements("@target='$target'");
                     
                     $infoFiles = $this->_form->upload($i, $path);
                     if ($infoFiles) {
