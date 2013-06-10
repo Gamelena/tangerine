@@ -469,7 +469,7 @@ class Zwei_Admin_Acl extends Zend_Acl
             $select->where(self::$_tb_modules_actions.".acl_actions_id = '$permission'");
         }
 
-        $select->where( self::$_tb_users.".".self::$_user_login." = '".$user."'");
+        $select->limit(1);
         
         Debug::writeBySettings($select->__toString(), 'query_log');
             
