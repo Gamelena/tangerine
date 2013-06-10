@@ -28,9 +28,12 @@ if (count($this->groups) > 0) {
 <?php
            
            foreach ($group->children() as $element) :
-               $eName = $element->getAttribute('name')
-               ? $element->getAttribute('name')
-               : $this->xml->getElements("@target='{$element->getAttribute('target')}'")[0]->getAttribute('name');
+               if ($element->getAttribute('name')) {
+                  $eName = $element->getAttribute('name');
+               } else {
+                  $targets = $this->xml->getElements("@target='{$element->getAttribute('target')}'");
+                  $eName = $targets[0]->getAttribute('name');
+               }
 ?>
                 <div class="formSearchSelectorItem">
                     <input dojoType="dijit.form.RadioButton" id="<?php echo $this->domPrefix?>searchFields[<?php echo $i?>][<?php echo $k?>]" name="switchFields[<?php echo $i?>]" <?php if ($k == 0) echo 'checked="checked"' ?> value="<?php echo $element->getAttribute('target') ?>" type="radio" onClick="dijit.byId('<?php echo $this->domPrefix . '_search_' . $i?>').set('name', this.value)" />
