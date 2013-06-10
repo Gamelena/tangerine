@@ -110,10 +110,12 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>" : '';
-        $this->view->styleDialog = $this->_xml->xpath("//forms[@style]") ? "style=\"{$this->_xml->xpath("//forms")[0]->getAttribute('style')}\"" : '';
-        $this->view->onloadDialog = $this->_xml->xpath("//forms[@onload]") ? "onload=\"{$this->_xml->xpath("//forms")[0]->getAttribute('onload')}\"" : '';
-        $this->view->onshowDialog = $this->_xml->xpath("//forms[@onshow]") ? "onshow=\"{$this->_xml->xpath("//forms")[0]->getAttribute('onshow')}\"" : '';
-        $this->view->onhideDialog = $this->_xml->xpath("//forms[@onhide]") ? "onhide=\"{$this->_xml->xpath("//forms")[0]->getAttribute('onhide')}\"" : '';
+        if ($this->_xml->xpath("//forms")) $forms = $this->_xml->xpath("//forms");
+        
+        $this->view->styleDialog = $this->_xml->xpath("//forms[@style]") ? "style=\"{$forms[0]->getAttribute('style')}\"" : '';
+        $this->view->onloadDialog = $this->_xml->xpath("//forms[@onload]") ? "onload=\"{$forms[0]->getAttribute('onload')}\"" : '';
+        $this->view->onshowDialog = $this->_xml->xpath("//forms[@onshow]") ? "onshow=\"{$forms[0]->getAttribute('onshow')}\"" : '';
+        $this->view->onhideDialog = $this->_xml->xpath("//forms[@onhide]") ? "onhide=\"{$forms[0]->getAttribute('onhide')}\"" : '';
         $this->view->ajax = $this->_xml->xpath("//forms[@ajax='true']") ? true : false;
     }
 
