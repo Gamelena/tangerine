@@ -14,11 +14,12 @@ class Elements_DijitFormValidationTextBoxController extends Zend_Controller_Acti
         $this->view->i =  $r->getParam('i');
         $this->view->domId =  $r->getParam('domId');
         $this->view->target =  $r->getParam('target');
+        Debug::write($this->getRequest()->getParams());
         
         $this->view->value =  $r->getParam('value', '');
-        $this->view->readonly = $r->getParam('readonly', '') === 'true' ? "readonly=\"readonly\"" : '';
-        $this->view->disabled = $r->getParam('disabled', '') === 'true' ? "disabled=\"disabled\"" : '';
-        $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
+        $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? "readonly=\"readonly\"" : '';
+        $this->view->disabled = $r->getParam('disabled') === 'true' || $r->getParam($r->getParam('mode')) == 'disabled' ? "disabled=\"disabled\"" : '';
+        $this->view->required = $r->getParam('required') === 'true' ? "required=\"true\"" : '';
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
         $this->view->style = $r->getParam('onblur') ? "style=\"{$r->getParam('style')}\"" : '';
         $this->view->regExp = $r->getParam('regExp') ? "regExp=\"{$r->getParam('regExp')}\"" : '';

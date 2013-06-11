@@ -50,6 +50,7 @@ if (!$this->loadPartial) :
             }
             
             $params['domId'] = $this->domPrefix . "_{$this->mode}_";
+            $params['mode'] = $this->mode;
             $params['i'] = $j;
             $hidden = $params['type'] == 'hidden' ? ' style="display:none"' : '';
             
