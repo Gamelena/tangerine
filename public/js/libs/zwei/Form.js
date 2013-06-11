@@ -30,15 +30,21 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      * zwei.Utils
      */
     utils: null,
-    
-    
+    /**
+     * boolean
+     */
     ajax: false,
-    
+    /**
+     * Object
+     */
     response: null,
-    
-    
+    /**
+     * Object
+     */
     primary: {},
-    
+    /**
+     * string
+     */
     
     queryParams: '',
     
@@ -221,7 +227,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         var primaries = {};
         
         if (this.dijitDataGrid != null && this.dijitForm != null) {
-            console.debug(this);
+            globalOpc = this.action;
             var name;
             if (this.action != 'add') {
                 var items = this.dijitDataGrid.selection.getSelected();

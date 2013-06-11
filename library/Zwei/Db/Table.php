@@ -321,7 +321,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * Agregar string javascript para añadir validación adicional para editar o eliminar
      * sobrescribiendo metodo en Modelo a usar
-     * usar en javascript var global_opc = ('edit' || 'add') para discriminar entre editar y agregar
+     * usar en javascript var globalOpc = ('edit' || 'add') para discriminar entre editar y agregar
      * en caso de no pasar validacion agregar un return false en la condición javascript.
      * @return string
      */

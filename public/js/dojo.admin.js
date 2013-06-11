@@ -1,4 +1,4 @@
-var global_opc;
+var globalOpc;
 var globalModuleId;
 var globalModule;
 
@@ -249,7 +249,7 @@ function cargarArbolMenu(layout)
 
 function cargarTabsPanelCentral(component, action, primary, domPrefix)
 {
-    global_opc = action;
+    globalOpc = action;
     //if (iframe == undefined) var iframe = false;
     if (primary == undefined) var primary = "id";
     if (domPrefix == undefined) var domPrefix = "";

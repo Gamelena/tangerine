@@ -24,6 +24,10 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
         $this->view->regExp = $r->getParam('regExp') ? "regExp=\"{$r->getParam('regExp')}\"" : '';
         $this->view->label = $r->getParam('label') ? "label=\"{$r->getParam('label')}\"" : '';
+        $this->view->onchange = $r->getParam('onchange') ? "onchange=\"{$r->getParam('onchange')}\"" : '';
+        $this->view->onclick = $r->getParam('onclick') ? "onclick=\"{$r->getParam('onclick')}\"" : '';
+        $this->view->onshow = $r->getParam('onshow') ? "onShow=\"{$r->getParam('onshow')}\"" : '';
+        $this->view->onload = $r->getParam('onload', '');
         
         if (preg_match("/^\{BASE_URL\}(.*)$/", $r->getParam('label'), $matches)) {
             $this->view->label = "url=\"".BASE_URL . $matches[1]."\"";
@@ -43,7 +47,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
     
         $selected = array();
     
-        if (!$r->getParam('value')) {
+        if ($r->getParam('value') === false) {
             $value = $r->getParam($r->getParam('target', ''), null);
         } else {
             $value = $r->getParam('value');
@@ -70,7 +74,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
             Zwei_Utils_Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $model->fetchAll($select);
 
-            if ($r->getParam('defaultValue') !== false || $r->getParam('defaultText') !== false) {
+            if ($r->getParam('defaultValue') || $r->getParam('defaultText')) {
                 $options .= "<option value=\"{$r->getParam('defaultValue', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
             }
     
@@ -88,6 +92,11 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         } else {
             $options = "";
             $rows = explode(";", $r->getParam('list'));
+            
+            if ($r->getParam('defaultValue') || $r->getParam('defaultText')) {
+                $options .= "<option value=\"{$r->getParam('defaultValue', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
+            }
+            
             foreach ($rows as $row) {
                 $selected = $row == $value ? "selected" : "";
                 $options .= "<option value=\"".$row."\" ".$selected." >$row</option>\r\n";

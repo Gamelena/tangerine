@@ -3,7 +3,7 @@
  * Controlador de Datos
  *
  * Controlador principal que interactúa con capa de datos para operaciones CRUD, 
- * recibe parametros por $_REQUEST y devuelve datos y/o mensajes en formatos como json u xls
+ * recibe parametros por $_REQUEST y devuelve datos y/o mensajes en formatos como json, xml o excel
  *
  * @package Controllers
  * @version $Id:$
@@ -112,7 +112,7 @@ class CrudRequestController extends Zend_Controller_Action
                         ROOT_DIR . '/public/upfiles';
                     
                     $element = $this->_xml->getElements("@target='$target'");
-                    
+
                     $infoFiles = $this->_form->upload($i, $path);
                     if ($infoFiles) {
                         $j = 0;
@@ -283,7 +283,6 @@ class CrudRequestController extends Zend_Controller_Action
                                'more' => $this->_response_content['more']);
                 $content = Zend_Json::encode($data);
             } else {
-
                 foreach ($data as $rowArray) {
                     $collection[$i]=array();
                     foreach ($rowArray as $column => $value) {

@@ -59,12 +59,21 @@
         </xsd:choice>
         <xsd:attribute name="ajax" />
         <xsd:attribute name="style"/>
+        <xsd:attribute name="onload"/>
+        <xsd:attribute name="onshow"/>
+        <xsd:attribute name="onhide"/>
     </xsd:complexType>
     <xsd:complexType name="formType">
         <xsd:sequence>
             <xsd:element name="tabs" type="tabsType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="onPostSubmit" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="onSubmit" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
         <xsd:attribute name="ajax" />
+        <xsd:attribute name="style"/>
+        <xsd:attribute name="onload"/>
+        <xsd:attribute name="onshow"/>
+        <xsd:attribute name="onhide"/>
     </xsd:complexType>
     <xsd:complexType name="tabsType">
         <xsd:sequence>
@@ -104,9 +113,11 @@
     <xsd:complexType name="elementType">
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
             <xsd:element name="tinyMceInit" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="thumb" type="thumbType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:choice>
         <xsd:attribute name="target" use="required"/>
         <xsd:attribute name="type" type="elementTypeType"/>
+        <xsd:attribute name="style" />
         <xsd:attribute name="name" />
         <xsd:attribute name="visible" />
         <xsd:attribute name="edit" />
@@ -122,6 +133,8 @@
         <xsd:attribute name="required" />
         <xsd:attribute name="regExp"/>
         <xsd:attribute name="trim"/>
+        <xsd:attribute name="url"/>
+        <xsd:attribute name="path"/>
         <xsd:attribute name="table"/>
         <xsd:attribute name="tableField"/>
         <xsd:attribute name="tablePk"/>
@@ -136,7 +149,13 @@
         <xsd:attribute name="sufix"/>
         <xsd:attribute name="prefix"/>
         <xsd:attribute name="tinyMceTemplate" />
+        <xsd:attribute name="placeHolder" />
         <xsd:attribute name="operator" type="operatorType"/>
+    </xsd:complexType>
+    <xsd:complexType name="thumbType">
+        <xsd:attribute name="width" />
+        <xsd:attribute name="height" />
+        <xsd:attribute name="path"/>
     </xsd:complexType>
     <xsd:simpleType name="operatorType">
         <xsd:restriction base="xsd:string">
@@ -167,6 +186,7 @@
             <xsd:enumeration value="dijit-form-filtering-select"/>
             <xsd:enumeration value="dijit-form-textarea"/>
             <xsd:enumeration value="dijit-form-validation-text-box"/>
+            <xsd:enumeration value="dijit-form-date-text-box"/>
             <xsd:enumeration value="dojox-form-checked-multi-select"/>
             <xsd:enumeration value="dojox-form-uploader"/>
             <xsd:enumeration value="hidden"/>

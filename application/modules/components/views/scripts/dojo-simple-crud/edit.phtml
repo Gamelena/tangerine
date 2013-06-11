@@ -1,6 +1,9 @@
 <?php 
 $modAux = $this->mode != 'clone' ? $this->mode : 'add';
 ?>
+<script type="text/javascript">
+    globalOpc = '<?php echo $this->mode ?>';
+</script>
 <form dojoType="dijit.form.Form" target="ifrm_process" id="<?php echo $this->domPrefix?>form_<?php echo $modAux?>" class="tabForm" jsId="<?php echo $this->domPrefix?>form_<?php echo $modAux?>" name="<?php echo $this->domPrefix?>form_<?php echo $this->mode?>" encType="multipart/form-data"  action="<?php echo BASE_URL?>crud-request" method="post">
 <?php 
 $i = 0;
@@ -38,32 +41,35 @@ if (!$this->loadPartial) :
             $hidden = '';
             $params = (array) $element->attributes();
             $params = $params['@attributes'];
-            if ($element->existsChildren('tinyMceInit')) {
-                $params['tinyMceInit'] = dom_import_simplexml($element->tinyMceInit)->textContent;
-            }
             
-            if ($element->existsChildren('thumb')) {
-                $params['thumbs'] = array();
-                foreach ($this->xml->xpath("//elements/element[@target='{$params['target']}']/thumb") as $t) {
-                    $params['thumbs'][] = $t;
+            if (isset($params[$this->mode]) && $params[$this->mode] !== 'false') :
+                if ($element->existsChildren('tinyMceInit')) {
+                    $params['tinyMceInit'] = dom_import_simplexml($element->tinyMceInit)->textContent;
                 }
-            }
-            
-            $params['domId'] = $this->domPrefix . "_{$this->mode}_";
-            $params['mode'] = $this->mode;
-            $params['i'] = $j;
-            $hidden = $params['type'] == 'hidden' ? ' style="display:none"' : '';
-            
-            if (isset($_REQUEST[$params['target']])) $params['value'] = $_REQUEST[$params['target']]; //Esto aplica para formularios cargados vía ajax
-            if (isset($this->data[$params['target']])) $params['value'] = $this->data[$params['target']];
-            
-            $params['target'] = "data[{$params['target']}]";
+                
+                if ($element->existsChildren('thumb')) {
+                    $params['thumbs'] = array();
+                    foreach ($this->xml->xpath("//elements/element[@target='{$params['target']}']/thumb") as $t) {
+                        $params['thumbs'][] = $t;
+                    }
+                }
+                
+                $params['domId'] = $this->domPrefix . "_{$this->mode}_";
+                $params['mode'] = $this->mode;
+                $params['i'] = $j;
+                $hidden = $params['type'] == 'hidden' ? ' style="display:none"' : '';
+                
+                if (isset($_REQUEST[$params['target']])) $params['value'] = $_REQUEST[$params['target']]; //Esto aplica para formularios cargados vía ajax
+                if (isset($this->data[$params['target']])) $params['value'] = $this->data[$params['target']];
+                
+                $params['target'] = "data[{$params['target']}]";
 ?>
             <tr<?php echo $hidden?>>
                 <th><label for="<?php echo $element->getAttribute('target')?>"><?php echo $element->getAttribute('name') ?></label></th>
                 <td><?php echo $this->action('index', $element->getAttribute('type'), 'elements', $params); ?></td>
             </tr>
 <?php 
+            endif;
         endforeach;
 ?>
         </table>
