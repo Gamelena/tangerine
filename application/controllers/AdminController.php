@@ -83,12 +83,12 @@ class AdminController extends Zend_Controller_Action
             @import "'.$this->baseDojoFolder.'/dijit/themes/'.$this->_dojoTheme.'/'.$this->_dojoTheme.'.css";
         ');    
 
+        $settings = new SettingsModel();
+        
         try {
-            $settings = new SettingsModel();
-            $result = $settings->find('titulo_adm')->current();
-            $this->_sitename = $result->value;
-            $this->view->adminTitle = $result->value;
-            $this->view->adminTitle = $result->value;
+            $this->_sitename = $settings->find('titulo_adm')->current()->value;
+            $this->view->adminTitle = $this->_sitename;
+            $this->view->urlLogoOper = $settings->find('url_logo_oper')->current()->value;
         } catch (Zend_Db_Exception $e){
             Debug::write($e->getMessage());
         }

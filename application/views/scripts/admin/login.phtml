@@ -15,10 +15,6 @@
     <script type="text/javascript">
     require(["dojo/ready", "dojo/parser", "dijit/registry", "dijit/Dialog"], function(ready, parser, registry){
         ready(function(){
-
-            console.debug(dijit.byId('username'));
-          
-            
             dojo.connect(dijit.byId('username'), 'onFocus', function() {
                 dojo.byId("user_icon").style.left="-48px";
             });
@@ -43,14 +39,14 @@
     <div id="wrapper">
         <div class="user-icon" id="user_icon"></div>
         <div class="pass-icon" id="pass_icon"></div>
-        <div class="operLogo" style="background-image: url(<?php echo BASE_URL ?>upfiles/4fcd081blogo_movistar68x50.png);"></div>
+        <div class="operLogo" style="background-image: url(<?php echo BASE_URL ?>upfiles/<?php echo $this->urlLogoOper ?>);"></div>
         <form name="login-form" class="login-form" action="" method="post">
             <div class="header">
                 <h1><?php echo $this->adminTitle;?></h1>
                 <span></span>
             </div>
                 <?php if($this->errorMessage != ""): ?><p class="error"><?php echo $this->errorMessage;?></p><?php endif; ?>
-                <?php echo $this->loginForm;?>
+                <?php echo $this->loginForm?>
         </form>
     </div>
     <div class="gradient"></div>
