@@ -404,7 +404,7 @@ class Zwei_Admin_Acl extends Zend_Acl
             self::_init();
         }
 
-        return (self::$_acl->isAllowed(self::$_user, $resource, $permission));
+        return self::$_acl->isAllowed(self::$_user, $resource, $permission);
 
     }
 

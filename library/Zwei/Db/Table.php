@@ -378,7 +378,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
                 $array[0] = str_replace("`", "", $aux[1]);
             }
             
-            $return[trim(str_replace("`", "", $array[0]))] = str_replace("'", "",$array[1]);
+            $return[trim(str_replace("`", "", $array[0]))] = trim(str_replace("'", "",$array[1]));
         }
         return $return;
     }

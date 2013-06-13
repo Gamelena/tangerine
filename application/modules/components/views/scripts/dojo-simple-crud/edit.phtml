@@ -17,7 +17,7 @@ if (!$this->loadPartial) :
             $style = $i == 0 ? 'style="background-image: url(/dojotoolkit/dijit/themes/claro/images/activeGradient.png); background-color: rgb(207, 229, 250); background-position: initial initial; background-repeat: repeat no-repeat;"' : '';
             $i++;
 ?>
-    <a id="<?php echo $this->domPrefix ?>tab<?php echo $this->mode ?>_ctrl<?php echo $i?>" class="settingsTab" <?php echo $style ?> onclick="admportal.switchTabs('<?php echo $this->domPrefix?>form_<?php echo $modAux?>', this.id, '<?php echo $this->domPrefix.'Tab_'.$this->mode.$i?>')"><?php echo $tab->getAttribute('name') ?></a>
+    <a id="<?php echo $this->domPrefix .'tab_'. $this->mode .'_ctrl'. $i?>" class="settingsTab" <?php echo $style ?> onclick="admportal.switchTabs('<?php echo $this->domPrefix?>form_<?php echo $modAux?>', this.id, '<?php echo $this->domPrefix.'tab_'.$this->mode.$i?>')"><?php echo $tab->getAttribute('name') ?></a>
 <?php 
             //endif;
         endforeach;
@@ -31,7 +31,7 @@ if (!$this->loadPartial) :
         $style = $i == 0 ? 'style="display:block"' : 'style="display:none"'; 
         $i++;
 ?>
-    <div id="<?php echo $this->domPrefix.'Tab_'.$this->mode.$i?>" class="settingsArea" <?php echo $style ?>>
+    <div id="<?php echo $this->domPrefix.'tab_'.$this->mode.$i?>" class="settingsArea" <?php echo $style ?>>
         <table>
 <?php 
         $k=0;

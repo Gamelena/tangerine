@@ -51,6 +51,8 @@ class AclModulesModel extends Zwei_Db_Table
         if (empty($data['parent_id'])) $data['parent_id'] = null;
         if (isset($data['actions'])) {
             $this->_dataActions = $data['actions'];
+            //Encomillar los elementos de $this->_dataActions
+            array_walk($this->_dataActions, create_function('&$str', '$str = "\"$str\"";'));
             unset($data['actions']);
         }
         return $data;
@@ -59,18 +61,10 @@ class AclModulesModel extends Zwei_Db_Table
     protected function saveDataActions($aclModulesId) {
         $modulesAction = new DbTable_AclModulesActions();
         $ad = $modulesAction->getAdapter();
-        $insert = false;
-        $return = false;
-        
         //Borrar Todas las acciones del modulo, excepto los marcados
-        $unquotedList = !empty($this->_dataActions) ?
+        $list = !empty($this->_dataActions) ?
             implode(",", $this->_dataActions) :
             false;
-        
-        $list = array();
-        foreach ($list as $a) {
-            $list[] = $ad->quote($a);
-        }
         
         $where = array();
         
@@ -79,8 +73,6 @@ class AclModulesModel extends Zwei_Db_Table
             
         $delete = $modulesAction->delete($where);
          
-        if ($delete) $return = true;
-        //Fin Borrar
         
         foreach ($this->_dataActions as $v) {
             $data = array(
@@ -96,11 +88,8 @@ class AclModulesModel extends Zwei_Db_Table
                     Debug::write("Ya existe modulo_accion asociado a $printData");
                 }
             }
-            if ($insert) $return = true;
         }
-        
-        
-        return $return;
+        return $insert || $delete;
     }
     
     /**

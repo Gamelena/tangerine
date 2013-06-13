@@ -146,7 +146,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             }
         });
         
-        /*//Esto siempre toma el camino function(err) aunque la respuesta se vea bien
+        /*//Esto siempre toma el camino function(err) aunque la respuesta se vea bien, debido a que espera otro tipo de headers
          * 
         require(["dojo/request/iframe"], function(iframe){
             iframe.post(base_url+'crud-request', {
@@ -173,7 +173,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             'model': domForm['model'].value,
             'action': 'delete',
             'format': 'json' 
-        }
+        };
         
         dojo.forEach(dojo.query("#"+this.dijitForm.id+" input[name^=primary]"), function(entry, i){
             name = entry.name.replace('primary[', '').replace(']', '');
@@ -286,7 +286,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             }
             
             this.dijitDialog.set('href', base_url+'components/dojo-simple-crud/'+this.action+'?p='+this.component+'&'+ids+'&'+this.queryParams);
-            console.debug(this.dijitDialog);
         }
         
         this.dijitDialog.show();

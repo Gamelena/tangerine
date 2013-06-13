@@ -84,8 +84,6 @@ class AclRolesModel extends Zwei_Db_Table
                $data["permissions"][] = $perm['id'];
            }     
         }
-
-        Debug::write($data);
         return $data;
     }
 
