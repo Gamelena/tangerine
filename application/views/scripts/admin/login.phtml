@@ -40,14 +40,14 @@
         <div class="user-icon" id="user_icon"></div>
         <div class="pass-icon" id="pass_icon"></div>
         <div class="operLogo" style="background-image: url(<?php echo BASE_URL ?>upfiles/<?php echo $this->urlLogoOper ?>);"></div>
-        <form name="login-form" class="login-form" action="" method="post">
+        <div class="login-form">
             <div class="header">
                 <h1><?php echo $this->adminTitle;?></h1>
                 <span></span>
             </div>
                 <?php if($this->errorMessage != ""): ?><p class="error"><?php echo $this->errorMessage;?></p><?php endif; ?>
                 <?php echo $this->loginForm?>
-        </form>
+        </div>
     </div>
     <div class="gradient"></div>
     <div class="zweicomLogo"></div>
