@@ -40,7 +40,27 @@ if ($this->edit) :
 <?php 
 endif;
 ?>
-
+<?php 
+if ($this->delete) :
+?>
+    <div class="keyPadButton">
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconDelete" id="<?php echo $this->domPrefix?>btnDelete" onClick="
+                var form = new zwei.Form({
+                    ajax: <?php echo $this->ajax ?>,
+                    action: 'delete',
+                    component: '<?php echo $this->component?>',
+                    dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_edit'), 
+                    dijitForm: dijit.byId('<?php echo $this->domPrefix?>form_edit'), 
+                    dijitDataGrid: dijit.byId('<?php echo $this->domPrefix?>dataGrid'),
+                    dijitFormSearch: dijit.byId('<?php echo $this->domPrefix?>formSearch')
+                }); 
+                form.delete()">
+            Eliminar <?php echo $this->name ?>
+        </button>
+    </div>
+<?php 
+endif;
+?>
 <?php
 if ($this->clone) :
 ?>
@@ -68,27 +88,6 @@ if ($this->changePassword) :
     <div class="keyPadButton">
         <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?php echo $this->domPrefix?>btnChangePassword" onClick="{$domPrefix}showDialogPass();">
             Cambiar Contrase&ntilde;a
-        </button>
-    </div>
-<?php 
-endif;
-?>
-<?php 
-if ($this->delete) :
-?>
-    <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconDelete" id="<?php echo $this->domPrefix?>btnDelete" onClick="
-            var form = new zwei.Form({
-                ajax: <?php echo $this->ajax ?>,
-                action: 'delete',
-                component: '<?php echo $this->component?>',
-                dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_edit'), 
-                dijitForm: dijit.byId('<?php echo $this->domPrefix?>form_edit'), 
-                dijitDataGrid: dijit.byId('<?php echo $this->domPrefix?>dataGrid'),
-                dijitFormSearch: dijit.byId('<?php echo $this->domPrefix?>formSearch')
-            }); 
-            form.delete();">
-            Eliminar <?php echo $this->name ?>
         </button>
     </div>
 <?php 
