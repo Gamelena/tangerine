@@ -19,6 +19,10 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      */
     dijitFormSearch: null,
     /**
+    * dijit.form.Dialog
+    */
+    dijitDialog: null,
+    /**
      * dijit.form.DataGrid
      */
     dijitDataGrid: null,
