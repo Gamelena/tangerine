@@ -9,6 +9,7 @@
     font-style: normal;
 }
 
+
 /*******************
 SELECTION STYLING
 *******************/
@@ -33,6 +34,7 @@ BODY STYLING
 }
 
 body {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight:300;
     text-align: left;
     text-decoration: none;
@@ -49,32 +51,6 @@ body {
     margin-top: -200px;
 }
 
-/* Download Button (Demo Only) */
-.download {
-    display: block;
-    position: absolute;
-    float: right;
-    right: 25px;
-    bottom: 25px;
-    padding: 5px;
-    
-    font-weight: bold;
-    font-size: 11px;
-    text-align: right;
-    text-decoration: none;
-    color: rgba(0,0,0,0.5);
-    text-shadow: 1px 1px 0 rgba(256,256,256,0.5);
-}
-
-.download:hover {
-    color: rgba(0,0,0,0.75);
-    text-shadow: 1px 1px 0 rgba(256,256,256,0.5);
-}
-
-.download:focus {
-    bottom: 24px;
-}
-
 
 .gradient {
     /* Center Positioning */
@@ -85,6 +61,7 @@ body {
     top: 50%;
     margin-left: -300px;
     margin-top: -300px;
+    z-index: -1;
     
     /* Fallback */ 
     background-image: url(i/gradient.png); 
@@ -122,7 +99,7 @@ HEADER
 *******************/
 
 .login-form .header {
-    padding: 40px 30px 30px 30px;
+    padding: 40px 30px 0px 30px;
 }
 
 .login-form .header h1 {
@@ -133,6 +110,7 @@ HEADER
     color: #414848;
     text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .login-form .header span {
@@ -151,7 +129,7 @@ CONTENT
 }
 
 /* Input field */
-.login-form .content .input {
+.login-form .input {
     width: 188px;
     padding: 15px 25px;
     
@@ -170,17 +148,21 @@ CONTENT
     -webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
 }
 
+.login-form dd {
+	text-align: center;
+}
+
 /* Second input field */
-.login-form .content .password, .login-form .content .pass-icon {
+.login-form  .password, .login-form .content .pass-icon {
     margin-top: 25px;
 }
 
-.login-form .content .input:hover {
+.login-form .input:hover {
     background: #dfe9ec;
     color: #414848;
 }
 
-.login-form .content .input:focus {
+.login-form  .input:focus {
     background: #dfe9ec;
     color: #414848;
     
@@ -205,12 +187,12 @@ CONTENT
 }
 
 .user-icon {
-    top:147px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
+    top:97px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
     background: rgba(65,72,72,0.75) url(../images/user-icon.png) no-repeat center;  
 }
 
 .pass-icon {
-    top:221px;
+    top:156px;
     background: rgba(65,72,72,0.75) url(../images/pass-icon.png) no-repeat center;
 }
 
@@ -240,9 +222,9 @@ FOOTER
 }
 
 /* Login button */
-.login-form .footer .button {
-    float:right;
+.login-form  .button {
     padding: 11px 25px;
+    margin: 20px;
     
     font-family: 'resagokrbold', serif;
     font-weight: 300;
@@ -260,7 +242,7 @@ FOOTER
     -webkit-box-shadow: inset 0 0 2px rgba(256,256,256,0.75);
 }
 
-.login-form .footer .button:hover {
+.login-form .button:hover {
     background: #3f9db8;
     border: 1px solid rgba(256,256,256,0.75);
     
@@ -269,7 +251,7 @@ FOOTER
     -webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
 }
 
-.login-form .footer .button:focus {
+.login-form .button:focus {
     position: relative;
     bottom: -1px;
     
@@ -280,37 +262,56 @@ FOOTER
     -webkit-box-shadow: inset 0 1px 6px rgba(256,256,256,0.75);
 }
 
-/* Register button */
-.login-form .footer .register {
-    display: block;
-    float: right;
-    padding: 10px;
-    margin-right: 20px;
-    
-    background: none;
-    border: none;
-    cursor: pointer;
-    
-    font-family: 'resagokrbold', serif;
-    font-weight: 300;
-    font-size: 18px;
-    color: #414848;
-    text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
-}
-
-.login-form .footer .register:hover {
-    color: #3f9db8;
-}
-
-.login-form .footer .register:focus {
-    position: relative;
-    bottom: -1px;
-}
-
-.errors {
+.errors, .error {
     color: rgb(255, 1, 1);
-}	
+}   
+
+.error {
+    text-align: center;	
+}
 
 .errors li {
     display:inline-block;
 }
+/*******************
+CORPORATIVO
+*******************/
+.zweicomLogo
+{
+	background-image: url(../images/logo-zweicom-trans.svg);
+	width: 322px;
+	height: 185px;
+	left: 81%;
+	top: 81%;
+	position: fixed;
+	background-size: 200px;
+	background-repeat: no-repeat;
+}	
+.operLogo
+{
+	background-repeat: no-repeat;
+	width: 103px;
+	height: 105px;
+	left: -7%;
+	top: 5%;
+	z-index: 9999;
+	position: absolute;
+}
+
+.dijitDialog {
+	background: transparent !important;
+}
+
+.dijitDialog #wrapper {
+    position: relative  !important;
+    left: 0px !important;
+    top: 0px !important;
+    margin-left: 0px !important;
+    margin-top: 0px !important;
+}
+.dijitDialogPaneContent {
+    background: transparent !important;
+    overflow: hidden !important;
+    padding: 10px 33px 0px 33px !important;
+}
+

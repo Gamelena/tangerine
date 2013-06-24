@@ -1,20 +1,30 @@
 <?xml version="1.0"?>
-<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="components.xsd"
- name="Perfiles" type="dojo-simple-crud" target="AclRolesModel" js="roles.js" list="true" edit="true" add="true" clone="true" delete="true" plugins="{}" style="min-height:427px;width:416px;">
+<component name="Perfiles" type="dojo-simple-crud" target="AclRolesModel" js="roles.js" list="true" edit="true" add="true" clone="true" delete="true" 
+plugins="{}"  
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="components.xsd" >
     <elements>
-   	    <element name="ID" target="id" type="id-box" visible="true" edit="false" add="false" />
+        <element name="ID" target="id" type="dijit-form-validation-text-box" visible="true" edit="false" add="false" />
         <element name="Perfil" target="role_name" type="dijit-form-validation-text-box" required="true" trim="true" visible="true" edit="true" add="true" clone="true"/>
-        <element name="Descripci&amp;oacute;n" target="description" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"  clone="true" />
-        <element name="Permisos" target="permissions" type="dojox-form-checked-multi-select" table="AclRolesModel" tableMethod="selectPermissions" required="false" visible="false" edit="true" add="true" clone="true"/>
+        <element name="Descripci&amp;oacute;n" target="description" type="dijit-form-textarea" 
+            style="color: #131313;font-family: Verdana,Arial,Helvetica,sans-serif;font-size: inherit;" visible="true" edit="true" add="true" clone="true"/>
+        <element name="Permisos" target="permissions" type="dojox-form-checked-multi-select" table="AclModulesActionsModel" tableMethod="selectAllActions" visible="false" edit="true" add="true" clone="true" style="height:450px !important;"/>
     </elements>
-    <forms>
+    <searchers>
+        <group name="Perfil">
+            <element target="role_name"/>
+            <element target="description"/>
+        </group>
+    </searchers>
+    <forms ajax="true" 
+        style="min-height:85%;min-width:30%;" 
+        onload="dojo.byId(this.id).style.minHeight=null;dojo.byId(this.id).style.minWidth=null;" 
+        onhide="dojo.byId(this.id).style.minHeight='85%';dojo.byId(this.id).style.minWidth='30%';">
         <tabs>
             <tab name="Informaci&amp;oacute;n B&amp;aacute;sica">
-                <element target="id"/>
                 <element target="role_name"/>
                 <element target="description"/>
             </tab>
-            <tab name="Permisos">
+            <tab name="Permisos"> 
                 <element target="permissions"/>
             </tab>
         </tabs>

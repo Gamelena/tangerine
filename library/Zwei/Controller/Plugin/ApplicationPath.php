@@ -33,11 +33,11 @@ class Zwei_Controller_Plugin_ApplicationPath extends Zend_Controller_Plugin_Abst
         }
         
         if ($module != "default") {
-            if (file_exists(APPLICATION_PATH . '/modules/' . $module . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php')) {
+            if (file_exists(APPLICATION_PATH . '/modules/' . $module . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php')) {
                 //Debug::write("Existe ". APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');
                 $frontController->addModuleDirectory(APPLICATION_PATH . '/modules');
             } else {
-                //Debug::write("Buscando ". ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');   
+                Debug::write("Buscando ". ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php');   
                 $frontController->addModuleDirectory(ADMPORTAL_APPLICATION_PATH . '/modules');            
             }
         }

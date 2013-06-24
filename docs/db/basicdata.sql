@@ -11,29 +11,15 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Base de datos: `regla_cobros`
+-- Volcado de datos para la tabla `acl_actions`
 --
 
+INSERT INTO `acl_actions` (`id`, `title`) VALUES
+('EDIT', 'Editar'),
+('ADD', 'Agregar'),
+('DELETE', 'Eliminar'),
+('LIST', 'Listar');
 
---
--- Estructura de tabla para la tabla `acl_modules`
---
-
-DROP TABLE IF EXISTS `acl_modules`;
-CREATE TABLE IF NOT EXISTS `acl_modules` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` int(10) unsigned DEFAULT NULL,
-  `title` char(200) DEFAULT NULL,
-  `module` char(200) DEFAULT NULL,
-  `tree` enum('0','1') NOT NULL DEFAULT '1',
-  `linkable` enum('0','1') NOT NULL,
-  `type` enum('xml','xml_mvc','zend_module','legacy','iframe') NOT NULL DEFAULT 'xml',
-  `approved` enum('0','1') NOT NULL,
-  `order` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `root` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `module` (`module`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Volcado de datos para la tabla `acl_modules`
@@ -53,78 +39,6 @@ INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `linkab
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `acl_permissions`
---
-
-DROP TABLE IF EXISTS `acl_permissions`;
-CREATE TABLE IF NOT EXISTS `acl_permissions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `acl_roles_id` int(1) NOT NULL,
-  `acl_modules_id` int(4) NOT NULL,
-  `permission` char(64) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `acl_roles_id` (`acl_roles_id`,`acl_modules_id`,`permission`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=162 ;
-
---
--- Volcado de datos para la tabla `acl_permissions`
---
-
-INSERT INTO `acl_permissions` (`id`, `acl_roles_id`, `acl_modules_id`, `permission`) VALUES
-(110, 1, 5, 'LIST'),
-(109, 1, 5, 'EDIT'),
-(108, 1, 5, 'DELETE'),
-(107, 1, 5, 'ADD'),
-(106, 1, 9, 'LIST'),
-(105, 1, 9, 'EDIT'),
-(104, 1, 9, 'DELETE'),
-(103, 1, 9, 'ADD'),
-(102, 1, 8, 'LIST'),
-(101, 1, 8, 'EDIT'),
-(100, 1, 8, 'DELETE'),
-(99, 1, 8, 'ADD'),
-(98, 1, 7, 'LIST'),
-(97, 1, 4, 'LIST'),
-(96, 1, 4, 'EDIT'),
-(95, 1, 4, 'DELETE'),
-(94, 1, 4, 'ADD'),
-(159, 2, 5, 'DELETE'),
-(93, 1, 3, 'LIST'),
-(92, 1, 3, 'EDIT'),
-(91, 1, 2, 'LIST'),
-(90, 1, 1, 'LIST'),
-(89, 1, 1, 'EDIT'),
-(158, 2, 5, 'ADD'),
-(153, 2, 1, 'LIST'),
-(154, 2, 2, 'LIST'),
-(134, 3, 3, 'LIST'),
-(160, 2, 5, 'EDIT'),
-(161, 2, 5, 'LIST'),
-(157, 2, 8, 'LIST'),
-(133, 3, 3, 'EDIT'),
-(132, 3, 2, 'LIST'),
-(88, 1, 1, 'DELETE'),
-(156, 2, 3, 'LIST'),
-(155, 2, 3, 'EDIT'),
-(87, 1, 1, 'ADD');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `acl_roles`
---
-
-DROP TABLE IF EXISTS `acl_roles`;
-CREATE TABLE IF NOT EXISTS `acl_roles` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_name` char(64) NOT NULL,
-  `description` char(100) CHARACTER SET utf8 NOT NULL,
-  `approved` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `role_name` (`role_name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
-
---
 -- Volcado de datos para la tabla `acl_roles`
 --
 
@@ -134,24 +48,6 @@ INSERT INTO `acl_roles` (`id`, `role_name`, `description`, `approved`) VALUES
 (3, 'Consultas', 'Acceso a listados y reportes.', '1');
 
 -- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `acl_users`
---
-
-DROP TABLE IF EXISTS `acl_users`;
-CREATE TABLE IF NOT EXISTS `acl_users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `acl_roles_id` int(4) NOT NULL,
-  `user_name` char(64) NOT NULL,
-  `password` char(200) NOT NULL,
-  `first_names` char(50) NOT NULL,
-  `last_names` char(50) NOT NULL,
-  `email` char(50) NOT NULL,
-  `approved` enum('0','1') NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user_name` (`user_name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `acl_users`
@@ -166,80 +62,7 @@ INSERT INTO `acl_users` (`id`, `acl_roles_id`, `user_name`, `password`, `first_n
 
 --
 -- Estructura de tabla para la tabla `log_book`
---
 
-DROP TABLE IF EXISTS `log_book`;
-CREATE TABLE IF NOT EXISTS `log_book` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user` char(40) NOT NULL,
-  `table` char(40) NOT NULL,
-  `action` char(40) NOT NULL,
-  `condition` char(200) NOT NULL,
-  `acl_roles_id` int(11) NOT NULL,
-  `ip` char(200) NOT NULL,
-  `stamp` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Estructura Stand-in para la vista `tables_logged`
---
-DROP VIEW IF EXISTS `tables_logged`;
-CREATE TABLE IF NOT EXISTS `tables_logged` (
-`id` char(40)
-,`title` char(40)
-);
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `web_permissions`
---
-
-DROP TABLE IF EXISTS `web_permissions`;
-CREATE TABLE IF NOT EXISTS `web_permissions` (
-  `id` char(20) NOT NULL,
-  `title` char(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `web_permissions`
---
-
-INSERT INTO `web_permissions` (`id`, `title`) VALUES
-('ADD', 'Agregar'),
-('EDIT', 'Editar'),
-('DELETE', 'Borrar'),
-('LIST', 'Listar');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `web_settings`
---
-
-DROP TABLE IF EXISTS `web_settings`;
-CREATE TABLE IF NOT EXISTS `web_settings` (
-  `id` char(255) NOT NULL DEFAULT '',
-  `list` char(255) NOT NULL,
-  `value` char(255) NOT NULL DEFAULT '0',
-  `type` char(255) NOT NULL DEFAULT '',
-  `description` text NOT NULL,
-  `ord` int(11) NOT NULL DEFAULT '0',
-  `group` char(255) NOT NULL,
-  `function` char(255) NOT NULL,
-  `approved` enum('0','1') NOT NULL,
-  `path` varchar(50) NOT NULL,
-  `regExp` varchar(60) NOT NULL,
-  `invalidMessage` varchar(50) NOT NULL,
-  `promptMessage` varchar(50) NOT NULL,
-  `formatter` varchar(25) NOT NULL,
-  `xml_children` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `group` (`group`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `web_settings`
@@ -254,5 +77,131 @@ INSERT INTO `web_settings` (`id`, `list`, `value`, `type`, `description`, `ord`,
 ('credits', '', '&copy; Zweicom 2012', 'dijit-form-validation-text-box', '', 2, 'Admin', '', '1', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
+
+
+--
+-- Base de datos: `USSD`
+--
+
+--
+-- Volcado de datos para la tabla `acl_modules_actions`
+--
+
+INSERT INTO `acl_modules_actions` (`id`, `acl_modules_id`, `acl_actions_id`) VALUES
+(162, 5, 'EDIT'),
+(163, 5, 'ADD'),
+(164, 5, 'DELETE'),
+(165, 5, 'LIST'),
+(171, 4, 'EDIT'),
+(172, 4, 'ADD'),
+(173, 4, 'DELETE'),
+(261, 8, 'DELETE'),
+(188, 2, 'LIST'),
+(204, 9, 'EDIT'),
+(205, 9, 'LIST'),
+(260, 8, 'ADD'),
+(187, 7, 'LIST'),
+(62, 3, 'EDIT'),
+(63, 3, 'LIST'),
+(168, 1, 'LIST'),
+(174, 4, 'LIST'),
+(259, 8, 'EDIT'),
+(262, 8, 'LIST'),
+(266, 3, '"LIST"'),
+(265, 3, '"EDIT"');
+
+--
+-- Volcado de datos para la tabla `acl_roles_modules_actions`
+--
+
+INSERT INTO `acl_roles_modules_actions` (`id`, `acl_roles_id`, `acl_modules_actions_id`, `permission`) VALUES
+(1, 2, 168, 'ALLOW'),
+(13, 2, 197, 'ALLOW'),
+(3, 2, 188, 'ALLOW'),
+(12, 2, 183, 'ALLOW'),
+(5, 2, 62, 'ALLOW'),
+(6, 2, 63, 'ALLOW'),
+(7, 2, 192, 'ALLOW'),
+(8, 2, 162, 'ALLOW'),
+(9, 2, 163, 'ALLOW'),
+(10, 2, 164, 'ALLOW'),
+(11, 2, 165, 'ALLOW'),
+(62, 3, 188, 'ALLOW'),
+(15, 1, 168, 'ALLOW'),
+(16, 1, 183, 'ALLOW'),
+(17, 1, 188, 'ALLOW'),
+(18, 1, 197, 'ALLOW'),
+(19, 1, 198, 'ALLOW'),
+(20, 1, 199, 'ALLOW'),
+(21, 1, 200, 'ALLOW'),
+(102, 1, 235, 'ALLOW'),
+(101, 1, 234, 'ALLOW'),
+(100, 1, 233, 'ALLOW'),
+(99, 1, 232, 'ALLOW'),
+(26, 1, 62, 'ALLOW'),
+(27, 1, 63, 'ALLOW'),
+(28, 1, 72, 'ALLOW'),
+(29, 1, 73, 'ALLOW'),
+(30, 1, 74, 'ALLOW'),
+(31, 1, 75, 'ALLOW'),
+(98, 1, 243, 'ALLOW'),
+(33, 1, 171, 'ALLOW'),
+(34, 1, 172, 'ALLOW'),
+(35, 1, 173, 'ALLOW'),
+(36, 1, 174, 'ALLOW'),
+(37, 1, 187, 'ALLOW'),
+(38, 1, 204, 'ALLOW'),
+(39, 1, 205, 'ALLOW'),
+(126, 1, 262, 'ALLOW'),
+(125, 1, 261, 'ALLOW'),
+(124, 1, 260, 'ALLOW'),
+(123, 1, 259, 'ALLOW'),
+(44, 1, 162, 'ALLOW'),
+(45, 1, 163, 'ALLOW'),
+(46, 1, 164, 'ALLOW'),
+(47, 1, 165, 'ALLOW'),
+(52, 2, 191, 'ALLOW'),
+(61, 3, 183, 'ALLOW'),
+(97, 1, 242, 'ALLOW'),
+(96, 1, 241, 'ALLOW'),
+(95, 1, 240, 'ALLOW'),
+(107, 1, 228, 'ALLOW'),
+(57, 1, 210, 'ALLOW'),
+(58, 1, 211, 'ALLOW'),
+(59, 1, 212, 'ALLOW'),
+(60, 1, 213, 'ALLOW'),
+(89, 3, 227, 'ALLOW'),
+(93, 3, 243, 'ALLOW'),
+(92, 3, 240, 'ALLOW'),
+(91, 3, 242, 'ALLOW'),
+(67, 3, 162, 'ALLOW'),
+(68, 3, 163, 'ALLOW'),
+(69, 3, 164, 'ALLOW'),
+(70, 3, 165, 'ALLOW'),
+(71, 3, 189, 'ALLOW'),
+(72, 3, 190, 'ALLOW'),
+(73, 3, 192, 'ALLOW'),
+(74, 3, 168, 'ALLOW'),
+(75, 3, 218, 'ALLOW'),
+(90, 3, 241, 'ALLOW'),
+(103, 5, 62, 'ALLOW'),
+(104, 5, 63, 'ALLOW'),
+(105, 3, 62, 'ALLOW'),
+(106, 3, 63, 'ALLOW'),
+(108, 1, 229, 'ALLOW'),
+(109, 1, 230, 'ALLOW'),
+(110, 1, 231, 'ALLOW'),
+(111, 1, 218, 'ALLOW'),
+(112, 1, 248, 'ALLOW'),
+(113, 1, 249, 'ALLOW'),
+(114, 1, 250, 'ALLOW'),
+(115, 1, 251, 'ALLOW'),
+(116, 1, 252, 'ALLOW'),
+(117, 1, 253, 'ALLOW'),
+(118, 1, 254, 'ALLOW'),
+(119, 5, 183, 'ALLOW'),
+(120, 5, 72, 'ALLOW'),
+(121, 5, 254, 'ALLOW'),
+(122, 5, 243, 'ALLOW');
 
 

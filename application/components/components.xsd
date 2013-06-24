@@ -130,6 +130,7 @@
         <xsd:attribute name="onchange" />
         <xsd:attribute name="onclick" />
         <xsd:attribute name="onblur" />
+        <xsd:attribute name="onload" />
         <xsd:attribute name="required" />
         <xsd:attribute name="regExp"/>
         <xsd:attribute name="trim"/>

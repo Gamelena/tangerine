@@ -50,7 +50,10 @@ class Zwei_Admin_Auth
         return self::$_instance;
     }
     
-    
+    /**
+     * Verifying if exists an instance with identity of Zend_Auth 
+     * @return boolean
+     */
     public function hasIdentity()
     {
         if (!Zend_Auth::getInstance()->hasIdentity()) return false;

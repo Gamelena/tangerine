@@ -12,15 +12,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $loader = Zend_Loader_Autoloader::getInstance();
         $loader->setFallbackAutoloader(true);
         set_include_path('.'
-            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/../library'
             . PATH_SEPARATOR . ROOT_DIR.'/library'
+            . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/../library'
             . PATH_SEPARATOR . APPLICATION_PATH . '/models'
             . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/models'
             . PATH_SEPARATOR . APPLICATION_PATH . '/forms'
             . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/forms'
             . PATH_SEPARATOR . get_include_path()
         );
-        $loader->pushAutoloader(new Zwei_Autoloader_PhpThumb());
+        //$loader->pushAutoloader(new Zwei_Autoloader_PhpThumb());
     }
     
     public function loadConstants()
@@ -42,6 +42,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         defined('APPLICATION_PATH') || define('APPLICATION_PATH', ROOT_DIR . '/application');
         defined('COMPONENTS_ADMIN_PATH') || define('COMPONENTS_ADMIN_PATH', APPLICATION_PATH.'/components');
         defined('BASE_URL') || define('BASE_URL', PROTO.$_SERVER['HTTP_HOST'].dirname($_SERVER["SCRIPT_NAME"]).$eop);
+        defined('TEMPLATE') || define('TEMPLATE', '');//template alternativo [TODO] esto es para desarrollo futuro
 
         
         // Define application environment

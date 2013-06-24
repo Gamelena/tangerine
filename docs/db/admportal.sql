@@ -16,23 +16,42 @@ CREATE TABLE IF NOT EXISTS `acl_modules` (
   `approved` enum('0','1') NOT NULL,
   `order` tinyint(4) unsigned NOT NULL DEFAULT '0',
   `root` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `icons_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `module` (`module`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 
--- 
--- Structure for table `acl_permissions`
--- 
-DROP TABLE IF EXISTS `acl_permissions`;
-CREATE TABLE IF NOT EXISTS `acl_permissions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `acl_roles_id` int(1) NOT NULL,
-  `acl_modules_id` int(4) NOT NULL,
-  `permission` char(64) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `acl_roles_id` (`acl_roles_id`,`acl_modules_id`,`permission`)
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl_actions`
+--
+
+DROP TABLE IF EXISTS `acl_actions`;
+CREATE TABLE IF NOT EXISTS `acl_actions` (
+  `id` varchar(10) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `acl_actions`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl_modules_actions`
+--
+DROP TABLE IF EXISTS `acl_modules_actions`;
+CREATE TABLE IF NOT EXISTS `acl_modules_actions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `acl_modules_id` int(11) NOT NULL,
+  `acl_actions_id` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `acl_modules_id` (`acl_modules_id`,`acl_actions_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 
 -- 
@@ -46,13 +65,14 @@ CREATE TABLE IF NOT EXISTS `acl_roles` (
   `approved` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_name` (`role_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- 
 -- Structure for table `acl_users`
 -- 
 
 
+DROP TABLE IF EXISTS `acl_users`;
 CREATE TABLE IF NOT EXISTS `acl_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `acl_roles_id` int(4) NOT NULL,
@@ -65,36 +85,32 @@ CREATE TABLE IF NOT EXISTS `acl_users` (
   `foto` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name` (`user_name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;
+
+
+
+DROP TABLE IF EXISTS `acl_roles_modules_actions`;
+CREATE TABLE IF NOT EXISTS `acl_roles_modules_actions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `acl_roles_id` int(11) NOT NULL,
+  `acl_modules_actions_id` int(11) NOT NULL,
+  `permission` enum('ALLOW','DENY') CHARACTER SET utf8 NOT NULL DEFAULT 'ALLOW',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `acl_roles_id` (`acl_roles_id`,`acl_modules_actions_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
 
--- 
--- Structure for table `web_permissions`
--- 
-
-DROP TABLE IF EXISTS `web_permissions`;
-CREATE TABLE IF NOT EXISTS `web_permissions` (
-  `id` char(20) NOT NULL,
-  `title` char(50) NOT NULL,
+--
+-- Estructura de tabla para la tabla `web_icons`
+--
+DROP TABLE IF EXISTS `web_icons`;
+CREATE TABLE IF NOT EXISTS `web_icons` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL,
+  `image` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-
--- phpMyAdmin SQL Dump
--- version 3.4.11.1deb1
--- http://www.phpmyadmin.net
---
--- Servidor: localhost
--- Tiempo de generación: 07-06-2013 a las 15:49:34
--- Versión del servidor: 5.5.31
--- Versión de PHP: 5.4.6-1ubuntu1.2
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
---
--- Base de datos: `USSD`
---
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 

@@ -34,7 +34,7 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
         $this->view->style = $r->getParam('style') ? $r->getParam('style') : '';
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
-        $this->view->promptMessage= $r->getParam('promptMessage') ? "promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
+        $this->view->promptMessage = $r->getParam('promptMessage') ? "promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         
         $this->view->options = $this->options();
     }
@@ -51,6 +51,7 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
             $className = $r->getParam('table');
             $model = new $className;
             $primary = $model->getPrimary() ? $model->getPrimary() : 'id';
+            Debug::write($primary);
         
             if ($r->getParam('tableMethod')) {
                 $method = $r->getParam('tableMethod');

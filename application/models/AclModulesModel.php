@@ -76,7 +76,7 @@ class AclModulesModel extends Zwei_Db_Table
         
         foreach ($this->_dataActions as $v) {
             $data = array(
-                    'acl_actions_id' => $v,
+                    'acl_actions_id' => str_replace('"', '',$v), /*[FIXME] evitar el str_replace() acá, de momento es necesario usarlo */
                     'acl_modules_id' => $aclModulesId
             );
         
