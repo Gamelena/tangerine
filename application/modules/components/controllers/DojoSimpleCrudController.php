@@ -47,44 +47,40 @@
  * </code>
  *
  *
+ *
+ *
  */
 
 class Components_DojoSimpleCrudController extends Zend_Controller_Action
 {
 
     /**
+     * Objecto XML
      * @var Zwei_Admin_Xml
-     *
-     *
-     *
-     *
      */
     private $_xml = null;
 
     /**
+     * Nombre archivo XML
      * @var string
-     *
      */
     private $_component = null;
 
     /**
+     * Configuración global.
      * @var Zend_Config
-     *
-     *
-     *
-     *
      */
     private $_config = null;
 
     /**
+     * Control de acceso a recursos.
      * @var Zwei_Admin_Acl
-     *
      */
     private $_acl = null;
 
     /**
+     * Modelo sobre el cual se opera.
      * @var Zwei_Db_Table
-     *
      */
     private $_model = null;
 
@@ -108,6 +104,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $className = $this->_xml->getAttribute('target');
+        $this->_model = new $className();
+        
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>" : '';
         if ($this->_xml->xpath("//forms")) $forms = $this->_xml->xpath("//forms");
@@ -117,6 +116,12 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->onshowDialog = $this->_xml->xpath("//forms[@onshow]") ? "onshow=\"{$forms[0]->getAttribute('onshow')}\"" : '';
         $this->view->onhideDialog = $this->_xml->xpath("//forms[@onhide]") ? "onhide=\"{$forms[0]->getAttribute('onhide')}\"" : '';
         $this->view->ajax = $this->_xml->xpath("//forms[@ajax='true']") ? true : false;
+        $this->view->changePassword = $this->_xml->xpath("//forms/changePassword") ? true : false;
+        if ($this->view->changePassword) {
+            $this->view->targetPass = 'password';
+            $this->view->namePass = 'Contrase&ntilde;a';
+            $this->view->primary = $this->_model->getPrimary();
+        }
     }
 
     public function searchAction()
@@ -170,6 +175,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function editAction()
     {
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
+        $this->view->changePassword = $this->_xml->xpath("//forms/changePassword") ? true : false;
         if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? true : false;
         $this->initForm('edit');
@@ -189,7 +195,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->initForm('clone');
         $this->render('edit');
     }
-    
+
     public function listAction()
     {
         $this->view->p = $this->_component;
@@ -244,7 +250,16 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         //$this->view->changePassword = $this->_xml->getAttribute("changePassword") && $this->_xml->getAttribute("changePassword") == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT');
     }
 
+    public function changePasswordAction()
+    {
+        $this->view->p = $this->_component;
+        $this->initForm('edit');
+    }
 
+    public function contextMenuAction()
+    {
+        // action body
+    }
 
 
 }

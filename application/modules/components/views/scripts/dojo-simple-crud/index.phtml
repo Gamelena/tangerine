@@ -1,7 +1,7 @@
 <?php 
 if ($this->mainPane != 'dijitTabs') :
 ?>
-<h2><?php echo $this->name?></h2>
+<h2><?=$this->name?></h2>
 <?php 
 endif;
 $requestForm = $_REQUEST;
@@ -9,26 +9,45 @@ if ($this->ajax) {
     $requestForm['loadPartial'] = 'true';
 }
 ?>
-<?php echo $this->includeJs?>
-<div id="<?php echo $this->domPrefix?>content_dojo" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false" class="contentWrapper" style="width:100%">
+<?=$this->includeJs?>
+<div id="<?=$this->domPrefix?>content_dojo" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false" class="contentWrapper" style="width:100%">
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:true" class="contentCenter">
-        <?php echo $this->action('search', 'dojo-simple-crud', 'components', $_REQUEST); ?>
-        <?php echo $this->action('list', 'dojo-simple-crud', 'components', $_REQUEST); ?>
+        <?=$this->action('search', 'dojo-simple-crud', 'components', $_REQUEST)?>
+        <?=$this->action('list', 'dojo-simple-crud', 'components', $_REQUEST)?>
     </div>
-    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?php echo $this->domPrefix?>contentBottom" class="contentBottom">
-        <?php echo $this->action('keypad', 'dojo-simple-crud', 'components', $_REQUEST)?>
-        <div data-dojo-type="dojox.widget.DialogSimple" executeScripts="true" id="<?php echo $this->domPrefix ?>dialog_edit" jsId="<?php echo $this->domPrefix ?>dialog_edit" title="Editar <?php echo $this->name ?>" <?php echo $this->styleDialog?> <?php echo $this->onloadDialog?> <?php echo $this->onshowDialog?> <?php echo $this->onhideDialog?>>
-            <?php echo $this->action('edit', 'dojo-simple-crud', 'components', $requestForm)?>
-        </div>
-        <div data-dojo-type="dojox.widget.DialogSimple" executeScripts="true" id="<?php echo $this->domPrefix ?>dialog_add" jsId="<?php echo $this->domPrefix ?>dialog_add" title="Agregar <?php echo $this->name ?>" <?php echo $this->styleDialog?> <?php echo $this->onloadDialog?> <?php echo $this->onshowDialog?> <?php echo $this->onhideDialog?>>
-            <?php echo $this->action('add', 'dojo-simple-crud', 'components', $requestForm)?>
-        </div>
+    <div data-dojo-type="dojox.widget.DialogSimple" executeScripts="true" id="<?=$this->domPrefix?>dialog_edit" jsId="<?=$this->domPrefix?>dialog_edit" title="Editar <?=$this->name?>" <?=$this->styleDialog?> <?=$this->onloadDialog?> <?=$this->onshowDialog?> <?=$this->onhideDialog?>>
+        <?=$this->action('edit', 'dojo-simple-crud', 'components', $requestForm)?>
+    </div>
+    <div data-dojo-type="dojox.widget.DialogSimple" executeScripts="true" id="<?=$this->domPrefix?>dialog_add" jsId="<?=$this->domPrefix?>dialog_add" title="Agregar <?=$this->name?>" <?=$this->styleDialog?> <?=$this->onloadDialog?> <?=$this->onshowDialog?> <?=$this->onhideDialog?>>
+        <?=$this->action('add', 'dojo-simple-crud', 'components', $requestForm)?>
+    </div>
+<?php 
+if ($this->changePassword) : 
+    Debug::write($this->changePasswordParams);
+?>
+    <div data-dojo-type="dojox.widget.DialogSimple" executeScripts="true" id="<?=$this->domPrefix?>dialog_editpass" jsId="<?=$this->domPrefix?>dialog_editpass" title="Cambiar Contrase&ntilde;a" <?=$this->styleDialog?> <?=$this->onloadDialog?> <?=$this->onshowDialog?> <?=$this->onhideDialog?>>
+        <?=$this->action('change-password', 'dojo-simple-crud', 'components', $_REQUEST)?>
+    </div>
+<?php 
+endif; 
+?>
+    <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>contentBottom" class="contentBottom">
+<?php 
+if ($this->actionsOnContextMenu) :
+?>
+        <?=$this->action('context-menu', 'dojo-simple-crud', 'components', $_REQUEST)?>
+<?php 
+else : 
+?>
+        <?=$this->action('keypad', 'dojo-simple-crud', 'components', $_REQUEST)?>
+<?php 
+endif;
+?>
     </div>
 </div>
-
 <script type="text/javascript">
     function initModule(){
-        if (typeof('<?php echo $this->domPrefix?>Init') == 'function') <?php echo $this->domPrefix?>Init();
+        if (typeof('<?=$this->domPrefix?>Init') == 'function') <?=$this->domPrefix?>Init();
     }
     initModule();  
 </script>

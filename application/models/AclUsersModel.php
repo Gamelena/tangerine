@@ -20,7 +20,7 @@ class AclUsersModel extends Zwei_Db_Table
     {
         $select = new Zend_Db_Table_Select($this);
         $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
-        $select->from($this->_name)
+        $select->from($this->_name, array('id', 'user_name', 'acl_roles_id', 'first_names', 'last_names', 'email', 'approved'))
         ->joinLeft($this->_name_roles, "$this->_name.acl_roles_id = $this->_name_roles.id", "role_name")
         ;
 

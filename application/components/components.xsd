@@ -8,6 +8,7 @@
             <xsd:element name="searchers" type="searchersType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="forms" type="formsType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="excel" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="helpers" type="helpersType" minOccurs="0" maxOccurs="1"/>
         </xsd:choice>
         <xsd:attribute name="target" use="required" type="xsd:normalizedString"/>
         <xsd:attribute name="type" use="required" type="componentTypeType" />
@@ -62,6 +63,7 @@
         <xsd:attribute name="onload"/>
         <xsd:attribute name="onshow"/>
         <xsd:attribute name="onhide"/>
+        <xsd:attribute name="component"/>
     </xsd:complexType>
     <xsd:complexType name="formType">
         <xsd:sequence>
@@ -74,6 +76,13 @@
         <xsd:attribute name="onload"/>
         <xsd:attribute name="onshow"/>
         <xsd:attribute name="onhide"/>
+    </xsd:complexType>
+    <xsd:complexType name="helpersType">
+        <xsd:sequence>
+            <xsd:element name="changePassword" type="elementType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="dialog" type="formsType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="customFunction" type="elementType" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="tabsType">
         <xsd:sequence>
@@ -90,6 +99,7 @@
         <xsd:attribute name="edit" />
         <xsd:attribute name="add" />
         <xsd:attribute name="clone" />
+        <xsd:attribute name="password" />
         <xsd:attribute name="defaultValue" />
         <xsd:attribute name="defaultText" />
         <xsd:attribute name="field" />
