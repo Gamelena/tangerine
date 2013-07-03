@@ -237,5 +237,28 @@ dojo.declare("zwei.Utils", null, {
         else if (dojo.byId(id).style.WebkitTransform != undefined) dojo.byId(id).style.WebkitTransform = 'scale('+scale+')';
         else if (dojo.byId(id).style.MozTransform != undefined) dojo.byId(id).style.MozTransform = 'scale('+scale+')';
         else alert('Zoom no soportado en este navegador');
+    },
+    loadScript: function(src, f) {
+        var head = document.getElementsByTagName("head")[0];
+        var script = document.createElement("script");
+        script.src = src;
+        var done = false;
+        script.onload = script.onreadystatechange = function() { 
+          // attach to both events for cross browser finish detection:
+            if ( !done && (!this.readyState ||
+                this.readyState == "loaded" || this.readyState == "complete") ) {
+                done = true;
+                if (typeof f == 'function') f();
+            // cleans up a little memory:
+                script.onload = script.onreadystatechange = null;
+                head.removeChild(script);
+            }
+        };
+        head.appendChild(script);
+    },
+    supportsAudio: function()
+    {
+        var a = document.createElement('audio'); 
+        return !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
     }
 });

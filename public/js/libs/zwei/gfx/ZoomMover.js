@@ -12,7 +12,6 @@ define(["dojo/has", "dojo/_base/event"],
                 var y = has("touch") ? (e.changedTouches ? e.changedTouches[0] : e).clientY : e.clientY;
                 
                 scale = (typeof(dojo.cookie("scale")) != 'undefined') ? parseFloat(dojo.cookie("scale")) : 1;
-                console.debug(scale);
                 //console.debug(this.shape);
                 this.myCurrX = Math.round(this.myCurrX + (x - this.lastX) / scale); 
                 this.myCurrY = Math.round(this.myCurrY + (y - this.lastY) / scale);

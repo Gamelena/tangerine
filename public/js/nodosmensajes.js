@@ -342,10 +342,12 @@ var addLine = function(id, campanaId, nodeIdFrom, nodeIdTo) {
                 path = getConnectorPath(x1, y1, x2, y2, dx, dy, curveType);
                 console.debug('nodeIdFrom:'+path);
                 lines[id].setShape(path);
+                /*
                 lines[id].x1 = x1;
                 lines[id].y1 = y1;
                 lines[id].x2 = x2;
                 lines[id].y2 = y2;
+                */
             }
         });
     }
@@ -369,10 +371,12 @@ var addLine = function(id, campanaId, nodeIdFrom, nodeIdTo) {
                 path = getConnectorPath(x1, y1, x2, y2, dx, dy, curveType);
                 console.debug('nodeIdFrom:'+path);
                 lines[id].setShape(path);
+                /*
                 lines[id].x1 = x1;
                 lines[id].y1 = y1;
                 lines[id].x2 = x2;
                 lines[id].y2 = y2;
+                */
             }
         });
     }

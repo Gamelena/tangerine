@@ -37,7 +37,7 @@ class Zwei_Controller_Plugin_ApplicationPath extends Zend_Controller_Plugin_Abst
                 //Debug::write("Existe ". APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');
                 $frontController->addModuleDirectory(APPLICATION_PATH . '/modules');
             } else {
-                Debug::write("Buscando ". ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php');   
+                //Debug::write("Buscando ". ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php');   
                 $frontController->addModuleDirectory(ADMPORTAL_APPLICATION_PATH . '/modules');            
             }
         }

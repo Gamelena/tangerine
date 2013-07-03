@@ -282,6 +282,8 @@ class CrudRequestController extends Zend_Controller_Action
                                'todo' => $this->_response_content['todo'],
                                'more' => $this->_response_content['more']);
                 $content = Zend_Json::encode($data);
+                $this->getResponse()
+                ->setHeader('Content-Type', 'text/html'); //internet explorer needs this
             } else {
                 foreach ($data as $rowArray) {
                     $collection[$i]=array();
@@ -331,6 +333,8 @@ class CrudRequestController extends Zend_Controller_Action
                 }
                 
                 if (isset($numRows)) $content->setMetadata('numRows', $numRows);
+                $this->getResponse()
+                ->setHeader('Content-Type', 'text/html');
                 
             }
             $this->view->content = $content;

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <!--------------------
+    LOGIN FORM
+    by: Amit Jakhu
+    www.amitjakhu.com
+    --------------------->
+    <!--META-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><?php echo $this->adminTitle;?> - <?php echo $this->credits?></title>
+    <?php echo $this->headStyle()?>
+    <?php echo $this->dojo()?>
+    <link href="<?php echo BASE_URL ?>css/login.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+    require(["dojo/ready", "dojo/parser", "dijit/registry", "dijit/Dialog"], function(ready, parser, registry){
+        ready(function(){
+            dojo.connect(dijit.byId('username'), 'onFocus', function() {
+                dojo.byId("user_icon").style.left="-48px";
+            });
+            
+            dojo.connect(dijit.byId('username'), 'onBlur', function() {
+                dojo.byId("user_icon").style.left="0px";
+            });
+
+            dojo.connect(dijit.byId('password'), 'onFocus', function() {
+                dojo.byId("pass_icon").style.left="-48px";
+            });
+            
+            dojo.connect(dijit.byId('password'), 'onBlur', function() {
+                dojo.byId("pass_icon").style.left="0px";
+            });
+            
+        });
+    });
+    </script>
+</head>
+<body class="<?php echo $this->bodyClass?> login">
+    <div id="wrapper">
+        <div class="user-icon" id="user_icon"></div>
+        <div class="pass-icon" id="pass_icon"></div>
+        <div class="operLogo" style="background-image: url(<?php echo BASE_URL ?>upfiles/<?php echo $this->urlLogoOper ?>);"></div>
+        <div class="login-form">
+            <div class="header">
+                <h1><?php echo $this->adminTitle;?></h1>
+                <span></span>
+            </div>
+                <?php if($this->errorMessage != ""): ?><p class="error"><?php echo $this->errorMessage;?></p><?php endif; ?>
+                <?php echo $this->loginForm?>
+        </div>
+    </div>
+    <div class="gradient"></div>
+    <div class="zweicomLogo"></div>
+</body>
+</html>

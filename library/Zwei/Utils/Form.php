@@ -128,7 +128,7 @@ class Zwei_Utils_Form {
    */
   
     function encode($value) {
-       if (get_magic_quotes_gpc() == 1) $value = stripslashes($value);
+       if (get_magic_quotes_gpc() == 1 && !is_array($value)) $value = stripslashes($value);
        if (!is_array($value)) {
              if(strlen($value)<64){
                $value = htmlentities($this->_unescape($value), null, 'UTF-8');

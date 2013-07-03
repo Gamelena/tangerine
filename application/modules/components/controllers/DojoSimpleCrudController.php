@@ -209,19 +209,21 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
         if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
-        
-        $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick') 
-            ? $this->_xml->getAttribute('onRowDblClick') : 
-                $this->_acl->isUserAllowed($this->_component, 'EDIT') ? 
-                    "var form = new zwei.Form({
-                        ajax: $ajax,
-                        component: '{$this->_component}',
-                        action: 'edit',
-                        dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
-                        dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
-                        dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
-                    }); 
-                    form.showDialog()" : "";
+        Debug::write($this->_xml->getAttribute('onRowDblClick'));
+        $this->view->onRowDblClick = '';
+        if ($this->_xml->getAttribute('onRowDblClick')) {
+            $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick');
+        } else if ($this->_acl->isUserAllowed($this->_component, 'EDIT')) {
+            $this->view->onRowDblClick = "var form = new zwei.Form({
+                    ajax: $ajax,
+                    component: '{$this->_component}',
+                    action: 'edit',
+                    dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
+                    dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
+                    dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
+                }); 
+                form.showDialog()";
+        }
         
         $numElements = count($this->view->elements);
         $widthCol = round((100/$numElements), 1) . "%";//Se le asigna a cada columna de la grilla un ancho proporcional a su cantidad en porcentaje.

@@ -201,10 +201,6 @@ class AdminController extends Zend_Controller_Action
 
     public function componentsAction()
     {
-        $logger = new Zend_Log();
-        $writer = new Zend_Log_Writer_Stream('php://output');
-        $logger->addWriter($writer);
-        
         if ($this->getRequest()->getParam('p')) {
             $component = $this->getRequest()->getParam('p');
 
@@ -214,7 +210,7 @@ class AdminController extends Zend_Controller_Action
                 try {
                     $xml = new Zwei_Admin_Xml($file, 0, 1);
                 } catch (Exception $e) {
-                    $logger->log($e->getCode()."-".$e->getMessage(), Zend_Log::ERR);
+                    Debug::write($e->getCode()."-".$e->getMessage());
                     $this->view->content = "Error al parsear $file";
                     $this->render();
                 }
@@ -225,6 +221,7 @@ class AdminController extends Zend_Controller_Action
                     $action = 'index';
                     $controller = $xml->getAttribute('type');
                 }
+                Debug::write(dir(APPLICATION_PATH . '/modules'));
                 $this->view->content =  $this->view->action($action, $controller, 'components', $this->getRequest()->getParams());
             } else {
                 $this->view->content = "Acceso denegado a módulo $component";
@@ -265,7 +262,7 @@ class AdminController extends Zend_Controller_Action
     
         if (Zwei_Admin_Auth::getInstance()->hasIdentity())
         {
-            $this->_redirect(BASE_URL. 'admin');
+            //$this->_redirect(BASE_URL. 'admin');
         }
         
         $this->view->bodyClass = $this->_dojoTheme;
@@ -279,7 +276,7 @@ class AdminController extends Zend_Controller_Action
         {
             if($loginForm->isValid($request->getPost()))
             {
-                $authAdapter = $this->getAuthAdapter();
+                $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter();
     
                 $username = $loginForm->getValue('username');
                 $password = $loginForm->getValue('password');
@@ -320,31 +317,6 @@ class AdminController extends Zend_Controller_Action
         $this->_redirect(BASE_URL.'admin/login');
     }
     
-    /**
-     * Gets the adapter for authentication against a database table
-     *
-     * @return object
-     */
-    protected function getAuthAdapter()
-    {
-        $resource = $this->getInvokeArg('bootstrap')->getResource("multidb");
-        
-        $dbAdapter = isset($resource) && $resource->getDb("auth") ?
-        $resource->getDb("auth") :
-        Zend_Db_Table::getDefaultAdapter();
-    
-        $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
-        $authUsersTable = 'acl_users';
-        $authUserName = 'user_name';
-        $authPassword = 'password';
-        
-        $authAdapter->setTableName($authUsersTable)
-        ->setIdentityColumn($authUserName)
-        ->setCredentialColumn($authPassword)
-        ->setCredentialTreatment('MD5(?) and approved="1"');
-        Debug::write($authAdapter->getDbSelect()->__toString());
-        return $authAdapter;
-    }
     
     /**
      * login form
@@ -386,5 +358,10 @@ class AdminController extends Zend_Controller_Action
         ->addElement($submit);
     
         return $loginForm;
+    }
+    
+    public function iframeAction()
+    {
+        $this->view->src = $this->getRequest()->getParam('p');
     }
 }
