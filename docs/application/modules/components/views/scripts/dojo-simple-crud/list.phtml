@@ -1,0 +1,19 @@
+<span data-dojo-type="<?php echo $this->dataDojoType ?>" id="<?php echo $this->domPrefix?>storeGrid" jsId="<?php echo $this->domPrefix?>storeGrid" data-dojo-props="url: '<?php echo BASE_URL?>crud-request?model=<?php echo $this->model?>&format=json'"></span>
+<table data-dojo-type="<?php echo $this->gridDojoType ?>" id="<?php echo $this->domPrefix?>dataGrid" jsId="<?php echo $this->domPrefix?>dataGrid" data-dojo-props="store: <?php echo $this->domPrefix?>storeGrid, plugins:<?php echo $this->plugins ?>, clientSort:true, selectable: true, rowsPerPage: 10, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.'" class="dataGrid" style="height: 50em;" onRowDblClick="<?php echo $this->onRowDblClick?>">
+    <thead>
+        <tr>
+<?php
+foreach ($this->elements as $e) :
+?>
+            <th field="<?php echo $e->getAttribute('field') ? $e->getAttribute('field') : $e->getAttribute('target') ?>" editable="false" formatter="<?php echo $e->getAttribute('formatter')?>" width="<?=$e->getAttribute('width')?>"><?php echo $e->getAttribute('name')?></th>
+<?php  
+endforeach;
+?>
+        </tr>
+    <thead>
+    <script type="text/javascript">
+        dojo.connect(dijit.byId('<?php echo $this->domPrefix?>dataGrid'), "onload", function(e){
+            dijit.byId('<?php echo $this->domPrefix?>dataGrid').resize();
+        });
+    </script>
+</table>
