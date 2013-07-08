@@ -239,6 +239,11 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function keypadAction()
     {
+        $className = $this->_xml->getAttribute('target');
+        $this->view->model = $className;
+        $this->_model = new $className();
+        $this->view->primary = implode(";", $this->_model->info('primary'));
+        
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->add = $this->_xml->getAttribute("add") && $this->_xml->getAttribute("add") == "true" && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
         $this->view->edit = $this->_xml->getAttribute("edit") && $this->_xml->getAttribute("edit") == "true"  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
@@ -247,6 +252,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->component = $this->_component;
         
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
+        $customFunctions = $this->_xml->xpath("//helpers/customFunction");
+        $this->view->customFunctions = $customFunctions ? $customFunctions : array();
         //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? 'true' : 'false';
         //$this->view->changePassword = $this->_xml->getAttribute("changePassword") && $this->_xml->getAttribute("changePassword") == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT');

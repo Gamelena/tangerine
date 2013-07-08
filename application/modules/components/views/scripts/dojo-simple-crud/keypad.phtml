@@ -3,17 +3,17 @@
 if ($this->add) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconNewTask" id="<?php echo $this->domPrefix?>btnAdd" onClick="
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconNewTask" id="<?=$this->domPrefix?>btnAdd" onClick="
                     var form = new zwei.Form({
-                        component: '<?php echo $this->component?>',
-                        ajax: <?php echo $this->ajax ?>,
+                        component: '<?=$this->component?>',
+                        ajax: <?=$this->ajax ?>,
                         action: 'add',
-                        dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_add'), 
-                        dijitForm: dijit.byId('<?php echo $this->domPrefix?>form_add'), 
-                        dijitDataGrid: dijit.byId('<?php echo $this->domPrefix?>dataGrid')
+                        dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
+                        dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
+                        dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
                     }); 
                     form.showDialog()">
-        Agregar <?php echo $this->name ?>
+        Agregar <?=$this->name ?>
         </button>
     </div>
 <?php 
@@ -24,17 +24,17 @@ endif;
 if ($this->edit) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?php echo $this->domPrefix?>btnEdit" onClick="
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnEdit" onClick="
                 var form = new zwei.Form({
-                    ajax: <?php echo $this->ajax ?>,
-                    component: '<?php echo $this->component?>',
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
                     action: 'edit',
-                    dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_edit'), 
-                    dijitForm: dijit.byId('<?php echo $this->domPrefix?>form_edit'), 
-                    dijitDataGrid: dijit.byId('<?php echo $this->domPrefix?>dataGrid')
+                    dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
+                    dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'), 
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
                 }); 
                 form.showDialog()">
-            Editar <?php echo $this->name ?>
+            Editar <?=$this->name ?>
         </button>
     </div>
 <?php 
@@ -44,18 +44,18 @@ endif;
 if ($this->delete) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconDelete" id="<?php echo $this->domPrefix?>btnDelete" onClick="
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconDelete" id="<?=$this->domPrefix?>btnDelete" onClick="
                 var form = new zwei.Form({
-                    ajax: <?php echo $this->ajax ?>,
+                    ajax: <?=$this->ajax ?>,
                     action: 'delete',
-                    component: '<?php echo $this->component?>',
-                    dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_edit'), 
-                    dijitForm: dijit.byId('<?php echo $this->domPrefix?>form_edit'), 
-                    dijitDataGrid: dijit.byId('<?php echo $this->domPrefix?>dataGrid'),
-                    dijitFormSearch: dijit.byId('<?php echo $this->domPrefix?>formSearch')
+                    component: '<?=$this->component?>',
+                    dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
+                    dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'), 
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch')
                 }); 
                 form['delete']()">
-            Eliminar <?php echo $this->name ?>
+            Eliminar <?=$this->name ?>
         </button>
     </div>
 <?php 
@@ -65,17 +65,17 @@ endif;
 if ($this->clone) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconNewTask" id="<?php echo $this->domPrefix?>btnClone" onClick="
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconNewTask" id="<?=$this->domPrefix?>btnClone" onClick="
                 var form = new zwei.Form({
-                    ajax: <?php echo $this->ajax ?>,
-                    component: '<?php echo $this->component?>',
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
                     action: 'clone',
-                    dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_add'), 
-                    dijitForm: dijit.byId('<?php echo $this->domPrefix?>form_add'), 
-                    dijitDataGrid: dijit.byId('<?php echo $this->domPrefix?>dataGrid')
+                    dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
+                    dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
                 }); 
                 form.showDialog()">
-                Clonar <?php echo $this->name ?>
+                Clonar <?=$this->name ?>
         </button>
     </div>
 <?php 
@@ -86,14 +86,14 @@ endif;
 if ($this->changePassword) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?php echo $this->domPrefix?>btnChangePassword" onClick="
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnChangePassword" onClick="
             var form = new zwei.Form({
-                ajax: <?php echo $this->ajax ?>,
-                component: '<?php echo $this->component?>',
+                ajax: <?=$this->ajax ?>,
+                component: '<?=$this->component?>',
                 action: 'edit',
-                dijitDialog: dijit.byId('<?php echo $this->domPrefix?>dialog_editpass'), 
-                dijitForm: dijit.byId('<?php echo $this->domPrefix?>form_editpass'), 
-                dijitDataGrid: dijit.byId('<?php echo $this->domPrefix?>dataGrid')
+                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_editpass'), 
+                dijitForm: dijit.byId('<?=$this->domPrefix?>form_editpass'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
             }); 
             form.showDialog()">
             Cambiar Contrase&ntilde;a
@@ -101,5 +101,17 @@ if ($this->changePassword) :
     </div>
 <?php 
 endif;
+?>
+<?php 
+foreach ($this->customFunctions as $i => $f) :
+?>
+    <div class="keyPadButton">
+        <button type="button" dojoType="dijit.form.Button" iconClass="<?=$f['iconClass'] ? $f['icon'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="
+            admportal.execFunction('<?=$f['target']?>', '', '<?=$this->component?>', '<?=$this->primary?>', '<?=$this->domPrefix?>');">
+        <?=$f['name'] ? $f['name'] : $f['target']?>
+        </button>
+    </div>
+<?php 
+endforeach;
 ?>
 </div>

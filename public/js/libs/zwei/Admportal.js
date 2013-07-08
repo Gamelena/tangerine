@@ -190,5 +190,18 @@ dojo.declare("zwei.Admportal", null, {
         } catch (e) {
             console.debug(e.message);
         }    
+    },
+    execFunction: function(method, params, object, primary, domPrefix){
+        if (primary == undefined) var primary = 'id'; 
+        if (domPrefix == undefined) var domPrefix = '';
+
+        try {
+            var items = dijit.byId(domPrefix + 'dataGrid').selection.getSelected();
+            var id = "&"+primary+"="+ items[0][primary];
+        } catch(e) {
+            console.debug(e);
+            var id = '';
+        }    
+        document.getElementById('ifrm_process').src=base_url+'functions?method='+method+'&params='+params+id+"&object="+object+"&uri="+escape(dijit.byId(domPrefix+'dataGrid').store.url);
     }
 });

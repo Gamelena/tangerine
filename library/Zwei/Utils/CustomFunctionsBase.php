@@ -18,12 +18,6 @@
 class Zwei_Utils_CustomFunctionsBase
 {
     /**
-     * Icono Dijit para pintar boton [TODO] diseñar implementar configuración de esto en XML.
-     * @var array
-     */
-    protected $_icons;
-    
-    /**
      * Id Capturada de la fila seleccionada de la grilla al llamar a la función .
      * @var mixed
      */
@@ -59,15 +53,6 @@ class Zwei_Utils_CustomFunctionsBase
     
     
     /**
-     * Array asociativo entre el nombre del método y la descripción a mostrar, para pintar botones.
-     * @var array
-     */
-    protected $_names=array(
-        'clonarPromocion'=>'Clonar Promocion',
-        'procesarArchivoAbonados'=>'Procesar Archivo'
-    );
-
-    /**
      * Objeto $_REQUEST.
      * @var Zwei_Utils_Form
      */
@@ -83,84 +68,12 @@ class Zwei_Utils_CustomFunctionsBase
         $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
         $this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
         $this->_form = new Zwei_Utils_Form();
-        if (!empty($_REQUEST['uri'])) {
-            parse_str(urldecode($_REQUEST['uri']), $aParams);
-            $subForm = new Zwei_Utils_Form($aParams);
-            $this->initQueryParams($subForm);
-        }        
     }
     
     public function setId($value)
     {
         $this->_id=$value;
     }
-    
-    public function getName($index){
-        return $this->_names[$index];
-    }
-    
-    /**
-     * 
-     * @param $index string
-     * @return string
-     */
-    public function getIcon($index)
-    {
-        return !empty($this->_icons[$index]) ? $this->_icons[$index] : "dijitIconFunction";
-    }
-    
-   /**
-     * Inicializa $this->_query_params con un array asociativo de parámetros de busqueda
-     * 
-     * @param $form - Objeto Request
-     * @return array
-     * @example
-     * <code>
-     *     $this->initQueryParams(new Zwei_Utils_Form);
-     *     Debug::write($this->_query_params);
-     * </code>
-     */
-    public function initQueryParams($form)
-    {
-        if (!empty($form->search) || $form->search === '0') {
-            $searchFields = explode(";", $form->search_fields);
-            $search = explode(';', $form->search);
-            $betweened = false;
-            
-            if (isset($form->between) && (!empty($form->between) || $form->between === '0')) $between = explode(';', $form->between);
-            $i = 0;    
-            foreach ($search as $v) {
-                if (!empty($searchFields[$i])) {
-                    if (!in_array($searchFields[$i], $between)) {
-                        if ($betweened) {
-                           if ($search[$i+1] != '') $this->_query_params[$searchFields[$i]] = $search[$i+1];
-                        } else {
-                           if ($search[$i] != '')  $this->_query_params[$searchFields[$i]] = $search[$i];
-                        }    
-                    } else {
-                        $betweened = true;
-                        $this->_query_params[$searchFields[$i]] = array();
-                        if ($search[$i] != '') $this->_query_params[$searchFields[$i]][] = $search[$i];
-                        if ($search[$i+1] != '') $this->_query_params[$searchFields[$i]][] = $search[$i+1];                            
-                    }
-                    $i++;
-                }    
-            }
-        }
-        Debug::write($this->_query_params);
-        return $this->_query_params;
-    }
-    
-    
-    
-    /**
-     * A continuación se ponen ejemplos como apoyo, no son son usados de ninguna otra forma 
-     * sólo son de referencia para construir la clase Zwei_Utils_CustomFunctions en cada proyecto   
-     * 
-     */
-    
-    
-    
     /**
      * Ejemplo Clonar Promoción de Bonos Consumo 
      * @example

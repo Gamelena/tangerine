@@ -7,19 +7,20 @@
 DROP TABLE IF EXISTS `acl_modules`;
 CREATE TABLE IF NOT EXISTS `acl_modules` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` int(10) unsigned DEFAULT NULL,
-  `title` char(200) DEFAULT NULL,
-  `module` char(200) DEFAULT NULL,
+  `parent_id` int(10) unsigned DEFAULT NULL COMMENT 'Id de Módulo padre',
+  `title` char(200) DEFAULT NULL COMMENT 'Nombre',
+  `module` char(200) DEFAULT NULL COMMENT 'Url de módulo, puede ser archivo XML, URl de controlador o módulo ZF',
   `tree` enum('0','1') NOT NULL DEFAULT '1',
   `linkable` enum('0','1') NOT NULL,
-  `type` enum('xml','xml_mvc','zend_module','legacy','iframe') NOT NULL DEFAULT 'xml',
+  `refresh_on_load` enum('0','1') NOT NULL DEFAULT '0' COMMENT 'Define si módulo debe ser refrescado al reseleccionar la pestaña, en caso contrario mantendrá el estatus de como se dejó al abandonarla.',
+  `type` enum('xml','zend_module','legacy','iframe') NOT NULL DEFAULT 'xml',
   `approved` enum('0','1') NOT NULL,
-  `order` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `root` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `order` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT 'Orden en que aparece en arbol',
+  `root` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0' COMMENT 'Define si solo puede acceder perfil ROOT (en configuracion por defecto acl_roles_id = 1)',
   `icons_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `module` (`module`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=44 ;
 
 
 -- --------------------------------------------------------

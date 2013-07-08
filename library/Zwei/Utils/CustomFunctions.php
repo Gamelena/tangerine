@@ -14,19 +14,11 @@
 class Zwei_Utils_CustomFunctions extends Zwei_Utils_CustomFunctionsBase
 {
     //[TODO] personalizar este código, es solo una base de ejemplo para modificar. 
-    protected $_names = array(
-        'enviarReporte' => 'Enviar Reporte'
-    );
-    //[TODO] personalizar este código, es solo una base de ejemplo para modificar. 
-    protected $_icons = array(
-        'enviarReporte' => 'dijitIconMail'
-    );
-    //[TODO] personalizar este código, es solo una base de ejemplo para modificar. 
     public function enviarReporte()
     {
+        Debug::write($_REQUEST);
         echo "<script  type='text/javascript'>
                 window.parent.location.href = '".BASE_URL."/yo-puedo-ser-cualquier-cosa';
                 </script>";
     }
-    
 }

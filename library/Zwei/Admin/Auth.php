@@ -67,5 +67,29 @@ class Zwei_Admin_Auth
             return true;
         }    
     }
+    
+    /**
+     * Authentification params against DB Table
+     * @return Zend_Auth_Adapter_DbTable
+     */
+    public function getAuthAdapter() {
+        $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
+        $dbAdapter = isset($resource) && $resource->getDb("auth") ?
+        $resource->getDb("auth") :
+        Zend_Db_Table::getDefaultAdapter();
+    
+        $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
+        $authUsersTable = 'acl_users';
+        $authUserName = 'user_name';
+        $authPassword = 'password';
+    
+        $authAdapter->setTableName($authUsersTable)
+        ->setIdentityColumn($authUserName)
+        ->setCredentialColumn($authPassword)
+        ->setCredentialTreatment('MD5(?) and approved="1"');
+    
+        Debug::write($authAdapter->getDbSelect()->__toString());
+        return $authAdapter;
+    }
 }
 

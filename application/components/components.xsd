@@ -161,6 +161,7 @@
         <xsd:attribute name="prefix"/>
         <xsd:attribute name="tinyMceTemplate" />
         <xsd:attribute name="placeHolder" />
+        <xsd:attribute name="icon" />
         <xsd:attribute name="operator" type="operatorType"/>
     </xsd:complexType>
     <xsd:complexType name="thumbType">
