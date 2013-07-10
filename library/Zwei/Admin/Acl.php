@@ -332,7 +332,7 @@ class Zwei_Admin_Acl extends Zend_Acl
         }
 
         $select=self::$_db->select()
-        ->from(self::$_tb_modules, array('id', 'title', 'module', 'type', 'tree', 'linkable'));
+        ->from(self::$_tb_modules, array('id', 'title', 'module', 'type', 'tree', 'linkable', 'refresh_on_load'));
         
         if (self::$_userInfo->{self::$_user_role_id} != '1') {
             $select
