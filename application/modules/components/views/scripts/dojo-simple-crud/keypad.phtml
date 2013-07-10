@@ -115,3 +115,12 @@ foreach ($this->customFunctions as $i => $f) :
 endforeach;
 ?>
 </div>
+<script>
+/*
+    dojo.require('dojo.on');
+    dojo.require('dojo.ready');
+    dojo.ready(function(){
+        dojo.on(dijit.byId('<?=$this->domPrefix?>dataGrid'), 'rowClick', function(e) {console.debug(e)} );
+    });
+*/
+</script>

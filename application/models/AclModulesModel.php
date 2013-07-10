@@ -61,6 +61,8 @@ class AclModulesModel extends Zwei_Db_Table
     protected function saveDataActions($aclModulesId) {
         $modulesAction = new DbTable_AclModulesActions();
         $ad = $modulesAction->getAdapter();
+        $insert = false;
+        $delete = false;
         //Borrar Todas las acciones del modulo, excepto los marcados
         $list = !empty($this->_dataActions) ?
             implode(",", $this->_dataActions) :
@@ -161,6 +163,7 @@ class AclModulesModel extends Zwei_Db_Table
                 $arrNodes[$key]['type']  = $branch['type'];
                 $arrNodes[$key]['linkable']  = $branch['linkable'];
                 $arrNodes[$key]['image']  = $branch['image'];
+                $arrNodes[$key]['refresh_on_load']  = $branch['refresh_on_load'];
                 
                 $arrNodes[$key]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($branch['title']) : utf8_encode(html_entity_decode($branch['title']));
                 if ($branch['linkable'] == '1') { 
