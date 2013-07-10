@@ -102,30 +102,33 @@ if ($this->changePassword) :
 endif;
 ?>
 <?php 
-foreach ($this->excel as $i => $f) :
-?>
-    <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnChangePassword" onClick="
-            var form = new zwei.Form({
-                dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
-                dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 
-                queryParams: 'format=excel&subformat=<?=$f['subformat']?>',
-                iframe: dojo.byId('ifrm_process')
-            });
-            form.loadData()">
-            Descargar como Excel
-        </button>
-    </div>
-<?php 
-endforeach;
-?>
-<?php 
 foreach ($this->customFunctions as $i => $f) :
 ?>
     <div class="keyPadButton">
         <button type="button" dojoType="dijit.form.Button" iconClass="<?=$f['iconClass'] ? $f['icon'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="
             admportal.execFunction('<?=$f['target']?>', '', '<?=$this->component?>', '<?=$this->primary?>', '<?=$this->domPrefix?>');">
         <?=$f['name'] ? $f['name'] : $f['target']?>
+        </button>
+    </div>
+<?php 
+endforeach;
+?>
+<?php 
+foreach ($this->excel as $i => $f) :
+    $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->zweiExcelVersion;
+    $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Descargar como Excel' ;
+?>
+
+    <div class="keyPadButton">
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnChangePassword" onClick="
+            var form = new zwei.Form({
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 
+                queryParams: 'format=excel&excel_formatter=<?=$formatter?>',
+                iframe: dojo.byId('ifrm_process')
+            });
+            form.loadData()">
+            <?=$name?>
         </button>
     </div>
 <?php 

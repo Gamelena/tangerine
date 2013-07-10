@@ -66,7 +66,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         var domForm = this.dijitFormSearch != null ? dojo.byId(this.dijitFormSearch.id) : dojo.byId(this.dijitForm.id);
         var searchUrl = base_url+'crud-request?model=' + domForm['model'].value + '&format=' + domForm['format'].value+'&'+this.queryParams;
         
-        if (this.dijitFormSearch != null) {
+        if (this.dijitFormSearch != undefined && this.dijitFormSearch != null) {
             dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i){
                 if (entry.type != 'submit' && entry.type != 'radio' && entry.type != 'hidden') {
                     if (entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
@@ -81,7 +81,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 }
             });
         }
-        console.debug(this.queryParams);
+        console.debug(this.iframe);
         if (this.iframe != null){
             this.iframe.src = searchUrl;
         } else {
