@@ -64,7 +64,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      */
     loadData: function() {
         var domForm = this.dijitFormSearch != null ? dojo.byId(this.dijitFormSearch.id) : dojo.byId(this.dijitForm.id);
-        var searchUrl = base_url+'crud-request?model=' + domForm['model'].value + '&format=' + domForm['format'].value;
+        var searchUrl = base_url+'crud-request?model=' + domForm['model'].value + '&format=' + domForm['format'].value+'&'+this.queryParams;
         
         if (this.dijitFormSearch != null) {
             dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i){
@@ -81,7 +81,8 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 }
             });
         }
-        if (domForm['format'].value == 'excel'){
+        console.debug(this.queryParams);
+        if (this.iframe != null){
             this.iframe.src = searchUrl;
         } else {
             var params = {url: searchUrl, clearOnClose: true, urlPreventCache:true};

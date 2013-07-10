@@ -116,8 +116,8 @@ class CrudRequestController extends Zend_Controller_Action
                     $infoFiles = $this->_form->upload($i, $path);
                     if ($infoFiles) {
                         $j = 0;
-                        foreach ($infoFiles as $i => $v) {
-                            $this->_form->data[$i] = $v['filename'];
+                        foreach ($infoFiles as $k => $l) {
+                            $this->_form->data[$k] = $l['filename'];
                             if ($element[$j]->existsChildren('thumb')) {
                                 foreach ($element[$j]->thumb as $t) {
                                     try {
@@ -132,9 +132,9 @@ class CrudRequestController extends Zend_Controller_Action
                                         //[TODO] revisar configuracion de Autoloader en Bootstrap para no usar require_once
                                         require_once ADMPORTAL_APPLICATION_PATH .'/../library/PhpThumb/ThumbLib.inc.php';
                                         
-                                        $thumb = PhpThumbFactory::create($path."/".$v['filename']);
+                                        $thumb = PhpThumbFactory::create($path."/".$l['filename']);
                                         $thumb->resize($t->getAttribute('width'), $t->getAttribute('height'));
-                                        $thumb->save($thumbPath."/".$v['filename']);
+                                        $thumb->save($thumbPath."/".$l['filename']);
                                     } catch (Exception $e) {
                                         Debug::write($e->getMessage() . '-' . $e->getCode() . $e->getTraceAsString());
                                     }

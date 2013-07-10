@@ -81,7 +81,6 @@ if ($this->clone) :
 <?php 
 endif;
 ?>
-
 <?php 
 if ($this->changePassword) :
 ?>
@@ -101,6 +100,24 @@ if ($this->changePassword) :
     </div>
 <?php 
 endif;
+?>
+<?php 
+foreach ($this->excel as $i => $f) :
+?>
+    <div class="keyPadButton">
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnChangePassword" onClick="
+            var form = new zwei.Form({
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 
+                queryParams: 'format=excel&subformat=<?=$f['subformat']?>',
+                iframe: dojo.byId('ifrm_process')
+            });
+            form.loadData()">
+            Descargar como Excel
+        </button>
+    </div>
+<?php 
+endforeach;
 ?>
 <?php 
 foreach ($this->customFunctions as $i => $f) :

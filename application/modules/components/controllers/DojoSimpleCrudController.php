@@ -254,6 +254,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
         $customFunctions = $this->_xml->xpath("//helpers/customFunction");
         $this->view->customFunctions = $customFunctions ? $customFunctions : array();
+        $excel = $this->_xml->xpath("//excel");
+        $this->view->excel = $excel ? $excel : array();
         //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? 'true' : 'false';
         //$this->view->changePassword = $this->_xml->getAttribute("changePassword") && $this->_xml->getAttribute("changePassword") == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT');

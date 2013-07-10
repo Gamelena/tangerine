@@ -74,7 +74,7 @@ dojo.declare("zwei.Admportal", null, {
                 onClick: function(item){
                     if (item.url != undefined) {
                         if (layout == 'dijitTabs') {
-                            self.loadModuleTab(item.url, item.id, item.label);
+                            self.loadModuleTab(item.url, item.id, item.label, item.refresh_on_load);
                         } else {
                             self.loadModuleSingle(item.url);
                         }    
@@ -152,6 +152,7 @@ dojo.declare("zwei.Admportal", null, {
                         closable:true, 
                         id: 'mainTabModule'+moduleId, 
                         jsId: 'mainTabModule'+moduleId,
+                        parseOnLoad: true,
                         executeScripts: true,
                         scriptHasHooks: true,
                         refreshOnShow: refresh,
