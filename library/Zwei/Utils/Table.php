@@ -42,9 +42,19 @@ class Zwei_Utils_Table
         {
             $i++;
             if (!isset($this->_xml)) {
-                $out .= ($html) ? "<th>".$target."</th>" : '"'.$target.'"';
-            } else if(!empty($this->_name[$target])) {        
-                $out .= ($html) ? "<th>".str_replace("\r\n", "", $this->_name[$target])."</th>" : '"'.$this->_name[$target].'"';
+                if ($html) {
+                    $out .= "<th>$target</th>";
+                } else {
+                    $out .= stristr(",", $target) || stristr('"', $target) ? '"' . str_replace('"', "", $target) . '"' : $target;
+                }
+            } else if(!empty($this->_name[$target])) {
+                if ($html) {
+                    $out .= "<th>.$this->_name[$target].</th>";
+                } else {
+                    $out .= stristr(",", $this->_name[$target]) || stristr('"', $this->_name[$target]) ? 
+                        '"' . str_replace('"', "", $this->_name[$target]) . '"' : 
+                        $this->_name[$target];
+                }
             }
             if (!$html && $i < $counter) $out .= $separator;
         }
