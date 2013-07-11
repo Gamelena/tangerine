@@ -207,6 +207,10 @@ class AdminController extends Zend_Controller_Action
             if (Zwei_Admin_Acl::isUserAllowed($component, "LIST") || Zwei_Admin_Acl::isUserAllowed($component, "EDIT") || Zwei_Admin_Acl::isUserAllowed($component, "ADD")) {
                 $file = Zwei_Admin_Xml::getFullPath($component);
                 
+                if (!file_exists($file)) {
+                    exit("No se encuentra $file");
+                    //$this->render();
+                }
                 try {
                     $xml = new Zwei_Admin_Xml($file, 0, 1);
                 } catch (Exception $e) {
