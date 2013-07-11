@@ -33,20 +33,23 @@ class Zwei_Utils_Table
      * @return string html
      */
     
-    function showTitlesHtml($rowset)
+    function showTitles($rowset, $html = true, $separator = ',')
     {
-        //Debug::write($rowset);
-        //Debug::write($this->_name);
-        $out = "<tr>";
+        $out = $html ? "<tr>" :  "";
+        $i = 0;
+        $counter = is_a($rowset, 'Zend_Db_Table_Rowset') ? count($rowset[0]->toArray()) : count($rowset[0]);
         foreach ($rowset[0] as $target => $value) 
         {
+            $i++;
             if (!isset($this->_xml)) {
-                $out.= "<th>".$target."</th>";
+                $out .= ($html) ? "<th>".$target."</th>" : '"'.$target.'"';
             } else if(!empty($this->_name[$target])) {        
-                $out.= "<th>".str_replace("\n", "", $this->_name[$target])."</th>";
+                $out .= ($html) ? "<th>".str_replace("\n", "", $this->_name[$target])."</th>" : '"'.$this->_name[$target].'"';
             }
+            if (!$html && $i < $counter) $out .= $separator;
         }
-        $out .= "</tr>\n";
+        if ($html) $out .= "</tr>";
+        $out .= "\n";
         return $out;        
     }
     
@@ -57,16 +60,21 @@ class Zwei_Utils_Table
      * @return HTML
      */
     
-    function showContent($rowset, $count)
+    function showContent($rowset, $count, $html = true, $separator = ',')
     {
-        $out="<tr>";
+        $out = $html ? "<tr>" :  "";
+        $i = 0;
+        $counter = is_a($rowset, 'Zend_Db_Table_Rowset') ? count($rowset[$count]->toArray()) : count($rowset[$count]);
         foreach ($rowset[$count] as $target => $value) 
         {
+            $i++;
             if(!empty($this->_name[$target]) || !isset($this->_xml)){    
-                $out.= "<td>$value</td>";
-            }    
+                $out.= ($html) ? "<td>$value</td>" : '"'.$value.'"';
+            }
+            if (!$html && $i < $counter) $out .= $separator;
         }
-        $out.="</tr>\n";
+        if ($html) $out .= "</tr>";
+        $out .= "\n";
         return $out;        
     }    
     
@@ -96,6 +104,44 @@ class Zwei_Utils_Table
     }
     
     /**
+     * Tranforma un Zend_Db_Rowset a CSV
+     * @param array|Zend_Db_Rowset
+     * @param string|array componente XML|array de títulos
+     * @return string tabla HTML
+     */
+    
+    public function rowsetToCsv($rowset, $component=false)
+    {
+        if ($component) {
+            if (!is_array($component)) { // buscar títulos en componente xml
+                $this->parseComponent($component);
+            } else { // sacar títulos de array
+                $row = $rowset[0];
+                $j = 0;
+                foreach($row as $i => $v) {
+                    $this->_name[$i] = $component[$j];
+                    $j++;
+                }
+    
+                $this->_xml = "array";
+            }
+        }
+    
+        $count = count($rowset);
+        $out = '';
+    
+        if (!empty($rowset) && count($rowset) > 0) {
+            $out .= $this->showTitles($rowset, false);
+            for ($i=0;$i<$count;$i++) {
+                $out .= $this->showContent($rowset, $i, false);
+            }
+        }
+        Debug::write($out);
+        return $out;
+    }
+    
+    
+    /**
      * Tranforma un Zend_Db_Rowset a HTML
      * @param array|Zend_Db_Rowset
      * @param string|array componente XML|array de títulos
@@ -123,7 +169,7 @@ class Zwei_Utils_Table
 
         $out = "<table border=\"1\">\n";
         if (!empty($rowset) && count($rowset) > 0) {
-            $out .= $this->showTitlesHtml($rowset);
+            $out .= $this->showTitles($rowset);
             for ($i=0;$i<$count;$i++) {
                 $out .= $this->showContent($rowset, $i);
             }

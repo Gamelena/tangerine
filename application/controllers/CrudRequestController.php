@@ -56,9 +56,9 @@ class CrudRequestController extends Zend_Controller_Action
                                'message'=>'Su sesión a expirado, por favor vuelva a ingresar.',
                                'todo'=>'goToLogin');
             $this->view->content = Zend_Json::encode($data);
-            $this->render('index'); 
+            $this->render('admin'); 
         } else {
-            $this->_redirect('index/login');
+            $this->_redirect('admin/login');
         }
         $this->_helper->layout()->disableLayout();
         
@@ -247,29 +247,37 @@ class CrudRequestController extends Zend_Controller_Action
                 $this->_helper->layout->disableLayout();
                 $this->_helper->viewRenderer->setNoRender();
                 
-                $Table = new Zwei_Utils_Table();
+                $table = new Zwei_Utils_Table();
                 
-                
-                if ($numRows > 5000) {
-                    //Si el numero es mayor a 5000 filas, exportamos "a la antigua" ya que PhpExcel puede agotar el limite de RAM
-                    //Tomar en cuenta que el numero mayor de registros a soportar es 20000 12/11/2012
+                if ($this->_form->excel_formatter != 'csv') {
                     header('Content-type: application/vnd.ms-excel');
                     header("Content-Disposition: attachment; filename={$this->_form->model}.xls");
                     header("Pragma: no-cache");
                     header("Expires: 0");
                     
                     if (isset($this->_form->p)) {
-                        $content = $Table->rowsetToHtml($data, $this->_form->p);
+                        $content = $table->rowsetToHtml($data, $this->_form->p);
                     } else {
-                        $content = $Table->rowsetToHtml($data);
+                        $content = $table->rowsetToHtml($data);
                     }
                     echo $content;
                 } else {
+                    header("Pragma: public");
+                    header("Expires: 0");
+                    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                    header("Cache-Control: private",false);
+                    header("Content-Type: application/octet-stream");
+                    header("Content-Disposition: attachment; filename={$this->_form->model}.csv");
+                    header("Pragma: no-cache");
+                    header("Expires: 0");
+                    header("Content-Transfer-Encoding: binary");
+                                    
                     if (isset($this->_form->p)) {
-                        $content = $Table->rowsetToExcel($data, $this->_form->p);
+                        $content = $table->rowsetToCsv($data, $this->_form->p);
                     } else {
-                        $content = $Table->rowsetToExcel($data);
+                        $content = $table->rowsetToCsv($data);
                     }
+                    echo $content;
                 }
 
                 exit();

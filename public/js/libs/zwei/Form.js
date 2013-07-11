@@ -81,8 +81,8 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 }
             });
         }
-        console.debug(this.iframe);
-        if (this.iframe != null){
+        
+        if (this.iframe != null && this.queryParams.indexOf('format=excel') >= 0){
             this.iframe.src = searchUrl;
         } else {
             var params = {url: searchUrl, clearOnClose: true, urlPreventCache:true};
