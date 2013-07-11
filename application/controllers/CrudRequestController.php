@@ -265,19 +265,20 @@ class CrudRequestController extends Zend_Controller_Action
                     header("Pragma: public");
                     header("Expires: 0");
                     header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-                    header("Cache-Control: private",false);
+                    header("Content-Type: application/force-download");
                     header("Content-Type: application/octet-stream");
+                    header("Content-Type: application/download");
                     header("Content-Disposition: attachment; filename={$this->_form->model}.csv");
-                    header("Pragma: no-cache");
-                    header("Expires: 0");
-                    header("Content-Transfer-Encoding: binary");
+                    header('Content-Encoding: UTF-8');
+                    header('Content-type: text/csv; charset=UCS-2LE');
+                    
                                     
                     if (isset($this->_form->p)) {
                         $content = $table->rowsetToCsv($data, $this->_form->p);
                     } else {
                         $content = $table->rowsetToCsv($data);
                     }
-                    echo $content;
+                    echo  chr(255) . chr(254) . mb_convert_encoding($content, 'UCS-2LE', 'UTF-8');
                 }
 
                 exit();

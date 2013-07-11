@@ -44,12 +44,12 @@ class Zwei_Utils_Table
             if (!isset($this->_xml)) {
                 $out .= ($html) ? "<th>".$target."</th>" : '"'.$target.'"';
             } else if(!empty($this->_name[$target])) {        
-                $out .= ($html) ? "<th>".str_replace("\n", "", $this->_name[$target])."</th>" : '"'.$this->_name[$target].'"';
+                $out .= ($html) ? "<th>".str_replace("\r\n", "", $this->_name[$target])."</th>" : '"'.$this->_name[$target].'"';
             }
             if (!$html && $i < $counter) $out .= $separator;
         }
         if ($html) $out .= "</tr>";
-        $out .= "\n";
+        $out .= "\r\n ";
         return $out;        
     }
     
@@ -69,12 +69,16 @@ class Zwei_Utils_Table
         {
             $i++;
             if(!empty($this->_name[$target]) || !isset($this->_xml)){    
-                $out.= ($html) ? "<td>$value</td>" : '"'.$value.'"';
+                if ($html) {
+                    $out .= "<td>$value</td>";
+                } else {
+                    $out .= stristr(",", $value) || stristr('"', $value) ? '"' . str_replace('"', "", $value) . '"' : $value;
+                }
             }
             if (!$html && $i < $counter) $out .= $separator;
         }
         if ($html) $out .= "</tr>";
-        $out .= "\n";
+        $out .= "\r\n ";
         return $out;        
     }    
     
