@@ -22,7 +22,7 @@
 
 /* Tabs, shared classes */
 .zweicom .dijitTabPaneWrapper {
-	background: #bcd5f0 url(http://localhost/dojotoolkit/dijit/themes/zweicom/images/titleBar.png) repeat-x top left;
+	background: #bcd5f0 url(../images/titleBar.png) repeat-x top left;
 	border:1px solid #B1BADF;
 	margin: 0;
 	padding-left: 0;
