@@ -130,7 +130,7 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
         
         if ($this->existsChildren('searchers')) {
             if ($this->xpath('//component/searchers/group'.$xpath)) {
-                for ($i = 0; $i < $this->searchers->group->count(); $i++) {
+                for ($i = 0; $i < count($this->searchers->group); $i++) {
                     if (!$this->searchers->group[$i]->getAttribute('type')) 
                         $this->searchers->group[$i]->addAttribute('type', 'dijit-form-validation-text-box');
                     
@@ -142,7 +142,7 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
             }
             
             if ($this->xpath('//component/searchers/element'.$xpath)) {
-                for ($i = 0; $i < $this->searchers->element->count(); $i++) {
+                for ($i = 0; $i <  count($this->searchers->element); $i++) {
                     if ($inherits) $this->inheritAttributes($this->searchers->element[$i]);
                     $elements[] = $this->searchers->element[$i];
                 }
