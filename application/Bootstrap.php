@@ -81,9 +81,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Inicializar el MVC
         Zend_Layout::startMvc(array('layoutPath' => ROOT_DIR.'/application/views/layouts'));
         
-
         // Run!
-        
         $frontController = Zend_Controller_Front::getInstance();
         //Plugin Timeout de Sesión
         $frontController->registerPlugin(new Zwei_Controller_Plugin_TimeOutHandler());
@@ -96,7 +94,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         $frontController->throwExceptions(true);
         
-        $db = Zend_Db::factory($this->_config->resources->db);
+        if ($this->_config->resources->multidb) {
+            $this->bootstrap('multidb');
+            $resource = $this->getPluginResource('multidb');
+            $db = $resource->getDb('dn');//reemplazar 'dn' por el namespace multidb por defecto definido para el proyecto
+        } else {
+            $db = Zend_Db::factory($this->_config->resources->db);
+        }
         
         Zwei_Db_Table::setDefaultAdapter($db);
         Zwei_Db_Table::setDefaultLogMode($this->_config->zwei->db->table->logbook);

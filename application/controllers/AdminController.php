@@ -208,7 +208,7 @@ class AdminController extends Zend_Controller_Action
                 $file = Zwei_Admin_Xml::getFullPath($component);
                 
                 if (!file_exists($file)) {
-                    exit("No se encuentra $file");
+                    exit("No se encuentra archivo $file");
                     //$this->render();
                 }
                 try {
