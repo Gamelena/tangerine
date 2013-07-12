@@ -75,7 +75,7 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
         
         if ($this->xpath('//component/forms/tabs/tab'/*.$xpath*/)) {
             for ($i = 0; $i < count($this->forms->tabs->tab); $i++) {
-                for ($j = 0; $j < count($this->forms->tabs->tab[$i]->count); $j++) {
+                for ($j = 0; $j < count($this->forms->tabs->tab[$i]); $j++) {
                     if ($inherits) $this->inheritAttributes($this->forms->tabs->tab[$i]->element[$j]);
                 }
             }
