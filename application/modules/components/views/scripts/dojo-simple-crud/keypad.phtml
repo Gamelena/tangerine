@@ -24,7 +24,7 @@ endif;
 if ($this->edit) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnEdit" onClick="
+        <button type="button" dojoType="dijit.form.Button" disabled="disabled" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnEdit" onClick="
                 var form = new zwei.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
@@ -44,7 +44,7 @@ endif;
 if ($this->delete) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconDelete" id="<?=$this->domPrefix?>btnDelete" onClick="
+        <button type="button" dojoType="dijit.form.Button" disabled="disabled" iconClass="dijitIconDelete" id="<?=$this->domPrefix?>btnDelete" onClick="
                 var form = new zwei.Form({
                     ajax: <?=$this->ajax ?>,
                     action: 'delete',
@@ -65,7 +65,7 @@ endif;
 if ($this->clone) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconNewTask" id="<?=$this->domPrefix?>btnClone" onClick="
+        <button type="button" dojoType="dijit.form.Button"  disabled="disabled" iconClass="dijitIconNewTask" id="<?=$this->domPrefix?>btnClone" onClick="
                 var form = new zwei.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
@@ -85,7 +85,7 @@ endif;
 if ($this->changePassword) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnChangePassword" onClick="
+        <button type="button" dojoType="dijit.form.Button" disabled="disabled" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnChangePassword" onClick="
             var form = new zwei.Form({
                 ajax: <?=$this->ajax ?>,
                 component: '<?=$this->component?>',
@@ -122,7 +122,7 @@ foreach ($this->excel as $i => $f) :
     <div class="keyPadButton">
         <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnChangePassword" onClick="
             var form = new zwei.Form({
-                dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'),
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 
                 queryParams: 'format=excel&excel_formatter=<?=$formatter?>',
                 iframe: dojo.byId('ifrm_process')
@@ -134,13 +134,14 @@ foreach ($this->excel as $i => $f) :
 <?php 
 endforeach;
 ?>
-</div>
 <script>
-/*
-    dojo.require('dojo.on');
-    dojo.require('dojo.ready');
-    dojo.ready(function(){
-        dojo.on(dijit.byId('<?=$this->domPrefix?>dataGrid'), 'rowClick', function(e) {console.debug(e)} );
+dojo.require(["dijit/registry",  "dojo/on", "dojo/ready", "dojo/domReady!"], function (registry, on, ready) {
+    /*
+    ready(function () { //wait till dom is parsed into dijits
+        var panel = registry.byId('<?=$this->domPrefix?>dataGrid');   //get dijit from its source dom element
+        
     });
-*/
+    */
+});
 </script>
+</div>

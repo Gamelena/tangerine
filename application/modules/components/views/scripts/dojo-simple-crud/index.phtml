@@ -10,7 +10,7 @@ if ($this->ajax) {
 }
 ?>
 <?=$this->includeJs?>
-<div id="<?=$this->domPrefix?>content_dojo" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false" class="contentWrapper" style="width:100%">
+<div id="<?=$this->domPrefix?>contentTab" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false" class="contentWrapper" style="width:100%">
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:true" class="contentCenter">
         <?=$this->action('search', 'dojo-simple-crud', 'components', $_REQUEST)?>
         <?=$this->action('list', 'dojo-simple-crud', 'components', $_REQUEST)?>

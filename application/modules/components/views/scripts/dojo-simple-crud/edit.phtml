@@ -4,7 +4,7 @@ $modAux = $this->mode != 'clone' ? $this->mode : 'add';
 <script type="text/javascript">
     globalOpc = '<?=$this->mode ?>';
 </script>
-<form dojoType="dijit.form.Form" target="ifrm_process" id="<?=$this->domPrefix?>form_<?=$modAux?>" class="tabForm" jsId="<?=$this->domPrefix?>form_<?=$modAux?>" name="<?=$this->domPrefix?>form_<?=$this->mode?>" encType="multipart/form-data"  action="<?=BASE_URL?>crud-request" method="post">
+<form dojoType="dijit.form.Form" target="ifrm_process" id="<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>" class="tabForm" jsId="<?=$this->domPrefix?>form_<?=$modAux?>" name="<?=$this->domPrefix?>form_<?=$this->mode?>" encType="multipart/form-data"  action="<?=BASE_URL?>crud-request" method="post">
 <?php 
 $i = 0;
 $tableWrapperClass = '';
@@ -17,7 +17,7 @@ if (!$this->loadPartial) :
             $style = $i == 0 ? 'style="background-image: url(/dojotoolkit/dijit/themes/claro/images/activeGradient.png); background-color: rgb(207, 229, 250); background-position: initial initial; background-repeat: repeat no-repeat;"' : '';
             $i++;
 ?>
-    <a id="<?=$this->domPrefix .'tab_'. $this->mode .'_ctrl'. $i?>" class="settingsTab" <?=$style ?> onclick="admportal.switchTabs('<?=$this->domPrefix?>form_<?=$modAux?>', this.id, '<?=$this->domPrefix.'tab_'.$this->mode.$i?>')"><?=$tab->getAttribute('name') ?></a>
+    <a id="<?=$this->domPrefix .'tab_'. $this->mode .'_ctrl'. $i?><?=$this->dialogIndex?>" class="settingsTab" <?=$style ?> onclick="admportal.switchTabs('<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>', this.id, '<?=$this->domPrefix.'tab_'.$this->mode.$i?><?=$this->dialogIndex?>')"><?=$tab->getAttribute('name') ?></a>
 <?php 
             //endif;
         endforeach;
@@ -31,7 +31,7 @@ if (!$this->loadPartial) :
         $style = $i == 0 ? 'style="display:block"' : 'style="display:none"'; 
         $i++;
 ?>
-    <div id="<?=$this->domPrefix.'tab_'.$this->mode.$i?>" class="settingsArea" <?=$style ?>>
+    <div id="<?=$this->domPrefix.'tab_'.$this->mode.$i?><?=$this->dialogIndex?>" class="settingsArea" <?=$style ?>>
         <table>
 <?php 
         $k=0;
@@ -97,7 +97,7 @@ endif;
         try {
             var form = new zwei.Form({
                 dijitForm: this, 
-                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_<?=$this->mode != 'clone' ? $this->mode : 'add'?>'),
+                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_<?=$this->mode != 'clone' ? $this->mode : 'add'?><?=$this->dialogIndex?>'),
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
                 iframe: dojo.byId('ifrm_process')
@@ -126,5 +126,5 @@ endif;
     }
     return true;
     </script>
-    <button dojoType="dijit.form.Button" id="<?=$this->domPrefix?>tabs_btn_save<?=$this->mode != 'clone' ? $this->mode : 'add'?>" type="submit" />Guardar</button>
+    <button dojoType="dijit.form.Button" id="<?=$this->domPrefix?>tabs_btn_save<?=$this->mode != 'clone' ? $this->mode : 'add'?><?=$this->dialogIndex?>" type="submit" />Guardar</button>
 </form>

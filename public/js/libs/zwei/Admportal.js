@@ -173,7 +173,7 @@ dojo.declare("zwei.Admportal", null, {
     },
     loadModuleSingle: function(url, moduleId, moduleTitle) 
     {
-        var widget = dijit.byId("panel_central");
+        var widget = dijit.byId("mainPane");
         widget.set('href', base_url+url);
     },
     switchTabs: function(containerId, tabId, areaId) {

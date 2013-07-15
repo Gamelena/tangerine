@@ -494,7 +494,7 @@ a.settingsTab {
     background: #EFEFEF;
 }
 
-#panel_central h2 {
+#mainPane h2 {
     text-align: left;
     padding-left: 10px;
     color: black;
@@ -528,7 +528,7 @@ a.settingsTab {
     margin: -6px 6px 6px -6px; /* Offset the image by certain pixels to reveal the shadow, as the shadows are 6 pixels wide, offset it by that amount to get a perfect shadow */
 }
 
-#panel_central form > table {
+#mainPane form > table {
     border: 1px solid #AAA;
     padding: 10px;  
 }

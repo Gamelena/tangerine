@@ -140,6 +140,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->xml = $this->_xml;
         $this->view->mode = $mode;
         $this->view->loadPartial = $r->getParam('loadPartial', false);
+        $this->view->dialogIndex = $r->getParam('dialogIndex', '');
 
         $this->view->onPostSubmit = $this->_xml->xpath('//forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
         $this->view->onSubmit = $this->_xml->xpath('//forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
@@ -209,7 +210,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
         if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
-        Debug::write($this->_xml->getAttribute('onRowDblClick'));
+        
         $this->view->onRowDblClick = '';
         if ($this->_xml->getAttribute('onRowDblClick')) {
             $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick');

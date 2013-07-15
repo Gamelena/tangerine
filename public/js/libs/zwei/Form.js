@@ -71,7 +71,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i){
                 if (entry.type != 'submit' && entry.type != 'radio' && entry.type != 'hidden') {
                     if (entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
-                        searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][value]=' + encodeURIComponent(entry.get('uncheckedvalue'));
+                        searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][value]=' +encodeURIComponent(entry.get('uncheckedvalue'));
                     } else {
                         if (entry.declaredClass != "dijit.form.DateTextBox") {
                             value = entry.get('value');
@@ -81,10 +81,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                         
                         searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][value]=' + encodeURIComponent(value);
                     }
-                    
-
- 
-                    
                     searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][format]=' + encodeURIComponent(dojo.byId(entry.id+'_format').value);
                     searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][operator]=' + encodeURIComponent(dojo.byId(entry.id+'_operator').value);
                     searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
@@ -215,6 +211,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 load: function(response){
                     if(response.message != "" && response.message != null){
                         self.utils.showMessage(response.message);
+                        self.postSave();
                     }else if(response.state == 'DELETE_OK'){
                         self.utils.showMessage('Se ha borrado correctamente.');
                         self.postSave();
@@ -230,8 +227,18 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             });
         }
     },
-
-    
+    /**
+     * [TODO] en proceso, para soportar múltiples diálogos
+     */
+    showMultipleDialogs: function() {
+        if (this.action != 'add') {
+            var items = this.dijitDataGrid.selection.getSelected();
+            dojo.forEach(items, function(i, item){
+                if (item.i != undefined && item.r._items != undefined) item = item.i;//workaround, a Dojo bug?
+                showDialog(i);
+            });
+        }
+    },
     
     /**
      * @constructorParam dijit.form.Dialog    this.dijitDialog
@@ -249,6 +256,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             if (this.action != 'add') {
                 var items = this.dijitDataGrid.selection.getSelected();
                 if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+                
                 
                 //Buscar inputs (hidden) con nombre primary[$idCampo] para obtener las PKs
                 dojo.forEach(dojo.query("#"+this.dijitForm.id+" input[name^=primary]"), function(entry, i){

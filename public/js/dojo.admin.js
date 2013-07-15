@@ -29,33 +29,17 @@ window.tinyMCEPreInit = {
  */
 dijit.form.Form.prototype.getChildrenByName = function(name) { return this.getChildren().filter(function(w){ return w.get('name') == name;}); } 
 
-function execFunction(method, params, object, primary, domPrefix){
-    if (primary == undefined) var primary = 'id'; 
-    if (domPrefix == undefined) var domPrefix = '';
-
-    try {
-        var items = dijit.byId(domPrefix + 'main_grid').selection.getSelected();
-        var id = "&"+primary+"="+ eval("items[0]."+primary);
-    } catch(e) {
-        console.debug(e);
-        var id = '';
-    }    
-    document.getElementById('ifrm_process').src=base_url+'functions?method='+method+'&params='+params+id+"&object="+object+"&uri="+escape(dojo.byId(domPrefix+'data_url').value);
-}
-
-
-
 function redirectToModule(url, domPrefix){
     if (primary == undefined) var primary = 'id';
     if (domPrefix == undefined) var domPrefix = ''; 
     try{
-        var items = dijit.byId(domPrefix + 'main_grid').selection.getSelected();
+        var items = dijit.byId(domPrefix + 'dataGrid').selection.getSelected();
         var id = "&"+primary+"="+ eval("items[0]."+primary);    
     } catch(e) {
         var id='';
     }
     if (domPrefix == '') {
-        var widget = dijit.byId("panel_central");
+        var widget = dijit.byId("mainPane");
         widget.set('href',base_url+url);
     } else {    
         loadModuleByConfig(url, globalModuleId, '');
