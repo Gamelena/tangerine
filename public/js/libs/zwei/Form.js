@@ -65,13 +65,13 @@ dojo.declare("zwei.Form", dojo.Stateful, {
     loadData: function() {
         var domForm = this.dijitFormSearch != null ? dojo.byId(this.dijitFormSearch.id) : dojo.byId(this.dijitForm.id);
         var searchUrl = base_url+'crud-request?model=' + domForm['model'].value + '&format=' + domForm['format'].value+'&'+this.queryParams;
-        var value
+        var value;
         
         if (this.dijitFormSearch != undefined && this.dijitFormSearch != null) {
             dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i){
                 if (entry.type != 'submit' && entry.type != 'radio' && entry.type != 'hidden') {
                     if (entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
-                        searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][value]='+encodeURIComponent(entry.get('uncheckedvalue'));
+                        searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][value]=' + encodeURIComponent(entry.get('uncheckedvalue'));
                     } else {
                         if (entry.declaredClass != "dijit.form.DateTextBox") {
                             value = entry.get('value');
@@ -79,16 +79,16 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                             value = entry.get('value') == null ? '' : dojo.date.locale.format(entry.get('value'), {datePattern: "yyyy-MM-dd", selector: "date"});
                         }
                         
-                        searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][value]='+encodeURIComponent(value);
+                        searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][value]=' + encodeURIComponent(value);
                     }
                     
 
  
                     
-                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][format]='+encodeURIComponent(dojo.byId(entry.id+'_format').value);
-                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][operator]='+encodeURIComponent(dojo.byId(entry.id+'_operator').value);
-                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix]='+encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
-                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][prefix]='+encodeURIComponent(dojo.byId(entry.id+'_prefix').value);
+                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][format]=' + encodeURIComponent(dojo.byId(entry.id+'_format').value);
+                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][operator]=' + encodeURIComponent(dojo.byId(entry.id+'_operator').value);
+                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
+                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][prefix]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix').value);
                 }
             });
         }
@@ -132,6 +132,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             
             if (response.message != '' && response.message != null) {
                 self.utils.showMessage(response.message);
+                self.postSave();
             } else if(response.state == 'UPDATE_OK') {
                 self.utils.showMessage('Datos Actualizados');
                 self.postSave();
