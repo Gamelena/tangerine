@@ -8,10 +8,10 @@
     --------------------->
     <!--META-->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?php echo $this->adminTitle;?> - <?php echo $this->credits?></title>
-    <?php echo $this->headStyle()?>
-    <?php echo $this->dojo()?>
-    <link href="<?php echo BASE_URL ?>css/login.css" rel="stylesheet" type="text/css" />
+    <title><?=$this->adminTitle?> - <?=$this->credits?></title>
+    <?=$this->headStyle()?>
+    <?=$this->dojo()?>
+    <link href="<?=BASE_URL ?>css/login.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
     require(["dojo/ready", "dojo/parser", "dijit/registry", "dijit/Dialog"], function(ready, parser, registry){
         ready(function(){
@@ -35,8 +35,8 @@
     });
     </script>
 </head>
-<body class="<?php echo $this->bodyClass?> login">
-    <<!--[if lt IE 7]>
+<body class="<?=$this->bodyClass?> login">
+    <!--[if lt IE 7]>
     <div style='border: 1px solid #F7941D; background: #FEEFDA; text-align: center; clear: both; height: 75px; position: relative;'>
     <div style='position: absolute; right: 3px; top: 3px; font-family: courier new; font-weight: bold;'><a href='#' onclick='javascript:this.parentNode.parentNode.style.display="none"; return false;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-cornerx.jpg' style='border: none;' alt='Cierra este aviso'/></a></div>
     <div style='width: 640px; margin: 0 auto; text-align: left; padding: 0; overflow: hidden; color: black;'>
@@ -56,14 +56,14 @@
     <div id="wrapper">
         <div class="user-icon" id="user_icon"></div>
         <div class="pass-icon" id="pass_icon"></div>
-        <div class="operLogo" style="background-image: url(<?php echo BASE_URL ?>upfiles/<?php echo $this->urlLogoOper ?>);"></div>
+        <div class="operLogo" style="background-image: url(<?=BASE_URL ?>upfiles/<?=$this->urlLogoOper?>);"></div>
         <div class="login-form">
             <div class="header">
-                <h1><?php echo $this->adminTitle;?></h1>
+                <h1><?=$this->adminTitle?></h1>
                 <span></span>
             </div>
-                <?php if($this->errorMessage != ""): ?><p class="error"><?php echo $this->errorMessage;?></p><?php endif; ?>
-                <?php echo $this->loginForm?>
+                <?php if ($this->errorMessage != "") : ?><p class="error"><?=$this->errorMessage;?></p><?php endif; ?>
+                <?=$this->loginForm?>
         </div>
     </div>
     <div class="gradient"></div>
