@@ -24,7 +24,7 @@ endif;
 if ($this->edit) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnEdit" onClick="
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" disabled="disabled" id="<?=$this->domPrefix?>btnEdit" onClick="
                 var form = new zwei.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
@@ -44,7 +44,7 @@ endif;
 if ($this->delete) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconDelete" id="<?=$this->domPrefix?>btnDelete" onClick="
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconDelete" disabled="disabled" id="<?=$this->domPrefix?>btnDelete" onClick="
                 var form = new zwei.Form({
                     ajax: <?=$this->ajax ?>,
                     action: 'delete',
@@ -65,7 +65,7 @@ endif;
 if ($this->clone) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconNewTask" id="<?=$this->domPrefix?>btnClone" onClick="
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconNewTask" disabled="disabled" id="<?=$this->domPrefix?>btnClone" onClick="
                 var form = new zwei.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
@@ -85,7 +85,7 @@ endif;
 if ($this->changePassword) :
 ?>
     <div class="keyPadButton">
-        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnChangePassword" onClick="
+        <button type="button" dojoType="dijit.form.Button" iconClass="dijitIconEdit" disabled="disabled" id="<?=$this->domPrefix?>btnChangePassword" onClick="
             var form = new zwei.Form({
                 ajax: <?=$this->ajax ?>,
                 component: '<?=$this->component?>',

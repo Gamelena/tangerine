@@ -1,5 +1,8 @@
 <span data-dojo-type="<?=$this->dataDojoType ?>" id="<?=$this->domPrefix?>storeGrid" jsId="<?=$this->domPrefix?>storeGrid" data-dojo-props="url: '<?=BASE_URL?>crud-request?model=<?=$this->model?>&format=json'"></span>
-<table data-dojo-type="<?=$this->gridDojoType ?>" id="<?=$this->domPrefix?>dataGrid" jsId="<?=$this->domPrefix?>dataGrid" data-dojo-props="store: <?=$this->domPrefix?>storeGrid, plugins:<?=$this->plugins ?>, clientSort:true, selectable: true, rowsPerPage: 10, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.'" class="dataGrid" style="height: 50em;" onRowDblClick="<?=$this->onRowDblClick?>">
+<table data-dojo-type="<?=$this->gridDojoType ?>" id="<?=$this->domPrefix?>dataGrid" jsId="<?=$this->domPrefix?>dataGrid" data-dojo-props="store: <?=$this->domPrefix?>storeGrid, plugins:<?=$this->plugins ?>, clientSort:true, selectable: true, rowsPerPage: 10, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.', onRowDblClick: function(){<?=$this->onRowDblClick?>}" class="dataGrid" style="height: 50em;">
+    <script type="dojo/connect" data-dojo-event="onRowClick" data-dojo-args="e">
+        <?=$this->onRowClick?>
+    </script>
     <thead>
         <tr>
 <?php
@@ -11,9 +14,4 @@ endforeach;
 ?>
         </tr>
     <thead>
-    <script type="text/javascript">
-        dojo.connect(dijit.byId('<?=$this->domPrefix?>dataGrid'), "onload", function(e){
-            dijit.byId('<?=$this->domPrefix?>dataGrid').resize();
-        });
-    </script>
 </table>
