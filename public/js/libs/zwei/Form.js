@@ -123,6 +123,8 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 rawResponse = dojo.byId(iframeId).contentDocument.body.innerText;
             else if (dojo.byId(iframeId).contentDocument.getElementsByTagName('pre')[0]) //firefox
                 rawResponse = dojo.byId(iframeId).contentDocument.getElementsByTagName('pre')[0].innerHTML;
+            else if (dojo.byId(iframeId).contentDocument.getElementsByTagName('body')[0]) //firefox
+                rawResponse = dojo.byId(iframeId).contentDocument.getElementsByTagName('body')[0].innerHTML;
             
             var response = dojo.json.parse(rawResponse);
             
