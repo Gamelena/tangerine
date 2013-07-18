@@ -47,12 +47,12 @@ class AdminController extends Zend_Controller_Action
      */
     public function init()
     {
-        $this->_helper->layout()->disableLayout();
-        $this->view->base_url = BASE_URL;
-        $this->baseDojoFolder = '/dojotoolkit';
-        
         $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
         $confLayout = $config->zwei->layout;
+        
+        $this->_helper->layout()->disableLayout();
+        $this->view->base_url = BASE_URL;
+        $this->baseDojoFolder = isset($config->zwei->js->dojo->baseUrl) ? $config->zwei->js->dojo->baseUrl : '/dojotoolkit';
         
         if (!empty($confLayout->dojoTheme)) $this->_dojoTheme = $confLayout->dojoTheme;
         if (!empty($confLayout->template)) $this->_dojoTheme = $confLayout->layout->template;
@@ -63,22 +63,33 @@ class AdminController extends Zend_Controller_Action
                 
         Zend_Dojo::enableView($this->view);
         $this->view->addHelperPath('Zend/Dojo/View/Helper/', 'Zend_Dojo_View_Helper');
+        
+        
         $this->view->dojo()
-        ->setLocalPath (PROTO.$_SERVER['HTTP_HOST'].$this->baseDojoFolder.'/dojo/dojo.js')
+        ->setLocalPath ($config->resources->dojo->localPath)
         ->setDjConfig(
             array(
-                'parseOnLoad' => 'true', 
-                'isDebug' => 'false', 
-                'locale' => 'es',
+                'parseOnLoad' => $config->resources->dojo->djConfig->parseOnLoad, 
+                'isDebug' => $config->resources->dojo->djConfig->isDebug, 
+                'locale' => $config->resources->dojo->djConfig->locale,
                 'packages' => array(
-                     array('name' => 'dojo', 'location' => $this->baseDojoFolder . '/dojo'),
-                     array('name' => 'dijit', 'location' => $this->baseDojoFolder . '/dijit'),
-                     array('name' => 'dojox', 'location' => $this->baseDojoFolder . '/dojox'),
-                     array('name' => 'zwei', 'location' => '/libs/zwei'),
+                     array('name' => 'dojo', 'location' => isset($config->resources->dojo->djConfig->packages->dojo) ? 
+                             $config->resources->dojo->djConfig->packages->dojo :
+                             $this->baseDojoFolder . '/dojo'),
+                     array('name' => 'dijit', 'location' => isset($config->resources->dojo->djConfig->packages->dijit) ? 
+                             $config->resources->dojo->djConfig->packages->dijit :
+                             $this->baseDojoFolder . '/dijit'),
+                     array('name' => 'dojox', 'location' => isset($config->resources->dojo->djConfig->packages->dojox) ? 
+                             $config->resources->dojo->djConfig->packages->dojox :
+                             $this->baseDojoFolder . '/dojox'),
+                     array('name' => 'zwei', 'location' => isset($config->resources->dojo->djConfig->packages->zwei) ? 
+                             $config->resources->dojo->djConfig->packages->zwei : 
+                             '/libs/zwei'),
                 )
             )
         );
-
+        
+        
         $this->view->headStyle()->appendStyle('
             @import "'.$this->baseDojoFolder.'/dijit/themes/'.$this->_dojoTheme.'/'.$this->_dojoTheme.'.css";
         ');    
@@ -113,46 +124,9 @@ class AdminController extends Zend_Controller_Action
         $this->view->bodyClass = $this->_dojoTheme;
         
         $this->view->dojo()
-        ->requireModule("dojox.widget.Standby")
-        ->requireModule("dijit.layout.BorderContainer")
-        ->requireModule("dijit.form.Button")
-        ->requireModule("dijit.form.DropDownButton")
-        ->requireModule("dijit.Menu")
-        ->requireModule("dijit.MenuItem")
-        ->requireModule("dijit.dijit")
-        ->requireModule("dijit.Calendar")
-        ->requireModule("dojo.data.ItemFileWriteStore")
-        ->requireModule("dojo.date.locale")
-        ->requireModule("dijit.Tree")
-        ->requireModule("dojo.cookie")
-        ->requireModule("dojox.layout.ContentPane")
-        ->requireModule("dojox.layout.ExpandoPane")
-        ->requireModule("dijit.layout.TabContainer")
-        ->requireModule("dijit.Dialog")
-        ->requireModule("dijit.form.Form")
-        ->requireModule("dijit.form.TextBox")
-        ->requireModule("dijit.form.Textarea")
-        ->requireModule("dijit.form.SimpleTextarea")
-        ->requireModule("dijit.form.Button")
-        ->requireModule("dijit.form.DateTextBox")
-        ->requireModule("dijit.form.Select")
-        ->requireModule("dijit.form.FilteringSelect")
-        ->requireModule("dijit.form.TimeTextBox")
-        ->requireModule("dijit.form.ComboBox")
-        ->requireModule("dojox.grid.DataGrid")
-        ->requireModule("dojox.grid.EnhancedGrid")
         ->requireModule("dojox.grid.enhanced.plugins.Pagination")
-        ->requireModule("dojox.form.CheckedMultiSelect")
-        ->requireModule("dojox.form.FileInput")
-        ->requireModule("dojox.form.Uploader")
-        ->requireModule("dojox.form.uploader.plugins.IFrame")
-        ->requireModule("dojox.encoding.digests.MD5")
-        ->requireModule("dojo.data.ItemFileWriteStore")
-        ->requireModule("dojo.data.ItemFileReadStore")
-        ->requireModule("dojox.data.QueryReadStore")
-        ->requireModule("dojo.date.locale")
-        ->requireModule("dojox.widget.DialogSimple")
-        ->requireModule("dojox.widget.Toaster")
+        ->requireModule("dijit.form.Form")
+        ->requireModule("dojox.widget.Standby")
         ->requireModule("zwei.form.ValidationTextarea")
         ->requireModule("zwei.Form")
         ->requireModule("zwei.Utils")
@@ -192,7 +166,7 @@ class AdminController extends Zend_Controller_Action
                 $modules->setApproved();
                 $tree = $modules->getTree();
                 $menu = new Zwei_Utils_Menu($tree);
-                $this->view->list=$menu->display();
+                $this->view->list = $menu->display();
                 $this->view->content = "<center><img width=\"960\" src=\"".BASE_URL."images/satelite.jpg\"/></center>";
             }
         }
@@ -255,7 +229,7 @@ class AdminController extends Zend_Controller_Action
         $treeObj = new Zend_Dojo_Data('id', $tree);
         $treeObj->setLabel('label');
 
-        $this->view->content = Zend_Json::prettyPrint($treeObj->toJson());
+        $this->view->content = $treeObj->toJson();
     }
     
     public function loginAction()

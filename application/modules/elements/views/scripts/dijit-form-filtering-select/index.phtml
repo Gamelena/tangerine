@@ -35,7 +35,7 @@ endif;
 ?>
 }, 100);
 </script>
-<select dojoType="dijit.form.FilteringSelect" id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" onload="dijit.byId('<?php echo $this->domId . $this->i?>').set('value', dijit.byId('<?php echo $this->domId . $this->i?>').get('value'));<?php echo $this->onload ?>" 
+<select data-dojo-type="dijit/form/FilteringSelect" id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" onload="dijit.byId('<?php echo $this->domId . $this->i?>').set('value', dijit.byId('<?php echo $this->domId . $this->i?>').get('value'));<?php echo $this->onload ?>" 
     <?php echo $this->readonly.$this->disabled.$this->required.$this->regExp.$this->trim.$this->invalidMessage.$this->onshow.
     $this->promptMessage.$this->onblur.$this->value.$this->onchange.$this->onclick ?> <?php if ($this->formatter) echo ' searchAttr="name" labelAttr="label" labelType="html"'?>>
     <?php echo $this->options ?>

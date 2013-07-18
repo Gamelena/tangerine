@@ -4,7 +4,7 @@ $modAux = $this->mode != 'clone' ? $this->mode : 'add';
 <script type="text/javascript">
     globalOpc = '<?=$this->mode ?>';
 </script>
-<form dojoType="dijit.form.Form" target="ifrm_process" id="<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>" class="tabForm" jsId="<?=$this->domPrefix?>form_<?=$modAux?>" name="<?=$this->domPrefix?>form_<?=$this->mode?>" encType="multipart/form-data"  action="<?=BASE_URL?>crud-request" method="post">
+<form data-dojo-type="dijit/form/Form" target="ifrm_process" id="<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>" class="tabForm" jsId="<?=$this->domPrefix?>form_<?=$modAux?>" name="<?=$this->domPrefix?>form_<?=$this->mode?>" encType="multipart/form-data"  action="<?=BASE_URL?>crud-request" method="post">
 <?php 
 $i = 0;
 $tableWrapperClass = '';
@@ -126,5 +126,5 @@ endif;
     }
     return true;
     </script>
-    <button dojoType="dijit.form.Button" id="<?=$this->domPrefix?>tabs_btn_save<?=$this->mode != 'clone' ? $this->mode : 'add'?><?=$this->dialogIndex?>" type="submit" />Guardar</button>
+    <button data-dojo-type="dijit/form/Button" id="<?=$this->domPrefix?>tabs_btn_save<?=$this->mode != 'clone' ? $this->mode : 'add'?><?=$this->dialogIndex?>" type="submit" />Guardar</button>
 </form>

@@ -1,7 +1,7 @@
 <?php 
 if (count($this->groups) > 0) {
 ?>
-<div dojoType="dijit.form.Form" class="formSearch" id="<?php echo $this->domPrefix?>formSearch" jsId="<?php echo $this->domPrefix?>formSearch" encType="multipart/form-data" action="" method="">
+<div data-dojo-type="dijit/form/Form" class="formSearch" id="<?php echo $this->domPrefix?>formSearch" jsId="<?php echo $this->domPrefix?>formSearch" encType="multipart/form-data" action="" method="">
     <div class="formSearchInputs">
 <?php 
     $i = 0;
@@ -36,7 +36,7 @@ if (count($this->groups) > 0) {
                }
 ?>
                 <div class="formSearchSelectorItem">
-                    <input dojoType="dijit.form.RadioButton" id="<?php echo $this->domPrefix?>searchFields[<?php echo $i?>][<?php echo $k?>]" name="switchFields[<?php echo $i?>]" <?php if ($k == 0) echo 'checked="checked"' ?> value="<?php echo $element->getAttribute('target') ?>" type="radio" onClick="dijit.byId('<?php echo $this->domPrefix . '_search_' . $i?>').set('name', this.value)" />
+                    <input data-dojo-type="dijit/form/RadioButton" id="<?php echo $this->domPrefix?>searchFields[<?php echo $i?>][<?php echo $k?>]" name="switchFields[<?php echo $i?>]" <?php if ($k == 0) echo 'checked="checked"' ?> value="<?php echo $element->getAttribute('target') ?>" type="radio" onClick="dijit.byId('<?php echo $this->domPrefix . '_search_' . $i?>').set('name', this.value)" />
                     <label for="<?php echo $element->getAttribute('target') ?>"><?php echo $eName ?></label>
                 </div>
 <?php 
@@ -57,7 +57,7 @@ if (count($this->groups) > 0) {
         <input type="hidden" name="model" value="<?php echo $this->model ?>" />
         <input type="hidden" name="format" value="json" />
         <input type="hidden" name="storeType" value="query" />
-        <button type="submit" class="submit" dojoType="dijit.form.Button" iconClass="dijitIconSearch" id="<?=$this->domPrefix?>btnBuscar">Buscar</button>
+        <button type="submit" class="submit" data-dojo-type="dijit/form/Button" iconClass="dijitIconSearch" id="<?=$this->domPrefix?>btnBuscar">Buscar</button>
     </div>
 
     <script type="dojo/method" event="onSubmit">

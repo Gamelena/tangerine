@@ -201,8 +201,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->p = $this->_component;
         $this->view->model = $this->_xml->getAttribute('target');
-        $this->view->dataDojoType = $this->_xml->getAttribute('serverPagination') === "true" ? 'dojox.data.QueryReadStore' : 'dojo.data.ItemFileReadStore';
-        $this->view->gridDojoType = $this->_xml->getAttribute('gridDojoType') ? $this->_xml->getAttribute('gridDojoType') : 'dojox.grid.EnhancedGrid';
+        $this->view->dataDojoType = $this->_xml->getAttribute('serverPagination') === "true" ? 'dojox/data/QueryReadStore' : 'dojo/data/ItemFileReadStore';
+        $this->view->gridDojoType = $this->_xml->getAttribute('gridDojoType') ? $this->_xml->getAttribute('gridDojoType') : 'dojox/grid/EnhancedGrid';
         $this->view->plugins = $this->_xml->getAttribute('plugins') ? $this->_xml->getAttribute('plugins') : "{pagination: {defaultPageSize:25, maxPageStep: 5 }}";
         $this->view->onRowClick = $this->_xml->getAttribute('onRowClick') ? "onRowClick:{$this->_xml->getAttribute('onRowClick')}," : "";
         $this->view->searchHideSubmit = $this->_xml->getAttribute('searchHideSubmit') === "true" ? true : false;
