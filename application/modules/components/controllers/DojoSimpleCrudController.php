@@ -108,6 +108,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->_model = new $className();
         
         $this->view->name = $this->_xml->getAttribute('name');
+        $this->view->menus = $this->_config->zwei->layout->menus;
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>" : '';
         if ($this->_xml->xpath("//forms")) $forms = $this->_xml->xpath("//forms");
         
@@ -172,6 +173,33 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         }
         
     }
+    
+    public function initKeys()
+    {
+        $className = $this->_xml->getAttribute('target');
+        $this->view->model = $className;
+        $this->_model = new $className();
+        $this->view->primary = implode(";", $this->_model->info('primary'));
+        
+        $this->view->name = $this->_xml->getAttribute('name');
+        $this->view->add = $this->_xml->getAttribute("add") && $this->_xml->getAttribute("add") == "true" && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
+        $this->view->edit = $this->_xml->getAttribute("edit") && $this->_xml->getAttribute("edit") == "true"  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
+        $this->view->clone = $this->_xml->getAttribute("clone") && $this->_xml->getAttribute("clone") == "true"  && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
+        $this->view->delete = $this->_xml->getAttribute("delete") && $this->_xml->getAttribute("delete") == "true" && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
+        $this->view->component = $this->_component;
+        
+        $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
+        $customFunctions = $this->_xml->xpath("//helpers/customFunction");
+        $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? $customFunctions : array();
+        $excel = $this->_xml->xpath("//helpers/excel");
+        $this->view->excel = $excel ? $excel : array();
+        $this->view->zweiExcelVersion = $this->_config->zwei->excel->version ? $this->_config->zwei->excel->version : 'csv';
+        
+        
+        //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
+        $this->view->ajax = $ajax === 'true' ? 'true' : 'false';
+        //$this->view->changePassword = $this->_xml->getAttribute("changePassword") && $this->_xml->getAttribute("changePassword") == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT');
+    }
 
     public function editAction()
     {
@@ -203,7 +231,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->model = $this->_xml->getAttribute('target');
         $this->view->dataDojoType = $this->_xml->getAttribute('serverPagination') === "true" ? 'dojox/data/QueryReadStore' : 'dojo/data/ItemFileReadStore';
         $this->view->gridDojoType = $this->_xml->getAttribute('gridDojoType') ? $this->_xml->getAttribute('gridDojoType') : 'dojox/grid/EnhancedGrid';
-        $this->view->plugins = $this->_xml->getAttribute('plugins') ? $this->_xml->getAttribute('plugins') : "{pagination: {defaultPageSize:25, maxPageStep: 5 }}";
+        $menus = in_array($this->_config->zwei->layout->menus, array('contextMenu', 'both')) ? "menus:{selectedRegionMenu: menu{$this->view->domPrefix}}," : '';
+        $this->view->plugins = $this->_xml->getAttribute('plugins') ? $this->_xml->getAttribute('plugins') : "{ $menus pagination: {defaultPageSize:25, maxPageStep: 5 }}";
         $this->view->onRowClick = $this->_xml->getAttribute('onRowClick') ? "onRowClick:{$this->_xml->getAttribute('onRowClick')}," : "";
         $this->view->searchHideSubmit = $this->_xml->getAttribute('searchHideSubmit') === "true" ? true : false;
         $this->view->elements = $this->_xml->getElements("@visible='true'");
@@ -259,29 +288,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function keypadAction()
     {
-        $className = $this->_xml->getAttribute('target');
-        $this->view->model = $className;
-        $this->_model = new $className();
-        $this->view->primary = implode(";", $this->_model->info('primary'));
-        
-        $this->view->name = $this->_xml->getAttribute('name');
-        $this->view->add = $this->_xml->getAttribute("add") && $this->_xml->getAttribute("add") == "true" && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
-        $this->view->edit = $this->_xml->getAttribute("edit") && $this->_xml->getAttribute("edit") == "true"  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
-        $this->view->clone = $this->_xml->getAttribute("clone") && $this->_xml->getAttribute("clone") == "true"  && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
-        $this->view->delete = $this->_xml->getAttribute("delete") && $this->_xml->getAttribute("delete") == "true" && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
-        $this->view->component = $this->_component;
-        
-        $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
-        $customFunctions = $this->_xml->xpath("//helpers/customFunction");
-        $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? $customFunctions : array();
-        $excel = $this->_xml->xpath("//helpers/excel");
-        $this->view->excel = $excel ? $excel : array();
-        $this->view->zweiExcelVersion = $this->_config->zwei->excel->version ? $this->_config->zwei->excel->version : 'csv';
-        
-        
-        //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
-        $this->view->ajax = $ajax === 'true' ? 'true' : 'false';
-        //$this->view->changePassword = $this->_xml->getAttribute("changePassword") && $this->_xml->getAttribute("changePassword") == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT');
+        $this->initKeys();
     }
 
     public function changePasswordAction()
@@ -292,9 +299,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function contextMenuAction()
     {
-        // action body
+        $this->initKeys();
     }
-
-
 }
 

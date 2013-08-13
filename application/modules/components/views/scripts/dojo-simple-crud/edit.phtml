@@ -108,7 +108,7 @@ endif;
                 console.debug(response);
                 if (response != null) {
                     <?=$this->onPostSubmit ?>
-                    if (response.todo == 'goToLogin') window.location.href = base_url + '/login';
+                    if (response.todo == 'goToLogin') window.location.href = base_url + 'admin/login';
                     else if (response.todo == 'cargarArbolMenu') admportal.loadMainMenu();
                     this.set("response", null);
                 }
