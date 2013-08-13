@@ -56,7 +56,7 @@ class CrudRequestController extends Zend_Controller_Action
                                'message'=>'Su sesión a expirado, por favor vuelva a ingresar.',
                                'todo'=>'goToLogin');
             $this->view->content = Zend_Json::encode($data);
-            $this->render('admin'); 
+            $this->render('index'); 
         } else {
             $this->_redirect('admin/login');
         }
