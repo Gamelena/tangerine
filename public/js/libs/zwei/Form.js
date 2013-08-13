@@ -130,7 +130,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             
             if (response.message != '' && response.message != null) {
                 self.utils.showMessage(response.message, response.type);
-                self.postSave();
+                if (response.state != 'AUTH_FAILED') self.postSave();
             } else if(response.state == 'UPDATE_OK') {
                 self.utils.showMessage('Datos Actualizados');
                 self.postSave();
@@ -213,11 +213,11 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 load: function(response){
                     if(response.message != "" && response.message != null){
                         self.utils.showMessage(response.message);
-                        self.postSave();
-                    }else if(response.state == 'DELETE_OK'){
+                        if (response.state != 'AUTH_FAILED') self.postSave();
+                    } else if(response.state == 'DELETE_OK') {
                         self.utils.showMessage('Se ha borrado correctamente.');
                         self.postSave();
-                    }else if(response.state == 'DELETE_FAIL'){
+                    } else if(response.state == 'DELETE_FAIL') {
                         self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
                     }
                     return response;
