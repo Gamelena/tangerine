@@ -53,7 +53,7 @@ class CrudRequestController extends Zend_Controller_Action
             ->initContext();
             $data = array( 'id'=>'0',
                                'state'=>'AUTH_FAILED',
-                               'message'=>'Su sesión a expirado, por favor vuelva a ingresar.',
+                               'message'=>'Su sesión ha expirado, por favor vuelva a ingresar.',
                                'todo'=>'goToLogin');
             $this->view->content = Zend_Json::encode($data);
             $this->render('index');
