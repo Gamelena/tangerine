@@ -145,26 +145,29 @@ dojo.declare("zwei.Admportal", null, {
         menuExpand.domNode.style.display='block';
         dijit.byId('borderContainer').resize();
     },
-    loadModuleTab: function(url, moduleId, moduleTitle, refresh) 
+    loadModuleTab: function(url, moduleId, moduleTitle, refreshOnShow) 
     {
+        if (typeof(refreshOnShow) == 'undefined') var refreshOnShow = false;
+        refreshOnShow = Boolean(parseInt(refreshOnShow));
+        
         var self = this;
         require(["dojox/layout/ContentPane"], function(ContentPane){
-            if (typeof(refresh) == 'undefined') refresh = true;
+            console.debug(refreshOnShow);
             if (!dojo.byId('mainTabModule'+moduleId)) {
                 var tab = tabContainer.addChild(
-                        new ContentPane({
-                            title:moduleTitle, 
-                            closable:true, 
-                            id: 'mainTabModule'+moduleId, 
-                            jsId: 'mainTabModule'+moduleId,
-                            parseOnLoad: true,
-                            executeScripts: true,
-                            scriptHasHooks: true,
-                            refreshOnShow: refresh,
-                            href: base_url + url,
-                            style: {background: 'transparent', top: '0px'},
-                            selected: true
-                        })
+                    new ContentPane({
+                        title:moduleTitle, 
+                        closable:true, 
+                        id: 'mainTabModule'+moduleId, 
+                        jsId: 'mainTabModule'+moduleId,
+                        parseOnLoad: true,
+                        executeScripts: true,
+                        scriptHasHooks: true,
+                        refreshOnShow: refreshOnShow,
+                        href: base_url + url,
+                        style: {background: 'transparent', top: '0px'},
+                        selected: true
+                    })
                 );
                 tabContainer.selectChild(dijit.byId('mainTabModule' + moduleId));
                 

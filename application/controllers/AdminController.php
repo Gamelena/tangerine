@@ -66,29 +66,32 @@ class AdminController extends Zend_Controller_Action
         
         
         $this->view->dojo()
-        ->setLocalPath ($config->resources->dojo->localPath)
+        ->setLocalPath (PROTO.$_SERVER['HTTP_HOST'].$this->baseDojoFolder.'/dojo/dojo.js')
         ->setDjConfig(
             array(
-                'parseOnLoad' => $config->resources->dojo->djConfig->parseOnLoad, 
-                'isDebug' => $config->resources->dojo->djConfig->isDebug, 
-                'locale' => $config->resources->dojo->djConfig->locale,
+                'parseOnLoad' => 'true', 
+                'isDebug' => 'false', 
+                'locale' => 'es',
                 'packages' => array(
-                     array('name' => 'dojo', 'location' => isset($config->resources->dojo->djConfig->packages->dojo) ? 
-                             $config->resources->dojo->djConfig->packages->dojo :
-                             $this->baseDojoFolder . '/dojo'),
-                     array('name' => 'dijit', 'location' => isset($config->resources->dojo->djConfig->packages->dijit) ? 
-                             $config->resources->dojo->djConfig->packages->dijit :
-                             $this->baseDojoFolder . '/dijit'),
-                     array('name' => 'dojox', 'location' => isset($config->resources->dojo->djConfig->packages->dojox) ? 
-                             $config->resources->dojo->djConfig->packages->dojox :
-                             $this->baseDojoFolder . '/dojox'),
-                     array('name' => 'zwei', 'location' => isset($config->resources->dojo->djConfig->packages->zwei) ? 
-                             $config->resources->dojo->djConfig->packages->zwei : 
-                             '/libs/zwei'),
+                     array('name' => 'dojo',
+                           'location' => 
+                               (isset($config->resources->dojo->djConfig->packages->dojo) ? 
+                               $config->resources->dojo->djConfig->packages->dojo : $this->baseDojoFolder . '/dojo')),
+                     array('name' => 'dijit',
+                           'location' => 
+                               (isset($config->resources->dojo->djConfig->packages->dijit) ? 
+                               $config->resources->dojo->djConfig->packages->dijit : $this->baseDojoFolder . '/dijit')),
+                     array('name' => 'dojox',
+                           'location' => 
+                               (isset($config->resources->dojo->djConfig->packages->dojox) ? 
+                               $config->resources->dojo->djConfig->packages->dojox : $this->baseDojoFolder . '/dojox')),
+                     array('name' => 'zwei',
+                           'location' => 
+                               (isset($config->resources->dojo->djConfig->packages->zwei) ?
+                               $config->resources->dojo->djConfig->packages->zwei : '/libs/zwei')),
                 )
             )
         );
-        
         
         $this->view->headStyle()->appendStyle('
             @import "'.$this->baseDojoFolder.'/dijit/themes/'.$this->_dojoTheme.'/'.$this->_dojoTheme.'.css";
@@ -124,13 +127,50 @@ class AdminController extends Zend_Controller_Action
         $this->view->bodyClass = $this->_dojoTheme;
         
         $this->view->dojo()
-        ->requireModule("dojox.grid.enhanced.plugins.Pagination")
-        ->requireModule("dijit.form.Form")
         ->requireModule("dojox.widget.Standby")
+        ->requireModule("dijit.layout.BorderContainer")
+        ->requireModule("dijit.form.Button")
+        ->requireModule("dijit.form.DropDownButton")
+        ->requireModule("dijit.Menu")
+        ->requireModule("dijit.MenuItem")
+        ->requireModule("dijit.dijit")
+        ->requireModule("dijit.Calendar")
+        ->requireModule("dojo.data.ItemFileWriteStore")
+        ->requireModule("dojo.date.locale")
+        ->requireModule("dijit.Tree")
+        ->requireModule("dojo.cookie")
+        ->requireModule("dojox.layout.ContentPane")
+        ->requireModule("dojox.layout.ExpandoPane")
+        ->requireModule("dijit.layout.TabContainer")
+        ->requireModule("dijit.Dialog")
+        ->requireModule("dijit.form.Form")
+        ->requireModule("dijit.form.TextBox")
+        ->requireModule("dijit.form.Textarea")
+        ->requireModule("dijit.form.SimpleTextarea")
+        ->requireModule("dijit.form.Button")
+        ->requireModule("dijit.form.DateTextBox")
+        ->requireModule("dijit.form.Select")
+        ->requireModule("dijit.form.FilteringSelect")
+        ->requireModule("dijit.form.TimeTextBox")
+        ->requireModule("dijit.form.ComboBox")
+        ->requireModule("dojox.grid.DataGrid")
+        ->requireModule("dojox.grid.EnhancedGrid")
+        ->requireModule("dojox.grid.enhanced.plugins.Pagination")
+        ->requireModule("dojox.form.CheckedMultiSelect")
+        ->requireModule("dojox.form.FileInput")
+        ->requireModule("dojox.form.Uploader")
+        ->requireModule("dojox.form.uploader.plugins.IFrame")
+        ->requireModule("dojox.encoding.digests.MD5")
+        ->requireModule("dojo.data.ItemFileWriteStore")
+        ->requireModule("dojo.data.ItemFileReadStore")
+        ->requireModule("dojox.data.QueryReadStore")
+        ->requireModule("dojo.date.locale")
+        ->requireModule("dojox.widget.DialogSimple")
+        ->requireModule("dojox.widget.Toaster")
         ->requireModule("zwei.form.ValidationTextarea")
         ->requireModule("zwei.Form")
         ->requireModule("zwei.Utils")
-        ->requireModule("zwei.Menu")
+        //->requireModule("zwei.Menu")
         ->requireModule("zwei.Admportal")
         ;
     

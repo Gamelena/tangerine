@@ -26,7 +26,7 @@ class CrudRequestController extends Zend_Controller_Action
      * Arreglo que será parte de la respuesta en json, Dojo data store, u otro formato a definir.
      * @var array
      */
-    private $_response_content=array();
+    private $_response_content = array();
     
     /**
      * Modelo sobre el cual se trabajará.
@@ -218,72 +218,72 @@ class CrudRequestController extends Zend_Controller_Action
                 
             } else {
                 //[TODO] validar permisos para listar
-            }
-
-            $oDbObject = new Zwei_Db_Object($this->_form);
-            $oSelect = $oDbObject->select();
-
-            if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) {
-                $adapter = $this->_model->getZwAdapter();
-
-                if (isset($adapter) && !empty($adapter)) $this->_model->setAdapter($adapter);
+                $oDbObject = new Zwei_Db_Object($this->_form);
+                $oSelect = $oDbObject->select();
                 
-                $data = $this->_model->fetchAll($oSelect);
-                $paginator = Zend_Paginator::factory($oSelect);
-                $numRows = $paginator->getTotalItemCount();
-            } else {
-                $data = $oDbObject->select();
-            }    
-            $i = 0;
-               
-            //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
-            if ($this->_model->overloadDataList($data)) {
-                $data = $this->_model->overloadDataList($data);
-                $numRows = count($data);
-            }    
-
-            //si ?format=excel exportamos el rowset a excel
-            if (@$this->_form->format == 'excel') {
-                $this->_helper->layout->disableLayout();
-                $this->_helper->viewRenderer->setNoRender();
+                if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) {
+                    $adapter = $this->_model->getZwAdapter();
                 
-                $table = new Zwei_Utils_Table();
+                    if (isset($adapter) && !empty($adapter)) $this->_model->setAdapter($adapter);
                 
-                if ($this->_form->excel_formatter != 'csv') {
-                    header('Content-type: application/vnd.ms-excel');
-                    header("Content-Disposition: attachment; filename={$this->_form->model}.xls");
-                    header("Pragma: no-cache");
-                    header("Expires: 0");
-                    
-                    if (isset($this->_form->p)) {
-                        $content = $table->rowsetToHtml($data, $this->_form->p);
-                    } else {
-                        $content = $table->rowsetToHtml($data);
-                    }
-                    echo $content;
+                    $data = $this->_model->fetchAll($oSelect);
+                    $paginator = Zend_Paginator::factory($oSelect);
+                    $numRows = $paginator->getTotalItemCount();
                 } else {
-                    header("Pragma: public");
-                    header("Expires: 0");
-                    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-                    header("Content-Type: application/force-download");
-                    header("Content-Type: application/octet-stream");
-                    header("Content-Type: application/download");
-                    header("Content-Disposition: attachment; filename={$this->_form->model}.csv");
-                    header('Content-Encoding: UTF-8');
-                    header('Content-type: text/csv; charset=UCS-2LE');
-                    
-                                    
-                    if (isset($this->_form->p)) {
-                        $content = $table->rowsetToCsv($data, $this->_form->p);
-                    } else {
-                        $content = $table->rowsetToCsv($data);
-                    }
-                    echo  chr(255) . chr(254) . mb_convert_encoding($content, 'UCS-2LE', 'UTF-8');
+                    $data = $oDbObject->select();
                 }
-
-                exit();
+                $i = 0;
+                 
+                //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
+                if ($this->_model->overloadDataList($data)) {
+                    $data = $this->_model->overloadDataList($data);
+                    $numRows = count($data);
+                }
                 
-            } else if (count($this->_response_content) > 0) {
+                //si ?format=excel exportamos el rowset a excel
+                if (@$this->_form->format == 'excel') {
+                    $this->_helper->layout->disableLayout();
+                    $this->_helper->viewRenderer->setNoRender();
+                
+                    $table = new Zwei_Utils_Table();
+                
+                    if ($this->_form->excel_formatter != 'csv') {
+                        header('Content-type: application/vnd.ms-excel');
+                        header("Content-Disposition: attachment; filename={$this->_form->model}.xls");
+                        header("Pragma: no-cache");
+                        header("Expires: 0");
+                
+                        if (isset($this->_form->p)) {
+                            $content = $table->rowsetToHtml($data, $this->_form->p);
+                        } else {
+                            $content = $table->rowsetToHtml($data);
+                        }
+                        echo $content;
+                    } else {
+                        header("Pragma: public");
+                        header("Expires: 0");
+                        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                        header("Content-Type: application/force-download");
+                        header("Content-Type: application/octet-stream");
+                        header("Content-Type: application/download");
+                        header("Content-Disposition: attachment; filename={$this->_form->model}.csv");
+                        header('Content-Encoding: UTF-8');
+                        header('Content-type: text/csv; charset=UCS-2LE');
+                
+                
+                        if (isset($this->_form->p)) {
+                            $content = $table->rowsetToCsv($data, $this->_form->p);
+                        } else {
+                            $content = $table->rowsetToCsv($data);
+                        }
+                        echo  chr(255) . chr(254) . mb_convert_encoding($content, 'UCS-2LE', 'UTF-8');
+                    }
+                
+                    exit();
+                }
+            }
+            
+            if (count($this->_response_content) > 0) {
                 $this->_response_content['message'] = $this->_model->getMessage();
                 $data = array( 'id' => '0',
                                'state' => $this->_response_content['state'],

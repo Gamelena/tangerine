@@ -5,9 +5,14 @@ if ($this->mainPane != 'dijitTabs') :
 <?php 
 endif;
 $requestForm = $_REQUEST;
-if ($this->ajax) {
-    $requestForm['loadPartial'] = 'true';
-}
+if ($this->ajax) $requestForm['loadPartial'] = 'true';
+?>
+<?php 
+if (isset($this->menus) && in_array($this->menus, array('contextMenu', 'both'))) :
+?>
+    <?=$this->action('context-menu', 'dojo-simple-crud', 'components', $_REQUEST)?>
+<?php 
+endif;
 ?>
 <?=$this->includeJs?>
 <div id="<?=$this->domPrefix?>contentTab" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false" class="contentWrapper" style="width:100%">
@@ -23,7 +28,6 @@ if ($this->ajax) {
     </div>
 <?php 
 if ($this->changePassword) : 
-    Debug::write($this->changePasswordParams);
 ?>
     <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="<?=$this->domPrefix?>dialog_editpass" jsId="<?=$this->domPrefix?>dialog_editpass" title="Cambiar Contrase&ntilde;a" <?=$this->styleDialog?> <?=$this->onloadDialog?> <?=$this->onshowDialog?> <?=$this->onhideDialog?>>
         <?=$this->action('change-password', 'dojo-simple-crud', 'components', $_REQUEST)?>
@@ -33,13 +37,9 @@ endif;
 ?>
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>contentBottom" class="contentBottom">
 <?php 
-if ($this->actionsOnContextMenu) :
+if (!isset($this->menus) || in_array($this->menus, array('keypad', 'both'))) :
 ?>
-        <?=$this->action('context-menu', 'dojo-simple-crud', 'components', $_REQUEST)?>
-<?php 
-else : 
-?>
-        <?=$this->action('keypad', 'dojo-simple-crud', 'components', $_REQUEST)?>
+    <?=$this->action('keypad', 'dojo-simple-crud', 'components', $_REQUEST)?>
 <?php 
 endif;
 ?>

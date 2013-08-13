@@ -22,7 +22,7 @@ class Elements_DojoxFormUploaderController extends Zend_Controller_Action
         $this->view->readonly = $r->getParam('readonly', '') === 'true' ? "readonly=\"readonly\"" : '';
         $this->view->disabled = $r->getParam('disabled', '') === 'true' ? "disabled=\"disabled\"" : '';
         $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
-        $this->view->url = $r->getParam('url') ? "url=\"{$r->getParam('url')}\"" : '';
+        $this->view->url = $r->getParam('url') ? "url=\"{$r->getParam('url')}\"" : 'url=""';
         $this->view->baseUrlPath = $r->getParam('url') ? $r->getParam('url') : BASE_URL . '/upfiles/';
         
         if (preg_match("/^\{BASE_URL\}(.*)$/", $r->getParam('url'), $matches)) {

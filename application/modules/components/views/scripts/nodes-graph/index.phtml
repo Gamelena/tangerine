@@ -1,7 +1,7 @@
-<script type="text/javascript" src="<?php echo BASE_URL?>js/nodosmensajes.js"></script>
+<script type="text/javascript" src="<?=BASE_URL?>js/nodosmensajes.js"></script>
 <script>
-    var campanaId = '<?php echo $this->idCampana?>';
-    var campanaGroups = [], storeNodes, storeLinks;
+    var pathsId = '<?=$this->idCampana?>';
+    var pathsGroups = [], storeNodes, storeLinks;
     dojo.require("dijit/MenuBar");
     dojo.require("dijit/PopupMenuBarItem");
 </script>
@@ -16,8 +16,8 @@
 @media print
 {
 body * { visibility: hidden; }
-    #<?php echo $this->domPrefix ?>gfx_holder * { visibility: visible; }
-    #<?php echo $this->domPrefix ?>gfx_holder { position: absolute; top: 0px; left: -130px; }
+    #<?=$this->domPrefix?>gfx_holder * { visibility: visible; }
+    #<?=$this->domPrefix?>gfx_holder { position: absolute; top: 0px; left: -130px; }
 }
 </style>
 <!-- Menu -->
@@ -25,10 +25,10 @@ body * { visibility: hidden; }
     <div data-dojo-type="dijit/PopupMenuBarItem">
         <span>Zoom</span>
         <div data-dojo-type="dijit/Menu" onclick="">
-            <div id="<?php echo $this->domPrefix ?>verticalSlider" data-dojo-type="dijit/form/VerticalSlider"
+            <div id="<?=$this->domPrefix?>verticalSlider" data-dojo-type="dijit/form/VerticalSlider"
                 value="1" minimum="0.2" maximum="1" 
                 intermediateChanges="true"
-                showButtons="true" style="height:200px;" name="verticalSlider" onchange="zoomCanvas(this.value, <?php echo $this->idCampana?>, '<?php echo $this->domPrefix ?>gfx_holder')">
+                showButtons="true" style="height:200px;" name="verticalSlider" onchange="zoomCanvas(this.value, <?=$this->idCampana?>, '<?=$this->domPrefix?>gfx_holder')">
                 <ol data-dojo-type="dijit/form/VerticalRuleLabels" container="leftDecoration"
                     style="width:1.5em;font-size:75%;color:gray;">
                     <li></li>
@@ -60,7 +60,7 @@ body * { visibility: hidden; }
                     action: 'add',
                     dijitDialog: dijit.byId('mensajes_xmldialog_add'), 
                     dijitForm: dijit.byId('mensajes_xmlform_add'),
-                    queryParams: 'idCampana=' + campanaId
+                    queryParams: 'idCampana=' + pathsId
                 }); 
                 form.showDialog();
                 ">
@@ -78,7 +78,7 @@ body * { visibility: hidden; }
                     action: 'add',
                     dijitDialog: dijit.byId('enlaces_xmldialog_add'), 
                     dijitForm: dijit.byId('enlaces_xmlform_add'),
-                    queryParams: 'group_id=' + campanaId
+                    queryParams: 'group_id=' + pathsId
                 }); 
                 form.showDialog();
                 ">
@@ -92,26 +92,26 @@ body * { visibility: hidden; }
 </div>
 <!-- /Menu -->
 <!-- Dialogos Formularios Mensajes -->
-<div id="<?php echo $this->domPrefix ?>gfx_holder" jsId="gfxHolder" style="width: 100%; height: 100%;"></div>
-<div dojoType="dijit.Dialog" id="<?php echo $this->domPrefix ?>dialog_add" jsId="<?php echo $this->domPrefix ?>dialog_add" title="Nuevo Nodo" onload="globalOpc='add';" >
+<div id="<?=$this->domPrefix?>gfx_holder" jsId="gfxHolder" style="width: 100%; height: 100%;"></div>
+<div dojoType="dijit.Dialog" id="<?=$this->domPrefix?>dialog_add" jsId="<?=$this->domPrefix?>dialog_add" title="Nuevo Nodo" onload="globalOpc='add';" >
 </div>
-<div dojoType="dijit.Dialog" id="<?php echo $this->domPrefix ?>dialog_edit" jsId="<?php echo $this->domPrefix ?>dialog_edit" refreshOnShow="true" title="Editar Nodo"  onload="globalOpc='edit';"  >
+<div dojoType="dijit.Dialog" id="<?=$this->domPrefix?>dialog_edit" jsId="<?=$this->domPrefix?>dialog_edit" refreshOnShow="true" title="Editar Nodo"  onload="globalOpc='edit';"  >
 </div>
 <!-- Dialogos Formularios Enlaces -->
-<div dojoType="dijit.Dialog" id="<?php echo $this->domPrefix2 ?>dialog_add" jsId="<?php echo $this->domPrefix2 ?>dialog_add" title="Nuevo Enlace" onload="globalOpc='add';" >
+<div dojoType="dijit.Dialog" id="<?=$this->domPrefix2?>dialog_add" jsId="<?=$this->domPrefix2?>dialog_add" title="Nuevo Enlace" onload="globalOpc='add';" >
 </div>
-<div dojoType="dijit.Dialog" id="<?php echo $this->domPrefix2 ?>dialog_edit" jsId="<?php echo $this->domPrefix2 ?>dialog_edit" refreshOnShow="true" title="Editar Nodo"  onload="globalOpc='edit';"  >
+<div dojoType="dijit.Dialog" id="<?=$this->domPrefix2?>dialog_edit" jsId="<?=$this->domPrefix2?>dialog_edit" refreshOnShow="true" title="Editar Nodo"  onload="globalOpc='edit';"  >
 </div>
 <div id="log" style="width:600px;height:300px;overflow: auto;"></div>
 <script>
 dojo.addOnLoad(function(){
-    initGfx('<?php echo $this->domPrefix?>');
-    campanaGroups[<?php echo $this->idCampana?>] = surface.createGroup();
+    initGfx('<?=$this->domPrefix?>');
+    pathsGroups[<?=$this->idCampana?>] = surface.createGroup();
     
     var response = {'more': {'data' : {'nombre' : ''}} };
     /*
     storeNodes = new dojo.data.ItemFileReadStore({
-        url: base_url + 'crud-request?model=MensajesModel&primary[idCampana]=<?php echo $this->idCampana?>&format=json&p=mensajes.xml'
+        url: base_url + 'crud-request?model=MensajesModel&primary[idCampana]=<?=$this->idCampana?>&format=json&p=mensajes.xml'
     });
     
     storeNodes.fetch({
@@ -121,7 +121,7 @@ dojo.addOnLoad(function(){
                 addNode(
                     response, 
                     storeNodes.getValues(i, "id")[0], 
-                    <?php echo $this->idCampana?>, 
+                    <?=$this->idCampana?>, 
                     storeNodes.getValues(i, "x")[0], 
                     storeNodes.getValues(i, "y")[0], 
                     true
@@ -134,27 +134,27 @@ dojo.addOnLoad(function(){
     });
     
     storeLinks = new dojo.data.ItemFileReadStore({
-        url: base_url + 'objects?model=tree_links&idCampana=<?php echo $this->idCampana?>&format=json'
+        url: base_url + 'objects?model=tree_links&idCampana=<?=$this->idCampana?>&format=json'
     });
     */
 <?php 
     foreach ($this->nodes as $v) :
 ?>
-    response.more.data.nombre = '<?php echo $v->nombre ?>';
-    addNode(response, <?php echo $this->idCampana?>, '<?php echo $v->id ?>', <?php echo $v->x?>, <?php echo $v->y?>, true);
+    response.more.data.nombre = '<?=$v->nombre?>';
+    addNode(response, <?=$this->idCampana?>, '<?=$v->id?>', <?=$v->x?>, <?=$v->y?>, true);
 <?php 
     endforeach;
 ?>
 <?php 
     foreach ($this->links as $v) :
 ?>
-    addLine(<?php echo $v->id?>, <?php echo $this->idCampana?>, <?php echo $v->from_id?>, '<?php echo $v->to_id ?>', true);
+    addLine(<?=$v->id?>, <?=$this->idCampana?>, <?=$v->from_id?>, '<?=$v->to_id?>', true);
 <?php 
     endforeach;
 ?>
     var timeout = setTimeout(function () {
         if (typeof(dojo.cookie("scale")) != 'undefined') {
-            dijit.byId("<?php echo $this->domPrefix ?>verticalSlider").set('value', parseFloat(dojo.cookie("scale")));
+            dijit.byId("<?=$this->domPrefix?>verticalSlider").set('value', parseFloat(dojo.cookie("scale")));
             clearTimeout(timeout);
         }
     }, 500);

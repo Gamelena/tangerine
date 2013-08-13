@@ -19,7 +19,6 @@ if ($this->add) :
 <?php 
 endif;
 ?>
-     
 <?php 
 if ($this->edit) :
 ?>
@@ -105,7 +104,7 @@ endif;
 foreach ($this->customFunctions as $i => $f) :
 ?>
     <div class="keyPadButton">
-        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['icon'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="
             admportal.execFunction('<?=$f['target']?>', '', '<?=$this->component?>', '<?=$this->primary?>', '<?=$this->domPrefix?>');">
         <?=$f['name'] ? $f['name'] : $f['target']?>
         </button>
@@ -135,12 +134,3 @@ foreach ($this->excel as $i => $f) :
 endforeach;
 ?>
 </div>
-<script>
-/*
-    dojo.require('dojo.on');
-    dojo.require('dojo.ready');
-    dojo.ready(function(){
-        dojo.on(dijit.byId('<?=$this->domPrefix?>dataGrid'), 'rowClick', function(e) {console.debug(e)} );
-    });
-*/
-</script>

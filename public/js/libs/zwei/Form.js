@@ -129,7 +129,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             var response = dojo.json.parse(rawResponse);
             
             if (response.message != '' && response.message != null) {
-                self.utils.showMessage(response.message);
+                self.utils.showMessage(response.message, response.type);
                 self.postSave();
             } else if(response.state == 'UPDATE_OK') {
                 self.utils.showMessage('Datos Actualizados');
@@ -138,14 +138,14 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 self.utils.showMessage('Datos Ingresados');
                 self.postSave();
             } else if(response.state == 'UPDATE_FAIL') {
-                self.utils.showMessage('Ha ocurrido un error, o no ha modificado datos');
+                self.utils.showMessage('Ha ocurrido un error, o no ha modificado datos', 'error');
             } else if(response.state == 'ADD_FAIL') {
-                self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde');
+                self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
             } else if(response.state == 'DELETE_OK') {
                 self.utils.showMessage('Se ha borrado correctamente.');
                 self.postSave();
             } else if(response.state == 'DELETE_FAIL') {
-                self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde');
+                self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
             }
             dojo.disconnect(listener);
             self.set("response", response);
@@ -218,12 +218,12 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                         self.utils.showMessage('Se ha borrado correctamente.');
                         self.postSave();
                     }else if(response.state == 'DELETE_FAIL'){
-                        self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde');
+                        self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
                     }
                     return response;
                 },
                 error:function(err){
-                    self.utils.showMessage('Error en comunicacion de datos. error: '+err);
+                    self.utils.showMessage('Error en comunicacion de datos. error: '+err, 'error');
                     return err;
                 }
             });

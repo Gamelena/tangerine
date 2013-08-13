@@ -74,7 +74,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
             Zwei_Utils_Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $model->fetchAll($select);
 
-            if ($r->getParam('defaultValue') || $r->getParam('defaultText')) {
+            if ($r->getParam('defaultValue') || $r->getParam('defaultValue') === '' || $r->getParam('defaultText') || $r->getParam('defaultText') === '') {
                 $options .= "<option value=\"{$r->getParam('defaultValue', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
             }
     
@@ -93,7 +93,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
             $options = "";
             $rows = explode(";", $r->getParam('list'));
             
-            if ($r->getParam('defaultValue') || $r->getParam('defaultText')) {
+            if ($r->getParam('defaultValue') || $r->getParam('defaultValue') === '' || $r->getParam('defaultText') || $r->getParam('defaultText') === '') {
                 $options .= "<option value=\"{$r->getParam('defaultValue', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
             }
             

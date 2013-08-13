@@ -4,19 +4,20 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocat
     <elements>
         <element name="ID" target="id" type="dijit-form-validation-text-box" visible="true" edit="false" add="false" />
         <element name="M&amp;oacute;dulo Padre" target="parent_id" type="dijit-form-filtering-select" table="AclModulesModel" tableMethod="selectDistinct" defaultValue="" defaultText="---Ninguno---" field="parent_title" visible="true" edit="true" add="true" clone="true"/>
-        <element name="M&amp;oacute;dulo Padre" target="parent.title" type="dijit-form-validation-text-box" visible="false" edit="false" add="false"/>                         
+        <element name="M&amp;oacute;dulo Padre" target="parent.title" type="dijit-form-validation-text-box" visible="false" edit="false" add="false"/>
         <element name="M&amp;oacute;dulo" target="title" type="dijit-form-validation-text-box" visible="true" edit="true" add="true" clone="true"/>
         <element name="M&amp;oacute;dulo" target="acl_modules.title" type="dijit-form-validation-text-box" visible="false" edit="false" add="false"/> 
         <element name="Componente" target="module" type="dijit-form-validation-text-box" visible="true" edit="true" add="true" clone="true"/>
         <element name="Componente" target="acl_modules.module" type="dijit-form-validation-text-box" visible="false" edit="false" add="false"/>
         <element name="En &amp;Aacute;rbol" target="tree" type="dijit-form-check-box" formatter="utils.formatYesNo" visible="true" edit="true" add="true" clone="true"/>
         <element name="Enlazable" target="linkable" type="dijit-form-check-box" formatter="utils.formatYesNo" visible="true" edit="true" add="true" clone="true"/>
-        <element name="Tipo" target="type" type="dijit-form-filtering-select" list="xml;xml_mvc;zend_module;legacy;iframe" visible="true" edit="true" add="true" clone="true"/>
+        <element name="Refrescar al cargar" target="refresh_on_load" type="dijit-form-check-box" formatter="utils.formatYesNo" visible="true" edit="true" add="true" clone="true"/>
+        <element name="Tipo" target="type" type="dijit-form-filtering-select" list="xml;xml_mvc;zend_module;legacy;iframe" defaultValue="" defaultText="---Ninguno---" visible="true" edit="true" add="true" clone="true"/>
         <element name="Aprobado" target="approved" type="dijit-form-check-box" formatter="utils.formatYesNo" visible="true" edit="true" add="true" clone="true"/>
         <element name="Root" target="root" type="dijit-form-check-box" formatter="utils.formatYesNo" visible="true" edit="true" add="true" clone="true"/>
         <element name="Orden" target="order" type="dijit-form-validation-text-box" regExp="[\d]+" invalidMessage="Solo números" visible="false" edit="true" add="true" clone="true"/>
         <element name="Acciones" target="actions" type="dojox-form-checked-multi-select" table="AclActionsModel" visible="false" edit="true" add="true" clone="true"/>
-        <element name="&amp;Iacute;cono" target="icons_id" field="image" type="dijit-form-filtering-select" formatter="utils.formatImage16" table="IconsModel" defaultValue="" defaultText="---Por defecto---" visible="true" edit="true" add="true" clone="true"/>
+        <element name="&amp;Iacute;cono" target="icons_id" field="image" type="dijit-form-filtering-select" formatter="utils.formatImage16" table="IconsModel" visible="true" edit="true" add="true" clone="true"/>
     </elements>
     <searchers>
         <group name="Buscar">
@@ -33,6 +34,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocat
                 <element target="module"/>
                 <element target="tree"/>
                 <element target="linkable"/>
+                <element target="refresh_on_load"/>
                 <element target="type"/>
                 <element target="root"/>
                 <element target="approved"/>
@@ -44,7 +46,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocat
             <tab name="&amp;Iacute;cono">
                 <element name=" " target="icons_id"/>
             </tab>
-            
         </tabs>
     </forms>
 </component>
