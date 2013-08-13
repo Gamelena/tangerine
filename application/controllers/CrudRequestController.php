@@ -18,7 +18,7 @@ class CrudRequestController extends Zend_Controller_Action
      */
     private $_user_info;
     /**
-     * Instancia de $_REQUEST, en este caso preferible a Zend_Controller_Request ya que este no permite manejar un <pre>$_REQUEST['action']</pre> al ser el índice palabra reservada.
+     * Instancia de $_REQUEST, en este caso preferible a Zend_Controller_Request ya que este no permite manejar un <pre>$_REQUEST['action']</pre> al ser el índice reservado.
      * @var Zwei_Utils_Form
      */
     private $_form;
