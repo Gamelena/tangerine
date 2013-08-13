@@ -187,10 +187,10 @@ dojo.declare("zwei.Utils", null, {
         // +   bugfixed by: Brett Zamir (http://brett-zamir.me)
         // +      input by: Nick Kolosov (http://sammy.ru)
         // +   bugfixed by: Fox
-        // -    depends on: get_html_translation_table
-        // *     example 1: html_entity_decode('Kevin &amp; van Zonneveld');
+        // -    depends on: this.getHtmlTranslationTable
+        // *     example 1: this.htmlEntityDecode('Kevin &amp; van Zonneveld');
         // *     returns 1: 'Kevin & van Zonneveld'
-        // *     example 2: html_entity_decode('&amp;lt;');
+        // *     example 2: this.htmlEntityDecode('&amp;lt;');
         // *     returns 2: '&lt;'
         var hash_map = {},
           symbol = '',
