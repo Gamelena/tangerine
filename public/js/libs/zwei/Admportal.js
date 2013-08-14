@@ -102,27 +102,27 @@ dojo.declare("zwei.Admportal", null, {
                 },
                 'arbolPrincipal');
             } else {
-                var Tree = dijit.byId('arbolPrincipal');
+                var tree = dijit.byId('arbolPrincipal');
                 
-                Tree.dndController.selectNone();
+                tree.dndController.selectNone();
     
-                Tree.model.store.clearOnClose = true;
-                Tree.model.store.close();
+                tree.model.store.clearOnClose = true;
+                tree.model.store.close();
     
                 // Completely delete every node from the dijit.Tree     
-                Tree._itemNodesMap = {};
-                Tree.rootNode.state = "UNCHECKED";
-                Tree.model.root.children = null;
+                tree._itemNodesMap = {};
+                tree.rootNode.state = "UNCHECKED";
+                tree.model.root.children = null;
     
                 // Destroy the widget
-                Tree.rootNode.destroyRecursive();
+                tree.rootNode.destroyRecursive();
     
                 // Recreate the model, (with the model again)
-                Tree.model.constructor(dijit.byId('arbolPrincipal').model)
+                tree.model.constructor(dijit.byId('arbolPrincipal').model)
     
                 // Rebuild the tree
-                Tree.postMixInProperties();
-                Tree._load();        
+                tree.postMixInProperties();
+                tree._load();        
             }
         });
     },
@@ -166,7 +166,13 @@ dojo.declare("zwei.Admportal", null, {
                         refreshOnShow: refreshOnShow,
                         href: base_url + url,
                         style: {background: 'transparent', top: '0px'},
-                        selected: true
+                        selected: true,
+                        onClose: function() {
+                            if (tabContainer.getChildren().length == 1) {
+                                self.minimizeMainPane();
+                            }
+                            return true;
+                        }
                     })
                 );
                 tabContainer.selectChild(dijit.byId('mainTabModule' + moduleId));
