@@ -1,7 +1,7 @@
 <?php 
-if (count($this->groups) > 0) {
+if (count($this->groups) > 0) :
 ?>
-<div data-dojo-type="dijit/form/Form" class="formSearch" id="<?php echo $this->domPrefix?>formSearch" jsId="<?php echo $this->domPrefix?>formSearch" encType="multipart/form-data" action="" method="">
+<div data-dojo-type="dijit/form/Form" class="formSearch" id="<?=$this->domPrefix?>formSearch" jsId="<?=$this->domPrefix?>formSearch" encType="multipart/form-data" action="" method="">
     <div class="formSearchInputs">
 <?php 
     $i = 0;
@@ -13,38 +13,52 @@ if (count($this->groups) > 0) {
 ?>
         <div class="formSearchItemContainer">
             <div class="item">
-                <label for="search" class="formSearchItemLabel"><?php echo $group->getAttribute('name') ?></label>
-                <?php echo $this->action('index', $group->getAttribute('type'), 'elements', $params); ?>
-                <input type="hidden" value="<?php echo $group->getAttribute('format') ?>" id="<?php echo $this->domPrefix . '_search_' . $i ?>_format" name="<?php echo $group->getAttribute('target') ?>_format" />
-                <input type="hidden" value="<?php echo $group->getAttribute('operator') ?>" id="<?php echo $this->domPrefix . '_search_' . $i ?>_operator" name="<?php echo $group->getAttribute('target') ?>_operator" />
-                <input type="hidden" value="<?php echo $group->getAttribute('sufix') ?>" id="<?php echo $this->domPrefix . '_search_' . $i ?>_sufix" name="<?php echo $group->getAttribute('target') ?>_sufix" />
-                <input type="hidden" value="<?php echo $group->getAttribute('prefix') ?>" id="<?php echo $this->domPrefix . '_search_' . $i ?>_prefix" name="<?php echo $group->getAttribute('target') ?>_prefix" />
+                <label for="search" class="formSearchItemLabel"><?=$group->getAttribute('name')?></label>
+                <?=$this->action('index', $group->getAttribute('type'), 'elements', $params);?>
+                <input type="hidden" value="<?=$group->getAttribute('format')?>" id="<?=$this->domPrefix . '_search_' . $i?>_format" name="<?=$group->getAttribute('target')?>_format" />
+                <input type="hidden" value="<?=$group->getAttribute('operator')?>" id="<?=$this->domPrefix . '_search_' . $i?>_operator" name="<?=$group->getAttribute('target')?>_operator" />
+                <input type="hidden" value="<?=$group->getAttribute('sufix')?>" id="<?=$this->domPrefix . '_search_' . $i?>_sufix" name="<?=$group->getAttribute('target')?>_sufix" />
+                <input type="hidden" value="<?=$group->getAttribute('prefix')?>" id="<?=$this->domPrefix . '_search_' . $i?>_prefix" name="<?=$group->getAttribute('target')?>_prefix" />
             </div>
 <?php 
        $k = 0;
        if (count($group->children()) > 1) :
+           
+           if ($group->getAttribute('operator') != 'between') :
 ?>
            <div class="formSearchSelectors">
 <?php
            
-           foreach ($group->children() as $element) :
-               if ($element->getAttribute('name')) {
-                  $eName = $element->getAttribute('name');
-               } else {
-                  $targets = $this->xml->getElements("@target='{$element->getAttribute('target')}'");
-                  $eName = $targets[0]->getAttribute('name');
-               }
+               foreach ($group->children() as $element) :
+                   if ($element->getAttribute('name')) {
+                      $eName = $element->getAttribute('name');
+                   } else {
+                      $targets = $this->xml->getElements("@target='{$element->getAttribute('target')}'");
+                      $eName = $targets[0]->getAttribute('name');
+                   }
 ?>
                 <div class="formSearchSelectorItem">
-                    <input data-dojo-type="dijit/form/RadioButton" id="<?php echo $this->domPrefix?>searchFields[<?php echo $i?>][<?php echo $k?>]" name="switchFields[<?php echo $i?>]" <?php if ($k == 0) echo 'checked="checked"' ?> value="<?php echo $element->getAttribute('target') ?>" type="radio" onClick="dijit.byId('<?php echo $this->domPrefix . '_search_' . $i?>').set('name', this.value)" />
-                    <label for="<?php echo $element->getAttribute('target') ?>"><?php echo $eName ?></label>
+                    <input data-dojo-type="dijit/form/RadioButton" id="<?=$this->domPrefix?>searchFields[<?=$i?>][<?=$k?>]" name="switchFields[<?=$i?>]" <?php if ($k == 0) echo 'checked="checked"' ?> value="<?=$element->getAttribute('target') ?>" type="radio" onClick="dijit.byId('<?=$this->domPrefix . '_search_' . $i?>').set('name', this.value)" />
+                    <label for="<?=$element->getAttribute('target')?>"><?=$eName?></label>
                 </div>
 <?php 
-            $k++;
-            endforeach;
+                $k++;
+                endforeach;
 ?>
             </div>
+<?php
+            else :
+                $j=0;
+                foreach ($group->children() as $element) :
+                    $j++;
+                    if ($j >= 2) :
+?>
+            <input type="hidden" value="<?=$element->getAttribute('sufix')?>" name="<?=$group->getAttribute('target')?>_sufix<?=$j?>" />
+            <input type="hidden" value="<?=$element->getAttribute('prefix')?>" name="<?=$group->getAttribute('target')?>_prefix<?=$j?>" />
 <?php 
+                    endif;
+                endforeach;
+            endif;
         endif;
 ?>
         </div>
@@ -54,7 +68,7 @@ if (count($this->groups) > 0) {
 ?>
     </div>
     <div class="formSearchSubmit">
-        <input type="hidden" name="model" value="<?php echo $this->model ?>" />
+        <input type="hidden" name="model" value="<?=$this->model ?>" />
         <input type="hidden" name="format" value="json" />
         <input type="hidden" name="storeType" value="query" />
         <button type="submit" class="submit" data-dojo-type="dijit/form/Button" iconClass="dijitIconSearch" id="<?=$this->domPrefix?>btnBuscar">Buscar</button>
@@ -63,7 +77,7 @@ if (count($this->groups) > 0) {
     <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
             try {
-                var form = new zwei.Form({dijitFormSearch: this, dijitDataGrid: dijit.byId('<?php echo $this->domPrefix ?>dataGrid')});
+                var form = new zwei.Form({dijitFormSearch: this, dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')});
                 form.loadData();
             } catch(e) {
                 alert(e.message)
@@ -77,5 +91,5 @@ if (count($this->groups) > 0) {
     </script>
 </div>
 <?php 
-}
+endif;
 ?>

@@ -5,9 +5,6 @@
  * Permite invocar métodos de Zwei_Utils_CustomFunctions() por URL.
  * Para ser invocado mediante el atributo "functions" de los components xml del admin.
  *
- * @example: <section type="table_dojo" functions="assign_request,excel_export" (...)>
- * este ejemplo pintará botones
- * que ejecuten $CustomFunctions->assignRequest(...) y $CustomFunctions->excelExport(...)
  *
  * @package Controllers
  * @version $Id:$
@@ -19,18 +16,22 @@ class FunctionsController extends Zend_Controller_Action
     public function init()
     {
         $this->_helper->layout()->disableLayout();
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
+        if(!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+            echo "<script>if (window.parent != undefined) window.parent.location.href='".BASE_URL."admin/login'
+              else window.location.href='".BASE_URL."admin/login';</script>"; 
+            //$this->_redirect('admin/login');
+        }
         $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
     }
 
     public function indexAction(){
         $CustomFunctions = new Zwei_Utils_CustomFunctions();
-        $Form = new Zwei_Utils_Form();
-        $string_params = $Form->params;
-        $method = Zwei_Utils_String::toFunctionWord($Form->method);
+        $form = new Zwei_Utils_Form();
+        $string_params = $form->params;
+        $method = Zwei_Utils_String::toFunctionWord($form->method);
          
-        if (isset($Form->id)) {
-            $CustomFunctions->setId($Form->id);
+        if (isset($form->id)) {
+            $CustomFunctions->setId($form->id);
         }
          
         $params = explode(",", $string_params);

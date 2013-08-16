@@ -85,6 +85,8 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][operator]=' + encodeURIComponent(dojo.byId(entry.id+'_operator').value);
                     searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
                     searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][prefix]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix').value);
+                    if (dojo.byId(entry.id+'_sufix2')) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix2').value);
+                    if (dojo.byId(entry.id+'_prefix2')) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][prefix]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix2').value);
                 }
             });
         }

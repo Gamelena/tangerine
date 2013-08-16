@@ -131,16 +131,42 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
         if ($this->existsChildren('searchers')) {
             if ($this->xpath('//component/searchers/group'.$xpath)) {
                 for ($i = 0; $i < count($this->searchers->group); $i++) {
-                    if (!$this->searchers->group[$i]->getAttribute('type')) 
-                        $this->searchers->group[$i]->addAttribute('type', 'dijit-form-validation-text-box');
+                    //Seteo de target, si no existe en el grupo se busca en el primer elemento hijo
+                    $target = $this->searchers->group[$i]->getAttribute('target');
+                    if (!$target) {
+                        $target = $this->searchers->group[$i]->element->getAttribute('target');
+                        $this->searchers->group[$i]->addAttribute('target', $target);
+                    }
                     
-                    if (!$this->searchers->group[$i]->getAttribute('target'))
-                        $this->searchers->group[$i]->addAttribute('target', $this->searchers->group[$i]->element->getAttribute('target'));
+                    //Seteo de DojoType, si no existe en el grupo se busca en el primer elemento hijo, si no existe en este se busca en nodo /elements
+                    if (!$this->searchers->group[$i]->getAttribute('type')) {
+                        if ($this->searchers->group[$i]->element->getAttribute('type')) {
+                            $this->searchers->group[$i]->addAttribute('type', $this->searchers->group[$i]->element->getAttribute('type'));
+                        } else if ($type = $this->xpath("//component/elements/element[@target='$target']/@type")) {
+                            $this->searchers->group[$i]->addAttribute('type', $type[0]);
+                        } else {
+                            $this->searchers->group[$i]->addAttribute('type', 'dijit-form-validation-text-box');
+                        }
+                    }
+                    
+                    //Se intenta obtener 'sufix' y 'prefix' desde primer elemento hijo si no está declarado en grupo
+                    if (!$this->searchers->group[$i]->getAttribute('prefix')) {
+                        if ($prefix = $this->searchers->group[$i]->element->getAttribute('prefix')) {
+                            $this->searchers->group[$i]->addAttribute('prefix', $prefix);
+                        }
+                    }
+                    
+                    if (!$this->searchers->group[$i]->getAttribute('sufix')) {
+                        if ($sufix = $this->searchers->group[$i]->element->getAttribute('sufix')) {
+                            $this->searchers->group[$i]->addAttribute('sufix', $sufix);
+                        }
+                    }
                     
                     $elements[] = $this->searchers->group[$i];
                 }
             }
             
+            //Se terminan de heredar atributos de /elements
             if ($this->xpath('//component/searchers/element'.$xpath)) {
                 for ($i = 0; $i <  count($this->searchers->element); $i++) {
                     if ($inherits) $this->inheritAttributes($this->searchers->element[$i]);
