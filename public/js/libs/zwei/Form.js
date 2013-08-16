@@ -83,10 +83,10 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     }
                     searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][format]=' + encodeURIComponent(dojo.byId(entry.id+'_format').value);
                     searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][operator]=' + encodeURIComponent(dojo.byId(entry.id+'_operator').value);
-                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
-                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][prefix]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix').value);
-                    if (dojo.byId(entry.id+'_sufix2')) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix2').value);
-                    if (dojo.byId(entry.id+'_prefix2')) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][prefix]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix2').value);
+                    if (dojo.byId(entry.id+'_sufix') != undefined) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
+                    if (dojo.byId(entry.id+'_prefix') != undefined) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][prefix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix').value);
+                    if (dojo.byId(entry.id+'_sufix2') != undefined) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix2').value);
+                    if (dojo.byId(entry.id+'_prefix2') != undefined) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][prefix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix2').value);
                 }
             });
         }

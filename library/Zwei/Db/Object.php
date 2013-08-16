@@ -74,6 +74,7 @@ class Zwei_Db_Object
             $allowedOperators = array('like', 'between', '=', '!=', '<>', '<', '>', '<=', '>=');
 
             foreach ($search as $i => $s) {
+                Debug::write($s);
                 $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
                 $op = 'like';//Operador por defecto
                 $sufix = '%';//Sufijo por defecto
@@ -107,6 +108,7 @@ class Zwei_Db_Object
                      *     <element target="fecha" sufix=" 23:59:59"/>
                      * </group>
                      */
+                    Debug::write($op);
                     if ($op == 'between') {
                         $sufix0 = isset($s['sufix'][0]) ? $s['sufix'][0] : '';
                         $prefix0 = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
