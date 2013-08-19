@@ -72,9 +72,8 @@ class Zwei_Db_Object
         if (isset($this->_form->search) && !$oModel->isFiltered()) {
             $search = $this->_form->search;
             $allowedOperators = array('like', 'between', '=', '!=', '<>', '<', '>', '<=', '>=');
-
+            $sufix = array();
             foreach ($search as $i => $s) {
-                Debug::write($s);
                 $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
                 $op = 'like';//Operador por defecto
                 $sufix = '%';//Sufijo por defecto
@@ -85,12 +84,12 @@ class Zwei_Db_Object
                     if (!empty($s['operator'])) {
                         if (in_array($s['operator'], $allowedOperators)) {
                             $op = $s['operator'];
-                            $sufix = $s['sufix'];
-                            $prefix = $s['prefix'];
+                            $sufix = isset($s['sufix'][0]) ? $s['sufix'][0] : '';
+                            $prefix = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
                         }
                     } else {
-                        if (!empty($s['sufix'])) $sufix = $s['sufix'];
-                        if (!empty($s['prefix'])) $sufix = $s['prefix'];
+                        if (isset($s['sufix'][0])) $sufix = $s['sufix'][0];
+                        if (isset($s['prefix'][0])) $sufix = $s['prefix'][0];
                     }
                     
                     
@@ -108,7 +107,6 @@ class Zwei_Db_Object
                      *     <element target="fecha" sufix=" 23:59:59"/>
                      * </group>
                      */
-                    Debug::write($op);
                     if ($op == 'between') {
                         $sufix0 = isset($s['sufix'][0]) ? $s['sufix'][0] : '';
                         $prefix0 = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
