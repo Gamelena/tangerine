@@ -17,8 +17,19 @@ if (count($this->groups) > 0) :
                 <?=$this->action('index', $group->getAttribute('type'), 'elements', $params);?>
                 <input type="hidden" value="<?=$group->getAttribute('format')?>" id="<?=$this->domPrefix . '_search_' . $i?>_format" name="<?=$group->getAttribute('target')?>_format" />
                 <input type="hidden" value="<?=$group->getAttribute('operator')?>" id="<?=$this->domPrefix . '_search_' . $i?>_operator" name="<?=$group->getAttribute('target')?>_operator" />
+<?php 
+    if ($group->getAttribute('sufix')) :
+?>
                 <input type="hidden" value="<?=$group->getAttribute('sufix')?>" id="<?=$this->domPrefix . '_search_' . $i?>_sufix" name="<?=$group->getAttribute('target')?>_sufix" />
+<?php 
+
+    endif;
+    if ($group->getAttribute('prefix')) :
+?>
                 <input type="hidden" value="<?=$group->getAttribute('prefix')?>" id="<?=$this->domPrefix . '_search_' . $i?>_prefix" name="<?=$group->getAttribute('target')?>_prefix" />
+<?php 
+    endif;
+?>
             </div>
 <?php 
        $k = 0;
@@ -53,8 +64,8 @@ if (count($this->groups) > 0) :
                     $j++;
                     if ($j >= 2) :
 ?>
-            <input type="hidden" value="<?=$element->getAttribute('sufix')?>" name="<?=$group->getAttribute('target')?>_sufix<?=$j?>" />
-            <input type="hidden" value="<?=$element->getAttribute('prefix')?>" name="<?=$group->getAttribute('target')?>_prefix<?=$j?>" />
+            <input type="hidden" id="<?=$this->domPrefix . '_search_' . $i?>_sufix<?=$j?>" value="<?=$element->getAttribute('sufix')?>" name="<?=$group->getAttribute('target')?>_sufix" />
+            <input type="hidden" id="<?=$this->domPrefix . '_search_' . $i?>_prefix<?=$j?>" value="<?=$element->getAttribute('prefix')?>" name="<?=$group->getAttribute('target')?>_prefix" />
 <?php 
                     endif;
                 endforeach;
