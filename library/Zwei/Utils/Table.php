@@ -150,7 +150,6 @@ class Zwei_Utils_Table
                 $out .= $this->showContent($rowset, $i, false);
             }
         }
-        Debug::write($out);
         return $out;
     }
     
