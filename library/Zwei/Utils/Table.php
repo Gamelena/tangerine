@@ -79,7 +79,7 @@ class Zwei_Utils_Table
         {
             $value = html_entity_decode($value);
             $i++;
-            if(!empty($this->_name[$target]) || !isset($this->_xml)){    
+            if (!empty($this->_name[$target]) || !isset($this->_xml)) {
                 if ($html) {
                     $out .= "<td>$value</td>";
                 } else {

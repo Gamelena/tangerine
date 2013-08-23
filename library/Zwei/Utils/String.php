@@ -129,6 +129,22 @@ class Zwei_Utils_String {
         return $text;
     }
     
+    /**
+     * Elimina caracteres no texto de un string
+     * @param string $text
+     * @return string
+     */
+    static public function textify($text)
+    {
+        return preg_replace('/[^(\x20-\x7F)]*/','', $text);
+    }
+    
+    
+    /**
+     * 
+     * @param mixed $input
+     * @return string
+     */
     function decodeAsciiHex($input)
     {
         $output = "";
