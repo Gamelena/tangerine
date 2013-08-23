@@ -17,7 +17,7 @@ class Zwei_Utils_Table
      */
     private $_xml;
     /**
-     * @var Zend_Db_Rowset
+     * @var Zend_Db_Rowset|array
      */
     private $_rowset=array();
     /**
@@ -77,12 +77,13 @@ class Zwei_Utils_Table
         $counter = is_a($rowset, 'Zend_Db_Table_Rowset') ? count($rowset[$count]->toArray()) : count($rowset[$count]);
         foreach ($rowset[$count] as $target => $value) 
         {
+            $value = html_entity_decode($value);
             $i++;
             if(!empty($this->_name[$target]) || !isset($this->_xml)){    
                 if ($html) {
                     $out .= "<td>$value</td>";
                 } else {
-                    $out .= stristr(",", $value) || stristr('"', $value) ? '"' . str_replace('"', "", $value) . '"' : $value;
+                    $out .= stristr($separator, $value) || stristr('"', $value) ? '"' . str_replace('"', "", $value) . '"' : $value;
                 }
             }
             if (!$html && $i < $counter) $out .= $separator;
