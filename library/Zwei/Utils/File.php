@@ -28,7 +28,8 @@ class Zwei_Utils_File
      * @param $folder string - carpeta
      * @return boolean
      */
-    public function isNotEmptyFolder($folder) { 
+    public function isNotEmptyFolder($folder)
+    { 
         if (! is_dir($folder)) 
             return false; // not a dir 
     
@@ -39,6 +40,22 @@ class Zwei_Utils_File
         } 
     } 
     
+    public static function getEncoding($file) {
+        return mb_detect_encoding(file_get_contents($file));
+    }
+    
+    /**
+     * @return string 
+     */
+    public function getSeparator($file, $lines = 5)
+    {
+        
+        return (string) $char;
+    }
+    
+    /**
+     * 
+     */
     public function getResponseFromService($url, $params='', $username=false, $password=false, $log=false, $typeOfResponse=false)
     {
         
