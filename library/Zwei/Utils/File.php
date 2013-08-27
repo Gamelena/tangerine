@@ -5,8 +5,10 @@
  * @category Zwei
  *
  */
+
 class Zwei_Utils_File
 {
+
     /**
      * 
      * @param string - ruta 
@@ -40,17 +42,67 @@ class Zwei_Utils_File
         } 
     } 
     
-    public static function getEncoding($file) {
-        return mb_detect_encoding(file_get_contents($file));
+    public static function getEncoding($filename) {
+        return mb_detect_encoding(file_get_contents($filename));
     }
     
     /**
+     * 
+     * @param string $filename
+     * @param int $lines
      * @return string 
      */
-    public function getSeparator($file, $lines = 5)
+    public function getSeparator($filename, $linesToReview = 5)
     {
+        $handle = fopen($filename, 'r');
+        $tabs = array();
+        $commas = array();
+        $semicolons = array();
+        $separator = ',';
         
-        return (string) $char;
+        $i = 0;
+        while ($line = fgets($handle)) {
+            $tabs[] = count(explode("\t", $line));
+            $semicolons[] = count(explode(";", $line));
+            $i++;
+            if ($i >= $linesToReview) break;
+        }
+        
+        if ($tabs[0] > 1) {
+            $i = 0;
+            foreach ($tabs as $v) {
+                if ($i == 0) {
+                    $char = $v;
+                } else {
+                    if ($v != $char) {
+                        break;
+                    } else {
+                        $char = $v;
+                        $separator = "\t";
+                    }
+                }
+                $i++;
+            }
+        }
+        
+        if ($semicolons[0] > 1) {
+            $i = 0;
+            foreach ($semicolons as $v) {
+                if ($i == 0) {
+                    $char = $v;
+                } else {
+                    if ($v != $char) {
+                        break;
+                    } else {
+                        $char = $v;
+                        $separator = ";";
+                    }
+                }
+                $i++;
+            }   
+        }
+        
+        return $separator;
     }
     
     /**
