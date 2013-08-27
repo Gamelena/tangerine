@@ -222,7 +222,8 @@ class Zwei_Admin_Acl extends Zend_Acl
         ->from(self::$_tb_modules)
         ->from(self::$_tb_roles_modules_actions)
         ->from(self::$_tb_actions, array('permission'=>'id'))
-        ->where(self::$_tb_roles.".id = ".self::$_tb_roles_modules_actions.".".self::$_tb_roles."_id");
+        ->where(self::$_tb_roles.".id = ".self::$_tb_permissions.".".self::$_tb_roles."_id")
+        ->where(self::$_tb_modules.".id = ".self::$_tb_permissions.".".self::$_tb_modules."_id");
         
         //Zwei_Utils_Debug::write($select->__toString());
 
