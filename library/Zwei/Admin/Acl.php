@@ -209,6 +209,14 @@ class Zwei_Admin_Acl extends Zend_Acl
     }
 
     /**
+     * [TODO] no se está sacando todo el provecho a Zend_Acl 
+     * Acá debe inicializarse 
+     * 
+     * self::$_acl->allow($value['role_name'], $value['module'], $value['permission'])
+     * con la query correspondiente
+     * y omitir la query manual en isAllowed
+     * 
+     * 
      * Añade las reglas "allow" al usuario en sesión.
      * 
      * @return void
@@ -217,20 +225,12 @@ class Zwei_Admin_Acl extends Zend_Acl
     {
         self::initResources();
 
-        $select = self::$_db->select()
-        ->from(self::$_tb_roles)
-        ->from(self::$_tb_modules)
-        ->from(self::$_tb_roles_modules_actions)
-        ->from(self::$_tb_actions, array('permission'=>'id'))
-        ->where(self::$_tb_roles.".id = ".self::$_tb_roles_modules_actions.".".self::$_tb_roles."_id");
-        
-        //Zwei_Utils_Debug::write($select->__toString());
 
-        $acl = self::$_db->fetchAll( $select );
-
+        /*
         foreach ($acl as $key=>$value) {
-            self::$_acl->allow($value['role_name'], $value['module'], $value['permission']);
+            //self::$_acl->allow($value['role_name'], $value['module'], $value['permission']);
         }
+        */
     }
 
     /**
