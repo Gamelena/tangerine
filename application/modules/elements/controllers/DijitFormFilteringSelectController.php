@@ -43,7 +43,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? "promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         
-        if ($r->getParam('value') !== false) {
+        if ($r->getParam('data') && $r->getParam('value') !== false) {
             $this->view->value = "value=\"{$r->getParam('value')}\" ";
         } else {
             $this->view->value =  $r->getParam('defaultValue') && !$r->getParam('defaultText') ? "value=\"{$r->getParam('defaultValue')}\" " : '';
