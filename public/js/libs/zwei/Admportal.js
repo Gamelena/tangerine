@@ -152,7 +152,6 @@ dojo.declare("zwei.Admportal", null, {
         
         var self = this;
         require(["dojox/layout/ContentPane"], function(ContentPane){
-            console.debug(refreshOnShow);
             if (!dojo.byId('mainTabModule'+moduleId)) {
                 var tab = tabContainer.addChild(
                     new ContentPane({
@@ -180,9 +179,11 @@ dojo.declare("zwei.Admportal", null, {
                 dojo.connect(dojo.byId('tabContainer_tablist_mainTabModule' + moduleId), 'dblclick', function(){self.switchMainPane();});
                 dojo.byId('tabContainer_tablist_mainTabModule' + moduleId).style.cursor = 'pointer';
             } else {
-                console.debug('ya esta abierto mainTabModule ' + moduleId);
-                //dijit.byId('mainTabModule'+moduleId).set('selected', true);
-                tabContainer.selectChild(dijit.byId('mainTabModule' + moduleId));
+                if (dijit.byId('mainTabModule' + moduleId).get('selected', true)) {
+                    dijit.byId('mainTabModule' + moduleId).refresh();
+                } else {
+                    tabContainer.selectChild(dijit.byId('mainTabModule' + moduleId));
+                }
             }
         });
     },
