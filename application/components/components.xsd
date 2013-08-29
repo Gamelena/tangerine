@@ -153,6 +153,7 @@
         <xsd:attribute name="invalidMessage"/>
         <xsd:attribute name="promptMessage"/>
         <xsd:attribute name="list"/>
+        <xsd:attribute name="data"/>
         <xsd:attribute name="formatter"/>
         <xsd:attribute name="maxlength"/>
         <xsd:attribute name="width"/>
