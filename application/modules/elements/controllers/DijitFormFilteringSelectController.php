@@ -13,7 +13,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
     public function indexAction()
     {
         $r = $this->getRequest();
-        Debug::write($r);
+        
         $this->view->i =  $r->getParam('i');
         $this->view->domId =  $r->getParam('domId');
         $this->view->target =  $r->getParam('target');
