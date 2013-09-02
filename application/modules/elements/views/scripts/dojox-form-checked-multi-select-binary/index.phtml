@@ -1,4 +1,4 @@
-<select data-dojo-type="dojox/form/CheckedMultiSelect" onload="console.debug('onload')" multiple="true" id="helper<?=$this->domId.$this->i?>" name="helper<?=$this->target?>[]" <?=$this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur.$this->value ?>>
+<select data-dojo-type="dojox/form/CheckedMultiSelect" onload="console.debug('onload')" multiple="true" id="helper<?=$this->domId.$this->i?>" name="helper<?=$this->target?>[]" <?=$this->readonly.$this->disabled.$this->required.$this->invalid_message.$this->prompt_message.$this->onblur ?>>
     <script type="dojo/connect" data-dojo-event="onChange" data-dojo-args="e">
         dojo.byId('<?=$this->domId.$this->i?>').value = '0';
         dojo.forEach(this.options, function(e) {
