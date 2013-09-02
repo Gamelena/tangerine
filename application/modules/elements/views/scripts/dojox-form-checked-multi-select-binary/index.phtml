@@ -1,0 +1,24 @@
+<select data-dojo-type="dojox/form/CheckedMultiSelect" onload="console.debug('onload')" multiple="true" id="helper<?=$this->domId.$this->i?>" name="helper<?=$this->target?>[]" <?=$this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur.$this->value ?>>
+    <script type="dojo/connect" data-dojo-event="onChange" data-dojo-args="e">
+        dojo.byId('<?=$this->domId.$this->i?>').value = '0';
+        dojo.forEach(this.options, function(e) {
+            if (e.selected) {
+                var value = parseInt(dojo.byId('<?=$this->domId.$this->i?>').value) + parseInt(e.value);
+                dojo.byId('<?=$this->domId.$this->i?>').value = value;
+            }
+        });
+    </script>
+    <?=$this->options ?>
+</select>
+<input type="hidden" value="<?=$this->value?>" id="<?=$this->domId.$this->i?>" name="<?=$this->target?>"/>
+<?php 
+if (!empty($this->style)) :
+?>
+<style type="text/css">
+#widget_helper<?=$this->domId.$this->i?> .dojoxCheckedMultiSelectWrapper {
+    <?=$this->style?>
+}
+</style>
+<?php 
+endif;
+?>
