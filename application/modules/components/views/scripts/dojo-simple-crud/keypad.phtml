@@ -10,7 +10,8 @@ if ($this->add) :
                         action: 'add',
                         dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
                         dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
-                        dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+                        dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                        queryParams: '<?=$this->queryParams?>'
                     }); 
                     form.showDialog()">
         Agregar <?=$this->name ?>
