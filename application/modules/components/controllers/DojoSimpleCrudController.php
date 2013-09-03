@@ -121,7 +121,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         if ($this->view->changePassword) {
             $this->view->targetPass = 'password';
             $this->view->namePass = 'Contrase&ntilde;a';
-            $this->view->primary = $this->_model->getPrimary();
+            $this->view->primary = $this->_model->info(Zend_Db_Table::PRIMARY);
         }
     }
 
@@ -198,6 +198,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? 'true' : 'false';
+        $this->view->queryParams = http_build_query($this->getRequest()->getParams());
         //$this->view->changePassword = $this->_xml->getAttribute("changePassword") && $this->_xml->getAttribute("changePassword") == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT');
     }
 
@@ -207,6 +208,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->changePassword = $this->_xml->xpath("//forms/changePassword") ? true : false;
         if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? true : false;
+        $this->view->queryParams = http_build_query($this->getRequest()->getParams());
         $this->initForm('edit');
     }
 
@@ -282,7 +284,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             if (!$elements[$i]->getAttribute('width')) {
                 $elements[$i]->addAttribute('width', $widthCol);
             }
-        } 
+        }
+        
+        $this->view->queryParams = http_build_query($this->getRequest()->getParams());
         
     }
 
