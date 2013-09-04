@@ -5,6 +5,7 @@ if (count($this->groups) > 0) :
     <div class="formSearchInputs">
 <?php 
     $i = 0;
+    $hideSubmit = true;
     foreach ($this->groups as $group) :
         $params = (array) $group->attributes();
         $params = $params['@attributes'];
@@ -15,6 +16,7 @@ if (count($this->groups) > 0) :
             $params['value'] = $this->searchRequest[$group->getAttribute('target')]['value'];
         
         $hidden = $params['type'] == 'hidden' ? 'style="display:none;"' : '';
+        if ($hidden === '') $hideSubmit = false;
 ?>
         <div class="formSearchItemContainer" <?=$hidden?>>
             <div class="item">
@@ -81,6 +83,14 @@ if (count($this->groups) > 0) :
 <?php 
         $i++;
     endforeach;
+    $hidden = $hideSubmit ? 'style="display:none;"' : '';
+    if ($hidden) :
+?>
+    <script type="text/javascript">
+        dojo.byId('<?=$this->domPrefix?>formSearch').style.display='none';
+    </script>
+<?php
+    endif; 
 ?>
     </div>
     <div class="formSearchSubmit">
