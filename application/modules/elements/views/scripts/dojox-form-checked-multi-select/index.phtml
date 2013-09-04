@@ -1,12 +1,12 @@
-<select data-dojo-type="dojox/form/CheckedMultiSelect" multiple="true" id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>[]" <?php echo $this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur.$this->value ?>>
-    <?php echo $this->options ?>
+<select data-dojo-type="dojox/form/CheckedMultiSelect" multiple="true" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" <?=$this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur.$this->value ?>>
+    <?=$this->options ?>
 </select>
 <?php 
 if (!empty($this->style)) :
 ?>
 <style type="text/css">
-#widget_<?php echo $this->domId . $this->i?> .dojoxCheckedMultiSelectWrapper {
-    <?php echo $this->style?>
+#widget_<?=$this->domId . $this->i?> .dojoxCheckedMultiSelectWrapper {
+    <?=$this->style?>
 }
 </style>
 <?php 

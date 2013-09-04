@@ -8,10 +8,15 @@ if (count($this->groups) > 0) :
     foreach ($this->groups as $group) :
         $params = (array) $group->attributes();
         $params = $params['@attributes'];
-        $params['domId'] =  $this->domPrefix . '_search_';
+        $params['domId'] =  $this->domPrefix.'_search_';
         $params['i'] = $i;
+        
+        if (isset($this->searchRequest[$group->getAttribute('target')]))
+            $params['value'] = $this->searchRequest[$group->getAttribute('target')]['value'];
+        
+        $hidden = $params['type'] == 'hidden' ? 'style="display:none;"' : '';
 ?>
-        <div class="formSearchItemContainer">
+        <div class="formSearchItemContainer" <?=$hidden?>>
             <div class="item">
                 <label for="search" class="formSearchItemLabel"><?=$group->getAttribute('name')?></label>
                 <?=$this->action('index', $group->getAttribute('type'), 'elements', $params);?>

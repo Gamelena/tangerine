@@ -131,6 +131,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->model = $this->_xml->getAttribute('target');
         $this->view->xml = $this->_xml;
         $this->view->groups = $this->_xml->getSearchers(true);
+        $this->view->searchRequest = $this->getRequest()->getParam('search', array());
     }
 
     public function initForm($mode)
@@ -209,6 +210,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? true : false;
         $this->view->queryParams = http_build_query($this->getRequest()->getParams());
+        
         $this->initForm('edit');
     }
 
