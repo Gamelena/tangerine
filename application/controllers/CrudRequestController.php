@@ -206,7 +206,7 @@ class CrudRequestController extends Zend_Controller_Action
                             }
                         } catch (Zend_Db_Exception $e) {
                             $this->_response_content['state'] = 'UPDATE_FAIL';
-                            Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$classModel|".$e->getTraceAsString());
+                            Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$classModel|".$e->getTraceAsString());
                         }
                         //Zwei_Utils_Debug::write($response);
                     }
@@ -299,6 +299,7 @@ class CrudRequestController extends Zend_Controller_Action
                 ->setHeader('Content-Type', 'text/html'); //internet explorer needs this
             } else {
                 $i = 0;
+                $collection = array();
                 foreach ($data as $rowArray) {
                     $collection[$i] = array();
                     foreach ($rowArray as $column => $value) {
@@ -313,21 +314,22 @@ class CrudRequestController extends Zend_Controller_Action
                     $i++;
                 }
                 //Zwei_Utils_Debug::write($str_collection);
-                $id = $this->_model->getPrimary();
-                
-                if ($id !== false && (!is_array($id) || count($id) == 1)) {
-                    $id = $this->_model->getPrimary();
+                $id = $this->_model->info(Zend_Db_Table_Abstract::PRIMARY);
+
+                if ((!is_array($id) || count($id) == 1)) {
+                    $id = $this->_model->info(Zend_Db_Table_Abstract::PRIMARY);
                     $content = new Zend_Dojo_Data($id[1], @$collection);
                 } else {
                     /*
-                     * En caso de que no exista ninguna PK simple, inventamos un ID aca para que funcione el datastore
+                     * En caso de que no exista ninguna PK simple, inventamos un ID aca para que funcione dojo.data.ItemFileStore
                      */
-                    if (!isset($collection[0]['id'])) {
+                    if (!isset($collection[0]['AdmFakeId'])) {
                         for($j=0;$j<$i;$j++) {
-                            $collection[$j]['id']=$j;
+                            $collection[$j]['AdmFakeId']=$j;
                         }
                     }
-                    $content = new Zend_Dojo_Data('id', @$collection);
+                    
+                    $content = new Zend_Dojo_Data('AdmFakeId', @$collection);
                 }
 
                 /**
