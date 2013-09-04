@@ -69,7 +69,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         if (this.dijitFormSearch != undefined && this.dijitFormSearch != null) {
             dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i){
-                if (entry.type != 'submit' && entry.type != 'radio' && entry.type != 'hidden') {
+                if (entry.type != 'submit' && entry.type != 'radio') {
                     if (entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
                         searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][value]=' +encodeURIComponent(entry.get('uncheckedvalue'));
                     } else {
