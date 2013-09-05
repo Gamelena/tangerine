@@ -65,3 +65,13 @@ Perfiles y Usuarios por defecto en caso de generación automática de tablas:
 
 TIP: para agregar nuevos módulos ZF ejecutar dentro del proyecto
 $ zf create module {módulo} 
+
+Directiva Alias de ejemplo
+
+Alias /ussd-admportal "/proyectos/ussd-admportal/web/public/"
+<Directory "/proyectos/ussd-admportal/web/public/">
+    AllowOverride All
+        allow from all
+    SetEnv APPLICATION_ENV development
+</Directory>
+
