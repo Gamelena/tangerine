@@ -8,8 +8,10 @@ if (!$this->data && $this->formatter) :
         e.label = <?=$this->formatter?>(e.name)
     });
 <?php
-    //para saltarse esta parte el nombre la función formatter debe contener el string "formatimage" 
+    //para saltarse esta parte el nombre la función formatter debe contener el string "formatimage"
+    $labelName = 'label'; 
     if (!preg_match("/formatimage/i", $this->formatter)) :
+        $labelName = 'name';
 ?>
     dijit.byId('<?=$this->domId . $this->i?>').textbox.value=<?=$this->formatter?>(dijit.byId('<?=$this->domId . $this->i?>').get('value'));
 <?php
@@ -33,6 +35,7 @@ endif;
 <?php 
 $store = '';
 if ($this->data) :
+    $labelName = 'name';
 ?>
     <div data-dojo-type="dojo/store/Memory" data-dojo-id="<?=$this->domId . $this->i?>Store" data-dojo-props="data: <?=$this->data?>"></div>
 <?php 
@@ -41,6 +44,6 @@ endif;
 ?>
 <select data-dojo-type="dijit/form/FilteringSelect" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>" onchange="<?=$this->onchange?>" onload="dijit.byId('<?=$this->domId . $this->i?>').set('value', dijit.byId('<?=$this->domId . $this->i?>').get('value'));<?=$this->onload ?>" data-dojo-props="<?=$store?>" 
     <?=$this->value.$this->readonly.$this->disabled.$this->required.$this->regExp.$this->trim.$this->invalidMessage.$this->onshow.
-    $this->promptMessage.$this->onblur.$this->value.$this->onclick ?> <?php if ($this->formatter) echo ' searchAttr="name" labelAttr="name" labelType="html"'?>>
+    $this->promptMessage.$this->onblur.$this->value.$this->onclick ?> <?php if ($this->formatter) echo " searchAttr=\"name\" labelAttr=\"$labelName\" labelType=\"html\""?>>
     <?=$this->options ? $this->options : '' ?>
 </select>

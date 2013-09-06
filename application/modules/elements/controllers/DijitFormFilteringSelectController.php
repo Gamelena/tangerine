@@ -87,18 +87,18 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
             $rows = $model->fetchAll($select);
 
             if ($r->getParam('defaultValue') || $r->getParam('defaultValue') === '' || $r->getParam('defaultText') || $r->getParam('defaultText') === '') {
-                $options .= "<option value=\"{$r->getParam('defaultValue', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
+                $options .= "<option value=\"{$r->getParam('defaultValue', '')}\" label=\"{$r->getParam('defaultText', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
             }
     
     
             foreach ($rows as $row) {
                 $selected = $row[$id] == $value ? "selected" : "";
                 if ($r->getParam('tableField')) {
-                    $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$r->getParam('tableField')]}</option>\r\n";
+                    $options .= "<option value=\"".$row[$id]."\" ".$selected." label=\"{$row[$r->getParam('tableField')]}\">{$row[$r->getParam('tableField')]}</option>\r\n";
                 } else if ($r->getParam('field')) {
-                    $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$r->getParam('field')]}</option>\r\n";
+                    $options .= "<option value=\"".$row[$id]."\" ".$selected." label=\"{$row[$r->getParam('field')]}\">{$row[$r->getParam('field')]}</option>\r\n";
                 } else {
-                    $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row["title"]}</option>\r\n";
+                    $options .= "<option value=\"".$row[$id]."\" ".$selected." label=\"{$row["title"]}\">{$row["title"]}</option>\r\n";
                 }
             }
         } else {
@@ -106,7 +106,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
             $rows = explode(";", $r->getParam('list'));
             
             if ($r->getParam('defaultValue') || $r->getParam('defaultValue') === '' || $r->getParam('defaultText') || $r->getParam('defaultText') === '') {
-                $options .= "<option value=\"{$r->getParam('defaultValue', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
+                $options .= "<option value=\"{$r->getParam('defaultValue', '')}\" label=\"{$r->getParam('defaultText', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
             }
             
             foreach ($rows as $row) {
