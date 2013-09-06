@@ -44,6 +44,19 @@ ln -s /usr/share/php/Zend/bin/zf.sh /usr/bin/zf
 DEVELBASE="/{Carpeta de desarrollo de proyectos}"
 export ZWC_ADMPORTAL=$DEVELBASE/admportal
 export PATH=$PATH:$ZWC_ADMPORTAL/tools  
+
+3. Hacer un Alias para las librerias javascript de zweicom, donde "/proyectos/admportal/" es la ruta donde se instaló admportal
+
+Alias /libs "/proyectos/admportal/public/js/libs/"
+<Directory "/proyectos/admportal/public/js/libs/">
+    Options Indexes MultiViews FollowSymLinks
+    AllowOverride None
+    Order deny,allow
+    Deny from all
+    Allow from 127.0.0.0/255.0.0.0 ::1/128
+</Directory>
+
+
  
 3. Ubicarse en consola en la carpeta del proyecto, dentro de esta carpeta se creará una subcarpeta llamada web donde estará el proyecto web.
 
@@ -56,11 +69,21 @@ export PATH=$PATH:$ZWC_ADMPORTAL/tools
         - Copiar modelos, módulos y controladores de AdmPortal (N por omisión) escoger S sólo en caso de necesitar modificar modelos, módulos, controladores/vistas por defecto,
          tener en cuenta que en este caso, las actualizaciones y mejoras que se hagan en AdmPortal en estos elementos no serán reflejados en la nueva aplicación.    
 
+
+
+
 Perfiles y Usuarios por defecto en caso de generación automática de tablas:
 
 -Soporte         user: zweicom, password: zweicom
 -Administrador   user: admin,   password: admin
 -Consultas       user: consultas, password: consultas
+
+
+
+
+
+
+
 
 
 TIP: para agregar nuevos módulos ZF ejecutar dentro del proyecto
