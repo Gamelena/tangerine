@@ -56,11 +56,9 @@ Alias /libs "/proyectos/admportal/public/js/libs/"
     Allow from 127.0.0.0/255.0.0.0 ::1/128
 </Directory>
 
+4. Ubicarse en consola en la carpeta del proyecto, dentro de esta carpeta se creará una subcarpeta llamada web donde estará el proyecto web.
 
- 
-3. Ubicarse en consola en la carpeta del proyecto, dentro de esta carpeta se creará una subcarpeta llamada web donde estará el proyecto web.
-
-4. Ejecutar admportal-create 
+5. Ejecutar admportal-create 
     Deberá ingresar: Tipo de DB (MySQL por omisión), nombre de DB, Usuario DB, Password DB, 
         estos parámetros pueden ser ser de una instancia de DB ya existente o para crear una nueva DB.
     Deberá escoger:
@@ -70,20 +68,11 @@ Alias /libs "/proyectos/admportal/public/js/libs/"
          tener en cuenta que en este caso, las actualizaciones y mejoras que se hagan en AdmPortal en estos elementos no serán reflejados en la nueva aplicación.    
 
 
-
-
 Perfiles y Usuarios por defecto en caso de generación automática de tablas:
 
 -Soporte         user: zweicom, password: zweicom
 -Administrador   user: admin,   password: admin
 -Consultas       user: consultas, password: consultas
-
-
-
-
-
-
-
 
 
 TIP: para agregar nuevos módulos ZF ejecutar dentro del proyecto
