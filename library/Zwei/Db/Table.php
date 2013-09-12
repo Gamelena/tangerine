@@ -116,21 +116,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      */
     public function setAdapter($adapter) 
     {
-        //Debug::write($adapter);
-        $config = new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
-        if (isset($config->resources->multidb->{$adapter}->params)) {
-            /**
-             * [TODO]
-             * @deprecated bloque backward compatibility, incluyendo $config
-             * 
-             */
-            $db = Zend_Db::factory($config->resources->multidb->{$adapter});
-            //Debug::write($db);
-        } else {    
-            $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
-            $db = $resource->getDb($adapter);
-            //Debug::write($db);
-        }
+        $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
+        $db = $resource->getDb($adapter);
         $this->_setAdapter($db);
     }
 
@@ -170,8 +157,15 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $select = new Zend_Db_Table_Select($this);
         
         try {
-            Debug::writeBySettings($select->where($where)->__toString(), 'query_log');
-            $rowOrig = $this->fetchRow($select->where($where));
+            if (!is_array($where)) {
+                $select->where($where);
+            } else {
+                foreach ($where as $w) {
+                    $select->where($w);
+                }
+            }
+            Debug::writeBySettings($select->__toString(), 'query_log');
+            $rowOrig = $this->fetchRow($select);
         } catch (Zend_Db_Exception $e) {
             $differences = '{Ocurrió un error al obtener los datos originales.}';
             Debug::write($e->getCode() . " " . $e->getMessage());
@@ -182,9 +176,14 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         if ($update && class_exists("SettingsModel")) {
             if ($rowOrig) {
                 try {
-                    $rowNew = $this->fetchRow($select->where($where));
-                    $differences = Zwei_Utils_Array::getDifferences($rowOrig->toArray(), $rowNew->toArray());
-                    $differences = print_r($differences, true);
+                    $select = new Zend_Db_Table_Select($this);
+                    $rowNew = $this->fetchRow($select);
+                    if ($rowNew) {
+                        $differences = Zwei_Utils_Array::getDifferences($rowOrig->toArray(), $rowNew->toArray());
+                        $differences = print_r($differences, true);
+                    } else {
+                        Debug::write('FIXME, modificaron mi identidad y perdí el seguimiento');
+                    }
                 } catch (Zend_Db_Exception $e) {
                     Debug::write($e->getCode() . " " . $e->getMessage());
                 }
