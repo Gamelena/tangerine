@@ -12,7 +12,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $loader = Zend_Loader_Autoloader::getInstance();
         $loader->setFallbackAutoloader(true);
         set_include_path('.'
-            . PATH_SEPARATOR . ROOT_DIR.'/library'
+            . PATH_SEPARATOR . APPLICATION_PATH.'/../library'
             . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/../library'
             . PATH_SEPARATOR . APPLICATION_PATH . '/models'
             . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/models'
@@ -65,7 +65,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     public function getConfig()
     {
-        return new Zend_Config_Ini(ROOT_DIR.'/application/configs/application.ini', APPLICATION_ENV);
+        return new Zend_Config($this->getOptions());
     }
     
     public function run()
