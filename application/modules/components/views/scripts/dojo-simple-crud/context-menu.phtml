@@ -120,7 +120,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     label: "<?=$f['name'] ? $f['name'] : $f['target']?>",
     iconClass: "<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>",
     onClick : function(){
-        admportal.execFunction('<?=$f['target']?>', '', '<?=$this->component?>', '<?=$this->primary?>', '<?=$this->domPrefix?>');
+        admportal.execFunction('<?=$f['target']?>', '', '<?=$this->domPrefix?>', '<?=$this->component?>', '<?=$this->primary?>');
     }
 }));
 <?php 

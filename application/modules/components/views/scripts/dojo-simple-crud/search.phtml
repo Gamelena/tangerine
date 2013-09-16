@@ -16,24 +16,24 @@ if (count($this->groups) > 0) :
             $params['value'] = $this->searchRequest[$group->getAttribute('target')]['value'];
         
         $hidden = $params['type'] == 'hidden' ? 'style="display:none;"' : '';
-        if ($hidden === '') $hideSubmit = false;
+        if ($hidden === '') $hideSubmit = false; //Si hay por lo menos un input.type != 'hidden', mostrar submit
 ?>
         <div class="formSearchItemContainer" <?=$hidden?>>
             <div class="item">
                 <label for="search" class="formSearchItemLabel"><?=$group->getAttribute('name')?></label>
                 <?=$this->action('index', $group->getAttribute('type'), 'elements', $params);?>
-                <input type="hidden" value="<?=$group->getAttribute('format')?>" id="<?=$this->domPrefix . '_search_' . $i?>_format" name="<?=$group->getAttribute('target')?>_format" />
-                <input type="hidden" value="<?=$group->getAttribute('operator')?>" id="<?=$this->domPrefix . '_search_' . $i?>_operator" name="<?=$group->getAttribute('target')?>_operator" />
+                <input type="hidden" value="<?=$group->getAttribute('format')?>" id="<?=$this->domPrefix.'_search_'.$i?>_format" name="<?=$group->getAttribute('target')?>_format" />
+                <input type="hidden" value="<?=$group->getAttribute('operator')?>" id="<?=$this->domPrefix.'_search_'.$i?>_operator" name="<?=$group->getAttribute('target')?>_operator" />
 <?php 
     if ($group->getAttribute('sufix')) :
 ?>
-                <input type="hidden" value="<?=$group->getAttribute('sufix')?>" id="<?=$this->domPrefix . '_search_' . $i?>_sufix" name="<?=$group->getAttribute('target')?>_sufix" />
+                <input type="hidden" value="<?=$group->getAttribute('sufix')?>" id="<?=$this->domPrefix.'_search_'.$i?>_sufix" name="<?=$group->getAttribute('target')?>_sufix" />
 <?php 
 
     endif;
     if ($group->getAttribute('prefix')) :
 ?>
-                <input type="hidden" value="<?=$group->getAttribute('prefix')?>" id="<?=$this->domPrefix . '_search_' . $i?>_prefix" name="<?=$group->getAttribute('target')?>_prefix" />
+                <input type="hidden" value="<?=$group->getAttribute('prefix')?>" id="<?=$this->domPrefix.'_search_'.$i?>_prefix" name="<?=$group->getAttribute('target')?>_prefix" />
 <?php 
     endif;
 ?>
@@ -41,7 +41,6 @@ if (count($this->groups) > 0) :
 <?php 
        $k = 0;
        if (count($group->children()) > 1) :
-           
            if ($group->getAttribute('operator') != 'between') :
 ?>
            <div class="formSearchSelectors">
@@ -99,7 +98,6 @@ if (count($this->groups) > 0) :
         <input type="hidden" name="storeType" value="query" />
         <button type="submit" class="submit" data-dojo-type="dijit/form/Button" iconClass="dijitIconSearch" id="<?=$this->domPrefix?>btnBuscar">Buscar</button>
     </div>
-
     <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
             try {

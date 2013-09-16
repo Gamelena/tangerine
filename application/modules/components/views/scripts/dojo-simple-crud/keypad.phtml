@@ -106,7 +106,7 @@ foreach ($this->customFunctions as $i => $f) :
 ?>
     <div class="keyPadButton">
         <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="
-            admportal.execFunction('<?=$f['target']?>', '', '<?=$this->component?>', '<?=$this->primary?>', '<?=$this->domPrefix?>');">
+            admportal.execFunction('<?=$f['target']?>', '', '<?=$this->domPrefix?>', '<?=$this->component?>', '<?=$this->primary?>');">
         <?=$f['name'] ? $f['name'] : $f['target']?>
         </button>
     </div>
