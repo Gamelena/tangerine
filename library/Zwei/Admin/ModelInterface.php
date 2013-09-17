@@ -19,8 +19,5 @@ interface Zwei_Admin_ModelInterface
      * @throws Zend_Db_Table_Exception
      */
     public function info($key=null);
-    /**
-     * @return string
-     */
-    public function __toString();
+
 }
