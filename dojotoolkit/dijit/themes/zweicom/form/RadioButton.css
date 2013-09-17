@@ -1,0 +1,66 @@
+/*
+ *  CheckBox and Radio Widgets,
+ *	and the CSS to embed a checkbox or radio icon inside a ToggleButton.
+ *
+ *	Order of images in the default sprite (from L to R, checkbox and radio in same image):
+ *		checkbox	normal 	 - checked
+ *							 - unchecked
+ *					disabled - checked
+ *							 - unchecked
+ *					hover 	 - checked
+ *							 - unchecked
+ *
+ *		radio		normal 	 - checked
+ *							 - unchecked
+ *					disabled - checked
+ *							 - unchecked
+ *					hover 	 - checked
+ *							 - unchecked
+*/
+
+.zweicom .dijitToggleButton .dijitRadio,
+.zweicom .dijitToggleButton .dijitRadioIcon {
+	background-image: url('../images/spriteRadio.gif');
+}
+
+.zweicom .dijitRadio,
+.zweicom .dijitRadioIcon	{		/* inside a toggle button */
+	background-image: url('../images/spriteRadio.gif'); /* checkbox sprite image */
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+.zweicom .dijitRadio,
+.zweicom .dijitToggleButton .dijitRadioIcon {
+	/* unselected */
+	background-position: -16px;
+}
+
+.zweicom .dijitRadioChecked,
+.zweicom .dijitToggleButtonChecked .dijitRadioIcon {
+	/* selected */
+	background-position: 0;
+}
+
+.zweicom .dijitRadioDisabled {
+	/* unselected and disabled */
+	background-position: -48px;
+}
+
+.zweicom .dijitRadioCheckedDisabled {
+	/* selected but disabled */
+	background-position: -32px;
+}
+
+.zweicom .dijitRadioHover {
+	/* hovering over an unselected enabled radio button */
+	background-position: -80px;
+}
+
+.zweicom .dijitRadioCheckedHover {
+	/* hovering over a selected enabled radio button */
+	background-position: -64px;
+}

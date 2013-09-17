@@ -1,0 +1,77 @@
+/**
+ * dijit.layout.BorderContainer
+ *
+ */
+
+.zweicom .dijitBorderContainer {
+	background-color: #e1ebfb;
+	padding: 5px;
+}
+
+.zweicom .dijitSplitContainer-child,
+.zweicom .dijitBorderContainer-child {
+	/* By default put borders on all children of BorderContainer,
+	 *  to give illusion of borders on the splitters themselves.
+	 */
+	border: 1px #b1badf solid;
+}
+
+.zweicom .dijitBorderContainer-dijitTabContainerTop,
+.zweicom .dijitBorderContainer-dijitTabContainerBottom,
+.zweicom .dijitBorderContainer-dijitTabContainerLeft,
+.zweicom .dijitBorderContainer-dijitTabContainerRight {
+	/* except that TabContainer defines borders on it's sub-nodes (tablist and dijitTabPaneWrapper),
+	 * so no border on domNode
+	 */
+	 border: none;
+}
+
+.zweicom .dijitBorderContainer-dijitBorderContainer {
+	/* also, make nested BorderContainers look like a single big widget with lots of splitters */
+	border: none;
+	padding: 0;
+}
+
+
+.zweicom .dijitSplitterH,
+.zweicom .dijitGutterH {
+	background: #E1EBFB;
+	border:0;
+	border-left:0 solid #d3d3d3;
+	border-right:0 solid #d3d3d3;
+	height:5px;
+}
+
+.zweicom .dijitSplitterH .dijitSplitterThumb {
+	background:#B0B0B0 none;
+	height:1px;
+	top:2px;
+	width:19px;
+}
+
+.zweicom .dijitSplitterV,
+.zweicom .dijitGutterV {
+	background: #E1EBFB;
+	border:0;
+	border-top:0 solid #d3d3d3;
+	border-bottom:0 solid #d3d3d3;
+	width:5px;
+}
+
+.zweicom .dijitSplitterV .dijitSplitterThumb {
+	background:#B0B0B0 none;
+	height:19px;
+	left:2px;
+	width:1px;
+}
+
+/* active splitter */
+.zweicom .dijitSplitterActive {
+	font-size: 1px;
+	background-image: none;
+	background-color: #aaa;
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+	filter: Alpha(Opacity=60);
+	margin: 0;
+}
