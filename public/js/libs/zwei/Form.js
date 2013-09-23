@@ -66,27 +66,33 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         var domForm = this.dijitFormSearch != null ? dojo.byId(this.dijitFormSearch.id) : dojo.byId(this.dijitForm.id);
         var searchUrl = base_url+'crud-request?model=' + domForm['model'].value + '&format=' + domForm['format'].value+'&'+this.queryParams;
         var value;
+        var auxTwice;
+        var self=this;
         
         if (this.dijitFormSearch != undefined && this.dijitFormSearch != null) {
             dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i){
                 if (entry.type != 'submit' && entry.type != 'radio') {
+                    if (self.dijitFormSearch.getChildrenByName(entry.get('name')).length > 1) {
+                        auxTwice = '['+i+']';
+                    } else {
+                        auxTwice = '';
+                    }
                     if (entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
-                        searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][value]=' +encodeURIComponent(entry.get('uncheckedvalue'));
+                        searchUrl += '&search['+entry.get('name')+'][value]=' +encodeURIComponent(entry.get('uncheckedvalue'));
                     } else {
                         if (entry.declaredClass != "dijit.form.DateTextBox") {
                             value = entry.get('value');
                         } else {
                             value = entry.get('value') == null ? '' : dojo.date.locale.format(entry.get('value'), {datePattern: "yyyy-MM-dd", selector: "date"});
                         }
-                        
-                        searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][value]=' + encodeURIComponent(value);
+                        searchUrl += '&search['+dijit.byId(entry.id).get('name')+']'+auxTwice+'[value]='+encodeURIComponent(value);
                     }
-                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][format]=' + encodeURIComponent(dojo.byId(entry.id+'_format').value);
-                    searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][operator]=' + encodeURIComponent(dojo.byId(entry.id+'_operator').value);
-                    if (dojo.byId(entry.id+'_sufix') != undefined) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
-                    if (dojo.byId(entry.id+'_prefix') != undefined) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][prefix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix').value);
-                    if (dojo.byId(entry.id+'_sufix2') != undefined) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][sufix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix2').value);
-                    if (dojo.byId(entry.id+'_prefix2') != undefined) searchUrl += '&search['+dijit.byId(entry.id).get('name')+'][prefix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix2').value);
+                    searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[format]='+encodeURIComponent(dojo.byId(entry.id+'_format').value);
+                    searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[operator]='+encodeURIComponent(dojo.byId(entry.id+'_operator').value);
+                    if (dojo.byId(entry.id+'_sufix') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[sufix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
+                    if (dojo.byId(entry.id+'_prefix') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[prefix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix').value);
+                    if (dojo.byId(entry.id+'_sufix2') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[sufix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix2').value);
+                    if (dojo.byId(entry.id+'_prefix2') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[prefix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix2').value);
                 }
             });
         }

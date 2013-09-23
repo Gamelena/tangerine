@@ -43,6 +43,13 @@ class Zwei_Db_Object
     private $_select;
     
     /**
+     * Operadores permitidos para usar en $_REQUEST
+     * @var array
+     */
+    private $_allowedOperators = array('like', 'between', '=', '!=', '<>', '<', '>', '<=', '>=');
+    
+    
+    /**
      * 
      * @param Zwei_Utils_Form | array
      * @param Zwei_Db_Select
@@ -66,58 +73,21 @@ class Zwei_Db_Object
      */
     public function select()
     {
-        $oModel = $this->_model;
-        $oSelect = isset($this->_select) ? $this->_select : $oModel->select();
+        $this->_select = isset($this->_select) ? $this->_select : $this->_model->select();
         
-        if (isset($this->_form->search) && !$oModel->isFiltered()) {
+        if (isset($this->_form->search) && !$this->_model->isFiltered()) {
             $search = $this->_form->search;
-            $allowedOperators = array('like', 'between', '=', '!=', '<>', '<', '>', '<=', '>=');
             $sufix = array();
+            $iterated = array();
+            //Iteración por cada item del buscador
             foreach ($search as $i => $s) {
-                $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
-                $op = 'like';//Operador por defecto
-                $sufix = '%';//Sufijo por defecto
-                $prefix = '%';//Prefijo por defecto
-                $s['value'] = htmlentities($s['value']);//[TODO] evaluar si esto sirve para todos los casos, en caso de no serlo debe ser paramatrizable
-                
-                if (!empty($s['value']) || $s['value'] === '0') {
-                    if (!empty($s['operator'])) {
-                        if (in_array($s['operator'], $allowedOperators)) {
-                            $op = $s['operator'];
-                            $sufix = isset($s['sufix'][0]) ? $s['sufix'][0] : '';
-                            $prefix = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
-                        }
-                    } else {
-                        if (isset($s['sufix'][0])) $sufix = $s['sufix'][0];
-                        if (isset($s['prefix'][0])) $sufix = $s['prefix'][0];
+                if (!isset($s['value']) && is_array($s)) {
+                    //Iteración por cada item duplicado de buscador, esto se usa para diferentes operadores (ej: '<' y '>')
+                    foreach ($s as $s2) {
+                        $this->iterateSearcher($i, $s2);
                     }
-                    
-                    
-                    /**
-                     * BETWEEN se aplica sobre un campo único, la diferencia en los valores las hacen los sufijos y prefijos concatenados al valor del campo
-                     * La razón del soporte de BETWEEN es poder usar un CAMPO ÚNICO + sufijos y prefijos, 
-                     * esto es preferible a usar funciones sobre columnas (como DATE_FORMAT) ya que al tranformar la columna inutilizamos sus índices.
-                     * 
-                     * NO se puede usar BETWEEN entre campos diferentes, para esto deben usarse los operadores <, >, <=, >= que hacen lo mismo con la misma performance.
-                     * 
-                     * @example 
-                     * "WHERE fecha >= '$fecha 00:00:00' AND fecha <= '$fecha 23:59:59' ", 
-                     * <group operator="between">
-                     *     <element target="fecha" sufix=" 00:00:00"/>
-                     *     <element target="fecha" sufix=" 23:59:59"/>
-                     * </group>
-                     */
-                    if ($op == 'between') {
-                        $sufix0 = isset($s['sufix'][0]) ? $s['sufix'][0] : '';
-                        $prefix0 = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
-                        $sufix1 = isset($s['sufix'][1]) ? $s['sufix'][1] : '';
-                        $prefix1 = isset($s['prefix'][1]) ? $s['prefix'][1] : '';
-                        
-                        $oSelect->where($oModel->getAdapter()->quoteInto("$field >= ?", "{$prefix0}{$s['value']}{$sufix0}"));
-                        $oSelect->where($oModel->getAdapter()->quoteInto("$field <= ?", "{$prefix1}{$s['value']}{$sufix1}"));
-                    } else {
-                        $oSelect->where($oModel->getAdapter()->quoteInto("$field $op ?", "{$prefix}{$s['value']}{$sufix}"));
-                    }
+                } else {
+                    $this->iterateSearcher($i, $s);
                 }
             }
         }
@@ -130,7 +100,7 @@ class Zwei_Db_Object
             
             foreach ($groups as $g) {
                 $g = preg_replace('/[^(\x20-\x7F)]*/', '', $g);//Truco para eliminar caracteres no texto
-                $oSelect->group($g);
+                $this->_select->group($g);
             }
 
         }
@@ -139,21 +109,70 @@ class Zwei_Db_Object
         $count = (isset($this->_form->count)) ? $this->_form->count : 20000;//dojo.data.QueryReadStore usa count en lugar de limit
         $sort = (isset($this->_form->sort)) ? $this->_form->sort : false;
         
-        if ($sort && (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select"))) {
-            $oSelect->reset(Zend_Db_Select::ORDER);
+        if ($sort && (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select"))) {
+            $this->_select->reset(Zend_Db_Select::ORDER);
             if (preg_match("/^-(.*)/", $sort)) {
                 $sort = substr($sort, 1);
-                $oSelect->order("$sort DESC");
+                $this->_select->order("$sort DESC");
             } else {
-                $oSelect->order($sort);
+                $this->_select->order($sort);
             }
         }
         
-        if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) $oSelect->limit($count, $start);
+        if (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) $this->_select->limit($count, $start);
         
         //Se imprime query en log debug según configuración del sitio
-        if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($oSelect->__toString(), 'query_log');
-        if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($oSelect->getAdapter()->getConfig(), 'query_log');
-        return $oSelect;
+        if (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($this->_select->__toString(), 'query_log');
+        if (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($this->_select->getAdapter()->getConfig(), 'query_log');
+        return $this->_select;
+    }
+    
+    protected function iterateSearcher($i, $s)
+    {
+        $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
+        $op = 'like';//Operador por defecto
+        $sufix = '%';//Sufijo por defecto
+        $prefix = '%';//Prefijo por defecto
+        $s['value'] = htmlentities($s['value']);
+        
+        if (!empty($s['value']) || $s['value'] === '0') {
+            if (!empty($s['operator'])) {
+                if (in_array($s['operator'], $this->_allowedOperators)) {
+                    $op = $s['operator'];
+                    $sufix = isset($s['sufix'][0]) ? $s['sufix'][0] : '';
+                    $prefix = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
+                }
+            } else {
+                if (isset($s['sufix'][0])) $sufix = $s['sufix'][0];
+                if (isset($s['prefix'][0])) $sufix = $s['prefix'][0];
+            }
+        
+        
+            /**
+             * BETWEEN se aplica sobre un campo único, la diferencia en los valores las hacen los sufijos y prefijos concatenados al valor del campo
+             * La razón del soporte de BETWEEN es poder usar un CAMPO ÚNICO + sufijos y prefijos,
+             * esto es preferible a usar funciones SQL sobre columnas (por ejemplo DATE_FORMAT) ya que al transformar la columna inutilizamos sus índices.
+             *
+             * NO se puede usar BETWEEN entre campos diferentes, para esto deben usarse los operadores <, >, <=, >= que hacen lo mismo con la misma performance.
+             *
+             * @example
+             * "WHERE fecha >= '$fecha 00:00:00' AND fecha <= '$fecha 23:59:59' ",
+             * <group operator="between">
+             *     <element target="fecha" sufix=" 00:00:00"/>
+             *     <element target="fecha" sufix=" 23:59:59"/>
+             * </group>
+             */
+            if ($op == 'between') {
+                $sufix0 = isset($s['sufix'][0]) ? $s['sufix'][0] : '';
+                $prefix0 = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
+                $sufix1 = isset($s['sufix'][1]) ? $s['sufix'][1] : '';
+                $prefix1 = isset($s['prefix'][1]) ? $s['prefix'][1] : '';
+        
+                $this->_select->where($this->_model->getAdapter()->quoteInto("$field >= ?", "{$prefix0}{$s['value']}{$sufix0}"));
+                $this->_select->where($this->_model->getAdapter()->quoteInto("$field <= ?", "{$prefix1}{$s['value']}{$sufix1}"));
+            } else {
+                $this->_select->where($this->_model->getAdapter()->quoteInto("$field $op ?", "{$prefix}{$s['value']}{$sufix}"));
+            }
+        }
     }
 }
