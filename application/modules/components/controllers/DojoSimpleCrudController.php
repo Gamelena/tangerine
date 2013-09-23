@@ -280,12 +280,13 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $numElements = count($this->view->elements);
         $widthCol = round((100/$numElements), 1) . "%";//Se le asigna a cada columna de la grilla un ancho proporcional a su cantidad en porcentaje.
-        for ($i = 1; $i < $numElements; $i++) {
+        for ($i = 1; $i <= $numElements; $i++) {
             $elements = $this->_xml->getElements();
             //Para cada columna se permite sobreescribir el ancho asignado por defecto, se sugiere trabajar con porcentajes para aprovechar toda la pantalla.
             if (!$elements[$i]->getAttribute('width')) {
                 $elements[$i]->addAttribute('width', $widthCol);
             }
+            
         }
         
         $this->view->queryParams = http_build_query($this->getRequest()->getParams());
