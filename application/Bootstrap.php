@@ -79,7 +79,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }    
         
         // Inicializar el MVC
-        Zend_Layout::startMvc(array('layoutPath' => ROOT_DIR.'/application/views/layouts'));
+        Zend_Layout::startMvc();
+        Zend_Layout::getMvcInstance()->disableLayout();
         
         // Run!
         $frontController = Zend_Controller_Front::getInstance();
