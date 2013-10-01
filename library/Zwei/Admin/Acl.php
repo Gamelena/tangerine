@@ -332,7 +332,7 @@ class Zwei_Admin_Acl extends Zend_Acl
         }
 
         $select=self::$_db->select()
-        ->from(self::$_tb_modules, array('id', 'title', 'module', 'type', 'tree', 'linkable', 'refresh_on_load'));
+        ->from(self::$_tb_modules, array('id', 'title', 'module', 'type', 'tree', 'refresh_on_load'));
         
         if (self::$_userInfo->{self::$_user_role_id} != '1') {
             $select
@@ -344,7 +344,9 @@ class Zwei_Admin_Acl extends Zend_Acl
             ->where(self::$_tb_users.".".self::$_user_login." = '".self::$_user."'");
         } 
         if (is_null($parent_id)) {
-            $select->where('parent_id IS NULL');
+            //$select->where('parent_id IS NULL');
+            //Se soporta 0 solo para backward compatibility
+            $select->where("parent_id IN ('0', NULL)");
         } else {
             $select->where('parent_id = ?', (int) $parent_id);
         }    
