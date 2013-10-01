@@ -50,8 +50,8 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
             
             $className = $r->getParam('table');
             $model = new $className;
+            //[TODO] deprecar getPrimary y usar info('primary') nativo de ZF
             $primary = $model->getPrimary() ? $model->getPrimary() : 'id';
-            Debug::write($primary);
         
             if ($r->getParam('tableMethod')) {
                 $method = $r->getParam('tableMethod');
@@ -66,7 +66,7 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
                     $select = $model->select(array("title", $id));
                 }
             }
-            Debug::writeBySettings($select->__toString(), 'query_log');
+            if (method_exists($select, "__toString")) Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.
         
             if ($r->getParam('value')) {

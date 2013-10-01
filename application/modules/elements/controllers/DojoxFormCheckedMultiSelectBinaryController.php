@@ -66,7 +66,7 @@ class Elements_DojoxFormCheckedMultiSelectBinaryController extends Zend_Controll
                     $select = $model->select(array("title", $id));
                 }
             }
-            Debug::writeBySettings($select->__toString(), 'query_log');
+            if (method_exists($select, "__toString")) Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.
         
             if ($r->getParam('value')) {
