@@ -92,17 +92,16 @@ class CrudRequestController extends Zend_Controller_Action
         $classModel = $this->getRequest()->getParam('model');
         
         if (class_exists($classModel)) {
+            $data = array();
             /**
              * 
              * @var Zwei_Db_Table
              */
             $this->_model = new $classModel();
-            $a = $this->_model->getAdapter();
             $this->view->collection = array();
             
             if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
                 if (isset($this->_form->action)) {
-                    $data = array();
                     $where = array();
                     
                     foreach ($_FILES as $i => $v) {
@@ -174,9 +173,9 @@ class CrudRequestController extends Zend_Controller_Action
                             $this->_response_content['state'] = 'ADD_FAIL';
                             Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
                         }
-                    } elseif ($this->_form->action == 'delete') {
+                    } else if ($this->_form->action == 'delete') {
                         foreach ($this->_form->primary as $i => $v) {
-                            $where[] = $a->quoteInto($a->quoteIdentifier($i)." = ?", $v);
+                            $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i)." = ?", $v);
                         }
                         if (count($where) == 1) $where = $where[0];
                         
@@ -189,7 +188,7 @@ class CrudRequestController extends Zend_Controller_Action
                         //Zwei_Utils_Debug::write($response);
                     } else if ($this->_form->action == 'edit') {
                         foreach ($this->_form->primary as $i => $v) {
-                            $where[] = $a->quoteInto($a->quoteIdentifier($i)." = ?", $v);
+                            $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i)." = ?", $v);
                         }
                         if (count($where) == 1) $where = $where[0];
                         
@@ -224,25 +223,25 @@ class CrudRequestController extends Zend_Controller_Action
                     
                     if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) {
                         $adapter = $this->_model->getZwAdapter();
-                    
+                        
                         if (isset($adapter) && !empty($adapter)) $this->_model->setAdapter($adapter);
                     
                         $data = $this->_model->fetchAll($oSelect);
                         $paginator = Zend_Paginator::factory($oSelect);
                         $numRows = $paginator->getTotalItemCount();
                     } else {
-                        $data = $oDbObject->select();
+                        $data = $this->_model->fetchAll();
                     }
                     $i = 0;
                      
                     //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
-                    if ($this->_model->overloadDataList($data)) {
+                    if (method_exists($this->_model, 'overloadDataList') && $this->_model->overloadDataList($data)) {
                         $data = $this->_model->overloadDataList($data);
                         $numRows = count($data);
                     }
                     
                     //si ?format=excel exportamos el rowset a excel
-                    if (@$this->_form->format == 'excel') {
+                    if (isset($this->_form->format) && $this->_form->format == 'excel') {
                         $this->_helper->layout->disableLayout();
                         $this->_helper->viewRenderer->setNoRender();
                     
@@ -336,15 +335,15 @@ class CrudRequestController extends Zend_Controller_Action
                  * Si esta especificado $this->_model->_label se especifica el ÍNDICE del atributo label, standard dojo store,
                  * Si esta especificado $this->_model->_labels se especifica el ARRAY de labels, NO standard dojo store pero necesario para algunos casos.
                  */
-                if ($this->_model->getLabel()) {
+                if (method_exists($this->_model, 'getLabel') && $this->_model->getLabel()) {
                     $content->setLabel($this->_model->getLabel());
                 } 
                 
-                if ($this->_model->getLabels()) {
+                if (method_exists($this->_model, 'getLabels') && $this->_model->getLabels()) {
                     $content->setMetadata(array("labels" => $this->_model->getLabels()));
                 }
                 
-                if ($this->_model->getTitle()) {
+                if (method_exists($this->_model, 'getTitle') && $this->_model->getTitle()) {
                     $content->setMetadata(array("title" => $this->_model->getTitle()));
                 }
                 

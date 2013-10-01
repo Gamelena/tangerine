@@ -161,22 +161,21 @@ class AclModulesModel extends Zwei_Db_Table
                 $key = $branch['id'];
                 $arrNodes[$key]['id']  = $branch['id'];
                 $arrNodes[$key]['type']  = $branch['type'];
-                $arrNodes[$key]['linkable']  = $branch['linkable'];
                 $arrNodes[$key]['image']  = $branch['image'];
                 $arrNodes[$key]['refresh_on_load']  = $branch['refresh_on_load'];
                 
                 $arrNodes[$key]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($branch['title']) : utf8_encode(html_entity_decode($branch['title']));
-                if ($branch['linkable'] == '1') { 
-                    $prefix = "";
-                    if ($branch['type'] == 'zend_module') {$prefix = "";}
-                    else if ($branch['type'] == 'xml') {$prefix = "admin/components?p=";}
-                    else if ($branch['type'] == 'legacy') {$prefix = "admin/legacy?p=";}
-                    else if ($branch['type'] == 'iframe') {$prefix = "admin/iframe?p=";}
-                    
-                    
-                    if ($prefix != "") $branch['module'] = urlencode($branch['module']);
-                    $arrNodes[$key]['url'] = $prefix.$branch['module'];
-                }
+
+                $prefix = "";
+                if ($branch['type'] == 'zend_module') {$prefix = "";}
+                else if ($branch['type'] == 'xml') {$prefix = "admin/components?p=";}
+                else if ($branch['type'] == 'legacy') {$prefix = "admin/legacy?p=";}
+                else if ($branch['type'] == 'iframe') {$prefix = "admin/iframe?p=";}
+                
+                
+                if ($prefix != "") $branch['module'] = urlencode($branch['module']);
+                $arrNodes[$key]['url'] = $prefix.$branch['module'];
+
                 
                 $childrens = $this->getTree($branch['id']);
                 if ($childrens) {

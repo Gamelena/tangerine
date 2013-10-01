@@ -201,14 +201,6 @@ class AdminController extends Zend_Controller_Action
 
         if (!empty($this->_template)) {
             $this->_helper->viewRenderer("index-$this->_template");
-            if ($this->_template != 'dojo') { //en fase experimental
-                $modules = new AclModulesModel();
-                $modules->setApproved();
-                $tree = $modules->getTree();
-                $menu = new Zwei_Utils_Menu($tree);
-                $this->view->list = $menu->display();
-                $this->view->content = "<center><img width=\"960\" src=\"".BASE_URL."images/satelite.jpg\"/></center>";
-            }
         }
     }
 
@@ -222,7 +214,7 @@ class AdminController extends Zend_Controller_Action
                 $file = Zwei_Admin_Xml::getFullPath($component);
                 
                 if (!file_exists($file)) {
-                    exit("No se encuentra archivo $file");
+                    //exit("No se encuentra archivo $file");
                     //$this->render();
                 }
                 try {
