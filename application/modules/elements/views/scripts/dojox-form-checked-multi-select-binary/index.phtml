@@ -8,6 +8,18 @@
             }
         });
     </script>
+<?php 
+if ($this->disabled) :
+?>
+    <script type="dojo/on" data-dojo-event="mouseover" data-dojo-args="e">
+    if (dojo.byId('helper<?=$this->domId.$this->i?>').disabled) { 
+        dijit.byId('helper<?=$this->domId.$this->i?>').set('disabled', true);
+        dojo.byId('<?=$this->domId.$this->i?>').disabled = true;
+    }
+    </script>
+<?php 
+endif;
+?>
     <?=$this->options ?>
 </select>
 <input type="hidden" value="<?=$this->value?>" id="<?=$this->domId.$this->i?>" name="<?=$this->target?>"/>

@@ -1,4 +1,16 @@
 <select data-dojo-type="dojox/form/CheckedMultiSelect" multiple="true" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" <?=$this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur.$this->value ?>>
+<?php 
+if ($this->disabled) :
+?>
+    <script type="dojo/on" data-dojo-event="mouseover" data-dojo-args="e">
+    if (dojo.byId('helper<?=$this->domId.$this->i?>').disabled) { 
+        dijit.byId('helper<?=$this->domId.$this->i?>').set('disabled', true);
+        dojo.byId('<?=$this->domId.$this->i?>').disabled = true;
+    }
+    </script>
+<?php 
+endif;
+?>
     <?=$this->options ?>
 </select>
 <?php 
