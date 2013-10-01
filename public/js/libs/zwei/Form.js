@@ -202,7 +202,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             name = entry.name.replace('primary[', '').replace(']', '');
             if (typeof(items[0][name]) != 'undefined') {
                 entry.value = items[0][name];
-                xhrContent['primary['+name+']'] = entry.value;
+                xhrContent['primary['+name+']'] = encodeURIComponent(entry.value);
             }
         });
         console.debug(xhrContent);
@@ -279,7 +279,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 
                 if (this.ajax) {
                     for (var primary in primaries) {
-                        ids += '&primary['+primary + "]=" + primaries[primary];
+                        ids += '&primary['+primary + "]=" + encodeURIComponent(primaries[primary]);
                     }
                 } else {
                     //Poblar campos con datos fila de datagrid seleccionada
@@ -303,10 +303,9 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     var primary = this.primary;
                     var dijitForm = this.dijitForm;
                     
-                    for (var id in this.primary) {
-                        ids += '&primary['+ id + ']=' + this.primary[id];
+                    for (var primal in primary) {
+                        ids += '&primary['+ primal + ']=' + encodeURIComponent(primary[primal]);
                     }
-                    
                     if (dijitForm != null) {
                         var listener = dojo.connect(this.dijitDialog, "onLoad", function(){
                              if (dijitForm)
