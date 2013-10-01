@@ -233,6 +233,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->p = $this->_component;
         $this->view->model = $this->_xml->getAttribute('target');
+        $this->view->list = $this->_xml->getAttribute('list') === 'true' ? true : false;
+        $this->view->store = $this->view->list ? "store: {$this->view->domPrefix}storeGrid," : "";
+        
         $this->view->dataDojoType = $this->_xml->getAttribute('serverPagination') === "true" ? 'dojox/data/QueryReadStore' : 'dojo/data/ItemFileReadStore';
         $this->view->gridDojoType = $this->_xml->getAttribute('gridDojoType') ? $this->_xml->getAttribute('gridDojoType') : 'dojox/grid/EnhancedGrid';
         $menus = in_array($this->_config->zwei->layout->menus, array('contextMenu', 'both')) ? "menus:{selectedRegionMenu: menu{$this->view->domPrefix}}," : '';

@@ -1,5 +1,11 @@
+<?php
+if ($this->list) :
+?>
 <span data-dojo-type="<?=$this->dataDojoType ?>" id="<?=$this->domPrefix?>storeGrid" jsId="<?=$this->domPrefix?>storeGrid" data-dojo-props="url: '<?=BASE_URL?>crud-request?model=<?=$this->model?>&format=json&<?=$this->queryParams?>'"></span>
-<table data-dojo-type="<?=$this->gridDojoType ?>" id="<?=$this->domPrefix?>dataGrid" jsId="<?=$this->domPrefix?>dataGrid" data-dojo-props="store: <?=$this->domPrefix?>storeGrid, plugins:<?=$this->plugins ?>, clientSort:true, selectable: true, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.', onRowDblClick: function(){<?=$this->onRowDblClick?>}" class="dataGrid" style="height: 50em;">
+<?php 
+endif;
+?>
+<table data-dojo-type="<?=$this->gridDojoType ?>" id="<?=$this->domPrefix?>dataGrid" jsId="<?=$this->domPrefix?>dataGrid" data-dojo-props="<?=$this->store?> plugins:<?=$this->plugins ?>, clientSort:true, selectable: true, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.', onRowDblClick: function(){<?=$this->onRowDblClick?>}" class="dataGrid" style="height: 50em;">
     <script type="dojo/connect" data-dojo-event="onRowClick" data-dojo-args="e">
         <?=$this->onRowClick?>
     </script>
