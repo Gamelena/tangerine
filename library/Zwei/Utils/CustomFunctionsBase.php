@@ -59,7 +59,7 @@ class Zwei_Utils_CustomFunctionsBase
     protected $_form;
     
     
-    public function __construct($icon=false)
+    public function __construct()
     {
         if (!Zend_Auth::getInstance()->hasIdentity()) {
             Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoAndExit('login');
