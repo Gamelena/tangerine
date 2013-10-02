@@ -52,7 +52,7 @@ class Elements_DojoxFormCheckedMultiSelectBinaryController extends Zend_Controll
             
             $className = $r->getParam('table');
             $model = new $className;
-            $primary = $model->info(Zwei_Db_Table::PRIMARY);
+            $primary = method_exists($model, 'info') ? $model->info(Zwei_Db_Table::PRIMARY) : 'id';
         
             if ($r->getParam('tableMethod')) {
                 $method = $r->getParam('tableMethod');

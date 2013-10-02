@@ -52,7 +52,7 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
             $className = $r->getParam('table');
             $model = new $className;
             //[TODO] deprecar getPrimary y usar info('primary') nativo de ZF
-            $primary = $model->getPrimary() ? $model->getPrimary() : 'id';
+            $primary = method_exists($model, 'getPrimary') && $model->getPrimary() ? $model->getPrimary() : 'id';
         
             if ($r->getParam('tableMethod')) {
                 $method = $r->getParam('tableMethod');
