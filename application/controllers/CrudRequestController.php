@@ -313,11 +313,15 @@ class CrudRequestController extends Zend_Controller_Action
                     $i++;
                 }
                 //Zwei_Utils_Debug::write($str_collection);
-                $id = $this->_model->info(Zend_Db_Table_Abstract::PRIMARY);
+                $id = method_exists($this->_model, 'info') ? $this->_model->info(Zend_Db_Table_Abstract::PRIMARY) : 'id';
 
                 if ((!is_array($id) || count($id) == 1)) {
-                    $id = $this->_model->info(Zend_Db_Table_Abstract::PRIMARY);
-                    $content = new Zend_Dojo_Data($id[1], @$collection);
+                    //FIXME
+                    if (is_array($id)) {
+                        $arrayValues = array_values($id);
+                        $id = $arrayValues[0]; 
+                    }
+                    $content = new Zend_Dojo_Data($id, @$collection);
                 } else {
                     /*
                      * En caso de que no exista ninguna PK simple, inventamos un ID aca para que funcione dojo.data.ItemFileStore
