@@ -344,9 +344,7 @@ class Zwei_Admin_Acl extends Zend_Acl
             ->where(self::$_tb_users.".".self::$_user_login." = '".self::$_user."'");
         } 
         if (is_null($parent_id)) {
-            //$select->where('parent_id IS NULL');
-            //Se soporta 0 solo para backward compatibility
-            $select->where("parent_id IN ('0', NULL)");
+            $select->where('parent_id IS NULL');
         } else {
             $select->where('parent_id = ?', (int) $parent_id);
         }    
