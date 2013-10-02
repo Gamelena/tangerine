@@ -16,7 +16,8 @@ if (!$this->loadPartial) :
         $tableWrapperClass = "settingsArea";
         foreach ($this->tabs as $tab) :
             //if ($tab->getAttribute($this->mode) === 'true') :
-            $style = $i == 0 ? 'style="background-image: url(/dojotoolkit/dijit/themes/claro/images/activeGradient.png); background-color: rgb(207, 229, 250); background-position: initial initial; background-repeat: repeat no-repeat;"' : '';
+            $auxStyle= $tab->getAttribute('style') ? $tab->getAttribute('style') : '';
+            $style = $i == 0 ? "style=\"background-image: url(/dojotoolkit/dijit/themes/claro/images/activeGradient.png); background-color: rgb(207, 229, 250); background-position: initial initial; background-repeat: repeat no-repeat;$auxStyle\"" : "style=\"$auxStyle\"";
             $i++;
 ?>
     <a id="<?=$this->domPrefix .'tab_'. $modAux .'_ctrl'. $i?><?=$this->dialogIndex?>" class="settingsTab" <?=$style ?> onclick="admportal.switchTabs('<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>', this.id, '<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>')"><?=$tab->getAttribute('name') ?></a>
