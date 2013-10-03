@@ -83,7 +83,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
                 }
             }
             
-            Zwei_Utils_Debug::writeBySettings($select->__toString(), 'query_log');
+            if (method_exists($select, '__toString')) Zwei_Utils_Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $model->fetchAll($select);
 
             if ($r->getParam('defaultValue') || $r->getParam('defaultValue') === '' || $r->getParam('defaultText') || $r->getParam('defaultText') === '') {
