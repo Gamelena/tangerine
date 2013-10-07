@@ -92,7 +92,10 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
     
     
             foreach ($rows as $row) {
-                $selected = $row[$id] == $value ? "selected" : "";
+                $selected = $row[$id] == $value ? "selected=\"selected\"" : "";
+                if ( $row[$id] == $value ) {
+                    Debug::write($value);
+                }
                 if ($r->getParam('tableField')) {
                     $options .= "<option value=\"".$row[$id]."\" ".$selected." label=\"{$row[$r->getParam('tableField')]}\">{$row[$r->getParam('tableField')]}</option>\r\n";
                 } else if ($r->getParam('field')) {

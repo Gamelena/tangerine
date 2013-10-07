@@ -16,7 +16,7 @@ if (!$this->loadPartial) :
         $tableWrapperClass = "settingsArea";
         foreach ($this->tabs as $tab) :
             //if ($tab->getAttribute($this->mode) === 'true') :
-            $auxStyle= $tab->getAttribute('style') ? $tab->getAttribute('style') : '';
+            $auxStyle = $tab->getAttribute('style');
             $style = $i == 0 ? "style=\"background-image: url(/dojotoolkit/dijit/themes/claro/images/activeGradient.png); background-color: rgb(207, 229, 250); background-position: initial initial; background-repeat: repeat no-repeat;$auxStyle\"" : "style=\"$auxStyle\"";
             $i++;
 ?>
