@@ -162,15 +162,20 @@ class AclRolesModel extends Zwei_Db_Table
     }
     
     /**
+     * Agregar los permisos asociados al perfil
      * 
-     * @param int $acl_roles_id
+     * @param int $aclRolesId
      * @return int || false
      */
     public function addPermissions($aclRolesId)
     {
         $aclRolesModulesAction = new AclRolesModulesActionsModel();
         $ad = $aclRolesModulesAction->getAdapter();
+        
+        //(1) Inicialización clausula SQL WHERE para borrar permisos
         $where = array();
+        
+        //(2) Se deben borrar todos los permisos asociados a este perfil ...
         $where[] = $ad->quoteInto("acl_roles_id = ?", $aclRolesId);
         
         $whereOr = array();
@@ -180,11 +185,13 @@ class AclRolesModel extends Zwei_Db_Table
             $whereOr[] = $ad->quote($aclModulesActionsId);
         }
         
+        //(3) excepto los permisos que se encuentren chequeados en formulario
         if (!empty($this->_dataRolesModulesActions)) {
             $list = implode(",", $whereOr);
             $where[] = "(acl_modules_actions_id) NOT IN ($list)";
         }
         
+        //(4) Clausula WHERE lista, borremos los permisos desmarcados del formulario.
         $delete = $aclRolesModulesAction->delete($where);
         
         if (!empty($this->_dataRolesModulesActions)) $return = $delete;
