@@ -417,39 +417,12 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     }
     
     /**
-     * Inicializa $this->_query_params con un array asociativo de parámetros de busqueda
-     * @param Zwei_Utils_Form | false
+     * Método para separar datos de tabla principal de datos de tablas auxiliares, para ser reescrito en modelos respectivos.
+     * 
+     * @param array $data
      * @return array
      */
-    public function initQueryParams($form = false)
-    {
-        if (!$form) { $form = new Zwei_Utils_Form(); }
-        if (isset($form->search) && (!empty($form->search) || $form->search === '0')) {
-            $searchFields = explode(";", $form->search_fields);
-            $search = explode(';', $form->search);
-            $betweened = false;
-            $between = array();
-            
-            if (isset($form->between) && (!empty($form->between) || $form->between === '0')) $between = explode(';', $form->between);
-            $i = 0;    
-            foreach ($search as $v) {
-                if (!empty($searchFields[$i])) {
-                    if (!in_array($searchFields[$i], $between)) {
-                        if ($betweened) {
-                           if ($search[$i+1] != '') $this->_query_params[$searchFields[$i]] = $search[$i+1];
-                        } else {
-                           if ($search[$i] != '')  $this->_query_params[$searchFields[$i]] = $search[$i];
-                        }    
-                    } else {
-                        $betweened = true;
-                        $this->_query_params[$searchFields[$i]] = array();
-                        if ($search[$i] != '') $this->_query_params[$searchFields[$i]][] = $search[$i];
-                        if ($search[$i+1] != '') $this->_query_params[$searchFields[$i]][] = $search[$i+1];                            
-                    }
-                    $i++;
-                }    
-            }
-        }
-        return $this->_query_params;
+    protected function cleanDataParams($data) {
+        return $data;
     }
 }

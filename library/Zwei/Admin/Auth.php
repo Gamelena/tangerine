@@ -88,7 +88,6 @@ class Zwei_Admin_Auth
         ->setCredentialColumn($authPassword)
         ->setCredentialTreatment('MD5(?) and approved="1"');
     
-        Debug::write($authAdapter->getDbSelect()->__toString());
         return $authAdapter;
     }
 }
