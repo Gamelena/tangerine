@@ -185,7 +185,7 @@ class AclRolesModel extends Zwei_Db_Table
             $whereOr[] = $ad->quote($aclModulesActionsId);
         }
         
-        //(3) excepto los permisos que se encuentren chequeados en formulario
+        //(3) ... excepto los permisos que se encuentren chequeados en formulario
         if (!empty($this->_dataRolesModulesActions)) {
             $list = implode(",", $whereOr);
             $where[] = "(acl_modules_actions_id) NOT IN ($list)";
@@ -195,7 +195,8 @@ class AclRolesModel extends Zwei_Db_Table
         $delete = $aclRolesModulesAction->delete($where);
         
         if (!empty($this->_dataRolesModulesActions)) $return = $delete;
-
+        
+        //Agregar los permisos que fueron chequeados. 
         $insert =  false;
         foreach ($this->_dataRolesModulesActions as $aclModulesActionsId) {
             $data = array(
