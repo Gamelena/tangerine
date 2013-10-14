@@ -50,7 +50,10 @@ class AdminController extends Zend_Controller_Action
         $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
         $confLayout = $config->zwei->layout;
         
-        $this->_helper->layout()->disableLayout();
+        $userInfo = Zend_Auth::getInstance()->getStorage()->read();
+        if ($userInfo)  $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
+        
+        
         $this->view->base_url = BASE_URL;
         $this->baseDojoFolder = isset($config->zwei->js->dojo->baseUrl) ? $config->zwei->js->dojo->baseUrl : '/dojotoolkit';
         
@@ -170,7 +173,6 @@ class AdminController extends Zend_Controller_Action
         ->requireModule("zwei.form.ValidationTextarea")
         ->requireModule("zwei.Form")
         ->requireModule("zwei.Utils")
-        //->requireModule("zwei.Menu")
         ->requireModule("zwei.Admportal")
         ;
     
@@ -210,19 +212,14 @@ class AdminController extends Zend_Controller_Action
         if ($this->getRequest()->getParam('p')) {
             $component = $this->getRequest()->getParam('p');
 
-            if (Zwei_Admin_Acl::isUserAllowed($component, "LIST") || Zwei_Admin_Acl::isUserAllowed($component, "EDIT") || Zwei_Admin_Acl::isUserAllowed($component, "ADD")) {
+            if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
+            if ($this->_acl->isUserAllowed($component, "LIST") || $this->_acl->isUserAllowed($component, "EDIT") || $this->_acl->isUserAllowed($component, "ADD")) {
                 $file = Zwei_Admin_Xml::getFullPath($component);
                 
-                if (!file_exists($file)) {
-                    //exit("No se encuentra archivo $file");
-                    //$this->render();
-                }
                 try {
-                    $xml = new Zwei_Admin_Xml($file, 0, 1);
+                    $xml = new Zwei_Admin_Xml($file, LIBXML_NOWARNING, 1);
                 } catch (Exception $e) {
-                    Debug::write($e->getCode()."-".$e->getMessage());
-                    $this->view->content = "Error al parsear $file";
-                    $this->render();
+                    exit("Error al intentar parsear $file, compruebe que el archivo exista y que sea un XML válido.");
                 }
 
                 if (stristr($xml->getAttribute('type'), '.')) {
@@ -231,7 +228,7 @@ class AdminController extends Zend_Controller_Action
                     $action = 'index';
                     $controller = $xml->getAttribute('type');
                 }
-                Debug::write(dir(APPLICATION_PATH . '/modules'));
+                
                 $this->view->content =  $this->view->action($action, $controller, 'components', $this->getRequest()->getParams());
             } else {
                 $this->view->content = "Acceso denegado a módulo $component";
