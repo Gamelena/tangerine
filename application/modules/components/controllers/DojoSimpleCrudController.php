@@ -247,7 +247,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
         if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         
-        if ($this->_acl->isUserAllowed($this->_component, 'EDIT')) {
+        if ($this->_xml->getAttribute('edit') === 'true' && $this->_acl->isUserAllowed($this->_component, 'EDIT')) {
             $this->view->onRowClick = "
                 if (dijit.byId('{$this->view->domPrefix}btnEdit') != undefined) dijit.byId('{$this->view->domPrefix}btnEdit').set('disabled', false);
                 if (dijit.byId('{$this->view->domPrefix}btnDelete') != undefined) dijit.byId('{$this->view->domPrefix}btnDelete').set('disabled', false);
@@ -255,7 +255,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             ";
         }
         
-        if ($this->_acl->isUserAllowed($this->_component, 'ADD')) {
+        if ($this->_xml->getAttribute('add') === 'true' && $this->_acl->isUserAllowed($this->_component, 'ADD')) {
             $this->view->onRowClick .= "
             if (dijit.byId('{$this->view->domPrefix}btnClone') != undefined) dijit.byId('{$this->view->domPrefix}btnClone').set('disabled', false);
             ";
@@ -269,7 +269,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->onRowDblClick = '';
         if ($this->_xml->getAttribute('onRowDblClick')) {
             $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick');
-        } else if ($this->_acl->isUserAllowed($this->_component, 'EDIT')) {
+        } else if ($this->_xml->getAttribute('edit') === 'true' && $this->_acl->isUserAllowed($this->_component, 'EDIT')) {
             $this->view->onRowDblClick = "var form = new zwei.Form({
                     ajax: $ajax,
                     component: '{$this->_component}',
