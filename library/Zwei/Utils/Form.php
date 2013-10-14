@@ -95,6 +95,7 @@ class Zwei_Utils_Form {
                         $info[$i]['filename'] = $filename;
                         $info[$i]['ext'] = $ext;
                     } else {
+                        Debug::write("No se pudo subir archivo {$_FILES[$file]['tmp_name'][$i]} a $dest."/".$filename");
                         $info = false;
                     }
                 }
@@ -115,6 +116,7 @@ class Zwei_Utils_Form {
                     $info['filename'] = $filename;
                     $info['ext'] = $ext;
                 } else {
+                    Debug::write("No se pudo subir archivo {$_FILES[$file]['tmp_name'][$i]} a $dest."/".$filename");
                     $info = false;
                 }
                 return $info;
