@@ -10,7 +10,7 @@ Requerimientos Básicos
 http://www.zend.com/community/downloads.
 descomprimirlo en /usr/share/php/Zend y agregar /usr/share/php/ al include_path en php.ini.
 
-- Dojo Toolkit 1.9.3
+- Dojo Toolkit 1.9.1
 http://download.dojotoolkit.org/
 
 Configurar Apache para ser accessible desde la url http://localhost/dojotoolkit. 
