@@ -5,7 +5,7 @@ setTimeout(function () {
 if (!$this->data && $this->formatter) :
 ?>
     dojo.forEach(dijit.byId('<?=$this->domId . $this->i?>').store.data, function(e) {
-        e.label = <?=$this->formatter?>(e.name)
+        e.label = <?=$this->formatter?>(e.name);
     });
 <?php
     //para saltarse esta parte el nombre la función formatter debe contener el string "formatimage"
@@ -18,6 +18,13 @@ if (!$this->data && $this->formatter) :
     endif; 
 ?>
 <?php 
+endif;
+?>
+<?php
+if ($this->data && $this->value && $this->mode == 'add') :
+?>
+    dijit.byId('<?=$this->domId . $this->i?>').set('value', '<?=$this->value?>');
+<?php
 endif;
 ?>
 <?php
@@ -37,7 +44,7 @@ $store = '';
 $value = '';
 if ($this->data) :
     $labelName = 'name';
-    $value = $this->value;
+    $value = " value=\"$this->value\"";
 ?>
     <div data-dojo-type="dojo/store/Memory" data-dojo-id="<?=$this->domId . $this->i?>Store" data-dojo-props="data: <?=$this->data?>"></div>
 <?php 
