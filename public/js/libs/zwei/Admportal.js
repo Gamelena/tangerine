@@ -73,12 +73,21 @@ dojo.declare("zwei.Admportal", null, {
                     model: treeModel,
                     showRoot: false,
                     persist: true,
-                    openOnClick: true,
                     onClick: function(item){
+                        this.openOnClick = false;
                         if (item.url != undefined) {
                             self.loadModuleTab(item.url, item.id, item.label, item.refresh_on_load);
                         } else {
-                            return false;
+                            this.openOnClick = true;
+                        }     
+                    },
+                    onClose: function(item){
+                        this.openOnClick = false;
+                        console.debug(item);
+                        if (item.url != undefined) {
+                            this.openOnClick = false;
+                        } else {
+                            this.openOnClick = true;
                         }     
                     },
                     _createTreeNode: function(
