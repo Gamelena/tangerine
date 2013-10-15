@@ -20,6 +20,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         
         $this->view->formatter = $r->getParam('formatter', false);
         $this->view->data = $r->getParam('data', false);
+        $this->view->mode = $r->getParam('mode');
         $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? "readonly=\"readonly\"" : '';
         $this->view->disabled = $r->getParam('disabled') === 'true' || $r->getParam($r->getParam('mode')) == 'disabled' ? "disabled=\"disabled\"" : '';
         $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
@@ -43,10 +44,12 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? "promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         
-        if ($r->getParam('data') && $r->getParam('value') !== false) {
-            $this->view->value = "value=\"{$r->getParam('value')}\" ";
+        if ($r->getParam('data') && $r->getParam('mode') == 'add' && $r->getParam('defaultValue') !== false) {
+            $this->view->value =  $r->getParam('defaultValue');
+        } else if ($r->getParam('data') && $r->getParam('value') !== false) {
+            $this->view->value = $r->getParam('value');
         } else {
-            $this->view->value =  $r->getParam('defaultValue') && !$r->getParam('defaultText') ? "value=\"{$r->getParam('defaultValue')}\" " : '';
+            $this->view->value =  $r->getParam('defaultValue') && !$r->getParam('defaultText') ? $r->getParam('defaultValue') : '';
         }
         
         $this->view->options = !$this->view->data ? $this->options() : false;
