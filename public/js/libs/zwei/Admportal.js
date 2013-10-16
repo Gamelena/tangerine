@@ -4,9 +4,9 @@ dojo.declare("zwei.Admportal", null, {
     },
     initLoad: function(layout) 
     {
-        admportal.loadEvents();
-        admportal.loadLayoutSettings(dojo.byId("logosAdm"),dojo.byId("tituloAdm"), dojo.byId("zweicomLogo"), dojo.byId("zweicomLegend"));
-        admportal.loadMainMenu(layout);
+        this.loadEvents();
+        this.loadLayoutSettings(dojo.byId("logosAdm"),dojo.byId("tituloAdm"), dojo.byId("zweicomLogo"), dojo.byId("zweicomLegend"));
+        this.loadMainMenu(layout);
     },
     loadEvents: function()
     {
@@ -19,6 +19,11 @@ dojo.declare("zwei.Admportal", null, {
     },
     loadLayoutSettings: function(domLogo, domTitle, domFooterImg, domFooterLegend) 
     {
+        if (domLogo == undefined) var domLogo = dojo.byId("logosAdm");
+        if (domTitle == undefined) var domTitle = dojo.byId("tituloAdm");
+        if (domFooterImg == undefined) var domFooterImg = dojo.byId("zweicomLogo");
+        if (domFooterLegend == undefined) var domFooterLegend = dojo.byId("zweicomLegend");
+        
         require(["dojo/data/ItemFileReadStore"], function(ItemFileReadStore){
             var store = new ItemFileReadStore({
                 url: base_url+'crud-request?model=SettingsModel&format=json'
