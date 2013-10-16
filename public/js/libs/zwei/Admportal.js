@@ -2,6 +2,12 @@ dojo.declare("zwei.Admportal", null, {
     constructor: function(args){
         dojo.mixin(this, args);
     },
+    initLoad: function(layout) 
+    {
+        admportal.loadEvents();
+        admportal.loadLayoutSettings(dojo.byId("logosAdm"),dojo.byId("tituloAdm"), dojo.byId("zweicomLogo"), dojo.byId("zweicomLegend"));
+        admportal.loadMainMenu(layout);
+    },
     loadEvents: function()
     {
         dojo.connect(dojo.byId("btnSalir"), "onclick", function(){

@@ -40,6 +40,7 @@ foreach ($this->groups as $group) :
             var observer = form.watch("response", function(name, oldValue, response) {
                 if (response != null) {
                     dijit.byId('mainTabModule' + globalModuleId).refresh();
+                    admportal.initLoad();
                 }
             });
 
