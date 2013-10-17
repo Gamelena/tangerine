@@ -120,24 +120,7 @@ class CrudRequestController extends Zend_Controller_Action
                                 $this->_form->data[$k] = $l['filename'];
                                 if ($element[$j]->existsChildren('thumb')) {
                                     foreach ($element[$j]->thumb as $t) {
-                                        try {
-                                            if (preg_match("/^\{ROOT_DIR\}(.*)$/", $t->getAttribute('path'), $matches)) {
-                                                $thumbPath = ROOT_DIR . $matches[1];
-                                            } else if (preg_match("/^\{APPLICATION_PATH\}(.*)$/", $t->getAttribute('path'), $matches)) {
-                                                $thumbPath = APPLICATION_PATH . $matches[1];
-                                            } else {
-                                                $thumbPath = $t->getAttribute('path');
-                                            }
-    
-                                            //[TODO] revisar configuracion de Autoloader en Bootstrap para no usar require_once
-                                            require_once ADMPORTAL_APPLICATION_PATH .'/../library/PhpThumb/ThumbLib.inc.php';
-                                            
-                                            $thumb = PhpThumbFactory::create($path."/".$l['filename']);
-                                            $thumb->resize($t->getAttribute('width'), $t->getAttribute('height'));
-                                            $thumb->save($thumbPath."/".$l['filename']);
-                                        } catch (Exception $e) {
-                                            Debug::write($e->getMessage() . '-' . $e->getCode() . $e->getTraceAsString());
-                                        }
+                                        $this->createThumb($t, $l, $path);
                                     }
                                 }
                                 $j++;
@@ -371,46 +354,101 @@ class CrudRequestController extends Zend_Controller_Action
         $failed = 0;
         $message = '';
         
-        foreach ($_FILES as $i => $v) {
+        $count = 0;
+        foreach ($_FILES as $data => $v) {
             $tmpTargets = array_keys($v['name']);
-            $target = $tmpTargets[0];
+            $target = $tmpTargets[$count];
             $path = $this->_form->pathdata[$target];
-            $infoFiles = $this->_form->upload($i, $path);
+            $infoFiles = $this->_form->upload($data, $path);
+            
             if ($infoFiles) {
-                foreach ($infoFiles as $i => $v) {
-                    $this->_form->data[$i] = $v['filename'];
+                foreach ($infoFiles as $id => $v) {
+                    $id = str_replace("'", '', $id);
+                    $row = $this->_model->find($id)->current();
+                    $xmlChildren = new Zwei_Admin_Xml('<element>'.html_entity_decode($row->xml_children).'</element>');
+                    
+                    foreach ($xmlChildren->thumb as $child) {
+                        
+                        $this->createThumb($child, $v, $path);
+                    }
+                    //Se agrega nombre de archivo subido a array de actualizacion de datos
+                    $this->_form->data[$id] = $v['filename'];
                 }
-            } else {
+            } else if ($v['size'] > 0) {
                 Debug::write("error al subir archivo a $path");
             }
+            $count++;
         }
         
+        
         if (isset($this->_form->deletedata )) {
-            foreach ($this->_form->deletedata as $i => $v) {
-                if (!unlink($this->_form->pathdata[$i]. $v)) {
-                    Debug::write("no se pudo borrar " . ROOT_DIR . '/upfiles/'. $v);
+            foreach ($this->_form->deletedata as $id => $value) {
+                if (!unlink($this->_form->pathdata[$id]. $value)) {
+                    Debug::write("no se pudo borrar " . ROOT_DIR . '/upfiles/'. $value);
                 }
-                $this->_form->data[$i] = '';
+                $this->_form->data[$id] = '';
             }
         }
         
-        
-        foreach ($this->_form->data as $i => $v) {
-            $i = str_replace("'", '', $i);
-            $where = $this->_model->getAdapter()->quoteInto('id = ?', $i);
-            $data = array('value' => $v);
-            if ($this->_model->update($data, $where)) $updated++;
+        $i = 0;
+        foreach ($this->_form->data as $id => $value) {
+            $id = str_replace("'", '', $id);
+            $row = $this->_model->find($id)->current();
+            $row->value = $value;
+            if ($row->save()) $updated++;
         }
         
         $message .= "Actualizados $updated registros";
         
-        
-        $data = array( 'id' => '0',
-                'state' => 0,
-                'message' => $message,
-                'todo' => '',
-                'more' => '');
+        $data = array(
+            'id'     => '0',
+            'state'  => 0,
+            'message'=> $message,
+            'todo'   => '',
+            'more'   => ''
+        );
         
         $this->view->content = Zend_Json::encode($data);
     }
+    
+    /**
+     * Genera las miniaturas a partir de información xml
+     * 
+     * @param Zwei_Admin_Xml $node
+     * @param array $infoFile
+     * @param string $path
+     * @return GdThumb
+     */
+    protected function createThumb(Zwei_Admin_Xml $node, $infoFile, $path)
+    {
+        try {
+            if (preg_match("/^\{ROOT_DIR\}(.*)$/", $node->getAttribute('path'), $matches)) {
+                $thumbPath = ROOT_DIR . $matches[1];
+            } else if (preg_match("/^\{APPLICATION_PATH\}(.*)$/", $node->getAttribute('path'), $matches)) {
+                $thumbPath = APPLICATION_PATH . $matches[1];
+            } else if ($node->getAttribute('path')){
+                $thumbPath = $node->getAttribute('path');
+            } else {
+                $thumbPath = $path; 
+            }
+            
+        
+            //[TODO] cambiar configuracion del Autoloader en Bootstrap para no usar require_once
+            require_once ADMPORTAL_APPLICATION_PATH . '/../library/PhpThumb/ThumbLib.inc.php';
+        
+            if (!file_exists($path)) mkdir($path, 0777, true);
+            Debug::write($path);
+            $thumb = PhpThumbFactory::create($path."/".$infoFile['filename']);
+            $width = $node->getAttribute('width') ? $node->getAttribute('width') : 0;
+            $height = $node->getAttribute('height') ? $node->getAttribute('height') : 0;
+            
+            $thumb->resize($width, $height);
+            $thumb->save($thumbPath."/".$infoFile['filename']);
+            Debug::write($thumb);
+        } catch (Exception $e) {
+            Debug::write($e->getMessage() . '-' . $e->getCode() . $e->getTraceAsString());
+            return false;
+        }
+    }
+    
 }
