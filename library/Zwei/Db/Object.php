@@ -129,6 +129,7 @@ class Zwei_Db_Object
     
     protected function iterateSearcher($i, $s)
     {
+
         $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
         $op = 'like';//Operador por defecto
         $sufix = '%';//Sufijo por defecto

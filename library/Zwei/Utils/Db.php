@@ -20,6 +20,9 @@ class Zwei_Utils_Db
     {
         $possibleTables = array();
         $realTables = array();
+        Debug::write("en tablas rotadas");
+        Debug::write($from);
+        Debug::write($to);
         if (!is_null($from) && !is_null($to)) {
         
             $interval = Zwei_Utils_Time::createInterval (

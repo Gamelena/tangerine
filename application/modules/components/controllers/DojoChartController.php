@@ -5,15 +5,15 @@
  * @example
  * <code>
  * <?xml version="1.0"?>
-    <!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
+    <!DOCTYPE section PUBLIC "//COMPONENTS/" "components.xsd">
     <component 
         name="Gráfico por Canal"
         type="dojo-chart" 
-        chart_y_target="count"
-        chart_x_type="datetime"
-        chart_x_target="fecha"  
-        chart_dojo_type="Markers"
-        chart_dojo_theme="Shrooms"
+        chartYTarget="count"
+        chartXType="datetime"
+        chartXTarget="fecha"  
+        chartDojoType="Markers"
+        chartDojoTheme="Shrooms"
         target="counter_c_d_r_compras"
     />
  * </code>
@@ -49,6 +49,7 @@ class Components_DojoChartController extends Zend_Controller_Action
     
     public function init()
     {
+        Debug::write("init");
         $this->_helper->layout()->disableLayout();
         
         $this->_page = $this->_request->getParam('p');
@@ -86,11 +87,11 @@ class Components_DojoChartController extends Zend_Controller_Action
             } 
         }
         //Eje Y
-        $this->view->yTarget = $this->_xml->getAttribute("chart_y_target");
-        if ($this->_xml->getAttribute("chart_y_label")) $this->view->yTitle = $this->_xml->getAttribute("chart_y_label");
+        $this->view->yTarget = $this->_xml->getAttribute("chartYTarget");
+        if ($this->_xml->getAttribute("chartYLabel")) $this->view->yTitle = $this->_xml->getAttribute("chartYLabel");
         
         $this->view->options = $this->_xml->getAttribute("options") ? $this->_xml->getAttribute("options") : "new Object()";
-        $this->view->chartingTheme = $this->_xml->getAttribute("chart_dojo_theme") ? $this->_xml->getAttribute("chart_dojo_theme") : "Claro";
+        $this->view->chartingTheme = $this->_xml->getAttribute("chartDojoTheme") ? $this->_xml->getAttribute("chartDojoTheme") : "Claro";
         
         if (!empty($this->_request->style)) $this->_dojo_style = $this->_request->style;
     }
@@ -98,23 +99,25 @@ class Components_DojoChartController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->xTarget = $this->_xml->getAttribute("chart_x_target");
-        $this->view->items = $this->_xml->getAttribute("chart_items");
+        Debug::write("indexAction");
+        $this->view->xTarget = $this->_xml->getAttribute("chartXTarget");
+        if(!$this->_xml->getAttribute("items"))
+        $this->view->items = $this->_xml->getAttribute("items");
 
-        if ($this->_request->getParam("chart_items")) {
-            $this->view->items = $this->_request->getParam("chart_items");
-            $this->view->url .= "&chart_items=" . $this->_request->getParam("chart_items");
+        if ($this->_request->getParam("items")) {
+            $this->view->items = $this->_request->getParam("items");
+            $this->view->url .= "&items=" . $this->_request->getParam("items");
         }
         
-        if ($this->_request->getParam("chart_items_description")) {
-            $this->view->items = $this->_request->getParam("chart_items_description");
-            $this->view->url .= "&chart_items_description=" . $this->_request->getParam("chart_items_description");            
+        if ($this->_request->getParam("itemsDescription")) {
+            $this->view->items = $this->_request->getParam("itemsDescription");
+            $this->view->url .= "&itemsDescription=" . $this->_request->getParam("itemsDescription");            
         }
         
         
-        if ($this->_xml->getAttribute("chart_x_label")) $this->view->xTitle = $this->_xml->getAttribute("chart_x_label");
+        if ($this->_xml->getAttribute("chartXLabel")) $this->view->xTitle = $this->_xml->getAttribute("chartXLabel");
         
-        $this->view->chartType = $this->_xml->getAttribute("chart_dojo_type") ?  $this->_xml->getAttribute("chart_dojo_type") : "Lines";
+        $this->view->chartType = $this->_xml->getAttribute("chartDojoType") ?  $this->_xml->getAttribute("chartDojoType") : "Lines";
     }
 
     public function pieAction()

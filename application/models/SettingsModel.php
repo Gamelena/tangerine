@@ -57,4 +57,5 @@ class SettingsModel extends Zwei_Db_Table
         Debug::writeBySettings($select->__toString(), 'query_log');
         return $this->fetchAll($select)->toArray();
     }
+
 }
