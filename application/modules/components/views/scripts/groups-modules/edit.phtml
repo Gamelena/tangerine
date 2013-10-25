@@ -1,0 +1,46 @@
+<style type="text/css">
+    .formContainer {
+        width: 800px;
+    }
+    
+    .formContainer table{
+        float: left;
+    }
+    .formContainer th{
+        width: 80px;
+    }
+    .formContainer td{
+        width: 80px;
+    }
+</style>
+<div class="formContainer">
+    <form data-dojo-type="dijit/form/Form" id="actionsModules<?=$this->mode?>">
+<?php 
+foreach ($this->modules as $i => $module) :
+    if (!empty($module->actions)) :
+?>
+
+        <table>
+            <tr>
+                <th>
+                    <?=$module->title?>
+                </th>
+                <td>
+                    <select multiple="true" name="actionsModule<?=$module->id?>" id="actionsModule<?=$module->id?><?=$this->mode?>" data-dojo-type="dojox.form.CheckedMultiSelect">
+<?php
+        foreach ($module->actions as $action) :
+?>
+                          <option value="<?=$action->id?>"><?=$action->title?></option>
+<?php 
+        endforeach;
+?>
+                     </select>
+                 </td>
+             </tr>
+        </table>
+<?php
+    endif; 
+endforeach;
+?>
+    </form>
+</div>
