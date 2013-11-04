@@ -16,7 +16,19 @@ class Components_GroupsModulesController extends Zend_Controller_Action
      *
      */
     private $_aclModulesItemId = null;
-
+    
+    /**
+     * 
+     * @var int
+     */
+    private $_aclGroupsId;
+    
+    /**
+     *
+     * @var array
+     */
+    private $_selected = array();
+    
     /**
      * Post Constructor
      *
@@ -29,6 +41,8 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
         $this->view->aclModulesId = $this->_aclModulesId = $this->getRequest()->getParam('acl_modules_id');
         $this->view->aclModulesItemId = $this->_aclModulesItemId = $this->getRequest()->getParam('acl_modules_item_id');
+        $this->view->aclGroupsId = $this->_aclGroupsId = $this->getRequest()->getParam('id');
+        $this->view->model = 'AclGroupsModulesActionsModel';
     }
 
     public function indexAction()
@@ -47,11 +61,8 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         $parent = $modulesModel->find($aclModulesId)->current();
         $modules[$i]['id'] = $parent->id;
         $modules[$i]['title'] = $title != null ? $title : $parent->title;
-        /**
-         * TODO esto debe ser parametrizable
-         */
-        //$modules[$i]['title'] = "Campaña";
-       
+        
+        
         $actions = $parent->findDependentRowset('DbTable_AclModulesActions');
         $modules[$i]['actions'] = $actions->toArray();
         
@@ -59,12 +70,16 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         
         $j = 0;
         foreach ($actions as $action) {
+            Debug::write($action->id);
+            Debug::write($this->_selected);
             $modules[$i]->actions[$j]['title'] = $action->findParentRow('DbTable_AclActions')->title;
+            $modules[$i]->actions[$j]['selected'] = in_array($action->id, $this->_selected);
             $modules[$i]->actions[$j] = (object) $modules[$i]->actions[$j];
             $j++;
         }
         
-        $childrens = $parent->findDependentRowset('DbTable_AclModules');
+        $select = $parent->select()->order('order');
+        $childrens = $parent->findDependentRowset('DbTable_AclModules', null, $select);
         
         if ($childrens->count()) {
             foreach ($childrens as $child) {
@@ -78,23 +93,19 @@ class Components_GroupsModulesController extends Zend_Controller_Action
 
     public function editAction()
     {
+        $selected = array();
+        $gmaModel = new AclGroupsModulesActionsModel();
+        
+        $select = $gmaModel->select();
+        $select->where($gmaModel->getAdapter()->quoteInto('acl_groups_id = ?', $this->_aclGroupsId));
+        $select->where($gmaModel->getAdapter()->quoteInto('acl_modules_item_id = ?', $this->_aclModulesItemId));
+        
+        foreach ($gmaModel->fetchAll($select) as $row) {
+            $this->_selected[] = $row->acl_modules_actions_id;
+        }
+        
         $this->view->mode = 'edit';
         $title = 'Campaña';
         $this->view->modules = $this->getModules($this->_aclModulesId, $title);
     }
-
-    public function addAction()
-    {
-        $this->view->mode = 'add';
-        $title = 'Campaña';
-        $this->view->modules = $this->getModules($this->_aclModulesId, $title);
-        $this->render('edit');
-    }
-
-
 }
-
-
-
-
-

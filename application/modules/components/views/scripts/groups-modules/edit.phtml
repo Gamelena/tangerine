@@ -14,7 +14,7 @@
     }
 </style>
 <div class="formContainer">
-    <form data-dojo-type="dijit/form/Form" id="actionsModules<?=$this->mode?>">
+    <form data-dojo-type="dijit/form/Form" id="actionsModules<?=$this->mode?>" target="ifrm_process" action="<?=BASE_URL?>crud-request" method="post">
 <?php 
 foreach ($this->modules as $i => $module) :
     if (!empty($module->actions)) :
@@ -26,11 +26,11 @@ foreach ($this->modules as $i => $module) :
                     <?=$module->title?>
                 </th>
                 <td>
-                    <select multiple="true" name="actionsModule<?=$module->id?>" id="actionsModule<?=$module->id?><?=$this->mode?>" data-dojo-type="dojox.form.CheckedMultiSelect">
+                    <select multiple="true" name="data[actionsModule<?=$module->id?>][]" id="actionsModule<?=$module->id?><?=$this->mode?>" data-dojo-type="dojox.form.CheckedMultiSelect">
 <?php
         foreach ($module->actions as $action) :
 ?>
-                          <option value="<?=$action->id?>"><?=$action->title?></option>
+                        <option value="<?=$action->id?>" <?=$action->selected ? 'selected="selected"' : ''?>><?=$action->title?></option>
 <?php 
         endforeach;
 ?>
@@ -42,5 +42,22 @@ foreach ($this->modules as $i => $module) :
     endif; 
 endforeach;
 ?>
+    <input type="hidden" name="model" value="<?=$this->model?>" />
+    <input type="hidden" name="action" value="edit" />
+    <input type="hidden" name="format" value="json" />
+    <input type="hidden" name="primary[acl_modules_item_id]" value="<?=$this->aclModulesItemId?>" />
+    <input type="hidden" name="primary[acl_groups_id]" value="<?=$this->aclGroupsId?>" />
+    <button data-dojo-type="dijit/form/Button" id="actionsModule<?=$module->id?><?=$this->mode?>btnSave" type="submit">Guardar</button>
+    <script type="dojo/method" event="onSubmit">
+    if (this.validate()) {
+        console.debug(this);
+        utils.showMessage('Datos Guardados');
+        dijit.byId('groups_modulesdialog_edit').hide();
+    } else {
+        utils.showMessage('Por favor corrija los campos marcados.', 'error');
+        return false;
+    }
+    return true;
+    </script>
     </form>
 </div>
