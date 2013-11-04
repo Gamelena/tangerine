@@ -30,7 +30,7 @@ menugroups_modules.startup();
 </script>
 <div id="groups_modulescontentTab" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false" class="contentWrapper" style="width:100%">
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:true" class="contentCenter">
-        <span data-dojo-type="dojo/data/ItemFileReadStore" id="groups_modulesstoreGrid" jsId="groups_modulesstoreGrid" data-dojo-props="url: 'http://localhost/ussd-admportal/crud-request?model=AclGroupsModel&format=json&p=groups.xml'"></span>
+        <span data-dojo-type="dojo/data/ItemFileReadStore" id="groups_modulesstoreGrid" jsId="groups_modulesstoreGrid" data-dojo-props="url: '<?=BASE_URL?>ussd-admportal/crud-request?model=AclGroupsModel&format=json&p=groups.xml'"></span>
         <table data-dojo-type="dojox/grid/EnhancedGrid" id="groups_modulesdataGrid" jsId="groups_modulesdataGrid" data-dojo-props="store: groups_modulesstoreGrid, plugins:{ menus:{selectedRegionMenu: menugroups_modules}, pagination: {defaultPageSize:25, maxPageStep: 5 }}, clientSort:true, selectable: true, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.', onRowDblClick: function(){
             var dijitDialog = dijit.byId('groups_modulesdialog_edit');
             var items = dijit.byId('groups_modulesdataGrid').selection.getSelected();
