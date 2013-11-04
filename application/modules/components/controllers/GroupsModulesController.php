@@ -70,8 +70,6 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         
         $j = 0;
         foreach ($actions as $action) {
-            Debug::write($action->id);
-            Debug::write($this->_selected);
             $modules[$i]->actions[$j]['title'] = $action->findParentRow('DbTable_AclActions')->title;
             $modules[$i]->actions[$j]['selected'] = in_array($action->id, $this->_selected);
             $modules[$i]->actions[$j] = (object) $modules[$i]->actions[$j];

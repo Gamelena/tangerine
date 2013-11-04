@@ -59,42 +59,10 @@ class AdminController extends Zend_Controller_Action
         
         if (!empty($confLayout->dojoTheme)) $this->_dojoTheme = $confLayout->dojoTheme;
         if (!empty($confLayout->template)) $this->_dojoTheme = $confLayout->layout->template;
-        $this->view->jsLoadModuleFunction = isset($confLayout->mainPane) && $confLayout->mainPane == 'dijitTabs' ? 'admportal.loadModuleTab' : 'admportal.loadModuleSingle';
         
         if (!empty($this->_request->theme)) $this->_dojoTheme = $this->_request->theme;
         if (!empty($this->_request->template)) $this->_template = $this->_request->template;
                 
-        Zend_Dojo::enableView($this->view);
-        $this->view->addHelperPath('Zend/Dojo/View/Helper/', 'Zend_Dojo_View_Helper');
-        
-        
-        $this->view->dojo()
-        ->setLocalPath (PROTO.$_SERVER['HTTP_HOST'].$this->baseDojoFolder.'/dojo/dojo.js')
-        ->setDjConfig(
-            array(
-                'parseOnLoad' => 'true', 
-                'isDebug' => 'false', 
-                'locale' => 'es',
-                'packages' => array(
-                     array('name' => 'dojo',
-                           'location' => 
-                               (isset($config->resources->dojo->djConfig->packages->dojo) ? 
-                               $config->resources->dojo->djConfig->packages->dojo : $this->baseDojoFolder . '/dojo')),
-                     array('name' => 'dijit',
-                           'location' => 
-                               (isset($config->resources->dojo->djConfig->packages->dijit) ? 
-                               $config->resources->dojo->djConfig->packages->dijit : $this->baseDojoFolder . '/dijit')),
-                     array('name' => 'dojox',
-                           'location' => 
-                               (isset($config->resources->dojo->djConfig->packages->dojox) ? 
-                               $config->resources->dojo->djConfig->packages->dojox : $this->baseDojoFolder . '/dojox')),
-                     array('name' => 'zwei',
-                           'location' => 
-                               (isset($config->resources->dojo->djConfig->packages->zwei) ?
-                               $config->resources->dojo->djConfig->packages->zwei : '/libs/zwei')),
-                )
-            )
-        );
         
         $this->view->headStyle()->appendStyle('
             @import "'.$this->baseDojoFolder.'/dijit/themes/'.$this->_dojoTheme.'/'.$this->_dojoTheme.'.css";
