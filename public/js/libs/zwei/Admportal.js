@@ -38,11 +38,11 @@ dojo.declare("zwei.Admportal", null, {
                     dojo.forEach(items, function(i)
                     {
                         if (store.getValue(i, "id") == "url_logo_oper"){
-                            images += "<img src=\""+base_url+ '/upfiles/' +store.getValue(i, "value")+ "\" />";
+                            images += "<img src=\""+base_url+ 'upfiles/corporative/' +store.getValue(i, "value")+ "\" />";
                         } else if(store.getValue(i, "id") == "titulo_adm") {
                             domTitle.innerHTML = store.getValue(i, "value");
                         } else if(store.getValue(i, "id") == "url_logo_zweicom") {
-                            domFooterImg.src = base_url+ '/upfiles/' +store.getValue(i, "value");
+                            domFooterImg.src = base_url+ 'upfiles/corporative/' +store.getValue(i, "value");
                         } else if(store.getValue(i, "id") == "credits") {
                             domFooterLegend.innerHTML = store.getValue(i, "value");
                         }
