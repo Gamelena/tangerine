@@ -81,7 +81,8 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         
         if ($childrens->count()) {
             foreach ($childrens as $child) {
-                $modules[] = $this->getModules($child->id)[0];
+                $module = $this->getModules($child->id);
+                $modules[] = $module[0];
             }
         }
         
