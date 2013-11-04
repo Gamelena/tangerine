@@ -11,7 +11,7 @@
  *
  */
 
-class AclModulesModel extends Zwei_Db_Table
+class AclModulesModel extends DbTable_AclModules
 {
     protected $_name = "acl_modules";
     protected $_nameIcons = "web_icons";
@@ -115,41 +115,13 @@ class AclModulesModel extends Zwei_Db_Table
         $this->_approved = ($value == 1) ? '1' : '0';
     }
 
-    /**
-     * Obtiene los módulos hijos a partir de una id 
-     * @param $parent_id
-     * @return Array()
-     */
-
-    private function getChildrens($parent_id)
-    {
-        $childrens = $this->_acl->listGrantedResourcesByParentId($parent_id);
-        if ($parent_id != 0) {
-            foreach ($childrens as $i => $child) {
-                $childrens[$i]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($child['title']) : utf8_encode(html_entity_decode($child['title']));
-                unset($childrens[$i]['title']);
-                $prefix = "";
-
-                if ($child['type'] == 'zend_module') $prefix = "";
-                else if ($child['type'] == 'xml') $prefix = "admin/components?p=";
-                else if ($child['type'] == 'legacy') $prefix = "admin/legacy?p=";
-                else if ($child['type'] == 'iframe') $prefix = "admin/iframe?p=";
-                    
-                if ($prefix != "") $child['module'] = urlencode($child['module']);
-
-                $childrens[$i]['url'] = $prefix.(PHP_VERSION_ID >= 50400 ? html_entity_decode($child['module']) : utf8_encode(html_entity_decode($child['module'])));
-                unset($childrens[$i]['module']);
-            }
-        }
-        return $childrens;
-    }
 
     /**
      * Obtiene arbol de módulos en forma recursiva
      * @param $parent_id
      * @return Array()
      */
-    public function getTree($parent_id = null)
+    public function getTree($parent_id = null, $noTree = false)
     {
         $root = $this->_acl->listGrantedResourcesByParentId($parent_id);
 
@@ -157,7 +129,7 @@ class AclModulesModel extends Zwei_Db_Table
       
         //$i = 0;
         foreach ($root as $branch) {
-            if ($branch['tree'] == '1') {
+            if ($branch['tree'] == '1' || $noTree) {
                 $key = $branch['id'];
                 $arrNodes[$key]['id']  = $branch['id'];
                 $arrNodes[$key]['type']  = $branch['type'];
@@ -174,7 +146,7 @@ class AclModulesModel extends Zwei_Db_Table
                 
                 
                 if ($prefix != "") $branch['module'] = urlencode($branch['module']);
-                $arrNodes[$key]['url'] = $prefix.$branch['module'];
+                if ($branch['type']) $arrNodes[$key]['url'] = $prefix.$branch['module'];
 
                 
                 $childrens = $this->getTree($branch['id']);
@@ -197,9 +169,9 @@ class AclModulesModel extends Zwei_Db_Table
         $select=new Zend_Db_Table_Select($this);
         $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
         $select->from($this->_name)
-        ->joinLeft(array('parent'=>$this->_name), "$this->_name.parent_id = parent.id", array("parent_title"=>"title", "parent_module"=>"module"))
-        ->joinLeft($this->_nameIcons, "$this->_name.icons_id=$this->_nameIcons.id", array('icon_title' => 'title', 'image'))
-        ->where("$this->_name.id != ?", 0)
+            ->joinLeft(array('parent'=>$this->_name), "$this->_name.parent_id = parent.id", array("parent_title"=>"title", "parent_module"=>"module"))
+            ->joinLeft($this->_nameIcons, "$this->_name.icons_id=$this->_nameIcons.id", array('icon_title' => 'title', 'image'))
+            ->where("$this->_name.id != ?", 0)
         ;
         
         //Si no pertenece al role_id 1, no puede ver módulos root

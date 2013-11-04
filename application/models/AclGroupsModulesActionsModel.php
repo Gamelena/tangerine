@@ -1,0 +1,59 @@
+<?php
+
+class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
+{
+    protected $_dataModulesActionsId;
+    
+    public function update($data, $where)
+    {
+        $data = $this->cleanDataParams($data);
+        $delete = $this->deleteUnchecked($data, $where);
+
+        $where = self::whereToArray($where);
+        $data['acl_groups_id'] = $where['acl_groups_id'];
+        $data['acl_modules_item_id'] = $where['acl_modules_item_id'];
+        
+        $insert = false;
+        foreach ($this->_dataModulesActionsId as $aclModulesActionsId) {
+            try {
+                $data['acl_modules_actions_id'] = $aclModulesActionsId;
+                $insert = $this->insert($data);
+            } catch (Zend_Db_Exception $e) {
+                if ($e->getCode() == '23000') {
+                    $printData = print_r($data, 1);
+                    Debug::write("Ya existe modulo_accion asociado a $printData");
+                }
+            }
+        }
+        
+        return $insert || $delete;
+    }
+    
+    public function cleanDataParams($data)
+    {
+        foreach ($data as $i => $v) {
+            if (preg_match("/^actionsModule/", $i)) {
+                foreach ($v as $v2) {
+                    $this->_dataModulesActionsId[] = $v2;
+                    unset($data[$i]);
+                }
+            }
+        }
+        return $data;
+    }
+    
+    public function deleteUnchecked($data, $where)
+    {
+        Debug::write($this->_dataModulesActionsId);
+        $list = !empty($this->_dataModulesActionsId) ?
+            implode(",", $this->_dataModulesActionsId) :
+            false;
+        
+        if ($list) $where[] = "acl_modules_actions_id NOT IN ($list)";
+        
+        $delete = parent::delete($where);
+    }
+    
+
+}
+
