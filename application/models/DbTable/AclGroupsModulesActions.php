@@ -15,13 +15,17 @@ class DbTable_AclGroupsModulesActions extends Zwei_Db_Table
     protected $_referenceMap  =  array(
         'acl_modules_actions' => array(
             'columns'           => array('acl_modules_id'),
-            'refTableClass'     => 'AclModulesModel',
-            'refColumns'        => array('id')
+            'refTableClass'     => 'DbTable_AclModules',
+            'refColumns'        => array('id'),
+            'onDelete'          => self::CASCADE,
+            'onUpdate'          => self::RESTRICT
         ),
         'acl_groups' => array(
             'columns'           => array('acl_groups_id'),
-            'refTableClass'     => 'AclGroupsModel',
-            'refColumns'        => array('id')
+            'refTableClass'     => 'DbTable_AclGroups',
+            'refColumns'        => array('id'),
+            'onDelete'          => self::CASCADE,
+            'onUpdate'          => self::RESTRICT
         )
     );
 }
