@@ -14,8 +14,8 @@ class DbTable_AclGroupsModulesActions extends Zwei_Db_Table
      */
     protected $_referenceMap  =  array(
         'acl_modules_actions' => array(
-            'columns'           => array('acl_modules_id'),
-            'refTableClass'     => 'DbTable_AclModules',
+            'columns'           => array('acl_modules_actions_id'),
+            'refTableClass'     => 'DbTable_AclModulesActions',
             'refColumns'        => array('id'),
             'onDelete'          => self::CASCADE,
             'onUpdate'          => self::RESTRICT

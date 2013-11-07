@@ -17,8 +17,11 @@ class AclModulesModel extends DbTable_AclModules
     protected $_nameIcons = "web_icons";
     protected $_label = "title";
     protected $_dataActions = array();
-    private $_approved = null;
-
+    
+    /**
+     * (non-PHPdoc)
+     * @see Zwei_Db_Table::update()
+     */
     public function update($data, $where) 
     {
         $data = $this->cleanDataParams($data);
@@ -34,11 +37,15 @@ class AclModulesModel extends DbTable_AclModules
         return $saveActions || $update;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Zwei_Db_Table::insert()
+     */
     public function insert($data)
     {
         $data = $this->cleanDataParams($data);
         $this->_ajax_todo = 'cargarArbolMenu';
-
+        
         $lastInsertedId = parent::insert($data);
         $saveActions = $this->saveDataActions($lastInsertedId);
         
@@ -46,7 +53,12 @@ class AclModulesModel extends DbTable_AclModules
         
     } 
     
-    protected function cleanDataParams($data) {
+    /**
+     * (non-PHPdoc)
+     * @see Zwei_Db_Table::cleanDataParams()
+     */
+    protected function cleanDataParams($data)
+    {
         if (empty($data['module'])) $data['module'] = null;
         if (empty($data['parent_id'])) $data['parent_id'] = null;
         if (isset($data['actions'])) {
@@ -58,7 +70,14 @@ class AclModulesModel extends DbTable_AclModules
         return $data;
     }
     
-    protected function saveDataActions($aclModulesId) {
+    /**
+     * Guardar acciones. 
+     * 
+     * @param int $aclModulesId
+     * @return boolean
+     */
+    protected function saveDataActions($aclModulesId)
+    {
         $modulesAction = new DbTable_AclModulesActions();
         $ad = $modulesAction->getAdapter();
         $insert = false;
@@ -74,7 +93,6 @@ class AclModulesModel extends DbTable_AclModules
         if ($list) $where[] = "acl_actions_id NOT IN ($list)";    
             
         $delete = $modulesAction->delete($where);
-         
         
         foreach ($this->_dataActions as $v) {
             $data = array(
@@ -110,12 +128,6 @@ class AclModulesModel extends DbTable_AclModules
     }
     
     
-    public function setApproved($value=1)
-    {
-        $this->_approved = ($value == 1) ? '1' : '0';
-    }
-
-
     /**
      * Obtiene arbol de módulos en forma recursiva
      * @param $parent_id
@@ -124,9 +136,8 @@ class AclModulesModel extends DbTable_AclModules
     public function getTree($parent_id = null, $noTree = false)
     {
         $root = $this->_acl->listGrantedResourcesByParentId($parent_id);
-
+        
         $arrNodes = array();
-      
         //$i = 0;
         foreach ($root as $branch) {
             if ($branch['tree'] == '1' || $noTree) {
@@ -136,7 +147,7 @@ class AclModulesModel extends DbTable_AclModules
                 $arrNodes[$key]['image']  = $branch['image'];
                 $arrNodes[$key]['refresh_on_load']  = $branch['refresh_on_load'];
                 
-                $arrNodes[$key]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($branch['title']) : utf8_encode(html_entity_decode($branch['title']));
+                $arrNodes[$key]['label'] = html_entity_decode($branch['title']);
 
                 $prefix = "";
                 if ($branch['type'] == 'zend_module') {$prefix = "";}
@@ -210,7 +221,6 @@ class AclModulesModel extends DbTable_AclModules
      * Selecciona diferentes módulos, mostrando modulo padre 
      * @return Zend_Db_Table_Select
      */
-
     public function selectDistinct()
     {
         $select=new Zend_Db_Table_Select($this);
@@ -249,5 +259,29 @@ class AclModulesModel extends DbTable_AclModules
             $select->where("$this->_name.root != ?", "1");
         }
         return $select;
+    }
+    
+    /**
+     * Retorna el id asociado a module.
+     * 
+     * @param string $module
+     * @return int
+     */
+    public function getModuleId($module) {
+        $select = new Zend_Db_Table_Select($this);
+        $select->from($this->_name, array('id'))->where($this->getAdapter()->quoteInto('module = ?', $module));
+        return $this->fetchRow($select)->id;
+    }
+    
+    /**
+     * Retorna el id asociado a module.
+     *
+     * @param string $module
+     * @return int
+     */
+    public function findModule($module, $fields = array('*')) {
+        $select = new Zend_Db_Table_Select($this);
+        $select->from($this->_name, $fields)->where($this->getAdapter()->quoteInto('module = ?', $module));
+        return $this->fetchRow($select);
     }
 }

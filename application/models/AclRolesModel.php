@@ -11,13 +11,8 @@
  *
  */
 
-class AclRolesModel extends Zwei_Db_Table
+class AclRolesModel extends DbTable_AclRoles
 {
-    /**
-     * 
-     * @var string
-     */
-    protected $_name = "acl_roles";
     /**
      * 
      * @var string
@@ -191,12 +186,12 @@ class AclRolesModel extends Zwei_Db_Table
             $where[] = "(acl_modules_actions_id) NOT IN ($list)";
         }
         
-        //(4) Clausula WHERE lista, borremos los permisos desmarcados del formulario.
+        //(4) Clausula WHERE lista, ahora borremos los permisos.
         $delete = $aclRolesModulesAction->delete($where);
         
         if (!empty($this->_dataRolesModulesActions)) $return = $delete;
         
-        //Agregar los permisos que fueron chequeados. 
+        //(5) Agregar los permisos que fueron chequeados. 
         $insert =  false;
         foreach ($this->_dataRolesModulesActions as $aclModulesActionsId) {
             $data = array(
@@ -217,6 +212,47 @@ class AclRolesModel extends Zwei_Db_Table
     }
     
     /**
+     * Da permisos para listar en todos los modulos padres para poder acceder a modulo actual.
+     * 
+     * @param int $aclModulesId
+     * @param int $aclRolesId
+     * @param string $action
+     * @return Zend_Db_Table_Row
+     */
+    public function setParentModulesPermissions($aclModulesId, $aclRolesId, $action = 'LIST', $selfPermission = true)
+    {
+        $aclModulesModel = new DbTable_AclModules();
+        $aclModuleRow = $aclModulesModel->find($aclModulesId)->current();
+        
+        $parent = $aclModuleRow->findParentRow('DbTable_AclModules');
+        
+        if ($parent && $parentId != $aclModulesId) {
+            $actions = $parent->findDependentRowset('DbTable_AclModulesActions');
+            $aclModulesActionsId = null;
+            
+            foreach ($actions as $a) {
+                if ($a->acl_actions_id == $action) {
+                    $acl_modules_action_id = $a->id;
+                }
+            }
+            if ($aclModulesActionsId) {
+                try {
+                    $aclRolesModulesActionsModel = new AclRolesModulesActionsModel();
+                    $data = array(
+                        'acl_modules_actions_id' => $aclModulesActionsId,
+                        'acl_roles_id' => $aclRolesId
+                    );
+                    $aclRolesModulesActionsModel->insert($data);
+                } catch (Zend_Db_Exception $e) {
+                    Debug::write($e->getMessage());
+                }
+            }
+            $this->setParentModulesPermissions($aclModulesId, $aclRolesId, 'LIST', false);
+        }
+        return $aclModuleRow;
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see Zwei_Db_Table::delete()
      */
@@ -226,7 +262,7 @@ class AclRolesModel extends Zwei_Db_Table
         if ($delete) { //borrar permisos asociados
             $arrWhere = self::whereToArray($where);
             $where = $this->getAdapter()->quoteInto("acl_roles_id = ? ", $where['id']);
-            $aclPermissions = new AclPermissionsModel();
+            $aclPermissions = new AclRolesModulesActionsModel();
             $aclPermissions->delete($where);
         }
         return $delete;

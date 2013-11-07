@@ -10,9 +10,8 @@
  *
  */
 
-class AclUsersModel extends Zwei_Db_Table
+class AclUsersModel extends DbTable_AclUsers
 {
-    protected $_name = "acl_users";
     protected $_name_roles = "acl_roles";
     protected $_generate_pass = "user_name";
 

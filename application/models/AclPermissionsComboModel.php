@@ -11,9 +11,8 @@
  *
  */
 
-class AclPermissionsComboModel extends Zwei_Db_Table
+class AclPermissionsComboModel extends DbTable_AclActions
 {
-    protected $_name = "acl_permissions";
     public $_name_roles = "acl_roles";
     public $_name_modules = "acl_modules";
     public $_name_permissions = "web_permissions";

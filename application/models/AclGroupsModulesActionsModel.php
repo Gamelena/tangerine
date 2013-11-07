@@ -8,7 +8,7 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     {
         $data = $this->cleanDataParams($data);
         $delete = $this->deleteUnchecked($data, $where);
-
+        
         $where = self::whereToArray($where);
         $data['acl_groups_id'] = $where['acl_groups_id'];
         $data['acl_modules_item_id'] = $where['acl_modules_item_id'];
@@ -25,7 +25,6 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
                 }
             }
         }
-        
         return $insert || $delete;
     }
     
