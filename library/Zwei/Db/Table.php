@@ -69,10 +69,10 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     */
     protected $_adapter;
     /**
-     * parámetros de búsqueda llave:valor enviados por request
-     * @var array
+     * parámetros enviados por $_REQUEST
+     * @var Zwei_Utils_Form
      */
-    protected $_query_params;
+    protected $_form;
     /**
      * Se asocia un título al recordset modelo, el cual puede ir en metadata de archivo json. 
      * @var string
@@ -86,6 +86,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      */
     protected $_more = null;
     
+    
+    
     /**
      * Post Constructor.
      * Inicializa atributos de usuario en sesion, permisos y adaptador de DB.
@@ -94,12 +96,16 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     {
         if (Zend_Auth::getInstance()->hasIdentity()) {
             $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
-            $this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
+            if (isset($this->_user_info->user_name)) {
+                $this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
+            }
         } 
         
         if (!empty($this->_adapter)) {     
             $this->setAdapter($this->_adapter);  
         }
+        
+        $this->_form = new Zwei_Utils_Form();
     }
     
     
@@ -317,18 +323,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     {
         return '';
     }
-    /**
-     * Agregar string javascript para añadir validación adicional para editar o eliminar
-     * sobrescribiendo metodo en Modelo a usar
-     * usar en javascript var globalOpc = ('edit' || 'add') para discriminar entre editar y agregar
-     * en caso de no pasar validacion agregar un return false en la condición javascript.
-     * @return string
-     */
-    public function getEditValidation()
-    {
-        return '';
-    }
-
+    
     /**
      * 
      * @return string

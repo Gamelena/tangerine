@@ -219,7 +219,6 @@ class AdminController extends Zend_Controller_Action
 
         //$this->_helper->viewRenderer->setNoRender(true);
         $modules = new AclModulesModel();
-        $modules->setApproved();
 
         $tree = $modules->getTree();
 
@@ -235,8 +234,7 @@ class AdminController extends Zend_Controller_Action
             @import "'.BASE_URL.'css/admin.css";
         ');
     
-        if (Zwei_Admin_Auth::getInstance()->hasIdentity())
-        {
+        if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             //$this->_redirect(BASE_URL. 'admin');
         }
         
@@ -247,37 +245,26 @@ class AdminController extends Zend_Controller_Action
     
         $errorMessage = "";
     
-        if($request->isPost())
-        {
-            if($loginForm->isValid($request->getPost()))
-            {
+        if ($request->isPost()) {
+            if ($loginForm->isValid($request->getPost())) {
                 $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter();
     
                 $username = $loginForm->getValue('username');
                 $password = $loginForm->getValue('password');
     
+                $auth = Zend_Auth::getInstance();
+                
                 $authAdapter->setIdentity($username)
                 ->setCredential($password);
-    
-                $auth = Zend_Auth::getInstance();
                 $result = $auth->authenticate($authAdapter);
     
                 if($result->isValid())
                 {
                     // Obtener toda la info de usuario, excepto la password
-                    $userInfo = $authAdapter->getResultRowObject(null, 'password');
-    
-                    $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
-    
-                    if (isset($config->zwei->session->namespace)) $userInfo->sessionNamespace = $config->zwei->session->namespace;
-    
-                    $authStorage = $auth->getStorage();
-                    $authStorage->write($userInfo);
-    
+                    Zwei_Admin_Auth::initUserInfo($authAdapter);
+                    
                     $this->_redirect(BASE_URL.'admin');
-                }
-                else
-                {
+                } else {
                     $errorMessage = "Usuario o Password incorrectos.";
                 }
             }

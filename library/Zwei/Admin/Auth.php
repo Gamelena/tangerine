@@ -87,8 +87,35 @@ class Zwei_Admin_Auth
         ->setIdentityColumn($authUserName)
         ->setCredentialColumn($authPassword)
         ->setCredentialTreatment('MD5(?) and approved="1"');
-    
+        
         return $authAdapter;
+    }
+    
+    
+    public static function initUserInfo($authAdapter) {
+        $auth = Zend_Auth::getInstance();
+        $userInfo = $authAdapter->getResultRowObject(null, 'password');
+        
+        $options = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
+        $config = new Zend_Config($options);
+        
+        if (isset($config->zwei->session->namespace)) {
+            $userInfo->sessionNamespace = $config->zwei->session->namespace;
+        }
+        
+        $authStorage = $auth->getStorage();
+        $aclUsersGroupsModel = new AclUsersGroupsModel();
+        
+        $buffGroups = $aclUsersGroupsModel->findByUserId($userInfo->id);
+        $groups = array();
+        
+        foreach ($buffGroups as $g) {
+            $groups[] = $g['id'];
+        }
+        
+        
+        $userInfo->groups = $groups;
+        $authStorage->write($userInfo);
     }
 }
 
