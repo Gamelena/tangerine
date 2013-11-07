@@ -43,12 +43,11 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         $this->view->aclModulesItemId = $this->_aclModulesItemId = $this->getRequest()->getParam('acl_modules_item_id');
         $this->view->aclGroupsId = $this->_aclGroupsId = $this->getRequest()->getParam('id');
         $this->view->model = 'AclGroupsModulesActionsModel';
+        $this->view->itemName = $this->getRequest()->getParam('itemName');
     }
 
     public function indexAction()
     {
-        
-        
     }
 
     public function getModules($aclModulesId = null, $title = null)

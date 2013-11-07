@@ -88,7 +88,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-        $this->_acl = new Zwei_Admin_Acl($userInfo->user_name);
+        $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
         
         $configParams = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
         $this->_config = new Zend_Config($configParams);
@@ -183,10 +183,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->primary = implode(";", $this->_model->info('primary'));
         
         $this->view->name = $this->_xml->getAttribute('name');
-        $this->view->add = $this->_xml->getAttribute("add") && $this->_xml->getAttribute("add") == "true" && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
-        $this->view->edit = $this->_xml->getAttribute("edit") && $this->_xml->getAttribute("edit") == "true"  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
-        $this->view->clone = $this->_xml->getAttribute("clone") && $this->_xml->getAttribute("clone") == "true"  && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
-        $this->view->delete = $this->_xml->getAttribute("delete") && $this->_xml->getAttribute("delete") == "true" && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
+        $this->view->add = $this->_xml->getAttribute('add') && $this->_xml->getAttribute("add") == 'true' && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
+        $this->view->edit = $this->_xml->getAttribute('edit') && $this->_xml->getAttribute("edit") == 'true'  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
+        $this->view->clone = $this->_xml->getAttribute('clone') && $this->_xml->getAttribute("clone") == 'true'  && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
+        $this->view->delete = $this->_xml->getAttribute('delete') && $this->_xml->getAttribute("delete") == 'true' && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
         $this->view->component = $this->_component;
         
         $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
@@ -195,7 +195,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $excel = $this->_xml->xpath("//helpers/excel");
         $this->view->excel = $excel ? $excel : array();
         $this->view->zweiExcelVersion = $this->_config->zwei->excel->version ? $this->_config->zwei->excel->version : 'csv';
-        
         
         //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? 'true' : 'false';

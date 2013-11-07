@@ -7,15 +7,6 @@ dojo.require('dijit.PopupMenuItem');
 
 var menugroups_modules = new dijit.Menu({});
 menugroups_modules.addChild(new dijit.MenuItem({
-    label: "Agregar Grupos",
-    iconClass: "dijitIconNewTask",
-    onClick : function(e){
-        var dijitDialog = dijit.byId('groups_modulesdialog_add');
-        dijitDialog.set('href', base_url + 'components/groups-modules/add?acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>');
-        dijitDialog.show();
-    }
-}));
-menugroups_modules.addChild(new dijit.MenuItem({
     label: "Editar Grupos",
     iconClass: "dijitIconEdit",
     onClick : function(e){
@@ -23,6 +14,7 @@ menugroups_modules.addChild(new dijit.MenuItem({
         var items = dijit.byId('groups_modulesdataGrid').selection.getSelected();
         if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
         dijitDialog.set('href', base_url + 'components/groups-modules/edit?groups_id='+items[0].id+'&acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>');
+        dijitDialog.set('title', 'Editar grupo ' + items[0].title + '<?=$this->itemName?>');
         dijitDialog.show();
     }
 }));
@@ -36,6 +28,7 @@ menugroups_modules.startup();
             var items = dijit.byId('groups_modulesdataGrid').selection.getSelected();
             if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
             dijitDialog.set('href', base_url + 'components/groups-modules/edit?id='+items[0].id+'&acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>');
+            dijitDialog.set('title', 'Editar grupo ' + items[0].title);
             dijitDialog.show();}" class="dataGrid" style="height: 50em;">
             <script type="dojo/connect" data-dojo-event="onRowClick" data-dojo-args="e">
                 if (dijit.byId('groups_modulesbtnEdit') != undefined) dijit.byId('groups_modulesbtnEdit').set('disabled', false);
@@ -48,28 +41,19 @@ menugroups_modules.startup();
             <thead>
         </table>
     </div>
-    <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="groups_modulesdialog_edit" jsId="groups_modulesdialog_edit" title="Editar Grupos"    >
-    </div>
-    <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="groups_modulesdialog_add" jsId="groups_modulesdialog_add" title="Agregar Grupos">
+    <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="groups_modulesdialog_edit" jsId="groups_modulesdialog_edit" title="Editar Grupo"    >
     </div>
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="groups_modulescontentBottom" class="contentBottom">
         <div class="keyPadWrapper">
-            <div class="keyPadButton">
-                <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconNewTask" id="groups_modulesbtnAdd" onClick="
-                    var dijitDialog = dijit.byId('groups_modulesdialog_add');
-                    dijitDialog.set('href', base_url + 'components/groups-modules/add?acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>');
-                    dijitDialog.show();">
-                Agregar Grupos
-                </button>
-            </div>
             <div class="keyPadButton">
                 <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconEdit" disabled="disabled" id="groups_modulesbtnEdit" onClick="
                     var dijitDialog = dijit.byId('groups_modulesdialog_edit');
                     var items = dijit.byId('groups_modulesdataGrid').selection.getSelected();
                     if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
                     dijitDialog.set('href', base_url + 'components/groups-modules/edit?id='+items[0].id+'&acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>');
-                    dijitDialog.show();">
-                    Editar Grupos
+                    dijitDialog.show();
+                    dijitDialog.set('title', 'Editar grupo ' + items[0].title);">
+                    Editar Grupo  
                 </button>
             </div>
         </div>
