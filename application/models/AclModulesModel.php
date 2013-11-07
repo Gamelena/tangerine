@@ -147,7 +147,7 @@ class AclModulesModel extends DbTable_AclModules
                 $arrNodes[$key]['image']  = $branch['image'];
                 $arrNodes[$key]['refresh_on_load']  = $branch['refresh_on_load'];
                 
-                $arrNodes[$key]['label'] = html_entity_decode($branch['title']);
+                $arrNodes[$key]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($branch['title']) : utf8_encode(html_entity_decode($branch['title']));
 
                 $prefix = "";
                 if ($branch['type'] == 'zend_module') {$prefix = "";}
