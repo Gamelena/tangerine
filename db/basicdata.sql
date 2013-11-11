@@ -205,3 +205,5 @@ INSERT INTO `acl_roles_modules_actions` (`id`, `acl_roles_id`, `acl_modules_acti
 (122, 5, 243, 'ALLOW');
 
 
+DELETE FROM acl_roles_modules_actions WHERE acl_roles_id NOT IN (SELECT id FROM acl_roles);
+DELETE FROM acl_modules_actions WHERE acl_modules_id NOT IN (SELECT id FROM acl_modules);

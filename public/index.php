@@ -24,10 +24,7 @@ require_once 'Zend/Application.php';
 
 $application = new Zend_Application(
     APPLICATION_ENV,
-    array(
-        APPLICATION_PATH . '/configs/application.ini',
-        APPLICATION_PATH . '/configs/gw_ussd.ini'
-    )
+    APPLICATION_PATH . '/configs/application.ini'
 );
 
 /*
