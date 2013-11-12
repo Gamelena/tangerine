@@ -66,9 +66,6 @@ if (!$this->loadPartial) :
                 if (isset($this->data[$params['target']])) $params['value'] = $this->data[$params['target']];
                 
                 $params['target'] = "data[{$params['target']}]";
-                Debug::write('params');
-                Debug::write($params);
-                
 ?>
             <tr<?=$hidden?>>
                 <th><label for="<?=$element->getAttribute('target')?>"><?=$element->getAttribute('name') ?></label></th>
@@ -127,7 +124,7 @@ endif;
         }
         return false;
     } else {
-        alert('Por favor corrija los campos marcados.');
+        utils.showMessage('Por favor corrija los campos marcados.', 'error');
         return false;
     }
     return true;

@@ -96,8 +96,32 @@ if (count($this->groups) > 0) :
         <input type="hidden" name="model" value="<?=$this->model ?>" />
         <input type="hidden" name="format" value="json" />
         <input type="hidden" name="storeType" value="query" />
+<?php 
+    if (!$this->hideSubmit) :
+?>
         <button type="submit" class="submit" data-dojo-type="dijit/form/Button" iconClass="dijitIconSearch" id="<?=$this->domPrefix?>btnBuscar">Buscar</button>
+<?php 
+    endif;
+?>
     </div>
+    <div class="keyPadWrapper" style="clear: both;">
+<?php 
+    foreach ($this->customFunctions as $i => $f) :
+        $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
+        $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+?>
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="<?=$onclick.$target?>">
+        <?=$f['name'] ? $f['name'] : $f['target']?>
+        </button>
+    </div>
+<?php 
+    endforeach;
+?>
+    </div>
+<?php 
+    if (!$this->hideSubmit) :
+?>
     <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
             try {
@@ -113,6 +137,9 @@ if (count($this->groups) > 0) :
         }
         return true;
     </script>
+<?php 
+    endif;
+?>
 </div>
 <?php 
 endif;

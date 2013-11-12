@@ -112,12 +112,12 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>" : '';
         if ($this->_xml->xpath("//forms")) $forms = $this->_xml->xpath("//forms");
         
-        $this->view->styleDialog = $this->_xml->xpath("//forms[@style]") ? "style=\"{$forms[0]->getAttribute('style')}\"" : '';
-        $this->view->onloadDialog = $this->_xml->xpath("//forms[@onload]") ? "onload=\"{$forms[0]->getAttribute('onload')}\"" : '';
-        $this->view->onshowDialog = $this->_xml->xpath("//forms[@onshow]") ? "onshow=\"{$forms[0]->getAttribute('onshow')}\"" : '';
-        $this->view->onhideDialog = $this->_xml->xpath("//forms[@onhide]") ? "onhide=\"{$forms[0]->getAttribute('onhide')}\"" : '';
-        $this->view->ajax = $this->_xml->xpath("//forms[@ajax='true']") ? true : false;
-        $this->view->changePassword = $this->_xml->xpath("//forms/changePassword") ? true : false;
+        $this->view->styleDialog = $this->_xml->xpath("//component/forms[@style]") ? "style=\"{$forms[0]->getAttribute('style')}\"" : '';
+        $this->view->onloadDialog = $this->_xml->xpath("//component/forms[@onload]") ? "onload=\"{$forms[0]->getAttribute('onload')}\"" : '';
+        $this->view->onshowDialog = $this->_xml->xpath("//component/forms[@onshow]") ? "onshow=\"{$forms[0]->getAttribute('onshow')}\"" : '';
+        $this->view->onhideDialog = $this->_xml->xpath("//component/forms[@onhide]") ? "onhide=\"{$forms[0]->getAttribute('onhide')}\"" : '';
+        $this->view->ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? true : false;
+        $this->view->changePassword = $this->_xml->xpath("//component/forms/changePassword") ? true : false;
         if ($this->view->changePassword) {
             $this->view->targetPass = 'password';
             $this->view->namePass = 'Contrase&ntilde;a';
@@ -127,11 +127,17 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function searchAction()
     {
-        $this->view->p = $this->_component;
-        $this->view->model = $this->_xml->getAttribute('target');
-        $this->view->xml = $this->_xml;
-        $this->view->groups = $this->_xml->getSearchers(true);
-        $this->view->searchRequest = $this->getRequest()->getParam('search', array());
+        if (isset($this->_xml->searchers)) {
+            $this->view->p = $this->_component;
+            $this->view->model = $this->_xml->getAttribute('target');
+            $this->view->xml = $this->_xml;
+            $this->view->groups = $this->_xml->getSearchers(true);
+            $this->view->hideSubmit = $this->_xml->searchers->getAttribute('hideSubmit');
+            $this->view->searchRequest = $this->getRequest()->getParam('search', array());
+            
+            $customFunctions = $this->_xml->xpath("//searchers/helpers/customFunction");
+            $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'LIST') ? $customFunctions : array();
+        }
     }
 
     public function initForm($mode)
@@ -144,8 +150,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->loadPartial = $r->getParam('loadPartial', false);
         $this->view->dialogIndex = $r->getParam('dialogIndex', '');
 
-        $this->view->onPostSubmit = $this->_xml->xpath('//forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
-        $this->view->onSubmit = $this->_xml->xpath('//forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
+        $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
+        $this->view->onSubmit = $this->_xml->xpath('//component/forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
 
         $className = $this->_xml->getAttribute('target');
         $this->view->model = $className;
@@ -189,10 +195,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->delete = $this->_xml->getAttribute('delete') && $this->_xml->getAttribute("delete") == 'true' && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
         $this->view->component = $this->_component;
         
-        $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
-        $customFunctions = $this->_xml->xpath("//helpers/customFunction");
+        $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
+        $customFunctions = $this->_xml->xpath("//component/helpers/customFunction");
         $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? $customFunctions : array();
-        $excel = $this->_xml->xpath("//helpers/excel");
+        $excel = $this->_xml->xpath("//component/helpers/excel");
         $this->view->excel = $excel ? $excel : array();
         $this->view->zweiExcelVersion = $this->_config->zwei->excel->version ? $this->_config->zwei->excel->version : 'csv';
         
@@ -204,9 +210,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function editAction()
     {
-        $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
-        $this->view->changePassword = $this->_xml->xpath("//forms/changePassword") ? true : false;
-        if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
+        $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
+        $this->view->changePassword = $this->_xml->xpath("//component/forms/changePassword") ? true : false;
+        if (!$ajax === 'false' && $this->_xml->xpath("//component/forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? true : false;
         $this->view->queryParams = http_build_query($this->getRequest()->getParams());
         
@@ -221,8 +227,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function cloneAction()
     {
-        $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
-        if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
+        $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
+        if (!$ajax === 'false' && $this->_xml->xpath("//component/forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? true : false;
         $this->initForm('clone');
         $this->render('edit');
@@ -260,6 +266,12 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             ";
         }
         
+        if ($this->_xml->getAttribute('delete') === 'true' && $this->_acl->isUserAllowed($this->_component, 'DELETE')) {
+            $this->view->onRowClick .= "
+            if (dijit.byId('{$this->view->domPrefix}btnDelete') != undefined) dijit.byId('{$this->view->domPrefix}btnDelete').set('disabled', false);
+            ";
+        }
+        
         if ($this->_xml->getAttribute('onRowClick')) {
             $this->view->onRowClick .= $this->_xml->getAttribute('onRowClick');
         }
@@ -281,16 +293,17 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         }
         
         $numElements = count($this->view->elements);
-        $widthCol = round((100/$numElements), 1) . "%";//Se le asigna a cada columna de la grilla un ancho proporcional a su cantidad en porcentaje.
-        $elements = $this->_xml->getElements();
-        for ($i = 1; $i < $numElements; $i++) {
-            //Para cada columna se permite sobreescribir el ancho asignado por defecto, se sugiere trabajar con porcentajes para aprovechar toda la pantalla.
-            if (!$elements[$i]->getAttribute('width')) {
-                $elements[$i]->addAttribute('width', $widthCol);
+        if ($numElements) {
+            $widthCol = round((100/$numElements), 1) . "%";//Se le asigna a cada columna de la grilla un ancho proporcional a su cantidad en porcentaje.
+            $elements = $this->_xml->getElements();
+            for ($i = 1; $i < $numElements; $i++) {
+                //Para cada columna se permite sobreescribir el ancho asignado por defecto, se sugiere trabajar con porcentajes para aprovechar toda la pantalla.
+                if (!$elements[$i]->getAttribute('width')) {
+                    $elements[$i]->addAttribute('width', $widthCol);
+                }
+                
             }
-            
         }
-        
         $this->view->queryParams = http_build_query($this->getRequest()->getParams());
         
     }

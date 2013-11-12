@@ -115,12 +115,14 @@ endif;
 ?>
 <?php 
 foreach ($this->customFunctions as $i => $f) :
+    $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
+    $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
 ?>
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     label: "<?=$f['name'] ? $f['name'] : $f['target']?>",
     iconClass: "<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>",
     onClick : function(){
-        admportal.execFunction('<?=$f['target']?>', '', '<?=$this->domPrefix?>', '<?=$this->component?>', '<?=$this->primary?>');
+        <?=$onclick.$target?>
     }
 }));
 <?php 
