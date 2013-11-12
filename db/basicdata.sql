@@ -68,13 +68,17 @@ INSERT INTO `acl_users` (`id`, `acl_roles_id`, `user_name`, `password`, `first_n
 -- Volcado de datos para la tabla `web_settings`
 --
 
-INSERT INTO `web_settings` (`id`, `list`, `value`, `type`, `description`, `ord`, `group`, `function`, `approved`, `path`, `regExp`, `invalidMessage`, `promptMessage`, `formatter`, `xml_children`) VALUES
-('query_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', '', '', '', '', ''),
-('transactions_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', '', '', '', '', ''),
-('titulo_adm', '', 'Gateway USSD', 'dijit-form-validation-text-box', '', 1, 'Admin', '', '1', '', '', '', '', '', ''),
-('url_logo_oper', '', '4fcd081blogo_movistar68x50.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '', '', '', 'formatImage', '&lt;thumb height=&quot;56px&quot; path=&quot;{ROOT_DIR}/upfiles/settings/&quot;/&gt;'),
-('url_logo_zweicom', '', '3702066dlogo-zweicom-20x26.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '', '', '', 'formatImage', '&lt;thumb height=&quot;18px&quot; path=&quot;{ROOT_DIR}/upfiles/settings/&quot;/&gt;'),
-('credits', '', '&copy; Zweicom 2012', 'dijit-form-validation-text-box', '', 2, 'Admin', '', '1', '', '', '', '', '', '');
+--
+-- Volcado de datos para la tabla `web_settings`
+--
+
+INSERT INTO `web_settings` (`id`, `list`, `value`, `type`, `description`, `ord`, `group`, `function`, `approved`, `path`, `url`, `regExp`, `invalidMessage`, `promptMessage`, `formatter`, `xml_children`) VALUES
+('credits', '', '&copy; Zweicom 2013', 'dijit-form-validation-text-box', '', 2, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
+('query_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', NULL, '', '', '', '', ''),
+('titulo_adm', '', 'Gateway USSD', 'dijit-form-validation-text-box', '', 1, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
+('transactions_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', NULL, '', '', '', '', ''),
+('url_logo_oper', '', 'febe32d0logo-movistar162x120.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="56" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;'),
+('url_logo_zweicom', '', 'b28576bblogo-zweicom-26x34.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="18" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;\r\n');
 
 -- --------------------------------------------------------
 
