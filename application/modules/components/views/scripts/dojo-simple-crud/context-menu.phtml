@@ -100,7 +100,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     iconClass: "dijitIconEdit",
     onClick : function(){
         var form = new zwei.Form({
-            ajax: <?=$this->ajax ?>,
+            ajax: false,
             component: '<?=$this->component?>',
             action: 'edit',
             dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_editpass'), 

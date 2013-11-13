@@ -87,7 +87,7 @@ if ($this->changePassword) :
     <div class="keyPadButton">
         <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconEdit" disabled="disabled" id="<?=$this->domPrefix?>btnChangePassword" onClick="
             var form = new zwei.Form({
-                ajax: <?=$this->ajax ?>,
+                ajax: false,
                 component: '<?=$this->component?>',
                 action: 'edit',
                 dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_editpass'), 
