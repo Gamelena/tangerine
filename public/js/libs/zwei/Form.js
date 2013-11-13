@@ -70,8 +70,8 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         var self=this;
         
         if (this.dijitFormSearch != undefined && this.dijitFormSearch != null) {
-            dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i){
-                if (entry.type != 'submit' && entry.type != 'radio') {
+            dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i) {
+                if (entry.type != 'submit' && entry.type != 'radio' && entry.type != 'button') {
                     if (self.dijitFormSearch.getChildrenByName(entry.get('name')).length > 1) {
                         auxTwice = '['+i+']';
                     } else {
@@ -102,8 +102,11 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         } else {
             var params = {url: searchUrl, clearOnClose: true, urlPreventCache:true};
             var store = (domForm['storeType'] != undefined && domForm['storeType'].value == 'query') ? new dojox.data.QueryReadStore(params) : dojo.data.ItemFileReadStore(params);
-            this.dijitDataGrid.setStore(store);    
+            if (this.dijitDataGrid != null) {
+                this.dijitDataGrid.setStore(store);
+            }
         }
+        return searchUrl;
     },
     /**
      * @constructorParam dijit.form.form    this.dijitForm
