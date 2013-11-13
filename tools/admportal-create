@@ -70,11 +70,11 @@ read -p "¿Desea crear y poblar tablas básicas MySQL de AdmPortal? (S/N) (por d
 CREATE_TABLES=${CREATE_TABLES:-S}
 
 if [ "$CREATE_TABLES" = "S" ]; then
-        echo mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql" $DB_NAME
-        mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/docs/db/admportal.sql" $DB_NAME
+        echo mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/admportal.sql" $DB_NAME
+        mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/admportal.sql" $DB_NAME
         echo " "
-        echo mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql" $DB_NAME
-        mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/docs/db/basicdata.sql" $DB_NAME
+        echo mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/basicdata.sql" $DB_NAME
+        mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/basicdata.sql" $DB_NAME
 fi
 
 
