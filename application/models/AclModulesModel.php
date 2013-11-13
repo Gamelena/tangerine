@@ -274,10 +274,11 @@ class AclModulesModel extends DbTable_AclModules
     }
     
     /**
-     * Retorna el id asociado a module.
-     *
+     * Obtiene la fila asociada al nombre del modulo
+     * 
      * @param string $module
-     * @return int
+     * @param array() $fields
+     * @return Zend_Db_Table_Row
      */
     public function findModule($module, $fields = array('*')) {
         $select = new Zend_Db_Table_Select($this);

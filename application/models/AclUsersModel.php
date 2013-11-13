@@ -32,6 +32,24 @@ class AclUsersModel extends DbTable_AclUsers
     }
 
     /**
+     * Se agregan grupos asociados a rowset original
+     * @param Zend_Db_Table_Rowset
+     * @return array
+     */
+    public function overloadDataForm($data) {
+        $data = $data->toArray();
+    
+        $model = new DbTable_AclUsersGroups();
+        $select = $model->select()->where("acl_users_id = ?", $data['id']);
+        $usuarios = $model->fetchAll($select);
+    
+        foreach ($usuarios as $usuario) { //  $permissions->id = $permission->permission
+            $data["grupos"][] = $usuario['acl_groups_id'];
+        }
+        return $data;
+    }
+    
+    /**
      * Un usuario no podría borrarse a si mismo, si es que no existen otros usuarios que puedan cumplir su misión.
      * (si no existen otros usuarios con su mismo perfil)
      * @see Zwei_Db_Table::delete()
