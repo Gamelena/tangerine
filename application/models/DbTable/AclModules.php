@@ -12,7 +12,7 @@ class DbTable_AclModules extends Zwei_Db_Table
      *
      * @var array
      */
-    protected $_dependentTables = array('DbTable_AclModulesActions', 'DbTable_AclModules');
+    //protected $_dependentTables = array('DbTable_AclModulesActions', 'DbTable_AclModules');
 
     /**
      * Mapa relacional, esto emula DRI (declarative referential integrity) en base de datos y permite usar métodos Zend_Db que dependen de esto.
