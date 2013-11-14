@@ -50,7 +50,7 @@ class Components_GroupsModulesController extends Zend_Controller_Action
     {
     }
 
-    public function getModules($aclModulesId = null, $title = null)
+    public function getModules($aclModulesId = null, $title = null, $first = false)
     {
         $i = 0;
         $modules[$i] = array();
@@ -70,6 +70,7 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         $j = 0;
         foreach ($actions as $action) {
             $modules[$i]->actions[$j]['title'] = $action->findParentRow('DbTable_AclActions')->title;
+            $modules[$i]->actions[$j]['isFirst'] = $first;
             $modules[$i]->actions[$j]['selected'] = in_array($action->id, $this->_selected);
             $modules[$i]->actions[$j] = (object) $modules[$i]->actions[$j];
             $j++;
@@ -104,6 +105,6 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         
         $this->view->mode = 'edit';
         $title = 'Campaña';
-        $this->view->modules = $this->getModules($this->_aclModulesId, $title);
+        $this->view->modules = $this->getModules($this->_aclModulesId, $title, true);
     }
 }

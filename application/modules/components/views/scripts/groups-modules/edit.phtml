@@ -29,9 +29,11 @@ foreach ($this->modules as $i => $module) :
                     <select multiple="true" name="data[actionsModule<?=$module->id?>][]" id="actionsModule<?=$module->id?><?=$this->mode?>" data-dojo-type="dojox.form.CheckedMultiSelect">
 <?php
         foreach ($module->actions as $action) :
+            if (!$action->isFirst || $action->acl_actions_id != 'ADD') :
 ?>
                         <option value="<?=$action->id?>" <?=$action->selected ? 'selected="selected"' : ''?>><?=$action->title?></option>
 <?php 
+            endif;
         endforeach;
 ?>
                      </select>
