@@ -353,7 +353,7 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @param Zwei_Db_Table $model
      * @return boolean
      */
-    public function userHasGroupsAllowed($module, $permission = null, $itemId = null, $model = null)
+    public function userHasGroupsAllowed($module, $permission, $itemId = null, $model = null)
     {
         $aclModulesModel = new AclModulesModel();
         $resource = $aclModulesModel->getModuleId($module);
@@ -365,31 +365,33 @@ class Zwei_Admin_Acl extends Zend_Acl
             
             $permission = $aclModulesActionsModel->getAdapter()->quote($permission);
             $resource = $aclModulesActionsModel->getAdapter()->quote($resource);
+            
             $select = $aclModulesActionsModel->select()->where("acl_modules_id=$resource AND acl_actions_id=$permission");
             
             Debug::writeBySettings($select->__toString(), 'query_log');
+            
+            //Obtenemos acl_modules_actions.id para usar acl_groups_modules_action.acl_modules_actions_id
             $aclModulesActions = $aclModulesActionsModel->fetchAll($select);
             
+            Debug::write($aclModulesActions->toArray());
+            
             foreach ($aclModulesActions as $rowAclModulesActions) {
-                if (!$itemId) {
-                    $actions = $rowAclModulesActions->findDependentRowset('DbTable_AclGroupsModulesActions');
-                    if ($actions) {
-                        Debug::write($actions);
-                        return true;
-                    }
-                } else {
-                    $rowModule = $aclModulesModel->findModule($module);
-                    if ($rowModule->type == 'xml') {
-                        try {
-                            $xml = new Zwei_Admin_Xml($file, LIBXML_NOWARNING, 1);
-                            $model = $xml->getAttribute('target');
-                        } catch (Exception $e) {
-                            exit("Error al intentar parsear $file, compruebe que el archivo exista y que sea un XML válido.");
-                        }
-                    }
-                    $item = $model->find($itemId);
+                //Si $itemId es nulo, sólo se verifica que el grupo tenga la acción cualquiera sobre el módulo en acl_groups_modules_actions . 
+                $aclGMAModel = new AclGroupsModulesActionsModel();
+                $select = $aclGMAModel->select();
+                $where = array();
+                $select->where("acl_groups_id IN($groups)");
+                $select->where($aclGMAModel->getAdapter()->quoteInto('acl_modules_actions_id = ?', $rowAclModulesActions->id));
+
+                if ($itemId) {
+                    $select->where($aclGMAModel->getAdapter()->quoteInto('acl_modules_item_id = ?', $itemId));
                 }
+                
+                Debug::writeBySettings($select->__toString(), 'query_log');
+                return $aclGMAModel->fetchRow($select);
             }
+        } else {
+            return false;
         }
     }
     
