@@ -84,6 +84,15 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      */
     private $_model = null;
 
+    /**
+     * Modulo asociado a archivo XML
+     * @var Zend_Db_Table_Row
+     */
+    private $_module = null;
+    /**
+     * (non-PHPdoc)
+     * @see Zend_Controller_Action::init()
+     */
     public function init()
     {
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
@@ -97,9 +106,25 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->_component = $this->getRequest()->getParam('p');
             $file = Zwei_Admin_Xml::getFullPath($this->_component);
             $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+            
+            $aclModulesModel = new AclModulesModel();
+            $this->_module = $aclModulesModel->findModule($this->_component);
         }
+        
         $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
         $this->view->domPrefix  = (isset($this->view->mainPane) && $this->view->mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($this->getRequest()->getParam('p')) : '';
+        
+        if ($this->_acl->userHasRoleAllowed($this->_component, 'EDIT')) {
+            $this->view->validateGroupEdit = false;
+        } else {
+            $this->view->validateGroupEdit = true;
+        }
+        
+        if ($this->_acl->userHasRoleAllowed($this->_component, 'DELETE')) {
+            $this->view->validateGroupDelete = false;
+        } else {
+            $this->view->validateGroupDelete = true;
+        }
     }
 
     public function indexAction()
@@ -118,6 +143,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->onhideDialog = $this->_xml->xpath("//component/forms[@onhide]") ? "onhide=\"{$forms[0]->getAttribute('onhide')}\"" : '';
         $this->view->ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? true : false;
         $this->view->changePassword = $this->_xml->xpath("//component/forms/changePassword") ? true : false;
+        
         if ($this->view->changePassword) {
             $this->view->targetPass = 'password';
             $this->view->namePass = 'Contrase&ntilde;a';
@@ -159,13 +185,12 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->modelPrimary = $this->_model->info('primary');
         $this->view->tabs = $this->_xml->getTabsWithElements(true, "@$mode='true' or @$mode='readonly' or @$mode='disabled'");
         
-        if (($mode == 'edit' || $mode == 'clone') && $this->view->ajax && !$this->view->loadPartial) {
+        if (($mode == 'edit' || $mode == 'clone') && $this->view->ajax) {
             $a = $this->_model->getAdapter();
             
             $select = $this->_model->select();
-            $primaries = $r->getParam('primary');
 
-            foreach ($r->getParam('primary') as $i => $v) { 
+            foreach ($r->getParam('primary', array()) as $i => $v) { 
                 //Concatenar nombre de campo con tabla principal en caso de que campo exista en la tabla,
                 //esto previene posibles errores de ambiguedad de nombre de campo cuando se use join
                 if (in_array($i, $this->_model->info(Zend_Db_Table::COLS))) { 
@@ -189,10 +214,12 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->primary = implode(";", $this->_model->info('primary'));
         
         $this->view->name = $this->_xml->getAttribute('name');
+        
         $this->view->add = $this->_xml->getAttribute('add') && $this->_xml->getAttribute("add") == 'true' && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
         $this->view->edit = $this->_xml->getAttribute('edit') && $this->_xml->getAttribute("edit") == 'true'  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
         $this->view->clone = $this->_xml->getAttribute('clone') && $this->_xml->getAttribute("clone") == 'true'  && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
         $this->view->delete = $this->_xml->getAttribute('delete') && $this->_xml->getAttribute("delete") == 'true' && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
+        
         $this->view->component = $this->_component;
         
         $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
@@ -228,7 +255,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function cloneAction()
     {
         $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
-        if (!$ajax === 'false' && $this->_xml->xpath("//component/forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? true : false;
         $this->initForm('clone');
         $this->render('edit');
@@ -249,27 +275,42 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->searchHideSubmit = $this->_xml->getAttribute('searchHideSubmit') === "true" ? true : false;
         $this->view->elements = $this->_xml->getElements("@visible='true'");
         
-        $ajax = $this->_xml->xpath("//forms[@ajax='true']") ? 'true' : 'false';
-        if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
+        $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
+        //if ($ajax !== 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         
-        if ($this->_xml->getAttribute('edit') === 'true' && $this->_acl->isUserAllowed($this->_component, 'EDIT')) {
-            $this->view->onRowClick = "
-                if (dijit.byId('{$this->view->domPrefix}btnEdit') != undefined) dijit.byId('{$this->view->domPrefix}btnEdit').set('disabled', false);
+        if ($this->_xml->getAttribute('edit') === 'true') {
+            if (!$this->view->validateGroupEdit) {
+                $this->view->onRowClick = "
+                    if (dijit.byId('{$this->view->domPrefix}btnEdit') != undefined) dijit.byId('{$this->view->domPrefix}btnEdit').set('disabled', false);
+                    if (dijit.byId('{$this->view->domPrefix}btnChangePassword') != undefined) dijit.byId('{$this->view->domPrefix}btnChangePassword').set('disabled', false);
+                ";
+            } else {
+                $this->view->onRowClick = " var items = this.selection.getSelected();
+                    if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+                    dijit.byId('{$this->view->domPrefix}btnEdit').set('disabled', items[0].magicPortalIsAllowedEDIT!='1');
+                ";
+            }
+        }
+        
+        if ($this->_xml->getAttribute('add') === 'true') {
+            if ($this->_acl->userHasRoleAllowed($this->_component, 'ADD')) {
+                $this->view->onRowClick .= "
+                if (dijit.byId('{$this->view->domPrefix}btnClone') != undefined) dijit.byId('{$this->view->domPrefix}btnClone').set('disabled', false);
+                ";
+            } 
+        }
+        
+        if ($this->_xml->getAttribute('delete') === 'true') {
+            if (!$this->view->validateGroupDelete) {
+                $this->view->onRowClick .= "
                 if (dijit.byId('{$this->view->domPrefix}btnDelete') != undefined) dijit.byId('{$this->view->domPrefix}btnDelete').set('disabled', false);
-                if (dijit.byId('{$this->view->domPrefix}btnChangePassword') != undefined) dijit.byId('{$this->view->domPrefix}btnChangePassword').set('disabled', false);
-            ";
-        }
-        
-        if ($this->_xml->getAttribute('add') === 'true' && $this->_acl->isUserAllowed($this->_component, 'ADD')) {
-            $this->view->onRowClick .= "
-            if (dijit.byId('{$this->view->domPrefix}btnClone') != undefined) dijit.byId('{$this->view->domPrefix}btnClone').set('disabled', false);
-            ";
-        }
-        
-        if ($this->_xml->getAttribute('delete') === 'true' && $this->_acl->isUserAllowed($this->_component, 'DELETE')) {
-            $this->view->onRowClick .= "
-            if (dijit.byId('{$this->view->domPrefix}btnDelete') != undefined) dijit.byId('{$this->view->domPrefix}btnDelete').set('disabled', false);
-            ";
+                ";
+            } else {
+                $this->view->onRowClick .= " var items = this.selection.getSelected();
+                if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+                dijit.byId('{$this->view->domPrefix}btnDelete').set('disabled', items[0].magicPortalIsAllowedDELETE!='1');
+                ";
+            }
         }
         
         if ($this->_xml->getAttribute('onRowClick')) {
@@ -280,16 +321,34 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->onRowDblClick = '';
         if ($this->_xml->getAttribute('onRowDblClick')) {
             $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick');
-        } else if ($this->_xml->getAttribute('edit') === 'true' && $this->_acl->isUserAllowed($this->_component, 'EDIT')) {
-            $this->view->onRowDblClick = "var form = new zwei.Form({
-                    ajax: $ajax,
-                    component: '{$this->_component}',
-                    action: 'edit',
-                    dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
-                    dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
-                    dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
-                }); 
-                form.showDialog()";
+        } else if ($this->_xml->getAttribute('edit')) {
+            if (!$this->view->validateGroupEdit) {
+                $this->view->onRowDblClick = "var form = new zwei.Form({
+                        ajax: $ajax,
+                        component: '{$this->_component}',
+                        action: 'edit',
+                        dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
+                        dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
+                        dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
+                    }); 
+                    form.showDialog()";
+            } else {
+                $this->view->onRowDblClick = "
+                    var items = this.selection.getSelected();
+                    if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+                    if (items[0].magicPortalIsAllowedEDIT=='1') {
+                        var form = new zwei.Form({
+                            ajax: $ajax,
+                            component: '{$this->_component}',
+                            action: 'edit',
+                            dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
+                            dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
+                            dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
+                        }); 
+                        form.showDialog();
+                    }
+                ";
+            }
         }
         
         $numElements = count($this->view->elements);
@@ -316,6 +375,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function changePasswordAction()
     {
         $this->view->p = $this->_component;
+        $this->view->ajax = 'false';
         $this->initForm('edit');
     }
 

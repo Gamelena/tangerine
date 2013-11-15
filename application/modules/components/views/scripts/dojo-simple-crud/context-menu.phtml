@@ -9,7 +9,10 @@ var menu<?=$this->domPrefix?> = new dijit.Menu({});
 <?php
 if ($this->add) :
 ?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItemAdd')) dijit.byId('<?=$this->domPrefix?>MenuItemAdd').destroy(); 
+
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItemAdd',
     label: "Agregar <?=$this->name ?>",
     iconClass: "dijitIconNewTask",
     onClick : function(e){
@@ -31,7 +34,10 @@ endif;
 <?php
 if ($this->edit) :
 ?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItemEdit')) dijit.byId('<?=$this->domPrefix?>MenuItemEdit').destroy(); 
+
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItemEdit',
     label: "Editar <?=$this->name ?>",
     iconClass: "dijitIconEdit",
     onClick : function(e){
@@ -47,12 +53,26 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     }
 }));
 <?php
+    if ($this->validateGroupEdit) :
+?>
+    dojo.connect(menucampanas_xml, 'onOpen', function(e){
+        var items = dijit.byId(domPrefix + 'dataGrid').selection.getSelected();
+        if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+        dijit.byId('<?=$this->domPrefix?>MenuItemEdit').set('disabled', items[0].magicPortalIsAllowedEDIT!='1');
+    });
+<?php
+    endif;
+?>
+<?php
 endif;
 ?>
 <?php 
 if ($this->delete) :
 ?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItemDelete')) dijit.byId('<?=$this->domPrefix?>MenuItemDelete').destroy(); 
+    
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItemDelete',
     label: "Eliminar <?=$this->name ?>",
     iconClass: "dijitIconDelete",
     onClick : function(){
@@ -69,12 +89,26 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     }
 }));
 <?php
+    if ($this->validateGroupDelete) :
+?>
+        dojo.connect(menucampanas_xml, 'onOpen', function(e){
+            var items = dijit.byId(domPrefix + 'dataGrid').selection.getSelected();
+            if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+            dijit.byId('<?=$this->domPrefix?>MenuItemDelete').set('disabled', items[0].magicPortalIsAllowedDELETE!='1');
+        });
+<?php
+    endif;
+?>
+<?php
 endif;
 ?>
 <?php 
 if ($this->clone) :
 ?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItemClone')) dijit.byId('<?=$this->domPrefix?>MenuItemClone').destroy(); 
+
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItemClone',
     label: "Clonar <?=$this->name ?>",
     iconClass: "dijitIconNewTask",
     onClick : function(){
@@ -95,7 +129,10 @@ endif;
 <?php 
 if ($this->changePassword) :
 ?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItemChangePass')) dijit.byId('<?=$this->domPrefix?>MenuItemChangePass').destroy(); 
+
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItemChangePass',
     label: "Cambiar Contraseña",
     iconClass: "dijitIconEdit",
     onClick : function(){
@@ -111,6 +148,17 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     }
 }));
 <?php
+    if ($this->validateGroupEdit) :
+?>
+        dojo.connect(menucampanas_xml, 'onOpen', function(e){
+            var items = dijit.byId(domPrefix + 'dataGrid').selection.getSelected();
+            if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+            dijit.byId('<?=$this->domPrefix?>MenuItemChangePass').set('disabled', items[0].magicPortalIsAllowedEDIT!='1');
+        });
+<?php
+    endif;
+?>
+<?php
 endif;
 ?>
 <?php 
@@ -118,7 +166,10 @@ foreach ($this->customFunctions as $i => $f) :
     $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
     $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
 ?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItem<?=$f['target']?>')) dijit.byId('<?=$this->domPrefix?>MenuItem<?=$f['target']?>').destroy(); 
+
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItem<?=$f['target']?>',
     label: "<?=$f['name'] ? $f['name'] : $f['target']?>",
     iconClass: "<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>",
     onClick : function(){
@@ -133,7 +184,9 @@ foreach ($this->excel as $i => $f) :
     $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->zweiExcelVersion;
     $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Descargar como Excel' ;
 ?>
+if (dijit.byId('<?=$this->domPrefix?>MenuExcel<?=$formatter?>')) dijit.byId('<?=$this->domPrefix?>MenuExcel<?=$formatter?>').destroy(); 
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuExcel<?=$formatter?>',
     label: "<?=$name?>",
     iconClass: "dijitLeaf",
     onClick : function(){

@@ -43,7 +43,6 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     
     public function deleteUnchecked($data, $where)
     {
-        Debug::write($this->_dataModulesActionsId);
         $list = !empty($this->_dataModulesActionsId) ?
             implode(",", $this->_dataModulesActionsId) :
             false;
@@ -53,6 +52,14 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
         $delete = parent::delete($where);
     }
     
-
+    public function findModuleId($id)
+    {
+        
+    }
+    
+    public function findActionId($id)
+    {
+        
+    }
 }
 

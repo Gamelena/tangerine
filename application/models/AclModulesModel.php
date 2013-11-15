@@ -285,4 +285,11 @@ class AclModulesModel extends DbTable_AclModules
         $select->from($this->_name, $fields)->where($this->getAdapter()->quoteInto('module = ?', $module));
         return $this->fetchRow($select);
     }
+    
+    public function getActions($id) {
+        $model = new AclModulesActionsModel();
+        $select = $model->select(); 
+        $select->where($model->getAdapter()->quoteInto('acl_modules_id = ?', $id));
+        return $model->fetchAll($select);
+    }
 }
