@@ -317,12 +317,12 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @param $permission string
      * @return boolean
      */
-    public function isUserAllowed($module, $permission = null, $itemId = null, $model = null)
+    public function isUserAllowed($module, $permission = null, $itemId = null)
     {
         $allowed = $this->userHasRoleAllowed($module, $permission);
         
         if (!$allowed) {
-            $allowed = $this->userHasGroupsAllowed($module, $permission, $itemId, $model);
+            $allowed = $this->userHasGroupsAllowed($module, $permission, $itemId);
         }
         
         return $allowed;
@@ -340,7 +340,6 @@ class Zwei_Admin_Acl extends Zend_Acl
         $aclModulesModel = new AclModulesModel();
         $resource = $aclModulesModel->getModuleId($module);
         $allowed =  $this->isAllowed($this->_userInfo->acl_roles_id, $resource, $permission);
-        Debug::write($allowed);
         return $allowed;
     }
     
@@ -374,8 +373,6 @@ class Zwei_Admin_Acl extends Zend_Acl
             //Obtenemos acl_modules_actions.id para usar acl_groups_modules_action.acl_modules_actions_id
             $aclModulesActions = $aclModulesActionsModel->fetchAll($select);
             
-            Debug::write($aclModulesActions->toArray());
-            
             foreach ($aclModulesActions as $rowAclModulesActions) {
                 //Si $itemId es nulo, sólo se verifica que el grupo tenga la acción cualquiera sobre el módulo en acl_groups_modules_actions . 
                 $aclGMAModel = new AclGroupsModulesActionsModel();
@@ -387,9 +384,8 @@ class Zwei_Admin_Acl extends Zend_Acl
                 if ($itemId) {
                     $select->where($aclGMAModel->getAdapter()->quoteInto('acl_modules_item_id = ?', $itemId));
                 }
-                
                 Debug::writeBySettings($select->__toString(), 'query_log');
-                return $aclGMAModel->fetchRow($select);
+                return $aclGMAModel->fetchRow($select) ? true : false;
             }
         } else {
             return false;
