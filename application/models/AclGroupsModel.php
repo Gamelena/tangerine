@@ -10,16 +10,18 @@ class AclGroupsModel extends DbTable_AclGroups
      * @return array
     */
     public function overloadDataForm($data) {
-        $data = $data->toArray();
-    
-        $model = new DbTable_AclUsersGroups();
-        $select = $model->select()->where("acl_groups_id = ?", $data['id']);
-        $usuarios = $model->fetchAll($select);
-    
-        foreach ($usuarios as $usuario) { //  $permissions->id = $permission->permission
-            $data["usuarios"][] = $usuario['acl_users_id'];
-        }
-        return $data;
+        //if (is_a('Zend_Db_Table_Rowset', $data)) {
+            $data = $data->toArray();
+        
+            $model = new DbTable_AclUsersGroups();
+            $select = $model->select()->where("acl_groups_id = ?", $data['id']);
+            $usuarios = $model->fetchAll($select);
+        
+            foreach ($usuarios as $usuario) { //  $permissions->id = $permission->permission
+                $data["usuarios"][] = $usuario['acl_users_id'];
+            }
+            return $data;
+        //}
     }
     
     /**

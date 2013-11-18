@@ -8,6 +8,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocat
         <element name="Perfil" target="acl_roles_id" defaultValue="" type="dijit-form-filtering-select" table="AclRolesModel" field="role_name" visible="true" edit="true" add="true"/>
         <element name="Activo" target="approved" type="dijit-form-check-box" formatter="utils.formatYesNo" visible="true" edit="true" add="true"/>
         <element name="Activo" target="acl_users.approved" type="dijit-form-check-box" formatter="utils.formatYesNo" visible="false" edit="false" add="false"/>
+        <element name="Grupos" target="grupos" type="dojox-form-checked-multi-select" table="AclGroupsModel" field="title" visible="false" edit="disabled" style="width:164px;"/>
     </elements>
     <searchers>
         <group name="Datos Personales">
@@ -18,4 +19,9 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocat
         <element target="acl_roles_id" defaultText="Todo" operator="=" />
         <element target="acl_users.approved" operator="=" checked="true" />
     </searchers>
-</component>
+    <forms ajax="true">
+        <changePassword>
+            <element target="password"/>
+        </changePassword>
+    </forms>
+</component> 

@@ -3,6 +3,7 @@
 class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
 {
     protected $_dataModulesActionsId;
+    protected $_nameModulesActions = 'acl_modules_actions';
     
     public function update($data, $where)
     {
@@ -60,6 +61,18 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     public function findActionId($id)
     {
         
+    }
+    
+    public function select()
+    {
+        $select = new Zend_Db_Table_Select($this);
+        $select->setIntegrityCheck(false);
+        $select->from($this->_name);
+        $select->joinLeft($this->_nameModulesActions, 
+                "$this->_name.acl_modules_actions_id=$this->_nameModulesActions.id", 
+                array('acl_modules_id', 'acl_actions_id')
+        );
+        return $select;
     }
 }
 

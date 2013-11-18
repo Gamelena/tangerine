@@ -287,7 +287,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             } else {
                 $this->view->onRowClick = " var items = this.selection.getSelected();
                     if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-                    dijit.byId('{$this->view->domPrefix}btnEdit').set('disabled', items[0].magicPortalIsAllowedEDIT!='1');
+                    if (dijit.byId('{$this->view->domPrefix}btnEdit') != undefined) dijit.byId('{$this->view->domPrefix}btnEdit').set('disabled', items[0].magicPortalIsAllowedEDIT!='1');
                 ";
             }
         }
@@ -308,7 +308,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             } else {
                 $this->view->onRowClick .= " var items = this.selection.getSelected();
                 if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-                dijit.byId('{$this->view->domPrefix}btnDelete').set('disabled', items[0].magicPortalIsAllowedDELETE!='1');
+                if (dijit.byId('{$this->view->domPrefix}btnDelete') != undefined) dijit.byId('{$this->view->domPrefix}btnDelete').set('disabled', items[0].magicPortalIsAllowedDELETE!='1');
                 ";
             }
         }

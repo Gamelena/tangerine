@@ -340,6 +340,7 @@ class Zwei_Admin_Acl extends Zend_Acl
         $aclModulesModel = new AclModulesModel();
         $resource = $aclModulesModel->getModuleId($module);
         $allowed =  $this->isAllowed($this->_userInfo->acl_roles_id, $resource, $permission);
+        Debug::write($allowed);
         return $allowed;
     }
     
@@ -353,7 +354,7 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @param Zwei_Db_Table $model
      * @return boolean
      */
-    public function userHasGroupsAllowed($module, $permission, $itemId = null, $model = null)
+    public function userHasGroupsAllowed($module, $permission, $itemId = null)
     {
         $aclModulesModel = new AclModulesModel();
         $resource = $aclModulesModel->getModuleId($module);

@@ -56,6 +56,7 @@ class AdminController extends Zend_Controller_Action
         
         $this->view->base_url = BASE_URL;
         $this->baseDojoFolder = isset($config->zwei->js->dojo->baseUrl) ? $config->zwei->js->dojo->baseUrl : '/dojotoolkit';
+        if (isset($config->resources->dojo->cdnbase)) $this->baseDojoFolder = $config->resources->dojo->cdnbase . '/' . $config->resources->dojo->cdnversion;
         
         if (!empty($confLayout->dojoTheme)) $this->_dojoTheme = $confLayout->dojoTheme;
         if (!empty($confLayout->template)) $this->_dojoTheme = $confLayout->layout->template;

@@ -270,6 +270,7 @@ class AclModulesModel extends DbTable_AclModules
     public function getModuleId($module) {
         $select = new Zend_Db_Table_Select($this);
         $select->from($this->_name, array('id'))->where($this->getAdapter()->quoteInto('module = ?', $module));
+        Debug::writeBySettings($select->__toString(), 'query_log');
         return $this->fetchRow($select)->id;
     }
     
@@ -283,6 +284,7 @@ class AclModulesModel extends DbTable_AclModules
     public function findModule($module, $fields = array('*')) {
         $select = new Zend_Db_Table_Select($this);
         $select->from($this->_name, $fields)->where($this->getAdapter()->quoteInto('module = ?', $module));
+        Debug::writeBySettings($select->__toString(), 'query_log');
         return $this->fetchRow($select);
     }
     
@@ -290,6 +292,7 @@ class AclModulesModel extends DbTable_AclModules
         $model = new AclModulesActionsModel();
         $select = $model->select(); 
         $select->where($model->getAdapter()->quoteInto('acl_modules_id = ?', $id));
+        Debug::writeBySettings($select->__toString(), 'query_log');
         return $model->fetchAll($select);
     }
 }
