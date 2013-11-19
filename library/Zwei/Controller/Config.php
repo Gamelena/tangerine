@@ -7,11 +7,62 @@
 class Zwei_Controller_Config
 {
     /**
+     * Bootstrap
+     * 
+     * @return mixed
+     */
+    public function getBootstrap()
+    {
+        return Zend_Controller_Front::getInstance()->getParam("bootstrap");
+    }
+    /**
      * Obtiene la configuracion cargada via bootstrap
      * @return Zend_Config
      */
-    public static function get(){
-        $configParams = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
+    public static function getOptions()
+    {
+        $configParams = self::getBootstrap()->getApplication()->getOptions();
         return new Zend_Config($configParams);
+    }
+    
+    /**
+     * @param string $resource
+     * @return Zend_Application_Resource
+     */
+    public static function getResource($resource)
+    {
+        return Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource($resource);
+    }
+    
+    /**
+     * @return Zend_Application_Resource_Multidb
+     */
+    public static function getResourceMultiDb()
+    {
+        return self::getResource('multidb');
+    }
+    
+    /**
+     * @return Zend_Application_Resource_Db
+     */
+    public static function getResourceDb()
+    {
+        return self::getResource('db');
+    }
+    
+    /**
+     * @return Zend_Application_Resource_Dojo
+     */
+    public static function getResourceDojo()
+    {
+        return self::getResource('dojo');
+    }
+    
+    /**
+     * @return Zend_Application_Resource_Mail
+     */
+    public static function getResourceMail()
+    {
+        return self::getResource('mail');
     }
 }
