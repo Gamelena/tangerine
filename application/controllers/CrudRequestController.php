@@ -42,7 +42,6 @@ class CrudRequestController extends Zend_Controller_Action
 
     public function init()
     {
-       
         $this->_form = new Zwei_Utils_Form();
         
         if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
@@ -91,6 +90,7 @@ class CrudRequestController extends Zend_Controller_Action
         }
         
         $classModel = $this->getRequest()->getParam('model');
+        
         if (class_exists($classModel)) {
             $data = array();
             /**
@@ -112,8 +112,7 @@ class CrudRequestController extends Zend_Controller_Action
                             ROOT_DIR . '/public/upfiles';
                         
                         $element = $this->_xml->getElements("@target='$target'");
-                        Debug::write('this->_xml');
-                        Debug::write($element);
+    
                         $infoFiles = $this->_form->upload($i, $path);
                         if ($infoFiles) {
                             $j = 0;
@@ -335,6 +334,8 @@ class CrudRequestController extends Zend_Controller_Action
                     $content->setMetadata(array("title" => $this->_model->getTitle()));
                 }
                 
+                if ($this->_model->getMore()) $content->setMetadata(array("more" => $this->_model->getMore()));
+                
                 if (isset($numRows)) $content->setMetadata('numRows', $numRows);
                 $this->getResponse()
                 ->setHeader('Content-Type', 'text/html');
@@ -347,37 +348,10 @@ class CrudRequestController extends Zend_Controller_Action
 
     public function multiUpdateAction()
     {
-        require_once ADMPORTAL_APPLICATION_PATH .'/../library/PhpThumb/ThumbLib.inc.php';
         $r = $this->getRequest();
         $classModel = $r->getParam('model');
-
         $this->_model = new $classModel();
-        Debug::write('........getparams........................');
-        Debug::write($r->getParams());
-        Debug::write($r->getParam('thumbdata'));
-        
-   //     $otro = $r->getParam('thumbdata');
-    //    $otro1 = $otro['url_logo_zweicom'].[0].['width'];
-        //$thumb['url_logo_zweicom'] = $r->getParam('thumbdata');
-        //$width= $thumb['url_logo_zweicom'];
-        //$otro = $width['url_logo_zweicom'];
-        //$width_ = $width['url_logo_zweicom'];
-          
-          
-          
-        /*   Debug::write('urlLogoZweicom');
-        Debug::write($urlLogoZweicom);
-        $index[] = $urlLogoZweicom[0];
-        Debug::write('index');
-        Debug::write($index);
-        $width= $index['width'];
-       */
-  //      Debug::write('otro');
-    //    Debug::write($otro1);
-       
-        
-        
-        
+
         $updated = 0;
         $failed = 0;
         $message = '';
@@ -401,12 +375,6 @@ class CrudRequestController extends Zend_Controller_Action
                     }
                     //Se agrega nombre de archivo subido a array de actualizacion de datos
                     $this->_form->data[$id] = $v['filename'];
-                    
-                    
-                  /*  $thumb = PhpThumbFactory::create($path."/".$v['filename']);
-                    $thumb->resize($t->getAttribute('width'), $t->getAttribute('height'));
-                    Debug::write('thumb');
-                    Debug::write($thumb);*/
                 }
             } else if ($v['size'] > 0) {
                 Debug::write("error al subir archivo a $path");

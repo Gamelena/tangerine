@@ -259,7 +259,6 @@ class Zwei_Admin_Acl extends Zend_Acl
                 $selectRoles->joinLeft($this->_tb_groups_modules_actions, $this->_tb_groups_modules_actions.".acl_modules_actions_id=".$this->_tb_modules_actions.".id", array());
             }
             
-            $selectRoles->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR $this->_tb_groups_modules_actions.acl_groups_id IN ($groups)");
             if ($groups) {
                 $selectRoles->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR $this->_tb_groups_modules_actions.acl_groups_id IN ($groups)");
             } else {
@@ -320,6 +319,8 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function isUserAllowed($module, $permission = null, $itemId = null)
     {
         $allowed = $this->userHasRoleAllowed($module, $permission);
+        
+        $this->isOwner($module, $itemId);
         
         if (!$allowed) {
             $allowed = $this->userHasGroupsAllowed($module, $permission, $itemId);
@@ -390,6 +391,18 @@ class Zwei_Admin_Acl extends Zend_Acl
         } else {
             return false;
         }
+    }
+    /**
+     * 
+     * @param string $module
+     * @param string $permission
+     * @param string $itemId
+     */
+    public function isOwner($module, $itemId = null)
+    {
+        $file = Zwei_Admin_Xml::getFullPath($module);
+        $xml = new Zwei_Admin_Xml($file, null, true);
+        Debug::write($xml);
     }
     
     /**
