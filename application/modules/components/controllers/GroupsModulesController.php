@@ -57,7 +57,7 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         $this->view->aclGroupsId = $this->_aclGroupsId = $this->getRequest()->getParam('id');
         $this->view->model = $this->_xml->getAttribute('target');
         $this->view->itemName = $this->getRequest()->getParam('itemName');
-        $this->view->actionForm = $this->view->edit === true ? 'Editar' : 'Detalles';
+        $this->view->actionForm = $this->view->edit ? 'Editar' : 'Detalles';
     }
 
     public function indexAction()

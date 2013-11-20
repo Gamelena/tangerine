@@ -96,7 +96,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function init()
     {
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
-        $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
         
         $configParams = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
@@ -112,7 +111,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         }
         
         $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
-        $this->view->domPrefix  = (isset($this->view->mainPane) && $this->view->mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($this->getRequest()->getParam('p')) : '';
+        $this->view->domPrefix = isset($this->view->mainPane) && $this->view->mainPane == 'dijitTabs' ? Zwei_Utils_String::toVarWord($this->getRequest()->getParam('p')) : '';
         
         if ($this->_acl->userHasRoleAllowed($this->_component, 'EDIT')) {
             $this->view->validateGroupEdit = false;
@@ -276,7 +275,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->elements = $this->_xml->getElements("@visible='true'");
         
         $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
-        //if ($ajax !== 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         
         if ($this->_xml->getAttribute('edit') === 'true') {
             if (!$this->view->validateGroupEdit) {
@@ -287,7 +285,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             } else {
                 $this->view->onRowClick = " var items = this.selection.getSelected();
                     if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-                    if (dijit.byId('{$this->view->domPrefix}btnEdit') != undefined) dijit.byId('{$this->view->domPrefix}btnEdit').set('disabled', items[0].magicPortalIsAllowedEDIT!='1');
+                    if (dijit.byId('{$this->view->domPrefix}btnEdit') != undefined) dijit.byId('{$this->view->domPrefix}btnEdit').set('disabled', false);
+                    dijit.byId('{$this->view->domPrefix}MenuItemEdit').set('disabled', false);
                 ";
             }
         }
