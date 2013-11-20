@@ -39,11 +39,25 @@ class Components_GroupsModulesController extends Zend_Controller_Action
     public function init()
     {
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
+        $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
+        
+        if ($this->getRequest()->getParam('p')) {
+            $this->_component = $this->getRequest()->getParam('p');
+            $file = Zwei_Admin_Xml::getFullPath($this->_component);
+            $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+        
+            $aclModulesModel = new AclModulesModel();
+            $this->_module = $aclModulesModel->findModule($this->_component);
+        }
+        
+        $this->view->p = $this->getRequest()->getParam('p');
+        $this->view->edit = $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
         $this->view->aclModulesId = $this->_aclModulesId = $this->getRequest()->getParam('acl_modules_id');
         $this->view->aclModulesItemId = $this->_aclModulesItemId = $this->getRequest()->getParam('acl_modules_item_id');
         $this->view->aclGroupsId = $this->_aclGroupsId = $this->getRequest()->getParam('id');
-        $this->view->model = 'AclGroupsModulesActionsModel';
+        $this->view->model = $this->_xml->getAttribute('target');
         $this->view->itemName = $this->getRequest()->getParam('itemName');
+        $this->view->actionForm = $this->view->edit === true ? 'Editar' : 'Detalles';
     }
 
     public function indexAction()

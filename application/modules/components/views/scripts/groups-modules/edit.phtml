@@ -14,6 +14,13 @@
     }
 </style>
 <div class="formContainer">
+<?php 
+if (!$this->edit) :
+?>
+    <div style="position: absolute;width: 100%; height: 100%;z-index: 99999999" ></div>
+<?php 
+endif;
+?>
     <form data-dojo-type="dijit/form/Form" id="actionsModules<?=$this->mode?>" target="ifrm_process" action="<?=BASE_URL?>crud-request" method="post">
 <?php 
 foreach ($this->modules as $i => $module) :
@@ -43,6 +50,7 @@ foreach ($this->modules as $i => $module) :
 <?php
     endif; 
 endforeach;
+if ($this->edit) :
 ?>
     <input type="hidden" name="model" value="<?=$this->model?>" />
     <input type="hidden" name="action" value="edit" />
@@ -61,5 +69,8 @@ endforeach;
     }
     return true;
     </script>
+<?php 
+endif;
+?>
     </form>
 </div>

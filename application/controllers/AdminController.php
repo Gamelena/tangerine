@@ -47,12 +47,11 @@ class AdminController extends Zend_Controller_Action
      */
     public function init()
     {
-        $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
+        $config = Zwei_Controller_Config::getOptions();
         $confLayout = $config->zwei->layout;
         
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         if ($userInfo)  $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
-        
         
         $this->view->base_url = BASE_URL;
         $this->baseDojoFolder = isset($config->zwei->js->dojo->baseUrl) ? $config->zwei->js->dojo->baseUrl : '/dojotoolkit';
