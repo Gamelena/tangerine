@@ -220,7 +220,8 @@ class CrudRequestController extends Zend_Controller_Action
                     //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
                     if (method_exists($this->_model, 'overloadDataList') && $this->_model->overloadDataList($data)) {
                         $data = $this->_model->overloadDataList($data);
-                        $numRows = count($data);
+                        $countData = count($data);
+                        if ($numRows < $countData) $countData = $numRows;
                     }
                     
                     //si ?format=excel exportamos el rowset a excel
@@ -334,7 +335,7 @@ class CrudRequestController extends Zend_Controller_Action
                     $content->setMetadata(array("title" => $this->_model->getTitle()));
                 }
                 
-                if ($this->_model->getMore()) $content->setMetadata(array("more" => $this->_model->getMore()));
+                if (method_exists($this->_model, 'getMore') && $this->_model->getMore()) $content->setMetadata(array("more" => $this->_model->getMore()));
                 
                 if (isset($numRows)) $content->setMetadata('numRows', $numRows);
                 $this->getResponse()
