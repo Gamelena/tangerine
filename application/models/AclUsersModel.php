@@ -19,14 +19,13 @@ class AclUsersModel extends DbTable_AclUsers
     {
         $select = new Zend_Db_Table_Select($this);
         $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
-        $select->from($this->_name, array('id', 'user_name', 'acl_roles_id', 'first_names', 'last_names', 'email', 'approved'))
-        ->joinLeft($this->_name_roles, "$this->_name.acl_roles_id = $this->_name_roles.id", "role_name")
-        ;
-
+        $select->from($this->_name, array('id', 'user_name', 'acl_roles_id', 'first_names', 'last_names', 'email', 'approved'));
+        $select->joinLeft($this->_name_roles, "$this->_name.acl_roles_id = $this->_name_roles.id", "role_name");
         //[TODO] esto está en duro, debiera ser dinámico via campo root en acl_roles
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where('acl_roles_id <> ?', '1');
         }
+        $select->order('user_name');
 
         return $select;
     }
