@@ -95,6 +95,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     if (dojo.byId(entry.id+'_prefix2') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[prefix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix2').value);
                 }
             });
+            searchUrl += '&p='+domForm.p.value;
         }
         
         if (this.iframe != null && this.queryParams.indexOf('format=excel') >= 0){
