@@ -110,7 +110,7 @@ class Zwei_Admin_Auth
         $groups = array();
         
         foreach ($buffGroups as $g) {
-            $groups[] = $g['id'];
+            $groups[] = $g['acl_groups_id'];
         }
         
         
