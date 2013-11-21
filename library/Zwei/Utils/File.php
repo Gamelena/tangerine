@@ -106,6 +106,16 @@ class Zwei_Utils_File
     }
     
     /**
+     * Obtener extensión de nombre de archivo
+     * @param string $filename
+     */
+    public function getExtension($filename)
+    {
+        $fp = explode(".", $filename);
+        return $fp[count($fp) - 1];
+    }
+    
+    /**
      * 
      */
     public function getResponseFromService($url, $params='', $username=false, $password=false, $log=false, $typeOfResponse=false)
