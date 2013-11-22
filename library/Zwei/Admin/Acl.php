@@ -235,10 +235,10 @@ class Zwei_Admin_Acl extends Zend_Acl
      */
     public function listGrantedResourcesByParentId($parentId)
     {
-        $select = $this->_db->select()
-            ->from($this->_tb_modules, array('id', 'title', 'module', 'type', 'tree', 'refresh_on_load', 'ownership'));
-        
+        $select = $this->_db->select();
         $groups = $this->_userInfo->groups;
+        $fields = array('id', 'title', 'module', 'type', 'tree', 'refresh_on_load', 'ownership');
+        
         if (!empty($groups)) {
             $groups = implode(",", $groups);
         } else {
@@ -257,7 +257,10 @@ class Zwei_Admin_Acl extends Zend_Acl
             } else {
                 $select->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR ownership='1'");
             }
+        } else {
+            $fields['permission'] = new Zend_Db_Expr(1);
         }
+        $select->from($this->_tb_modules, $fields);
         
         if (is_null($parentId)) {
             $select->where('parent_id IS NULL');
