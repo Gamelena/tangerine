@@ -428,7 +428,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * @param unknown $user
      * @return boolean
      */
-    protected function isOwner($itemId, $user=null) {
+    public function isOwner($itemId, $user=null) {
         return false;
     } 
 }
