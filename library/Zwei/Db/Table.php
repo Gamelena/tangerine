@@ -414,10 +414,21 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * Método para separar datos de tabla principal de datos de tablas auxiliares, para ser reescrito en modelos respectivos.
      * 
-     * @param array $data
+     * @param Zend_Db_Table_Rowset $data
      * @return array
      */
-    protected function cleanDataParams($data) {
+    protected function cleanDataParams($data)
+    {
         return $data;
     }
+    
+    /**
+     * Método para preguntar si determinado usuario es el owner de un elemento
+     * 
+     * @param unknown $user
+     * @return boolean
+     */
+    protected function isOwner($itemId, $user=null) {
+        return false;
+    } 
 }

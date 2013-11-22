@@ -136,10 +136,23 @@ class AclModulesModel extends DbTable_AclModules
     public function getTree($parent_id = null, $noTree = false)
     {
         $root = $this->_acl->listGrantedResourcesByParentId($parent_id);
-        
+                
         $arrNodes = array();
         //$i = 0;
         foreach ($root as $branch) {
+            //Buscar si usuario en sesion es owner de algun elemento para desplegar nodo
+            if ($branch['ownership']) {
+                if ($branch['type'] == 'xml') {
+                    $file = Zwei_Admin_Xml::getFullPath($branch['module']);
+                    $xml = new Zwei_Admin_Xml($file, null, true);
+                    $modelName = $xml->getAttribute('target');
+                    $model = new $modelName;
+                    if (!$model->isOwner()) {
+                        return $arrNodes;
+                    }
+                } 
+            }
+            
             if ($branch['tree'] == '1' || $noTree) {
                 $key = $branch['id'];
                 $arrNodes[$key]['id']  = $branch['id'];

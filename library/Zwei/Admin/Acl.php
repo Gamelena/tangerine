@@ -94,17 +94,13 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @param Zend_Auth $user
      */
     public function __construct() {
-        $config = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
-        $config = new Zend_Config($config);
-        
         $this->_userInfo = Zend_Auth::getInstance()->getStorage()->read();
         
-        if (Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb")) {
-            $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
+        if (Zwei_Controller_Config::getResourceMultiDb()) {
+            $resource = Zwei_Controller_Config::getResourceMultiDb();
             $this->_db = $resource->getDb("auth");
         } else {
-            $dbParams = $config->resources->db;
-            $this->_db = Zend_Db::factory($dbParams);
+            $this->_db = Zwei_Controller_Config::getResourceDb();
         }
         self::roleResource();
     }
@@ -243,7 +239,7 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function listGrantedResourcesByParentId($parentId)
     {
         $selectRoles = $selectGroups = $this->_db->select()
-            ->from($this->_tb_modules, array('id', 'title', 'module', 'type', 'tree', 'refresh_on_load'));
+            ->from($this->_tb_modules, array('id', 'title', 'module', 'type', 'tree', 'refresh_on_load', 'ownership'));
         
         $groups = $this->_userInfo->groups;
         if (!empty($groups)) {
@@ -260,18 +256,18 @@ class Zwei_Admin_Acl extends Zend_Acl
             }
             
             if ($groups) {
-                $selectRoles->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR $this->_tb_groups_modules_actions.acl_groups_id IN ($groups)");
+                $selectRoles->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR $this->_tb_groups_modules_actions.acl_groups_id IN ($groups) OR ownership='1'");
             } else {
-                $selectRoles->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id}");
+                $selectRoles->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR ownership='1'");
             }
-            
         }
         
         if (is_null($parentId)) {
             $selectRoles->where('parent_id IS NULL');
         } else {
             $selectRoles->where($this->_db->quoteInto('parent_id = ?', $parentId));
-        }    
+        }
+        
         $selectRoles->joinLeft('web_icons', "web_icons.id=".$this->_tb_modules.'.icons_id', array('image'));
         $selectRoles->order("order");
         
@@ -357,7 +353,22 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function userHasGroupsAllowed($module, $permission, $itemId = null)
     {
         $aclModulesModel = new AclModulesModel();
-        $resource = $aclModulesModel->getModuleId($module);
+        $moduleRow = $aclModulesModel->findModule($module);
+        $resource = $moduleRow->id;
+        $moduleType = $moduleRow->type;
+        
+        if ($moduleType == 'xml') {
+            $file = Zwei_Admin_Xml::getFullPath($module);
+            $xml = new Zwei_Admin_Xml($file, null, true);
+            if ($xml->getAttribute('target')) {
+                $modelName = $xml->getAttribute('target');
+                $model = new $modelName();
+                
+                if (is_a($model, 'Zwei_Db_Table')) {
+                    if ($model->isOwner($itemId)) return true;
+                }
+            }
+        }
         
         $groups = $this->_userInfo->groups;
         if (!empty($groups)) {
