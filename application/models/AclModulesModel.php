@@ -141,7 +141,7 @@ class AclModulesModel extends DbTable_AclModules
         //$i = 0;
         foreach ($root as $branch) {
             //Buscar si usuario en sesion es owner de algun elemento para desplegar nodo
-            if ($branch['ownership']) {
+            if ($branch['ownership'] && !$branch['permission']) {
                 if ($branch['type'] == 'xml') {
                     $file = Zwei_Admin_Xml::getFullPath($branch['module']);
                     $xml = new Zwei_Admin_Xml($file, null, true);

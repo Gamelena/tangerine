@@ -88,11 +88,8 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @var string
      */
     private $_user_role_id = 'acl_roles_id';
-
-    /**
-     * 
-     * @param Zend_Auth $user
-     */
+    
+    
     public function __construct() {
         $this->_userInfo = Zend_Auth::getInstance()->getStorage()->read();
         
@@ -238,7 +235,7 @@ class Zwei_Admin_Acl extends Zend_Acl
      */
     public function listGrantedResourcesByParentId($parentId)
     {
-        $selectRoles = $selectGroups = $this->_db->select()
+        $select = $this->_db->select()
             ->from($this->_tb_modules, array('id', 'title', 'module', 'type', 'tree', 'refresh_on_load', 'ownership'));
         
         $groups = $this->_userInfo->groups;
@@ -249,31 +246,31 @@ class Zwei_Admin_Acl extends Zend_Acl
         }
         
         if ($this->_userInfo->{$this->_user_role_id} != ROLES_ROOT_ID) {
-            $selectRoles->joinLeft($this->_tb_modules_actions, $this->_tb_modules_actions.".acl_modules_id=".$this->_tb_modules.".id", array());
-            $selectRoles->joinLeft($this->_tb_roles_modules_actions, $this->_tb_roles_modules_actions.".acl_modules_actions_id=".$this->_tb_modules_actions.".id", array());
+            $select->joinLeft($this->_tb_modules_actions, $this->_tb_modules_actions.".acl_modules_id=".$this->_tb_modules.".id", array());
+            $select->joinLeft($this->_tb_roles_modules_actions, $this->_tb_roles_modules_actions.".acl_modules_actions_id=".$this->_tb_modules_actions.".id", array('permission'));
             if ($groups) {
-                $selectRoles->joinLeft($this->_tb_groups_modules_actions, $this->_tb_groups_modules_actions.".acl_modules_actions_id=".$this->_tb_modules_actions.".id", array());
+                $select->joinLeft($this->_tb_groups_modules_actions, $this->_tb_groups_modules_actions.".acl_modules_actions_id=".$this->_tb_modules_actions.".id", array());
             }
             
             if ($groups) {
-                $selectRoles->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR $this->_tb_groups_modules_actions.acl_groups_id IN ($groups) OR ownership='1'");
+                $select->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR $this->_tb_groups_modules_actions.acl_groups_id IN ($groups) OR ownership='1'");
             } else {
-                $selectRoles->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR ownership='1'");
+                $select->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR ownership='1'");
             }
         }
         
         if (is_null($parentId)) {
-            $selectRoles->where('parent_id IS NULL');
+            $select->where('parent_id IS NULL');
         } else {
-            $selectRoles->where($this->_db->quoteInto('parent_id = ?', $parentId));
+            $select->where($this->_db->quoteInto('parent_id = ?', $parentId));
         }
         
-        $selectRoles->joinLeft('web_icons', "web_icons.id=".$this->_tb_modules.'.icons_id', array('image'));
-        $selectRoles->order("order");
+        $select->joinLeft('web_icons', "web_icons.id=".$this->_tb_modules.'.icons_id', array('image'));
+        $select->order("order");
         
-        //Debug::writeBySettings($selectRoles->__toString(), 'query_log');
+        //Debug::writeBySettings($select->__toString(), 'query_log');
         
-        return($this->_db->fetchAll($selectRoles));
+        return($this->_db->fetchAll($select));
     }
 
     /**
@@ -315,8 +312,6 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function isUserAllowed($module, $permission = null, $itemId = null)
     {
         $allowed = $this->userHasRoleAllowed($module, $permission);
-        
-        $this->isOwner($module, $itemId);
         
         if (!$allowed) {
             $allowed = $this->userHasGroupsAllowed($module, $permission, $itemId);
@@ -403,19 +398,6 @@ class Zwei_Admin_Acl extends Zend_Acl
             return false;
         }
     }
-    /**
-     * 
-     * @param string $module
-     * @param string $permission
-     * @param string $itemId
-     */
-    public function isOwner($module, $itemId = null)
-    {
-        $file = Zwei_Admin_Xml::getFullPath($module);
-        $xml = new Zwei_Admin_Xml($file, null, true);
-        Debug::write($xml);
-    }
-    
     /**
      * Verifica si usuario en sesión tiene tal permiso en tal módulo 
      * [FIXME] está repetida debería deprecarse y borrarse.
