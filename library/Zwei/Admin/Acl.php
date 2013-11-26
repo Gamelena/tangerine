@@ -10,7 +10,7 @@
  *
  *
  */
- 
+
 class Zwei_Admin_Acl extends Zend_Acl
 {
     /**
@@ -82,19 +82,31 @@ class Zwei_Admin_Acl extends Zend_Acl
      * Campo de user login en tabla $this->_tb_users.
      * @var string
      */
-    private $_user_login = 'user_name';
+    private $_userLogin = 'user_name';
     /**
      * Campo id de perfil en tabla $this->_tb_users.
      * @var string
      */
-    private $_user_role_id = 'acl_roles_id';
-    
-    
-    public function __construct() {
+    private $_userRoleId = 'acl_roles_id';
+    /**
+     * 
+     * @var int
+     */
+    private $_resource = null;
+    /**
+     * 
+     * @var Zend_Db_Table_Row
+     */
+    private $_moduleRow = null;
+    /**
+     * 
+     */
+    public function __construct()
+    {
         $this->_userInfo = Zend_Auth::getInstance()->getStorage()->read();
         
         if (Zwei_Controller_Config::getResourceMultiDb()) {
-            $resource = Zwei_Controller_Config::getResourceMultiDb();
+            $resource  = Zwei_Controller_Config::getResourceMultiDb();
             $this->_db = $resource->getDb("auth");
         } else {
             $this->_db = Zwei_Controller_Config::getResourceDb();
@@ -108,16 +120,16 @@ class Zwei_Admin_Acl extends Zend_Acl
      */
     private function initRoles()
     {
-        $select = $this->_db->select()
-            ->from($this->_tb_roles)
-            ->order(array('id DESC'));
+        $select = $this->_db->select()->from($this->_tb_roles)->order(array(
+            'id DESC'
+        ));
         
         $roles = $this->_db->fetchAll($select);
         
         $this->addRole(new Zend_Acl_Role($roles[0]['id']));
         
-        for ($i = 1; $i < count($roles); $i++) { 
-            $this->addRole(new Zend_Acl_Role($roles[$i]['id']), $roles[$i-1]['id']);
+        for ($i = 1; $i < count($roles); $i++) {
+            $this->addRole(new Zend_Acl_Role($roles[$i]['id']), $roles[$i - 1]['id']);
         }
     }
     
@@ -128,19 +140,16 @@ class Zwei_Admin_Acl extends Zend_Acl
     private function initResources()
     {
         self::initRoles();
+        $select    = $this->_db->select()->from($this->_tb_modules);
+        $resources = $this->_db->fetchAll($select);
         
-        $select = $this->_db->select()
-            ->from($this->_tb_modules);
-        
-        $resources = $this->_db->fetchAll( $select );
-        
-        foreach ($resources as $key=>$value) {
+        foreach ($resources as $key => $value) {
             if (!$this->has($value['id'])) {
                 $this->add(new Zend_Acl_Resource($value['id']));
             }
         }
     }
-
+    
     /**
      * 
      * 
@@ -153,16 +162,16 @@ class Zwei_Admin_Acl extends Zend_Acl
         self::initResources();
         
         $select = $this->_db->select();
-        $select->from($this->_tb_roles_modules_actions, array('acl_roles_id'));
-        $select->joinLeft($this->_tb_modules_actions, 
-            "$this->_tb_modules_actions.id = $this->_tb_roles_modules_actions.acl_modules_actions_id", array()
-        );
-        $select->joinLeft($this->_tb_modules, 
-            "$this->_tb_modules.id = $this->_tb_modules_actions.acl_modules_id", array('acl_modules_id' => 'id')
-        );
-        $select->joinLeft($this->_tb_actions,
-            "$this->_tb_actions.id = $this->_tb_modules_actions.acl_actions_id", array('acl_actions_id' => 'id')
-        );
+        $select->from($this->_tb_roles_modules_actions, array(
+            'acl_roles_id'
+        ));
+        $select->joinLeft($this->_tb_modules_actions, "$this->_tb_modules_actions.id = $this->_tb_roles_modules_actions.acl_modules_actions_id", array());
+        $select->joinLeft($this->_tb_modules, "$this->_tb_modules.id = $this->_tb_modules_actions.acl_modules_id", array(
+            'acl_modules_id' => 'id'
+        ));
+        $select->joinLeft($this->_tb_actions, "$this->_tb_actions.id = $this->_tb_modules_actions.acl_actions_id", array(
+            'acl_actions_id' => 'id'
+        ));
         $select->where("$this->_tb_modules.id IS NOT NULL");
         
         $acl = $this->_db->fetchAll($select);
@@ -171,7 +180,7 @@ class Zwei_Admin_Acl extends Zend_Acl
             $this->allow($row['acl_roles_id'], $row['acl_modules_id'], $row['acl_actions_id']);
         }
     }
-
+    
     /**
      * Lista todos los perfiles.
      * 
@@ -180,9 +189,9 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function listRoles()
     {
         $select = $this->_db->select()->from($this->_tb_roles);
-        return $this->_db->fetchAll( $select );
+        return $this->_db->fetchAll($select);
     }
-
+    
     /**
      * Obtiene id de perfil a través del nombre.
      * 
@@ -191,14 +200,12 @@ class Zwei_Admin_Acl extends Zend_Acl
      */
     public function getRoleId($roleName)
     {
-        $select = $this->_db->select()
-            ->from($this->_tb_roles, "id")
-            ->where($this->_tb_roles.".role_name = '".$roleName."'");
+        $select = $this->_db->select()->from($this->_tb_roles, "id")->where($this->_tb_roles . ".role_name = '" . $roleName . "'");
         
         //Zwei_Utils_Debug::write($select->__toString());
-        return $this->_db->fetchRow( $select );
+        return $this->_db->fetchRow($select);
     }
-
+    
     /**
      * Inserta usuario.
      * 
@@ -207,12 +214,13 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function insertAclUser()
     {
         $data = array(
-        $this->_tb_roles.'_id' => $this->_getUserRoleId,
-            'user_name' => $this->_user);
-
+            $this->_tb_roles . '_id' => $this->_getUserRoleId,
+            'user_name' => $this->_user
+        );
+        
         return $this->_db->insert($this->_tb_users, $data);
     }
-
+    
     /**
      * Listado de los módulos.
      * 
@@ -220,13 +228,10 @@ class Zwei_Admin_Acl extends Zend_Acl
      */
     public function listResources()
     {
-        $select = $this->_db->select()
-            ->from($this->_tb_modules)
-            ->from($this->_tb_roles_modules_actions)
-            ->where($this->_tb_modules."_id = ".$this->_tb_modules.".id");
-        return $this->_db->fetchAll( $select );
+        $select = $this->_db->select()->from($this->_tb_modules)->from($this->_tb_roles_modules_actions)->where($this->_tb_modules . "_id = " . $this->_tb_modules . ".id");
+        return $this->_db->fetchAll($select);
     }
-
+    
     /**
      * Devuelve una lista con los recursos que a que tiene acceso el usuario en sesión.
      * 
@@ -237,7 +242,15 @@ class Zwei_Admin_Acl extends Zend_Acl
     {
         $select = $this->_db->select();
         $groups = $this->_userInfo->groups;
-        $fields = array('id', 'title', 'module', 'type', 'tree', 'refresh_on_load', 'ownership');
+        $fields = array(
+            'id',
+            'title',
+            'module',
+            'type',
+            'tree',
+            'refresh_on_load',
+            'ownership'
+        );
         
         if (!empty($groups)) {
             $groups = implode(",", $groups);
@@ -245,11 +258,13 @@ class Zwei_Admin_Acl extends Zend_Acl
             $groups = false;
         }
         
-        if ($this->_userInfo->{$this->_user_role_id} != ROLES_ROOT_ID) {
-            $select->joinLeft($this->_tb_modules_actions, $this->_tb_modules_actions.".acl_modules_id=".$this->_tb_modules.".id", array());
-            $select->joinLeft($this->_tb_roles_modules_actions, $this->_tb_roles_modules_actions.".acl_modules_actions_id=".$this->_tb_modules_actions.".id", array('permission'));
+        if ($this->_userInfo->{$this->_userRoleId} != ROLES_ROOT_ID) {
+            $select->joinLeft($this->_tb_modules_actions, $this->_tb_modules_actions . ".acl_modules_id=" . $this->_tb_modules . ".id", array());
+            $select->joinLeft($this->_tb_roles_modules_actions, $this->_tb_roles_modules_actions . ".acl_modules_actions_id=" . $this->_tb_modules_actions . ".id", array(
+                'permission'
+            ));
             if ($groups) {
-                $select->joinLeft($this->_tb_groups_modules_actions, $this->_tb_groups_modules_actions.".acl_modules_actions_id=".$this->_tb_modules_actions.".id", array());
+                $select->joinLeft($this->_tb_groups_modules_actions, $this->_tb_groups_modules_actions . ".acl_modules_actions_id=" . $this->_tb_modules_actions . ".id", array());
             }
             
             if ($groups) {
@@ -258,7 +273,7 @@ class Zwei_Admin_Acl extends Zend_Acl
                 $select->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR ownership='1'");
             }
         } else {
-            $fields['permission'] = new Zend_Db_Expr(1);
+            $fields['permission'] = new Zend_Db_Expr("'ALLOW'");
         }
         $select->from($this->_tb_modules, $fields);
         
@@ -268,14 +283,16 @@ class Zwei_Admin_Acl extends Zend_Acl
             $select->where($this->_db->quoteInto('parent_id = ?', $parentId));
         }
         
-        $select->joinLeft('web_icons', "web_icons.id=".$this->_tb_modules.'.icons_id', array('image'));
+        $select->joinLeft('web_icons', "web_icons.id=" . $this->_tb_modules . '.icons_id', array(
+            'image'
+        ));
         $select->order("order");
         
         //Debug::writeBySettings($select->__toString(), 'query_log');
         
-        return($this->_db->fetchAll($select));
+        return ($this->_db->fetchAll($select));
     }
-
+    
     /**
      * Lista permisos de un módulo.
      * 
@@ -285,26 +302,21 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function listResourcesByGroup($group)
     {
         $result = null;
-        
-        $select = $this->_db->select()
-            ->from($this->_tb_modules)
-            ->from($this->_tb_roles_modules_actions)
-            ->where($this->_tb_modules.'.module = "' . $group . '"')
-            ->where($this->_tb_modules.".id = ".$this->_tb_modules."_id");
+        $select = $this->_db->select()->from($this->_tb_modules)->from($this->_tb_roles_modules_actions)->where($this->_tb_modules . '.module = "' . $group . '"')->where($this->_tb_modules . ".id = " . $this->_tb_modules . "_id");
         
         //Zwei_Utils_Debug::write($select->__toString());
         
-        $group = $this->_db->fetchAll( $select );
-
-        foreach ($group as $key=>$value) {
+        $group = $this->_db->fetchAll($select);
+        
+        foreach ($group as $key => $value) {
             if ($this->isUserAllowed($value['module'], $value['permission'])) {
                 $result[] = $value['permission'];
             }
         }
-
+        
         return $result;
     }
-
+    
     /**
      * Verifica si usuario en sesión tiene tal permiso en tal módulo. 
      * 
@@ -333,8 +345,8 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function userHasRoleAllowed($module, $permission = null)
     {
         $aclModulesModel = new AclModulesModel();
-        $resource = $aclModulesModel->getModuleId($module);
-        $allowed =  $this->isAllowed($this->_userInfo->acl_roles_id, $resource, $permission);
+        if ($this->_resource == null) $this->_resource = $aclModulesModel->getModuleId($module);
+        $allowed         = $this->isAllowed($this->_userInfo->acl_roles_id, $this->_resource, $permission);
         return $allowed;
     }
     
@@ -351,30 +363,31 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function userHasGroupsAllowed($module, $permission, $itemId = null)
     {
         $aclModulesModel = new AclModulesModel();
-        $moduleRow = $aclModulesModel->findModule($module);
-        $resource = $moduleRow->id;
-        $moduleType = $moduleRow->type;
+        if ($this->_moduleRow == null) $this->_moduleRow = $aclModulesModel->findModule($module);
+        $moduleRow       = $this->_moduleRow;
+        $resource        = $moduleRow->id;
+        $moduleType      = $moduleRow->type;
         
         if ($moduleType == 'xml') {
             $file = Zwei_Admin_Xml::getFullPath($module);
-            $xml = new Zwei_Admin_Xml($file, null, true);
+            $xml  = new Zwei_Admin_Xml($file, null, true);
             if ($xml->getAttribute('target')) {
                 $modelName = $xml->getAttribute('target');
-                $model = new $modelName();
+                $model     = new $modelName();
                 
                 if (is_a($model, 'Zwei_Db_Table')) {
-                    if ($model->isOwner($itemId)) return true;
+                    if ($model->isOwner($itemId))
+                        return true;
                 }
             }
         }
         
         $groups = $this->_userInfo->groups;
         if (!empty($groups)) {
-            $groups = implode(",", $groups);
+            $groups                 = implode(",", $groups);
             $aclModulesActionsModel = new DbTable_AclModulesActions();
-            
-            $permission = $aclModulesActionsModel->getAdapter()->quote($permission);
-            $resource = $aclModulesActionsModel->getAdapter()->quote($resource);
+            $permission             = $aclModulesActionsModel->getAdapter()->quote($permission);
+            $resource               = $aclModulesActionsModel->getAdapter()->quote($resource);
             
             $select = $aclModulesActionsModel->select()->where("acl_modules_id=$resource AND acl_actions_id=$permission");
             
@@ -386,11 +399,11 @@ class Zwei_Admin_Acl extends Zend_Acl
             foreach ($aclModulesActions as $rowAclModulesActions) {
                 //Si $itemId es nulo, sólo se verifica que el grupo tenga la acción cualquiera sobre el módulo en acl_groups_modules_actions . 
                 $aclGMAModel = new AclGroupsModulesActionsModel();
-                $select = $aclGMAModel->select();
-                $where = array();
+                $select      = $aclGMAModel->select();
+                $where       = array();
                 $select->where("acl_groups_id IN($groups)");
                 $select->where($aclGMAModel->getAdapter()->quoteInto('acl_modules_actions_id = ?', $rowAclModulesActions->id));
-
+                
                 if ($itemId) {
                     $select->where($aclGMAModel->getAdapter()->quoteInto('acl_modules_item_id = ?', $itemId));
                 }
@@ -413,7 +426,7 @@ class Zwei_Admin_Acl extends Zend_Acl
     {
         return ($this->isAllowed($this->_userInfo->acl_roles_id, $resource, $permission));
     }
-
+    
     /**
      * Verifica si sesión de usuario tiene acceso a módulo $_REQUEST['p']
      * 
@@ -423,6 +436,5 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function isActionAllowed($permission)
     {
         return ($this->_acl->isAllowed($this->_user, $_REQUEST['p'], $permission));
-    
     }
 }
