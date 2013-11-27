@@ -288,7 +288,7 @@ class Zwei_Admin_Acl extends Zend_Acl
         ));
         $select->order("order");
         
-        //Debug::writeBySettings($select->__toString(), 'query_log');
+        Debug::writeBySettings($select->__toString(), 'query_log');
         
         return ($this->_db->fetchAll($select));
     }

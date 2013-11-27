@@ -105,9 +105,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->_component = $this->getRequest()->getParam('p');
             $file = Zwei_Admin_Xml::getFullPath($this->_component);
             $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
-            
-            $aclModulesModel = new AclModulesModel();
-            $this->_module = $aclModulesModel->findModule($this->_component);
         }
         
         $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
