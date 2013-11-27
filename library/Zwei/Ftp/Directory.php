@@ -165,17 +165,18 @@ class Zwei_Ftp_Directory
 	 * @param string $remoteFilename [optional] Filename to save to on the server
 	 * @return Zwei_Ftp_File
 	 */
-	public function put($localFilepath, $mode = null, $remoteFilename = null)
+	public function put($localFilepath, $remoteFilepath, $mode = null, $remoteFilename = null)
 	{
 		if ($remoteFilename == null) {
 			$remoteFilename = basename($localFilepath);
 		}
-		$remoteFilepath = $this->_path . '/' . $remoteFilename;
-		 
+		$remoteFilepath = $remoteFilepath.'/'.$remoteFilename;
+		
 		$file = new Zwei_Ftp_File($remoteFilepath, $this->_ftp);
 		$file->put($localFilepath, $mode);
 		 
 		return $file;
+	
 	}
 	
 	/**

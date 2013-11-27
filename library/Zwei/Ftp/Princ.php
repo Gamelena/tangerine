@@ -22,6 +22,8 @@
 	 */
 	protected $_connection = null;
 	 
+	
+	protected $_tipo = "";
 	/**
 	 * The FTP host
 	 *
@@ -56,6 +58,14 @@
 	 */
 	protected $_port = 21;
 	 
+	
+	
+	
+	protected $_conn = 1;
+	
+	
+	
+	protected $_flag = 0;
 	/**
 	 * The command timeout
 	 *
@@ -97,7 +107,7 @@
 	 * @var boolean
 	 */
 	protected $_ssl = false;
-	 
+
 	/**
 	 * File types to be transferred in ASCII mode when using automatic detection
 	 *
@@ -105,6 +115,7 @@
 	 */
 	protected $_asciiTypes = array('txt', 'html', 'htm', 'php', 'phtml');
 	 
+	
 	/**
 	 * Instantiate
 	 *
@@ -114,7 +125,7 @@
 	 * @param int $port [optional] The port to connect to
 	 * @param int $timeout [optional] The command timeout
 	*/
-	public function __construct($host, $username, $password, $path, $port = 21, $timeout = 90)
+	public function __construct($username, $password, $path, $tipo, $host = null, $port = 21, $timeout = 10, $p = 0, $flag = 0, $conn = 1)
 	{
 		$this->_host = $host;
 		$this->_username = $username;
@@ -123,6 +134,9 @@
 		$this->_timeout = $timeout;
 		$this->_path = $path;
 		$this->_currentPath = $path;
+		$this->_tipo = $tipo;
+		$this->_flag = $flag;
+		$this->_conn = $conn;
 	}
 	 
 	/**
@@ -130,45 +144,113 @@
 	 */
 	protected function _connect()
 	{
+		if($this->_flag === 1)
+			return;
+		$this->_flag = 1;
+
+		$host = $this->_host;
+		if($host !== null)
+			return;
 		$config = Zend_Controller_Front::getInstance()->getParam('bootstrap');
-		$apikeys = $config->getOption('resources');
-		$path  = $apikeys['frontController']['ftpDirectory'];
+		$apikeys = $config->getOption('zwei');
+
+		if($apikeys['ftp'][$this->_tipo]['host']!=="" && $apikeys['ftp'][$this->_tipo]['host'."A"]=="" && $apikeys['ftp'][$this->_tipo]['host'."B"]==""){
+			$host = $apikeys['ftp'][$this->_tipo]['host'];
+			$resp = $this->conexion($host);
+			if($resp == 1){
+				return;
+			}else {
+				$host = "";
+			}
+		}
+		
+		if($apikeys['ftp'][$this->_tipo]['host'."A"]!=="" && ($host=="")){
+			$host = $apikeys['ftp'][$this->_tipo]['host'."A"];
+			$resp = $this->conexion($host);
+			if($resp == 1){
+				return;
+			}else{
+				$host = "";
+			}
+		}
+		
+		if($apikeys['ftp'][$this->_tipo]['host'."B"]!=="" && ($host=="")){
+			$host = $apikeys['ftp'][$this->_tipo]['host'."B"];
+			$resp = $this->conexion($host);
+			if($resp == 1){
+				return;
+			}else{
+				$host = "";
+			}
+		}
+		
+		if($apikeys['ftp']['host']!=="" && ($host=="")){
+			
+			$host = $apikeys['ftp']['host'];
+			$resp = $this->conexion($host);
+			if($resp == 1){
+				return;
+			}else{
+				$host = "";
+			}	
+		}
+		if($host == ""){
+			$this->_conn = 0;
+		}
+
+		return;
+		
+	}
+	 
+	
+	public function conexion($host){
+	
+		
 		if ($this->_connection === null) {
+
 			if ($this->_ssl) {
-				$connection = @ftp_ssl_connect($this->_host, $this->_port, $this->_timeout);
+				$connection = @ftp_ssl_connect($host, $this->_port, $this->_timeout);
 			} else {
-				$connection = @ftp_connect($this->_host, $this->_port, $this->_timeout);
+				$connection = @ftp_connect($host, $this->_port, $this->_timeout);
+
 			}
-			if ($connection === false) {
-				throw new Zwei_Ftp_Exception('Unable to connect to host "' . $this->_host . '" on port ' . $this->_port);
+			
+			if(!$connection){
+				return false;
 			}
-			 
+			
 			$this->_connection = $connection;
-			 
 			$login = @ftp_login($this->_connection, $this->_username, $this->_password);
+			
 			if ($login === false) {
-				throw new Zwei_Ftp_Exception('Unable to login with username "' . $this->_username);
+				echo "<script  type='text/javascript'>
+         			  		 window.parent.utils.showMessage('Los datos de usuario no son correctos', 'error');"
+						." </script>";
+				return;
 			}
-			 
+		
 			if ($this->_passive) {
 				$this->_setPassive();
 			}
-			 
-	//		$path = @ftp_pwd($this->_connection);
-	
-			if ($path === false) {
-				throw new Zwei_Ftp_Exception('Unable to get current directory');
+		
+			//		$path = @ftp_pwd($this->_connection);
+		
+			if ($this->_path === false) {
+				throw new Zend_Exception('Unable to get current directory');
+				return false;
 			}
-			 
-			$this->_currentPath = $path;
-
+		
+			$this->_currentPath = $this->_path;
+			return true;
 		}
+	
 	}
-	 
 	/**
 	 * Whether or not it's connected to the server
 	 *
 	 * @return boolean
+	 * 
+	 * 
 	 */
 	public function isConnected()
 	{
@@ -180,10 +262,15 @@
 	 *
 	 * @return resource
 	 */
+	public function getConn()
+	{	 
+		return $this->_conn;
+	}
+	
 	public function getConnection()
 	{
 		$this->_connect();
-		 
+			
 		return $this->_connection;
 	}
 	 
@@ -229,7 +316,7 @@
 		if ($this->_connection !== null) {
 			$option = @ftp_set_option($this->_connection, FTP_TIMEOUT_SEC, $this->_timeout);
 			if ($option === false) {
-				throw new Zwei_Ftp_Exception('Unable to set timeout');
+				throw new Zend_Exception('Unable to set timeout');
 			}
 		}
 		 
@@ -273,7 +360,7 @@
 		if ($this->_connection !== null) {
 			$pasv = @ftp_pasv($this->_connection, $this->_passive);
 			if ($pasv === false) {
-				throw new Zwei_Ftp_Exception('Unable to set passive mode');
+				throw new Zend_Exception('Unable to set passive mode');
 			}
 		}
 		 
@@ -295,7 +382,7 @@
 				$this->_currentMode = $mode;
 				break;
 			default:
-				throw new Zwei_Ftp_Exception('Unknown FTP transfer mode');
+				throw new Zend_Exception('Unknown FTP transfer mode');
 		}
 		 
 		return $this;
@@ -385,7 +472,7 @@
 		$chmod = @ftp_chmod($this->_connection, $this->_parsePermissions($permissions), $path);
 		if ($chmod === false) {
 			// For some reason ftp_chmod will return false even if it's successful so we need to check manually
-			//throw new Zwei_Ftp_Exception('Unable to change permissions of "' . $path . '"');
+			//throw new Zend_Exception('Unable to change permissions of "' . $path . '"');
 		}
 		 
 		return $this;
@@ -400,7 +487,7 @@
 	protected function _parsePermissions($permissions)
 	{
 		if (!is_int($permissions) && 0 == preg_match('/^[rwx\-]{9}$/', $permissions)) {
-			throw new Zwei_Ftp_Exception('Invalid permissions format');
+			throw new Zend_Exception('Invalid permissions format');
 		}
 		$perms = array(
 				'-' => 0,
@@ -434,4 +521,3 @@
 		return new self($host, $username, $password, $port, $timeout);
 	}
 }
-?>
