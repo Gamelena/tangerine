@@ -100,21 +100,17 @@ class Zwei_Utils_Table
     
     private function parseComponent($component)
     {
-        $Xml = new Zwei_Admin_Xml();
-        
         $file = Zwei_Admin_Xml::getFullPath($component);
+        $this->_xml = new Zwei_Admin_Xml($file, null, true);
         
-        $Xml->parse($file);
-        $this->_xml = $Xml->elements;
-        $count = count($this->_xml);
-        
-        for ($i=1; $i<$count; $i++) {
-              if (isset($this->_xml[$i]["VISIBLE"]) && $this->_xml[$i]["VISIBLE"] == "true") {
-                  if (isset($this->_xml[$i]["FIELD"]))
-                      $this->_name[$this->_xml[$i]["FIELD"]]=$this->_xml[$i]["NAME"];
-                  else
-                      $this->_name[$this->_xml[$i]["TARGET"]]=$this->_xml[$i]["NAME"];
-              }    
+        foreach ($this->_xml->elements->element as $element) {
+            if ($element->getAttribute("visible") && $element->getAttribute("visible") === "true") {
+                if ($element->getAttribute("field")) {
+                  $this->_name[$element->getAttribute("field")] = html_entity_decode($element->getAttribute("name"));
+                } else {
+                  $this->_name[$element->getAttribute("target")] = html_entity_decode($element->getAttribute("name"));
+                }
+            }    
         }
     }
     
