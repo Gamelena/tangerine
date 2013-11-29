@@ -152,11 +152,8 @@ class AclModulesModel extends DbTable_AclModules
                 $xml       = new Zwei_Admin_Xml($file, null, true);
                 $modelName = $xml->getAttribute('target');
                 $model     = new $modelName;
-                Debug::write($branch['module']);
                 if (!$this->_acl->isUserAllowed($branch['module'])) {
-                    Debug::write($branch['module']);
-                    Debug::write($this->_acl->isUserAllowed($branch['module']));
-                    //return $arrNodes;
+                    return $arrNodes;
                 }
             }
             

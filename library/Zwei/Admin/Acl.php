@@ -288,7 +288,7 @@ class Zwei_Admin_Acl extends Zend_Acl
         ));
         $select->order("order");
         
-        Debug::writeBySettings($select->__toString(), 'query_log');
+        //Debug::writeBySettings($select->__toString(), 'query_log');
         
         return ($this->_db->fetchAll($select));
     }
@@ -324,9 +324,13 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @param $permission string
      * @return boolean
      */
-    public function isUserAllowed($module, $permission = null, $itemId = null)
+    public function isUserAllowed($module, $permission = 'LIST', $itemId = null)
     {
         $allowed = $this->userHasRoleAllowed($module, $permission);
+        
+        if (!$allowed) {
+            $allowed = $this->isUserOwner($module, $itemId);
+        }
         
         if (!$allowed) {
             $allowed = $this->userHasGroupsAllowed($module, $permission, $itemId);
@@ -342,7 +346,7 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @param string $permission
      * @return boolean
      */
-    public function userHasRoleAllowed($module, $permission = null)
+    public function userHasRoleAllowed($module, $permission = 'LIST')
     {
         $aclModulesModel = new AclModulesModel();
         if ($this->_resource == null) $this->_resource = $aclModulesModel->getModuleId($module);
@@ -363,24 +367,11 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function userHasGroupsAllowed($module, $permission, $itemId = null)
     {
         $aclModulesModel = new AclModulesModel();
-        if ($this->_moduleRow == null) $this->_moduleRow = $aclModulesModel->findModule($module);
+        if ($this->_moduleRow == null) {
+            $this->_moduleRow = $aclModulesModel->findModule($module);
+        }
         $moduleRow       = $this->_moduleRow;
         $resource        = $moduleRow->id;
-        $moduleType      = $moduleRow->type;
-        
-        if ($moduleType == 'xml') {
-            $file = Zwei_Admin_Xml::getFullPath($module);
-            $xml  = new Zwei_Admin_Xml($file, null, true);
-            if ($xml->getAttribute('target')) {
-                $modelName = $xml->getAttribute('target');
-                $model     = new $modelName();
-                
-                if (is_a($model, 'Zwei_Db_Table')) {
-                    if ($model->isOwner($itemId))
-                        return true;
-                }
-            }
-        }
         
         $groups = $this->_userInfo->groups;
         if (!empty($groups)) {
@@ -414,6 +405,38 @@ class Zwei_Admin_Acl extends Zend_Acl
             return false;
         }
     }
+    
+    public function isUserOwner($module, $itemId = null)
+    {
+        $allowed = false;
+        $aclModulesModel = new AclModulesModel();
+        if ($this->_moduleRow == null) {
+            $this->_moduleRow = $aclModulesModel->findModule($module);
+        }
+        
+        $moduleRow       = $this->_moduleRow;
+        $resource        = $moduleRow->id;
+        $moduleType      = $moduleRow->type;
+        
+        if ($moduleType == 'xml') {
+            $file = Zwei_Admin_Xml::getFullPath($module);
+            $xml  = new Zwei_Admin_Xml($file, null, true);
+            if ($xml->getAttribute('target')) {
+                $modelName = $xml->getAttribute('target');
+                $model     = new $modelName();
+        
+                if (is_a($model, 'Zwei_Db_Table')) {
+                    Debug::write("owner in $modelName?");
+                    if ($model->isOwner($itemId)) {
+                        $allowed = true;
+                    }
+                }
+            }
+        }
+        return $allowed;
+    }
+    
+    
     /**
      * Verifica si usuario en sesión tiene tal permiso en tal módulo 
      * [FIXME] está repetida debería deprecarse y borrarse.
