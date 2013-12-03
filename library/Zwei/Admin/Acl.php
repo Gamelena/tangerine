@@ -286,6 +286,7 @@ class Zwei_Admin_Acl extends Zend_Acl
         $select->joinLeft('web_icons', "web_icons.id=" . $this->_tb_modules . '.icons_id', array(
             'image'
         ));
+        $select->where("approved = '1'");
         $select->order("order");
         
         //Debug::writeBySettings($select->__toString(), 'query_log');
@@ -366,6 +367,13 @@ class Zwei_Admin_Acl extends Zend_Acl
      */
     public function userHasGroupsAllowed($module, $permission, $itemId = null)
     {
+        $frontend = array(
+            'lifetime' => 86400, // cache lifetime of 24 hours (time is in seconds)
+            'automatic_serialization' => true  //default is false
+        );
+        $backend = array('cache_dir' => ROOT_DIR . '/cache');
+        $cache = Zend_Cache::factory('Core', 'File', $frontend, $backend);
+        
         $aclModulesModel = new AclModulesModel();
         if ($this->_moduleRow == null) {
             $this->_moduleRow = $aclModulesModel->findModule($module);
@@ -384,22 +392,30 @@ class Zwei_Admin_Acl extends Zend_Acl
             
             Debug::writeBySettings($select->__toString(), 'query_log');
             
+            
             //Obtenemos acl_modules_actions.id para usar acl_groups_modules_action.acl_modules_actions_id
             $aclModulesActions = $aclModulesActionsModel->fetchAll($select);
             
             foreach ($aclModulesActions as $rowAclModulesActions) {
-                //Si $itemId es nulo, sólo se verifica que el grupo tenga la acción cualquiera sobre el módulo en acl_groups_modules_actions . 
-                $aclGMAModel = new AclGroupsModulesActionsModel();
-                $select      = $aclGMAModel->select();
-                $where       = array();
-                $select->where("acl_groups_id IN($groups)");
-                $select->where($aclGMAModel->getAdapter()->quoteInto('acl_modules_actions_id = ?', $rowAclModulesActions->id));
-                
-                if ($itemId) {
-                    $select->where($aclGMAModel->getAdapter()->quoteInto('acl_modules_item_id = ?', $itemId));
+                //Si $itemId es nulo, sólo se verifica que el grupo tenga la acción cualquiera sobre el módulo en acl_groups_modules_actions .
+                $varReturn = "groupsAllowed{$this->_userInfo->id}{$itemId}{$rowAclModulesActions->id}";
+                if (!$$varReturn = $cache->load($varReturn)){ 
+                    $aclGMAModel = new AclGroupsModulesActionsModel();
+                    $select      = $aclGMAModel->select();
+                    $where       = array();
+                    $select->where("acl_groups_id IN($groups)");
+                    $select->where($aclGMAModel->getAdapter()->quoteInto('acl_modules_actions_id = ?', $rowAclModulesActions->id));
+                    
+                    if ($itemId) {
+                        $select->where($aclGMAModel->getAdapter()->quoteInto('acl_modules_item_id = ?', $itemId));
+                    }
+                    Debug::writeBySettings($select->__toString(), 'query_log');
+                    $$varReturn =  $aclGMAModel->fetchRow($select) ? true : false;
+                    $cache->save($$varReturn, $varReturn);
+                } else {
+                    Debug::write('usando cache');
                 }
-                Debug::writeBySettings($select->__toString(), 'query_log');
-                return $aclGMAModel->fetchRow($select) ? true : false;
+                return $$varReturn;
             }
         } else {
             return false;
