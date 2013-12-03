@@ -154,6 +154,7 @@
 		$config = Zend_Controller_Front::getInstance()->getParam('bootstrap');
 		$apikeys = $config->getOption('zwei');
 
+	
 		if($apikeys['ftp'][$this->_tipo]['host']!=="" && $apikeys['ftp'][$this->_tipo]['host'."A"]=="" && $apikeys['ftp'][$this->_tipo]['host'."B"]==""){
 			$host = $apikeys['ftp'][$this->_tipo]['host'];
 			$resp = $this->conexion($host);
@@ -163,6 +164,7 @@
 				$host = "";
 			}
 		}
+
 		
 		if($apikeys['ftp'][$this->_tipo]['host'."A"]!=="" && ($host=="")){
 			$host = $apikeys['ftp'][$this->_tipo]['host'."A"];
@@ -472,7 +474,7 @@
 		$chmod = @ftp_chmod($this->_connection, $this->_parsePermissions($permissions), $path);
 		if ($chmod === false) {
 			// For some reason ftp_chmod will return false even if it's successful so we need to check manually
-			//throw new Zend_Exception('Unable to change permissions of "' . $path . '"');
+			throw new Zend_Exception('Unable to change permissions of "' . $path . '"');
 		}
 		 
 		return $this;
