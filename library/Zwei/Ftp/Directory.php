@@ -60,7 +60,7 @@ class Zwei_Ftp_Directory
 			case 'path':
 				return $this->_path;
 		}
-		throw new Zwei_Ftp_Directory_Exception('Unknown property "' . $name . '"');
+		throw new Zend_Exception('Unknown property "' . $name . '"');
 	}
 	 
 	/**
@@ -85,7 +85,7 @@ class Zwei_Ftp_Directory
 	{
 		$chdir = ftp_chdir($this->_ftp->getConnection(), $this->_path);
 		if ($chdir === false) {
-			//throw new Zwei_Ftp_Directory_Exception('Unable to change to directory');
+			throw new Zend_Exception('Unable to change to directory');
 		}
 	}
 	 
@@ -145,12 +145,12 @@ class Zwei_Ftp_Directory
 	{
 		$makedir = @ftp_mkdir($this->_ftp->getConnection(), $this->_path);
 		if ($makedir === false) {
-			//throw new Zwei_Ftp_Directory_Exception('Unable to create directory "' . $dir . '"');
+			throw new Zend_Exception('Unable to create directory "' . $dir . '"');
 		}
 		if ($permissions !== null) {
 			$chmod = $this->_ftp->chmod($this->_path, $permissions);
 			if ($chmod === false) {
-				//throw new Zwei_Ftp_Directory_Exception('Unable to chmod directory "' . $dir . '"');
+				throw new Zend_Exception('Unable to chmod directory "' . $dir . '"');
 			}
 		}
 		 

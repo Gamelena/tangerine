@@ -57,7 +57,8 @@ class Zwei_Ftp_File
 			case 'path':
 				return $this->_path;
 		}
-		throw new Zwei_Ftp_Directory_Exception('Unknown property "' . $name . '"');
+		
+		throw new Zend_Exception('Unknown property "' . $name . '"');
 	}
 	 
 	/**
@@ -126,7 +127,7 @@ class Zwei_Ftp_File
 		}
 		$get = @ftp_get($this->_ftp->getConnection(), $file, $this->_path, $mode, $offset);
 		if ($get === false) {
-			//throw new Zend_Ftp_File_Exception('Unable to save file "' . $this->path . '"')
+			throw new Zend_Exception('Unable to save file "' . $this->path . '"');
 		}
 		 
 		return $this;
@@ -141,13 +142,14 @@ class Zwei_Ftp_File
 	 * @return Zend_Ftp_File
 	 */
 	public function put($localFilepath, $mode = null, $startPos = 0)
-	{
+	{	
+		Debug::write($this->_path);
 		if ($mode === null) {
 			$mode = ($this->_mode === null ? $this->_ftp->determineMode($localFilepath) : $this->_mode);
 		}
 		$put = @ftp_put($this->_ftp->getConnection(), $this->_path, $localFilepath, $mode, $startPos);
 		if ($put === false) {
-			throw new Zend_Ftp_File_Exception('Unable to put file "' . $this->path . '"');
+			throw new Zend_Exception('Unable to put file "' . $this->path . '"');
 		}
 		 
 		return $this;
