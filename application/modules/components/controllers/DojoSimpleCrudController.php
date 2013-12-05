@@ -262,6 +262,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->model = $this->_xml->getAttribute('target');
         $this->view->list = $this->_xml->getAttribute('list') === 'true' ? true : false;
         $this->view->store = $this->view->list ? "store: {$this->view->domPrefix}storeGrid," : "";
+        $this->view->noDataMessage = 'Sin datos.';
+        $this->view->canSort = $this->_xml->getAttribute('canSort') === 'false' ? ',canSort: function(){return false}' : '';
         
         $this->view->dataDojoType = $this->_xml->getAttribute('serverPagination') === "true" ? 'dojox/data/QueryReadStore' : 'dojo/data/ItemFileReadStore';
         $this->view->gridDojoType = $this->_xml->getAttribute('gridDojoType') ? $this->_xml->getAttribute('gridDojoType') : 'dojox/grid/EnhancedGrid';
