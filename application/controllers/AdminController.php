@@ -51,7 +51,7 @@ class AdminController extends Zend_Controller_Action
         $confLayout = $config->zwei->layout;
         
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-        if ($userInfo)  $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
+        if ($userInfo) $this->_acl = new Zwei_Admin_Acl();
         
         $this->view->base_url = BASE_URL;
         $this->baseDojoFolder = isset($config->zwei->js->dojo->baseUrl) ? $config->zwei->js->dojo->baseUrl : '/dojotoolkit';
@@ -62,11 +62,10 @@ class AdminController extends Zend_Controller_Action
         
         if (!empty($this->_request->theme)) $this->_dojoTheme = $this->_request->theme;
         if (!empty($this->_request->template)) $this->_template = $this->_request->template;
-                
         
         $this->view->headStyle()->appendStyle('
             @import "'.$this->baseDojoFolder.'/dijit/themes/'.$this->_dojoTheme.'/'.$this->_dojoTheme.'.css";
-        ');    
+        ');
 
         $settings = new SettingsModel();
         
@@ -192,6 +191,8 @@ class AdminController extends Zend_Controller_Action
 
                 if (stristr($xml->getAttribute('type'), '.')) {
                     list($controller, $action) = explode('.', $xml->getAttribute('type'));
+                } else if (stristr($xml->getAttribute('type'), '/')) {
+                    list($controller, $action) = explode('/', $xml->getAttribute('type'));
                 } else {
                     $action = 'index';
                     $controller = $xml->getAttribute('type');
