@@ -129,11 +129,11 @@ if (count($this->groups) > 0) :
                 var form = new zwei.Form({dijitFormSearch: this, dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')});
                 form.loadData();
             } catch(e) {
-                alert(e.message)
+                utils.showMessage(e.message, 'error');
             }
             return false;
         } else {
-            alert('Por favor corrija los campos marcados.');
+            utils.showMessage('Por favor corrija los campos marcados.', 'error');
             return false;
         }
         return true;

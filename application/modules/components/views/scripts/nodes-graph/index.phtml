@@ -129,7 +129,7 @@ dojo.addOnLoad(function(){
             });
         },
         onError: function(e){
-            alert(e.message);
+            utils.showMessage(e.message, 'error');
         }
     });
     

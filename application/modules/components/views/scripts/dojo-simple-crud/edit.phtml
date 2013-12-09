@@ -119,7 +119,7 @@ endif;
             
         } catch (e) {
             console.debug(e);
-            alert(e.message);
+            utils.showMessage(e.message, 'error');
         }
         return false;
     } else {
