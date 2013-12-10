@@ -26,7 +26,7 @@ class Zwei_Utils_Debug
         if  ($message !== null ){
             $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
         } else {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] Variable vacia.';
+            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] El grillo dijo "cri cri" (acá no hay nada).';
         }
         $ff = fopen($file, "a");
         fwrite($ff, "$message\r\n");
@@ -60,7 +60,7 @@ class Zwei_Utils_Debug
                 if ($message !==null ) {
                    $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
                 } else {
-                   $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] Variable vacia.';
+                   $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] El grillo dijo "criet cri" (acá no hay nada).';
                 }
                 $ff = fopen($file, "a");
                 fwrite($ff, "$message\r\n");

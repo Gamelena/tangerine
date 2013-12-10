@@ -189,6 +189,7 @@ class CrudRequestController extends Zend_Controller_Action
                     $this->_response_content['more'] = $this->_model->getMore();
                 } else {
                     //[TODO] validar permisos para listar
+                    Debug::write($this->_form);
                     $oDbObject = new Zwei_Db_Object($this->_form);
                     $oSelect   = $oDbObject->select();
                     
@@ -199,8 +200,12 @@ class CrudRequestController extends Zend_Controller_Action
                             $this->_model->setAdapter($adapter);
                         
                         $data      = $this->_model->fetchAll($oSelect);
-                        $paginator = Zend_Paginator::factory($oSelect);
-                        $numRows   = $paginator->getTotalItemCount();
+                        if ($this->_model->count() === false) {
+                            $paginator = Zend_Paginator::factory($oSelect);
+                            $numRows   = $paginator->getTotalItemCount();
+                        } else {
+                            $numRows = $this->_model->count();
+                        }
                     } else {
                         $data = $this->_model->fetchAll();
                     }
@@ -208,10 +213,13 @@ class CrudRequestController extends Zend_Controller_Action
                     
                     //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
                     if (method_exists($this->_model, 'overloadDataList') && $this->_model->overloadDataList($data)) {
-                        $data      = $this->_model->overloadDataList($data);
-                        $countData = count($data);
-                        if ($numRows < $countData)
-                            $countData = $numRows;
+                        if (!method_exists($this->_model, 'count') || $this->_model->count() === false) {
+                            $data      = $this->_model->overloadDataList($data);
+                            $countData = count($data);
+                            if ($numRows < $countData) {
+                                $countData = $numRows;
+                            }
+                        }
                     }
                     
                     //si ?format=excel exportamos el rowset a excel

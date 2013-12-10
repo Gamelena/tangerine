@@ -56,11 +56,11 @@ class Zwei_Db_Object
      */
     public function __construct($form, $select=false)
     {
-        if (is_a($form, 'Zwei_Db_Object')) {
+        if (is_a($form, 'Zwei_Utils_Form')) {
             $this->_form = $form;
         } else { //en este punto $form debe ser array
             $this->_form = new Zwei_Utils_Form($form);
-        }    
+        }
         if (!empty($this->_form->model)) {
             $model = $this->_form->model;
             $this->_model = new $model();
@@ -106,7 +106,7 @@ class Zwei_Db_Object
         }
 
         $start = (isset($this->_form->start)) ? $this->_form->start : 0; 
-        $count = (isset($this->_form->count)) ? $this->_form->count : 20000;//dojo.data.QueryReadStore usa count en lugar de limit
+        $count = (isset($this->_form->count)) ? $this->_form->count : false;
         $sort = (isset($this->_form->sort)) ? $this->_form->sort : false;
         
         if ($sort && (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select"))) {
@@ -119,7 +119,7 @@ class Zwei_Db_Object
             }
         }
         
-        if (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) $this->_select->limit($count, $start);
+        if ($count && is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) $this->_select->limit($count, $start);
         
         //Se imprime query en log debug según configuración del sitio
         if (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($this->_select->__toString(), 'query_log');
@@ -129,7 +129,6 @@ class Zwei_Db_Object
     
     protected function iterateSearcher($i, $s)
     {
-
         $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
         $op = 'like';//Operador por defecto
         $sufix = '%';//Sufijo por defecto

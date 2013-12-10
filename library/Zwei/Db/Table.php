@@ -133,7 +133,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * @param  array  $data  Column-value pairs.
      * @return mixed         The primary key of the row inserted.
      */    
-    public function insert($data)
+    public function insert(array $data)
     {
         if (class_exists("SettingsModel")) {
             $userName = (isset($this->_user_info->user_name)) ? $this->_user_info->user_name : "NN"; 
@@ -155,7 +155,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * @param  array|string $where An SQL WHERE clause, or an array of SQL WHERE clauses.
      * @return int          The number of rows updated.
      */
-    public function update($data, $where)
+    public function update(array $data, $where)
     {
         $rowOrig = false;
         $logMessage = '';
@@ -432,4 +432,13 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     {
         return false;
     } 
+    
+    /**
+     * Método para configurar manualmente el numero de elementos a ser paginados
+     * @return boolean
+     */
+    public function count()
+    {
+        return false;
+    }
 }
