@@ -95,7 +95,7 @@ if (count($this->groups) > 0) :
     <div class="formSearchSubmit">
         <input type="hidden" name="model" value="<?=$this->model ?>" />
         <input type="hidden" name="format" value="json" />
-        <input type="hidden" name="storeType" value="query" />
+        <input type="hidden" name="storeType" value="<?=$this->storeType?>" />
         <input type="hidden" name="p" value="<?=$this->p?>" />
 <?php 
     if (!$this->hideSubmit) :
