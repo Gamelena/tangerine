@@ -28,6 +28,38 @@
     background-attachment: fixed;
 }
 
+.zweicom .dojoxExpandoTitle {
+         height:16px;
+         font-size:0.9em;
+         font-weight:bold;
+         padding:3px;
+         padding-top:6px;
+         padding-bottom:5px;
+         background:#F0F4FC url("/dojotoolkit/dijit/themes/zweicom/images/tabContainerSprite.gif") repeat-x scroll 0pt -50px;
+         border-left: 1px solid #B1BADF;
+         border-right: 1px solid #B1BADF;
+}
+ 
+.zweicom .dojoxExpandoClosed .dojoxExpandoTitle {
+     background: none;
+     background-color: #F0F4FC;
+     border: none;
+}
+ 
+.zweicom .dojoxExpandoClosed {
+     background: none;
+     background-color: #F0F4FC;
+     border: 1px solid #B1BADF !important;
+}
+ 
+.zweicom .dojoxExpandoIcon {
+     background-image: url('/dojotoolkit//dijit/themes/zweicom/images/spriteRoundedIconsSmall.png');
+}
+ 
+.dj_ie6 .zweicom .dojoxExpandoIcon {
+     background-image: url('/dojotoolkit/dijit/themes/zweicom/images/spriteRoundedIconsSmall.gif');
+}
+
 a {
     color: #000;
     text-decoration: none;
