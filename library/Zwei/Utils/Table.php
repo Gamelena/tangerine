@@ -83,7 +83,7 @@ class Zwei_Utils_Table
                 if ($html) {
                     $out .= "<td>$value</td>";
                 } else {
-                    $out .= stristr($separator, $value) || stristr('"', $value) ? '"' . str_replace('"', "", $value) . '"' : $value;
+                    $out .= $value && (stristr($separator, $value) || stristr('"', $value)) ? '"' . str_replace('"', "", $value) . '"' : $value;
                 }
             }
             if (!$html && $i < $counter) $out .= $separator;
