@@ -157,6 +157,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->view->hideSubmit = $this->_xml->searchers->getAttribute('hideSubmit');
             $this->view->searchRequest = $this->getRequest()->getParam('search', array());
             $this->view->storeType = $this->_xml->getAttribute('serverPagination') === 'true' ? 'query' : '';
+            $this->view->onSubmit = $this->_xml->xpath('//component/searchers/onSubmit') ? dom_import_simplexml($this->_xml->searchers->onSubmit)->textContent : '';
             
             $customFunctions = $this->_xml->xpath("//searchers/helpers/customFunction");
             $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'LIST') ? $customFunctions : array();

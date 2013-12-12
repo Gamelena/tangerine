@@ -126,17 +126,16 @@ if (count($this->groups) > 0) :
     <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
             try {
+                <?=$this->onSubmit ?>
                 var form = new zwei.Form({dijitFormSearch: this, dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')});
                 form.loadData();
             } catch(e) {
                 utils.showMessage(e.message, 'error');
             }
-            return false;
         } else {
             utils.showMessage('Por favor corrija los campos marcados.', 'error');
-            return false;
         }
-        return true;
+        return false;
     </script>
 <?php 
     endif;
