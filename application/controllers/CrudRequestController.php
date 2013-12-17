@@ -16,7 +16,7 @@ class CrudRequestController extends Zend_Controller_Action
      * Información de usuario Instancia Singleton.
      * @var Zend_Auth
      */
-    private $_user_info;
+    private $_userInfo;
     /**
      * Instancia de $_REQUEST, en este caso preferible a Zend_Controller_Request ya que este no permite manejar un <pre>$_REQUEST['action']</pre> al ser el índice reservado.
      * @var Zwei_Utils_Form
@@ -26,7 +26,7 @@ class CrudRequestController extends Zend_Controller_Action
      * Arreglo que será parte de la respuesta en json, Dojo data store, u otro formato a definir.
      * @var array
      */
-    private $_response_content = array();
+    private $_responseContent = array();
     
     /**
      * Modelo sobre el cual se trabajará.
@@ -45,12 +45,13 @@ class CrudRequestController extends Zend_Controller_Action
         $this->_form = new Zwei_Utils_Form();
         
         if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
-            $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
+            $this->_userInfo = Zend_Auth::getInstance()->getStorage()->read();
         } else if (isset($this->_form->format) && $this->_form->format == 'json') {
             $this->_helper->ContextSwitch->setAutoJsonSerialization(false)->addActionContext('index', 'json')->initContext();
             $data                = array(
                 'id' => '0',
                 'state' => 'AUTH_FAILED',
+                'type' => 'error',
                 'message' => 'Su sesión ha expirado, por favor vuelva a ingresar.',
                 'todo' => 'goToLogin'
             );
@@ -138,12 +139,15 @@ class CrudRequestController extends Zend_Controller_Action
                         try {
                             $response = $this->_model->insert($data);
                             if ($response) {
-                                $this->_response_content['state'] = 'ADD_OK';
+                                $this->_responseContent['state'] = 'ADD_OK';
+                                $this->_responseContent['type'] = 'message';
                             } else {
-                                $this->_response_content['state'] = 'ADD_FAIL';
+                                $this->_responseContent['state'] = 'ADD_FAIL';
+                                $this->_responseContent['type'] = 'error';
                             }
                         } catch (Zend_Db_Exception $e) {
-                            $this->_response_content['state'] = 'ADD_FAIL';
+                            $this->_responseContent['state'] = 'ADD_FAIL';
+                            $this->_responseContent['type'] = 'error';
                             Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
                         }
                     } else if ($this->_form->action == 'delete') {
@@ -155,9 +159,11 @@ class CrudRequestController extends Zend_Controller_Action
                         
                         $response = $this->_model->delete($where);
                         if ($response) {
-                            $this->_response_content['state'] = 'DELETE_OK';
+                            $this->_responseContent['state'] = 'DELETE_OK';
+                            $this->_responseContent['type'] = 'message';
                         } else {
-                            $this->_response_content['state'] = 'DELETE_FAIL';
+                            $this->_responseContent['state'] = 'DELETE_FAIL';
+                            $this->_responseContent['type'] = 'error';
                         }
                         //Zwei_Utils_Debug::write($response);
                     } else if ($this->_form->action == 'edit') {
@@ -174,22 +180,24 @@ class CrudRequestController extends Zend_Controller_Action
                         try {
                             $response = $this->_model->update($data, $where);
                             if ($response) {
-                                $this->_response_content['state'] = 'UPDATE_OK';
+                                $this->_responseContent['state'] = 'UPDATE_OK';
+                                $this->_responseContent['type'] = 'message';
                             } else {
-                                $this->_response_content['state'] = 'UPDATE_FAIL';
+                                $this->_responseContent['state'] = 'UPDATE_FAIL';
+                                $this->_responseContent['type'] = 'error';
                             }
                         } catch (Zend_Db_Exception $e) {
-                            $this->_response_content['state'] = 'UPDATE_FAIL';
+                            $this->_responseContent['state'] = 'UPDATE_FAIL';
+                            $this->_responseContent['type'] = 'error';
                             Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$classModel|" . $e->getTraceAsString());
                         }
                         //Zwei_Utils_Debug::write($response);
                     }
                     
-                    $this->_response_content['todo'] = $this->_model->getAjaxTodo();
-                    $this->_response_content['more'] = $this->_model->getMore();
+                    $this->_responseContent['todo'] = $this->_model->getAjaxTodo();
+                    $this->_responseContent['more'] = $this->_model->getMore();
                 } else {
                     //[TODO] validar permisos para listar
-                    Debug::write($this->_form);
                     $oDbObject = new Zwei_Db_Object($this->_form);
                     $oSelect   = $oDbObject->select();
                     
@@ -216,9 +224,11 @@ class CrudRequestController extends Zend_Controller_Action
                         if (!method_exists($this->_model, 'count') || $this->_model->count() === false) {
                             $data      = $this->_model->overloadDataList($data);
                             $countData = count($data);
+                            Debug::write($countData);
                             if ($numRows < $countData) {
-                                $countData = $numRows;
+                                $numRows = $countData;
                             }
+                            Debug::write($numRows);
                         }
                     }
                     
@@ -268,14 +278,15 @@ class CrudRequestController extends Zend_Controller_Action
                 $data = array();
             }
             
-            if (count($this->_response_content) > 0) {
-                $this->_response_content['message'] = $this->_model->getMessage();
+            if (count($this->_responseContent) > 0) {
+                $this->_responseContent['message'] = $this->_model->getMessage();
                 $data                               = array(
                     'id' => '0',
-                    'state' => $this->_response_content['state'],
-                    'message' => $this->_response_content['message'],
-                    'todo' => $this->_response_content['todo'],
-                    'more' => $this->_response_content['more']
+                    'state' => $this->_responseContent['state'],
+                    'message' => $this->_responseContent['message'],
+                    'type' => $this->_responseContent['type'],
+                    'todo' => $this->_responseContent['todo'],
+                    'more' => $this->_responseContent['more']
                 );
                 $content                            = Zend_Json::encode($data);
                 $this->getResponse()->setHeader('Content-Type', 'text/html'); //internet explorer needs this
@@ -295,18 +306,17 @@ class CrudRequestController extends Zend_Controller_Action
                     }
                     $i++;
                 }
-                //Zwei_Utils_Debug::write($str_collection);
+                
                 $id = method_exists($this->_model, 'info') ? $this->_model->info(Zend_Db_Table_Abstract::PRIMARY) : 'id';
                 
                 if ((!is_array($id) || count($id) == 1)) {
-                    //FIXME
                     if (is_array($id)) {
                         $arrayValues = array_values($id);
                         $id          = $arrayValues[0];
                     }
                     $content = new Zend_Dojo_Data($id, @$collection);
                 } else {
-                    /*
+                    /**
                      * En caso de que no exista ninguna PK simple, inventamos un ID aca para que funcione dojo.data.ItemFileStore
                      */
                     if (!isset($collection[0]['AdmFakeId'])) {
@@ -351,7 +361,7 @@ class CrudRequestController extends Zend_Controller_Action
             $this->view->content = $content;
             
         }
-    } //public function indexAction()
+    }
     
     public function multiUpdateAction()
     {
@@ -453,7 +463,6 @@ class CrudRequestController extends Zend_Controller_Action
             
             $thumb->resize($width, $height);
             $thumb->save($thumbPath . "/" . $infoFile['filename']);
-            Debug::write($thumb);
         } catch (Exception $e) {
             Debug::write($e->getMessage() . '-' . $e->getCode() . $e->getTraceAsString());
             return false;

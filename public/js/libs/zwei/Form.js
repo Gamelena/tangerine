@@ -139,10 +139,10 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 rawResponse = dojo.byId(iframeId).contentDocument.getElementsByTagName('body')[0].innerHTML;
             
             var response = dojo.json.parse(rawResponse);
-            
+                        
             if (response.message != '' && response.message != null) {
                 self.utils.showMessage(response.message, response.type);
-                if (response.state != 'AUTH_FAILED') self.postSave();
+                if (response.state != 'AUTH_FAILED' && response.type != 'error') self.postSave();
             } else if(response.state == 'UPDATE_OK') {
                 self.utils.showMessage('Datos Actualizados');
                 self.postSave();
