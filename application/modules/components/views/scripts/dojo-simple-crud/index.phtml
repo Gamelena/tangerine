@@ -15,9 +15,24 @@ if (isset($this->menus) && in_array($this->menus, array('contextMenu', 'both')))
 endif;
 ?>
 <?=$this->includeJs?>
-<div id="<?=$this->domPrefix?>contentTab" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false" class="contentWrapper"  id="<?=$this->domPrefix?>contentWrapper" style="width:100%">
-    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:true" class="contentCenter" id="<?=$this->domPrefix?>contentCenter">
+<?php 
+if ($this->searchersOutsideContent) :
+?>
+    <div data-dojo-type="dijit/layout/ContentPane">
         <?=$this->action('search', 'dojo-simple-crud', 'components', $_REQUEST)?>
+    </div>
+<?php 
+endif;
+?>
+<div id="<?=$this->domPrefix?>contentTab" data-dojo-type="<?=$this->containerDojoType?>" data-dojo-props="gutters:false" class="contentWrapper"  id="<?=$this->domPrefix?>contentWrapper" style="width:100%;">
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:true" class="contentCenter" id="<?=$this->domPrefix?>contentCenter" title="<?=$this->name?>">
+<?php 
+if (!$this->searchersOutsideContent) :
+?>
+        <?=$this->action('search', 'dojo-simple-crud', 'components', $_REQUEST)?>
+<?php 
+endif;
+?>
         <?=$this->action('list', 'dojo-simple-crud', 'components', $_REQUEST)?>
     </div>
     <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="<?=$this->domPrefix?>dialog_edit" jsId="<?=$this->domPrefix?>dialog_edit" title="Editar <?=$this->name?>" <?=$this->styleDialog?> <?=$this->onloadDialog?> <?=$this->onshowDialog?> <?=$this->onhideDialog?>>
@@ -35,7 +50,7 @@ if ($this->changePassword) :
 <?php 
 endif; 
 ?>
-    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>contentBottom" class="contentBottom">
+     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>contentBottom" class="contentBottom" title="<?=$this->helpersName?>" onShow="<?=$this->helpersOnShow?>">
 <?php 
 if (!isset($this->menus) || in_array($this->menus, array('keypad', 'both'))) :
 ?>
@@ -44,6 +59,16 @@ if (!isset($this->menus) || in_array($this->menus, array('keypad', 'both'))) :
 endif;
 ?>
     </div>
+<?php 
+$i=0;
+foreach ($this->helpersPanes as $pane) :
+?>
+<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>Pane<?=$i?>" class="contentBottom" title="<?=$pane->getAttribute('name')?>" onShow="<?=$pane->getAttribute('onShow')?>">
+</div>
+<?php
+    $i++; 
+endforeach;
+?>
 </div>
 <input type="hidden" id="<?=$this->domPrefix?>DataUrl" value="" />
 <script type="text/javascript">
