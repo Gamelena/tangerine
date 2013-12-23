@@ -21,6 +21,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         $this->view->formatter = $r->getParam('formatter', false);
         $this->view->data = $r->getParam('data', false);
         $this->view->mode = $r->getParam('mode');
+        $this->view->trim = $r->getParam('trim') ? "trim=\"{$r->getParam('trim')}\"" : '';
         $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? "readonly=\"readonly\"" : '';
         $this->view->disabled = $r->getParam('disabled') === 'true' || $r->getParam($r->getParam('mode')) == 'disabled' ? "disabled=\"disabled\"" : '';
         $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
@@ -71,6 +72,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         if ($r->getParam('table')) {
             $id = $r->getParam('tablePk', 'id');
             $className = $r->getParam('table');
+
             $model = new $className();
     
             if ($r->getParam('tableMethod')) {
@@ -86,8 +88,13 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
                 }
             }
             
+            
             if (method_exists($select, '__toString')) Zwei_Utils_Debug::writeBySettings($select->__toString(), 'query_log');
-            $rows = $model->fetchAll($select);
+            try {
+                $rows = $model->fetchAll($select);
+            } catch (Zend_Db_Exception $e) {
+                throw new Zend_Db_Exception("$className::$methodName() {$e->getMessage()}", $e->getCode());
+            }
 
             if ($r->getParam('defaultValue') || $r->getParam('defaultValue') === '' || $r->getParam('defaultText') || $r->getParam('defaultText') === '') {
                 $options .= "<option value=\"{$r->getParam('defaultValue', '')}\" label=\"{$r->getParam('defaultText', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
@@ -96,9 +103,6 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
     
             foreach ($rows as $row) {
                 $selected = $row[$id] == $value ? "selected=\"selected\"" : "";
-                if ( $row[$id] == $value ) {
-                    Debug::write($value);
-                }
                 if ($r->getParam('tableField')) {
                     $options .= "<option value=\"".$row[$id]."\" ".$selected." label=\"{$row[$r->getParam('tableField')]}\">{$row[$r->getParam('tableField')]}</option>\r\n";
                 } else if ($r->getParam('field')) {
