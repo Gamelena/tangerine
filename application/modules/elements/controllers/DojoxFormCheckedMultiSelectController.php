@@ -101,13 +101,14 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
             }
         } else {
             if (!$r->getParam('value')) {
-                $value = (isset($request->{$this->target})) ? $request->{$this->target} : null;
+                $value = (isset($request->{$r->getParam('target')})) ? $request->{$r->getParam('target')} : null;
             } else {
                 $value = $r->getParam('value');
             }
         
             $options = "";
-            $rows = explode(",", $r->getParam('list'));
+            $rows = $r->getParam('list') ? explode(",", $r->getParam('list')) : array();
+            
             foreach ($rows as $row) {
                 //Zwei_Utils_Debug::write('$id='.$id.'$row='.$row.'$value='.$value);
                 $selected = $row == $value ? "selected" : "";
