@@ -18,9 +18,9 @@ if (count($this->groups) > 0) :
         $hidden = $params['type'] == 'hidden' ? 'style="display:none;"' : '';
         if ($hidden === '') $hideSubmit = false; //Si hay por lo menos un input.type != 'hidden', mostrar submit
 ?>
-        <div class="formSearchItemContainer" <?=$hidden?>>
+        <div class="formSearchItemContainer" <?=$hidden?> name="<?=$group->getAttribute('target')?>_container">
             <div class="item">
-                <label for="search" class="formSearchItemLabel"><?=$group->getAttribute('name')?></label>
+                <label for="search" class="formSearchItemLabel" name="<?=$group->getAttribute('target')?>_label" ><?=$group->getAttribute('name')?></label>
                 <?=$this->action('index', $group->getAttribute('type'), 'elements', $params);?>
                 <input type="hidden" value="<?=$group->getAttribute('format')?>" id="<?=$this->domPrefix.'_search_'.$i?>_format" name="<?=$group->getAttribute('target')?>_format" />
                 <input type="hidden" value="<?=$group->getAttribute('operator')?>" id="<?=$this->domPrefix.'_search_'.$i?>_operator" name="<?=$group->getAttribute('target')?>_operator" />
