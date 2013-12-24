@@ -131,7 +131,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->menus = $this->_config->zwei->layout->menus;
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>" : '';
-        if ($this->_xml->xpath("//forms")) $forms = $this->_xml->xpath("//forms");
+        if ($this->_xml->xpath("//forms")) $forms = $this->_xml->xpath("//component/forms");
         
         $this->view->styleDialog = $this->_xml->xpath("//component/forms[@style]") ? "style=\"{$forms[0]->getAttribute('style')}\"" : '';
         $this->view->onloadDialog = $this->_xml->xpath("//component/forms[@onload]") ? "onload=\"{$forms[0]->getAttribute('onload')}\"" : '';
@@ -139,6 +139,11 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->onhideDialog = $this->_xml->xpath("//component/forms[@onhide]") ? "onhide=\"{$forms[0]->getAttribute('onhide')}\"" : '';
         $this->view->ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? true : false;
         $this->view->changePassword = $this->_xml->xpath("//component/forms/changePassword") ? true : false;
+        $this->view->containerDojoType = $this->_xml->getAttribute('containerDojoType') ? $this->_xml->getAttribute('containerDojoType') : 'dijit/layout/BorderContainer';
+        $this->view->helpersName = $this->_xml->xpath("//component/helpers[@name]") ? $this->_xml->xpath("//component/helpers")[0]->getAttribute('name') : '';
+        $this->view->helpersOnShow = $this->_xml->xpath("//component/helpers[@onShow]") ? $this->_xml->xpath("//component/helpers")[0]->getAttribute('onShow') : '';
+        $this->view->searchersOutsideContent = $this->_xml->xpath("//component/searchers[@outsideContent='true']") ? true : false;
+        $this->view->helpersPanes = $this->_xml->xpath("//component/helpers/pane") ? $this->_xml->xpath("//component/helpers/pane") : array();
         
         if ($this->view->changePassword) {
             $this->view->targetPass = 'password';
@@ -183,6 +188,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->modelPrimary = $this->_model->info('primary');
         $this->view->tabs = $this->_xml->getTabsWithElements(true, "@$mode='true' or @$mode='readonly' or @$mode='disabled'");
         
+        //[FIXME] esto se debe ejecutarse al momento de abrir el formulario, no antes
         if (($mode == 'edit' || $mode == 'clone') && $this->view->ajax) {
             $a = $this->_model->getAdapter();
             
