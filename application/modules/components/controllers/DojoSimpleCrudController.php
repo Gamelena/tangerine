@@ -131,7 +131,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->menus = $this->_config->zwei->layout->menus;
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>" : '';
-        if ($this->_xml->xpath("//forms")) $forms = $this->_xml->xpath("//component/forms");
+        if ($this->_xml->xpath("//component/forms")) $forms = $this->_xml->xpath("//component/forms");
+        if ($this->_xml->xpath("//component/helpers")) $helpers = $this->_xml->xpath("//component/helpers");
         
         $this->view->styleDialog = $this->_xml->xpath("//component/forms[@style]") ? "style=\"{$forms[0]->getAttribute('style')}\"" : '';
         $this->view->onloadDialog = $this->_xml->xpath("//component/forms[@onload]") ? "onload=\"{$forms[0]->getAttribute('onload')}\"" : '';
@@ -140,8 +141,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? true : false;
         $this->view->changePassword = $this->_xml->xpath("//component/forms/changePassword") ? true : false;
         $this->view->containerDojoType = $this->_xml->getAttribute('containerDojoType') ? $this->_xml->getAttribute('containerDojoType') : 'dijit/layout/BorderContainer';
-        $this->view->helpersName = $this->_xml->xpath("//component/helpers[@name]") ? $this->_xml->xpath("//component/helpers")[0]->getAttribute('name') : '';
-        $this->view->helpersOnShow = $this->_xml->xpath("//component/helpers[@onShow]") ? $this->_xml->xpath("//component/helpers")[0]->getAttribute('onShow') : '';
+        $this->view->helpersName = $this->_xml->xpath("//component/helpers[@name]") ? $helpers[0]->getAttribute('name') : '';
+        $this->view->helpersOnShow = $this->_xml->xpath("//component/helpers[@onShow]") ? $helpers[0]->getAttribute('onShow') : '';
         $this->view->searchersOutsideContent = $this->_xml->xpath("//component/searchers[@outsideContent='true']") ? true : false;
         $this->view->helpersPanes = $this->_xml->xpath("//component/helpers/pane") ? $this->_xml->xpath("//component/helpers/pane") : array();
         
