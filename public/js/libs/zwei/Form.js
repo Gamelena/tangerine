@@ -77,22 +77,43 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     } else {
                         auxTwice = '';
                     }
+                    
+                    var valueIsArray = Object.prototype.toString.call(entry.get('value')) == '[object Array]';
+                    
                     if (entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
                         searchUrl += '&search['+entry.get('name')+'][value]=' +encodeURIComponent(entry.get('uncheckedvalue'));
                     } else {
-                        if (entry.declaredClass != "dijit.form.DateTextBox") {
-                            value = entry.get('value');
-                        } else {
+                        if (entry.declaredClass == "dijit.form.DateTextBox") {
                             value = entry.get('value') == null ? '' : dojo.date.locale.format(entry.get('value'), {datePattern: "yyyy-MM-dd", selector: "date"});
+                        } else {
+                            value = entry.get('value');
                         }
-                        searchUrl += '&search['+dijit.byId(entry.id).get('name')+']'+auxTwice+'[value]='+encodeURIComponent(value);
+                        if (valueIsArray) {
+                            dojo.forEach(entry.get('value'), function(value, i) {
+                                searchUrl += '&search['+ dijit.byId(entry.id).get('name').replace('[]', '') +']['+i+'][value]='+encodeURIComponent(value);
+                            });
+                        } else {
+                            searchUrl += '&search['+dijit.byId(entry.id).get('name')+']'+auxTwice+'[value]='+encodeURIComponent(value);
+                        }
                     }
-                    searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[format]='+encodeURIComponent(dojo.byId(entry.id+'_format').value);
-                    searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[operator]='+encodeURIComponent(dojo.byId(entry.id+'_operator').value);
-                    if (dojo.byId(entry.id+'_sufix') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[sufix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
-                    if (dojo.byId(entry.id+'_prefix') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[prefix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix').value);
-                    if (dojo.byId(entry.id+'_sufix2') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[sufix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix2').value);
-                    if (dojo.byId(entry.id+'_prefix2') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[prefix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix2').value);
+                    
+                    if (valueIsArray) {
+                        dojo.forEach(entry.get('value'), function(value, i) {
+                            searchUrl += '&search['+entry.get('name').replace('[]', '')+']['+i+'][format]='+encodeURIComponent(dojo.byId(entry.id+'_format').value);
+                            searchUrl += '&search['+entry.get('name').replace('[]', '')+']['+i+'][operator]='+encodeURIComponent(dojo.byId(entry.id+'_operator').value);
+                            if (dojo.byId(entry.id+'_sufix') != undefined) searchUrl += '&search['+entry.get('name').replace('[]', '')+']['+i+'][sufix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
+                            if (dojo.byId(entry.id+'_prefix') != undefined) searchUrl += '&search['+entry.get('name').replace('[]', '')+']['+i+'][prefix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix').value);
+                            if (dojo.byId(entry.id+'_sufix2') != undefined) searchUrl += '&search['+entry.get('name').replace('[]', '')+']['+i+'][sufix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix2').value);
+                            if (dojo.byId(entry.id+'_prefix2') != undefined) searchUrl += '&search['+entry.get('name').replace('[]', '')+']['+i+'][prefix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix2').value);
+                        });
+                    } else {
+                        searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[format]='+encodeURIComponent(dojo.byId(entry.id+'_format').value);
+                        searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[operator]='+encodeURIComponent(dojo.byId(entry.id+'_operator').value);
+                        if (dojo.byId(entry.id+'_sufix') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[sufix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix').value);
+                        if (dojo.byId(entry.id+'_prefix') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[prefix][0]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix').value);
+                        if (dojo.byId(entry.id+'_sufix2') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[sufix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_sufix2').value);
+                        if (dojo.byId(entry.id+'_prefix2') != undefined) searchUrl += '&search['+entry.get('name')+']'+auxTwice+'[prefix][1]=' + encodeURIComponent(dojo.byId(entry.id+'_prefix2').value);
+                    }
                 }
             });
             searchUrl += '&p='+domForm.p.value;

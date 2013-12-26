@@ -54,7 +54,7 @@ class Zwei_Db_Object
      * @param Zwei_Utils_Form | array
      * @param Zwei_Db_Select
      */
-    public function __construct($form, $select=false)
+    public function __construct($form, $select = false)
     {
         if (is_a($form, 'Zwei_Utils_Form')) {
             $this->_form = $form;

@@ -272,7 +272,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      */
     protected function setMessage($message)
     {
-        $this->_message=$message;
+        $this->_message = $message;
     }
 
 
@@ -345,7 +345,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     
 
     /**
-     * Flag para especificar que ignore filtros en ObjectsController
+     * Flag para especificar que ignore filtros en Zwei_Db_Object
      * y aplique filtros en modelo
      * @return boolean
      */
@@ -354,6 +354,15 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         return $this->_is_filtered;
     }
 
+    /**
+     * Activar o desactivar funcionalidad de usar parametros de búsqueda en XML de forma automática
+     * @param boolean $value
+     */
+    public function disableAutoSearch($value = true)
+    {
+        $this->_is_filtered = $value;
+    }
+    
     /**
      * Convierte un string "string sql where" a un array asociativo campo=>valor
      * @param $string

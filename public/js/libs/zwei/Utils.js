@@ -6,7 +6,7 @@ dojo.declare("zwei.Utils", null, {
         if (typeof(type) == 'undefined') var type = 'message';
         if (typeof(duration) == 'undefined') var duration = '6000';
         if (typeof(direction) == 'undefined') var direction = 'br-left';
-        if (typeof(myDijit) == 'undefined') var myToaster = dijit.byId('firstToaster');
+        if (typeof(myToaster) == 'undefined') var myToaster = dijit.byId('firstToaster');
         
         myToaster.positionDirection = direction;
         myToaster.setContent(message, type, duration);
