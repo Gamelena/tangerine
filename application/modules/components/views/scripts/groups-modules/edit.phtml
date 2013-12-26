@@ -52,12 +52,14 @@ foreach ($this->modules as $i => $module) :
 endforeach;
 if ($this->edit) :
 ?>
-    <input type="hidden" name="model" value="<?=$this->model?>" />
-    <input type="hidden" name="action" value="edit" />
-    <input type="hidden" name="format" value="json" />
-    <input type="hidden" name="primary[acl_modules_item_id]" value="<?=$this->aclModulesItemId?>" />
-    <input type="hidden" name="primary[acl_groups_id]" value="<?=$this->aclGroupsId?>" />
-    <button data-dojo-type="dijit/form/Button" id="actionsModule<?=$module->id?><?=$this->mode?>btnSave" type="submit">Guardar</button>
+    <div class="submitContainer">
+        <input type="hidden" name="model" value="<?=$this->model?>" />
+        <input type="hidden" name="action" value="edit" />
+        <input type="hidden" name="format" value="json" />
+        <input type="hidden" name="primary[acl_modules_item_id]" value="<?=$this->aclModulesItemId?>" />
+        <input type="hidden" name="primary[acl_groups_id]" value="<?=$this->aclGroupsId?>" />
+        <button data-dojo-type="dijit/form/Button" id="actionsModule<?=$module->id?><?=$this->mode?>btnSave" type="submit">Guardar</button>
+    </div>
     <script type="dojo/method" event="onSubmit">
     if (this.validate()) {
         console.debug(this);
@@ -73,4 +75,13 @@ if ($this->edit) :
 endif;
 ?>
     </form>
+    <style type="text/css">
+        #actionsModules<?=$this->mode?> .dojoxCheckedMultiSelectWrapper {
+            width: 6.6em;
+        }
+        .submitContainer {
+            float: right;
+            margin: 4em;
+        }
+    </style>
 </div>
