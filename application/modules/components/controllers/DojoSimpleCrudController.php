@@ -126,7 +126,14 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function indexAction()
     {
         $className = $this->_xml->getAttribute('target');
-        $this->_model = new $className();
+        //Se agrega nombre de modelo a mensaje de Exception
+        try {
+            $this->_model = new $className();
+        } catch (Zend_Application_Resource_Exception $e) {
+            throw new Zend_Application_Resource_Exception("$className: {$e->getMessage()}", $e->getCode());
+        } catch (Zend_Db_Exception $e) {
+            throw new Zend_Db_Exception("$className: {$e->getMessage()}", $e->getCode());
+        }
         
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->menus = $this->_config->zwei->layout->menus;
