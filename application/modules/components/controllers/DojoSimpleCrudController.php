@@ -137,7 +137,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->menus = $this->_config->zwei->layout->menus;
-        $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>" : '';
+        $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>\n" : '';
         if ($this->_xml->xpath("//component/forms")) $forms = $this->_xml->xpath("//component/forms");
         if ($this->_xml->xpath("//component/helpers")) $helpers = $this->_xml->xpath("//component/helpers");
         

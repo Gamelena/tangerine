@@ -1,8 +1,9 @@
 <?php 
 if (count($this->groups) > 0) :
 ?>
-<div data-dojo-type="dijit/form/Form" class="formSearch" id="<?=$this->domPrefix?>formSearch" jsId="<?=$this->domPrefix?>formSearch" encType="multipart/form-data" action="" method="">
+<form data-dojo-type="dijit/form/Form" class="formSearch" id="<?=$this->domPrefix?>formSearch" jsId="<?=$this->domPrefix?>formSearch" encType="multipart/form-data" action="" method="">
     <div class="formSearchInputs">
+
 <?php 
     $i = 0;
     $hideSubmit = true;
@@ -28,24 +29,27 @@ if (count($this->groups) > 0) :
     if ($group->getAttribute('sufix')) :
 ?>
                 <input type="hidden" value="<?=$group->getAttribute('sufix')?>" id="<?=$this->domPrefix.'_search_'.$i?>_sufix" name="<?=$group->getAttribute('target')?>_sufix" />
+
 <?php 
 
     endif;
     if ($group->getAttribute('prefix')) :
 ?>
                 <input type="hidden" value="<?=$group->getAttribute('prefix')?>" id="<?=$this->domPrefix.'_search_'.$i?>_prefix" name="<?=$group->getAttribute('target')?>_prefix" />
+
 <?php 
     endif;
 ?>
             </div>
+
 <?php 
        $k = 0;
        if (count($group->children()) > 1) :
            if ($group->getAttribute('operator') != 'between') :
 ?>
            <div class="formSearchSelectors">
+
 <?php
-           
                foreach ($group->children() as $element) :
                    if ($element->getAttribute('name')) {
                       $eName = $element->getAttribute('name');
@@ -58,6 +62,7 @@ if (count($this->groups) > 0) :
                     <input data-dojo-type="dijit/form/RadioButton" id="<?=$this->domPrefix?>searchFields[<?=$i?>][<?=$k?>]" name="switchFields[<?=$i?>]" <?php if ($k == 0) echo 'checked="checked"' ?> value="<?=$element->getAttribute('target') ?>" type="radio" onClick="dijit.byId('<?=$this->domPrefix . '_search_' . $i?>').set('name', this.value)" />
                     <label for="<?=$element->getAttribute('target')?>"><?=$eName?></label>
                 </div>
+
 <?php 
                 $k++;
                 endforeach;
@@ -72,6 +77,7 @@ if (count($this->groups) > 0) :
 ?>
             <input type="hidden" id="<?=$this->domPrefix . '_search_' . $i?>_sufix<?=$j?>" value="<?=$element->getAttribute('sufix')?>" name="<?=$group->getAttribute('target')?>_sufix" />
             <input type="hidden" id="<?=$this->domPrefix . '_search_' . $i?>_prefix<?=$j?>" value="<?=$element->getAttribute('prefix')?>" name="<?=$group->getAttribute('target')?>_prefix" />
+
 <?php 
                     endif;
                 endforeach;
@@ -79,6 +85,7 @@ if (count($this->groups) > 0) :
         endif;
 ?>
         </div>
+
 <?php 
         $i++;
     endforeach;
@@ -88,6 +95,7 @@ if (count($this->groups) > 0) :
     <script type="text/javascript">
         dojo.byId('<?=$this->domPrefix?>formSearch').style.display='none';
     </script>
+
 <?php
     endif; 
 ?>
@@ -97,6 +105,7 @@ if (count($this->groups) > 0) :
         <input type="hidden" name="format" value="json" />
         <input type="hidden" name="storeType" value="<?=$this->storeType?>" />
         <input type="hidden" name="p" value="<?=$this->p?>" />
+
 <?php 
     if (!$this->hideSubmit) :
 ?>
@@ -106,6 +115,7 @@ if (count($this->groups) > 0) :
 ?>
     </div>
     <div class="keyPadWrapper" style="clear: both;">
+
 <?php 
     foreach ($this->customFunctions as $i => $f) :
         $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
@@ -116,10 +126,12 @@ if (count($this->groups) > 0) :
         <?=$f['name'] ? $f['name'] : $f['target']?>
         </button>
     </div>
+
 <?php 
     endforeach;
 ?>
     </div>
+
 <?php 
     if (!$this->hideSubmit) :
 ?>
@@ -137,10 +149,11 @@ if (count($this->groups) > 0) :
         }
         return false;
     </script>
+
 <?php 
     endif;
 ?>
-</div>
+</form>
 <?php 
 endif;
 ?>
