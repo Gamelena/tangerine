@@ -166,10 +166,10 @@ input,textarea,select {
     text-align: left;
     font-family: 'resagokrbold', serif;
     float: left;
-    padding-left: 20px;
-    padding-top: 10px;
-    font-size: 28px;
-    color: #EFEFEF;
+    padding-left: 18px;
+    padding-top: 5px;
+    font-size: 23px;
+    color: #fff;
     font-weight: bold;
     text-shadow: 0.2em 0em 1em black, 0.2em 0.1em 0.3em black;
     filter: progid:DXImageTransform.Microsoft.Shadow(color='gray', Direction=135, Strength=6);
@@ -180,6 +180,11 @@ input,textarea,select {
     float: left;
     padding: 0 0 0 14px;
 }
+
+#logosAdm img{
+    height: 33px;
+}
+
 
 #side {
     margin-bottom: 10px;
@@ -413,7 +418,7 @@ a.settingsTab {
    font-family: Verdana,Arial,Helvetica,sans-serif;
    font-size: 0.688em;
 }
-	
+    
 
 
 .dojoxGrid table {
@@ -444,7 +449,7 @@ a.settingsTab {
 }
 
 .claro .dijitTabPane, .tundra {
-	background-color: transparent !important; 
+    background-color: transparent !important; 
 }
 
 #formatted {
@@ -512,8 +517,8 @@ a.settingsTab {
 
 .zweicom .dijitSplitContainer-dijitContentPane, .zweicom .dijitBorderContainer-dijitContentPane
 {
-	border-bottom: 1px solid #ccc;
-	background: #bcd5f0 url("/dojotoolkit/dijit/themes/zweicom/images/titleBar.png") repeat-x top left;
+    border-bottom: 1px solid #ccc;
+    background: #bcd5f0 url("/dojotoolkit/dijit/themes/zweicom/images/titleBar.png") repeat-x top left;
 }
 
 .tundra #appToolboxContainer
@@ -659,23 +664,23 @@ a.settingsTab {
 }
 
 .formSearchItemContainer .item {
-    overflow: hidden;	
-}	
+    overflow: hidden;   
+}   
 
 .dijitTab .tabLabel {
     outline: none;
 }
 
 .zweicom .contentWrapper {
-	
+    
 }
 
 .contentBottom{
-	
+    
 }
-	
+    
 .contentCenter{
-	
+    
 }
 
 .keyPadWrapper {
@@ -692,4 +697,14 @@ a.settingsTab {
 /*TinyMCE*/
 .mceIframeContainer {
     background: #fff !important;
+}
+
+
+#eficienciaChart > div {
+    margin: 0 auto;
+}
+
+.dojoxCheckedMultiSelect .dojoxCheckedMultiSelectWrapper {
+    border-radius: 0.5em;
+    border-color: #5FAFB0;
 }
