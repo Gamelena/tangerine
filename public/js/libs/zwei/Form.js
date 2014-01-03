@@ -71,7 +71,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         if (this.dijitFormSearch != undefined && this.dijitFormSearch != null) {
             dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i) {
-                if (entry.type != 'submit' && entry.type != 'radio' && entry.type != 'button') {
+                if (entry.type != 'submit' && entry.type != 'radio' && entry.type != 'button' && entry.get('disabled') != true) {
                     if (self.dijitFormSearch.getChildrenByName(entry.get('name')).length > 1) {
                         auxTwice = '['+i+']';
                     } else {
