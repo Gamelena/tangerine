@@ -85,14 +85,14 @@ endif;
     <input type="hidden" name="model" value="<?=$this->model?>" />
     <input type="hidden" name="p" value="<?=$this->p?>" />
 <?php 
-if ($this->mode == 'edit' || $this->mode == 'clone') :
+//if ($this->mode == 'edit' || $this->mode == 'clone') :
     foreach ($this->modelPrimary as $p) :
         $value = isset($_REQUEST['primary']) ? $_REQUEST['primary'][$p] : '';
 ?>
     <input type="hidden" name="primary[<?=$p?>]" value="<?=$value ?>" />
 <?php 
     endforeach;
-endif;
+//endif;
 ?>
     <script type="dojo/method" event="onSubmit">
     if (this.validate()) {
