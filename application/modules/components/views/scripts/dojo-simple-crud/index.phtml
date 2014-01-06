@@ -51,7 +51,7 @@ if ($this->changePassword) :
 <?php 
 endif; 
 ?>
-        <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>contentBottom" class="contentBottom" title="<?=$this->helpersName?>" onShow="<?=$this->helpersOnShow?>">
+        <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>contentBottom" class="contentBottom">
 <?php 
 if (!isset($this->menus) || in_array($this->menus, array('keypad', 'both'))) :
 ?>
@@ -65,7 +65,7 @@ endif;
 $i=0;
 foreach ($this->panes as $pane) :
 ?>
-    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>Pane<?=$i?>" class="contentBottom" title="<?=$pane->getAttribute('name')?>" onShow="<?=$pane->getAttribute('onShow')?>">
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>Pane<?=$i?>" class="contentBottom" title="<?=$pane->getAttribute('name')?>" onshow="<?=$pane->getAttribute('onshow')?>">
     </div>
 <?php
     $i++; 

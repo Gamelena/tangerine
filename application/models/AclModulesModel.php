@@ -31,7 +31,14 @@ class AclModulesModel extends DbTable_AclModules
         
         $this->_ajax_todo = 'cargarArbolMenu';
         
-        $update = parent::update($data, $where);
+        try {
+            $update = parent::update($data, $where);
+        } catch (Zend_Db_Exception $e) {
+            if ($e->getCode() == 23000) {
+                $this->setMessage("Clave repetida. COMPONENTE debe ser único.");
+                return false;
+            }
+        }
         Zwei_Utils_File::clearRecursive(ROOT_DIR . "/cache");
         
         return $saveActions || $update;
@@ -46,8 +53,15 @@ class AclModulesModel extends DbTable_AclModules
         $data             = $this->cleanDataParams($data);
         $this->_ajax_todo = 'cargarArbolMenu';
         
-        $lastInsertedId = parent::insert($data);
-        $saveActions    = $this->saveDataActions($lastInsertedId);
+        try {
+            $lastInsertedId = parent::insert($data);
+        } catch (Zend_Db_Exception $e) {
+            if ($e->getCode() == 23000) {
+                $this->setMessage("Clave repetida. COMPONENTE debe ser único.");
+                return false;
+            }
+        }
+    $saveActions    = $this->saveDataActions($lastInsertedId);
         
         return $lastInsertedId;
         
