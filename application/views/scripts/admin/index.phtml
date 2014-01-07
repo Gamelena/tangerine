@@ -71,7 +71,7 @@
     </div>
     <!-- /Loader -->
     <div data-dojo-type="dijit/layout/BorderContainer" id="borderContainer" jsId="borderContainer" data-dojo-props="design: 'headline', region: 'center', gutters: true" >
-       <div data-dojo-type="dojox/layout/ContentPane" jsId="contentPaneTop" data-dojo-props="splitter: true, region: 'top', executeScripts: true, scriptHasHooks: true" style="height: 37px;">
+       <div data-dojo-type="dojox/layout/ContentPane" jsId="contentPaneTop" data-dojo-props="region: 'top', executeScripts: true, scriptHasHooks: true" style="height: 37px;">
             <div id="logosAdm"></div>
             <div id="tituloAdm"></div>
             <div style="text-align: right; float: right;">
@@ -107,5 +107,6 @@
     </div>
     <div data-dojo-type="dojox/widget/Toaster" jsId="firstToaster" data-dojo-props="positionDirection:'br-left'" id="firstToaster"></div>
     <iframe name="ifrm_process" id="ifrm_process" style="display: none;"  src="" ></iframe>
+    <iframe name="ifrm_events" id="ifrm_events" style="display: none;"  src="<?=BASE_URL?>/events" ></iframe>
 </body>
 </html>
