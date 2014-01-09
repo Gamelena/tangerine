@@ -108,6 +108,10 @@ class AclRolesModel extends DbTable_AclRoles
     {
         $data = $this->cleanDataParams($data);
 
+        if (in_array('must_refresh', $this->info('cols'))) {
+            $data['must_refresh'] = '1';
+        }
+        
         try {
             $update = parent::update($data, $where);
         } catch (Zend_Db_Exception $e) {
@@ -126,10 +130,10 @@ class AclRolesModel extends DbTable_AclRoles
 
         $addPermissions = $this->addPermissions($aclRolesId);
 
-        if (!$update && $addPermissions) $update = $addPermissions; //Devolver <> false frente a cualquier modificacion
+
 
         Zwei_Utils_File::clearRecursive(ROOT_DIR ."/cache");
-        return $update;
+        return $update || $addPermissions;
     }
 
     /**

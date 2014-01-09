@@ -149,8 +149,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->changePassword = $this->_xml->xpath("//component/forms/changePassword") ? true : false;
         $this->view->containerDojoType = $this->_xml->getAttribute('containerDojoType') ? $this->_xml->getAttribute('containerDojoType') : 'dijit/layout/BorderContainer';
         $this->view->subContainerDojoType = $this->view->containerDojoType == 'dijit/layout/BorderContainer' ? '' : 'dijit/layout/ContentPane';
-        $this->view->helpersName = $this->_xml->xpath("//component/helpers[@name]") ? $helpers[0]->getAttribute('name') : '';
-        $this->view->helpersOnShow = $this->_xml->xpath("//component/helpers[@onShow]") ? $helpers[0]->getAttribute('onShow') : '';
         $this->view->searchersOutsideContent = $this->_xml->xpath("//component/searchers[@outsideContent='true']") ? true : false;
         $this->view->panes = $this->_xml->xpath("//component/pane") ? $this->_xml->xpath("//component/pane") : array();
         
