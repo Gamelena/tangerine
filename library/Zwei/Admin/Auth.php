@@ -72,7 +72,7 @@ class Zwei_Admin_Auth
      * Authentification params against DB Table
      * @return Zend_Auth_Adapter_DbTable
      */
-    public function getAuthAdapter() {
+    public function getAuthAdapter($hash = 'MD5') {
         $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
         $dbAdapter = isset($resource) && $resource->getDb("auth") ?
         $resource->getDb("auth") :
@@ -85,8 +85,13 @@ class Zwei_Admin_Auth
     
         $authAdapter->setTableName($authUsersTable)
         ->setIdentityColumn($authUserName)
-        ->setCredentialColumn($authPassword)
-        ->setCredentialTreatment('MD5(?) and approved="1"');
+        ->setCredentialColumn($authPassword);
+        
+        if ($hash == 'MD5') {
+            $authAdapter->setCredentialTreatment('MD5(?) and approved="1"');
+        } else {
+            $authAdapter->setCredentialTreatment('approved="1"');
+        }
         
         return $authAdapter;
     }
