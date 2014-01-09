@@ -58,18 +58,33 @@ class AclUsersModel extends DbTable_AclUsers
         $aWhere = $this->whereToArray($where);
         $id = $aWhere['id'];
         
+        $users = new DbTable_AclUsers();
+        $row = $users->find($id)->current();
+        
         if ($id == $this->_user_info->id) {
             //El usuario se está tratando de "suicidar" del sistema.
-            $users = new AclUsersModel();
-            $row = $users->find($id)->current();
+
             
             if ($row->acl_roles_id == $this->_user_info->acl_roles_id) {
                 //Nadie más puede cumplir su misión encomendada, no lo permitiremos.
                 $this->setMessage("No puede darse de baja usted mismo,\nno hay más usuarios con perfil $row->role_name.\n\nSi detectó un problema de seguridad se le sugiere cambiar su contraseña en Configuración.");
                 return false;
+            } 
+        }
+        
+        $delete = parent::delete($where);
+        
+        if ($delete) {
+            $aclRoles = new DbTable_AclRoles();
+            if (in_array('must_refresh', $aclRoles->info('cols'))) {
+                $currentRole = $aclRoles->find($row->acl_roles_id)->current();
+            
+                $currentRole->must_refresh = '1';
+                $currentRole->save();
             }
         }
-        return parent::delete($where);
+        
+        return $delete;
     }
     
     
@@ -115,6 +130,16 @@ class AclUsersModel extends DbTable_AclUsers
                 Zwei_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
             }
         }
+        
+        if ($update && $data['approved'] != '1') {
+            $aclRoles = new DbTable_AclRoles();
+            if (in_array('must_refresh', $aclRoles->info('cols'))) {
+                $currentRole = $aclRoles->find($data['acl_roles_id'])->current();
+                $currentRole->must_refresh = '1';
+                $currentRole->save();
+            }
+        }
+        
         return $update;
 
     }
