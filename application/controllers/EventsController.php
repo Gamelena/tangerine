@@ -28,7 +28,7 @@ class EventsController extends Zend_Controller_Action
                 if ($userFind->count() <= 0) {
                     exit("<script>window.parent.location.href='".BASE_URL."/admin/login';</script>");
                 } else {
-                    $currentUser = $userModel->find($authInfo->id)->current();
+                    $currentUser = $userFind->current();
                 }
                 
                 
@@ -39,7 +39,6 @@ class EventsController extends Zend_Controller_Action
                 ->setCredential($password);
 
                 $result = $auth->authenticate($authAdapter);
-                Debug::write($result);
                 
                 if ($result->isValid()) {
                     Zwei_Admin_Auth::initUserInfo($authAdapter);
