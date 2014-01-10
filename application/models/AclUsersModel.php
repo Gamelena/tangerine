@@ -131,7 +131,8 @@ class AclUsersModel extends DbTable_AclUsers
             }
         }
         
-        if ($update && $data['approved'] != '1') {
+        
+        if ($update && isset($data['approved']) && $data['approved'] != '1') {
             $aclRoles = new DbTable_AclRoles();
             if (in_array('must_refresh', $aclRoles->info('cols'))) {
                 $currentRole = $aclRoles->find($data['acl_roles_id'])->current();
