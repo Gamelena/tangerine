@@ -153,8 +153,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->panes = $this->_xml->xpath("//component/pane") ? $this->_xml->xpath("//component/pane") : array();
         
         if ($this->view->changePassword) {
-            $this->view->targetPass = 'password';
-            $this->view->namePass = 'Contrase&ntilde;a';
             $this->view->primary = $this->_model->info(Zend_Db_Table::PRIMARY);
         }
     }
@@ -388,6 +386,23 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function changePasswordAction()
     {
         $this->view->p = $this->_component;
+        
+        
+        $this->view->targetPass = 'password';
+        $this->view->namePass = 'Contrase&ntilde;a';
+        
+        $this->view->inputParams = array('target' => "data[{$this->view->targetPass}]", 'password' => 'true', 'value' => '', 'required' => 'true');
+        $this->view->inputConfirmParams = array('target' => "confirm[{$this->view->targetPass}]", 'password' => 'true', 'value' => '', 'required' => 'true');
+        
+        $elements = $this->_xml->xpath('//forms/changePassword/element');
+        $element = $elements[0];
+        
+        foreach ($element->attributes() as $i => $attr) {
+            if ($i != 'target') {
+                $this->view->inputParams[$i] = $attr;
+            }
+        }
+        
         $this->view->ajax = 'false';
         $this->initForm('edit');
     }
