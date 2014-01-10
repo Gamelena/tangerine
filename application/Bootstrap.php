@@ -85,7 +85,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Run!
         $frontController = Zend_Controller_Front::getInstance();
         //Plugin Timeout de Sesión
-        $frontController->registerPlugin(new Zwei_Controller_Plugin_TimeOutHandler());
+        $frontController->registerPlugin(new Zwei_Controller_Plugin_TimeOutHandler($this->_config));
         
         //Plugin para usar multiples carpetas aplication sobreescribibles
         $frontController->registerPlugin(new Zwei_Controller_Plugin_ApplicationPath());       
