@@ -107,7 +107,6 @@ endif;
             <?=$this->onSubmit ?>
             
             var observer = form.watch("response", function(name, oldValue, response) {
-                console.debug(response);
                 if (response != null) {
                     <?=$this->onPostSubmit ?>
                     if (response.todo == 'goToLogin') window.location.href = base_url + 'admin/login';

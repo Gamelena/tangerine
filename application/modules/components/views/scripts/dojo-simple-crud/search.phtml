@@ -142,6 +142,7 @@ if (count($this->groups) > 0) :
                 var form = new zwei.Form({dijitFormSearch: this, dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')});
                 form.loadData();
             } catch(e) {
+                console.log(e);
                 utils.showMessage(e.message, 'error');
             }
         } else {
