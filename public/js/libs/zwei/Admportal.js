@@ -94,7 +94,6 @@ dojo.declare("zwei.Admportal", null, {
                     },
                     onClose: function(item){
                         this.openOnClick = false;
-                        console.debug(item);
                         if (item.url != undefined) {
                             this.openOnClick = false;
                         } else {
@@ -150,15 +149,15 @@ dojo.declare("zwei.Admportal", null, {
         }
     },
     maximizeMainPane: function(){
-        contentPaneTop.domNode.style.display='none';
-        contentPaneBottom.domNode.style.display='none';
-        menuExpand.domNode.style.display='none';
+        contentPaneTop.domNode.style.display = 'none';
+        contentPaneBottom.domNode.style.display = 'none';
+        menuExpand.domNode.style.display = 'none';
         dijit.byId('borderContainer').resize();
     },
     minimizeMainPane: function(){
-        contentPaneTop.domNode.style.display='block';
-        contentPaneBottom.domNode.style.display='block';
-        menuExpand.domNode.style.display='block';
+        contentPaneTop.domNode.style.display = 'block';
+        contentPaneBottom.domNode.style.display = 'block';
+        menuExpand.domNode.style.display = 'block';
         dijit.byId('borderContainer').resize();
     },
     loadModuleTab: function(url, moduleId, moduleTitle, refreshOnShow) 
@@ -193,6 +192,9 @@ dojo.declare("zwei.Admportal", null, {
                 tabContainer.selectChild(dijit.byId('mainTabModule' + moduleId));
                 
                 dojo.connect(dojo.byId('tabContainer_tablist_mainTabModule' + moduleId), 'dblclick', function(){self.switchMainPane();});
+                dojo.connect(dijit.byId('mainTabModule' + moduleId), 'resize', function(){
+                    
+                });
                 dojo.byId('tabContainer_tablist_mainTabModule' + moduleId).style.cursor = 'pointer';
             } else {
                 if (dijit.byId('mainTabModule' + moduleId).get('selected', true)) {
@@ -228,8 +230,7 @@ dojo.declare("zwei.Admportal", null, {
         if (object == undefined) var object = ''; 
         if (primary == undefined) var primary = 'id'; 
 
-        var uri = (domPrefix == undefined) ? (dijit.byId('dataGrid') ? dijit.byId('dataGrid').store.url : '') 
-                : (escape(dijit.byId(domPrefix+'dataGrid').store.url));
+        var uri = escape(dijit.byId(domPrefix+'dataGrid').store.url);
 
         try {
             var items = dijit.byId(domPrefix + 'dataGrid').selection.getSelected();
@@ -237,7 +238,8 @@ dojo.declare("zwei.Admportal", null, {
         } catch(e) {
             console.debug(e);
             var id = '';
-        }    
+        }
+        console.debug(uri);
         document.getElementById('ifrm_process').src=base_url+'functions?method='+method+'&params='+params+id+"&object="+object+"&uri="+uri;
     }
 });
