@@ -90,8 +90,9 @@ class Zwei_Admin_Auth
         if ($hash == 'MD5') {
             $authAdapter->setCredentialTreatment('MD5(?) and approved="1"');
         } else {
-            $authAdapter->setCredentialTreatment('approved="1"');
+            $authAdapter->setCredentialTreatment('? and approved="1"');
         }
+        
         
         return $authAdapter;
     }
