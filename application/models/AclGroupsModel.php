@@ -10,7 +10,7 @@ class AclGroupsModel extends DbTable_AclGroups
      * @return array
     */
     public function overloadDataForm($data) {
-        //if (is_a('Zend_Db_Table_Rowset', $data)) {
+        if (method_exists($data, 'toArray')) {
             $data = $data->toArray();
         
             $model = new DbTable_AclUsersGroups();
@@ -21,7 +21,7 @@ class AclGroupsModel extends DbTable_AclGroups
                 $data["usuarios"][] = $usuario['acl_users_id'];
             }
             return $data;
-        //}
+        }
     }
     
     /**
