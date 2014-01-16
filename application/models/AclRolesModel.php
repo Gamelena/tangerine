@@ -128,8 +128,9 @@ class AclRolesModel extends DbTable_AclRoles
         $arrWhere = $this->whereToArray($where);
         $aclRolesId = $arrWhere['id'];
 
-        $addPermissions = $this->addPermissions($aclRolesId);
 
+        $addPermissions = $this->addPermissions($aclRolesId);
+        $this->_more = array('AclRolesId' => $aclRolesId);
 
 
         Zwei_Utils_File::clearRecursive(ROOT_DIR ."/cache");

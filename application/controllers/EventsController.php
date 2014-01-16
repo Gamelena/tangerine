@@ -3,11 +3,6 @@
 class EventsController extends Zend_Controller_Action
 {
 
-    public function init()
-    {
-        /* Initialize action controller here */
-    }
-
     public function indexAction()
     {
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity())
@@ -31,7 +26,6 @@ class EventsController extends Zend_Controller_Action
                     $currentUser = $userFind->current();
                 }
                 
-                
                 $username = $currentUser->user_name;
                 $password = $currentUser->password;
                 
@@ -42,15 +36,17 @@ class EventsController extends Zend_Controller_Action
                 
                 if ($result->isValid()) {
                     Zwei_Admin_Auth::initUserInfo($authAdapter);
-                    $acl=new Zwei_Admin_Acl();
+                    $acl = new Zwei_Admin_Acl();
                     echo "<script>window.parent.admportal.loadMainMenu();</script>";
                 } else {
                     echo "<script>window.parent.location.href='".BASE_URL."admin';</script>";
+                    $this->render();
                 }
+                
+
                 
                 echo "<script>
                    window.parent.document.getElementById('ifrm_process').src = '".BASE_URL."events/update-role';
-                   clearTimeout(timeOut);
                       </script>";
             }
         }
@@ -59,10 +55,20 @@ class EventsController extends Zend_Controller_Action
     {
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
-            sleep(10);
             $authInfo = $auth->getStorage()->read();
+            $aclRolesId = $authInfo->acl_roles_id;
+            
+            if ($this->getRequest()->getParam('acl_roles_id')) {
+                $acl = new Zwei_Admin_Acl();
+                if ($acl->isUserAllowed('roles.xml', 'edit')) {
+                    $aclRolesId = $this->getRequest()->getParam('acl_roles_id');
+                }
+            }
+            
+            sleep(10);
+
             $aclRoles = new DbTable_AclRoles();
-            $currentRole = $aclRoles->find($authInfo->acl_roles_id)->current();
+            $currentRole = $aclRoles->find($aclRolesId)->current();
     
             $currentRole->must_refresh = '0';
             $currentRole->save();
