@@ -450,4 +450,29 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     {
         return false;
     }
+    
+    /**
+     * Guarda acciones en log
+     *
+     * @param string $action
+     * @param string|array $condition
+     */
+    public function log($action, $condition, $table = null) {
+        if (is_array($condition)) $condition = print_r($condition, true);
+        if (self::$_defaultLogMode) {
+            $logBook = new LogBookModel();
+    
+            $logData = array (
+                    "user" => $this->_user_info->user_name,
+                    "acl_roles_id" => $this->_user_info->acl_roles_id,
+                    "table" => ($table ? $table : $this->_name),
+                    "action" => $action,
+                    "ip" => $_SERVER['REMOTE_ADDR'],
+                    "stamp" => date("Y-m-d H:i:s")
+            );
+    
+            if ($condition) $logData["condition"] = (string) $condition;
+            $logBook->insert($logData);
+        }
+    }
 }

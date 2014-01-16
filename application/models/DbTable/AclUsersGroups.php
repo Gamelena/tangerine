@@ -13,7 +13,7 @@ class DbTable_AclUsersGroups extends Zwei_Db_Table
         ),
         'acl_groups' => array(
             'columns'           => array('acl_groups_id'),
-            'refTableClass'     => 'DbTable_Groups',
+            'refTableClass'     => 'DbTable_AclGroups',
             'refColumns'        => array('id')
         )
     );

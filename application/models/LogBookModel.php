@@ -1,5 +1,5 @@
 <?php
-class LogBookModel extends Zwei_Db_Table
+class LogBookModel extends DbTable_LogBook
 {
     protected $_name = "log_book";
     
