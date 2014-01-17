@@ -40,6 +40,8 @@ class AclModulesModel extends DbTable_AclModules
                 return false;
             }
         }
+        Debug::write($update);
+        Debug::write($saveActions);
         Zwei_Utils_File::clearRecursive(ROOT_DIR . "/cache");
         
         return $saveActions || $update;
