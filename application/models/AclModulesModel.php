@@ -26,6 +26,7 @@ class AclModulesModel extends DbTable_AclModules
     {
         $data    = $this->cleanDataParams($data);
         $myWhere = $this->whereToArray($where);
+        $update = false;
         
         $saveActions = $this->saveDataActions($myWhere['id']);
         
