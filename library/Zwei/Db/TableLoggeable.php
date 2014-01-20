@@ -29,10 +29,9 @@ class Zwei_Db_TableLoggeable extends Zwei_Db_Table
     public function update($data, $where)
     {
         $update = parent::update($data, $where);
-        Debug::write($update);
         if (is_array ($where)) {
             $where = array_values($where);
-            $where = (count($where) == 1) ? $where[0] : print_r($where, true);
+            $where = (count($where) === 1) ? $where[0] : print_r($where, true);
             $where = print_r($where, true);
         }
         if ($update && self::$_defaultLogMode) {

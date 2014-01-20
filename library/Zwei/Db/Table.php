@@ -141,8 +141,9 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
 
             $strData = print_r($data, true);
             $logMessage = "[$userName $ip] INSERT INTO " . $this->info(Zend_Db_Table::NAME) . " VALUES ($strData) ";
-            //Debug::writeBySettings($this->getAdapter()->getConfig(), 'transactions_log', '1', "../log/transactions");
             Debug::writeBySettings($logMessage, 'transactions_log', '1', "../log/transactions");
+        } else {
+            Debug::write("No existe SettingsModel");
         }
         
         return parent::insert($data);
@@ -223,6 +224,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             $logMessage = "[$userName $ip] DELETE FROM " . $this->info(Zend_Db_Table::NAME) . " WHERE ($strWhere) ";
             //Debug::writeBySettings($this->getAdapter()->getConfig(), 'transactions_log', '1', "../log/transactions");
             Debug::writeBySettings($logMessage, 'transactions_log', '1', "../log/transactions");
+        } else {
+            Debug::write('No existe SettingsModel');
         }
 
         return parent::delete($where);
@@ -457,22 +460,27 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * @param string $action
      * @param string|array $condition
      */
-    public function log($action, $condition, $table = null) {
+    public function log($action, $condition, $table = null) 
+    {
         if (is_array($condition)) $condition = print_r($condition, true);
         if (self::$_defaultLogMode) {
-            $logBook = new LogBookModel();
-    
-            $logData = array (
-                    "user" => $this->_user_info->user_name,
-                    "acl_roles_id" => $this->_user_info->acl_roles_id,
-                    "table" => ($table ? $table : $this->_name),
-                    "action" => $action,
-                    "ip" => $_SERVER['REMOTE_ADDR'],
-                    "stamp" => date("Y-m-d H:i:s")
-            );
-    
-            if ($condition) $logData["condition"] = (string) $condition;
-            $logBook->insert($logData);
+            try {
+                $logBook = new DbTable_LogBook();
+                $logData = array (
+                        "user" => $this->_user_info->user_name,
+                        "acl_roles_id" => $this->_user_info->acl_roles_id,
+                        "table" => ($table ? $table : $this->_name),
+                        "action" => $action,
+                        "ip" => $_SERVER['REMOTE_ADDR'],
+                        "stamp" => date("Y-m-d H:i:s")
+                );
+                if ($condition) $logData["condition"] = $condition;
+                Debug::write($logData);
+                $logBook->insert($logData);
+            } catch (Zend_Acl_Role_Registry_Exception $e) {
+                //Si se elimina un perfil con permisos asociados se genera esta exception 
+                //ya que aun no son borrados los permisos asociados, estos se borrarán despues.
+            }
         }
     }
 }
