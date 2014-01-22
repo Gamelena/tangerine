@@ -7,7 +7,7 @@ class EventsController extends Zend_Controller_Action
     {
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity())
         {
-            echo "<script>window.parent.location.href='".BASE_URL."/admin/login';</script>";
+            echo "<script>window.parent.location.href='".BASE_URL."admin/login';</script>";
         } else {
             $auth = Zend_Auth::getInstance();
             $authInfo = $auth->getStorage()->read();
@@ -21,7 +21,7 @@ class EventsController extends Zend_Controller_Action
                 $userModel = new DbTable_AclUsers();
                 $userFind = $userModel->find($authInfo->id);
                 if ($userFind->count() <= 0) {
-                    exit("<script>window.parent.location.href='".BASE_URL."/admin/login';</script>");
+                    exit("<script>window.parent.location.href='".BASE_URL."admin/login';</script>");
                 } else {
                     $currentUser = $userFind->current();
                 }

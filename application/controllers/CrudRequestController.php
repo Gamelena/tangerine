@@ -303,7 +303,11 @@ class CrudRequestController extends Zend_Controller_Action
                             $collection[$i][$column] = ((PHP_VERSION_ID >= 50400)) ? html_entity_decode($value) : utf8_encode(html_entity_decode($value));
                         } else {
                             foreach ($value as $column2 => $value2) {
-                                $collection[$i][$column][$column2] = (PHP_VERSION_ID >= 50400) ? html_entity_decode($value2) : utf8_encode(html_entity_decode($value2));
+                                if (!is_array($value)) {
+                                    $collection[$i][$column][$column2] = (PHP_VERSION_ID >= 50400) ? html_entity_decode($value2) : utf8_encode(html_entity_decode($value2));
+                                } else {
+                                    $collection[$i][$column][$column2] = $value2;
+                                }
                             }
                         }
                     }
