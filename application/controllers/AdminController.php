@@ -166,7 +166,8 @@ class AdminController extends Zend_Controller_Action
         $this->view->last_names = $userInfo->last_names;
         $this->view->user_id = $userInfo->id;
         $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
-        $this->view->layout = isset($config->zwei->layout->mainPane) ? "'".$config->zwei->layout->mainPane."'" : 'undefined';
+        $this->view->layout = isset($config->zwei->layout->mainPane) ? "'".$config->zwei->layout->mainPane."'" : 'undefined';//Para backward compatibility, TODO deprecar
+        $this->view->multiForm = isset($config->zwei->form->multiple) && !empty($config->zwei->form->multiple) ? 'true' : 'false';//Para backward compatibility, TODO deprecar
 
         if (!empty($this->_template)) {
             $this->_helper->viewRenderer("index-$this->_template");
