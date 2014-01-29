@@ -242,13 +242,13 @@ endif;
 <?php 
 foreach ($this->customFunctions as $i => $f) :
     $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
-    $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+    $target = isset($f['target']) && !empty($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
     $disabled = isset($f['disabled']) && $f['disabled'] == 'true' ? 'true' : 'false';
 ?>
-if (dijit.byId('<?=$this->domPrefix?>MenuItem<?=$f['target']?>')) dijit.byId('<?=$this->domPrefix?>MenuItem<?=$f['target']?>').destroy(); 
+if (dijit.byId('<?=$this->domPrefix?>MenuItem<?=$i?>')) dijit.byId('<?=$this->domPrefix?>MenuItem<?=$i?>').destroy(); 
 
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
-    id: '<?=$this->domPrefix?>MenuItem<?=$f['target']?>',
+    id: '<?=$this->domPrefix?>MenuItem<?=$i?>',
     label: "<?=$f['name'] ? $f['name'] : $f['target']?>",
     iconClass: "<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>",
     disabled: <?=$disabled?>,

@@ -69,7 +69,8 @@ if ($this->edit) :
                     prefix: '<?=$this->domPrefix?>',
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                     keys : <?=$this->jsPrimary?>
-                }); 
+                });
+                console.log(<?=$this->jsPrimary?>, '<?=$this->domPrefix?>');
                 form.showMultipleDialogs();
 <?php 
     endif;
@@ -207,7 +208,7 @@ endif;
 <?php 
 foreach ($this->customFunctions as $i => $f) :
     $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
-    $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+    $target = isset($f['target']) && !empty($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
     $disabled = isset($f['disabled']) && $f['disabled'] == 'true' ? 'true' : 'false';
 ?>
     <div class="keyPadButton">
