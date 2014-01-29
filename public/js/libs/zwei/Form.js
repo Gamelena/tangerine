@@ -260,7 +260,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 items = [items[0]];
             } 
             
-            console.log(items);
             
             for (var j=0; j<items.length; j++) {
                 if (items[j].i != undefined && items[j].r._items != undefined) {items[j] = items[j].i;}//workaround, a Dojo bug?
@@ -303,6 +302,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         }
     },
     showMultipleDialogs: function() {
+        this.primary = {};
         if (this.action != 'add') {
             var items = this.dijitDataGrid.selection.getSelected();
             for (var j = 0; j < items.length; j++) {
@@ -336,6 +336,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             }
             
         }
+        this.keys = {};
     },
     
     /**
@@ -371,13 +372,11 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     }
                     item = items[0];
                 } else {
-                    console.log(this.row);
                     item = this.row;
                 }
                 //Buscar inputs (hidden) con nombre primary[$idCampo] para obtener las PKs
                 var idForm = this.dijitForm ? this.dijitForm.id : this.prefix + 'form_edit' + this.sufix;
                 
-                console.log("#"+idForm+" input[name^=primary]");
                 dojo.forEach(dojo.query("#"+idForm+" input[name^=primary]"), function(entry, i) {
                     name = entry.name.replace('primary[', '').replace(']', '');
                     if (typeof(item[name]) != 'undefined') {
@@ -425,7 +424,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                         });
                     }
                 }
-            } else console.debug(ids);
+            }
             
             this.dijitDialog.set('href', base_url+'components/dojo-simple-crud/'+this.action+'?p='+this.component+'&'+ids+'&'+this.queryParams);
         }
