@@ -19,29 +19,30 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
 <?php 
     if (!$this->multiForm) :
 ?>
-        var form = new zwei.Form({
-            component: '<?=$this->component?>',
-            ajax: <?=$this->ajax ?>,
-            action: 'add',
-            dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
-            dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
-            dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-            queryParams: '<?=$this->queryParams?>'
-        }); 
-        form.showDialog();
+            var form = new zwei.Form({
+                component: '<?=$this->component?>',
+                ajax: <?=$this->ajax ?>,
+                action: 'add',
+                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
+                dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                queryParams: '<?=$this->queryParams?>'
+            }); 
+            form.showDialog();
 <?php 
     else :
 ?>
-        var form = new zwei.Form({
-            component: '<?=$this->component?>',
-            prefix: '<?=$this->domPrefix?>',
-            ajax: <?=$this->ajax ?>,
-            action: 'add',
-            dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-            queryParams: '<?=$this->queryParams?>',
-            title: 'Agregar <?=$this->name?>'
-        }); 
-        form.showDialog();
+            var form = new zwei.Form({
+                component: '<?=$this->component?>',
+                prefix: '<?=$this->domPrefix?>',
+                ajax: <?=$this->ajax ?>,
+                action: 'add',
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                queryParams: '<?=$this->queryParams?>',
+                title: 'Agregar <?=$this->name?>'
+            }); 
+            form.showDialog();
+
 <?php 
     endif;
 ?>
@@ -60,15 +61,34 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     label: "Editar <?=$this->name ?>",
     iconClass: "dijitIconEdit",
     onClick : function(e){
-        var form = new zwei.Form({
-            ajax: <?=$this->ajax ?>,
-            component: '<?=$this->component?>',
-            action: 'edit',
-            dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
-            dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'), 
-            dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
-        }); 
-        form.showDialog() 
+<?php 
+    if (!$this->multiForm) :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'edit',
+                    dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
+                    dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'),
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+                }); 
+                form.showDialog();
+<?php 
+    else :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'edit',
+                    title: 'Editar <?=$this->name ?>',
+                    prefix: '<?=$this->domPrefix?>',
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    keys : <?=$this->jsPrimary?>
+                }); 
+                form.showMultipleDialogs();
+<?php 
+    endif;
+?>
     }
 }));
 <?php
@@ -95,16 +115,36 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     label: "Eliminar <?=$this->name ?>",
     iconClass: "dijitIconDelete",
     onClick : function(){
-        var form = new zwei.Form({
-            ajax: <?=$this->ajax ?>,
-            action: 'delete',
-            component: '<?=$this->component?>',
-            dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
-            dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'), 
-            dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-            dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch')
-        }); 
-        form['delete']();
+<?php 
+    if (!$this->multiForm) :
+?>
+            var form = new zwei.Form({
+                ajax: <?=$this->ajax ?>,
+                action: 'delete',
+                component: '<?=$this->component?>',
+                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                model: '<?=$this->model?>',
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
+                keys : <?=$this->jsPrimary?>
+            }); 
+            form['delete']();
+<?php 
+    else :
+?>
+            var form = new zwei.Form({
+                ajax: <?=$this->ajax ?>,
+                action: 'delete',
+                component: '<?=$this->component?>',
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                model: '<?=$this->model?>',
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
+                keys : <?=$this->jsPrimary?>
+            }); 
+            form['delete']();
+<?php 
+    endif;
+?>
     }
 }));
 <?php
@@ -131,15 +171,34 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     label: "Clonar <?=$this->name ?>",
     iconClass: "dijitIconNewTask",
     onClick : function(){
-        var form = new zwei.Form({
-            ajax: <?=$this->ajax ?>,
-            component: '<?=$this->component?>',
-            action: 'clone',
-            dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
-            dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
-            dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
-        }); 
-        form.showDialog();
+<?php 
+    if (!$this->multiForm) :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'clone',
+                    dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
+                    dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+                });
+                form.showDialog();
+<?php 
+    else :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'clone',
+                    title: 'Clonar <?=$this->name?>',
+                    prefix: '<?=$this->domPrefix?>',
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    keys : <?=$this->jsPrimary?>
+                });
+                form.showMultipleDialogs();
+<?php 
+    endif;
+?>
     }
 }));
 <?php
@@ -184,6 +243,7 @@ endif;
 foreach ($this->customFunctions as $i => $f) :
     $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
     $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+    $disabled = isset($f['disabled']) && $f['disabled'] == 'true' ? 'true' : 'false';
 ?>
 if (dijit.byId('<?=$this->domPrefix?>MenuItem<?=$f['target']?>')) dijit.byId('<?=$this->domPrefix?>MenuItem<?=$f['target']?>').destroy(); 
 
@@ -191,6 +251,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     id: '<?=$this->domPrefix?>MenuItem<?=$f['target']?>',
     label: "<?=$f['name'] ? $f['name'] : $f['target']?>",
     iconClass: "<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>",
+    disabled: <?=$disabled?>,
     onClick : function(){
         <?=$onclick.$target?>
     }

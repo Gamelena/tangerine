@@ -57,6 +57,7 @@ if (!empty($this->title)):
         options.titleGap = 0;
 <?php
 endif;
+
 if (!empty($this->model)) :
 ?>
         var json = xhr.get({
@@ -103,10 +104,10 @@ endif;
         var gotList = function(items, request){
             console.debug('gotList');
             console.debug(items);
-            var chart = new Chart("<?=$this->domPrefix?>chartNode", options);
+            var chart = new Chart("<?=$this->domPrefix;?>chartNode", options);
             chart.setTheme(theme);
             chart.addPlot("default", {
-                type: "<?=$this->chartType?>",
+                type: "<?=$this->chartType ?>",
                 font: "Arial, Verdana",
                 animate: {duration: 1800}    
             });

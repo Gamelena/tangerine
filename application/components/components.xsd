@@ -132,7 +132,8 @@
         <xsd:attribute name="target"/>
         <xsd:attribute name="onclick"/>
         <xsd:attribute name="name"/>
-        <xsd:attribute name="icon"/>
+        <xsd:attribute name="iconClass"/>
+        <xsd:attribute name="disabled" type="xsd:boolean"/>
     </xsd:complexType>
     <xsd:complexType name="elementType">
         <xsd:choice minOccurs="0" maxOccurs="unbounded">

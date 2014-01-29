@@ -36,12 +36,19 @@ endif;
 ?>
             <?=$this->action('list', 'dojo-simple-crud', 'components', $_REQUEST)?>
         </div>
+<?php 
+if (!$this->multiForm) :
+?>
         <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="<?=$this->domPrefix?>dialog_edit" jsId="<?=$this->domPrefix?>dialog_edit" title="Editar <?=$this->name?>" <?=$this->styleDialog?> <?=$this->onloadDialog?> <?=$this->onshowDialog?> <?=$this->onhideDialog?>>
             <?=$this->action('edit', 'dojo-simple-crud', 'components', $requestForm)?>
         </div>
         <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="<?=$this->domPrefix?>dialog_add" jsId="<?=$this->domPrefix?>dialog_add" title="Agregar <?=$this->name?>" <?=$this->styleDialog?> <?=$this->onloadDialog?> <?=$this->onshowDialog?> <?=$this->onhideDialog?>>
             <?=$this->action('add', 'dojo-simple-crud', 'components', $requestForm)?>
         </div>
+<?php 
+endif;
+?>
+      
 <?php 
 if ($this->changePassword) : 
 ?>
