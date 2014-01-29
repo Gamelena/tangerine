@@ -1,7 +1,9 @@
 <?php
 /**
  * 
- * Plugin para cachear ciertas páginas estáticas de AdmPortal.
+ * Implementación de Zend_Cache para admportal como Plugin,
+ * tip: para no cachear algun componente XML, usar la palabra "nocache" en el nombre de archivo, ej trafico-por-nodo-nocache.xml
+ *
  *
  */
 final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
@@ -59,7 +61,6 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
     {
         if (!Zend_Auth::getInstance()->hasIdentity() 
             || isset($_REQUEST['action']) 
-            || preg_match("/grafico/", $request->getParam('p'))
             || preg_match("/settings/", $request->getParam('p'))
             || preg_match("/nocache/", $request->getParam('p'))
             ) {
@@ -68,11 +69,11 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             $userInfo = Zend_Auth::getInstance()->getStorage()->read();
 
             if ($request->getControllerName() == "index" && $request->getActionName() == "components") {
-                $this->key = md5(BASE_URL.$request->getPathInfo().$request->getParam("p")) . "acl_roles_id_".$userInfo->acl_roles_id;
+                $this->key = md5(BASE_URL.$request->getPathInfo().$request->getParam("p")) . "id_".$userInfo->id;
             } else if ($request->getControllerName() == "objects" && $request->getParam('model') == "settings" && $request->getParam('format') == "json") {
-                $this->key = md5(BASE_URL.$userInfo->acl_roles_id."_settings"); 
+                $this->key = md5(BASE_URL.$userInfo->id."_settings"); 
             } else if ($request->getControllerName() == "index" && $request->getActionName() == "modules") {
-                $this->key = md5(BASE_URL.$userInfo->acl_roles_id."_modules"); 
+                $this->key = md5(BASE_URL.$userInfo->id."_modules"); 
             } else {
                 self::$doNotCache = true;
                 return;

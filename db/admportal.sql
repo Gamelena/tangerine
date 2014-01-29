@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `log_book` (
   `acl_roles_id` int(11) NOT NULL,
   `ip` char(200) NOT NULL,
   `stamp` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyIsam DEFAULT CHARSET=utf8;
 
 
 --

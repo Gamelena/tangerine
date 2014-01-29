@@ -22,7 +22,8 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
      * @param $file string
      * @return string
      */
-    public static function getFullPath($file) {
+    public static function getFullPath($file) 
+    {
         if (preg_match('/(.*).php/', $file)) {
             $prefix = BASE_URL ."/components/";
             
@@ -95,7 +96,8 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
      * @param array $array
      * @return Zwei_Admin_Xml
      */
-    public function parseXml($array) {
+    public function parseXml($array) 
+    {
         $xml = Zwei_Utils_Array::toXml($array, new Zwei_Admin_Xml("<?xml version=\"1.0\"?><components></components>"));
         return $xml;
     }

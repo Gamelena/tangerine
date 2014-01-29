@@ -16,6 +16,9 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     label: "Agregar <?=$this->name ?>",
     iconClass: "dijitIconNewTask",
     onClick : function(e){
+<?php 
+    if (!$this->multiForm) :
+?>
         var form = new zwei.Form({
             component: '<?=$this->component?>',
             ajax: <?=$this->ajax ?>,
@@ -25,7 +28,23 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
             dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
             queryParams: '<?=$this->queryParams?>'
         }); 
-        form.showDialog()
+        form.showDialog();
+<?php 
+    else :
+?>
+        var form = new zwei.Form({
+            component: '<?=$this->component?>',
+            prefix: '<?=$this->domPrefix?>',
+            ajax: <?=$this->ajax ?>,
+            action: 'add',
+            dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+            queryParams: '<?=$this->queryParams?>',
+            title: 'Agregar <?=$this->name?>'
+        }); 
+        form.showDialog();
+<?php 
+    endif;
+?>
     }
 }));
 <?php

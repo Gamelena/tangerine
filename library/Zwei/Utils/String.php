@@ -29,16 +29,16 @@ class Zwei_Utils_String {
     
     public static function stripAccents($string, $nospaces=false)
     {
-        $string = ereg_replace("[äáàâãª]","a",$string);
-        $string = ereg_replace("[ÁÀÂÃÄ]","A",$string);
-        $string = ereg_replace("[ÍÌÎÏ]","I",$string);
-        $string = ereg_replace("[íìîï]","i",$string);
-        $string = ereg_replace("[éèêë]","e",$string);
-        $string = ereg_replace("[ÉÈÊË]","E",$string);
-        $string = ereg_replace("[óòôõöº]","o",$string);
-        $string = ereg_replace("[ÓÒÔÕÖ]","O",$string);
-        $string = ereg_replace("[úùûü]","u",$string);
-        $string = ereg_replace("[ÚÙÛÜ]","U",$string);
+        $string = preg_replace("[äáàâãª]","a",$string);
+        $string = preg_replace("[ÁÀÂÃÄ]","A",$string);
+        $string = preg_replace("[ÍÌÎÏ]","I",$string);
+        $string = preg_replace("[íìîï]","i",$string);
+        $string = preg_replace("[éèêë]","e",$string);
+        $string = preg_replace("[ÉÈÊË]","E",$string);
+        $string = preg_replace("[óòôõöº]","o",$string);
+        $string = preg_replace("[ÓÒÔÕÖ]","O",$string);
+        $string = preg_replace("[úùûü]","u",$string);
+        $string = preg_replace("[ÚÙÛÜ]","U",$string);
         //$string = ereg_replace("[^´`¨~]","",$string);
         $string = str_replace("ç","c",$string);
         $string = str_replace("Ç","C",$string);
@@ -106,7 +106,7 @@ class Zwei_Utils_String {
     
     public static function toVarWord($string){
         $string = preg_replace("/(?<=[a-zA-Z])(?=[A-Z])/", "_", $string);
-        $string = preg_replace("/[\.-]/", "_", $string);
+        $string = preg_replace("/[\.\*-]/", "_", $string);
         return $string;
     }
     

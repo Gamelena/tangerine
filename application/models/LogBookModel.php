@@ -1,9 +1,6 @@
 <?php
 class LogBookModel extends DbTable_LogBook
 {
-    protected $_name = "log_book";
-    
-    
     public function select()
     {
         $select = new Zend_Db_Table_Select($this);

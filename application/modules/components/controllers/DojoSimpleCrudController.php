@@ -98,8 +98,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
         $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
         
-        $configParams = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
-        $this->_config = new Zend_Config($configParams);
+        $this->_config = Zwei_Controller_Config::getOptions();
+        $this->view->multiForm = isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple) ? true : false;
+        
         
         if ($this->getRequest()->getParam('p')) {
             $this->_component = $this->getRequest()->getParam('p');
@@ -121,10 +122,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         } else {
             $this->view->validateGroupDelete = true;
         }
-    }
-
-    public function indexAction()
-    {
+        
         $className = $this->_xml->getAttribute('target');
         //Se agrega nombre de modelo a mensaje de Exception
         try {
@@ -134,10 +132,13 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         } catch (Zend_Db_Exception $e) {
             throw new Zend_Db_Exception("$className: {$e->getMessage()}", $e->getCode());
         }
-        
+    }
+
+    public function indexAction()
+    {
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->menus = $this->_config->zwei->layout->menus;
-        $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."\"></script>\n" : '';
+        $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."?nocache=4\"></script>\n" : '';
         if ($this->_xml->xpath("//component/forms")) $forms = $this->_xml->xpath("//component/forms");
         if ($this->_xml->xpath("//component/helpers")) $helpers = $this->_xml->xpath("//component/helpers");
         
@@ -176,7 +177,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function initForm($mode)
     {
-
         $r = $this->getRequest();
         $this->view->p = $this->_component;
         $this->view->xml = $this->_xml;
@@ -184,16 +184,14 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->loadPartial = $r->getParam('loadPartial', false);
         $this->view->dialogIndex = $r->getParam('dialogIndex', '');
 
-        $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
+        $this->view->onShow = $this->_xml->xpath('//component/forms/onShow') ? dom_import_simplexml($this->_xml->forms->onShow)->textContent : '';
         $this->view->onSubmit = $this->_xml->xpath('//component/forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
+        $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
 
-        $className = $this->_xml->getAttribute('target');
-        $this->view->model = $className;
-        $this->_model = new $className();
+        $this->view->model = $this->_xml->getAttribute('target');
         $this->view->modelPrimary = $this->_model->info('primary');
         $this->view->tabs = $this->_xml->getTabsWithElements(true, "@$mode='true' or @$mode='readonly' or @$mode='disabled'");
         
-        //[FIXME] esto se debe ejecutarse al momento de abrir el formulario, no antes
         if (($mode == 'edit' || $mode == 'clone') && $this->view->ajax) {
             $a = $this->_model->getAdapter();
             
@@ -209,18 +207,24 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             }
             Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
             $data = $this->_model->fetchRow($select);
+            if ($this->view->multiForm) {
+                $this->view->dialogIndex = '';
+                foreach ($this->_model->info('primary') as $primary) {
+                    $this->view->dialogIndex .= $data[$primary];
+                }
+                $this->view->dialogIndex = Zwei_Utils_String::toVarWord($this->view->dialogIndex);
+            }
             //Es posible añadir más valores al retorno de la query principal sobrecargando este método.
             $this->view->data = $this->_model->overloadDataForm($data);
         }
-        $this->view->includeJs = $this->_xml->getAttribute('jsForm') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('jsForm')."\"></script>" : '';
+        $this->view->includeJs = $this->_xml->getAttribute('jsForm') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('jsForm')."?nocache=5\"></script>" : '';
     }
     
     public function initKeys()
     {
-        $className = $this->_xml->getAttribute('target');
-        $this->view->model = $className;
-        $this->_model = new $className();
+        $this->view->model = $this->_xml->getAttribute('target');
         $this->view->primary = implode(";", $this->_model->info('primary'));
+        $this->view->jsPrimary = "['".implode("','",  $this->_model->info('primary'))."']";
         
         $this->view->name = $this->_xml->getAttribute('name');
         
@@ -228,6 +232,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->edit = $this->_xml->getAttribute('edit') && $this->_xml->getAttribute("edit") == 'true'  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
         $this->view->clone = $this->_xml->getAttribute('clone') && $this->_xml->getAttribute("clone") == 'true'  && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
         $this->view->delete = $this->_xml->getAttribute('delete') && $this->_xml->getAttribute("delete") == 'true' && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
+        $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
+        
         
         $this->view->component = $this->_component;
         
@@ -273,6 +279,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->p = $this->_component;
         $this->view->model = $this->_xml->getAttribute('target');
+        $primary = $this->_model->info(Zend_Db_Table::PRIMARY);
+        $jsPrimary = "['".implode("','", $primary)."']";
+        $this->view->primary = implode(";", $this->_model->info('primary'));
+        
         $this->view->list = $this->_xml->getAttribute('list') === 'true' ? true : false;
         $this->view->store = $this->view->list ? "store: {$this->view->domPrefix}storeGrid," : "";
         $this->view->noDataMessage = 'Sin datos.';
@@ -334,15 +344,31 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick');
         } else if ($this->_xml->getAttribute('edit')) {
             if (!$this->view->validateGroupEdit) {
-                $this->view->onRowDblClick = "var form = new zwei.Form({
-                        ajax: $ajax,
-                        component: '{$this->_component}',
-                        action: 'edit',
-                        dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
-                        dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
-                        dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
-                    }); 
-                    form.showDialog()";
+                if (isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple)) {
+                    $this->view->onRowDblClick = "
+                        var form = new zwei.Form({
+                            ajax: $ajax,
+                            component: '{$this->_component}',
+                            action: 'edit',
+                            title: 'Editar {$this->_xml->getAttribute("name")}',
+                            prefix: '{$this->view->domPrefix}', 
+                            dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid'),
+                            keys : $jsPrimary
+                        }); 
+                        form.showMultipleDialogs()
+                        ";
+                } else {
+                    $this->view->onRowDblClick = "
+                        var form = new zwei.Form({
+                            ajax: $ajax,
+                            component: '{$this->_component}',
+                            action: 'edit',
+                            dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'),
+                            dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'),
+                            dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
+                        });
+                        form.showDialog()";
+                }
             } else {
                 $this->view->onRowDblClick = "
                     var items = this.selection.getSelected();

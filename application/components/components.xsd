@@ -17,10 +17,12 @@
         <xsd:attribute name="add" type="xsd:boolean"/>
         <xsd:attribute name="delete" type="xsd:boolean"/>
         <xsd:attribute name="clone" type="xsd:boolean"/>
+        <xsd:attribute name="canSort" type="xsd:boolean"/>
         <xsd:attribute name="js" />
         <xsd:attribute name="jsForm" />
         <xsd:attribute name="style" />
         <xsd:attribute name="plugins" />
+        <xsd:attribute name="containerDojoType" type="containerDojoTypeType" />
         <xsd:attribute name="chartXType" />
         <xsd:attribute name="chartXTarget" />
         <xsd:attribute name="chartXLabel" />
@@ -60,6 +62,7 @@
             <xsd:element name="add" type="formType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="onPostSubmit" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="onSubmit" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="onShow" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="tabs" type="tabsType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:choice>
         <xsd:attribute name="ajax" type="xsd:boolean" />
@@ -285,6 +288,13 @@
             <xsd:enumeration value="Tufte"/>
             <xsd:enumeration value="WatersEdge"/>
             <xsd:enumeration value="Wetland"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="containerDojoTypeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="dijit/layout/BorderContainer"/>
+            <xsd:enumeration value="dijit/layout/AccordionContainer"/>
+            <xsd:enumeration value="dijit/layout/TabContainer"/>
         </xsd:restriction>
     </xsd:simpleType>
 </xsd:schema>

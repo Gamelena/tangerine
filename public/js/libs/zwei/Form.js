@@ -11,22 +11,27 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      */
     status: null,
     /**
+     * formulario de edicion
      * dijit.form.Form
      */
     dijitForm: null,
     /**
+     * formulario de búsqueda
      * dijit.form.Form
      */
     dijitFormSearch: null,
     /**
+    * Diálogo desplegable.
     * dijit.form.Dialog
     */
     dijitDialog: null,
     /**
+     * Grilla
      * dijit.form.DataGrid
      */
     dijitDataGrid: null,
     /**
+     * Iframe
      * dom Element
      */
     iframe: null,
@@ -51,7 +56,34 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      */
     
     queryParams: '',
-    
+    /**
+     * string
+     */
+    title: null,
+    /*
+     * array
+     */
+    row: null,
+    /**
+     * array
+     */
+    keys: [],
+    /**
+     * string
+     */
+    prefix: null,
+    /**
+     * string
+     */
+    sufix: null,
+    /**
+     * string
+     */
+    model: null,
+    /**
+     * 
+     * @param Object args 
+     */
     constructor: function(args){
         this.utils = new zwei.Utils();
         dojo.mixin(this, args);
@@ -67,7 +99,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         var searchUrl = base_url+'crud-request?model=' + domForm['model'].value + '&format=' + domForm['format'].value+'&'+this.queryParams;
         var value;
         var auxTwice;
-        var self=this;
+        var self = this;
         
         if (this.dijitFormSearch != undefined && this.dijitFormSearch != null) {
             dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i) {
@@ -176,7 +208,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
             } else if(response.state == 'DELETE_OK') {
                 self.utils.showMessage('Se ha borrado correctamente.');
-                self.postSave();
             } else if(response.state == 'DELETE_FAIL') {
                 self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
             }
@@ -213,65 +244,97 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         domForm.submit();
     },
     'delete': function() {
-        var domForm = dojo.byId(this.dijitForm.id);
+        var domForm;
+        
         var items = this.dijitDataGrid.selection.getSelected();
         if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
         
-        var xhrContent = {
-            'model': domForm['model'].value,
-            'action': 'delete',
-            'format': 'json' 
-        };
+        var messageConfirm = multiForm && items.length > 1 ? '\u00BFDesea eliminar los ' + items.length + ' registros seleccionados?' : '\u00BFDesea eliminar el registro seleccionado?';
         
-        dojo.forEach(dojo.query("#"+this.dijitForm.id+" input[name^=primary]"), function(entry, i){
-            name = entry.name.replace('primary[', '').replace(']', '');
-            if (typeof(items[0][name]) != 'undefined') {
-                entry.value = items[0][name];
-                xhrContent['primary['+name+']'] = encodeURIComponent(entry.value);
-            }
-        });
-        console.debug(xhrContent);
-
-        
-        if (confirm('\u00BFDesea eliminar el registro seleccionado?')) {
+        if (confirm(messageConfirm)) {
             var self = this;
             
-            dojo.xhrPost( {
-                url: base_url+'crud-request',
-                content: xhrContent,
-                handleAs: 'json',
-                sync: true,
-                preventCache: true,
-                timeout: 5000,
-                load: function(response){
-                    if(response.message != "" && response.message != null){
-                        self.utils.showMessage(response.message);
-                        if (response.state != 'AUTH_FAILED') self.postSave();
-                    } else if(response.state == 'DELETE_OK') {
-                        self.utils.showMessage('Se ha borrado correctamente.');
-                        self.postSave();
-                    } else if(response.state == 'DELETE_FAIL') {
-                        self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
-                    }
-                    return response;
-                },
-                error:function(err){
-                    self.utils.showMessage('Error en comunicacion de datos. error: '+err, 'error');
-                    return err;
+            
+            
+            if (!multiForm) {
+                items = [items[0]];
+            } 
+            
+            console.log(items);
+            
+            for (var j=0; j<items.length; j++) {
+                if (items[j].i != undefined && items[j].r._items != undefined) {items[j] = items[j].i;}//workaround, a Dojo bug?
+                
+                var xhrContent = {
+                    'model': this.model,
+                    'action': 'delete',
+                    'format': 'json' 
+                };
+                
+                for (var i = 0; i < this.keys.length; i++) {
+                    xhrContent['primary['+this.keys[i]+']'] = encodeURIComponent(items[j][this.keys[i]]);
                 }
-            });
+                
+                dojo.xhrPost({
+                    url: base_url+'crud-request',
+                    content: xhrContent,
+                    handleAs: 'json',
+                    sync: true,
+                    preventCache: true,
+                    timeout: 5000,
+                    load: function(response){
+                        if(response.message != "" && response.message != null){
+                            self.utils.showMessage(response.message);
+                            if (response.state != 'AUTH_FAILED') self.postSave();
+                        } else if(response.state == 'DELETE_OK') {
+                            self.utils.showMessage('Se ha borrado correctamente.');
+                        } else if(response.state == 'DELETE_FAIL') {
+                            self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
+                        }
+                        return response;
+                    },
+                    error:function(err){
+                        self.utils.showMessage('Error en comunicacion de datos. error: '+err, 'error');
+                        return err;
+                    }
+                });
+            }
+            self.postSave();
         }
     },
-    /**
-     * [TODO] en proceso, para soportar múltiples diálogos
-     */
     showMultipleDialogs: function() {
         if (this.action != 'add') {
             var items = this.dijitDataGrid.selection.getSelected();
-            dojo.forEach(items, function(i, item){
-                if (item.i != undefined && item.r._items != undefined) item = item.i;//workaround, a Dojo bug?
-                showDialog(i);
-            });
+            for (var j = 0; j < items.length; j++) {
+                if (items[j].i != undefined && items[j].r._items != undefined) {items[j] = items[j].i;}//workaround, a Dojo bug?
+                
+                for (var i=0; i < this.keys.length; i++) {
+                    this.primary[this.keys[i]] = items[j][this.keys[i]];
+                }
+                this.sufix = '';
+                
+                if (this.primary) {
+                    for (var index in this.primary) {
+                        this.sufix += this.primary[index];
+                    }
+                }
+                
+                var dialogId = (this.prefix + 'dialog_' + this.action + this.sufix).trim();
+                
+                if (dijit.byId(dialogId) == undefined) {
+                    this.dijitDialog = new dojox.widget.DialogSimple({
+                        title: this.title,
+                        id: dialogId
+                    });
+                } else {
+                    this.dijitDialog = dijit.byId(dialogId);
+                }
+                
+                
+                this.row = items[j];
+                this.showDialog();
+            }
+            
         }
     },
     
@@ -285,19 +348,40 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         var ids = '';
         var primaries = {};
         
+        if (this.dijitDialog == null) {
+            var dialogId = this.prefix + 'dialog_' + this.action;
+            if (dijit.byId(dialogId) == undefined) {
+                this.dijitDialog = new dojox.widget.DialogSimple({
+                    title: this.title,
+                    id: dialogId
+                });
+            } else {
+                this.dijitDialog = dijit.byId(dialogId);
+            }
+        }
+        
         if (this.dijitDataGrid != null && this.dijitForm != null) {
             globalOpc = this.action;
             var name;
             if (this.action != 'add') {
-                var items = this.dijitDataGrid.selection.getSelected();
-                if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-                
-                
+                if (this.row == null) {
+                    var items = this.dijitDataGrid.selection.getSelected();
+                    if (items[0].i != undefined && items[0].r._items != undefined) {
+                        items[0] = items[0].i;//workaround, a Dojo bug?
+                    }
+                    item = items[0];
+                } else {
+                    console.log(this.row);
+                    item = this.row;
+                }
                 //Buscar inputs (hidden) con nombre primary[$idCampo] para obtener las PKs
-                dojo.forEach(dojo.query("#"+this.dijitForm.id+" input[name^=primary]"), function(entry, i){
+                var idForm = this.dijitForm ? this.dijitForm.id : this.prefix + 'form_edit' + this.sufix;
+                
+                console.log("#"+idForm+" input[name^=primary]");
+                dojo.forEach(dojo.query("#"+idForm+" input[name^=primary]"), function(entry, i) {
                     name = entry.name.replace('primary[', '').replace(']', '');
-                    if (typeof(items[0][name]) != 'undefined') {
-                        entry.value = items[0][name];
+                    if (typeof(item[name]) != 'undefined') {
+                        entry.value = item[name];
                         primaries[name] = entry.value;
                     }
                 });
@@ -310,11 +394,11 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     //Poblar campos con datos fila de datagrid seleccionada
                     dojo.forEach(this.dijitForm.getChildren(), function(entry, i){
                         name = entry.get('name').replace('data[', '').replace(']', '');
-                        if (typeof(items[0][name]) != 'undefined') {
+                        if (typeof(item[name]) != 'undefined') {
                             if (entry.baseClass != 'dijitCheckBox') {
-                                entry.set('value', items[0][name]);
+                                entry.set('value', item[name]);
                             } else {
-                                entry.set('checked', entry.value == items[0][name]);
+                                entry.set('checked', entry.value == item[name]);
                             }
                         }
                     });
@@ -329,12 +413,11 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     var dijitForm = this.dijitForm;
                     
                     for (var primal in primary) {
-                        ids += '&primary['+ primal + ']=' + encodeURIComponent(primary[primal]);
+                        ids += '&primary[' + primal + ']=' + encodeURIComponent(primary[primal]);
                     }
                     if (dijitForm != null) {
-                        var listener = dojo.connect(this.dijitDialog, "onLoad", function(){
-                             if (dijitForm)
-                             var domForm = dojo.byId(dijitForm.id);
+                        var listener = dojo.connect(this.dijitDialog, "onLoad", function() {
+                             if (dijitForm) {var domForm = dojo.byId(dijitForm.id);}
                              for (var id in primary) {
                                  domForm['primary['+ id + ']'].value = primary[id];
                              }
@@ -342,7 +425,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                         });
                     }
                 }
-            }
+            } else console.debug(ids);
             
             this.dijitDialog.set('href', base_url+'components/dojo-simple-crud/'+this.action+'?p='+this.component+'&'+ids+'&'+this.queryParams);
         }

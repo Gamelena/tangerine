@@ -475,11 +475,11 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
                         "stamp" => date("Y-m-d H:i:s")
                 );
                 if ($condition) $logData["condition"] = $condition;
-                Debug::write($logData);
                 $logBook->insert($logData);
             } catch (Zend_Acl_Role_Registry_Exception $e) {
-                //Si se elimina un perfil con permisos asociados se genera esta exception 
-                //ya que aun no son borrados los permisos asociados, estos se borrarán despues.
+                //Si se elimina un perfil con permisos asociados se genera esta Exception 
+                //ya que aun no son borrados los permisos asociados, generando una inconsistencia referencial, 
+                //estos permisos se borrarán despues, una forma de evitar esto es borrando en cascada por ORM o DB.
             }
         }
     }
