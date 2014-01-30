@@ -344,14 +344,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         if ($this->_xml->getAttribute('onRowDblClick')) {
             $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick');
         } else if ($this->_xml->getAttribute('edit')) {
-            $params = array();
-            foreach ($this->getRequest()->getParams() as $i => $v) {
-                if ($i != 'p') {
-                    $params[] = "$i=$v";
-                }
-            }
-            $queryParams = implode('&', $params);
-            
             if (!$this->view->validateGroupEdit) {
                 if (isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple)) {
                     $this->view->onRowDblClick = "
@@ -361,7 +353,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                             action: 'edit',
                             title: 'Editar {$this->_xml->getAttribute("name")}',
                             queryParams: '$queryParams',
-                            prefix: '{$this->view->domPrefix}', 
+                            prefix: '{$_SERVER['QUERY_STRING']}', 
                             dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid'),
                             keys : $jsPrimary
                         }); 
@@ -390,7 +382,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                             ajax: $ajax,
                             component: '{$this->_component}',
                             action: 'edit',
-                            queryParams: '$queryParams',
+                            queryParams: '{$_SERVER['QUERY_STRING']}',
                             dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
                             dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
                             dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
