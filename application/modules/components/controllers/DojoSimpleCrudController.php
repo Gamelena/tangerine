@@ -352,8 +352,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                             component: '{$this->_component}',
                             action: 'edit',
                             title: 'Editar {$this->_xml->getAttribute("name")}',
-                            queryParams: '$queryParams',
-                            prefix: '{$_SERVER['QUERY_STRING']}', 
+                            queryParams: '{$_SERVER['QUERY_STRING']}',
+                            prefix: '{$this->view->domPrefix}',
                             dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid'),
                             keys : $jsPrimary
                         }); 
