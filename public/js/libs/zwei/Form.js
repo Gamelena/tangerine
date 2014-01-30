@@ -206,10 +206,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 self.utils.showMessage('Ha ocurrido un error, o no ha modificado datos', 'error');
             } else if(response.state == 'ADD_FAIL') {
                 self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
-            } else if(response.state == 'DELETE_OK') {
-                self.utils.showMessage('Se ha borrado correctamente.');
-            } else if(response.state == 'DELETE_FAIL') {
-                self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
             }
             dojo.disconnect(listener);
             self.set("response", response);
@@ -260,7 +256,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 items = [items[0]];
             } 
             
-            
             for (var j=0; j<items.length; j++) {
                 if (items[j].i != undefined && items[j].r._items != undefined) {items[j] = items[j].i;}//workaround, a Dojo bug?
                 
@@ -290,6 +285,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                         } else if(response.state == 'DELETE_FAIL') {
                             self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
                         }
+                        self.set("response", response);
                         return response;
                     },
                     error:function(err){
