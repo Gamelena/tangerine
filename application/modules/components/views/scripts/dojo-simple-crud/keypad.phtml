@@ -54,6 +54,7 @@ if ($this->edit) :
                     component: '<?=$this->component?>',
                     action: 'edit',
                     dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
+                    queryParams: '<?=$this->queryParams?>',
                     dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'),
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
                 }); 
@@ -66,6 +67,7 @@ if ($this->edit) :
                     component: '<?=$this->component?>',
                     action: 'edit',
                     title: 'Editar <?=$this->name ?>',
+                    queryParams: '<?=$this->queryParams?>',
                     prefix: '<?=$this->domPrefix?>',
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                     keys : <?=$this->jsPrimary?>

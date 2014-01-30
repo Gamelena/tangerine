@@ -70,6 +70,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
                     action: 'edit',
                     dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
                     dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'),
+                    queryParams: '<?=$this->queryParams?>',
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
                 }); 
                 form.showDialog();
@@ -83,6 +84,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
                     title: 'Editar <?=$this->name ?>',
                     prefix: '<?=$this->domPrefix?>',
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    queryParams: '<?=$this->queryParams?>',
                     keys : <?=$this->jsPrimary?>
                 }); 
                 form.showMultipleDialogs();

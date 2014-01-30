@@ -138,7 +138,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->menus = $this->_config->zwei->layout->menus;
-        $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."?nocache=5\"></script>\n" : '';
+        $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."?nocache=7\"></script>\n" : '';
         if ($this->_xml->xpath("//component/forms")) $forms = $this->_xml->xpath("//component/forms");
         if ($this->_xml->xpath("//component/helpers")) $helpers = $this->_xml->xpath("//component/helpers");
         
@@ -226,6 +226,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->primary = implode(";", $this->_model->info('primary'));
         $this->view->jsPrimary = "['".implode("','",  $this->_model->info('primary'))."']";
         
+        
         $this->view->name = $this->_xml->getAttribute('name');
         
         $this->view->add = $this->_xml->getAttribute('add') && $this->_xml->getAttribute("add") == 'true' && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
@@ -246,7 +247,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? 'true' : 'false';
-        $this->view->queryParams = http_build_query($this->getRequest()->getParams());
+        $this->view->queryParams = $_SERVER["QUERY_STRING"];
         //$this->view->changePassword = $this->_xml->getAttribute("changePassword") && $this->_xml->getAttribute("changePassword") == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT');
     }
 
@@ -343,6 +344,14 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         if ($this->_xml->getAttribute('onRowDblClick')) {
             $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick');
         } else if ($this->_xml->getAttribute('edit')) {
+            $params = array();
+            foreach ($this->getRequest()->getParams() as $i => $v) {
+                if ($i != 'p') {
+                    $params[] = "$i=$v";
+                }
+            }
+            $queryParams = implode('&', $params);
+            
             if (!$this->view->validateGroupEdit) {
                 if (isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple)) {
                     $this->view->onRowDblClick = "
@@ -351,6 +360,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                             component: '{$this->_component}',
                             action: 'edit',
                             title: 'Editar {$this->_xml->getAttribute("name")}',
+                            queryParams: '$queryParams',
                             prefix: '{$this->view->domPrefix}', 
                             dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid'),
                             keys : $jsPrimary
@@ -362,7 +372,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                         var form = new zwei.Form({
                             ajax: $ajax,
                             component: '{$this->_component}',
+                            queryParams: '{$_SERVER['QUERY_STRING']}',
                             action: 'edit',
+                            queryParams: '$queryParams',
                             dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'),
                             dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'),
                             dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
@@ -378,6 +390,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                             ajax: $ajax,
                             component: '{$this->_component}',
                             action: 'edit',
+                            queryParams: '$queryParams',
                             dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
                             dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
                             dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
@@ -400,7 +413,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                 
             }
         }
-        $this->view->queryParams = http_build_query($this->getRequest()->getParams());
+        $this->view->queryParams = $_SERVER["QUERY_STRING"];
         
     }
 
