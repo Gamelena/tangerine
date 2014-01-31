@@ -366,7 +366,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                             component: '{$this->_component}',
                             queryParams: '{$_SERVER['QUERY_STRING']}',
                             action: 'edit',
-                            queryParams: '$queryParams',
                             dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'),
                             dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'),
                             dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
