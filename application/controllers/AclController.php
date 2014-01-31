@@ -29,7 +29,7 @@ class AclController extends Zend_Controller_Action
 
     public function init()
     {
-        $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
+        $this->_acl = new Zwei_Admin_Acl();
         $this->_module = $this->getRequest()->getParam('p', null);//$_REQUEST['module'] esta reservado por ZF
         $this->_permission = $this->getRequest()->getParam('permission', null);
         $this->_itemId = $this->getRequest()->getParam('itemId', null);
