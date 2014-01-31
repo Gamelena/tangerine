@@ -442,7 +442,6 @@ class Zwei_Admin_Acl extends Zend_Acl
                 $model     = new $modelName();
         
                 if (is_a($model, 'Zwei_Db_Table')) {
-                    Debug::write("owner in $modelName?");
                     if ($model->isOwner($itemId)) {
                         $allowed = true;
                     }
@@ -453,18 +452,6 @@ class Zwei_Admin_Acl extends Zend_Acl
     }
     
     
-    /**
-     * Verifica si usuario en sesión tiene tal permiso en tal módulo 
-     * [FIXME] está repetida debería deprecarse y borrarse.
-     * 
-     * @param $permission string
-     * @param $resource string
-     * @return boolean
-     */
-    public function isActionResourceAllowed($permission, $resource)
-    {
-        return ($this->isAllowed($this->_userInfo->acl_roles_id, $resource, $permission));
-    }
     
     /**
      * Verifica si sesión de usuario tiene acceso a módulo $_REQUEST['p']

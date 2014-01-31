@@ -231,6 +231,12 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         return parent::delete($where);
     }
 
+    /**
+     * Se setea attributo $this->_label el cual puede ser usado (por ejemplo) para almacenes de datos js como dojo.data.ItemFileReadStore
+     * 
+     * @param string $value
+     * @return void
+     */
     public function setLabel($value)
     {
         $this->_label = $value;
@@ -337,8 +343,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     }
     
     /**
-     * 
-     * @return multitype:
+     * Cuentame más: retorno de información auxiliar que puede ser util despues de ejecutar una operación crud.
+     * @return array
      */
     public function getMore()
     {
@@ -360,6 +366,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * Activar o desactivar funcionalidad de usar parametros de búsqueda en XML de forma automática
      * @param boolean $value
+     * @return void
      */
     public function disableAutoSearch($value = true)
     {
@@ -369,7 +376,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * Convierte un string "string sql where" a un array asociativo campo=>valor
      * @param $string
-     * @return array()
+     * @return array
      */
 
     public function whereToArray($where)
@@ -389,8 +396,12 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         return $return;
     }
     
-    
-    public function getPrimary() {
+    /**
+     * get primary key
+     * @deprecated use $this->info(Zend_Db_Table::PRIMARY) instead
+     */
+    public function getPrimary()
+    {
         return (isset($this->_primary)) ? $this->_primary : false;
     } 
     

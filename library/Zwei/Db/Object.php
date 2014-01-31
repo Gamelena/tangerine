@@ -126,7 +126,13 @@ class Zwei_Db_Object
         if (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($this->_select->getAdapter()->getConfig(), 'query_log');
         return $this->_select;
     }
-    
+    /**
+     * Recarga objeto Zend_Db_Select con parametros generados en buscador de Admportal
+     * 
+     * @param string $i nombre del campo
+     * @param array('operator', 'prefix', 'sufix') $s contiene operador, valor, sufijo, prefijo
+     * @return void
+     */
     protected function iterateSearcher($i, $s)
     {
         $field = !strstr($i, ".") && !empty($i) ? "`$i`" : $i;
@@ -149,11 +155,11 @@ class Zwei_Db_Object
         
         
             /**
-             * BETWEEN se aplica sobre un campo único, la diferencia en los valores las hacen los sufijos y prefijos concatenados al valor del campo
+             * 'between' se aplica sobre un campo único, la diferencia en los valores las hacen los sufijos y prefijos concatenados al valor del campo
              * La razón del soporte de BETWEEN es poder usar un CAMPO ÚNICO + sufijos y prefijos,
              * esto es preferible a usar funciones SQL sobre columnas (por ejemplo DATE_FORMAT) ya que al transformar la columna inutilizamos sus índices.
              *
-             * NO se puede usar BETWEEN entre campos diferentes, para esto deben usarse los operadores <, >, <=, >= que hacen lo mismo con la misma performance.
+             * NO se puede usar 'between' entre campos diferentes, para esto deben usarse los operadores <, >, <=, >= que hacen lo mismo con la misma performance y son compatibles con Zend_Db_Select.
              *
              * @example
              * "WHERE fecha >= '$fecha 00:00:00' AND fecha <= '$fecha 23:59:59' ",

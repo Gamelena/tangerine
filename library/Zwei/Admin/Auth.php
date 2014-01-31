@@ -72,7 +72,8 @@ class Zwei_Admin_Auth
      * Authentification params against DB Table
      * @return Zend_Auth_Adapter_DbTable
      */
-    public function getAuthAdapter($hash = 'MD5') {
+    public function getAuthAdapter($hash = 'MD5')
+    {
         $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
         $dbAdapter = isset($resource) && $resource->getDb("auth") ?
         $resource->getDb("auth") :
@@ -98,7 +99,8 @@ class Zwei_Admin_Auth
     }
     
     
-    public static function initUserInfo($authAdapter) {
+    public static function initUserInfo($authAdapter)
+    {
         $auth = Zend_Auth::getInstance();
         $userInfo = $authAdapter->getResultRowObject(null, 'password');
         
