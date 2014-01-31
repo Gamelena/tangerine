@@ -315,7 +315,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     }
                 }
                 
-                var dialogId = (this.prefix + 'dialog_' + this.action + this.sufix).trim();
+                var dialogId = this.prefix + 'dialog_' + this.action + this.sufix;
                 
                 if (dijit.byId(dialogId) == undefined) {
                     this.dijitDialog = new dojox.widget.DialogSimple({
@@ -344,6 +344,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
     showDialog: function() {
         var ids = '';
         var primaries = {};
+        var item;
         
         if (this.dijitDialog == null) {
             var dialogId = this.prefix + 'dialog_' + this.action;
