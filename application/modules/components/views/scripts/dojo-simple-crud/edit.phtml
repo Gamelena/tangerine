@@ -107,8 +107,10 @@ endif;
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
                 iframe: dojo.byId('ifrm_process')
             });
+            console.log('post form');
             <?=$this->onSubmit ?>
-            
+            console.log('post submit');
+            var name, oldValue, response;
             var observer = form.watch("response", function(name, oldValue, response) {
                 if (response != null) {
                     <?=$this->onPostSubmit ?>
@@ -116,7 +118,9 @@ endif;
                     else if (response.todo == 'cargarArbolMenu') admportal.loadMainMenu();
                     this.set("response", null);
                 }
+                console.log('observer');
             });
+
             form.save();
             
         } catch (e) {
