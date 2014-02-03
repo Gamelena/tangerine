@@ -216,7 +216,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         if (this.iframe.attachEvent) {
             this.iframe.attachEvent('onload', listener);
         } else {
-            this.iframe.onload = function() {listener} 
+            dojo.connect(this.iframe, 'onload', listener); 
         } 
        
        
