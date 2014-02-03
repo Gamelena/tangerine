@@ -176,7 +176,8 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         var self = this;
 
         //escuchar al iframe, como si el post normal hablara en ajax pero con posibilidad de hacer file uploads :)
-        var listener = dojo.connect(this.iframe, "onload", function() {
+
+        var listener = function() {
             //Desmarcar checkbox con valores negativos
             dojo.forEach(fakeChecked, function(entry, i) {
                 entry.set('value', entry.get('bkpvalue'));
@@ -192,6 +193,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 rawResponse = dojo.byId(iframeId).contentDocument.getElementsByTagName('body')[0].innerHTML;
             
             var response = dojo.json.parse(rawResponse);
+            
                         
             if (response.message != '' && response.message != null) {
                 self.utils.showMessage(response.message, response.type);
@@ -207,10 +209,16 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             } else if(response.state == 'ADD_FAIL') {
                 self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
             }
-            dojo.disconnect(listener);
+            //dojo.disconnect(listener);
             self.set("response", response);
-        });
+        }
         
+        if (this.iframe.attachEvent) {
+            this.iframe.attachEvent('onload', listener);
+        } else {
+            this.iframe.onload = function() {listener} 
+        } 
+       
        
         //Enviar valores "negativos" para los checkboxes sin marcar, estos son temporalmente chequeados
         dojo.forEach(this.dijitForm.getChildren(), function(entry, i) {
@@ -344,7 +352,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
     showDialog: function() {
         var ids = '';
         var primaries = {};
-        var item;
         
         if (this.dijitDialog == null) {
             var dialogId = this.prefix + 'dialog_' + this.action;
@@ -361,6 +368,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         if (this.dijitDataGrid != null && this.dijitForm != null) {
             globalOpc = this.action;
             var name;
+            var item;
             if (this.action != 'add') {
                 if (this.row == null) {
                     var items = this.dijitDataGrid.selection.getSelected();
