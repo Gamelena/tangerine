@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `acl_roles` (
   `role_name` char(64) NOT NULL,
   `description` char(100) CHARACTER SET utf8 NOT NULL,
   `approved` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
+  `must_refresh` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_name` (`role_name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
