@@ -205,7 +205,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                 }
                 $select->where($a->quoteInto($a->quoteIdentifier($i). " = ?", $v));
             }
-            Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
+            if (method_exists($select, '__toString')) Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
             $data = $this->_model->fetchRow($select);
             if ($this->view->multiForm) {
                 $this->view->dialogIndex = '';
@@ -215,7 +215,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                 $this->view->dialogIndex = Zwei_Utils_String::toVarWord($this->view->dialogIndex);
             }
             //Es posible añadir más valores al retorno de la query principal sobrecargando este método.
-            $this->view->data = $this->_model->overloadDataForm($data);
+            $this->view->data = $data;
+            if (method_exists($select, 'overloadDataForm')) $this->view->data = $this->_model->overloadDataForm($data);
         }
         $this->view->includeJs = $this->_xml->getAttribute('jsForm') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('jsForm')."?nocache=5\"></script>" : '';
     }
