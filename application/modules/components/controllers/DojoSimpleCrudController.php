@@ -216,7 +216,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             }
             //Es posible añadir más valores al retorno de la query principal sobrecargando este método.
             $this->view->data = $data;
-            if (method_exists($select, 'overloadDataForm')) $this->view->data = $this->_model->overloadDataForm($data);
+            if (method_exists($this->_model, 'overloadDataForm')) $this->view->data = $this->_model->overloadDataForm($data);
         }
         $this->view->includeJs = $this->_xml->getAttribute('jsForm') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('jsForm')."?nocache=5\"></script>" : '';
     }
