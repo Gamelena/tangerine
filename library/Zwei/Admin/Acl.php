@@ -367,13 +367,14 @@ class Zwei_Admin_Acl extends Zend_Acl
      */
     public function userHasGroupsAllowed($module, $permission, $itemId = null)
     {
+        /*
         $frontend = array(
             'lifetime' => 86400, // cache lifetime of 24 hours (time is in seconds)
             'automatic_serialization' => true  //default is false
         );
         $backend = array('cache_dir' => ROOT_DIR . '/cache');
         $cache = Zend_Cache::factory('Core', 'File', $frontend, $backend);
-        
+        */
         $aclModulesModel = new AclModulesModel();
         if ($this->_moduleRow == null) {
             $this->_moduleRow = $aclModulesModel->findModule($module);
@@ -382,6 +383,7 @@ class Zwei_Admin_Acl extends Zend_Acl
         $resource        = $moduleRow->id;
         
         $groups = $this->_userInfo->groups;
+        
         if (!empty($groups)) {
             $groups                 = implode(",", $groups);
             $aclModulesActionsModel = new DbTable_AclModulesActions();
@@ -399,7 +401,8 @@ class Zwei_Admin_Acl extends Zend_Acl
             foreach ($aclModulesActions as $rowAclModulesActions) {
                 //Si $itemId es nulo, sólo se verifica que el grupo tenga la acción cualquiera sobre el módulo en acl_groups_modules_actions .
                 $varReturn = "groupsAllowed{$this->_userInfo->id}{$itemId}{$rowAclModulesActions->id}";
-                if (!$$varReturn = $cache->load($varReturn)){ 
+                
+                //if (!$$varReturn = $cache->load($varReturn)){ 
                     $aclGMAModel = new AclGroupsModulesActionsModel();
                     $select      = $aclGMAModel->select();
                     $where       = array();
@@ -411,10 +414,10 @@ class Zwei_Admin_Acl extends Zend_Acl
                     }
                     Debug::writeBySettings($select->__toString(), 'query_log');
                     $$varReturn =  $aclGMAModel->fetchRow($select) ? true : false;
-                    $cache->save($$varReturn, $varReturn);
-                } else {
-                    Debug::write('usando cache');
-                }
+                    //$cache->save($$varReturn, $varReturn);
+                //} else {
+                    //Debug::write('usando cache');
+                //}
                 return $$varReturn;
             }
         } else {
