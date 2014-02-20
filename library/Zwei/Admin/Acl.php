@@ -376,9 +376,9 @@ class Zwei_Admin_Acl extends Zend_Acl
         $cache = Zend_Cache::factory('Core', 'File', $frontend, $backend);
         */
         $aclModulesModel = new AclModulesModel();
-        if ($this->_moduleRow == null) {
+        //if ($this->_moduleRow == null) {
             $this->_moduleRow = $aclModulesModel->findModule($module);
-        }
+        //}
         $moduleRow       = $this->_moduleRow;
         $resource        = $moduleRow->id;
         
@@ -400,7 +400,7 @@ class Zwei_Admin_Acl extends Zend_Acl
             
             foreach ($aclModulesActions as $rowAclModulesActions) {
                 //Si $itemId es nulo, sólo se verifica que el grupo tenga la acción cualquiera sobre el módulo en acl_groups_modules_actions .
-                $varReturn = "groupsAllowed{$this->_userInfo->id}{$itemId}{$rowAclModulesActions->id}";
+                //$varReturn = "groupsAllowed{$this->_userInfo->id}{$itemId}{$rowAclModulesActions->id}";
                 
                 //if (!$$varReturn = $cache->load($varReturn)){ 
                     $aclGMAModel = new AclGroupsModulesActionsModel();
@@ -413,12 +413,12 @@ class Zwei_Admin_Acl extends Zend_Acl
                         $select->where($aclGMAModel->getAdapter()->quoteInto('acl_modules_item_id = ?', $itemId));
                     }
                     Debug::writeBySettings($select->__toString(), 'query_log');
-                    $$varReturn =  $aclGMAModel->fetchRow($select) ? true : false;
+                    $varReturn =  $aclGMAModel->fetchRow($select) ? true : false;
                     //$cache->save($$varReturn, $varReturn);
                 //} else {
                     //Debug::write('usando cache');
                 //}
-                return $$varReturn;
+                return $varReturn;
             }
         } else {
             return false;
