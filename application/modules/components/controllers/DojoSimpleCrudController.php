@@ -89,8 +89,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      * @var Zend_Db_Table_Row
      */
     private $_module = null;
+    
     /**
-     * (non-PHPdoc)
+     * Post constructor
      * @see Zend_Controller_Action::init()
      */
     public function init()
@@ -100,7 +101,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $this->_config = Zwei_Controller_Config::getOptions();
         $this->view->multiForm = isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple) ? true : false;
-        
+        $this->view->noCache = isset($config->zwei->resources) ? $config->zwei->resources->noCache : '';
         
         if ($this->getRequest()->getParam('p')) {
             $this->_component = $this->getRequest()->getParam('p');
@@ -138,7 +139,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->menus = $this->_config->zwei->layout->menus;
-        $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."?nocache=8\"></script>\n" : '';
+        $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."?noCache={$this->view->noCache}\"></script>\n" : '';
         if ($this->_xml->xpath("//component/forms")) $forms = $this->_xml->xpath("//component/forms");
         if ($this->_xml->xpath("//component/helpers")) $helpers = $this->_xml->xpath("//component/helpers");
         
@@ -218,7 +219,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->view->data = $data;
             if (method_exists($this->_model, 'overloadDataForm')) $this->view->data = $this->_model->overloadDataForm($data);
         }
-        $this->view->includeJs = $this->_xml->getAttribute('jsForm') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('jsForm')."?nocache=5\"></script>" : '';
+        $this->view->includeJs = $this->_xml->getAttribute('jsForm') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('jsForm')."?noCache={$this->view->noCache}\"></script>" : '';
     }
     
     public function initKeys()

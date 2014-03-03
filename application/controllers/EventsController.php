@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Controlador que valida estatus de sesion en curso.
+ * 
+ * @todo cambiar los echo de javascript por una respuesta json que sea recogida por el listener js que invoca a esta url.
+ *
+ */
 class EventsController extends Zend_Controller_Action
 {
 
@@ -51,6 +56,9 @@ class EventsController extends Zend_Controller_Action
             }
         }
     }
+    /**
+     * Actualiza los permisos del perfil en uso.
+     */
     public function updateRoleAction()
     {
         $auth = Zend_Auth::getInstance();

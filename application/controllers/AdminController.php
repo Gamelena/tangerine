@@ -26,11 +26,6 @@ class AdminController extends Zend_Controller_Action
     private $_template = TEMPLATE;
     /**
      *
-     * @var int
-     */
-    private $_version = 10;
-    /**
-     *
      * @var Zwei_Db_Table
      */
     private $_model;
@@ -56,6 +51,7 @@ class AdminController extends Zend_Controller_Action
         $this->view->base_url = BASE_URL;
         $this->baseDojoFolder = isset($config->zwei->js->dojo->baseUrl) ? $config->zwei->js->dojo->baseUrl : '/dojotoolkit';
         if (isset($config->resources->dojo->cdnbase)) $this->baseDojoFolder = $config->resources->dojo->cdnbase . '/' . $config->resources->dojo->cdnversion;
+        $this->view->noCache = isset($config->zwei->resources) ? $config->zwei->resources->noCache : ''; 
         
         if (!empty($confLayout->dojoTheme)) $this->_dojoTheme = $confLayout->dojoTheme;
         if (!empty($confLayout->template)) $this->_dojoTheme = $confLayout->layout->template;
@@ -152,7 +148,7 @@ class AdminController extends Zend_Controller_Action
             @import "'.$this->baseDojoFolder.'/dojox/layout/resources/ExpandoPane.css";
             @import "'.$this->baseDojoFolder.'/dojox/form/resources/FileInput.css";
             @import "'.$this->baseDojoFolder.'/dojox/widget/Toaster/Toaster.css";
-            @import "'.BASE_URL.'css/admin.css?version='.$this->_version.'";
+            @import "'.BASE_URL.'css/admin.css?version='.$this->_view->noCache.'";
         ');
     }
 
