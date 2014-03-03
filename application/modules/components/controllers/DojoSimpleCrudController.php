@@ -101,7 +101,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $this->_config = Zwei_Controller_Config::getOptions();
         $this->view->multiForm = isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple) ? true : false;
-        $this->view->noCache = isset($config->zwei->resources) ? $config->zwei->resources->noCache : '';
+        $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : '';
         
         if ($this->getRequest()->getParam('p')) {
             $this->_component = $this->getRequest()->getParam('p');
