@@ -177,7 +177,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
 
         //escuchar al iframe, como si el post normal hablara en ajax pero con posibilidad de hacer file uploads :)
 
-        var listener = function() {
+        var postSave = function() {
             //Desmarcar checkbox con valores negativos
             dojo.forEach(fakeChecked, function(entry, i) {
                 entry.set('value', entry.get('bkpvalue'));
@@ -209,14 +209,20 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             } else if(response.state == 'ADD_FAIL') {
                 self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
             }
-            //dojo.disconnect(listener);
+            
+            if (self.iframe.detachEvent) {
+                self.iframe.detachEvent('onload', postSave);
+            } else {
+                dojo.disconnect(listener);
+            }
+            
             self.set("response", response);
         }
         
         if (this.iframe.attachEvent) {
-            this.iframe.attachEvent('onload', listener);
+            this.iframe.attachEvent('onload', postSave);
         } else {
-            dojo.connect(this.iframe, 'onload', listener); 
+            var listener = dojo.connect(this.iframe, 'onload', postSave); 
         } 
        
        
