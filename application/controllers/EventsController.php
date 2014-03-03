@@ -10,9 +10,13 @@ class EventsController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $this->view->response = array('status' => 'OK');
+        
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity())
         {
-            echo "<script>window.parent.location.href='".BASE_URL."admin/login';</script>";
+            $this->view->response['status'] = 'AUTH_FAILED';
+            $this->render();
+            //echo "<script>window.parent.location.href='".BASE_URL."admin/login';</script>";
         } else {
             $auth = Zend_Auth::getInstance();
             $authInfo = $auth->getStorage()->read();
@@ -26,7 +30,9 @@ class EventsController extends Zend_Controller_Action
                 $userModel = new DbTable_AclUsers();
                 $userFind = $userModel->find($authInfo->id);
                 if ($userFind->count() <= 0) {
-                    exit("<script>window.parent.location.href='".BASE_URL."admin/login';</script>");
+                    $this->view->response['status'] = 'AUTH_FAILED';
+                    $this->render();
+                    //exit("<script>window.parent.location.href='".BASE_URL."admin/login';</script>");
                 } else {
                     $currentUser = $userFind->current();
                 }
@@ -42,17 +48,18 @@ class EventsController extends Zend_Controller_Action
                 if ($result->isValid()) {
                     Zwei_Admin_Auth::initUserInfo($authAdapter);
                     $acl = new Zwei_Admin_Acl();
-                    echo "<script>window.parent.admportal.loadMainMenu();</script>";
+                    $this->view->response['status'] = 'ROLE_HAS_CHANGED';
+                    //echo "<script>window.parent.admportal.loadMainMenu();</script>";
                 } else {
-                    echo "<script>window.parent.location.href='".BASE_URL."admin';</script>";
+                    $this->view->response['status'] = 'AUTH_FAILED';
+                    //echo "<script>window.parent.location.href='".BASE_URL."admin';</script>";
                     $this->render();
                 }
-                
-
-                
+                /*
                 echo "<script>
                    window.parent.document.getElementById('ifrm_process').src = '".BASE_URL."events/update-role';
                       </script>";
+                */
             }
         }
     }
