@@ -78,7 +78,7 @@ class EventsController extends Zend_Controller_Action
     
             $currentRole->must_refresh = '0';
             if ($currentRole->save()) {
-                $this->view->response['status'] = 'UPDATE_FAILED';
+                $this->view->response['status'] = 'UPDATE_OK';
             }
         } else {
             $this->view->response['status'] = 'AUTH_FAILED';

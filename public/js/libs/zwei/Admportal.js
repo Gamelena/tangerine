@@ -2,11 +2,11 @@ dojo.declare("zwei.Admportal", null, {
     constructor: function(args){
         dojo.mixin(this, args);
     },
-    initLoad: function(layout) 
+    initLoad: function() 
     {
         this.loadEvents();
         this.loadLayoutSettings(dojo.byId("logosAdm"),dojo.byId("tituloAdm"), dojo.byId("zweicomLogo"), dojo.byId("zweicomLegend"));
-        this.loadMainMenu(layout);
+        this.loadMainMenu();
     },
     loadEvents: function()
     {
@@ -56,7 +56,6 @@ dojo.declare("zwei.Admportal", null, {
     },
     loadMainMenu: function(layout) 
     {
-        if (layout == undefined) var layout = false;
         var self = this;
         require(["dojo/data/ItemFileWriteStore", "dijit/Tree", "dijit/tree/ForestStoreModel"], function(ItemFileWriteStore, Tree, ForestStoreModel){
             var store = new ItemFileWriteStore({
@@ -66,20 +65,18 @@ dojo.declare("zwei.Admportal", null, {
                 label: 'label',
                 urlPreventCache:true
             });
-            store.fetch({
-                onComplete: function(items, request){
-                    if(items) {
-                        var i;
-                    }
-                },
-                queryOptions: {
-                    deep: true
-                }
-            });
-            var treeModel = new ForestStoreModel({
-                store: store
-            });
+
             if (!dijit.byId('arbolPrincipal')) {
+                store.fetch({
+                    onComplete: function(items, request){
+                    },
+                    queryOptions: {
+                        deep: true
+                    }
+                });
+                var treeModel = new ForestStoreModel({
+                    store: store
+                });
                 var treeControl = new Tree({
                     model: treeModel,
                     showRoot: false,
@@ -119,6 +116,7 @@ dojo.declare("zwei.Admportal", null, {
             } else {
                 var tree = dijit.byId('arbolPrincipal');
                 
+                
                 tree.dndController.selectNone();
     
                 tree.model.store.clearOnClose = true;
@@ -128,12 +126,14 @@ dojo.declare("zwei.Admportal", null, {
                 tree._itemNodesMap = {};
                 tree.rootNode.state = "UNCHECKED";
                 tree.model.root.children = null;
+                //tree.getParent().setContent('<p>&nbsp;&nbsp;Cargando ...</p>');
     
                 // Destroy the widget
                 tree.rootNode.destroyRecursive();
     
                 // Recreate the model, (with the model again)
                 tree.model.constructor(dijit.byId('arbolPrincipal').model)
+                //tree.getParent().setContent('<p>&nbsp;&nbsp;Cargando ...</p>');
     
                 // Rebuild the tree
                 tree.postMixInProperties();
