@@ -12,11 +12,9 @@ class EventsController extends Zend_Controller_Action
     {
         $this->view->response = array('status' => 'OK');
         
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity())
-        {
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             $this->view->response['status'] = 'AUTH_FAILED';
             $this->render();
-            //echo "<script>window.parent.location.href='".BASE_URL."admin/login';</script>";
         } else {
             $auth = Zend_Auth::getInstance();
             $authInfo = $auth->getStorage()->read();
@@ -32,7 +30,6 @@ class EventsController extends Zend_Controller_Action
                 if ($userFind->count() <= 0) {
                     $this->view->response['status'] = 'AUTH_FAILED';
                     $this->render();
-                    //exit("<script>window.parent.location.href='".BASE_URL."admin/login';</script>");
                 } else {
                     $currentUser = $userFind->current();
                 }
@@ -49,17 +46,10 @@ class EventsController extends Zend_Controller_Action
                     Zwei_Admin_Auth::initUserInfo($authAdapter);
                     $acl = new Zwei_Admin_Acl();
                     $this->view->response['status'] = 'ROLE_HAS_CHANGED';
-                    //echo "<script>window.parent.admportal.loadMainMenu();</script>";
                 } else {
                     $this->view->response['status'] = 'AUTH_FAILED';
-                    //echo "<script>window.parent.location.href='".BASE_URL."admin';</script>";
                     $this->render();
                 }
-                /*
-                echo "<script>
-                   window.parent.document.getElementById('ifrm_process').src = '".BASE_URL."events/update-role';
-                      </script>";
-                */
             }
         }
     }
@@ -69,6 +59,7 @@ class EventsController extends Zend_Controller_Action
     public function updateRoleAction()
     {
         $auth = Zend_Auth::getInstance();
+        $this->view->response = array('status' => 'UPDATE_FAILED');
         if ($auth->hasIdentity()) {
             $authInfo = $auth->getStorage()->read();
             $aclRolesId = $authInfo->acl_roles_id;
@@ -86,7 +77,11 @@ class EventsController extends Zend_Controller_Action
             $currentRole = $aclRoles->find($aclRolesId)->current();
     
             $currentRole->must_refresh = '0';
-            $currentRole->save();
+            if ($currentRole->save()) {
+                $this->view->response['status'] = 'UPDATE_FAILED';
+            }
+        } else {
+            $this->view->response['status'] = 'AUTH_FAILED';
         }
     }
     
