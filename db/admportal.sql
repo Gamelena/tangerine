@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS `acl_users` (
   `email` char(50) NOT NULL,
   `approved` enum('0','1') NOT NULL,
   `foto` varchar(256) DEFAULT NULL,
+  `must_refresh` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name` (`user_name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
