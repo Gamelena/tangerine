@@ -1,6 +1,10 @@
 dojo.declare("zwei.Admportal", null, {
-    constructor: function(args){
+    intervalListener: null,
+    utils: null,
+    constructor: function(args)
+    {
         dojo.mixin(this, args);
+        if (typeof zwei.Utils != 'undefined') this.utils = new zwei.Utils();
     },
     initLoad: function() 
     {
@@ -16,6 +20,48 @@ dojo.declare("zwei.Admportal", null, {
         dojo.connect(dijit.byId("tabContainer"), "selectChild", function(page){ 
             globalModuleId = parseInt(page.id.match(/\d+$/)); 
         });
+    },
+    initListeners: function()
+    {
+        var self = this;
+        this.intervalListener = setInterval(function(){self.listenUserStatus();}, 10000);
+    },
+    listenUserStatus: function()
+    {
+        var self = this;
+        var xhrArgsUpdateRole = {
+            url: base_url + 'events/update-role',
+            preventCache: true,
+            handleAs: "json",
+            load: function(data) {
+                if (data.status == 'AUTH_FAILED') {
+                    window.location.href = base_url + 'admin/login';
+                } else {
+                    self.intervalListener = setInterval(function(){self.listenUserStatus();}, 10000);
+                }
+            }
+        };
+        
+        var xhrArgsEvents = {
+            url: base_url + 'events',
+            preventCache: true,
+            handleAs: "json",
+            load: function(data) {
+                if (data.status != 'OK') {
+                    if (data.status == 'AUTH_FAILED') {
+                        window.location.href = base_url + 'admin/login';
+                    } else if (data.status == 'ROLE_HAS_CHANGED') {
+                        self.loadMainMenu();
+                        clearInterval(self.intervalListener);
+                        dojo.xhrPost(xhrArgsUpdateRole);
+                    } 
+                }
+            },
+            error: function(error){
+                window.location.href=base_url + 'admin/login';
+            }
+        };
+        dojo.xhrPost(xhrArgsEvents);
     },
     loadLayoutSettings: function(domLogo, domTitle, domFooterImg, domFooterLegend) 
     {
@@ -115,7 +161,6 @@ dojo.declare("zwei.Admportal", null, {
                 'arbolPrincipal');
             } else {
                 var tree = dijit.byId('arbolPrincipal');
-                
                 
                 tree.dndController.selectNone();
     
