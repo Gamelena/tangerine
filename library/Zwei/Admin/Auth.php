@@ -88,8 +88,8 @@ class Zwei_Admin_Auth
         ->setIdentityColumn($authUserName)
         ->setCredentialColumn($authPassword);
         
-        if ($hash == 'MD5') {
-            $authAdapter->setCredentialTreatment('MD5(?) and approved="1"');
+        if (!empty($hash)) {
+            $authAdapter->setCredentialTreatment($hash.'(?) and approved="1"');
         } else {
             $authAdapter->setCredentialTreatment('? and approved="1"');
         }
@@ -98,11 +98,15 @@ class Zwei_Admin_Auth
         return $authAdapter;
     }
     
-    
+    /**
+     * 
+     * @param Zend_Auth_Adapter_DbTable $authAdapter
+     */
     public static function initUserInfo($authAdapter)
     {
         $auth = Zend_Auth::getInstance();
         $userInfo = $authAdapter->getResultRowObject(null, 'password');
+        $db = Zend_Db_Table::getDefaultAdapter();
         
         $options = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
         $config = new Zend_Config($options);
@@ -124,6 +128,22 @@ class Zwei_Admin_Auth
         
         $userInfo->groups = $groups;
         $authStorage->write($userInfo);
+        
+        try {
+            if ($db->describeTable('acl_session')) {
+                $aclSession = new AclSessionModel();
+                $row = $aclSession->find(Zend_Session::getId())->current();
+                if ($row) {
+                    $row->acl_users_id = $userInfo->id;
+                    $row->acl_roles_id = $userInfo->acl_roles_id;
+                    $row->ip = $_SERVER['REMOTE_ADDR'];
+                    $row->save();
+                } else {
+                    $r = new Zend_Controller_Action_Helper_Redirector();
+                    $r->gotoUrl('/admin/login')->redirectAndExit();
+                }
+            }
+        } catch (Exception $e) {} //PDOException is not catched :facepalm:
     }
 }
 

@@ -233,7 +233,20 @@ CREATE TABLE IF NOT EXISTS `log_book` (
   `ip` char(200) NOT NULL,
   `stamp` datetime NOT NULL
 ) ENGINE=MyIsam DEFAULT CHARSET=utf8;
+-- --------------------------------------------------------
 
+DROP TABLE IF EXISTS `acl_session`;
+
+CREATE TABLE IF NOT EXISTS `acl_session` (
+  `id` char(32) NOT NULL DEFAULT '0',
+  `acl_users_id` int(11) NOT NULL,
+  `acl_roles_id` int(11) NOT NULL,
+  `modified` int(11) DEFAULT NULL,
+  `lifetime` int(11) DEFAULT NULL,
+  `data` text,
+  `ip` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Estructura para la vista `tables_logged`
