@@ -137,6 +137,7 @@ class Zwei_Admin_Auth
                     $row->acl_users_id = $userInfo->id;
                     $row->acl_roles_id = $userInfo->acl_roles_id;
                     $row->ip = $_SERVER['REMOTE_ADDR'];
+                    $row->user_agent = $_SERVER['HTTP_USER_AGENT'];
                     $row->save();
                 } else {
                     $r = new Zend_Controller_Action_Helper_Redirector();

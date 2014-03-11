@@ -65,8 +65,13 @@ CALL addColumnUnlessExists(Database(), 'acl_modules', 'ownership', 'enum("0","1"
 CALL addColumnUnlessExists(Database(), 'acl_roles', 'must_refresh', 'enum("0","1") NOT NULL DEFAULT "0"');
 CALL addColumnUnlessExists(Database(), 'acl_users', 'must_refresh', 'enum("0","1") NOT NULL DEFAULT "0"');
 
-DROP TABLE IF EXISTS `acl_session`;
+-- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `acl_session`
+--
+
+DROP TABLE IF EXISTS `acl_session`;
 CREATE TABLE IF NOT EXISTS `acl_session` (
   `id` char(32) NOT NULL DEFAULT '0',
   `acl_users_id` int(11) NOT NULL,
@@ -75,6 +80,7 @@ CREATE TABLE IF NOT EXISTS `acl_session` (
   `lifetime` int(11) DEFAULT NULL,
   `data` text,
   `ip` varchar(20) NOT NULL,
+  `user_agent` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
