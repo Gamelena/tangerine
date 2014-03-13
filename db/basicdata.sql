@@ -25,16 +25,16 @@ INSERT INTO `acl_actions` (`id`, `title`) VALUES
 -- Volcado de datos para la tabla `acl_modules`
 --
 
-INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `linkable`, `type`, `approved`, `order`, `root`) VALUES
-(9, 1, 'Variables', 'settings.xml', '1', '1', 'xml', '1', 0, '1'),
-(8, 1, 'Perfiles', 'roles.xml', '1', '1', 'xml', '1', 0, '1'),
-(7, 1, 'Servidor', 'phpinfo.xml', '1', '1', 'xml', '1', 0, '1'),
-(6, 1, 'Permisos', 'permissions.xml', '0', '1', 'xml', '0', 0, '1'),
-(5, 1, 'Usuarios', 'users.xml', '1', '1', 'xml', '1', 0, '0'),
-(4, 1, 'M&oacute;dulos', 'modules.xml', '1', '1', 'xml', '1', 7, '1'),
-(3, NULL, 'Datos Personales', 'personal-info.xml', '0', '0', 'xml', '1', 0, '0'),
-(2, NULL, 'Reportes Generales', NULL, '1', '0', 'xml', '1', 6, '0'),
-(1, NULL, 'Configuraci&oacute;n', NULL, '1', '0', 'xml', '1', 11, '0');
+INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `type`, `approved`, `order`, `root`) VALUES
+(9, 1, 'Variables', 'settings.xml', '1', 'xml', '1', 0, '1'),
+(8, 1, 'Perfiles', 'roles.xml', '1', 'xml', '1', 0, '1'),
+(7, 1, 'Servidor', 'phpinfo.xml', '1', 'xml', '1', 0, '1'),
+(6, 1, 'Permisos', 'permissions.xml', '0', 'xml', '0', 0, '1'),
+(5, 1, 'Usuarios', 'users.xml', '1', '1',  '1', 0, '0'),
+(4, 1, 'M&oacute;dulos', 'modules.xml', '1', 'xml', '1', 7, '1'),
+(3, NULL, 'Datos Personales', 'personal-info.xml', '0', 'xml', '1', 0, '0'),
+(2, NULL, 'Reportes Generales', NULL, '1', 'xml', '1', 6, '0'),
+(1, NULL, 'Configuraci&oacute;n', NULL, '1', 'xml', '1', 11, '0');
 
 -- --------------------------------------------------------
 
