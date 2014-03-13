@@ -8,6 +8,7 @@
             <xsd:element name="searchers" type="searchersType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="forms" type="formsType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="helpers" type="helpersType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="pane" type="paneType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:choice>
         <xsd:attribute name="target" use="required" type="xsd:normalizedString"/>
         <xsd:attribute name="type" use="required" type="componentTypeType" />
@@ -92,6 +93,11 @@
             <xsd:element name="excel" type="elementType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
+    <xsd:complexType name="PaneType">
+        <xsd:attribute name="onshow"/>
+        <xsd:attribute name="onhide"/>
+        <xsd:attribute name="name"/>
+    </xsd:complexType>
     <xsd:complexType name="tabsType">
         <xsd:sequence>
             <xsd:element name="tab" type="elementsType" minOccurs="1" maxOccurs="unbounded"/>
@@ -132,8 +138,7 @@
         <xsd:attribute name="target"/>
         <xsd:attribute name="onclick"/>
         <xsd:attribute name="name"/>
-        <xsd:attribute name="iconClass"/>
-        <xsd:attribute name="disabled" type="xsd:boolean"/>
+        <xsd:attribute name="icon"/>
     </xsd:complexType>
     <xsd:complexType name="elementType">
         <xsd:choice minOccurs="0" maxOccurs="unbounded">

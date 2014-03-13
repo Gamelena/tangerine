@@ -227,11 +227,9 @@ class CrudRequestController extends Zend_Controller_Action
                         if (!method_exists($this->_model, 'count') || $this->_model->count() === false) {
                             $data      = $this->_model->overloadDataList($data);
                             $countData = count($data);
-                            Debug::write($countData);
                             if ($numRows < $countData) {
                                 $numRows = $countData;
                             }
-                            Debug::write($numRows);
                         }
                     }
                     

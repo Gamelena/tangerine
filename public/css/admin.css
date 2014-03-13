@@ -170,7 +170,6 @@ input,textarea,select {
     padding-top: 5px;
     font-size: 23px;
     color: #fff;
-    font-weight: bold;
     text-shadow: 0.2em 0em 1em black, 0.2em 0.1em 0.3em black;
     filter: progid:DXImageTransform.Microsoft.Shadow(color='gray', Direction=135, Strength=6);
 }
