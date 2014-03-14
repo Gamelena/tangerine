@@ -96,9 +96,9 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     {
         if (Zend_Auth::getInstance()->hasIdentity()) {
             $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
-            if (isset($this->_user_info->user_name)) {
-                $this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
-            }
+            //if (isset($this->_user_info->user_name)) {
+                //$this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
+            //}
         } 
         
         if (!empty($this->_adapter)) {     
@@ -122,7 +122,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      */
     public function setAdapter($adapter) 
     {
-        $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
+        $resource = Zwei_Controller_Config::getResourceMultiDb();
         $db = $resource->getDb($adapter);
         $this->_setAdapter($db);
     }

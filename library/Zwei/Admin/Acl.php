@@ -153,7 +153,7 @@ class Zwei_Admin_Acl extends Zend_Acl
     /**
      * 
      * 
-     * Añade las reglas "allow" al usuario en sesión.
+     * Añade las reglas "allow" al cada usuario.
      * 
      * @return void
      */
@@ -234,13 +234,14 @@ class Zwei_Admin_Acl extends Zend_Acl
     
     /**
      * Devuelve una lista con los recursos que a que tiene acceso el usuario en sesión.
+     * Si el módulo tiene ownership también lo devuelve, debe validarse posteriormente si es que realmente tiene acceso.
      * 
      * @param $parent_id int
      * @return Zend_Db_Rowset
      */
     public function listGrantedResourcesByParentId($parentId)
     {
-        $select = $this->_db->select();
+        $select = $this->_db->select()->distinct();
         $groups = $this->_userInfo->groups;
         $fields = array(
             'id',
@@ -260,13 +261,15 @@ class Zwei_Admin_Acl extends Zend_Acl
         
         if ($this->_userInfo->{$this->_userRoleId} != ROLES_ROOT_ID) {
             $select->joinLeft($this->_tb_modules_actions, $this->_tb_modules_actions . ".acl_modules_id=" . $this->_tb_modules . ".id", array());
-            $select->joinLeft($this->_tb_roles_modules_actions, $this->_tb_roles_modules_actions . ".acl_modules_actions_id=" . $this->_tb_modules_actions . ".id", array(
-                'permission'
-            ));
+            $select->joinLeft($this->_tb_roles_modules_actions, $this->_tb_roles_modules_actions . ".acl_modules_actions_id=" . $this->_tb_modules_actions . ".id", array());
+            
             if ($groups) {
                 $select->joinLeft($this->_tb_groups_modules_actions, $this->_tb_groups_modules_actions . ".acl_modules_actions_id=" . $this->_tb_modules_actions . ".id", array());
             }
             
+            /**
+             * @todo se considera la existencia de grupos para validar ownership, por ahora están ligados pero no necesariamente será así siempre.
+             */
             if ($groups) {
                 $select->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR $this->_tb_groups_modules_actions.acl_groups_id IN ($groups) OR ownership='1'");
             } else {
@@ -275,6 +278,7 @@ class Zwei_Admin_Acl extends Zend_Acl
         } else {
             $fields['permission'] = new Zend_Db_Expr("'ALLOW'");
         }
+        
         $select->from($this->_tb_modules, $fields);
         
         if (is_null($parentId)) {
@@ -328,7 +332,6 @@ class Zwei_Admin_Acl extends Zend_Acl
     public function isUserAllowed($module, $permission = 'LIST', $itemId = null)
     {
         $allowed = $this->userHasRoleAllowed($module, $permission);
-        
         if (!$allowed) {
             $allowed = $this->isUserOwner($module, $itemId);
         }
@@ -347,11 +350,16 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @param string $permission
      * @return boolean
      */
-    public function userHasRoleAllowed($module, $permission = 'LIST')
+    public function userHasRoleAllowed($module, $aclActionsId = 'LIST')
     {
         $aclModulesModel = new AclModulesModel();
-        if ($this->_resource == null) $this->_resource = $aclModulesModel->getModuleId($module);
-        $allowed         = $this->isAllowed($this->_userInfo->acl_roles_id, $this->_resource, $permission);
+        //if ($this->_resource == null) $this->_resource = $module;//WORKAROUND @FIXME
+        if ($this->_resource == null) $this->_resource = $aclModulesModel->getModuleId($module);//@FIXME
+        //$allowed         = $this->isAllowed($this->_userInfo->acl_roles_id, $this->_resource, $permission);//@FIXME
+        $rolesModulesActions = new AclRolesModulesActionsModel();
+        $allowed = $rolesModulesActions->findAclModulesIdAclRolesId($this->_resource , $this->_userInfo->acl_roles_id, $aclActionsId)->count() > 0;//WORKAROUND @FIXME
+        
+        
         return $allowed;
     }
     
@@ -365,7 +373,7 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @param Zwei_Db_Table $model
      * @return boolean
      */
-    public function userHasGroupsAllowed($module, $permission, $itemId = null)
+    public function userHasGroupsAllowed($module, $permission = null, $itemId = null)
     {
         /*
         $frontend = array(
@@ -387,13 +395,17 @@ class Zwei_Admin_Acl extends Zend_Acl
         if (!empty($groups)) {
             $groups                 = implode(",", $groups);
             $aclModulesActionsModel = new DbTable_AclModulesActions();
-            $permission             = $aclModulesActionsModel->getAdapter()->quote($permission);
-            $resource               = $aclModulesActionsModel->getAdapter()->quote($resource);
+            $ad = $aclModulesActionsModel->getAdapter();
+            //$permission             = $ad->quote($permission);
+            //$resource               = $ad->quote($resource);
             
-            $select = $aclModulesActionsModel->select()->where("acl_modules_id=$resource AND acl_actions_id=$permission");
+            $select = $aclModulesActionsModel->select()->where($ad->quoteInto("acl_modules_id = ?", $resource));
+            
+            if ($permission) {
+                $select->where($ad->quoteInto('acl_actions_id = ?', $permission));
+            }
             
             Debug::writeBySettings($select->__toString(), 'query_log');
-            
             
             //Obtenemos acl_modules_actions.id para usar acl_groups_modules_action.acl_modules_actions_id
             $aclModulesActions = $aclModulesActionsModel->fetchAll($select);
@@ -429,9 +441,9 @@ class Zwei_Admin_Acl extends Zend_Acl
     {
         $allowed = false;
         $aclModulesModel = new AclModulesModel();
-        if ($this->_moduleRow == null) {
+        //if ($this->_moduleRow == null) {
             $this->_moduleRow = $aclModulesModel->findModule($module);
-        }
+        //}
         
         $moduleRow       = $this->_moduleRow;
         $resource        = $moduleRow->id;
@@ -443,8 +455,8 @@ class Zwei_Admin_Acl extends Zend_Acl
             if ($xml->getAttribute('target')) {
                 $modelName = $xml->getAttribute('target');
                 $model     = new $modelName();
-        
-                if (is_a($model, 'Zwei_Db_Table')) {
+                
+                if ($model instanceof Zwei_Db_Table) {
                     if ($model->isOwner($itemId)) {
                         $allowed = true;
                     }

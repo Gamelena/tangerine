@@ -266,18 +266,13 @@ class AclRolesModel extends DbTable_AclRoles
         $delete = parent::delete($where);
         if ($delete) { //borrar permisos asociados
             $arrWhere = self::whereToArray($where);
-            Debug::write($arrWhere);
             //$aclRolesActions = new DbTable_AclRolesModulesActions();//[FIXME] esto termina la ejecucion del script, no sabemos por qué. Por ello no lo usaremos.
-
             $where = $this->getAdapter()->quoteInto("acl_roles_id = ? ", $arrWhere['id']);
-            Debug::write($where);
             
             $query = "DELETE FROM acl_roles_modules_actions WHERE $where";
-            Debug::write($query);
             
             $deleteActions = $this->getAdapter()->query($query); //Ejecucion directa de SQL como workaround
             //$deleteActions = $aclRolesActions->delete($where);//[FIXME]
-            Debug::write($deleteActions);
         }
         return $delete;
     }

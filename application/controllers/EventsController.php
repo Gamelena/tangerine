@@ -16,9 +16,12 @@ class EventsController extends Zend_Controller_Action
             $this->view->response['status'] = 'AUTH_FAILED';
             $this->render();
         } else {
+            
             $auth = Zend_Auth::getInstance();
+            
             $authInfo = $auth->getStorage()->read();
             $aclRoles = new DbTable_AclRoles();
+            
             $currentRole = $aclRoles->find($authInfo->acl_roles_id)->current();
             
             $roleHasChanged = $currentRole->must_refresh == '1' ? true : false; 

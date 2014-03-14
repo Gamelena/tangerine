@@ -64,6 +64,14 @@ class Components_GroupsModulesController extends Zend_Controller_Action
     {
     }
 
+    /**
+     * Mapa jerarquico de módulos con permisos asociados.
+     * 
+     * @param string $aclModulesId
+     * @param string $title
+     * @param string $first
+     * @return StdClass
+     */
     public function getModules($aclModulesId = null, $title = null, $first = false)
     {
         $i = 0;
@@ -82,6 +90,9 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         $modules[$i] = (object) $modules[$i];
         
         $j = 0;
+        /**
+         * @var Zend_Db_Table_Row $action
+         */
         foreach ($actions as $action) {
             $modules[$i]->actions[$j]['title'] = $action->findParentRow('DbTable_AclActions')->title;
             $modules[$i]->actions[$j]['isFirst'] = $first;
@@ -94,6 +105,9 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         $childrens = $parent->findDependentRowset('DbTable_AclModules', null, $select);
         
         if ($childrens->count()) {
+            /**
+             * @var Zend_Db_Table_Row $child
+             */
             foreach ($childrens as $child) {
                 $module = $this->getModules($child->id);
                 $modules[] = $module[0];

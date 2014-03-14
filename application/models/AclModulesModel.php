@@ -40,8 +40,6 @@ class AclModulesModel extends DbTable_AclModules
                 return false;
             }
         }
-        Debug::write($update);
-        Debug::write($saveActions);
         Zwei_Utils_File::clearRecursive(ROOT_DIR . "/cache");
         
         return $saveActions || $update;
@@ -64,7 +62,7 @@ class AclModulesModel extends DbTable_AclModules
                 return false;
             }
         }
-    $saveActions    = $this->saveDataActions($lastInsertedId);
+        $saveActions    = $this->saveDataActions($lastInsertedId);
         
         return $lastInsertedId;
         
@@ -152,26 +150,33 @@ class AclModulesModel extends DbTable_AclModules
      * Obtiene arbol de módulos en forma recursiva
      * 
      * @param $parentId int, id sobre la que se buscaran modulos hijos
-     * @param $noTree boolean, Indica que esta funcion no se usara para el Arbol Menu, lo cual fue el diseño original
+     * @param $noTree boolean, Indica que esta funcion no se usara para el Arbol Menu para omitir lógica asociada a este.
      * @return Array()
      *      
      */
     public function getTree($parentId = null, $noTree = false)
     {
+        $this->_acl = new Zwei_Admin_Acl();
         $root = $this->_acl->listGrantedResourcesByParentId($parentId);
         
         $arrNodes = array();
         //$i = 0;
         foreach ($root as $branch) {
             //Buscar si usuario en sesion es owner de algun elemento para desplegar nodo
+            
             if ($branch['ownership']) {
+                Debug::write($branch);
                 $file      = Zwei_Admin_Xml::getFullPath($branch['module']);
                 $xml       = new Zwei_Admin_Xml($file, null, true);
-                $modelName = $xml->getAttribute('target');
-                $model     = new $modelName;
+                
+                
                 if (!$this->_acl->isUserAllowed($branch['module'])) {
                     return $arrNodes;
                 }
+                
+               
+
+                //Fin Workaround
             }
             
             if ($branch['tree'] == '1' || $noTree) {
