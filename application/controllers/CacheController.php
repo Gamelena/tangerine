@@ -17,7 +17,7 @@ class CacheController extends Zend_Controller_Action
     public function clearAction()
     {
         $listTags = $this->getRequest()->getParam('tags', false);
-        $response = array('status'=>'FAIL');
+        $response = array('status' => 'FAIL');
         
         if (!$listTags) {
             if (Zwei_Utils_File::clearRecursive(ROOT_DIR ."/cache")) {
@@ -27,9 +27,10 @@ class CacheController extends Zend_Controller_Action
         } else {
             $tags = explode(',', $listTags);
             $cache = new Zwei_Controller_Plugin_Cache(Zwei_Controller_Config::getOptions());
-            $cache->cleanByTags($tags);
-            $response['status'] = 'OK';
-            $response['message'] = "Cache borrado tags ($listTags)";
+            if ($cache->cleanByTags($tags)) {
+                $response['status'] = 'OK';
+                $response['message'] = "Cache borrado tags ($listTags)";
+            }
         }
         
         $this->view->response = Zend_Json::encode($response);
