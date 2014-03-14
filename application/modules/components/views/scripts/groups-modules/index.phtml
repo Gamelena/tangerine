@@ -14,7 +14,7 @@ menugroups_modules.addChild(new dijit.MenuItem({
         var items = dijit.byId('groups_modulesdataGrid').selection.getSelected();
         if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
         dijitDialog.set('href', base_url + 'components/groups-modules/edit?id='+items[0].id+'&acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>&p=<?=$this->p?>');
-        dijitDialog.set('title', '<?=$this->actionForm?> grupo ' + items[0].title + '<?=$this->itemName?>');
+        dijitDialog.set('title', '<?=$this->actionForm?> equipo ' + items[0].title + '<?=$this->itemName?>');
         dijitDialog.show();
     }
 }));
@@ -28,7 +28,7 @@ menugroups_modules.startup();
             var items = dijit.byId('groups_modulesdataGrid').selection.getSelected();
             if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
             dijitDialog.set('href', base_url + 'components/groups-modules/edit?id='+items[0].id+'&acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>&p=<?=$this->p?>');
-            dijitDialog.set('title', '<?=$this->actionForm?> grupo ' + items[0].title);
+            dijitDialog.set('title', '<?=$this->actionForm?> equipo ' + items[0].title);
             dijitDialog.show();}" class="dataGrid" style="height: 50em;">
             <script type="dojo/connect" data-dojo-event="onRowClick" data-dojo-args="e">
                 if (dijit.byId('groups_modulesbtnEdit') != undefined) dijit.byId('groups_modulesbtnEdit').set('disabled', false);
@@ -52,7 +52,7 @@ menugroups_modules.startup();
                     if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
                     dijitDialog.set('href', base_url + 'components/groups-modules/edit?id='+items[0].id+'&acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>&p=<?=$this->p?>');
                     dijitDialog.show();
-                    dijitDialog.set('title', '<?=$this->actionForm?> grupo ' + items[0].title);">
+                    dijitDialog.set('title', '<?=$this->actionForm?> equipo ' + items[0].title);">
                     <?=$this->actionForm?> Grupo  
                 </button>
             </div>
