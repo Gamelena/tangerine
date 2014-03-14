@@ -22,12 +22,17 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
      * @var string Cache key
      */
     public $key;
-
+    
+    /**
+     * Etiquetas para agrupar archivos de cache
+     * @var string
+     */
+    public $tags;
     /**
      * Constructor: inicializar cache
      * 
      * @param  array|Zend_Config $options 
-     * @return void
+     * @return Zend_Cache_Frontend
      * @throws Exception
      */
     public function __construct($options)
@@ -67,23 +72,28 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             self::$doNotCache = true;
         } else {
             $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-
-            if ($request->getControllerName() == "index" && $request->getActionName() == "components") {
-                $this->key = md5(BASE_URL.$request->getPathInfo().$request->getParam("p")) . "id_".$userInfo->id;
+            //Dependiendo el usuario pertenece o no a grupos se debe serializar el cache por id de usuario o id de perfil.
+            $cacheUserRoleHash = !empty($userInfo->groups) ? "userid{$userInfo->id}" : "roleid{$userInfo->acl_roles_id}"; 
+            
+            if ($request->getControllerName() == "admin" && $request->getActionName() == "components") {
+                $this->key = md5(BASE_URL . $request->getPathInfo() . $request->getParam("p")) . $cacheUserRoleHash;
             } else if ($request->getControllerName() == "objects" && $request->getParam('model') == "settings" && $request->getParam('format') == "json") {
-                $this->key = md5(BASE_URL.$userInfo->id."_settings"); 
-            } else if ($request->getControllerName() == "index" && $request->getActionName() == "modules") {
-                $this->key = md5(BASE_URL.$userInfo->id."_modules"); 
+                $this->key = md5(BASE_URL . "_settings"); 
+            } else if ($request->getControllerName() == "admin" && $request->getActionName() == "modules") {
+                $this->key = md5(BASE_URL . "_modules" . $cacheUserRoleHash); 
             } else {
                 self::$doNotCache = true;
                 return;
             }
             
+            $this->tags[] = "userid{$userInfo->id}";
+            $this->tags[] = "roleid{$userInfo->acl_roles_id}";
+            
             if (false !== ($response = $this->getCache())) {
                 $response->sendResponse();
                 exit;
             }
-        }    
+        }
     }
     
     
@@ -94,6 +104,14 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             return $response;
         }
         return false;
+    }
+    
+    public function cleanByTags($tags)
+    {
+        return $this->cache->clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            $tags
+        );
     }
     
     /**
@@ -110,7 +128,7 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             
             return;
         } else if ($this->cache) {
-            $this->cache->save($this->getResponse(), $this->key);
+            $this->cache->save($this->getResponse(), $this->key, $this->tags);
         }    
     }
 }
