@@ -1,7 +1,7 @@
+<form data-dojo-type="dijit/form/Form" class="formSearch" id="<?=$this->domPrefix?>formSearch" jsId="<?=$this->domPrefix?>formSearch" encType="multipart/form-data" action="" method="">
 <?php 
 if (count($this->groups) > 0) :
 ?>
-<form data-dojo-type="dijit/form/Form" class="formSearch" id="<?=$this->domPrefix?>formSearch" jsId="<?=$this->domPrefix?>formSearch" encType="multipart/form-data" action="" method="">
     <div class="formSearchInputs">
 
 <?php 
@@ -100,6 +100,9 @@ if (count($this->groups) > 0) :
     endif; 
 ?>
     </div>
+<?php 
+endif;
+?>
     <div class="formSearchSubmit">
         <input type="hidden" name="model" value="<?=$this->model ?>" />
         <input type="hidden" name="format" value="json" />
@@ -107,17 +110,17 @@ if (count($this->groups) > 0) :
         <input type="hidden" name="p" value="<?=$this->p?>" />
 
 <?php 
-    if (!$this->hideSubmit) :
+if (!$this->hideSubmit) :
 ?>
         <button type="submit" class="submit" data-dojo-type="dijit/form/Button" iconClass="dijitIconSearch" id="<?=$this->domPrefix?>btnBuscar">Buscar</button>
 <?php 
-    endif;
+endif;
 ?>
     </div>
     <div class="keyPadWrapper" style="clear: both;">
 
 <?php 
-    foreach ($this->customFunctions as $i => $f) :
+foreach ($this->customFunctions as $i => $f) :
         $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
         $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
 ?>
@@ -128,12 +131,12 @@ if (count($this->groups) > 0) :
     </div>
 
 <?php 
-    endforeach;
+endforeach;
 ?>
     </div>
 
 <?php 
-    if (!$this->hideSubmit) :
+if (!$this->hideSubmit) :
 ?>
     <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
@@ -152,9 +155,7 @@ if (count($this->groups) > 0) :
     </script>
 
 <?php 
-    endif;
-?>
-</form>
-<?php 
 endif;
 ?>
+</form>
+

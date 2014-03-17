@@ -161,9 +161,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     public function searchAction()
     {
+        $this->view->p = $this->_component;
+        $this->view->model = $this->_xml->getAttribute('target');
         if (isset($this->_xml->searchers)) {
-            $this->view->p = $this->_component;
-            $this->view->model = $this->_xml->getAttribute('target');
             $this->view->xml = $this->_xml;
             $this->view->groups = $this->_xml->getSearchers(true);
             $this->view->hideSubmit = $this->_xml->searchers->getAttribute('hideSubmit');
@@ -173,6 +173,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             
             $customFunctions = $this->_xml->xpath("//searchers/helpers/customFunction");
             $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'LIST') ? $customFunctions : array();
+        } else {
+            $this->view->groups = array();
+            $this->view->hideSubmit = true;
+            $this->view->customFunctions = array();
         }
     }
 
