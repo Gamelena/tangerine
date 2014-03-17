@@ -250,9 +250,9 @@ CREATE TABLE IF NOT EXISTS `acl_session` (
   `data` text,
   `ip` varchar(20) NOT NULL,
   `user_agent` varchar(255) NOT NULL,
+  `must_refresh` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 --
 -- Estructura para la vista `tables_logged`
 --

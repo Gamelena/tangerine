@@ -64,7 +64,7 @@ DELETE from acl_roles_modules_actions WHERE acl_modules_actions_id NOT IN (SELEC
 CALL addColumnUnlessExists(Database(), 'acl_modules', 'ownership', 'enum("0","1") NOT NULL DEFAULT "0" COMMENT "Indica si modulo usa modelo con reglas de owner, funciona con type=xml, ver Zwei_Db_Table::isOwner(item, user)"');
 CALL addColumnUnlessExists(Database(), 'acl_roles', 'must_refresh', 'enum("0","1") NOT NULL DEFAULT "0"');
 CALL addColumnUnlessExists(Database(), 'acl_users', 'must_refresh', 'enum("0","1") NOT NULL DEFAULT "0"');
-
+CALL addColumnUnlessExists(Database(), 'acl_session', 'must_refresh', 'enum("0","1") NOT NULL DEFAULT "0"');
 -- --------------------------------------------------------
 
 --
