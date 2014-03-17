@@ -329,7 +329,7 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @param $permission string
      * @return boolean
      */
-    public function isUserAllowed($module, $permission = 'LIST', $itemId = null)
+    public function isUserAllowed($module, $permission = null, $itemId = null)
     {
         $allowed = $this->userHasRoleAllowed($module, $permission);
         if (!$allowed) {
@@ -350,7 +350,7 @@ class Zwei_Admin_Acl extends Zend_Acl
      * @param string $permission
      * @return boolean
      */
-    public function userHasRoleAllowed($module, $aclActionsId = 'LIST')
+    public function userHasRoleAllowed($module, $aclActionsId = null)
     {
         $aclModulesModel = new AclModulesModel();
         //if ($this->_resource == null) $this->_resource = $module;//WORKAROUND @FIXME

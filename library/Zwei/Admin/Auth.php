@@ -106,7 +106,6 @@ class Zwei_Admin_Auth
     {
         $auth = Zend_Auth::getInstance();
         $userInfo = $authAdapter->getResultRowObject(null, 'password');
-        $db = Zend_Db_Table::getDefaultAdapter();
         
         $options = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
         $config = new Zend_Config($options);
@@ -129,7 +128,9 @@ class Zwei_Admin_Auth
         $userInfo->groups = $groups;
         $authStorage->write($userInfo);
         
+        /*Guardar sesion en base de datos, si tabla existe*/
         try {
+            $db = Zend_Db_Table::getDefaultAdapter();
             if ($db->describeTable('acl_session')) {
                 $aclSession = new AclSessionModel();
                 $row = $aclSession->find(Zend_Session::getId())->current();
