@@ -122,7 +122,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      */
     public function setAdapter($adapter) 
     {
-        $resource = Zwei_Controller_Config::getResourceMultiDb();
+        $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
         $db = $resource->getDb($adapter);
         $this->_setAdapter($db);
     }
