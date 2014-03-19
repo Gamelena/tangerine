@@ -1,6 +1,6 @@
 <?php
 
-class DbTable_AclSession extends Zend_Db_Table_Abstract
+class DbTable_AclSession extends Zwei_Db_Table
 {
 
     protected $_name = 'acl_session';
