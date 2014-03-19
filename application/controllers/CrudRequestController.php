@@ -109,6 +109,7 @@ class CrudRequestController extends Zend_Controller_Action
                             $j = 0;
                             foreach ($infoFiles as $k => $l) {
                                 $this->_form->data[$k] = $l['filename'];
+                                //Crear miniaturas de imagen si corresponde
                                 if ($element[$j]->existsChildren('thumb')) {
                                     foreach ($element[$j]->thumb as $t) {
                                         $this->createThumb($t, $l, $path);
@@ -392,7 +393,6 @@ class CrudRequestController extends Zend_Controller_Action
                     $xmlChildren = new Zwei_Admin_Xml('<element>' . html_entity_decode($row->xml_children) . '</element>');
                     
                     foreach ($xmlChildren->thumb as $child) {
-                        
                         $this->createThumb($child, $v, $path);
                     }
                     //Se agrega nombre de archivo subido a array de actualizacion de datos
