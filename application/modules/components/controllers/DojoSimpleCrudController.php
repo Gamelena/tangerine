@@ -83,7 +83,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
         
         $this->_config = Zwei_Controller_Config::getOptions();
-        $this->view->multiForm = isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple) ? true : false;
         $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : '';
         
         if ($this->getRequest()->getParam('p')) {
@@ -108,6 +107,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         }
         
         $className = $this->_xml->getAttribute('target');
+        $this->ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? true : false;
+        $this->view->multiForm = $this->_config->zwei->form->multiple && $this->ajax ? true : false;
         //Se agrega nombre de modelo a mensaje de Exception
         try {
             $this->_model = new $className();
@@ -367,7 +368,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick');
         } else if ($this->_xml->getAttribute('edit')) {
             if (!$this->view->validateGroupEdit) {
-                if (isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple)) {
+                if ($this->view->multiForm) {
                     $this->view->onRowDblClick = "
                         var form = new zwei.Form({
                             ajax: $ajax,
@@ -386,13 +387,13 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                         var form = new zwei.Form({
                             ajax: $ajax,
                             component: '{$this->_component}',
-                            queryParams: '{$_SERVER['QUERY_STRING']}',
                             action: 'edit',
-                            dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'),
+                            dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
                             dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'),
+                            queryParams: '{$_SERVER['QUERY_STRING']}',
                             dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
-                        });
-                        form.showDialog()";
+                        }); 
+                        form.showDialog();";
                 }
             } else {
                 $this->view->onRowDblClick = "
