@@ -5,45 +5,28 @@
  *
  * @example
  * @package Components
- * @version 2013-05-09
+ * @version 2014-03-19
  * @since 1.0
  * @author rodrigo.riquelme@zweicom.com
- *
+ * @example
  * <code>
- * <?xml version="1.0"?> 
- * <component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- * xsi:noNamespaceSchemaLocation="components.xsd" 
- * name="Usuarios" type="dojo-simple-crud" target="AclUsersModel" list="true"
- * edit="true" add="true" delete="true">
- *     <elements>
- *         <element name="ID" target="id" type="id-box" visible="false"
- * edit="false" add="false"/>
- *         <element name="Usuario" target="user_name"
- * type="dijit-form-validation-text-box" visible="true" edit="false" add="true"/>
- *         <element name="Nombres" target="first_names"
- * type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
- *         <element name="Apellidos" target="last_names"
- * type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
- *         <element name="E-Mail" target="email"
- * regExp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}" invalidMessage="mail
- * no valido" type="dijit-form-validation-text-box" visible="true" edit="true"
- * add="true" />
- *         <element name="Perfil" target="acl_roles_id" defaultValue=""
- * type="dijit-form-filtering-select" table="AclRolesModel" field="role_name"
- * visible="true" edit="true" add="true"/>
- *         <element name="Activo" target="approved" type="dijit-form-check-box"
- * formatter="formatYesNo" visible="true" edit="true" add="true"/>
- *     </elements>
- *     <searchers>
- *         <group>
- *             <element target="user_name"/>
- *             <element target="first_names"/>
- *             <element target="last_names"/>
- *             <element target="email"/>
- *         </group>
- *         <element target="acl_roles_id" defaultText="Todo"/>
- *     </searchers>
- * </component>
+    <?xml version="1.0"?> 
+    <component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="components.xsd" 
+    name="Informaci&amp;oacute;n" type="dojo-simple-crud" target="PersonalInfoModel" list="true" plugins="{}" edit="true" add="false" delete="false" serverPagination="true"
+    >
+        <elements>
+           	<element name="ID" target="id" type="id-box" visible="false" edit="false" add="false"/>
+            <element name="Usuario" target="user_name" type="dijit-form-validation-text-box" visible="true" edit="false" add="true"/>
+            <element name="Nombres" target="first_names" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
+            <element name="Apellidos" target="last_names" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
+            <element name="E-Mail" target="email" type="dijit-form-validation-text-box" regExp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}" invalidMessage="mail no valido" visible="true" edit="true" add="true" />
+        </elements>
+        <forms>
+            <changePassword>
+                <element target="password" regExp="^[0-9a-zA-Z_]{6,25}$" maxlength="25" invalidMessage="Sólo letras y números sin espacios, mínimo 6 caracteres"/>
+            </changePassword>
+        </forms>
+    </component>
  * </code>
  *
  *
@@ -135,6 +118,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         }
     }
 
+    /**
+     * Layout principal
+     * @return void
+     */
     public function indexAction()
     {
         $this->view->name = $this->_xml->getAttribute('name');
@@ -159,6 +146,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         }
     }
 
+    /**
+     * Buscador
+     * @return void
+     */
     public function searchAction()
     {
         $this->view->p = $this->_component;
@@ -180,6 +171,11 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         }
     }
 
+    /**
+     * Inicializa formulario
+     * @param string $mode
+     * @return void
+     */
     public function initForm($mode)
     {
         $r = $this->getRequest();
@@ -226,6 +222,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->includeJs = $this->_xml->getAttribute('jsForm') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('jsForm')."?noCache={$this->view->noCache}\"></script>" : '';
     }
     
+    /**
+     * Inicializa acciones para botones y menús
+     * @return void
+     */
     public function initKeys()
     {
         $this->view->model = $this->_xml->getAttribute('target');
@@ -256,7 +256,11 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->queryParams = $_SERVER["QUERY_STRING"];
         //$this->view->changePassword = $this->_xml->getAttribute("changePassword") && $this->_xml->getAttribute("changePassword") == "true"  && $this->_acl->isUserAllowed($this->page, 'EDIT');
     }
-
+    
+    /**
+     * Diálogo editar
+     * @return void
+     */
     public function editAction()
     {
         $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
@@ -267,13 +271,21 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $this->initForm('edit');
     }
-
+    
+    /**
+     * Diálogo agregar
+     * @return void
+     */
     public function addAction()
     {
         $this->initForm('add');
         $this->render('edit');
     }
-
+    
+    /**
+     * Diálogo clonar
+     * @return void
+     */
     public function cloneAction()
     {
         $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
@@ -281,7 +293,11 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->initForm('clone');
         $this->render('edit');
     }
-
+    
+    /**
+     * Listado
+     * @return void
+     */
     public function listAction()
     {
         $this->view->p = $this->_component;
@@ -413,12 +429,20 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->queryParams = $_SERVER["QUERY_STRING"];
         
     }
-
+    
+    /**
+     * Botonera
+     * @return void
+     */
     public function keypadAction()
     {
         $this->initKeys();
     }
-
+    
+    /**
+     * Diálogo cambiar password
+     * @return void
+     */
     public function changePasswordAction()
     {
         $this->view->p = $this->_component;
@@ -442,7 +466,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->ajax = 'false';
         $this->initForm('edit');
     }
-
+    
+    /**
+     * Menú contextual
+     */
     public function contextMenuAction()
     {
         $this->initKeys();
