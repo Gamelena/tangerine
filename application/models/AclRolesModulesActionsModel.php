@@ -37,7 +37,7 @@ class AclRolesModulesActionsModel extends DbTable_AclRolesModulesActions
         $select->where($this->getAdapter()->quoteInto('acl_modules_id = ?', $aclModulesId));
         if ($aclActionsId)  $select->where($this->getAdapter()->quoteInto('acl_actions_id = ?', $aclActionsId));
          
-        Debug::write($select->__toString());
+        //Debug::write($select->__toString());
         return $this->fetchAll($select);
     }
 

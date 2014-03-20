@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Modelo de datos para usuarios ACL del admin
+ * Modelo de datos para usuarios.
  *
  * @category Zwei
  * @package Models
@@ -12,16 +12,28 @@
 
 class AclUsersModel extends DbTable_AclUsers
 {
+    /**
+     * tabla auxiliar
+     * @var string
+     */
     protected $_name_roles = "acl_roles";
+    /**
+     * campo con el cual generar la password por default
+     * @var string
+     */
     protected $_generate_pass = "user_name";
-
+    
+    /**
+     * @return Zend_Db_Table_Select
+     * @see Zend_Db_Table_Abstract::select()
+     */
     public function select()
     {
         $select = new Zend_Db_Table_Select($this);
         $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
         $select->from($this->_name, array('id', 'user_name', 'acl_roles_id', 'first_names', 'last_names', 'email', 'approved'));
         $select->joinLeft($this->_name_roles, "$this->_name.acl_roles_id = $this->_name_roles.id", "role_name");
-        //[TODO] esto está en duro, debiera ser dinámico via campo root en acl_roles
+        
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where('acl_roles_id <> ?', '1');
         }
@@ -31,7 +43,7 @@ class AclUsersModel extends DbTable_AclUsers
     }
 
     /**
-     * Se agregan grupos asociados a rowset original
+     * Agrega grupos asociados a rowset original
      * @param Zend_Db_Table_Rowset
      * @return array
      */
@@ -49,8 +61,9 @@ class AclUsersModel extends DbTable_AclUsers
     }
     
     /**
-     * Un usuario no podría borrarse a si mismo, si es que no existen otros usuarios que puedan cumplir su misión.
-     * (si no existen otros usuarios con su mismo perfil)
+     * @param string $where
+     * @return boolean
+     * 
      * @see Zwei_Db_Table::delete()
      */
     public function delete($where)
@@ -58,30 +71,16 @@ class AclUsersModel extends DbTable_AclUsers
         $aWhere = $this->whereToArray($where);
         $id = $aWhere['id'];
         
-        $users = new DbTable_AclUsers();
-        $row = $users->find($id)->current();
-        
         if ($id == $this->_user_info->id) {
-            //El usuario se está tratando de "suicidar" del sistema.
-
-            
-            if ($row->acl_roles_id == $this->_user_info->acl_roles_id) {
-                //Nadie más puede cumplir su misión encomendada, no lo permitiremos.
-                $this->setMessage("No puede darse de baja usted mismo,\nno hay más usuarios con perfil $row->role_name.\n\nSi detectó un problema de seguridad se le sugiere cambiar su contraseña en Configuración.");
-                return false;
-            } 
+            $this->setMessage("No puede darse de baja usted mismo.");
+            return false;
         }
         
         $delete = parent::delete($where);
         
         if ($delete) {
-            $aclRoles = new DbTable_AclRoles();
-            if (in_array('must_refresh', $aclRoles->info('cols'))) {
-                $currentRole = $aclRoles->find($row->acl_roles_id)->current();
-            
-                $currentRole->must_refresh = '1';
-                $currentRole->save();
-            }
+            $aWhere = self::whereToArray($where);
+            $this->notify($aWhere['id']);
         }
         
         return $delete;
@@ -113,11 +112,29 @@ class AclUsersModel extends DbTable_AclUsers
         }
         return $last_insert_id;
     }
-
+    /**
+     * 
+     * @param string $userName
+     * @param array $columns
+     * @return Zend_Db_Table_Rowset_Abstract
+     */
+    public function findUserName($userName, $columns = array('*'))
+    {
+        $select = parent::select(false)->setIntegrityCheck(false);
+        $select
+            ->from($this->info(Zend_Db_Table::NAME), $columns)
+            ->where($this->getAdapter()->quoteInto('user_name = ?', $userName));
+        return $this->fetchAll($select);
+    }
+    
     /**
      * Captura de excepciones posibles como nombre de usuario en uso
+     * @param array $data
+     * @param string $where
+     * @return boolean
+     * 
+     * @see Zwei_Db_TableLoggeable::update()
      */
-
     public function update($data, $where)
     {
         try {
@@ -127,21 +144,56 @@ class AclUsersModel extends DbTable_AclUsers
                 $this->setMessage('Nombre de Usuario en uso.');
                 return false;
             } else {
-                Zwei_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
+                Debug::write(array($e->getMessage(), $e->getCode()));
             }
         }
         
-        
-        if ($update && isset($data['approved']) && $data['approved'] != '1') {
-            $aclRoles = new DbTable_AclRoles();
-            if (in_array('must_refresh', $aclRoles->info('cols'))) {
-                $currentRole = $aclRoles->find($data['acl_roles_id'])->current();
-                $currentRole->must_refresh = '1';
-                $currentRole->save();
-            }
+        Debug::write($update);
+        if ($update) {
+            $aWhere = self::whereToArray($where);
+            $this->notify($aWhere['id']);
         }
         
         return $update;
 
+    }
+    /*
+     * @param string|array $aclusersId
+     * @return boolean
+     */
+    public function notify($aclUsersId)
+    {
+        $tagsSufix = (array) $aclUsersId;
+        
+        //Limpiar cache
+        foreach ($tagsSufix as $sufix) {
+            $cache = new Zwei_Controller_Plugin_Cache(Zwei_Controller_Config::getOptions());
+            $cleaned = $cache->cleanByTags(array("userid{$sufix}"));
+        }
+        Debug::write($cleaned);
+        
+        if (!(Zend_Session::getSaveHandler() instanceof Zend_Session_SaveHandler_DbTable)) { //@TODO BACKWARD compatibility
+            Debug::write('!Zend_Session_SaveHandler_DbTable');
+            $aclRoles = new DbTable_AclRoles();
+            if (in_array('must_refresh', $aclRoles->info('cols'))) {
+                $users = new DbTable_AclUsers();
+                $row = $users->find($aclUsersId)->current();
+            
+                $currentRole = $aclRoles->find($row->acl_roles_id)->current();
+            
+                $currentRole->must_refresh = '1';
+                $currentRole->save();
+            } 
+            
+        } else { //END BACKWARD compatibility
+            Debug::write('Zend_Session_SaveHandler_DbTable');
+            $aclSession = new DbTable_AclSession();
+            
+            $data = array('must_refresh' => '1');
+            $where = is_array($aclUsersId) ?
+            "acl_users_id IN(". implode(",", $aclUsersId) .")" : $aclSession->getAdapter()->quoteInto('acl_users_id = ?', $aclUsersId);
+        
+            return $aclSession->update($data, $where);
+        } 
     }
 }

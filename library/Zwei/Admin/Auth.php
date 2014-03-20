@@ -12,7 +12,7 @@
 class Zwei_Admin_Auth
 {
      /**
-     * Singleton instance
+     * Instancia singleton.
      *
      * @var Zwei_Admin_Auth
      */
@@ -35,9 +35,8 @@ class Zwei_Admin_Auth
     {}
 
     /**
-     * Returns an instance of Zwei_Admin_Auth
-     *
-     * Singleton pattern implementation
+     * Retorna instancia de Zwei_Admin_Auth.
+     * Implementación de patrón singleton.
      *
      * @return Zwei_Admin_Auth Provides a fluent interface
      */
@@ -51,7 +50,8 @@ class Zwei_Admin_Auth
     }
     
     /**
-     * Verifying if exists an instance with identity of Zend_Auth 
+     * Verifica instancia con identitad de Zend_Auth.
+     * 
      * @return boolean
      */
     public function hasIdentity()
@@ -69,7 +69,8 @@ class Zwei_Admin_Auth
     }
     
     /**
-     * Authentification params against DB Table
+     * Autentificación contra DB.
+     * 
      * @return Zend_Auth_Adapter_DbTable
      */
     public function getAuthAdapter($hash = 'MD5')
@@ -99,6 +100,7 @@ class Zwei_Admin_Auth
     }
     
     /**
+     * Inicializa la información de sesión con datos del usuario en DB.
      * 
      * @param Zend_Auth_Adapter_DbTable $authAdapter
      */
@@ -146,6 +148,16 @@ class Zwei_Admin_Auth
                 }
             }
         } catch (Exception $e) {} //PDOException is not catched :facepalm:
+    }
+    
+    /**
+     * Limpia identidad Zend_Auth
+     * @return void
+     */
+    public function clearIdentity()
+    {
+        
+        return Zend_Auth::getInstance()->clearIdentity();
     }
 }
 

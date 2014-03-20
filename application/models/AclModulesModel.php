@@ -69,7 +69,10 @@ class AclModulesModel extends DbTable_AclModules
     }
     
     /**
-     * (non-PHPdoc)
+     * Se separa entre datos de modulo y datos de acciones asociadas.
+     * 
+     * @param array
+     * @return array
      * @see Zwei_Db_Table::cleanDataParams()
      */
     protected function cleanDataParams($data)
@@ -131,7 +134,8 @@ class AclModulesModel extends DbTable_AclModules
     }
     
     /**
-     * (non-PHPdoc)
+     * @param string $where
+     * @return int
      * @see Zwei_Db_Table::delete()
      */
     public function delete($where)
@@ -147,11 +151,11 @@ class AclModulesModel extends DbTable_AclModules
     
     
     /**
-     * Obtiene arbol de módulos en forma recursiva
+     * Obtiene arbol de módulos en forma recursiva.
      * 
      * @param $parentId int, id sobre la que se buscaran modulos hijos
      * @param $noTree boolean, Indica que esta funcion no se usara para el Arbol Menu para omitir lógica asociada a este.
-     * @return Array()
+     * @return array
      *      
      */
     public function getTree($parentId = null, $noTree = false)
@@ -167,16 +171,17 @@ class AclModulesModel extends DbTable_AclModules
             if ($branch['ownership']) {
                 Debug::write($branch);
                 $file      = Zwei_Admin_Xml::getFullPath($branch['module']);
-                $xml       = new Zwei_Admin_Xml($file, null, true);
+                if (file_exists($file)) {
+                    $xml       = new Zwei_Admin_Xml($file, null, true);
+                } else {
+                    Debug::write("No se pudo parsear archivo $file. Compruebe que exista y sea un XML válido");
+                    return $arrNodes;
+                }
                 
                 
                 if (!$this->_acl->isUserAllowed($branch['module'])) {
                     return $arrNodes;
                 }
-                
-               
-
-                //Fin Workaround
             }
             
             if ($branch['tree'] == '1' || $noTree) {
@@ -217,7 +222,8 @@ class AclModulesModel extends DbTable_AclModules
     }
     
     /**
-     * Se rescribe select por defecto para mostrar relacion recursiva a traves de parent_id
+     * Se consulta relación recursiva a traves de parent_id.
+     * 
      * @return Zend_Db_Table_Select
      */
     
@@ -245,7 +251,7 @@ class AclModulesModel extends DbTable_AclModules
     
     /**
      * @param $data Zend_Db_Table_Rowset
-     * (non-PHPdoc)
+     * @return array
      * @see Zwei_Db_Table::overloadDataForm()
      */
     public function overloadDataForm($data)
@@ -268,7 +274,8 @@ class AclModulesModel extends DbTable_AclModules
     
     
     /**
-     * Selecciona diferentes módulos, mostrando modulo padre 
+     * Selecciona diferentes módulos, mostrando modulo padre .
+     * 
      * @return Zend_Db_Table_Select
      */
     public function selectDistinct()
@@ -291,7 +298,8 @@ class AclModulesModel extends DbTable_AclModules
     }
     
     /**
-     * Selecciona diferentes módulos para uso general
+     * Selecciona diferentes módulos para uso general.
+     * 
      * @return Zend_Db_Table_Select 
      */
     
@@ -331,7 +339,7 @@ class AclModulesModel extends DbTable_AclModules
     }
     
     /**
-     * Obtiene la fila asociada al nombre del modulo
+     * Obtiene la fila asociada al nombre del módulo.
      * 
      * @param string $module
      * @param array() $fields
@@ -345,6 +353,12 @@ class AclModulesModel extends DbTable_AclModules
         return $this->fetchRow($select);
     }
     
+    /**
+     * Obtiene las acciones asociadas al módulo.
+     * 
+     * @param int $id
+     * @return Zend_Db_Table_Rowset_Abstract
+     */
     public function getActions($id)
     {
         $model  = new AclModulesActionsModel();

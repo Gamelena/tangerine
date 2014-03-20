@@ -99,7 +99,14 @@ class Zwei_Admin_Acl extends Zend_Acl
      */
     private $_moduleRow = null;
     /**
-     * 
+     *
+     * @var string
+     */
+    private $_module = null;
+    
+    /**
+     * Constructor
+     * @return void
      */
     public function __construct()
     {
@@ -384,9 +391,10 @@ class Zwei_Admin_Acl extends Zend_Acl
         $cache = Zend_Cache::factory('Core', 'File', $frontend, $backend);
         */
         $aclModulesModel = new AclModulesModel();
-        //if ($this->_moduleRow == null) {
+        if ($this->_module != $module) {
             $this->_moduleRow = $aclModulesModel->findModule($module);
-        //}
+            $this->_module = $module;
+        }
         $moduleRow       = $this->_moduleRow;
         $resource        = $moduleRow->id;
         
@@ -441,9 +449,10 @@ class Zwei_Admin_Acl extends Zend_Acl
     {
         $allowed = false;
         $aclModulesModel = new AclModulesModel();
-        //if ($this->_moduleRow == null) {
+        if ($this->_module != $module) {
             $this->_moduleRow = $aclModulesModel->findModule($module);
-        //}
+            $this->_module = $module;
+        }
         
         $moduleRow       = $this->_moduleRow;
         $resource        = $moduleRow->id;
@@ -451,14 +460,16 @@ class Zwei_Admin_Acl extends Zend_Acl
         
         if ($moduleType == 'xml') {
             $file = Zwei_Admin_Xml::getFullPath($module);
-            $xml  = new Zwei_Admin_Xml($file, null, true);
-            if ($xml->getAttribute('target')) {
-                $modelName = $xml->getAttribute('target');
-                $model     = new $modelName();
-                
-                if ($model instanceof Zwei_Db_Table) {
-                    if ($model->isOwner($itemId)) {
-                        $allowed = true;
+            if (file_exists($file)) {
+                $xml  = new Zwei_Admin_Xml($file, null, true);
+                if ($xml->getAttribute('target')) {
+                    $modelName = $xml->getAttribute('target');
+                    $model     = new $modelName();
+                    
+                    if ($model instanceof Zwei_Db_Table) {
+                        if ($model->isOwner($itemId)) {
+                            $allowed = true;
+                        }
                     }
                 }
             }

@@ -175,17 +175,22 @@ class AdminController extends Zend_Controller_Action
     {
         if ($this->getRequest()->getParam('p')) {
             $component = $this->getRequest()->getParam('p');
-
-            if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
+            
+            if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+                $this->_redirect('admin/login');
+            }
+            
             if ($this->_acl->isUserAllowed($component, "LIST") || $this->_acl->isUserAllowed($component, "EDIT") || $this->_acl->isUserAllowed($component, "ADD")) {
                 $file = Zwei_Admin_Xml::getFullPath($component);
                 
                 try {
                     $xml = new Zwei_Admin_Xml($file, LIBXML_NOWARNING, 1);
                 } catch (Exception $e) {
-                    exit("Error al intentar parsear $file, compruebe que el archivo exista y que sea un XML válido.");
+                    $message = "Error al intentar parsear $file";
+                    Debug::write($message);
+                    exit("<h2>$message<h2><center><img src=\"".BASE_URL."images/exception-xml.jpg\"/></center>");
                 }
-
+                
                 if (stristr($xml->getAttribute('type'), '.')) {
                     list($controller, $action) = explode('.', $xml->getAttribute('type'));
                 } else if (stristr($xml->getAttribute('type'), '/')) {
@@ -197,7 +202,7 @@ class AdminController extends Zend_Controller_Action
                 
                 $this->view->content =  $this->view->action($action, $controller, 'components', $this->getRequest()->getParams());
             } else {
-                $this->view->content = "Acceso denegado a módulo $component";
+                $this->view->content = "<h2>Acceso denegado a módulo $component</h2><center><img src=\"".BASE_URL."images/access-denied.jpg\"/ alt=\"\"></center>";
             }
         } else {
             $this->view->component = "index";

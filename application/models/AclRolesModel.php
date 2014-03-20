@@ -66,7 +66,6 @@ class AclRolesModel extends DbTable_AclRoles
      * @param Zend_Db_Table_Rowset
      * @return array
      */
-
     public function overloadDataForm($data) {
         $data = $data->toArray();
 
@@ -107,8 +106,9 @@ class AclRolesModel extends DbTable_AclRoles
     public function update($data, $where)
     {
         $data = $this->cleanDataParams($data);
-
-        if (in_array('must_refresh', $this->info('cols'))) {
+        
+        //@TODO Backward Compatibility patch (BCP)
+        if (!(Zend_Session::getSaveHandler() instanceof Zend_Session_SaveHandler_DbTable) && in_array('must_refresh', $this->info('cols'))) {
             $data['must_refresh'] = '1';
         }
         
@@ -123,20 +123,44 @@ class AclRolesModel extends DbTable_AclRoles
                 Debug::write($e->getMessage()."-".$e->getCode());
             }
         }
-
-
+        
         $arrWhere = $this->whereToArray($where);
         $aclRolesId = $arrWhere['id'];
-
-
+        
         $addPermissions = $this->addPermissions($aclRolesId);
         $this->_more = array('AclRolesId' => $aclRolesId);
-
-
-        Zwei_Utils_File::clearRecursive(ROOT_DIR ."/cache");
+        
+        if ($addPermissions) {
+            
+            $cache = new Zwei_Controller_Plugin_Cache(Zwei_Controller_Config::getOptions());//@TODO una vez eliminados los BCP limpiar cache en self::notifyUsers()
+            $cache->cleanByTags(array("roleid{$aclRolesId}"));
+            
+            if (Zend_Session::getSaveHandler() instanceof Zend_Session_SaveHandler_DbTable) { //@TODO BCP
+                $this->notifyUsers($aclRolesId);
+            }
+        }
+        
         return $update || $addPermissions;
     }
-
+    
+    /**
+     * 
+     * @param string $aclRolesId
+     * @return Ambigous <boolean, number>
+     */
+    public function notifyUsers($aclRolesId)
+    {
+        $aclUsers = new DbTable_AclSession();
+        $notifyUsers = false;
+        
+        $notifyUsers = $aclUsers->update(
+            array('must_refresh' => '1'),
+            $aclUsers->getAdapter()->quoteInto('acl_roles_id = ?', $aclRolesId)
+        );
+        
+        return $notifyUsers;
+    }
+    
     /**
      * (non-PHPdoc)
      * @see Zwei_Db_Table::insert()
@@ -153,12 +177,10 @@ class AclRolesModel extends DbTable_AclRoles
                 return false;
             }
         }
-
-        if ($insert) $addPermissions = $this->addPermissions($insert);
-        if (!$insert && $addPermissions) $insert = $addPermissions; //Devolver != false frente a cualquier modificacion
-
-        Zwei_Utils_File::clearRecursive(ROOT_DIR ."/cache");
-        return $insert;
+        
+        $addPermissions = $this->addPermissions($insert);
+        
+        return $insert || $addPermissions;
     }
 
     /**
@@ -171,15 +193,15 @@ class AclRolesModel extends DbTable_AclRoles
     {
         $aclRolesModulesAction = new AclRolesModulesActionsModel();
         $ad = $aclRolesModulesAction->getAdapter();
-
+        
         //(1) Inicialización clausula SQL WHERE para borrar permisos
         $where = array();
-
+        
         //(2) Se deben borrar todos los permisos asociados a este perfil ...
         $where[] = $ad->quoteInto("acl_roles_id = ?", $aclRolesId);
-
+        
         $whereOr = array();
-
+        
         $permissionsRows = array();
         foreach ($this->_dataRolesModulesActions as $aclModulesActionsId) {
             $whereOr[] = $ad->quote($aclModulesActionsId);
@@ -266,13 +288,18 @@ class AclRolesModel extends DbTable_AclRoles
         $delete = parent::delete($where);
         if ($delete) { //borrar permisos asociados
             $arrWhere = self::whereToArray($where);
-            //$aclRolesActions = new DbTable_AclRolesModulesActions();//[FIXME] esto termina la ejecucion del script, no sabemos por qué. Por ello no lo usaremos.
+            //$aclRolesActions = new DbTable_AclRolesModulesActions();//[FIXME] esto termina la ejecucion del script silenciosamente, no sabemos por qué. Por ello no lo usaremos.
+            //$deleteActions = $aclRolesActions->delete($where);
+            
             $where = $this->getAdapter()->quoteInto("acl_roles_id = ? ", $arrWhere['id']);
             
             $query = "DELETE FROM acl_roles_modules_actions WHERE $where";
-            
             $deleteActions = $this->getAdapter()->query($query); //Ejecucion directa de SQL como workaround
-            //$deleteActions = $aclRolesActions->delete($where);//[FIXME]
+            
+            if (Zend_Session::getSaveHandler() instanceof Zend_Session_SaveHandler_DbTable) {
+                $query = "DELETE FROM acl_session WHERE $where"; //Terminar sesiones de usuarios con sesion abierta con perfil asociado
+                $deleteSessions = $this->getAdapter()->query($query);
+            }
         }
         return $delete;
     }
