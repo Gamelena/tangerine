@@ -108,7 +108,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $className = $this->_xml->getAttribute('target');
         $this->ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? true : false;
-        $this->view->multiForm = $this->_config->zwei->form->multiple && $this->ajax ? true : false;
+        $this->view->multiForm = $this->ajax ? true : false;
         //Se agrega nombre de modelo a mensaje de Exception
         try {
             $this->_model = new $className();
