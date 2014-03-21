@@ -29,6 +29,8 @@ class AclSessionOnlineModel extends DbTable_AclSession
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where("acl_roles_id <> '1'");
         }
+        
+        $select->where("acl_users_id <> '0'");
         $select->order("modified DESC");
         
         return $select;
