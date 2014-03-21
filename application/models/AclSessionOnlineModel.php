@@ -50,9 +50,15 @@ class AclSessionOnlineModel extends DbTable_AclSession
         
         
         foreach ($data as $d) {
-            $timeout = $d['modified'] + $config->zwei->session->timeout;
-            $data[$i]['expires'] = date('Y-m-d h:i:s', $timeout);
-            $data[$i]['modified'] = date('Y-m-d h:i:s', $d['modified']);
+            //si la última actividad fue hace más de 10 segundos entonces ya no está logueado, 
+            //le damos 2 segundos más como margen de error (12 en total)
+            if (($d['modified']) > (time() - 12)) {
+                $timeout = $d['modified'] + $config->zwei->session->timeout;
+                $data[$i]['expires'] = date('Y-m-d h:i:s', $timeout);
+                $data[$i]['modified'] = date('Y-m-d h:i:s', $d['modified']);
+            } else {
+                unset($data[$i]);
+            }
             $i++;
         }
         
