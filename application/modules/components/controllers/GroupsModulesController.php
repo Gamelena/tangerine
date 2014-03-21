@@ -1,30 +1,36 @@
 <?php
-
+/**
+ * Controlador de edición de grupos
+ * @author rodrigo.riquelme@zweicom.com
+ *
+ */
 class Components_GroupsModulesController extends Zend_Controller_Action
 {
 
     /**
+     * Id de módulo
+     * 
      * @var int
-     *
-     *
      */
     private $_aclModulesId = null;
 
     /**
+     * Id de registro elemento de módulo.
+     * 
      * @var int
-     *
-     *
      */
     private $_aclModulesItemId = null;
     
     /**
+     * Id de grupo.
      * 
      * @var int
      */
     private $_aclGroupsId;
     
     /**
-     *
+     * Acciones previamente seleccionadas y guardadas.
+     * 
      * @var array
      */
     private $_selected = array();
@@ -117,7 +123,12 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         
         return $modules;
     }
-
+    
+    /**
+     * Acción editar.
+     * 
+     * @return void
+     */
     public function editAction()
     {
         $selected = array();
