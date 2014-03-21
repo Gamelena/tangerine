@@ -155,6 +155,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->p = $this->_component;
         $this->view->model = $this->_xml->getAttribute('target');
+        $this->view->hide = '';
         if (isset($this->_xml->searchers)) {
             $this->view->xml = $this->_xml;
             $this->view->groups = $this->_xml->getSearchers(true);
@@ -168,6 +169,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         } else {
             $this->view->groups = array();
             $this->view->hideSubmit = true;
+            $this->view->hide = 'style="display:none;"';
             $this->view->customFunctions = array();
         }
     }
