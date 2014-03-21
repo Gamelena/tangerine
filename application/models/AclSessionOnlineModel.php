@@ -26,7 +26,11 @@ class AclSessionOnlineModel extends DbTable_AclSession
         $select->joinLeft($this->_nameAclUsers, "$this->_name.acl_users_id=$this->_nameAclUsers.id", array('user_name', 'email'));
         $select->joinLeft($this->_nameAclRoles, "$this->_nameAclUsers.acl_roles_id=$this->_nameAclRoles.id", array('role_name'));
         
-        $select->where("acl_users_id <> '0'");
+        if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
+            $select->where("acl_roles_id <> '1'");
+        }
+        $select->order("modified DESC");
+        
         return $select;
     }
     
