@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Controlador de despliegue de PHP Info
+ * 
+ * @author rodrigo.riquelme@zweicom.com
+ *
+ */
 class Components_PhpInfoController extends Zend_Controller_Action
 {
 
@@ -7,7 +12,10 @@ class Components_PhpInfoController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
     }
-
+    
+    /**
+     * Acción index
+     */
     public function indexAction()
     {
         $out = '';

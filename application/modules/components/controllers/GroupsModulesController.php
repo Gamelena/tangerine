@@ -1,6 +1,7 @@
 <?php
 /**
- * Controlador de edición de grupos
+ * Controlador de edición de grupos.
+ * 
  * @author rodrigo.riquelme@zweicom.com
  *
  */

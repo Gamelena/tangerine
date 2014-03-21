@@ -173,7 +173,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->view->customFunctions = array();
         }
     }
-
+    
     /**
      * Inicializa formulario
      * @param string $mode
@@ -226,7 +226,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     }
     
     /**
-     * Inicializa acciones para botones y menús
+     * Inicialización de acciones para botones y menús.
+     * 
      * @return void
      */
     public function initKeys()
@@ -261,7 +262,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     }
     
     /**
-     * Diálogo editar
+     * Diálogo editar.
+     * 
      * @return void
      */
     public function editAction()
@@ -276,7 +278,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     }
     
     /**
-     * Diálogo agregar
+     * Diálogo agregar.
+     * 
      * @return void
      */
     public function addAction()
@@ -286,7 +289,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     }
     
     /**
-     * Diálogo clonar
+     * Diálogo clonar.
+     * 
      * @return void
      */
     public function cloneAction()
@@ -298,7 +302,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     }
     
     /**
-     * Listado
+     * Listado.
+     * 
      * @return void
      */
     public function listAction()
@@ -434,7 +439,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     }
     
     /**
-     * Botonera
+     * Botonera.
+     * 
      * @return void
      */
     public function keypadAction()
@@ -443,7 +449,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     }
     
     /**
-     * Diálogo cambiar password
+     * Diálogo cambiar password.
+     * 
      * @return void
      */
     public function changePasswordAction()
@@ -471,7 +478,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     }
     
     /**
-     * Menú contextual
+     * Menú contextual.
+     * 
+     * @return void
      */
     public function contextMenuAction()
     {
