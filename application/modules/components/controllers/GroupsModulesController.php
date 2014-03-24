@@ -87,6 +87,10 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         $actions = array();
         $modulesModel = new DbTable_AclModules();
         $parent = $modulesModel->find($aclModulesId)->current();
+        if (!$parent) {
+            throw new Zwei_Exception("No se ha encontrado un módulo con id $aclModulesId");
+        }
+        
         $modules[$i]['id'] = $parent->id;
         $modules[$i]['title'] = $title != null ? $title : $parent->title;
         
