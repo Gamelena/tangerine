@@ -1,4 +1,6 @@
 #!/bin/bash
+shopt -s nocasematch
+
 ZWC_ADMPORTAL_PATH=$ZWC_ADMPORTAL
 DEST_PATH=$PWD
 
@@ -26,7 +28,7 @@ read -p "¿Desea crear la base de datos MySQL? (S/N) (por defecto N):" CREATE_DA
 CREATE_DATABASE=${CREATE_DATABASE:-N}
 
 
-if [ "$CREATE_DATABASE" = "S" ]; then
+if [[ "$CREATE_DATABASE" = "S" ]]; then
         read -p "Ingrese Super Usuario para creación de DB (por defecto root):" DB_ROOT_USER  
         DB_ROOT_USER=${DB_ROOT_USER:-root}
         
@@ -49,7 +51,7 @@ echo Creando proyecto AdmPortal en $DEST_PATH/web
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/configs/ $DEST_PATH/web/application/configs/
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/components/ $DEST_PATH/web/application/components/
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/application/views/ $DEST_PATH/web/application/views/
-rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/public/ $DEST_PATH/web/public/
+rsync -r --exclude=.svn --exclude='js/libs' $ZWC_ADMPORTAL_PATH/public/ $DEST_PATH/web/public/
 cp  $ZWC_ADMPORTAL_PATH/application/Bootstrap.php $DEST_PATH/web/application/Bootstrap.php
 mkdir -p $DEST_PATH/web/library/Zwei/Utils/
 cp  $ZWC_ADMPORTAL_PATH/library/Zwei/Utils/CustomFunctions.php $DEST_PATH/web/library/Zwei/Utils/CustomFunctions.php
@@ -69,7 +71,7 @@ echo " "
 read -p "¿Desea crear y poblar tablas básicas MySQL de AdmPortal? (S/N) (por defecto S):" CREATE_TABLES
 CREATE_TABLES=${CREATE_TABLES:-S}
 
-if [ "$CREATE_TABLES" = "S" ]; then
+if [[ "$CREATE_TABLES" = "S" ]]; then
         echo mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/admportal.sql" $DB_NAME
         mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/admportal.sql" $DB_NAME
         echo " "
@@ -91,7 +93,7 @@ echo " "
 read -p "¿Desea copiar Controladores de AdmPortal en su proyecto local? (S/N) (por defecto N):" CREATE_CONTROLLERS    
 CREATE_CONTROLLERS=${CREATE_CONTROLLERS:-N}
 
-if [ "$CREATE_CONTROLLERS" = "S" ]; then
+if [[ "$CREATE_CONTROLLERS" = "S" ]]; then
     echo " "
     echo Creando Controladores.
     
@@ -135,7 +137,7 @@ CREATE_MODULES=${CREATE_MODULES:-N}
 
 
 
-if [ "$CREATE_MODULES" = "S" ]; then
+if [[ "$CREATE_MODULES" = "S" ]]; then
     echo " "
     echo Creando Módulos.
     zf create controller DojoPieChart components
@@ -148,7 +150,7 @@ echo " "
 read -p "¿Desea copiar Modelos de AdmPortal en su proyecto local? (S/N) (por defecto N):" CREATE_MODELS    
 CREATE_MODELS=${CREATE_MODELS:-N}
 
-if [ "$CREATE_MODELS" = "S" ]; then
+if [[ "$CREATE_MODELS" = "S" ]]; then
 
     echo " "
     echo Creando Modelos.
@@ -169,6 +171,7 @@ else
     mkdir -p $DEST_PATH/web/application/models/
 fi
 
+shopt -u nocasematch
 
 if [ -a $DEST_PATH/web/application/models/DbTable ];then
     echo Adaptando Tablas ZF a Tablas de AdmPortal
@@ -209,12 +212,12 @@ echo " "
 echo "      sed -i '1 i\RewriteBase /${PWD##*/}/' $DEST_PATH/web/public/.htaccess " 
 
 echo " "  
-echo \*\*\* Deberá darles permisos de escritura a las carpetas $DEST_PATH/web/log/ y  $DEST_PATH/web/cache/  \*\*\*
+echo \*\*\* Deberá darles permisos de escritura a las carpetas $DEST_PATH/web/log/, $DEST_PATH/web/cache/ y $DEST_PATH/web/public/upfiles/  \*\*\*
 echo " "
 echo "Puede tomar como referencia uno de estos comandos:"
 echo " "
-echo "      chown www-data  $DEST_PATH/web/log/ $DEST_PATH/web/cache/"
-echo "      chmod 777 -R  $DEST_PATH/web/log/ $DEST_PATH/web/cache/"
+echo "      chown www-data  $DEST_PATH/web/log/ $DEST_PATH/web/cache/ $DEST_PATH/web/public/upfiles/"
+echo "      chmod 777 -R  $DEST_PATH/web/log/ $DEST_PATH/web/cache/ $DEST_PATH/web/public/upfiles/"
 echo " "
 echo Happy AdmPortal\'ing.
 echo " "
