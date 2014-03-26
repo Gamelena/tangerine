@@ -99,7 +99,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     dojo.connect(menu<?=$this->domPrefix?>, 'onOpen', function(e){
         var items = dijit.byId('<?=$this->domPrefix?>dataGrid').selection.getSelected();
         if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-        dijit.byId('<?=$this->domPrefix?>MenuItemEdit').set('disabled', items[0].magicPortalIsAllowedEDIT!='1');
+        dijit.byId('<?=$this->domPrefix?>MenuItemEdit').set('disabled', items[0].admPortalIsAllowedEDIT!='1');
     });
 <?php
     endif;
@@ -155,7 +155,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
         dojo.connect(menu<?=$this->domPrefix?>, 'onOpen', function(e){
             var items = dijit.byId('<?=$this->domPrefix?>dataGrid').selection.getSelected();
             if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-            dijit.byId('<?=$this->domPrefix?>MenuItemDelete').set('disabled', items[0].magicPortalIsAllowedDELETE!='1');
+            dijit.byId('<?=$this->domPrefix?>MenuItemDelete').set('disabled', items[0].admPortalIsAllowedDELETE!='1');
         });
 <?php
     endif;
@@ -233,7 +233,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
         dojo.connect(menucampanas_xml, 'onOpen', function(e){
             var items = dijit.byId('<?=$this->domPrefix?>dataGrid').selection.getSelected();
             if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-            dijit.byId('<?=$this->domPrefix?>MenuItemChangePass').set('disabled', items[0].magicPortalIsAllowedEDIT!='1');
+            dijit.byId('<?=$this->domPrefix?>MenuItemChangePass').set('disabled', items[0].admPortalIsAllowedEDIT!='1');
         });
 <?php
     endif;

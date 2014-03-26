@@ -338,8 +338,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             } else {
                 $this->view->onRowClick = " var items = this.selection.getSelected();
                     if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-                    if (dijit.byId('{$this->view->domPrefix}btnEdit') != undefined) dijit.byId('{$this->view->domPrefix}btnEdit').set('disabled', items[0].magicPortalIsAllowedEDIT!='1');
-                    if (dijit.byId('{$this->view->domPrefix}MenuItemEdit')) dijit.byId('{$this->view->domPrefix}MenuItemEdit').set('disabled', items[0].magicPortalIsAllowedEDIT!='1');
+                    if (dijit.byId('{$this->view->domPrefix}btnEdit') != undefined) dijit.byId('{$this->view->domPrefix}btnEdit').set('disabled', items[0].admPortalIsAllowedEDIT!='1');
+                    if (dijit.byId('{$this->view->domPrefix}MenuItemEdit')) dijit.byId('{$this->view->domPrefix}MenuItemEdit').set('disabled', items[0].admPortalIsAllowedEDIT!='1');
                 ";
             }
         }
@@ -360,7 +360,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             } else {
                 $this->view->onRowClick .= " var items = this.selection.getSelected();
                 if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-                if (dijit.byId('{$this->view->domPrefix}btnDelete') != undefined) dijit.byId('{$this->view->domPrefix}btnDelete').set('disabled', items[0].magicPortalIsAllowedDELETE!='1');
+                if (dijit.byId('{$this->view->domPrefix}btnDelete') != undefined) dijit.byId('{$this->view->domPrefix}btnDelete').set('disabled', items[0].admPortalIsAllowedDELETE!='1');
                 ";
             }
         }
@@ -406,7 +406,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                 $this->view->onRowDblClick = "
                     var items = this.selection.getSelected();
                     if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-                    if (items[0].magicPortalIsAllowedEDIT=='1') {
+                    if (items[0].admPortalIsAllowedEDIT=='1') {
                         var form = new zwei.Form({
                             ajax: $ajax,
                             component: '{$this->_component}',
