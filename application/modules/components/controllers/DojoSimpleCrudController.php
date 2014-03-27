@@ -187,7 +187,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->mode = $mode;
         $this->view->loadPartial = $r->getParam('loadPartial', false);
         $this->view->dialogIndex = $r->getParam('dialogIndex', '');
-
+        
         $this->view->onShow = $this->_xml->xpath('//component/forms/onShow') ? dom_import_simplexml($this->_xml->forms->onShow)->textContent : '';
         $this->view->onSubmit = $this->_xml->xpath('//component/forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
         $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
@@ -218,10 +218,15 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                 }
                 $this->view->dialogIndex = Zwei_Utils_String::toVarWord($this->view->dialogIndex);
             }
+            
             //Es posible añadir más valores al retorno de la query principal sobrecargando este método.
             $this->view->data = $data;
             if (method_exists($this->_model, 'overloadDataForm')) $this->view->data = $this->_model->overloadDataForm($data);
         }
+        $this->view->dijitDialogId = $r->getParam('dijitDialogId', $this->view->domPrefix . 'dialog_' . $mode . $this->view->dialogIndex);
+        $this->view->dijitDataGridId = $r->getParam('dijitDataGridId', $this->view->domPrefix . 'dataGrid');
+        $this->view->dijitFormSearchId = $r->getParam('dijitFormSearchId', $this->view->domPrefix . 'formSearch');
+        
         $this->view->includeJs = $this->_xml->getAttribute('jsForm') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('jsForm')."?noCache={$this->view->noCache}\"></script>" : '';
     }
     

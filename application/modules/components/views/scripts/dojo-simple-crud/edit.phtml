@@ -102,9 +102,9 @@ endif;
         try {
             var form = new zwei.Form({
                 dijitForm: this, 
-                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_<?=$this->mode?><?=$this->dialogIndex?>'),
-                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
+                dijitDialog: dijit.byId('<?=$this->dijitDialogId?>'),
+                dijitDataGrid: dijit.byId('<?=$this->dijitDataGridId?>'),
+                dijitFormSearch: dijit.byId('<?=$this->dijitFormSearchId?>'),
                 iframe: dojo.byId('ifrm_process')
             });
             console.log('post form');

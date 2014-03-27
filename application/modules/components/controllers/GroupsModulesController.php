@@ -148,7 +148,7 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         }
         
         $this->view->mode = 'edit';
-        $title = 'Campaña';
+        $title = $this->getRequest()->getParam('title', false);
         $this->view->modules = $this->getModules($this->_aclModulesId, $title, true);
     }
 }
