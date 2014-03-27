@@ -10,9 +10,22 @@ endif;
 if ($this->elements) :
 ?>
     <table data-dojo-type="<?=$this->gridDojoType ?>" id="<?=$this->domPrefix?>dataGrid" jsId="<?=$this->domPrefix?>dataGrid" data-dojo-props="<?=$this->store?> plugins:<?=$this->plugins ?>, noDataMessage:'<?=$this->noDataMessage?>', onRowDblClick: function(){<?=$this->onRowDblClick?>}<?=$this->canSort?>" class="dataGrid" style="height: 50em;">
+<?php 
+    if ($this->onFetchComplete) :
+?>
+    <script type="dojo/aspect" data-dojo-advice="after" data-dojo-method="_onFetchComplete">
+    <?=$this->onFetchComplete?>
+    </script>
+<?php 
+    endif;
+    if ($this->onRowClick) :
+?>
         <script type="dojo/connect" data-dojo-event="onRowClick" data-dojo-args="e">
         <?=$this->onRowClick?>
         </script>
+<?php 
+    endif;
+?>
         <thead>
             <tr>
 <?php
