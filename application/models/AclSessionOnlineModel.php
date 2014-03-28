@@ -48,7 +48,6 @@ class AclSessionOnlineModel extends DbTable_AclSession
         $data = $data->toArray();
         $config = Zwei_Controller_Config::getOptions();
         
-        Debug::write($data);
         foreach ($data as $d) {
             //si la última actividad fue hace más de 10 segundos entonces ya no está logueado, 
             //le damos 2 segundos más como margen de error (12 en total)
