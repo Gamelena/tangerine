@@ -39,8 +39,18 @@
 
 class SettingsModel extends Zwei_Db_Table
 {
+    /**
+     * Tabla principal.
+     * 
+     * @var string
+     */
     protected $_name = "web_settings";
     
+    /**
+     * Selecciona grupos.
+     * 
+     * @return Zend_Db_Table_Rowset_Abstract
+     */
     public function loadGroups()
     {
         $select = new Zend_Db_Table_Select($this);
@@ -50,6 +60,12 @@ class SettingsModel extends Zwei_Db_Table
         return $this->fetchAll($select)->toArray();
     }
     
+    /**
+     * 
+     * @param string $group.
+     * 
+     * @return Zend_Db_Table_Rowset_Abstract:
+     */
     public function getSubGroups($group)
     {
         $select = new Zend_Db_Table_Select($this);

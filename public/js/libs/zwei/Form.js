@@ -292,7 +292,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     timeout: 5000,
                     load: function(response){
                         if(response.message != "" && response.message != null){
-                            self.utils.showMessage(response.message);
+                            self.utils.showMessage(response.message, response.type);
                             if (response.state != 'AUTH_FAILED') self.postSave();
                         } else if(response.state == 'DELETE_OK') {
                             self.utils.showMessage('Se ha borrado correctamente.');
