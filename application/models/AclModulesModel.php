@@ -342,7 +342,7 @@ class AclModulesModel extends DbTable_AclModules
      * Obtiene la fila asociada al nombre del módulo.
      * 
      * @param string $module
-     * @param array() $fields
+     * @param array $fields
      * @return Zend_Db_Table_Row
      */
     public function findModule($module, $fields = array('*'))

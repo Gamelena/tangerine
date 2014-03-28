@@ -1,10 +1,28 @@
 <?php
-
+/**
+ * 
+ * Modelo relacional entre grupos, módulos y acciones.
+ *
+ */
 class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
 {
+    /**
+     * Ids de tabla relacional acciones por módulo.
+     * 
+     * @var array
+     */
     protected $_dataModulesActionsId;
+    /**
+     * Nombre tabla relacional acciones por módulo.
+     * 
+     * @var string
+     */
     protected $_nameModulesActions = 'acl_modules_actions';
-    
+    /**
+     * @param array $data
+     * @param string $where
+     * @see Zwei_Db_Table::update()
+     */
     public function update($data, $where)
     {
         $data = $this->cleanDataParams($data);
@@ -29,6 +47,13 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
         return $insert || $delete;
     }
     
+    /**
+     * Se separan los datos de tabla principal de tabla acciones por módulo.
+     * 
+     * @param array $data
+     * @return array $data
+     * @see Zwei_Db_Table::cleanDataParams()
+     */
     public function cleanDataParams($data)
     {
         foreach ($data as $i => $v) {
@@ -42,6 +67,12 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
         return $data;
     }
     
+    /**
+     * Se borra todas las acciones que no existan en $data.
+     *  
+     * @param array $data
+     * @param string $where
+     */
     public function deleteUnchecked($data, $where)
     {
         $list = !empty($this->_dataModulesActionsId) ?
@@ -53,16 +84,10 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
         $delete = parent::delete($where);
     }
     
-    public function findModuleId($id)
-    {
-        
-    }
-    
-    public function findActionId($id)
-    {
-        
-    }
-    
+    /**
+     * @return Zend_Db_Table_Select
+     * @see Zend_Db_Table_Abstract::select()
+     */
     public function select()
     {
         $select = new Zend_Db_Table_Select($this);

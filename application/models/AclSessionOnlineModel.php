@@ -48,11 +48,11 @@ class AclSessionOnlineModel extends DbTable_AclSession
         $data = $data->toArray();
         $config = Zwei_Controller_Config::getOptions();
         
-        
+        Debug::write($data);
         foreach ($data as $d) {
             //si la última actividad fue hace más de 10 segundos entonces ya no está logueado, 
             //le damos 2 segundos más como margen de error (12 en total)
-            if (($d['modified']) > (time() - 12)) {
+            if ((int) $d['modified'] > (time() - 12)) {
                 $timeout = $d['modified'] + $config->zwei->session->timeout;
                 $data[$i]['expires'] = date('Y-m-d h:i:s', $timeout);
                 $data[$i]['modified'] = date('Y-m-d h:i:s', $d['modified']);
@@ -63,6 +63,16 @@ class AclSessionOnlineModel extends DbTable_AclSession
         }
         
         return $data;
+    }
+    
+    public function delete($where)
+    {
+        $aWhere = self::whereToArray($where);
+        if ($aWhere['id'] == Zend_Session::getId()) {
+            $this->setMessage("Esta es su propia sesión.");
+            return false;
+        }
+        return parent::delete($where);
     }
 }
 
