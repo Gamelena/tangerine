@@ -3,7 +3,7 @@
 name="Informaci&amp;oacute;n" type="dojo-simple-crud" target="PersonalInfoModel" list="true" plugins="{}" edit="true" add="false" delete="false"
 >
     <elements>
-        <element name="ID" target="id" type="id-box" visible="false" edit="false" add="false"/>
+        <element name="ID" target="id" type="dijit-form-validation-text-box" visible="false" edit="false" add="false"/>
         <element name="Usuario" target="user_name" type="dijit-form-validation-text-box" visible="true" edit="false" add="true"/>
         <element name="Nombres" target="first_names" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
         <element name="Apellidos" target="last_names" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
