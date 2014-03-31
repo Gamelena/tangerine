@@ -13,7 +13,7 @@ if ($this->elements) :
 <?php 
     if ($this->onFetchComplete) :
 ?>
-    <script type="dojo/aspect" data-dojo-advice="after" data-dojo-method="_onFetchComplete">
+    <script type="dojo/aspect" data-dojo-advice="after" data-dojo-method="_onFetchComplete" data-dojo-args="e">
     <?=$this->onFetchComplete?>
     </script>
 <?php 
@@ -36,7 +36,7 @@ if ($this->elements) :
     endforeach;
 ?>
             </tr>
-        <thead>
+        </thead>
     </table>
 <?php 
 endif;
