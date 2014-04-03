@@ -151,18 +151,21 @@ class AdminController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->enableDojo();
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
-        $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-        $this->view->user_name = $userInfo->user_name;
-        $this->view->first_names = $userInfo->first_names;
-        $this->view->last_names = $userInfo->last_names;
-        $this->view->user_id = $userInfo->id;
-        $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
-        $this->view->layout = isset($config->zwei->layout->mainPane) ? "'".$config->zwei->layout->mainPane."'" : 'undefined';//Para backward compatibility, TODO deprecar
-        $this->view->multiForm = isset($config->zwei->form->multiple) && !empty($config->zwei->form->multiple) ? 'true' : 'false';//Para backward compatibility, TODO deprecar
-
-        if ($this->_template != 'default') {
-            $this->_helper->viewRenderer("index-$this->_template");
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+            $this->_redirect('admin/login');
+        } else {
+            $userInfo = Zend_Auth::getInstance()->getStorage()->read();
+            $this->view->user_name = $userInfo->user_name;
+            $this->view->first_names = $userInfo->first_names;
+            $this->view->last_names = $userInfo->last_names;
+            $this->view->user_id = $userInfo->id;
+            $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
+            $this->view->layout = isset($config->zwei->layout->mainPane) ? "'".$config->zwei->layout->mainPane."'" : 'undefined';//Para backward compatibility, TODO deprecar
+            $this->view->multiForm = isset($config->zwei->form->multiple) && !empty($config->zwei->form->multiple) ? 'true' : 'false';//Para backward compatibility, TODO deprecar
+    
+            if ($this->_template != 'default') {
+                $this->_helper->viewRenderer("index-$this->_template");
+            }
         }
     }
 
@@ -207,24 +210,27 @@ class AdminController extends Zend_Controller_Action
 
     public function modulesAction()
     {
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
-
-        Zend_Dojo::enableView($this->view);
-
-        $this->_helper->ContextSwitch
-        ->setAutoJsonSerialization(false)
-        ->addActionContext('index', 'json')
-        ->initContext();
-
-        //$this->_helper->viewRenderer->setNoRender(true);
-        $modules = new AclModulesModel();
-
-        $tree = $modules->getTree();
-
-        $treeObj = new Zend_Dojo_Data('id', $tree);
-        $treeObj->setLabel('label');
-
-        $this->view->content = $treeObj->toJson();
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+            $this->_redirect('index/login');
+        } else {
+            
+            Zend_Dojo::enableView($this->view);
+            
+            $this->_helper->ContextSwitch
+            ->setAutoJsonSerialization(false)
+            ->addActionContext('index', 'json')
+            ->initContext();
+    
+            //$this->_helper->viewRenderer->setNoRender(true);
+            $modules = new AclModulesModel();
+    
+            $tree = $modules->getTree();
+    
+            $treeObj = new Zend_Dojo_Data('id', $tree);
+            $treeObj->setLabel('label');
+    
+            $this->view->content = $treeObj->toJson();
+        }
     }
     
     public function loginAction()
