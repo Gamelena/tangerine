@@ -429,7 +429,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * Indica si se guardarán transacciones en log, Modelo debe extender de Zwei_Table_Loggeable()
      * @param boolean
      */
-    public function setDefaultLogMode($mode)
+    static public function setDefaultLogMode($mode)
     {
         self::$_defaultLogMode = $mode;
     }

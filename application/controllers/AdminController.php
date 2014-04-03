@@ -320,6 +320,7 @@ class AdminController extends Zend_Controller_Action
         ->setTranslator(new Zend_Translate('array',array("Value is required and can't be empty"=>"Este valor no puede ir vacío"),'es'))
 
         ->setMethod('post')
+        ->setAttrib('id', 'loginForm')
         ->addElement($username)
         ->addElement($password)
         ->addElement($submit);
