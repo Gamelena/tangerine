@@ -13,17 +13,12 @@ class AdminController extends Zend_Controller_Action
      *
      * @var string
      */
-    private $_dojoTheme = 'tundra';
+    private $_dojoTheme = 'claro';
     /**
      *
      * @var string
      */
-    private $_sitename;
-    /**
-     *
-     * @var string
-     */
-    private $_template = TEMPLATE;
+    private $_template = 'default';
     /**
      *
      * @var Zwei_Db_Table
@@ -44,6 +39,7 @@ class AdminController extends Zend_Controller_Action
     {
         $config = Zwei_Controller_Config::getOptions();
         $confLayout = $config->zwei->layout;
+        $r = $this->getRequest();
         
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         if ($userInfo) $this->_acl = new Zwei_Admin_Acl();
@@ -53,11 +49,11 @@ class AdminController extends Zend_Controller_Action
         if (isset($config->resources->dojo->cdnbase)) $this->baseDojoFolder = $config->resources->dojo->cdnbase . '/' . $config->resources->dojo->cdnversion;
         $this->view->noCache = isset($config->zwei->resources) ? $config->zwei->resources->noCache : ''; 
         
-        if (!empty($confLayout->dojoTheme)) $this->_dojoTheme = $confLayout->dojoTheme;
-        if (!empty($confLayout->template)) $this->_dojoTheme = $confLayout->layout->template;
+        if ($confLayout->dojoTheme) $this->_dojoTheme = $confLayout->dojoTheme;
+        $this->_dojoTheme = $r->getParam('theme', $this->_dojoTheme);
         
-        if (!empty($this->_request->theme)) $this->_dojoTheme = $this->_request->theme;
-        if (!empty($this->_request->template)) $this->_template = $this->_request->template;
+        if ($confLayout->template) $this->_template = $confLayout->layout->template;
+        $this->_template = $r->getParam('template', $this->_template);
         
         $this->view->headStyle()->appendStyle('
             @import "'.$this->baseDojoFolder.'/dijit/themes/'.$this->_dojoTheme.'/'.$this->_dojoTheme.'.css";
@@ -66,8 +62,7 @@ class AdminController extends Zend_Controller_Action
         $settings = new SettingsModel();
         
         try {
-            $this->_sitename = $settings->find('titulo_adm')->current()->value;
-            $this->view->adminTitle = $this->_sitename;
+            $this->view->adminTitle = $settings->find('titulo_adm')->current()->value;
             $this->view->urlLogoOper = $settings->find('url_logo_oper')->current()->value;
         } catch (Zend_Db_Exception $e){
             Debug::write($e->getMessage());
@@ -77,15 +72,16 @@ class AdminController extends Zend_Controller_Action
             $this->view->headStyle()->appendStyle('
                 @import "'.BASE_URL.'css/'.$this->_template.'.css";
             ');         
-        } else {
-            $this->view->headStyle()->appendStyle('
-                .'.$this->_dojoTheme.'{
-                   color: #131313;
-                   font-family: Arial,Verdana, Helvetica,sans-serif;
-                   font-size: 0.75em;
-                }
-            ');
         }
+        
+        $this->view->headStyle()->appendStyle('
+            .'.$this->_dojoTheme.'{
+               color: #131313;
+               font-family: Arial,Verdana, Helvetica,sans-serif;
+               font-size: 0.75em;
+            }
+        ');
+        
     }
 
     private function enableDojo()
@@ -165,7 +161,7 @@ class AdminController extends Zend_Controller_Action
         $this->view->layout = isset($config->zwei->layout->mainPane) ? "'".$config->zwei->layout->mainPane."'" : 'undefined';//Para backward compatibility, TODO deprecar
         $this->view->multiForm = isset($config->zwei->form->multiple) && !empty($config->zwei->form->multiple) ? 'true' : 'false';//Para backward compatibility, TODO deprecar
 
-        if (!empty($this->_template)) {
+        if ($this->_template != 'default') {
             $this->_helper->viewRenderer("index-$this->_template");
         }
     }

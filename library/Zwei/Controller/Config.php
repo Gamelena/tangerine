@@ -65,4 +65,12 @@ class Zwei_Controller_Config
     {
         return self::getResource('mail');
     }
+    
+    /**
+     * @return Zend_Application_Resource_Session
+     */
+    public static function getResourceSession()
+    {
+        return self::getResource('session');
+    }
 }

@@ -1,20 +1,10 @@
-** APLICAR ESTO EN CASO DE TENER EL SIGUIENTE MENSAJE DE ERROR AL INSTALAR E INTENTAR EJECUTAR PHPUNIT:
-
-PHP Fatal error:  Call to undefined method PHP_CodeCoverage_Filter::getInstance() in /usr/bin/phpunit on line 39
-
-Esto es un bug del instalador PHPUnit en PHP 5.3
-
-Aplicar los siguiente comandos que pueden resolver dependencias de pear
-
-sudo pear update-channels
-sudo pear channel-discover components.ez.no
-sudo pear install channel://components.ez.no/ConsoleTools-1.6
-
-Luego aplicar el siguiente workaround
+Zend_Test_PhpUnit requiere phpunit 3.5 y no funciona con otras versiones. 
+Pear por defecto instalará una version más reciente, la cual no es compatible con los test generados por ZF
+por lo cual se debe indicar explicitamente que versiones necesitamos de los componentes de phpunit.
 **
-Fuente http://dustyreagan.com/downgrade-phpunit-3-6-to-3-5-15/, si ocurre algún problema la solución puede estar en el foro de la página
+http://dustyreagan.com/downgrade-phpunit-3-6-to-3-5-15/, si ocurre algún problema la solución puede estar en el foro de la página
 
-How to Downgrade PHPUnit 3.6 to 3.5.15
+How to Downgrade PHPUnit to 3.5.15
 
 If you try installing PHPUnit-3.5.15 first, you’ll find PEAR forces you to install 3.6. The way around this is installing the old versions of all of the PHPUnit dependencies.
 
@@ -37,7 +27,7 @@ sudo pear install phpunit/PHPUnit_Selenium-1.0.1
 sudo pear install phpunit/PHPUnit_MockObject-1.0.3
 sudo pear install phpunit/PHP_Timer-1.0.0
 sudo pear install phpunit/File_Iterator-1.2.3
-sudo pear install phpunit/PHP_CodeCoverage-1.0.2
+sudo pear install phpunit/PHP_CodeCoverage-1.0.4
 sudo pear install phpunit/Text_Template-1.0.0
 sudo pear install phpunit/DbUnit-1.0.0
 sudo pear install phpunit/PHPUnit-3.5.15

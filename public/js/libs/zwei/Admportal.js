@@ -1,6 +1,7 @@
 dojo.declare("zwei.Admportal", null, {
     intervalListener: null,
     utils: null,
+    template: 'default',
     constructor: function(args)
     {
         dojo.mixin(this, args);
@@ -92,7 +93,6 @@ dojo.declare("zwei.Admportal", null, {
                         } else if(store.getValue(i, "id") == "credits") {
                             domFooterLegend.innerHTML = store.getValue(i, "value");
                         }
-                        
                     });
                     domLogo.innerHTML = images;
                 }
@@ -100,8 +100,35 @@ dojo.declare("zwei.Admportal", null, {
             });
         });
     },
-    loadMainMenu: function(layout) 
+    loadMainMenu: function() 
     {
+        //[TODO] cambiar acá llamada a método de cargar menu principal según valor de this.template
+        this.loadTree();
+    },
+    loadMenuCooler: function()
+    {
+        //[TODO] in process
+        var self = this;
+        require(["dojo/data/ItemFileWriteStore", "dijit/Menu", "dijit/tree/ForestStoreModel"], function(ItemFileWriteStore, Menu, ForestStoreModel){
+            var store = new ItemFileWriteStore({
+                url: base_url + 'admin/modules?format=json',
+                clearOnClose:true,
+                identifier: 'id',
+                label: 'label',
+                urlPreventCache:true
+            });
+            store.fetch({
+                deep: true,
+            });
+            var treeModel = new ForestStoreModel({
+                store: store
+            });
+            self.treeModel = treeModel;
+        });
+        
+        
+    },
+    loadTree: function() {
         var self = this;
         require(["dojo/data/ItemFileWriteStore", "dijit/Tree", "dijit/tree/ForestStoreModel"], function(ItemFileWriteStore, Tree, ForestStoreModel){
             var store = new ItemFileWriteStore({
@@ -113,13 +140,7 @@ dojo.declare("zwei.Admportal", null, {
             });
 
             if (!dijit.byId('arbolPrincipal')) {
-                store.fetch({
-                    onComplete: function(items, request){
-                    },
-                    queryOptions: {
-                        deep: true
-                    }
-                });
+                store.fetch({queryOptions:{deep: true}});
                 var treeModel = new ForestStoreModel({
                     store: store
                 });

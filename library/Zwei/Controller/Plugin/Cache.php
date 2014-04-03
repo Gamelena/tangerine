@@ -96,7 +96,10 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
         }
     }
     
-    
+    /**
+     * 
+     * @return unknown|boolean
+     */
     public function getCache()
     {
         if (isset($this->cache) && ($response = $this->cache->load($this->key)) != false) {
@@ -106,6 +109,11 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
         return false;
     }
     
+    /**
+     * Borrar cache por tags
+     * 
+     * @param array $tags
+     */
     public function cleanByTags($tags)
     {
         return $this->cache->clean(
