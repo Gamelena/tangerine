@@ -13,9 +13,21 @@
 
 class AclModulesModel extends DbTable_AclModules
 {
-    protected $_name = "acl_modules";
+    /**
+     * Tabla de íconos.
+     * 
+     * @var string
+     */
     protected $_nameIcons = "web_icons";
+    /**
+     * 
+     * @var string
+     */
     protected $_label = "title";
+    /**
+     * 
+     * @var array
+     */
     protected $_dataActions = array();
     
     /**
@@ -334,7 +346,7 @@ class AclModulesModel extends DbTable_AclModules
         $select->from($this->_name, array(
             'id'
         ))->where($this->getAdapter()->quoteInto('module = ?', $module));
-        Debug::writeBySettings($select->__toString(), 'query_log');
+
         return $this->fetchRow($select)->id;
     }
     
@@ -349,7 +361,6 @@ class AclModulesModel extends DbTable_AclModules
     {
         $select = new Zend_Db_Table_Select($this);
         $select->from($this->_name, $fields)->where($this->getAdapter()->quoteInto('module = ?', $module));
-        Debug::writeBySettings($select->__toString(), 'query_log');
         return $this->fetchRow($select);
     }
     

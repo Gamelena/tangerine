@@ -17,7 +17,19 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
      * 
      * @var string
      */
-    protected $_nameModulesActions = 'acl_modules_actions';
+    protected $_nameModulesActions;
+    
+    /**
+     * Post Constructor
+     * @see Zwei_Db_Table::init()
+     * @return void
+     */
+    public function init(){
+        $aclModulesActions = new DbTable_AclModulesActions();
+        $this->_nameModulesActions = $aclModulesActions->info(Zend_Db_Table::NAME);
+        parent::init();
+    }
+    
     /**
      * @param array $data
      * @param string $where

@@ -85,6 +85,8 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      * @param Object args 
      */
     constructor: function(args){
+        dojo.require('dojox.widget.DialogSimple');
+        dojo.require('dojox.data.QueryReadStore');
         this.utils = new zwei.Utils();
         dojo.mixin(this, args);
     },
@@ -155,6 +157,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             this.iframe.src = searchUrl;
         } else {
             var params = {url: searchUrl, clearOnClose: true, urlPreventCache:true};
+            
             var store = (domForm['storeType'] != undefined && domForm['storeType'].value == 'query') ? new dojox.data.QueryReadStore(params) : dojo.data.ItemFileReadStore(params);
             if (this.dijitDataGrid != null) {
                 this.dijitDataGrid.setStore(store);
@@ -253,6 +256,12 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         domForm.submit();
     },
+    /**
+     * Eliminar filas seleccionadas de la grilla.
+     * 
+     * @constructorParam dijit.form.DataGrid    this.dataGrid
+     * @return void
+     */
     'delete': function() {
         var domForm;
         
@@ -302,8 +311,8 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                         self.set("response", response);
                         return response;
                     },
-                    error:function(err){
-                        self.utils.showMessage('Error en comunicacion de datos. error: '+err, 'error');
+                    error:function(message){
+                        self.utils.showMessage('Error en comunicacion de datos. error: ' + message, 'error');
                         return err;
                     }
                 });
@@ -311,6 +320,14 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             self.postSave();
         }
     },
+    /**
+     * Mostrar tantos diálogos como filas seleccionadas.
+     * 
+     * @constructorParam dijit.form.Dialog    this.dijitDialog
+     * @constructorParam dijit.form.form    this.dijitForm
+     * @constructorParam dijit.form.DataGrid    this.dataGrid
+     * @return void 
+     */
     showMultipleDialogs: function() {
         this.primary = {};
         if (this.action != 'add') {
@@ -350,6 +367,8 @@ dojo.declare("zwei.Form", dojo.Stateful, {
     },
     
     /**
+     * Mostrar un diálogo.
+     * 
      * @constructorParam dijit.form.Dialog    this.dijitDialog
      * @constructorParam dijit.form.form    this.dijitForm
      * @constructorParam dijit.form.DataGrid    this.dataGrid
@@ -418,6 +437,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         if (this.ajax) {
             if (dojo.objectToQuery(this.primary) != '') {
+                //Buscar valores de los PK
                 if (this.action == 'edit' || this.action == 'clone') {
                     var primary = this.primary;
                     var dijitForm = this.dijitForm;

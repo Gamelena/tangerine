@@ -1,11 +1,20 @@
 <?php
-
+/**
+ * Modelo de grupos (o equipos) de usuario
+ *
+ */
 class AclGroupsModel extends DbTable_AclGroups
 {
+    /**
+     * Usuarios a ingresar en DbTable_AclUsersGroups.
+     * 
+     * @var array
+     */
     protected $_dataUsuarios = array();
     
     /**
-     * Se agregan usuarios asociados a rowset original
+     * Se agregan usuarios asociados a rowset original.
+     * 
      * @param Zend_Db_Table_Rowset
      * @return array
     */
