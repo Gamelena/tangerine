@@ -252,7 +252,7 @@ class CrudRequestController extends Zend_Controller_Action
                             } else {
                                 $content = $table->rowsetToHtml($data);
                             }
-                            echo $content;
+                            $this->view->content = $content;
                         } else {
                             header("Pragma: public");
                             header("Expires: 0");
@@ -270,10 +270,10 @@ class CrudRequestController extends Zend_Controller_Action
                             } else {
                                 $content = $table->rowsetToCsv($data);
                             }
-                            echo chr(255) . chr(254) . mb_convert_encoding($content, 'UCS-2LE', 'UTF-8');
+                            $this->view->content = chr(255) . chr(254) . mb_convert_encoding($content, 'UCS-2LE', 'UTF-8');
                         }
                         
-                        exit();
+                        $this->render();
                     }
                 }
             } else {
