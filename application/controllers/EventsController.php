@@ -2,8 +2,6 @@
 /**
  * Controlador que valida estatus de sesion en curso.
  * 
- * @todo cambiar los echo de javascript por una respuesta json que sea recogida por el listener js que invoca a esta url.
- *
  */
 class EventsController extends Zend_Controller_Action
 {
@@ -12,31 +10,53 @@ class EventsController extends Zend_Controller_Action
     {
         $this->view->response = array('status' => 'OK');
         
+        
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             $this->view->response['status'] = 'AUTH_FAILED';
             $this->render();
         } else {
-            
             $auth = Zend_Auth::getInstance();
-            
             $authInfo = $auth->getStorage()->read();
-            $aclRoles = new DbTable_AclRoles();
+            //$aclRoles = new DbTable_AclRoles();
+            //$currentRole = $aclRoles->find($authInfo->acl_roles_id)->current();
             
-            $currentRole = $aclRoles->find($authInfo->acl_roles_id)->current();
+            $userModel = new DbTable_AclSession();
+            //$userFind = $aclUsers->find($authInfo->id);//<- @FIMXE - find() esto falla silenciosamente ¡?
             
-            $roleHasChanged = $currentRole->must_refresh == '1' ? true : false; 
+            //WORKAROUND FIXME
+            $select = $userModel->select(false)
+                ->from($userModel->info(Zend_Db_Table::NAME, array('acl_users_id')))
+                ->where($userModel->getAdapter()->quoteInto('acl_users_id = ?', $authInfo->id));
+            
+            $userFind = $userModel->fetchAll($select);
+            //END WORKAROUND
+            
+            if ($userFind->count() <= 0) {
+                $this->view->response['status'] = 'AUTH_FAILED';
+                $this->render();
+            } else {
+                $currentUser = $userFind->current();
+            }
+            
+            $roleHasChanged = $currentUser->must_refresh == '1' ? true : false;
             
             if ($roleHasChanged) {
-                $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter(false);
+                //WORKAROUND
                 $userModel = new DbTable_AclUsers();
-                $userFind = $userModel->find($authInfo->id);
+                $select = $userModel->select(false)
+                ->from($userModel->info(Zend_Db_Table::NAME, array('user_name', 'password')))
+                ->where($userModel->getAdapter()->quoteInto('id = ?', $authInfo->id));
+                
+                $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter(false);
+                $userFind = $userModel->fetchAll($select);
+                //END WORKAROUND
+                
                 if ($userFind->count() <= 0) {
                     $this->view->response['status'] = 'AUTH_FAILED';
                     $this->render();
-                } else {
-                    $currentUser = $userFind->current();
                 }
                 
+                $currentUser = $userFind->current();
                 $username = $currentUser->user_name;
                 $password = $currentUser->password;
                 
@@ -53,6 +73,7 @@ class EventsController extends Zend_Controller_Action
                     $this->view->response['status'] = 'AUTH_FAILED';
                     $this->render();
                 }
+                
             }
         }
     }
@@ -65,30 +86,34 @@ class EventsController extends Zend_Controller_Action
         $this->view->response = array('status' => 'UPDATE_FAILED');
         if ($auth->hasIdentity()) {
             $authInfo = $auth->getStorage()->read();
-            $aclRolesId = $authInfo->acl_roles_id;
+            $aclUsersId = $authInfo->id;
             
-            if ($this->getRequest()->getParam('acl_roles_id')) {
+            if ($this->getRequest()->getParam('acl_users_id')) {
                 $acl = new Zwei_Admin_Acl();
-                if ($acl->isUserAllowed('roles.xml', 'edit')) {
-                    $aclRolesId = $this->getRequest()->getParam('acl_roles_id');
+                if ($acl->isUserAllowed('users.xml', 'edit')) {
+                    $aclUsersId = $this->getRequest()->getParam('acl_users_id');
                 }
             }
             
             sleep(10);
 
-            $aclRoles = new DbTable_AclRoles();
-            $currentRole = $aclRoles->find($aclRolesId)->current();
-    
-            $currentRole->must_refresh = '0';
-            if ($currentRole->save()) {
+            $userModel = new DbTable_AclSession();
+            //$currentUser = $userModel->find($aclUsersId)->current();//<- @FIMXE - find() falla miserable y silenciosamente ¡?
+            //WORKAROUND FIXME
+            $select = $userModel->select(false)
+                ->from($userModel->info(Zend_Db_Table::NAME, array('acl_users_id')))
+                ->where($userModel->getAdapter()->quoteInto('acl_users_id = ?', $authInfo->id));
+            
+            $currentUser = $userModel->fetchRow($select);
+            Debug::write($currentUser->toArray());
+            //END WORKAROUND
+            
+            $currentUser->must_refresh = '0';
+            if ($currentUser->save()) {
                 $this->view->response['status'] = 'UPDATE_OK';
             }
         } else {
             $this->view->response['status'] = 'AUTH_FAILED';
         }
     }
-    
 }
-
-
-
