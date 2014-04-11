@@ -14,15 +14,18 @@ descomprimirlo en /usr/share/php/Zend y agregar /usr/share/php/ al include_path 
 http://download.dojotoolkit.org/
 
 Configurar Apache para ser accessible desde la url http://localhost/dojotoolkit. 
+Considere agregar 
+Include alias/*.conf
+Al final de apache2.conf y agregar cada uno de los alias.
+
 Considerar el sig. ejemplo: 
 
 Alias /dojotoolkit/ "/usr/share/javascript/dojotoolkit/"
 <Directory "/usr/share/javascript/dojotoolkit/">
-Options Indexes MultiViews FollowSymLinks
-AllowOverride None
-Order deny,allow
-Deny from all
-Allow from 127.0.0.0/255.0.0.0 ::1/128
+    Options Indexes MultiViews FollowSymLinks
+    AllowOverride None
+    Order deny,allow
+    Allow from all
 </Directory>
 
 
@@ -44,6 +47,7 @@ ln -s /usr/share/php/Zend/bin/zf.sh /usr/bin/zf
 DEVELBASE="/{Carpeta de desarrollo de proyectos}"
 export ZWC_ADMPORTAL=$DEVELBASE/admportal
 export PATH=$PATH:$ZWC_ADMPORTAL/tools  
+export APPLICATION_ENV=development
 
 3. Hacer un Alias para las librerias javascript de zweicom, donde "/proyectos/admportal/" es la ruta donde se instaló admportal
 
