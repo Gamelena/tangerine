@@ -56,8 +56,7 @@ Alias /libs "/proyectos/admportal/public/js/libs/"
     Options Indexes MultiViews FollowSymLinks
     AllowOverride None
     Order deny,allow
-    Deny from all
-    Allow from 127.0.0.0/255.0.0.0 ::1/128
+    Allow from all
 </Directory>
 
 4. Ubicarse en consola en la carpeta del proyecto, dentro de esta carpeta se creará una subcarpeta llamada web donde estará el proyecto web.
