@@ -91,14 +91,16 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             
             if (false !== ($response = $this->getCache())) {
                 $response->sendResponse();
-                exit;
+                if (!isset($_SESSION["PWD"])) {
+                    exit;//TODO debe erradicarse exit() y die() de admportal para el funcionamiento de phpunit
+                }
             }
         }
     }
     
     /**
      * 
-     * @return unknown|boolean
+     * @return boolean
      */
     public function getCache()
     {
@@ -116,6 +118,8 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
      */
     public function cleanByTags($tags)
     {
+        if (!$this->cache) return false;
+        
         return $this->cache->clean(
             Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             $tags

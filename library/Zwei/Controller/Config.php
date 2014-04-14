@@ -11,7 +11,7 @@ class Zwei_Controller_Config
      * 
      * @return mixed
      */
-    public function getBootstrap()
+    public static function getBootstrap()
     {
         return Zend_Controller_Front::getInstance()->getParam("bootstrap");
     }
