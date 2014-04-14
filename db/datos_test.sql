@@ -2,18 +2,18 @@
 -- Volcado de datos para la tabla `acl_modules`
 --
 
-INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `linkable`, `type`, `approved`, `order`) VALUES
-  ('1', '0', 'Configuraci&oacute;n', NULL, '1', '1', 'xml', '1', '9'),
-  ('2', '0', 'Reportes', NULL, '1', '0', 'xml', '1', '6'),
-  ('3', '1', 'Datos Personales', 'personal-info', '0', '0', 'xml', '1', '0'),
-  ('4', '1', 'M&oacute;dulos', 'modules', '1', '1', 'xml', '1', '7'),
-  ('5', '1', 'Usuarios', 'users', '1', '1', 'xml', '1', '0'),
-  ('6', '1', 'Permisos', 'permissions', '1', '1', 'xml', '1', '0'),
-  ('7', '1', 'Servidor', 'phpinfo', '1', '1', 'xml', '1', '0'),
-  ('8', '2', 'Ejemplo', 'ejemplo', '1', '1', 'xml', '1', '1'),
-  ('9', '1', 'Variables', 'settings', '1', '1','xml', '1', '1'),
-  ('30', '2', 'Clientes', 'clientes', '1', '1', 'xml','0', '1'),
-  ('31', NULL, 'Ninguno', NULL, '0', '0', 'xml','0', '0');
+INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `type`, `approved`, `order`) VALUES
+  ('1', '0', 'Configuraci&oacute;n', NULL, '1', 'xml', '1', '9'),
+  ('2', '0', 'Reportes', NULL, '1', 'xml', '1', '6'),
+  ('3', '1', 'Datos Personales', 'personal-info', '0', 'xml', '1', '0'),
+  ('4', '1', 'M&oacute;dulos', 'modules', '1', 'xml', '1', '7'),
+  ('5', '1', 'Usuarios', 'users', '1', 'xml', '1', '0'),
+  ('6', '1', 'Permisos', 'permissions', '1', 'xml', '1', '0'),
+  ('7', '1', 'Servidor', 'phpinfo', '1', 'xml', '1', '0'),
+  ('8', '2', 'Ejemplo', 'ejemplo', '1', 'xml', '1', '1'),
+  ('9', '1', 'Variables', 'settings', '1', 'xml', '1', '1'),
+  ('30', '2', 'Clientes', 'clientes', '1', 'xml','0', '1'),
+  ('31', NULL, 'Ninguno', NULL, '0', 'xml','0', '0');
 
 
 -- 
