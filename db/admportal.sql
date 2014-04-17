@@ -1,3 +1,75 @@
+-- phpMyAdmin SQL Dump
+-- version 4.0.5
+-- http://www.phpmyadmin.net
+--
+-- Servidor: 127.0.0.1:3306
+-- Tiempo de generación: 16-04-2014 a las 18:14:38
+-- Versión del servidor: 5.5.35-0ubuntu0.12.10.2
+-- Versión de PHP: 5.4.21
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Base de datos: `suscripciones`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl_actions`
+--
+
+DROP TABLE IF EXISTS `acl_actions`;
+CREATE TABLE IF NOT EXISTS `acl_actions` (
+  `id` varchar(10) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `acl_actions`
+--
+
+INSERT INTO `acl_actions` (`id`, `title`) VALUES
+('ADD', 'Agregar'),
+('DELETE', 'Eliminar'),
+('EDIT', 'Editar'),
+('LIST', 'Listar');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl_groups`
+--
+
+DROP TABLE IF EXISTS `acl_groups`;
+CREATE TABLE IF NOT EXISTS `acl_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) DEFAULT NULL,
+  `description` varchar(45) DEFAULT NULL,
+  `approved` enum('0','1') DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl_groups_modules_actions`
+--
+
+DROP TABLE IF EXISTS `acl_groups_modules_actions`;
+CREATE TABLE IF NOT EXISTS `acl_groups_modules_actions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `acl_modules_actions_id` int(10) NOT NULL,
+  `acl_groups_id` int(11) NOT NULL,
+  `acl_modules_item_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `acl_modules_actions_id` (`acl_modules_actions_id`,`acl_groups_id`,`acl_modules_item_id`),
+  KEY `fk_acl_groups_modules_actions_acl_modules_actions1` (`acl_modules_actions_id`),
+  KEY `fk_acl_groups_modules_actions_acl_groups1` (`acl_groups_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 -- --------------------------------------------------------
 
 --
@@ -20,31 +92,16 @@ CREATE TABLE IF NOT EXISTS `acl_modules` (
   `icons_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `module` (`module`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `acl_actions`
---
-
-DROP TABLE IF EXISTS `acl_actions`;
-CREATE TABLE IF NOT EXISTS `acl_actions` (
-  `id` varchar(10) NOT NULL,
-  `title` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `acl_actions`
---
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `acl_modules_actions`
 --
+
 DROP TABLE IF EXISTS `acl_modules_actions`;
 CREATE TABLE IF NOT EXISTS `acl_modules_actions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -52,12 +109,14 @@ CREATE TABLE IF NOT EXISTS `acl_modules_actions` (
   `acl_actions_id` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `acl_modules_id` (`acl_modules_id`,`acl_actions_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=326 ;
 
 
--- 
--- Structure for table `acl_roles`
--- 
+
+--
+-- Estructura de tabla para la tabla `acl_roles`
+--
+
 DROP TABLE IF EXISTS `acl_roles`;
 CREATE TABLE IF NOT EXISTS `acl_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -67,12 +126,47 @@ CREATE TABLE IF NOT EXISTS `acl_roles` (
   `must_refresh` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `role_name` (`role_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
--- 
--- Structure for table `acl_users`
--- 
 
+
+--
+-- Estructura de tabla para la tabla `acl_roles_modules_actions`
+--
+
+DROP TABLE IF EXISTS `acl_roles_modules_actions`;
+CREATE TABLE IF NOT EXISTS `acl_roles_modules_actions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `acl_roles_id` int(11) NOT NULL,
+  `acl_modules_actions_id` int(11) NOT NULL,
+  `permission` enum('ALLOW','DENY') CHARACTER SET utf8 NOT NULL DEFAULT 'ALLOW',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `acl_roles_id` (`acl_roles_id`,`acl_modules_actions_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=156 ;
+
+
+--
+-- Estructura de tabla para la tabla `acl_session`
+--
+
+DROP TABLE IF EXISTS `acl_session`;
+CREATE TABLE IF NOT EXISTS `acl_session` (
+  `id` char(32) NOT NULL DEFAULT '0',
+  `acl_users_id` int(11) NOT NULL,
+  `acl_roles_id` int(11) NOT NULL,
+  `modified` int(11) DEFAULT NULL,
+  `lifetime` int(11) DEFAULT NULL,
+  `data` text,
+  `ip` varchar(20) NOT NULL,
+  `user_agent` varchar(255) NOT NULL,
+  `must_refresh` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+--
+-- Estructura de tabla para la tabla `acl_users`
+--
 
 DROP TABLE IF EXISTS `acl_users`;
 CREATE TABLE IF NOT EXISTS `acl_users` (
@@ -88,56 +182,60 @@ CREATE TABLE IF NOT EXISTS `acl_users` (
   `must_refresh` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name` (`user_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 
 
-DROP TABLE IF EXISTS `acl_roles_modules_actions`;
-CREATE TABLE IF NOT EXISTS `acl_roles_modules_actions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `acl_roles_id` int(11) NOT NULL,
-  `acl_modules_actions_id` int(11) NOT NULL,
-  `permission` enum('ALLOW','DENY') CHARACTER SET utf8 NOT NULL DEFAULT 'ALLOW',
+--
+-- Estructura de tabla para la tabla `acl_users_groups`
+--
+
+DROP TABLE IF EXISTS `acl_users_groups`;
+CREATE TABLE IF NOT EXISTS `acl_users_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `acl_users_id` int(11) NOT NULL,
+  `acl_groups_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `acl_roles_id` (`acl_roles_id`,`acl_modules_actions_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+  UNIQUE KEY `acl_users_id` (`acl_users_id`,`acl_groups_id`),
+  KEY `fk_acl_users_groups_acl_users1` (`acl_users_id`),
+  KEY `fk_acl_users_groups_acl_groups1` (`acl_groups_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `log_book`
+--
+
+DROP TABLE IF EXISTS `log_book`;
+CREATE TABLE IF NOT EXISTS `log_book` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user` char(40) NOT NULL,
+  `table` char(40) NOT NULL,
+  `action` char(40) NOT NULL,
+  `condition` char(200) NOT NULL,
+  `acl_roles_id` int(11) NOT NULL,
+  `ip` char(200) NOT NULL,
+  `stamp` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `web_icons`
 --
+
 DROP TABLE IF EXISTS `web_icons`;
 CREATE TABLE IF NOT EXISTS `web_icons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(50) NOT NULL,
   `image` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `web_settings`
---
-
--- phpMyAdmin SQL Dump
--- version 3.4.11.1deb1
--- http://www.phpmyadmin.net
---
--- Servidor: localhost
--- Tiempo de generación: 17-10-2013 a las 10:53:44
--- Versión del servidor: 5.5.32
--- Versión de PHP: 5.4.6-1ubuntu1.4
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
---
--- Base de datos: `USSD`
---
-
--- --------------------------------------------------------
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Estructura de tabla para la tabla `web_settings`
@@ -163,100 +261,13 @@ CREATE TABLE IF NOT EXISTS `web_settings` (
   `xml_children` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group` (`group`)
-) ENGINE=innoDB DEFAULT CHARSET=latin1;
-
--- 
--- Structure for table `log_book`
--- 
-
---
--- Base de datos: `gw_promo`
---
---
--- Estructura de tabla para la tabla `acl_groups`
---
-
-DROP TABLE IF EXISTS `acl_groups`;
-CREATE TABLE IF NOT EXISTS `acl_groups` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(45) DEFAULT NULL,
-  `description` varchar(45) DEFAULT NULL,
-  `approved` enum('0','1') DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
-
-
---
--- Estructura de tabla para la tabla `acl_users_groups`
---
-
-DROP TABLE IF EXISTS `acl_users_groups`;
-CREATE TABLE IF NOT EXISTS `acl_users_groups` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `acl_users_id` int(11) NOT NULL,
-  `acl_groups_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `acl_users_id` (`acl_users_id`,`acl_groups_id`),
-  KEY `fk_acl_users_groups_acl_users1` (`acl_users_id`),
-  KEY `fk_acl_users_groups_acl_groups1` (`acl_groups_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `acl_groups_modules_actions`
---
-
-DROP TABLE IF EXISTS `acl_groups_modules_actions`;
-CREATE TABLE IF NOT EXISTS `acl_groups_modules_actions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `acl_modules_actions_id` int(10) NOT NULL,
-  `acl_groups_id` int(11) NOT NULL,
-  `acl_modules_item_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `acl_modules_actions_id` (`acl_modules_actions_id`,`acl_groups_id`,`acl_modules_item_id`),
-  KEY `fk_acl_groups_modules_actions_acl_modules_actions1` (`acl_modules_actions_id`),
-  KEY `fk_acl_groups_modules_actions_acl_groups1` (`acl_groups_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
--- --------------------------------------------------------
-
-DROP TABLE IF EXISTS `log_book`;
-
-CREATE TABLE IF NOT EXISTS `log_book` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `user` char(40) NOT NULL,
-  `table` char(40) NOT NULL,
-  `action` char(40) NOT NULL,
-  `condition` char(200) NOT NULL,
-  `acl_roles_id` int(11) NOT NULL,
-  `ip` char(200) NOT NULL,
-  `stamp` datetime NOT NULL
-) ENGINE=MyIsam DEFAULT CHARSET=utf8;
--- --------------------------------------------------------
-
-
---
--- Estructura de tabla para la tabla `acl_session`
---
-
-DROP TABLE IF EXISTS `acl_session`;
-CREATE TABLE IF NOT EXISTS `acl_session` (
-  `id` char(32) NOT NULL DEFAULT '0',
-  `acl_users_id` int(11) NOT NULL,
-  `acl_roles_id` int(11) NOT NULL,
-  `modified` int(11) DEFAULT NULL,
-  `lifetime` int(11) DEFAULT NULL,
-  `data` text,
-  `ip` varchar(20) NOT NULL,
-  `user_agent` varchar(255) NOT NULL,
-  `must_refresh` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
 --
 -- Estructura para la vista `tables_logged`
 --
-DROP VIEW IF EXISTS `tables_logged`;
 DROP TABLE IF EXISTS `tables_logged`;
-
+DROP VIEW IF EXISTS `tables_logged`;
 CREATE VIEW `tables_logged` AS select distinct `log_book`.`table` AS `id`,`log_book`.`table` AS `title` from `log_book` order by `log_book`.`table`;

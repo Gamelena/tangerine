@@ -17,7 +17,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocat
         <element name="Usa Owner" target="ownership" type="dijit-form-check-box" formatter="utils.formatYesNo" visible="true" edit="true" add="true" clone="true"/>
         <element name="Orden" target="order" type="dijit-form-validation-text-box" regExp="[\d]+" invalidMessage="Solo números" visible="false" edit="true" add="true" clone="true"/>
         <element name="Acciones" target="actions" type="dojox-form-checked-multi-select" table="AclActionsModel" visible="false" edit="true" add="true" clone="true"/>
-        <element name="&amp;Iacute;cono" target="icons_id" field="image" type="dijit-form-filtering-select" formatter="utils.formatImage16" table="IconsModel" visible="true" edit="true" add="true" clone="true"/>
+        <element name="&amp;Iacute;cono" target="icons_id" field="image" type="dijit-form-filtering-select" formatter="utils.formatImage16" table="IconsModel" defaultValue="" defaultText="---Ninguno---" visible="true" edit="true" add="true" clone="true"/>
     </elements>
     <searchers>
         <group name="Buscar">
