@@ -17,8 +17,9 @@ class Console
      */
     static function log($message = null, $file = 'php://stdout' )
     {
+        $logger = new Zend_Log();
         $writer = new Zend_Log_Writer_Firebug();
-        $this->addWriter($writer);
+        $logger->addWriter($writer);
     
         $trace = debug_backtrace() ;
         if  ($message !== null ){
@@ -30,7 +31,7 @@ class Console
         fwrite($ff, "[ADMPORTAL INFO]: $message\r\n");
         fclose($ff);
     
-        $this->log($message, Zend_Log::NOTICE);
+        $logger->log($message, Zend_Log::NOTICE);
     }
     
     /**
@@ -40,8 +41,9 @@ class Console
      */
     static function info($message = null, $file = 'php://stdout' )
     {
+        $logger = new Zend_Log();
         $writer = new Zend_Log_Writer_Firebug();
-        $this->addWriter($writer);
+        $logger->addWriter($writer);
         
         $trace = debug_backtrace() ;
         if  ($message !== null ){
@@ -53,7 +55,7 @@ class Console
         fwrite($ff, "[ADMPORTAL INFO]: $message\r\n");
         fclose($ff);
         
-        $this->log($message, Zend_Log::INFO);
+        $logger->log($message, Zend_Log::INFO);
     }
     
     /**
@@ -63,8 +65,9 @@ class Console
      */
     static function debug($message = null, $file = null )
     {
+        $logger = new Zend_Log();
         $writer = new Zend_Log_Writer_Firebug();
-        $this->addWriter($writer);
+        $logger->addWriter($writer);
         
         if ($file == null) $file = ROOT_DIR."/log/debug";
         $trace = debug_backtrace() ;
@@ -77,7 +80,7 @@ class Console
         fwrite($ff, "$message\r\n");
         fclose($ff);
         
-        $this->log($message, Zend_Log::DEBUG);
+        $logger->log($message, Zend_Log::DEBUG);
     }
     
     /**
@@ -87,8 +90,9 @@ class Console
      */
     static function warn($message = null, $file = 'php://stderr' )
     {
+        $logger = new Zend_Log();
         $writer = new Zend_Log_Writer_Firebug();
-        $this->addWriter($writer);
+        $logger->addWriter($writer);
         
         $trace = debug_backtrace() ;
         if  ($message !== null ){
@@ -100,7 +104,7 @@ class Console
         fwrite($ff, "[ADMPORTAL WARNING]: $message\r\n");
         fclose($ff);
         
-        $this->log($message, Zend_Log::WARN);
+        $logger->log($message, Zend_Log::WARN);
     }
     
     
@@ -111,8 +115,9 @@ class Console
      */
     static function error($message = null, $file = 'php://stderr' )
     {
+        $logger = new Zend_Log();
         $writer = new Zend_Log_Writer_Firebug();
-        $this->addWriter($writer);
+        $logger->addWriter($writer);
         
         $trace = debug_backtrace() ;
         if  ($message !== null ){
@@ -124,7 +129,7 @@ class Console
         fwrite($ff, "[ADMPORTAL ERROR]: $message\r\n");
         fclose($ff);
         
-        $this->log($message, Zend_Log::ERR);
+        $logger->log($message, Zend_Log::ERR);
     }
     
 

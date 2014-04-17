@@ -147,7 +147,7 @@ class Zwei_Admin_Auth
                     $r->gotoUrl('/admin/login')->redirectAndExit();
                 }
             }
-        } catch (Exception $e) {} //PDOException is not catched :facepalm:
+        } catch (Exception $e) {Debug::write($e->getMessage());} //PDOException is not catched :facepalm:
     }
     
     /**
@@ -156,7 +156,6 @@ class Zwei_Admin_Auth
      */
     public function clearIdentity()
     {
-        
         return Zend_Auth::getInstance()->clearIdentity();
     }
 }
