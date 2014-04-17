@@ -44,7 +44,6 @@ class AdminController extends Zend_Controller_Action
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         if ($userInfo) $this->_acl = new Zwei_Admin_Acl();
         
-        $this->view->base_url = BASE_URL;
         $this->baseDojoFolder = isset($config->zwei->js->dojo->baseUrl) ? $config->zwei->js->dojo->baseUrl : '/dojotoolkit';
         if (isset($config->resources->dojo->cdnbase)) $this->baseDojoFolder = $config->resources->dojo->cdnbase . '/' . $config->resources->dojo->cdnversion;
         $this->view->noCache = isset($config->zwei->resources) ? $config->zwei->resources->noCache : ''; 
@@ -52,7 +51,7 @@ class AdminController extends Zend_Controller_Action
         if ($confLayout->dojoTheme) $this->_dojoTheme = $confLayout->dojoTheme;
         $this->_dojoTheme = $r->getParam('theme', $this->_dojoTheme);
         
-        if ($confLayout->template) $this->_template = $confLayout->layout->template;
+        if ($confLayout->template) $this->_template = $confLayout->template;
         $this->_template = $r->getParam('template', $this->_template);
         
         $this->view->headStyle()->appendStyle('
@@ -65,7 +64,7 @@ class AdminController extends Zend_Controller_Action
             $this->view->adminTitle = $settings->find('titulo_adm')->current()->value;
             $this->view->urlLogoOper = $settings->find('url_logo_oper')->current()->value;
         } catch (Zend_Db_Exception $e){
-            Debug::write($e->getMessage());
+            Console::warn($e->getMessage());
         }
 
         if ($this->_template != '' && $this->_template != 'dojo') {
@@ -122,7 +121,7 @@ class AdminController extends Zend_Controller_Action
             $this->view->first_names = $userInfo->first_names;
             $this->view->last_names = $userInfo->last_names;
             $this->view->user_id = $userInfo->id;
-            $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
+            $config = Zwei_Controller_Config::getOptions();
             $this->view->layout = isset($config->zwei->layout->mainPane) ? "'".$config->zwei->layout->mainPane."'" : 'undefined';//Para backward compatibility, TODO deprecar
             $this->view->multiForm = isset($config->zwei->form->multiple) && !empty($config->zwei->form->multiple) ? 'true' : 'false';//Para backward compatibility, TODO deprecar
     
