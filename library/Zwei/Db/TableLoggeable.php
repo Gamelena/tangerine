@@ -6,14 +6,13 @@
  * @version $Id:$
  * @since 0.1
  */
-require_once ('Zwei/Db/Table.php');
 class Zwei_Db_TableLoggeable extends Zwei_Db_Table
 {
     /**
      * (non-PHPdoc)
      * @see Zwei_Db_Table::insert()
      */
-    public function insert($data)
+    public function insert(array $data)
     {
         $last_insert_id = parent::insert($data);
         if ($last_insert_id !== false && self::$_defaultLogMode) {
@@ -26,7 +25,7 @@ class Zwei_Db_TableLoggeable extends Zwei_Db_Table
      * (non-PHPdoc)
      * @see Zwei_Db_Table::update()
      */
-    public function update($data, $where)
+    public function update(array $data, $where)
     {
         $update = parent::update($data, $where);
         if (is_array ($where)) {
