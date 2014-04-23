@@ -210,10 +210,11 @@ endif;
 foreach ($this->customFunctions as $i => $f) :
     $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
     $target = isset($f['target']) && !empty($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
-    $disabled = isset($f['disabled']) && $f['disabled'] == 'true' ? 'true' : 'false';
+    $disabled = isset($f['disabled']) && $f['disabled'] == 'true' ? 'disabled="disabled"' : '';
+    $title = isset($f['title']) ? " title=\"{$f['title']}\"" : '';
 ?>
     <div class="keyPadButton">
-        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="<?=$onclick.$target?>" disabled="<?=$disabled?>">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" <?=$disabled.$title?> id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="<?=$onclick.$target?>" >
         <?=$f['name'] ? $f['name'] : $f['target']?>
         </button>
     </div>
@@ -224,11 +225,12 @@ endforeach;
 foreach ($this->excel as $i => $f) :
     $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->zweiExcelVersion;
     $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Descargar como Excel' ;
-    $disabled = !$this->list ? 'disabled="disabled"' : '';
+    $disabled = $f->getAttribute('disabled') || !$this->list ? 'disabled="disabled"' : '';
+    $title = $f->getAttribute('title') ? " title=\"{$f->getAttribute('title')}\"" : '';
 ?>
 
     <div class="keyPadButton">
-        <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconEdit" <?=$disabled?> id="<?=$this->domPrefix?>btnExcel<?=$formatter?>" onClick="
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f->getAttribute('iconClass') ? $f->getAttribute('iconClass') : 'dijitIconEdit'?>" <?=$disabled.$title?> id="<?=$this->domPrefix?>btnExcel<?=$formatter?>" onClick="
             var form = new zwei.Form({
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 

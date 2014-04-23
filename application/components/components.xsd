@@ -92,7 +92,7 @@
         <xsd:sequence>
             <xsd:element name="dialog" type="formsType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="customFunction" type="customFunctionType" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="excel" type="elementType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="excel" type="customFunctionType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="PaneType">
@@ -141,6 +141,8 @@
         <xsd:attribute name="onclick"/>
         <xsd:attribute name="name"/>
         <xsd:attribute name="icon"/>
+        <xsd:attribute name="title"/>
+        <xsd:attribute name="disabled"/>
     </xsd:complexType>
     <xsd:complexType name="elementType">
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
