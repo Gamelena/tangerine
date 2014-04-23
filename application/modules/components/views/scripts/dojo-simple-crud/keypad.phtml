@@ -224,10 +224,11 @@ endforeach;
 foreach ($this->excel as $i => $f) :
     $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->zweiExcelVersion;
     $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Descargar como Excel' ;
+    $disabled = !$this->list ? 'disabled="disabled"' : '';
 ?>
 
     <div class="keyPadButton">
-        <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconEdit" id="<?=$this->domPrefix?>btnChangePassword" onClick="
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconEdit" <?=$disabled?> id="<?=$this->domPrefix?>btnExcel<?=$formatter?>" onClick="
             var form = new zwei.Form({
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 

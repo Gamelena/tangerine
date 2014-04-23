@@ -84,6 +84,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $this->_config = Zwei_Controller_Config::getOptions();
         $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : '';
+        $this->view->menus = $this->_config->zwei->layout->menus;
+        $this->view->zweiExcelVersion = $this->_config->zwei->excel->version ? $this->_config->zwei->excel->version : 'csv';
         
         if ($this->getRequest()->getParam('p')) {
             $this->_component = $this->getRequest()->getParam('p');
@@ -126,7 +128,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function indexAction()
     {
         $this->view->name = $this->_xml->getAttribute('name');
-        $this->view->menus = $this->_config->zwei->layout->menus;
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."?noCache={$this->view->noCache}\"></script>\n" : '';
         if ($this->_xml->xpath("//component/forms")) $forms = $this->_xml->xpath("//component/forms");
         if ($this->_xml->xpath("//component/helpers")) $helpers = $this->_xml->xpath("//component/helpers");
@@ -166,6 +167,24 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             
             $customFunctions = $this->_xml->xpath("//searchers/helpers/customFunction");
             $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'LIST') ? $customFunctions : array();
+            
+            $this->view->enableActions = "";
+            //Activar botones y menu de acciones al hacer submit
+            if (!$this->_xml->getAttribute('list') || $this->_xml->getAttribute("list") == 'false') {
+                $excel = $this->_xml->xpath("//component/helpers/excel");
+                $myExcel = $excel ? $excel : array();
+                foreach ($myExcel as $i => $f) {
+                    $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->view->zweiExcelVersion;
+                    if ($this->view->menu = 'keypad' || $this->view->menu = 'both') {
+                        $this->view->enableActions = "dijit.byId('{$this->view->domPrefix}MenuExcel{$formatter}').set('disabled', false);";
+                    }
+                    
+                    if ($this->view->menu = 'contextMenu' || $this->view->menu = 'both') {
+                        $this->view->enableActions = "dijit.byId('{$this->view->domPrefix}btnExcel{$formatter}').set('disabled', false);";
+                    }
+                }
+            }
+            
         } else {
             $this->view->groups = array();
             $this->view->hideSubmit = true;
@@ -245,6 +264,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->name = $this->_xml->getAttribute('name');
         
         $this->view->add = $this->_xml->getAttribute('add') && $this->_xml->getAttribute("add") == 'true' && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
+        $this->view->list = $this->_xml->getAttribute('list') && $this->_xml->getAttribute("list") == 'true' && $this->_acl->isUserAllowed($this->_component, 'LIST') ? true : false;
         $this->view->edit = $this->_xml->getAttribute('edit') && $this->_xml->getAttribute("edit") == 'true'  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
         $this->view->clone = $this->_xml->getAttribute('clone') && $this->_xml->getAttribute("clone") == 'true'  && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
         $this->view->delete = $this->_xml->getAttribute('delete') && $this->_xml->getAttribute("delete") == 'true' && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
@@ -258,7 +278,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? $customFunctions : array();
         $excel = $this->_xml->xpath("//component/helpers/excel");
         $this->view->excel = $excel ? $excel : array();
-        $this->view->zweiExcelVersion = $this->_config->zwei->excel->version ? $this->_config->zwei->excel->version : 'csv';
+        
         
         //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? 'true' : 'false';

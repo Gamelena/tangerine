@@ -265,12 +265,14 @@ endforeach;
 foreach ($this->excel as $i => $f) :
     $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->zweiExcelVersion;
     $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Descargar como Excel' ;
+    $disabled = !$this->list ? 'true' : 'false';
 ?>
 if (dijit.byId('<?=$this->domPrefix?>MenuExcel<?=$formatter?>')) dijit.byId('<?=$this->domPrefix?>MenuExcel<?=$formatter?>').destroy(); 
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     id: '<?=$this->domPrefix?>MenuExcel<?=$formatter?>',
     label: "<?=$name?>",
     iconClass: "dijitLeaf",
+    disabled: <?=$disabled?>,
     onClick : function(){
         var form = new zwei.Form({
             dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
