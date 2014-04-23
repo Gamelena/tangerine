@@ -129,6 +129,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."?noCache={$this->view->noCache}\"></script>\n" : '';
+        $this->view->onShow = $this->_xml->getAttribute('onShow') ? $this->_xml->getAttribute('onShow') : '';
         if ($this->_xml->xpath("//component/forms")) $forms = $this->_xml->xpath("//component/forms");
         if ($this->_xml->xpath("//component/helpers")) $helpers = $this->_xml->xpath("//component/helpers");
         
@@ -164,6 +165,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->view->searchRequest = $this->getRequest()->getParam('search', array());
             $this->view->storeType = $this->_xml->getAttribute('serverPagination') === 'true' ? 'query' : '';
             $this->view->onSubmit = $this->_xml->xpath('//component/searchers/onSubmit') ? dom_import_simplexml($this->_xml->searchers->onSubmit)->textContent : '';
+            $this->view->onPostSubmit = $this->_xml->xpath('//component/searchers/onPostSubmit') ? dom_import_simplexml($this->_xml->searchers->onPostSubmit)->textContent : '';
             
             $customFunctions = $this->_xml->xpath("//searchers/helpers/customFunction");
             $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'LIST') ? $customFunctions : array();

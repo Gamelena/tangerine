@@ -146,6 +146,7 @@ if (!$this->hideSubmit) :
                 <?=$this->enableActions?>
                 var form = new zwei.Form({dijitFormSearch: this, dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')});
                 form.loadData();
+                <?=$this->onPostSubmit ?>
             } catch(e) {
                 console.log(e);
                 utils.showMessage(e.message, 'error');

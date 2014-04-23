@@ -32,6 +32,8 @@
         <xsd:attribute name="chartItems" />
         <xsd:attribute name="onRowClick" />
         <xsd:attribute name="onRowDblClick" />
+        <xsd:attribute name="onFetchComplete" />
+        <xsd:attribute name="onShow" />
         <xsd:attribute name="cols" />
         <xsd:attribute name="titles" />
         <xsd:attribute name="items" />
