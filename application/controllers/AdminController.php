@@ -32,7 +32,8 @@ class AdminController extends Zend_Controller_Action
     
     
     /**
-     * (non-PHPdoc)
+     * Post Constructor
+     * @return void
      * @see Zend_Controller_Action::init()
      */
     public function init()
@@ -83,6 +84,10 @@ class AdminController extends Zend_Controller_Action
         
     }
 
+    /**
+     * Agregar los temas de dojo y estilos css necesarios al head.
+     * @return void
+     */
     private function enableDojo()
     {
         $this->view->bodyClass = $this->_dojoTheme;
@@ -109,7 +114,10 @@ class AdminController extends Zend_Controller_Action
             @import "'.BASE_URL.'css/admin.css?version='.$this->view->noCache.'";
         ');
     }
-
+    /**
+     * Acción layout pantalla principal}
+     * @return void
+     */
     public function indexAction()
     {
         $this->enableDojo();
@@ -131,7 +139,10 @@ class AdminController extends Zend_Controller_Action
         }
     }
 
-
+    /**
+     * Acción parseadora de componentes XML
+     * @return void
+     */
     public function componentsAction()
     {
         if ($this->getRequest()->getParam('p')) {
@@ -170,7 +181,11 @@ class AdminController extends Zend_Controller_Action
             $this->view->component = "index";
         }
     }
-
+    
+    /**
+     * Accion módulos autorizados en json
+     * @return void
+     */
     public function modulesAction()
     {
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
@@ -183,19 +198,37 @@ class AdminController extends Zend_Controller_Action
             ->setAutoJsonSerialization(false)
             ->addActionContext('index', 'json')
             ->initContext();
-    
+            
             //$this->_helper->viewRenderer->setNoRender(true);
             $modules = new AclModulesModel();
-    
-            $tree = $modules->getTree();
-    
-            $treeObj = new Zend_Dojo_Data('id', $tree);
-            $treeObj->setLabel('label');
-    
-            $this->view->content = $treeObj->toJson();
+            
+            $this->view->tree = $modules->getTree();
+            
         }
     }
     
+    /**
+     * Accion menú principal
+     * @return void
+     */
+    public function menuAction()
+    {
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+            $this->_redirect('admin/login');
+        } else {
+        
+            Zend_Dojo::enableView($this->view);
+            //$this->_helper->viewRenderer->setNoRender(true);
+            $modules = new AclModulesModel();
+        
+            $this->view->tree = $modules->getTree();
+        }
+    }
+    
+    /**
+     * Accion pantalla login.
+     * @return void
+     */
     public function loginAction()
     {
         $this->view->headStyle()->appendStyle('
@@ -241,6 +274,10 @@ class AdminController extends Zend_Controller_Action
         $this->view->loginForm = $loginForm;
     }
     
+    /**
+     * Accion logout.
+     * @return void
+     */
     public function logoutAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
@@ -251,7 +288,7 @@ class AdminController extends Zend_Controller_Action
     /**
      * login form
      *
-     * @return object
+     * @return Zend_Dojo_Form
      */
     protected function getLoginForm()
     {
@@ -291,6 +328,10 @@ class AdminController extends Zend_Controller_Action
         return $loginForm;
     }
     
+    /**
+     * Acción iframe
+     * @return void
+     */
     public function iframeAction()
     {
         $this->view->src = $this->getRequest()->getParam('p');

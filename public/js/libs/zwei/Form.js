@@ -99,7 +99,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
     loadData: function() {
         var domForm = this.dijitFormSearch != null ? dojo.byId(this.dijitFormSearch.id) : dojo.byId(this.dijitForm.id);
         var searchUrl = base_url+'crud-request?model=' + domForm['model'].value +'&'+this.queryParams;
-        if (this.queryParams.indexOf('format=') <= 0) {
+        if (this.queryParams.indexOf('format=') < 0) {
             searchUrl += '&format=' + domForm['format'].value;
         }
         
