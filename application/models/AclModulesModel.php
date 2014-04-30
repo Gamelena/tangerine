@@ -95,7 +95,7 @@ class AclModulesModel extends DbTable_AclModules
                 if (is_writable(COMPONENTS_ADMIN_PATH)) {
                     $handle = fopen(COMPONENTS_ADMIN_PATH . '/' . $data['module'], "w+");
                     fwrite($handle, "<?xml version=\"1.0\"?>\n"
-                        . "\t<component name=\"M&oacute;dulos\" type=\"{Escriba tipo}\" target=\"EjemploModel\" list=\"true\""
+                        . "<component name=\"M&oacute;dulos\" type=\"{Escriba tipo}\" target=\"EjemploModel\" list=\"true\""
                         . " edit=\"true\" add=\"true\" delete=\"true\" clone=\"false\""
                         . " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"components.xsd\">\n"
                         . "</component>");
