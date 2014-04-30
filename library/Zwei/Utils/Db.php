@@ -7,7 +7,7 @@
 class Zwei_Utils_Db
 {
     /**
-     * Obtiene un array con nombres de tablas rotadas, tipo "transacciones_20121222"  
+     * Obtiene un array con nombres de tablas rotadas, tipo "transacciones_20121222".
      * 
      * @param datetime|null - fecha desde 'Y-m-d h:i:s'
      * @param datetime|null - fecha hasta 'Y-m-d h:i:s'
@@ -55,4 +55,17 @@ class Zwei_Utils_Db
         return $return; 
     }
     
+    /**
+     * Hace un backup de estructura y datos de tabla $table MySQL.
+     * 
+     * @param Zend_Db_Table $table
+     * @return Zend_Db_Statement
+     */
+    protected function backupTable(Zend_Db_Table $table, $sufix = '_bkp')
+    {
+        $ad = $table->getAdapter();
+        $name = $table->info(Zend_Db_Table::NAME);
+        $ad->query("CREATE TABLE `$name$sufix` LIKE `$name`");
+        return $ad->query("INSERT INTO `$name$sufix` SELECT * FROM `$name`");
+    }
 }
