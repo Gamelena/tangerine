@@ -34,7 +34,7 @@ class AclModulesModel extends DbTable_AclModules
      * (non-PHPdoc)
      * @see Zwei_Db_Table::update()
      */
-    public function update($data, $where)
+    public function update(array $data, $where)
     {
         $data    = $this->cleanDataParams($data);
         $myWhere = $this->whereToArray($where);
@@ -61,7 +61,7 @@ class AclModulesModel extends DbTable_AclModules
      * (non-PHPdoc)
      * @see Zwei_Db_Table::insert()
      */
-    public function insert($data)
+    public function insert(array $data)
     {
         $data             = $this->cleanDataParams($data);
         $this->_ajax_todo = 'cargarArbolMenu';
@@ -89,6 +89,25 @@ class AclModulesModel extends DbTable_AclModules
      */
     protected function cleanDataParams($data)
     {
+        //Si el tipo de archivo es xml se tratará de crear archivo xml base, el que se pueda hacer esto dependerá de los permisos.
+        if ($data['type'] == 'xml') {
+            if (!file_exists(COMPONENTS_ADMIN_PATH . '/' . $data['module'])) {
+                if (is_writable(COMPONENTS_ADMIN_PATH)) {
+                    $handle = fopen(COMPONENTS_ADMIN_PATH . '/' . $data['module'], "w+");
+                    fwrite($handle, "<?xml version=\"1.0\"?>\n"
+                        . "\t<component name=\"M&oacute;dulos\" type=\"{Escriba tipo}\" target=\"EjemploModel\" list=\"true\""
+                        . " edit=\"true\" add=\"true\" delete=\"true\" clone=\"false\""
+                        . " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"components.xsd\">\n"
+                        . "</component>");
+                    fclose($handle);
+                    chmod(COMPONENTS_ADMIN_PATH . '/' . $data['module'], 0777);
+                    Console::log("Creado archivo " . COMPONENTS_ADMIN_PATH . '/' . $data['module']);
+                } else {
+                    Console::log("No se pudo crear el archivo " . COMPONENTS_ADMIN_PATH . '/' . $data['module']);
+                }
+            }
+        }
+        
         if (empty($data['module']))
             $data['module'] = null;
         if (empty($data['parent_id']))
@@ -181,7 +200,6 @@ class AclModulesModel extends DbTable_AclModules
             //Buscar si usuario en sesion es owner de algun elemento para desplegar nodo
             
             if ($branch['ownership']) {
-                Debug::write($branch);
                 $file      = Zwei_Admin_Xml::getFullPath($branch['module']);
                 if (file_exists($file)) {
                     $xml       = new Zwei_Admin_Xml($file, null, true);
@@ -281,6 +299,11 @@ class AclModulesModel extends DbTable_AclModules
                 $data['actions'][] = $a['acl_actions_id'];
             }
         }
+        
+        if ($data['type'] == 'xml') {
+            $data['content'] = file_get_contents(COMPONENTS_ADMIN_PATH . '/' . $data['module']);
+        }
+        
         return $data;
     }
     
