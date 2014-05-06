@@ -123,7 +123,7 @@ class Zwei_Admin_Xml extends Zwei_Utils_SimpleXML
     
     /**
      * 
-     * @param boolean $inherit
+     * @param boolean $inherits
      * @param string $xpath
      * @return array(SimpleXMLElement)
      */
