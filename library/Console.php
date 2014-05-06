@@ -4,7 +4,7 @@
  * Se require firePHP para firefox o equivalente.
  * 
  * Observación: la razón de multiplicación del código de las funciones con diferentes parámetros es porque 
- * debug_backtrace() retorna el contexto donde se invoca el método, si tuvieramos un método base 
+ * debug_backtrace() retorna el contexto desde donde se invoca el método, si tuvieramos un método base 
  * el contexto sería ese método base por lo que el traceo carecería de utilidad. 
  *  
  */
@@ -15,12 +15,8 @@ class Console
      * @param string $message - texto a escribir en archivo.
      * @param string $file - ruta del archivo a escribir.
      */
-    static function log($message = null, $file = 'php://stdout', $write = true )
+    static function log($message = null, $showOutput = false, $write = true, $file = 'php://stdout')
     {
-        $logger = new Zend_Log();
-        $writer = new Zend_Log_Writer_Firebug();
-        $logger->addWriter($writer);
-    
         $trace = debug_backtrace() ;
         if  ($message !== null ){
             $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
@@ -30,10 +26,15 @@ class Console
         
         if ($write) {
             $ff = fopen($file, "a");
-            fwrite($ff, "[ADMPORTAL INFO]: $message\r\n");
+            fwrite($ff, "[ADMPORTAL LOG]: $message\r\n");
             fclose($ff);
         }
-        $logger->log($message, Zend_Log::NOTICE);
+        if ($showOutput) {
+            $logger = new Zend_Log();
+            $writer = new Zend_Log_Writer_Firebug();
+            $logger->addWriter($writer);
+            $logger->log($message, Zend_Log::NOTICE);
+        }
     }
     
     /**
@@ -41,7 +42,7 @@ class Console
      * @param string $message - texto a escribir en archivo.
      * @param string $file - ruta del archivo a escribir.
      */
-    static function info($message = null, $file = 'php://stdout', $write = false )
+    static function info($message = null, $showOutput = true, $write = true, $file = 'php://stdout')
     {
         $logger = new Zend_Log();
         $writer = new Zend_Log_Writer_Firebug();
@@ -59,7 +60,12 @@ class Console
             fclose($ff);
         }
         
-        $logger->log($message, Zend_Log::INFO);
+        if ($showOutput) {
+            $logger = new Zend_Log();
+            $writer = new Zend_Log_Writer_Firebug();
+            $logger->addWriter($writer);
+            $logger->log($message, Zend_Log::INFO);
+        }
     }
     
     /**
@@ -67,12 +73,8 @@ class Console
      * @param string $message - texto a escribir en archivo.
      * @param string $file - ruta del archivo a escribir.
      */
-    static function debug($message = null, $file = null, $write = false )
+    static function debug($message = null, $showOutput = true, $write = false, $file = null)
     {
-        $logger = new Zend_Log();
-        $writer = new Zend_Log_Writer_Firebug();
-        $logger->addWriter($writer);
-        
         if ($file == null) {
             $file = ROOT_DIR."/log/debug";
         } else {
@@ -89,8 +91,12 @@ class Console
             fwrite($ff, "$message\r\n");
             fclose($ff);
         }
-        
-        $logger->log($message, Zend_Log::DEBUG);
+        if ($showOutput) {
+            $logger = new Zend_Log();
+            $writer = new Zend_Log_Writer_Firebug();
+            $logger->addWriter($writer);
+            $logger->log($message, Zend_Log::DEBUG);
+        }
     }
     
     /**
@@ -98,12 +104,8 @@ class Console
      * @param string $message - texto a escribir en archivo.
      * @param string $file - ruta del archivo a escribir.
      */
-    static function warn($message = null, $file = 'php://stderr', $write = true)
+    static function warn($message = null, $showOutput = true, $write = true,$file = 'php://stderr')
     {
-        $logger = new Zend_Log();
-        $writer = new Zend_Log_Writer_Firebug();
-        $logger->addWriter($writer);
-        
         $trace = debug_backtrace() ;
         if  ($message !== null ){
             $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
@@ -116,7 +118,12 @@ class Console
             fclose($ff);
         }
         
-        $logger->log($message, Zend_Log::WARN);
+        if ($showOutput) {
+            $logger = new Zend_Log();
+            $writer = new Zend_Log_Writer_Firebug();
+            $logger->addWriter($writer);
+            $logger->log($message, Zend_Log::WARN);
+        }
     }
     
     
@@ -125,11 +132,9 @@ class Console
      * @param string $message - texto a escribir en archivo.
      * @param string $file - ruta del archivo a escribir.
      */
-    static function error($message = null, $file = 'php://stderr', $write = true)
+    static function error($message = null, $showOutput = false, $write = true, $file = 'php://stderr')
     {
-        $logger = new Zend_Log();
-        $writer = new Zend_Log_Writer_Firebug();
-        $logger->addWriter($writer);
+
         
         $trace = debug_backtrace() ;
         if  ($message !== null ){
@@ -143,7 +148,12 @@ class Console
             fclose($ff);
         }
         
-        $logger->log($message, Zend_Log::ERR);
+        if ($showOutput) {
+            $logger = new Zend_Log();
+            $writer = new Zend_Log_Writer_Firebug();
+            $logger->addWriter($writer);
+            $logger->log($message, Zend_Log::ERR);
+        }
     }
     
 
