@@ -100,6 +100,7 @@ class AdminController extends Zend_Controller_Action
         ->requireModule("zwei.Form")
         ->requireModule("zwei.form.ValidationTextarea")
         ->requireModule("dojox.grid.enhanced.plugins.Pagination")
+        ->requireModule("dojox.form.CheckedMultiSelect")
         ;
     
         $this->view->headStyle()->appendStyle('
