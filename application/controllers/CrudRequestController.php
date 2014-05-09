@@ -152,13 +152,19 @@ class CrudRequestController extends Zend_Controller_Action
                             Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
                         }
                     } else if ($this->_form->action == 'delete') {
-                        foreach ($this->_form->primary as $i => $v) {
-                            $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $v);
+                        if (isset($this->_form->primary)) {
+                            foreach ($this->_form->primary as $i => $v) {
+                                $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $v);
+                            }
+                            if (count($where) == 1)
+                                $where = $where[0];
+                            
+                            $response = $this->_model->delete($where);
+                        } else {
+                            Debug::write(array($this->_model->info('name'), "Se intento borrar sin parametros"));
+                            $response = false;
                         }
-                        if (count($where) == 1)
-                            $where = $where[0];
                         
-                        $response = $this->_model->delete($where);
                         if ($response) {
                             $this->_responseContent['state'] = 'DELETE_OK';
                             $this->_responseContent['type'] = 'message';
@@ -168,29 +174,35 @@ class CrudRequestController extends Zend_Controller_Action
                         }
                         //Zwei_Utils_Debug::write($response);
                     } else if ($this->_form->action == 'edit') {
-                        foreach ($this->_form->primary as $i => $v) {
-                            $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $v);
-                        }
-                        if (count($where) == 1)
-                            $where = $where[0];
-                        
-                        foreach ($this->_form->data as $i => $v) {
-                            $data[$i] = $v;
-                        }
-                        
-                        try {
-                            $response = $this->_model->update($data, $where);
-                            if ($response) {
-                                $this->_responseContent['state'] = 'UPDATE_OK';
-                                $this->_responseContent['type'] = 'message';
-                            } else {
+                        if (isset($this->_form->primary)) {
+                            foreach ($this->_form->primary as $i => $v) {
+                                $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $v);
+                            }
+                            if (count($where) == 1)
+                                $where = $where[0];
+                            
+                            foreach ($this->_form->data as $i => $v) {
+                                $data[$i] = $v;
+                            }
+                            
+                            try {
+                                $response = $this->_model->update($data, $where);
+                                if ($response) {
+                                    $this->_responseContent['state'] = 'UPDATE_OK';
+                                    $this->_responseContent['type'] = 'message';
+                                } else {
+                                    $this->_responseContent['state'] = 'UPDATE_FAIL';
+                                    $this->_responseContent['type'] = 'error';
+                                }
+                            } catch (Zend_Db_Exception $e) {
                                 $this->_responseContent['state'] = 'UPDATE_FAIL';
                                 $this->_responseContent['type'] = 'error';
+                                Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$classModel|" . $e->getTraceAsString());
                             }
-                        } catch (Zend_Db_Exception $e) {
+                        } else {
+                            Debug::write(array($this->_model->info('name'), "Se intento actualizar sin parametros"));
                             $this->_responseContent['state'] = 'UPDATE_FAIL';
                             $this->_responseContent['type'] = 'error';
-                            Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$classModel|" . $e->getTraceAsString());
                         }
                         //Zwei_Utils_Debug::write($response);
                     }
