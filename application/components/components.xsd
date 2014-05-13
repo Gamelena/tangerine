@@ -57,6 +57,7 @@
             <xsd:element name="helpers" type="helpersType" minOccurs="0" maxOccurs="1"/>
         </xsd:choice>
         <xsd:attribute name="hideSubmit" type="xsd:boolean"/>
+        <xsd:attribute name="outsideContent" type="xsd:boolean"/>
     </xsd:complexType>
     <xsd:complexType name="formsType">
         <xsd:choice minOccurs="1" maxOccurs="unbounded">
@@ -225,6 +226,7 @@
             <xsd:enumeration value="dijit-form-textarea"/>
             <xsd:enumeration value="dijit-form-validation-text-box"/>
             <xsd:enumeration value="dijit-form-date-text-box"/>
+            <xsd:enumeration value="dijit-form-time-text-box"/>
             <xsd:enumeration value="dojox-form-checked-multi-select"/>
             <xsd:enumeration value="dojox-form-checked-multi-select-binary"/>
             <xsd:enumeration value="dojox-form-uploader"/>
