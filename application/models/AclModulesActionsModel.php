@@ -83,5 +83,20 @@ class AclModulesActionsModel extends DbTable_AclModulesActions
         }
         return $select;
     }
+    /**
+     * 
+     * @param int $aclModulesId
+     * @param int $aclActionsId
+     * @return Zend_Db_Table_Row_Abstract
+     */
+    public function findByAclModulesIdAclActionsId ($aclModulesId, $aclActionsId) {
+        $ad = $this->getAdapter(); 
+        return $this->fetchAll(
+            array(
+                $ad->quoteInto("acl_modules_id = ? ", $aclModulesId), 
+                $ad->quoteInto("acl_actions_id = ? ", $aclActionsId)
+            )
+        );
+    }
 }
 

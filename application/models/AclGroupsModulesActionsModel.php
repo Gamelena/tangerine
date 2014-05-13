@@ -20,6 +20,22 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     protected $_nameModulesActions;
     
     /**
+     * Especificar si se deben borrar acciones asociadas.
+     * 
+     * @var boolean
+     */
+    protected $_deleteUnchecked = true;
+    /**
+     * Setea flag para borrar acciones asociadas. 
+     * 
+     * @param string $value
+     * @return void
+     */
+    public function setDeleteUnchecked($value = true)
+    {
+        $this->_deleteUnchecked = $value;
+    }
+    /**
      * Post Constructor
      * @see Zwei_Db_Table::init()
      * @return void
@@ -38,7 +54,7 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     public function update($data, $where)
     {
         $data = $this->cleanDataParams($data);
-        $delete = $this->deleteUnchecked($data, $where);
+        $delete = $this->_deleteUnchecked ? $this->deleteUnchecked($data, $where) : false;
         
         $where = self::whereToArray($where);
         $data['acl_groups_id'] = $where['acl_groups_id'];
@@ -60,6 +76,17 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     }
     
     /**
+     * @param $data array
+     * @return int
+     * @see Zwei_Db_Table::insert()
+     */
+    public function insert($data)
+    {
+        $data = $this->cleanDataParams($data);
+        return parent::insert($data);
+    }
+    
+    /**
      * Se separan los datos de tabla principal de tabla acciones por módulo.
      * 
      * @param array $data
@@ -76,6 +103,21 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
                 }
             }
         }
+        
+        //Si estan seteados ambos valores de tabla padre 'acl_modules_actions', busca valor de campo 'acl_modules_actions_id' propagado 
+        if (isset($data['acl_modules_id']) && isset($data['acl_actions_id'])) {
+            $modulesActionsModel = new AclModulesActionsModel();
+            
+            $gmaRowset = $modulesActionsModel->findByAclModulesIdAclActionsId($data['acl_modules_id'], $data['acl_actions_id']);
+            
+            if ($gmaRowset->count()) {
+                $data['acl_modules_actions_id'] = $gmaRowset->current()->id;
+            }
+            
+            unset($data['acl_modules_id']);
+            unset($data['acl_actions_id']);
+        }
+        
         return $data;
     }
     

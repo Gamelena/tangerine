@@ -29,6 +29,12 @@ class AclModulesModel extends DbTable_AclModules
      * @var array
      */
     protected $_dataActions = array();
+    /**
+     * Contenido archivo xml.
+     * 
+     * @var string
+     */
+    protected $_content = '';
     
     /**
      * (non-PHPdoc)
@@ -53,8 +59,9 @@ class AclModulesModel extends DbTable_AclModules
             }
         }
         Zwei_Utils_File::clearRecursive(ROOT_DIR . "/cache");
+        $writeContent = $this->writeContent($data);
         
-        return $saveActions || $update;
+        return $saveActions || $update || $writeContent;
     }
     
     /**
@@ -74,10 +81,27 @@ class AclModulesModel extends DbTable_AclModules
                 return false;
             }
         }
-        $saveActions    = $this->saveDataActions($lastInsertedId);
+        $this->writeContent($data);
+        $this->saveDataActions($lastInsertedId);
         
         return $lastInsertedId;
         
+    }
+    /**
+     * Escribe archivo xml.
+     * 
+     * @param array $data
+     * @return number
+     */
+    public function writeContent($data) {
+        $write = false;
+        if (!empty($this->_content) && is_writable(COMPONENTS_ADMIN_PATH . '/' . $data['module'])) {
+            $handle = fopen(COMPONENTS_ADMIN_PATH . '/' . $data['module'], "w+");
+            $write = fwrite($handle, html_entity_decode(str_replace('&amp;', '&', $this->_content)));
+            fclose($handle);
+            @chmod(COMPONENTS_ADMIN_PATH . '/' . $data['module'], 0777);
+        }
+        return $write;
     }
     
     /**
@@ -89,24 +113,34 @@ class AclModulesModel extends DbTable_AclModules
      */
     protected function cleanDataParams($data)
     {
-        //Si el tipo de archivo es xml se tratará de crear archivo xml base, el que se pueda hacer esto dependerá de los permisos.
+        //Si el tipo de archivo es xml se tratará de crear archivo xml base, el que se pueda hacer esto dependerá de los permisos de escritura para COMPONENTS_ADMIN_PATH.
         if ($data['type'] == 'xml') {
             if (!file_exists(COMPONENTS_ADMIN_PATH . '/' . $data['module'])) {
                 if (is_writable(COMPONENTS_ADMIN_PATH)) {
                     $handle = fopen(COMPONENTS_ADMIN_PATH . '/' . $data['module'], "w+");
                     fwrite($handle, "<?xml version=\"1.0\"?>\n"
-                        . "<component name=\"M&oacute;dulos\" type=\"{Escriba tipo}\" target=\"EjemploModel\" list=\"true\""
-                        . " edit=\"true\" add=\"true\" delete=\"true\" clone=\"false\""
+                        . "<component name=\"M&amp;oacute;dulos\" type=\"dojo-simple-crud\" target=\"EjemploModel\" list=\"true\""
+                        . " edit=\"true\" add=\"true\" delete=\"true\" clone=\"true\""
                         . " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"components.xsd\">\n"
-                        . "</component>");
+                        . "\t<elements>\n"
+                        . "\t\t<element target=\"id\" visible=\"true\" type=\"dijit-form-validation-text-box\" edit=\"true\" add=\"true\" clone=\"true\"></element>\n"
+                        . "\t</elements>\n"
+                        . "\t<!--@todo esta es sólo una base de ejemplo, ver components.xsd para valores de component.type disponibles -->\n"
+                        . "</component>\n");
                     fclose($handle);
-                    chmod(COMPONENTS_ADMIN_PATH . '/' . $data['module'], 0777);
+                    @chmod(COMPONENTS_ADMIN_PATH . '/' . $data['module'], 0777);
                     Console::log("Creado archivo " . COMPONENTS_ADMIN_PATH . '/' . $data['module']);
                 } else {
                     Console::log("No se pudo crear el archivo " . COMPONENTS_ADMIN_PATH . '/' . $data['module']);
                 }
             }
         }
+        
+        if (isset($data['content'])) {
+            $this->_content = $data['content'];
+            unset($data['content']);
+        }
+        
         
         if (empty($data['module']))
             $data['module'] = null;
@@ -202,9 +236,13 @@ class AclModulesModel extends DbTable_AclModules
             if ($branch['ownership']) {
                 $file      = Zwei_Admin_Xml::getFullPath($branch['module']);
                 if (file_exists($file)) {
-                    $xml       = new Zwei_Admin_Xml($file, null, true);
+                    try {
+                        $xml       = new Zwei_Admin_Xml($file, null, true);
+                    } catch (Exception $e) {
+                        Console::error("No se pudo parsear $file.");
+                    }
                 } else {
-                    Debug::write("No se pudo parsear archivo $file. Compruebe que exista y sea un XML válido");
+                    Console::error("No se pudo encuentra $file.");
                     return $arrNodes;
                 }
                 
@@ -220,6 +258,7 @@ class AclModulesModel extends DbTable_AclModules
                 $arrNodes[$key]['type']            = $branch['type'];
                 $arrNodes[$key]['image']           = $branch['image'];
                 $arrNodes[$key]['refresh_on_load'] = $branch['refresh_on_load'];
+                $arrNodes[$key]['module'] = $branch['module'];
                 
                 $arrNodes[$key]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($branch['title']) : utf8_encode(html_entity_decode($branch['title']));
                 
@@ -333,7 +372,7 @@ class AclModulesModel extends DbTable_AclModules
     }
     
     /**
-     * Selecciona diferentes módulos para uso general.
+     * Selecciona los diferentes módulos para uso general.
      * 
      * @return Zend_Db_Table_Select 
      */
