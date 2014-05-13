@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `acl_groups` (
   `description` varchar(45) DEFAULT NULL,
   `approved` enum('0','1') DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `acl_groups_modules_actions` (
   UNIQUE KEY `acl_modules_actions_id` (`acl_modules_actions_id`,`acl_groups_id`,`acl_modules_item_id`),
   KEY `fk_acl_groups_modules_actions_acl_modules_actions1` (`acl_modules_actions_id`),
   KEY `fk_acl_groups_modules_actions_acl_groups1` (`acl_groups_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `acl_users_groups` (
   UNIQUE KEY `acl_users_id` (`acl_users_id`,`acl_groups_id`),
   KEY `fk_acl_users_groups_acl_users1` (`acl_users_id`),
   KEY `fk_acl_users_groups_acl_groups1` (`acl_groups_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `log_book` (
   `ip` char(200) NOT NULL,
   `stamp` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
