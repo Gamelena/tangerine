@@ -146,7 +146,9 @@ BEGIN
     set @query = concat('
     INSERT INTO `', @dbNew ,'`.`acl_modules` 
         (`id`, `parent_id`, `title`, `module`, `tree`, `refresh_on_load`, `type`, `approved`, `order`, `root`, `icons_id`) 
-    SELECT `id`, IF(`parent_id` != "0", `parent_id`, NULL), `title`, `module`, `tree`, "0", IF (`linkable` != "0", `type`, ""), `approved`, `order`, `root`, "1" FROM `', @dbOld ,'`.`acl_modules` ;
+    SELECT `id`, IF(`parent_id` != "0", `parent_id`, NULL), `title`, `module`, `tree`, "0", IF (`linkable` != "0", `type`, ""), 
+        `approved`, `order`, `root`, IF(`parent_id` = "1" OR `parent_id` IS NULL OR `linkable`="1", "1", "2") 
+        FROM `', @dbOld ,'`.`acl_modules` ;
     ');
 
 
@@ -157,8 +159,8 @@ BEGIN
     set @query = concat('
     INSERT INTO ', @dbNew ,'.`acl_modules` 
         (`parent_id`, `title`, `module`, `tree`, `refresh_on_load`, `type`, `approved`, `order`, `root`, `icons_id`) VALUES
-        ((SELECT id FROM ', @dbOld ,'.acl_modules WHERE title="Configuraci&oacute;n" AND (parent_id IS NULL OR parent_id = "0") LIMIT 1), "&Iacute;conos", "icons.xml", "1", "0", "xml", "1", 7, "1", "1"),
-        ((SELECT id FROM ', @dbOld ,'.acl_modules WHERE module="settings.xml" LIMIT 1), "Avanzado", "settings-advanced.xml", "1", "0", "xml", "1", 0, "1", "1");
+        ((SELECT id FROM ', @dbOld ,'.acl_modules WHERE title="Configuraci&oacute;n" AND (parent_id IS NULL OR parent_id = "0") LIMIT 1), "&Iacute;conos", "icons.xml", "1", "0", "xml", "1", 7, "1", "16"),
+        ((SELECT id FROM ', @dbOld ,'.acl_modules WHERE module="settings.xml" LIMIT 1), "Avanzado", "settings-advanced.xml", "1", "0", "xml", "1", 0, "1", "4");
     ');
 
     PREPARE stmt FROM @query;
