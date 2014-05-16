@@ -105,6 +105,136 @@ BEGIN
     PREPARE stmt FROM @query;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt; 
+    
+    
+    -- 
+    -- Structure for table `acl_modules`
+    -- 
+    set @query = concat('
+    DROP TABLE IF EXISTS `', @dbNew ,'`.`acl_modules`;');
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+    set @query = concat('
+    CREATE TABLE IF NOT EXISTS `', @dbNew ,'`.`acl_modules` (
+      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      `parent_id` int(10) unsigned DEFAULT NULL COMMENT "Id de Modulo padre",
+      `title` char(200) DEFAULT NULL COMMENT "Nombre",
+      `module` char(200) DEFAULT NULL COMMENT "Url de modulo, puede ser archivo XML, URl de controlador o modulo ZF",
+      `tree` enum("0","1") NOT NULL DEFAULT "1",
+      `refresh_on_load` enum("0","1") NOT NULL DEFAULT "0" COMMENT "Define si modulo debe ser refrescado al reseleccionar la pestana, en caso contrario mantendrÃ¡ el estatus de como se dejÃ³ al abandonarla.",
+      `type` enum("xml","zend_module","legacy","iframe") NOT NULL DEFAULT "xml",
+      `approved` enum("0","1") NOT NULL,
+      `order` tinyint(4) unsigned NOT NULL DEFAULT "0" COMMENT "Orden en que aparece en arbol",
+      `root` enum("0","1") CHARACTER SET utf8 NOT NULL DEFAULT "0" COMMENT "Define si solo puede acceder perfil ROOT (en configuracion por defecto acl_roles_id = 1)",
+      `icons_id` int(11) DEFAULT NULL,
+      `ownership` enum("0","1") NOT NULL DEFAULT "0",
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `module` (`module`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+    ');
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+    -- 
+    -- Data for table `acl_modules`
+    -- 
+    set @query = concat('
+    INSERT INTO `', @dbNew ,'`.`acl_modules` 
+        (`id`, `parent_id`, `title`, `module`, `tree`, `refresh_on_load`, `type`, `approved`, `order`, `root`, `icons_id`) 
+    SELECT `id`, IF(`parent_id` != "0", `parent_id`, NULL), `title`, `module`, `tree`, "0", IF (`linkable` != "0", `type`, ""), `approved`, `order`, `root`, "1" FROM `', @dbOld ,'`.`acl_modules` ;
+    ');
+
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+    set @query = concat('
+    INSERT INTO ', @dbNew ,'.`acl_modules` 
+        (`parent_id`, `title`, `module`, `tree`, `refresh_on_load`, `type`, `approved`, `order`, `root`, `icons_id`) VALUES
+        ((SELECT id FROM ', @dbOld ,'.acl_modules WHERE title="Configuraci&oacute;n" AND (parent_id IS NULL OR parent_id = "0") LIMIT 1), "&Iacute;conos", "icons.xml", "1", "0", "xml", "1", 7, "1", "1"),
+        ((SELECT id FROM ', @dbOld ,'.acl_modules WHERE module="settings.xml" LIMIT 1), "Avanzado", "settings-advanced.xml", "1", "0", "xml", "1", 0, "1", "1");
+    ');
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+        -- 
+    -- Data for table `acl_modules_actions`
+    -- 
+    -- 
+    -- Structure for table `acl_modules_actions`
+    -- 
+    set @query = concat('
+    DROP TABLE IF EXISTS `', @dbNew ,'`.`acl_modules_actions`;');
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+    set @query = concat('
+    CREATE TABLE IF NOT EXISTS `', @dbNew ,'`.`acl_modules_actions` (
+      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      `acl_modules_id` int(11) NOT NULL,
+      `acl_actions_id` varchar(10) NOT NULL,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `acl_modules_id` (`acl_modules_id`,`acl_actions_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+    ');
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    set @query = concat('
+    INSERT INTO `', @dbNew ,'`.`acl_modules_actions` (`id`, `acl_modules_id`, `acl_actions_id`) VALUES
+    (1, (SELECT id FROM acl_modules WHERE title="Configuraci&oacute;n" AND (parent_id IS NULL) LIMIT 1), "LIST"),
+    (2, (SELECT id FROM acl_modules WHERE module="personal-info.xml" LIMIT 1), "EDIT"),
+    (3, (SELECT id FROM acl_modules WHERE module="personal-info.xml" LIMIT 1), "LIST"),
+    (4, (SELECT id FROM acl_modules WHERE module="modules.xml" LIMIT 1), "ADD"),
+    (5, (SELECT id FROM acl_modules WHERE module="modules.xml" LIMIT 1), "DELETE"),
+    (6, (SELECT id FROM acl_modules WHERE module="modules.xml" LIMIT 1), "EDIT"),
+    (7, (SELECT id FROM acl_modules WHERE module="modules.xml" LIMIT 1), "LIST"),
+    (8, (SELECT id FROM acl_modules WHERE module="users.xml" LIMIT 1), "ADD"),
+    (9, (SELECT id FROM acl_modules WHERE module="users.xml" LIMIT 1), "DELETE"),
+    (10, (SELECT id FROM acl_modules WHERE module="users.xml" LIMIT 1), "EDIT"),
+    (11, (SELECT id FROM acl_modules WHERE module="users.xml" LIMIT 1), "LIST"),
+    (12, (SELECT id FROM acl_modules WHERE module="phpinfo.xml" LIMIT 1), "LIST"),
+    (13, (SELECT id FROM acl_modules WHERE module="roles.xml" LIMIT 1), "ADD"),
+    (14, (SELECT id FROM acl_modules WHERE module="roles.xml" LIMIT 1), "DELETE"),
+    (15, (SELECT id FROM acl_modules WHERE module="roles.xml" LIMIT 1), "EDIT"),
+    (16, (SELECT id FROM acl_modules WHERE module="roles.xml" LIMIT 1), "LIST"),
+    (17, (SELECT id FROM acl_modules WHERE module="settings.xml" LIMIT 1), "EDIT"),
+    (18, (SELECT id FROM acl_modules WHERE module="settings.xml" LIMIT 1), "LIST"),
+    (19, (SELECT id FROM acl_modules WHERE module="permissions.xml" LIMIT 1), "LIST"),
+    (20, (SELECT id FROM acl_modules WHERE module="icons.xml" LIMIT 1), "ADD"),
+    (21, (SELECT id FROM acl_modules WHERE module="icons.xml" LIMIT 1), "DELETE"),
+    (22, (SELECT id FROM acl_modules WHERE module="icons.xml" LIMIT 1), "EDIT"),
+    (23, (SELECT id FROM acl_modules WHERE module="icons.xml" LIMIT 1), "LIST"),
+    (24, (SELECT id FROM acl_modules WHERE module="settings-advanced.xml" LIMIT 1), "ADD"),
+    (25, (SELECT id FROM acl_modules WHERE module="settings-advanced.xml" LIMIT 1), "DELETE"),
+    (26, (SELECT id FROM acl_modules WHERE module="settings-advanced.xml" LIMIT 1), "EDIT"),
+    (27, (SELECT id FROM acl_modules WHERE module="settings-advanced.xml" LIMIT 1), "LIST");
+    ');
+
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    
+    set @query = concat(
+        'INSERT IGNORE INTO `', @dbNew ,'`.`acl_modules_actions` (`acl_modules_id`, `acl_actions_id`) 
+        SELECT DISTINCT `acl_modules_id`, `permission` FROM `', @dbOld ,'`.`acl_permissions`'
+    );
+    
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+    
     -- 
     -- Structure for table dbNew.`acl_groups_modules_actions`
     -- 
@@ -159,96 +289,23 @@ BEGIN
     -- 
     set @query = concat('
     INSERT INTO ', @dbNew ,'.`web_icons` (`id`, `title`, `image`) VALUES
-      ("1", "icono1", "ef571526green-sphere.png"),
-      ("2", "icono2", "d198f0a9red-sphere-2.png"),
-      ("4", "icono3", "a8b62f78step4c.png"),
-      ("5", "icono4", "71f74174roles.png"),
-      ("6", "icono5", "08a305d0configuration1.png"),
-      ("7", "icono6", "73d5e4febitdefender-ussd-wipe-stopper.png"),
-      ("8", "icono7", "7045385ablockdevice.png"),
-      ("9", "icono8", "e325a568setup.png"),
-      ("10", "icono9", "d11de71aexcellogo1.png"),
-      ("11", "icono10", "d60ca6dd100px-0-129-0-128-leaf-orange.png"),
-      ("12", "icono11", "724207b3leaf-grey.png"),
-      ("14", "icono12", "c67d0c9cleaf-green.png"),
-      ("15", "icono13", "09441e4eshopping-bag-green.png"),
-      ("16", "icono14", "d9939c03line-chart.png"),
-      ("17", "icono15", "982673adchart-down.png"),
-      ("18", "icono16", "b7906effarea-chart-256.png"),
-      ("19", "icono16", "0d4f0ef1matlab.png"),
-      ("20", "icono17", "14094fcaicon-rc-heart-green.gif"),
-      ("21", "icono18", "dd65be18aside.png"),
-      ("22", "Icono 19", "d049b52250px-crystal-package.png"),
-      ("23", "Icono 20", "9333f8fasms.png"),
-      ("24", "icono21", "8899814acandado.png"),
-      ("25", "icono23", "8764dda1roles.png"),
-      ("26", "icono23", "9cd0e6b9alarm.png"),
-      ("27", "loading", "d8b2a98dmatlab.png"),
-      ("28", "prueba", "2631f82550px-crystal-package.png"),
-      ("29", "prueba", "9008c3e3icon-contact.gif"),
-      ("30", "prueba", "5992af0eroles.png"),
-      ("31", "prueba2", "6b6faf89setting-icon.png"),
-      ("32", "prueba3", "a0498d64blockdevice.png"),
-      ("33", "prueba4", "49484cdaarchive-new.png"),
-      ("34", "Config", "bc168084blockdevice.png"),
-      ("35", "Audit", "02455f20audit.png");
-    ');
-
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-    -- 
-    -- Structure for table `acl_modules`
-    -- 
-    set @query = concat('
-    DROP TABLE IF EXISTS `', @dbNew ,'`.`acl_modules`;');
-
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-
-    set @query = concat('
-    CREATE TABLE IF NOT EXISTS `', @dbNew ,'`.`acl_modules` (
-      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      `parent_id` int(10) unsigned DEFAULT NULL COMMENT "Id de Modulo padre",
-      `title` char(200) DEFAULT NULL COMMENT "Nombre",
-      `module` char(200) DEFAULT NULL COMMENT "Url de modulo, puede ser archivo XML, URl de controlador o modulo ZF",
-      `tree` enum("0","1") NOT NULL DEFAULT "1",
-      `refresh_on_load` enum("0","1") NOT NULL DEFAULT "0" COMMENT "Define si modulo debe ser refrescado al reseleccionar la pestana, en caso contrario mantendrÃ¡ el estatus de como se dejÃ³ al abandonarla.",
-      `type` enum("xml","zend_module","legacy","iframe") NOT NULL DEFAULT "xml",
-      `approved` enum("0","1") NOT NULL,
-      `order` tinyint(4) unsigned NOT NULL DEFAULT "0" COMMENT "Orden en que aparece en arbol",
-      `root` enum("0","1") CHARACTER SET utf8 NOT NULL DEFAULT "0" COMMENT "Define si solo puede acceder perfil ROOT (en configuracion por defecto acl_roles_id = 1)",
-      `icons_id` int(11) DEFAULT NULL,
-      `ownership` enum("0","1") NOT NULL DEFAULT "0",
-      PRIMARY KEY (`id`),
-      UNIQUE KEY `module` (`module`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-    ');
-
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-
-    -- 
-    -- Data for table `acl_modules`
-    -- 
-    set @query = concat('
-    INSERT INTO `', @dbNew ,'`.`acl_modules` 
-        (`id`, `parent_id`, `title`, `module`, `tree`, `refresh_on_load`, `type`, `approved`, `order`, `root`, `icons_id`) 
-    SELECT `id`, IF(`parent_id` != "0", `parent_id`, NULL), `title`, `module`, `tree`, "0", `type`, `approved`, `order`, `root`, "1" FROM `', @dbOld ,'`.`acl_modules` ;
-    ');
-
-
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-
-    set @query = concat('
-    INSERT INTO ', @dbNew ,'.`acl_modules` 
-        (`parent_id`, `title`, `module`, `tree`, `refresh_on_load`, `type`, `approved`, `order`, `root`, `icons_id`) VALUES
-        ((SELECT id FROM ', @dbOld ,'.acl_modules WHERE title="Configuraci&oacute;n" AND (parent_id IS NULL OR parent_id = "0") LIMIT 1), "&Iacute;conos", "icons.xml", "1", "0", "xml", "1", 7, "1", "1"),
-        ((SELECT id FROM ', @dbOld ,'.acl_modules WHERE module="settings.xml" LIMIT 1), "Avanzado", "settings-advanced.xml", "1", "0", "xml", "1", 0, "1", "1");
+    (1, "Sphere Green", "033d4c25green-sphere.png"),
+    (2, "Sphere Blue", "225ca2a1step4c.png"),
+    (3, "Sphere Red", "23cf88ccred-sphere-2.png"),
+    (4, "Sphere Yellow", "dedbeb01yellow-sphere.png"),
+    (5, "Keys", "a3093747roles.png"),
+    (6, "Module", "03e490e9blockdevice.png"),
+    (7, "Roles", "547353feuser-group-icon.png"),
+    (8, "Teams", "630e0daesocial-networking-package.jpg"),
+    (9, "Online", "ab789f0auser-online.png"),
+    (10, "Chart", "325d3cbfarea-chart-256.png"),
+    (11, "Magnifier", "905dbb5bwindows-7-magnifier.png"),
+    (12, "Settings", "e0d79f05setting-icon.png"),
+    (13, "Settings 2", "91732629iphone-settings-icon.png"),
+    (14, "Audit", "751f9170audit.png"),
+    (15, "Setup", "0d7df408setup-l.png"),
+    (16, "USSD", "c62b4507bitdefender-ussd-wipe-stopper.png"),
+    (17, "User", "a4c40f07actions-im-user-icon.png");
     ');
 
     PREPARE stmt FROM @query;
@@ -337,68 +394,7 @@ BEGIN
     PREPARE stmt FROM @query;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
-    -- 
-    -- Structure for table `acl_modules_actions`
-    -- 
-    set @query = concat('
-    DROP TABLE IF EXISTS `', @dbNew ,'`.`acl_modules_actions`;');
 
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-
-    set @query = concat('
-    CREATE TABLE IF NOT EXISTS `', @dbNew ,'`.`acl_modules_actions` (
-      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      `acl_modules_id` int(11) NOT NULL,
-      `acl_actions_id` varchar(10) NOT NULL,
-      PRIMARY KEY (`id`),
-      UNIQUE KEY `acl_modules_id` (`acl_modules_id`,`acl_actions_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-    ');
-
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-
-    -- 
-    -- Data for table `acl_modules_actions`
-    -- 
-
-    set @query = concat('
-    INSERT INTO `', @dbNew ,'`.`acl_modules_actions` (`id`, `acl_modules_id`, `acl_actions_id`) VALUES
-    (1, (SELECT id FROM acl_modules WHERE title="Configuraci&oacute;n" AND (parent_id IS NULL) LIMIT 1), "LIST"),
-    (2, (SELECT id FROM acl_modules WHERE module="personal-info.xml" LIMIT 1), "EDIT"),
-    (3, (SELECT id FROM acl_modules WHERE module="personal-info.xml" LIMIT 1), "LIST"),
-    (4, (SELECT id FROM acl_modules WHERE module="modules.xml" LIMIT 1), "ADD"),
-    (5, (SELECT id FROM acl_modules WHERE module="modules.xml" LIMIT 1), "DELETE"),
-    (6, (SELECT id FROM acl_modules WHERE module="modules.xml" LIMIT 1), "EDIT"),
-    (7, (SELECT id FROM acl_modules WHERE module="modules.xml" LIMIT 1), "LIST"),
-    (8, (SELECT id FROM acl_modules WHERE module="users.xml" LIMIT 1), "ADD"),
-    (9, (SELECT id FROM acl_modules WHERE module="users.xml" LIMIT 1), "DELETE"),
-    (10, (SELECT id FROM acl_modules WHERE module="users.xml" LIMIT 1), "EDIT"),
-    (11, (SELECT id FROM acl_modules WHERE module="users.xml" LIMIT 1), "LIST"),
-    (12, (SELECT id FROM acl_modules WHERE module="phpinfo.xml" LIMIT 1), "LIST"),
-    (13, (SELECT id FROM acl_modules WHERE module="roles.xml" LIMIT 1), "ADD"),
-    (14, (SELECT id FROM acl_modules WHERE module="roles.xml" LIMIT 1), "DELETE"),
-    (15, (SELECT id FROM acl_modules WHERE module="roles.xml" LIMIT 1), "EDIT"),
-    (16, (SELECT id FROM acl_modules WHERE module="roles.xml" LIMIT 1), "LIST"),
-    (17, (SELECT id FROM acl_modules WHERE module="settings.xml" LIMIT 1), "EDIT"),
-    (18, (SELECT id FROM acl_modules WHERE module="settings.xml" LIMIT 1), "LIST"),
-    (19, (SELECT id FROM acl_modules WHERE module="permissions.xml" LIMIT 1), "LIST"),
-    (20, (SELECT id FROM acl_modules WHERE module="icons.xml" LIMIT 1), "ADD"),
-    (21, (SELECT id FROM acl_modules WHERE module="icons.xml" LIMIT 1), "DELETE"),
-    (22, (SELECT id FROM acl_modules WHERE module="icons.xml" LIMIT 1), "EDIT"),
-    (23, (SELECT id FROM acl_modules WHERE module="icons.xml" LIMIT 1), "LIST"),
-    (24, (SELECT id FROM acl_modules WHERE module="settings-advanced.xml" LIMIT 1), "ADD"),
-    (25, (SELECT id FROM acl_modules WHERE module="settings-advanced.xml" LIMIT 1), "DELETE"),
-    (26, (SELECT id FROM acl_modules WHERE module="settings-advanced.xml" LIMIT 1), "EDIT"),
-    (27, (SELECT id FROM acl_modules WHERE module="settings-advanced.xml" LIMIT 1), "LIST");
-    ');
-
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
     -- 
     -- Structure for table `acl_users_groups`
     -- 
