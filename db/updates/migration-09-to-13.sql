@@ -147,7 +147,7 @@ BEGIN
     INSERT INTO `', @dbNew ,'`.`acl_modules` 
         (`id`, `parent_id`, `title`, `module`, `tree`, `refresh_on_load`, `type`, `approved`, `order`, `root`, `icons_id`) 
     SELECT `id`, IF(`parent_id` != "0", `parent_id`, NULL), `title`, `module`, `tree`, "0", IF (`linkable` != "0", `type`, ""), 
-        `approved`, `order`, `root`, IF(`parent_id` = "1" OR `parent_id` IS NULL OR `linkable`="1", "1", "2") 
+        `approved`, `order`, `root`, IF(`parent_id` = "1" OR `parent_id` IS NULL OR `linkable`="1", "2", "1") 
         FROM `', @dbOld ,'`.`acl_modules` ;
     ');
 
