@@ -29,23 +29,11 @@ class Zwei_Utils_String {
     
     public static function stripAccents($string, $nospaces=false)
     {
-        $string = preg_replace("[äáàâãª]","a",$string);
-        $string = preg_replace("[ÁÀÂÃÄ]","A",$string);
-        $string = preg_replace("[ÍÌÎÏ]","I",$string);
-        $string = preg_replace("[íìîï]","i",$string);
-        $string = preg_replace("[éèêë]","e",$string);
-        $string = preg_replace("[ÉÈÊË]","E",$string);
-        $string = preg_replace("[óòôõöº]","o",$string);
-        $string = preg_replace("[ÓÒÔÕÖ]","O",$string);
-        $string = preg_replace("[úùûü]","u",$string);
-        $string = preg_replace("[ÚÙÛÜ]","U",$string);
-        //$string = ereg_replace("[^´`¨~]","",$string);
-        $string = str_replace("ç","c",$string);
-        $string = str_replace("Ç","C",$string);
-        $string = str_replace("ñ","n",$string);
-        $string = str_replace("Ñ","N",$string);
-        $string = str_replace("Ý","Y",$string);
-        $string = str_replace("ý","y",$string);
+        $string = str_replace(array('[\', \']'), '', $string);
+        $string = preg_replace('/\[.*\]/U', '', $string);
+        $string = preg_replace('/&(amp;)?#?[a-z0-9]+;/i', '-', $string);
+        $string = htmlentities($string, ENT_COMPAT, 'utf-8');
+        $string = preg_replace('/&([a-z])(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);/i', '\\1', $string );
         if ($nospaces) $string = str_replace(" ","_",$string);
         return $string;
     }	
