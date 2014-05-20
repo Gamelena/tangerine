@@ -14,15 +14,16 @@ class Zwei_Utils_Db
      * @param string - alias de columna (ejecutar "SHOW TABLES" en MySQL para saber cual es este alias)
      * @param string - prefijo de tabla que es seguido por fecha resultante 
      * @param string "days"|"hours"
+     * @param Zend_Db_Table $table
      * @return array
      */
-    public function getRotatedTables($from, $to, $whereAlias, $prefix, $interval="days")
+    public static function getRotatedTables($from, $to, $whereAlias, $prefix, $interval = "days", Zend_Db_Table_Abstract $table=null)
     {
+        //Si se llama esto dentro de un modelo y no es especificado $adapter, ser usará el adapter del modelo.
+        $adapter = $table ? $table->getAdapter() : $this->getAdapter();
+        
         $possibleTables = array();
         $realTables = array();
-        Debug::write("en tablas rotadas");
-        Debug::write($from);
-        Debug::write($to);
         if (!is_null($from) && !is_null($to)) {
         
             $interval = Zwei_Utils_Time::createInterval (
@@ -44,8 +45,8 @@ class Zwei_Utils_Db
             $whereAlias .= " ($prefix)";
         }
         Debug::writeBySettings($query, 'query_log');
-        //para que $this->getAdapter() exista, esto debe ser llamado dentro de un Zend_Db_Table o equivalente
-        $realTables = $this->getAdapter()->fetchAll($query);
+        
+        $realTables = $adapter->fetchAll($query);
 
         $return = array();
         foreach ($realTables as $v) {
@@ -58,14 +59,16 @@ class Zwei_Utils_Db
     /**
      * Hace un backup de estructura y datos de tabla $table MySQL.
      * 
-     * @param Zend_Db_Table $table
-     * @return Zend_Db_Statement
+     * @param Zend_Db_Table_Abstract $table 
+     * @return string|false - Nombre tabla creada
      */
-    protected function backupTable(Zend_Db_Table $table, $sufix = '_bkp')
+    public static function backupTable(Zend_Db_Table_Abstract $table = null, $sufix = '_bkp')
     {
-        $ad = $table->getAdapter();
+        //Si se llama esto dentro de un modelo y no es especificado $adapter, ser usará el adapter del modelo.
+        $adapter = $table ? $table->getAdapter() : $this->getAdapter;
+        
         $name = $table->info(Zend_Db_Table::NAME);
-        $ad->query("CREATE TABLE `$name$sufix` LIKE `$name`");
-        return $ad->query("INSERT INTO `$name$sufix` SELECT * FROM `$name`");
+        $adapter->query("CREATE TABLE `$name$sufix` LIKE `$name`");
+        return $adapter->query("INSERT INTO `$name$sufix` SELECT * FROM `$name`") ? $name . $sufix : false;
     }
 }
