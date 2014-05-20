@@ -6,6 +6,11 @@ README
 
 Requerimientos Básicos
 
+- PHP Version
+5.2.4 o superior.
+
+"Zend recommends the most current release of PHP for critical security and performance enhancements" 
+
 - Zend Framework 1.12 
 http://www.zend.com/community/downloads.
 descomprimirlo en /usr/share/php/Zend y agregar /usr/share/php/ al include_path en php.ini.
