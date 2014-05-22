@@ -1,6 +1,6 @@
 <?php
 
-class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
+class Elements_DijitFormSelectController extends Zend_Controller_Action
 {
 
     public function init()
@@ -18,7 +18,6 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         $this->view->domId =  $r->getParam('domId');
         $this->view->target =  $r->getParam('target');
         
-        $this->view->formatter = $r->getParam('formatter', false);
         $this->view->data = $r->getParam('data', false);
         $this->view->mode = $r->getParam('mode');
         $this->view->trim = $r->getParam('trim') ? "trim=\"{$r->getParam('trim')}\"" : '';
@@ -29,10 +28,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         $this->view->regExp = $r->getParam('regExp') ? "regExp=\"{$r->getParam('regExp')}\"" : '';
         $this->view->label = $r->getParam('label') ? "label=\"{$r->getParam('label')}\"" : '';
         
-        $formatter = (!$this->view->data && $this->view->formatter && $this->view->formatter != 'formatimage') ?
-            "console.log('onchange');dijit.byId('{$this->view->domId}{$this->view->i}').textbox.value={$this->view->formatter}(dijit.byId('{$this->view->domId}{$this->view->i}').get('value'));" : '';
-        
-        $this->view->onchange = $r->getParam('onchange') ? $formatter.$r->getParam('onchange') : $formatter;
+        $this->view->onchange = $r->getParam('onchange') ? $r->getParam('onchange') : '';
         
         $this->view->onclick = $r->getParam('onclick') ? "onclick=\"{$r->getParam('onclick')}\"" : '';
         $this->view->onshow = $r->getParam('onshow') ? "onShow=\"{$r->getParam('onshow')}\"" : '';
@@ -129,5 +125,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         }
         return $options;
     }
+
+
 }
 

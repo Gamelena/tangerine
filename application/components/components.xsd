@@ -221,21 +221,20 @@
     <xsd:simpleType name="elementTypeType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="dijit-form-check-box"/>
-            <xsd:enumeration value="dijit-form-combo-box"/>
-            <xsd:enumeration value="dijit-form-filtering-select"/>
-            <xsd:enumeration value="dijit-form-textarea"/>
-            <xsd:enumeration value="dijit-form-validation-text-box"/>
-            <xsd:enumeration value="dijit-form-date-text-box"/>
-            <xsd:enumeration value="dijit-form-time-text-box"/>
             <xsd:enumeration value="dojox-form-checked-multi-select"/>
             <xsd:enumeration value="dojox-form-checked-multi-select-binary"/>
+            <xsd:enumeration value="dijit-form-combo-box"/>
+            <xsd:enumeration value="dijit-form-date-text-box"/>
+            <xsd:enumeration value="dijit-form-filtering-select"/>
+            <xsd:enumeration value="dijit-form-select"/>
+            <xsd:enumeration value="dijit-form-textarea"/>
+            <xsd:enumeration value="dijit-form-time-text-box"/>
+            <xsd:enumeration value="dijit-form-validation-text-box"/>
             <xsd:enumeration value="dojox-form-uploader"/>
             <xsd:enumeration value="hidden"/>
             <xsd:enumeration value="list-files"/>
             <xsd:enumeration value="tiny-mce"/>
             <xsd:enumeration value="zwei-form-validation-textarea"/>
-            <xsd:enumeration value="pk-original"/>
-            <xsd:enumeration value="id-box"/>
         </xsd:restriction>
     </xsd:simpleType>
     <xsd:simpleType name="chartDojoTypeType">

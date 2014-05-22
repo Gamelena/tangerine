@@ -16,8 +16,8 @@ class Elements_ZweiFormValidationTextareaController extends Zend_Controller_Acti
         $this->view->target =  $r->getParam('target');
         
         $this->view->value =  $r->getParam('value', $r->getParam('defaultValue', ''));
-        $this->view->readonly = $r->getParam('readonly', '') === 'true' ? "readonly=\"readonly\"" : '';
-        $this->view->disabled = $r->getParam('disabled', '') === 'true' ? "disabled=\"disabled\"" : '';
+        $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? "readonly=\"readonly\"" : '';
+        $this->view->disabled = $r->getParam('disabled') === 'true' || $r->getParam($r->getParam('mode')) == 'disabled' ? "disabled=\"disabled\"" : '';
         $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
         $this->view->style = $r->getParam('style') ? "style=\"{$r->getParam('style')}\"" : '';
