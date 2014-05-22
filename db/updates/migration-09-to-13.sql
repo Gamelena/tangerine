@@ -621,7 +621,7 @@ END$$
 
 DELIMITER ;
 
-
-CALL upgradeAdmportal09to13('gw_promo', 'maqueta');
+--  EJemplo de uso
+--  CALL upgradeAdmportal09to13('gw_promo', 'maqueta');
 
 
