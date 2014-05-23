@@ -86,7 +86,13 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      */
     protected $_more = null;
     
-    
+    /**
+     * Flag que indica si deben ser validados los permisos modulo-usuario-accion si se hace un request via CrudRequestController.
+     * @todo unimplemented, implementar en CrudRequestController
+     *
+     * @var array(EDIT|ADD|DELETE|LIST)
+     */
+    protected $_validateModulePermissions = array('EDIT', 'ADD', 'DELETE');
     
     /**
      * Post Constructor.
@@ -150,6 +156,52 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     }
     
     /**
+     * clonate existing row.
+     * 
+     * @param array|string $where  An SQL WHERE clause, or an array of SQL WHERE clauses.
+     * @param array  array columna valor para forzar guardar tales valores en tales columnas.
+     * @return int|array|false  last inserted Id(s)
+     */
+    public function clonate($where, $overdata = null)
+    {
+        $aWhere = self::whereToArray($where);
+        $select = parent::select();
+        $clonated = array();
+        
+        if (!is_array($where)) {
+            $select->where($where);
+        } else {
+            foreach ($where as $w) {
+                $select->where($w);
+            }
+        }
+        
+        $rowset = $this->fetchAll($select);
+        
+        $count = $rowset->count();
+        if (!$count) {
+            $clonated = false;
+        } else {
+            foreach ($rowset as $row) {
+                $data = array();
+                foreach ($this->info(Zend_Db_Table::COLS) as $col) {
+                    if (!in_array($col, array_keys($aWhere))) {
+                        $data[$col] = $row->{$col};
+                    }
+                }
+                if ($overData) $data = array_merge($data, $overdata);
+                $inserted = $this->insert($data);
+                if ($count === 1) {
+                    $clonated = $inserted;  
+                } else {
+                    $clonated[] = $inserted;
+                }
+            }
+        }
+        return $clonated;
+    }
+    
+    /**
      * Updates existing rows.
      *
      * @param  array        $data  Column-value pairs.
@@ -161,7 +213,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $rowOrig = false;
         $logMessage = '';
         $differences = '{Sin Cambios}';
-        $select = new Zend_Db_Table_Select($this);
+        $select = parent::select();
         
         try {
             if (!is_array($where)) {
@@ -282,6 +334,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     protected function setMessage($message)
     {
         $this->_message = $message;
+        Console::debug($message);
     }
 
 
