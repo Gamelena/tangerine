@@ -179,6 +179,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $rowset = $this->fetchAll($select);
         
         $count = $rowset->count();
+        
         if (!$count) {
             $clonated = false;
         } else {
@@ -189,9 +190,9 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
                         $data[$col] = $row->{$col};
                     }
                 }
-                if ($overData) $data = array_merge($data, $overdata);
+                if ($overdata) $data = array_merge($data, $overdata);
                 $inserted = $this->insert($data);
-                if ($count === 1) {
+                if ($count == 1) {
                     $clonated = $inserted;  
                 } else {
                     $clonated[] = $inserted;
