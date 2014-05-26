@@ -174,19 +174,13 @@ class Zwei_Db_Object
                 $sufix1 = isset($s['sufix'][1]) ? $s['sufix'][1] : '';
                 $prefix1 = isset($s['prefix'][1]) ? $s['prefix'][1] : '';
                 
-                if (in_array($field, $this->_model->info(Zend_Db_Table::COLS))) {
-                    $this->_select->where($this->_model->getAdapter()->quoteInto("$field >= ?", "{$prefix0}{$s['value']}{$sufix0}"));
-                    $this->_select->where($this->_model->getAdapter()->quoteInto("$field <= ?", "{$prefix1}{$s['value']}{$sufix1}"));
-                } else {
-                    $this->_select->having($this->_model->getAdapter()->quoteInto("$field >= ?", "{$prefix0}{$s['value']}{$sufix0}"));
-                    $this->_select->having($this->_model->getAdapter()->quoteInto("$field <= ?", "{$prefix1}{$s['value']}{$sufix1}"));
-                }
+                
+                
+                $this->_select->where($this->_model->getAdapter()->quoteInto("$field >= ?", "{$prefix0}{$s['value']}{$sufix0}"));
+                $this->_select->where($this->_model->getAdapter()->quoteInto("$field <= ?", "{$prefix1}{$s['value']}{$sufix1}"));
+
             } else {
-                if (in_array($field, $this->_model->info(Zend_Db_Table::COLS))) {
-                    $this->_select->where($this->_model->getAdapter()->quoteInto("$field $op ?", "{$prefix}{$s['value']}{$sufix}"));
-                } else {
-                    $this->_select->having($this->_model->getAdapter()->quoteInto("$field $op ?", "{$prefix}{$s['value']}{$sufix}"));
-                }
+                $this->_select->where($this->_model->getAdapter()->quoteInto("$field $op ?", "{$prefix}{$s['value']}{$sufix}"));
             }
         }
     }

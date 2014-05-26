@@ -51,7 +51,6 @@ class Zwei_Utils_Debug
             $aSettings = $oSettings->fetchRow($oSettingsSelect);
             if (isset($aSettings) && $aSettings->value == $settingsValue) {
                 /**
-                 * @fixme
                  * Acá se duplica código en lugar de llamar a self::write($message, $file) 
                  * porque debug_backtrace() retornaría como contexto la clase Debug, en lugar de el contexto donde Debug es instanciado
                  * lo que dificulta el seguimiento. Tomarlo en cuenta si se refactoriza.

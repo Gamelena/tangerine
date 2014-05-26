@@ -147,7 +147,9 @@ class Zwei_Admin_Auth
                     $r->gotoUrl('/admin/login')->redirectAndExit();
                 }
             }
-        } catch (Exception $e) {Debug::write($e->getMessage());} //PDOException is not catched :facepalm:
+        } catch (Exception $e) {
+            Console::error($e->getMessage(), true);
+        } //PDOException is not catched :facepalm:
     }
     
     /**
