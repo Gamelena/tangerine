@@ -7,6 +7,7 @@ class LogBookModel extends DbTable_LogBook
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where('acl_roles_id <> ?', '1');
         }
+        $select->order("id DESC");
         return $select;
     }
 }
