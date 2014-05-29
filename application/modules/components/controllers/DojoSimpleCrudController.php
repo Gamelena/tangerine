@@ -401,7 +401,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->onRowDblClick = '';
         if ($this->_xml->getAttribute('onRowDblClick')) {
             $this->view->onRowDblClick = $this->_xml->getAttribute('onRowDblClick');
-        } else if ($this->_xml->getAttribute('edit')) {
+        } else if ($this->_xml->getAttribute('edit') == "true") {
             if (!$this->view->validateGroupEdit) {
                 if ($this->view->multiForm) {
                     $this->view->onRowDblClick = "
