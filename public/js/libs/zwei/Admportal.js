@@ -7,6 +7,10 @@ dojo.declare("zwei.Admportal", null, {
         dojo.mixin(this, args);
         if (typeof zwei.Utils != 'undefined') this.utils = new zwei.Utils();
     },
+    setTemplate: function (template)
+    {
+        this.template = template;
+    },
     initLoad: function() 
     {
         this.loadEvents();
@@ -102,37 +106,85 @@ dojo.declare("zwei.Admportal", null, {
     },
     loadMainMenu: function() 
     {
-        //[TODO] cambiar acá llamada a método de cargar menu principal según valor de this.template
-        this.loadTree();
+        if (this.template == "cooler") {
+            this.loadMenuCooler();
+        } else {
+            this.loadTree();
+        }
     },
     loadMenuCooler: function()
     {
-        //[TODO] in process
         var self = this;
-        require(["dojo/data/ItemFileWriteStore", "dijit/Menu", "dijit/tree/ForestStoreModel"], function(ItemFileWriteStore, Menu, ForestStoreModel){
-            var store = new ItemFileWriteStore({
-                url: base_url + 'admin/modules?format=json',
-                clearOnClose:true,
-                identifier: 'id',
-                label: 'label',
-                urlPreventCache:true
-            });
-            store.fetch({
-                deep: true,
-            });
-            var treeModel = new ForestStoreModel({
-                store: store
-            });
-            self.treeModel = treeModel;
-        });
+        if (dijit.byId('arbolPrincipal')) {
+            dijit.byId('arbolPrincipal').destroyRecursive(false);
+        }
         
+        require([
+                 "dijit/MenuBar",
+                 "dijit/PopupMenuBarItem",
+                 "dijit/MenuBarItem",
+                 "dijit/Menu",
+                 "dijit/MenuItem",
+                 "dijit/PopupMenuItem",
+                 "dijit/DropDownMenu",
+                 "dojo/dom",
+                 "dojo/request",
+                 "dojo/json",
+                 "dojo/_base/array",
+                 "dijit/registry"
+             ], function(MenuBar, PopupMenuBarItem, MenuBarItem, Menu, MenuItem, PopupMenuItem, DropDownMenu, dom, request, JSON, arrayUtil) {
+                 request.post( base_url + 'admin/modules', {
+                     data: { format: 'json' }, 
+                     handleAs: "json"
+                 }).then(
+                     function(data) {
+                         // Display the data sent from the server
+                         var pMenuBar = new MenuBar({id: 'arbolPrincipal', style: {padding : '0.6em'}});
+                         
+                         
+                         arrayUtil.forEach(data.items, function(item, i) {
+                             pMenuBar.addChild(recursiveMakeMenuItem(item) );
+                         });
+        
+                         pMenuBar.placeAt("mainMenu");
+                         pMenuBar.startup();
+                         self.myMenu = pMenuBar;
+                     },
+                     function(error) {
+                         console.error(error);
+                     }
+                 );
+                 
+                 function recursiveMakeMenuItem(item) {
+                     // We then recursively dig deeper to generate the sub menus.
+                     
+                     var pSubMenu = new DropDownMenu({});
+                     var widget;
+                     
+                     widget = item.parent_id ? new PopupMenuItem({'iconSrc': base_url + "upfiles/16/" + item.image}) : new PopupMenuBarItem({'iconSrc': base_url + "upfiles/16/" + item.image});
+                     
+                     if (item.children) {
+                         arrayUtil.forEach(item.children, function(child) {
+                             pSubMenu.addChild(recursiveMakeMenuItem(child));
+                         });
+                     }
+                     
+                     
+                     widget.set("popup", pSubMenu);
+                     widget.set("label", item.label);
+                     return widget;
+                 }
+             });
+       
         
     },
     loadTree: function() {
         var self = this;
+        
         require(["dojo/data/ItemFileWriteStore", "dijit/Tree", "dijit/tree/ForestStoreModel"], function(ItemFileWriteStore, Tree, ForestStoreModel){
             var store = new ItemFileWriteStore({
-                url: base_url + 'admin/modules?format=json',
+                url: base_url + 'admin/modules',
+                data: {format: 'json'},
                 clearOnClose:true,
                 identifier: 'id',
                 label: 'label',
@@ -171,7 +223,7 @@ dojo.declare("zwei.Admportal", null, {
                         return tnode;
                     },
                     getIconStyle:function(item, opened){
-                        if (item.image != undefined && item.image[0] != null) {
+                        if (item.image != undefined && item.image[0] != null && item.image[0] != '') {
                             return {
                                 backgroundPosition: 0,
                                 backgroundImage: 'url('+base_url + 'upfiles/16/' + item.image[0] +')'
@@ -305,7 +357,7 @@ dojo.declare("zwei.Admportal", null, {
             console.debug(e);
             var id = '';
         }
-        console.debug(uri);
+        
         document.getElementById('ifrm_process').src=base_url+'functions?method='+method+'&params='+params+id+"&object="+object+"&uri="+uri;
     }
 });

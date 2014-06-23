@@ -47,13 +47,15 @@ class AdminController extends Zend_Controller_Action
         
         $this->baseDojoFolder = isset($config->zwei->js->dojo->baseUrl) ? $config->zwei->js->dojo->baseUrl : '/dojotoolkit';
         if (isset($config->resources->dojo->cdnbase)) $this->baseDojoFolder = $config->resources->dojo->cdnbase . '/' . $config->resources->dojo->cdnversion;
+        
         $this->view->noCache = isset($config->zwei->resources) ? $config->zwei->resources->noCache : ''; 
         
         if ($confLayout->dojoTheme) $this->_dojoTheme = $confLayout->dojoTheme;
         $this->_dojoTheme = $r->getParam('theme', $this->_dojoTheme);
         
-        if ($confLayout->template) $this->_template = $confLayout->template;
+        $this->_template = $confLayout->template ? $confLayout->template : "default";
         $this->_template = $r->getParam('template', $this->_template);
+        $this->view->template = $this->_template;
         
         $this->view->headStyle()->appendStyle('
             @import "'.$this->baseDojoFolder.'/dijit/themes/'.$this->_dojoTheme.'/'.$this->_dojoTheme.'.css";
@@ -245,13 +247,13 @@ class AdminController extends Zend_Controller_Action
         
         $this->view->bodyClass = $this->_dojoTheme;
         
-        $request = $this->getRequest();
+        $r = $this->getRequest();
         $loginForm = $this->getLoginForm();
     
         $errorMessage = "";
     
-        if ($request->isPost()) {
-            if ($loginForm->isValid($request->getPost())) {
+        if ($r->isPost()) {
+            if ($loginForm->isValid($r->getPost())) {
                 $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter();
     
                 $username = $loginForm->getValue('username');
@@ -268,7 +270,13 @@ class AdminController extends Zend_Controller_Action
                     // Obtener toda la info de usuario, excepto la password
                     Zwei_Admin_Auth::initUserInfo($authAdapter);
                     
-                    $this->_redirect(BASE_URL.'admin');
+                    $params = array();
+                    $r = $this->getRequest();
+                    if ($r->getParam('template')) $params['template'] = $r->getParam('template');
+                    if ($r->getParam('theme')) $params['theme'] = $r->getParam('theme');
+                    
+                    
+                    $this->_helper->redirector('index', 'admin', 'default', $params);
                 } else {
                     $errorMessage = "Usuario o Password incorrectos.";
                 }
@@ -314,10 +322,21 @@ class AdminController extends Zend_Controller_Action
         $password->setAttrib("invalidMessage", "Ingrese Contrase&ntilde;a");
         $password->setAttrib("required", "true");
         $password->setRequired(true);
-    
+        
+        $theme = new Zend_Form_Element_Hidden('theme');
+        $theme->setValue($this->getRequest()->getParam('theme'));
+        $theme->removeDecorator('HtmlTag');
+        $theme->removeDecorator('Label');
+        
+        $template = new Zend_Form_Element_Hidden('template');
+        $template->setValue($this->getRequest()->getParam('template'));
+        $template->removeDecorator('HtmlTag');
+        $template->removeDecorator('Label');
+        
         $submit = new Zend_Form_Element_Submit('login');
         $submit->setLabel('Login');
         $submit->setAttrib("class", "button");
+        
     
         $loginForm = new Zend_Dojo_Form();
         $loginForm->setAction($this->_request->getBaseUrl().'/admin/login/')
@@ -327,6 +346,8 @@ class AdminController extends Zend_Controller_Action
         ->setAttrib('id', 'loginForm')
         ->addElement($username)
         ->addElement($password)
+        ->addElement($theme)
+        ->addElement($template)
         ->addElement($submit);
     
         return $loginForm;

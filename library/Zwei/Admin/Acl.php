@@ -254,6 +254,7 @@ class Zwei_Admin_Acl extends Zend_Acl
             'id',
             'title',
             'module',
+            'parent_id',
             'type',
             'tree',
             'refresh_on_load',

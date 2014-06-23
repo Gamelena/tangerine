@@ -93,7 +93,8 @@ class AclModulesModel extends DbTable_AclModules
      * @param array $data
      * @return number
      */
-    public function writeContent($data) {
+    public function writeContent($data)
+    {
         $write = false;
         if (!empty($this->_content) && is_writable(COMPONENTS_ADMIN_PATH . '/' . $data['module'])) {
             $handle = fopen(COMPONENTS_ADMIN_PATH . '/' . $data['module'], "w+");
@@ -255,12 +256,13 @@ class AclModulesModel extends DbTable_AclModules
             if ($branch['tree'] == '1' || $noTree) {
                 $key                               = $branch['id'];
                 $arrNodes[$key]['id']              = $branch['id'];
+                $arrNodes[$key]['parent_id']       = $branch['parent_id'];
                 $arrNodes[$key]['type']            = $branch['type'];
                 $arrNodes[$key]['image']           = $branch['image'];
                 $arrNodes[$key]['refresh_on_load'] = $branch['refresh_on_load'];
-                $arrNodes[$key]['module'] = $branch['module'];
+                $arrNodes[$key]['module']          = $branch['module'];
                 
-                $arrNodes[$key]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($branch['title']) : utf8_encode(html_entity_decode($branch['title']));
+                $arrNodes[$key]['label'] = html_entity_decode($branch['title']); //utf8_encode(html_entity_decode($branch['title']));
                 
                 $prefix = "";
                 if ($branch['type'] == 'zend_module') {
