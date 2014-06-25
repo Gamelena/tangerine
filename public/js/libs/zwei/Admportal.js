@@ -177,7 +177,7 @@ dojo.declare("zwei.Admportal", null, {
                              if (item.url) {
                                  menuParams.onDblClick = loadModule;
                              }
-                             widget = new MenuBarItem(menuParams); 
+                             widget = new MenuItem(menuParams); 
                          }
                          
                          
