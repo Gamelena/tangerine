@@ -127,12 +127,13 @@ dojo.declare("zwei.Admportal", null, {
                  "dijit/MenuItem",
                  "dijit/PopupMenuItem",
                  "dijit/DropDownMenu",
+                 "dijit/MenuSeparator",
                  "dojo/dom",
                  "dojo/request",
                  "dojo/json",
                  "dojo/_base/array",
                  "dijit/registry"
-             ], function(MenuBar, PopupMenuBarItem, MenuBarItem, Menu, MenuItem, PopupMenuItem, DropDownMenu, dom, request, JSON, arrayUtil) {
+             ], function(MenuBar, PopupMenuBarItem, MenuBarItem, Menu, MenuItem, PopupMenuItem, DropDownMenu, MenuSeparator, dom, request, JSON, arrayUtil) {
                  request.post( base_url + 'admin/modules', {
                      data: { format: 'json' }, 
                      handleAs: "json"
@@ -156,22 +157,61 @@ dojo.declare("zwei.Admportal", null, {
                  );
                  
                  function recursiveMakeMenuItem(item) {
-                     // We then recursively dig deeper to generate the sub menus.
-                     
                      var pSubMenu = new DropDownMenu({});
                      var widget;
                      
-                     widget = item.parent_id ? new PopupMenuItem({'iconSrc': base_url + "upfiles/16/" + item.image}) : new PopupMenuBarItem({'iconSrc': base_url + "upfiles/16/" + item.image});
+                     menuParams = {id: "dijitEditorMenuModule" + item.id, label: item.label};
                      
+
+                     var loadModule = function() {
+                         self.loadModuleTab(item.url, item.id, item.label, item.refresh_on_load);
+                     };
+                     
+                     if (item.parent_id) {
+                         if (item.children) {
+                             if (item.url) {
+                                 menuParams.onDblClick = loadModule;
+                             }
+                             widget = new PopupMenuItem(menuParams);
+                         } else {
+                             if (item.url) {
+                                 menuParams.onDblClick = loadModule;
+                             }
+                             widget = new MenuBarItem(menuParams); 
+                         }
+                         
+                         
+                     } else {
+                         if (item.url) {
+                             menuParams.onDblClick = loadModule;
+                         }
+                         widget = new PopupMenuBarItem(menuParams);
+
+                     }
+                     
+                     if (item.image) {
+                         //widget.set('iconClass', 'dijitEditorIcon');
+                         //widget.domNode.style.backgroundImage = "none";
+                         widget.domNode.children[0].style.backgroundImage = "url('"+base_url+"/upfiles/16/"+item.image+"')";
+                         widget.domNode.children[0].style.backgroundRepeat = "no-repeat";
+                         widget.domNode.children[0].style.width = '16px'; 
+                         widget.domNode.children[0].style.height = '16px'; 
+                         
+                         if (!item.parent_id) {
+                             widget.domNode.children[0].style.paddingLeft = '18px';
+                             widget.domNode.children[0].style.paddingBottom = '1px'; 
+                         }
+                         
+                     }
                      if (item.children) {
                          arrayUtil.forEach(item.children, function(child) {
                              pSubMenu.addChild(recursiveMakeMenuItem(child));
+                             
                          });
                      }
                      
-                     
                      widget.set("popup", pSubMenu);
-                     widget.set("label", item.label);
+                     
                      return widget;
                  }
              });
@@ -269,13 +309,13 @@ dojo.declare("zwei.Admportal", null, {
     maximizeMainPane: function(){
         contentPaneTop.domNode.style.display = 'none';
         contentPaneBottom.domNode.style.display = 'none';
-        menuExpand.domNode.style.display = 'none';
+        if (typeof menuExpand != 'undefined') menuExpand.domNode.style.display = 'none';
         dijit.byId('borderContainer').resize();
     },
     minimizeMainPane: function(){
         contentPaneTop.domNode.style.display = 'block';
         contentPaneBottom.domNode.style.display = 'block';
-        menuExpand.domNode.style.display = 'block';
+        if (typeof menuExpand != 'undefined') menuExpand.domNode.style.display = 'block';
         dijit.byId('borderContainer').resize();
     },
     loadModuleTab: function(url, moduleId, moduleTitle, refreshOnShow) 

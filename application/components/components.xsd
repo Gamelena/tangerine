@@ -52,9 +52,12 @@
     </xsd:complexType>
     <xsd:complexType name="searchersType">
         <xsd:choice minOccurs="1" maxOccurs="unbounded">
-            <xsd:element name="element" type="elementType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="element" type="elementType" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:choice>
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
             <xsd:element name="group" type="groupType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="helpers" type="helpersType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="onSubmit" minOccurs="0" maxOccurs="1"/>
         </xsd:choice>
         <xsd:attribute name="hideSubmit" type="xsd:boolean"/>
         <xsd:attribute name="outsideContent" type="xsd:boolean"/>

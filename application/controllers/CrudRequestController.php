@@ -90,7 +90,11 @@ class CrudRequestController extends Zend_Controller_Action
         
         if (class_exists($classModel)) {
             $data                   = array();
-            $this->_model           = new $classModel();
+            try {
+                $this->_model           = new $classModel();
+            } catch (Zend_Application_Resource_Exception $e) {
+                throw new Zend_Application_Resource_Exception($classModel . ": " . $e->getMessage(), $e->getCode());
+            }
             $this->view->collection = array();
             
             if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {

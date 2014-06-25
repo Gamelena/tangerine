@@ -231,10 +231,10 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         } else {
             var listener = dojo.connect(this.iframe, 'onload', postSave); 
         } 
-       
-       
-        //Enviar valores "negativos" para los checkboxes sin marcar, estos son temporalmente chequeados
+        
+        
         dojo.forEach(this.dijitForm.getChildren(), function(entry, i) {
+          //Enviar valores "negativos" para los checkboxes sin marcar, estos son temporalmente chequeados
             if (entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
                 entry.set('bkpvalue', entry.get('value'));
                 entry.set('value', entry.get('uncheckedvalue'));
