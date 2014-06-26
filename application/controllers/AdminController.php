@@ -51,7 +51,7 @@ class AdminController extends Zend_Controller_Action
         $this->view->noCache = isset($config->zwei->resources) ? $config->zwei->resources->noCache : ''; 
         
         if ($confLayout->dojoTheme) $this->_dojoTheme = $confLayout->dojoTheme;
-        $this->_dojoTheme = $r->getParam('theme', $this->_dojoTheme);
+        if ($r->getParam('theme')) $this->_dojoTheme = $r->getParam('theme');
         
         $this->_template = $confLayout->template ? $confLayout->template : "default";
         $this->_template = $r->getParam('template', $this->_template);
