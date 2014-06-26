@@ -157,10 +157,10 @@ dojo.declare("zwei.Admportal", null, {
                  );
                  
                  function recursiveMakeMenuItem(item) {
-                     var pSubMenu = new DropDownMenu({});
+                     var pSubMenu = item.children ? new DropDownMenu() : new Menu();
                      var widget;
                      
-                     menuParams = {id: "dijitEditorMenuModule" + item.id, label: item.label};
+                     menuParams = {id: "dijitEditorMenuModule" + item.id, label: (item.url ? '<span class="linkableItem"><a>' + item.label +'</a></span>'  : '<span>' + item.label + '</span>')};
                      
 
                      var loadModule = function() {
@@ -175,17 +175,22 @@ dojo.declare("zwei.Admportal", null, {
                              widget = new PopupMenuItem(menuParams);
                          } else {
                              if (item.url) {
-                                 menuParams.onDblClick = loadModule;
+                                 menuParams.onClick = loadModule;
                              }
                              widget = new MenuItem(menuParams); 
                          }
                          
                          
                      } else {
+                         //pSubMenu = new Menu();
                          if (item.url) {
-                             menuParams.onDblClick = loadModule;
+                             if (item.children) {
+                                 menuParams.onDblClick = loadModule;
+                             } else {
+                                 menuParams.onClick = loadModule;
+                             }
                          }
-                         widget = new PopupMenuBarItem(menuParams);
+                         widget = item.children ? new PopupMenuBarItem(menuParams) : new MenuBarItem(menuParams);
 
                      }
                      
@@ -208,9 +213,10 @@ dojo.declare("zwei.Admportal", null, {
                              pSubMenu.addChild(recursiveMakeMenuItem(child));
                              
                          });
+                         widget.set("popup", pSubMenu);
                      }
                      
-                     widget.set("popup", pSubMenu);
+                     
                      
                      return widget;
                  }

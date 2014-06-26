@@ -1,0 +1,19 @@
+#logosAdm {
+    padding: 0.2em 1em 0 1.6em !important;
+}
+
+#personalWrapper{
+    top: 1.2em;
+    float: right;
+    position: absolute;
+    right: 1.2em;
+}
+
+#contentPaneTop {
+    height: 3.2em;
+    overflow: hidden;
+}
+
+.linkableItem a:hover {
+    text-decoration: underline;
+}
