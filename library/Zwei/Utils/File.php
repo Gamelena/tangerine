@@ -15,13 +15,15 @@ class Zwei_Utils_File
      * @param boolean
      * @return boolean
      */
-    public function clearRecursive($dir, $remove_dir = false) {
+    public function clearRecursive($dir, $remove_dir = false, $exclude = array()) {
+        $exclude = (array) $exclude;
         $return = false;
         foreach (glob($dir . '/*') as $file) {
-            if(is_dir($file))
+            if(is_dir($file)) {
                 $return = Zwei_Utils_File::clearRecursive($file);
-            else
+            } else if (!in_array($file, $exclude)) {
                 $return = unlink($file);
+            }
         }
         if ($remove_dir) $return = rmdir($dir);
         return $return;
