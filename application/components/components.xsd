@@ -53,9 +53,9 @@
     <xsd:complexType name="searchersType">
         <xsd:choice minOccurs="1" maxOccurs="unbounded">
             <xsd:element name="element" type="elementType" minOccurs="1" maxOccurs="unbounded"/>
+            <xsd:element name="group" type="groupType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:choice>
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
-            <xsd:element name="group" type="groupType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="helpers" type="helpersType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="onSubmit" minOccurs="0" maxOccurs="1"/>
         </xsd:choice>
@@ -115,19 +115,19 @@
         </xsd:sequence>
         <xsd:attribute name="name" />
         <xsd:attribute name="type" type="elementTypeType"/>
-        <xsd:attribute name="visible" />
-        <xsd:attribute name="edit" />
-        <xsd:attribute name="add" />
-        <xsd:attribute name="clone" />
+        <xsd:attribute name="visible" type="xsd:boolean" />
+        <xsd:attribute name="edit" type="editType" />
+        <xsd:attribute name="add" type="editType" />
+        <xsd:attribute name="clone" type="editType" />
         <xsd:attribute name="password" />
         <xsd:attribute name="defaultValue" />
         <xsd:attribute name="defaultText" />
         <xsd:attribute name="field" />
-        <xsd:attribute name="required" />
-        <xsd:attribute name="disabled" />
-        <xsd:attribute name="readonly" />
+        <xsd:attribute name="required" type="xsd:boolean" />
+        <xsd:attribute name="disabled" type="xsd:boolean" />
+        <xsd:attribute name="readonly" type="xsd:boolean" />
         <xsd:attribute name="regExp"/>
-        <xsd:attribute name="trim"/>
+        <xsd:attribute name="trim" type="xsd:boolean"/>
         <xsd:attribute name="table"/>
         <xsd:attribute name="tableField"/>
         <xsd:attribute name="tablePk"/>
@@ -157,10 +157,10 @@
         <xsd:attribute name="type" type="elementTypeType"/>
         <xsd:attribute name="style" />
         <xsd:attribute name="name" />
-        <xsd:attribute name="visible" />
-        <xsd:attribute name="edit" />
-        <xsd:attribute name="add" />
-        <xsd:attribute name="clone" />
+        <xsd:attribute name="visible" type="xsd:boolean" />
+        <xsd:attribute name="edit" type="editType" />
+        <xsd:attribute name="add" type="editType" />
+        <xsd:attribute name="clone" type="editType" />
         <xsd:attribute name="value" />
         <xsd:attribute name="defaultValue" />
         <xsd:attribute name="uncheckedValue" />
@@ -170,10 +170,10 @@
         <xsd:attribute name="onclick" />
         <xsd:attribute name="onblur" />
         <xsd:attribute name="onload" />
-        <xsd:attribute name="required" />
+        <xsd:attribute name="required" type="xsd:boolean" />
         <xsd:attribute name="regExp"/>
         <xsd:attribute name="trim"/>
-        <xsd:attribute name="url"/>
+        <xsd:attribute name="url" type="xsd:anyURI"/>
         <xsd:attribute name="path"/>
         <xsd:attribute name="table"/>
         <xsd:attribute name="tableField"/>
@@ -184,9 +184,9 @@
         <xsd:attribute name="list"/>
         <xsd:attribute name="data"/>
         <xsd:attribute name="formatter"/>
-        <xsd:attribute name="maxlength"/>
+        <xsd:attribute name="maxlength" type="xsd:integer"/>
         <xsd:attribute name="width"/>
-        <xsd:attribute name="checked"/>
+        <xsd:attribute name="checked" type="xsd:boolean"/>
         <xsd:attribute name="sufix"/>
         <xsd:attribute name="prefix"/>
         <xsd:attribute name="tinyMceTemplate" />
@@ -199,6 +199,14 @@
         <xsd:attribute name="height" />
         <xsd:attribute name="path"/>
     </xsd:complexType>
+    <xsd:simpleType name="editType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="true"/>
+            <xsd:enumeration value="false"/>
+            <xsd:enumeration value="readonly"/>
+            <xsd:enumeration value="disabled"/>
+        </xsd:restriction>
+    </xsd:simpleType>
     <xsd:simpleType name="operatorType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="like"/>
