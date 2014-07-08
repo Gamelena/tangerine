@@ -38,7 +38,7 @@ class Components_DojoSettingsController extends Zend_Controller_Action
         $file = Zwei_Admin_Xml::getFullPath($this->getRequest()->getParam('p'));
         $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
         $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
-        $this->view->domPrefix  = (isset($this->view->mainPane) && $this->view->mainPane == 'dijitTabs') ? Zwei_Utils_String::toVarWord($this->getRequest()->getParam('p')) : '';
+        $this->view->domPrefix = isset($this->view->mainPane) && $this->view->mainPane == 'dijitTabs' ? Zwei_Utils_String::toVarWord($this->getRequest()->getParam('p')) : '';
     }
     /**
      * Acción index.

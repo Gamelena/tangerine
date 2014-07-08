@@ -13,7 +13,7 @@ foreach ($this->groups as $group) :
         $params['domId'] = $this->domPrefix.'_edit_';
         $params['i'] = $i;
 ?>
-            <div class="formSettingsItemContainer">
+            <div class="formSettingsItemContainer" title="<?=nl2br($params['description'])?>">
                 <div class="item">
                     <label class="formSearchItemLabel"><?=$params['id'] ?></label>
 <?php 
@@ -21,7 +21,6 @@ foreach ($this->groups as $group) :
         $params['target'] = "data['{$params['id']}']";
 ?>
                     <?=$this->action('index', $params['type'], 'elements', $params);?>
-                    <div class="tip"><?=nl2br($params['description'])?></div>
                 </div>
             </div>
 <?php 

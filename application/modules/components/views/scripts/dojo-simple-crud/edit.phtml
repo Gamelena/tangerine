@@ -6,9 +6,15 @@ $modAux = $this->mode != 'clone' ? $this->mode : 'add';
     globalOpc = '<?=$this->mode ?>';
 </script>
 <form data-dojo-type="dijit/form/Form" target="ifrm_process" id="<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>" domsufix="<?=$this->dialogIndex?>" class="tabForm" jsId="<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>" name="<?=$this->domPrefix?>form_<?=$modAux?>" encType="multipart/form-data"  action="<?=BASE_URL?>crud-request" method="post">
+<?php 
+if ($this->onShow) :
+?>
     <script type="dojo/on" data-dojo-event="show">
         <?=$this->onShow?>
     </script>
+<?php 
+endif;
+?>
 <?php 
 $i = 0;
 $tableWrapperClass = '';
@@ -22,7 +28,7 @@ if (!$this->loadPartial) :
             $style = $i == 0 ? "style=\"background-image: url(/dojotoolkit/dijit/themes/claro/images/activeGradient.png); background-color: rgb(207, 229, 250); background-position: initial initial; background-repeat: repeat no-repeat;$auxStyle\"" : "style=\"$auxStyle\"";
             $i++;
 ?>
-    <a id="<?=$this->domPrefix .'tab_'. $modAux .'_ctrl'. $i?><?=$this->dialogIndex?>" class="settingsTab" <?=$style ?> onclick="admportal.switchTabs('<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>', this.id, '<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>')"><?=$tab->getAttribute('name') ?></a>
+    <a id="<?=$this->domPrefix .'tab_'. $modAux .'_ctrl'. $i?><?=$this->dialogIndex?>" class="settingsTab" <?=$style ?> onclick="admportal.switchTabs('<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>', this.id, '<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>');<?=$tab->getAttribute('onClick')?>"><?=$tab->getAttribute('name') ?></a>
 <?php 
             //endif;
         endforeach;
@@ -34,9 +40,10 @@ if (!$this->loadPartial) :
     $j=0;
     foreach ($this->tabs as $tab) :
         $style = $i == 0 ? 'style="display:block"' : 'style="display:none"'; 
+        $dataDojoType = is_object($tab) && $tab->getAttribute('dojoType') ? "data-dojo-type=\"{$tab->getAttribute('dojoType')}\"" : "";
         $i++;
 ?>
-    <div id="<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>" class="settingsArea" <?=$style ?>>
+    <div id="<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>" class="settingsArea" <?=$style ?> <?=$dataDojoType?>>
         <table>
 <?php 
         $k=0;
