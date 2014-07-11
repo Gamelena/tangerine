@@ -235,10 +235,20 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         dojo.forEach(this.dijitForm.getChildren(), function(entry, i) {
           //Enviar valores "negativos" para los checkboxes sin marcar, estos son temporalmente chequeados
-            if (entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
-                entry.set('bkpvalue', entry.get('value'));
-                entry.set('value', entry.get('uncheckedvalue'));
-                fakeChecked.push(entry);
+            if (entry.baseClass == "dijitContentPane") {
+                dojo.forEach(entry.getChildren(), function(subEntry, j) {
+                    if (subEntry.baseClass == 'dijitCheckBox' && !subEntry.get('checked')) {
+                        subEntry.set('bkpvalue', subEntry.get('value'));
+                        subEntry.set('subEntry', entry.get('uncheckedvalue'));
+                        fakeChecked.push(subEntry);
+                    }
+                });
+            } else {
+                if (entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
+                    entry.set('bkpvalue', entry.get('value'));
+                    entry.set('value', entry.get('uncheckedvalue'));
+                    fakeChecked.push(entry);
+                }
             }
         });
         
@@ -428,10 +438,20 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     dojo.forEach(this.dijitForm.getChildren(), function(entry, i){
                         name = entry.get('name').replace('data[', '').replace(']', '');
                         if (typeof(item[name]) != 'undefined') {
-                            if (entry.baseClass != 'dijitCheckBox') {
-                                entry.set('value', item[name]);
+                            if (entry.baseClass == "dijitContentPane") {
+                                dojo.forEach(entry.getChildren(), function(subEntry, j) {
+                                    if (subEntry.baseClass == 'dijitCheckBox' && !subEntry.get('checked')) {
+                                        subEntry.set('bkpvalue', subEntry.get('value'));
+                                        subEntry.set('subEntry', entry.get('uncheckedvalue'));
+                                        fakeChecked.push(subEntry);
+                                    }
+                                });
                             } else {
-                                entry.set('checked', entry.value == item[name]);
+                                if (entry.baseClass != 'dijitCheckBox') {
+                                    entry.set('value', item[name]);
+                                } else {
+                                    entry.set('checked', entry.value == item[name]);
+                                }
                             }
                         }
                     });

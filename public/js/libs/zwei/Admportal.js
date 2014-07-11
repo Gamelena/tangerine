@@ -164,7 +164,7 @@ dojo.declare("zwei.Admportal", null, {
                      
 
                      var loadModule = function() {
-                         self.loadModuleTab(item.url, item.id, item.label, item.refresh_on_load);
+                         self.loadModuleTab(item.url, item.id, item.label, item.refresh_on_load, item.image);
                      };
                      
                      if (item.parent_id) {
@@ -249,7 +249,7 @@ dojo.declare("zwei.Admportal", null, {
                     onClick: function(item){
                         this.openOnClick = false;
                         if (item.url != undefined) {
-                            self.loadModuleTab(item.url, item.id, item.label, item.refresh_on_load);
+                            self.loadModuleTab(item.url, item.id, item.label, item.refresh_on_load, item.image);
                         } else {
                             this.openOnClick = true;
                         }     
@@ -324,13 +324,23 @@ dojo.declare("zwei.Admportal", null, {
         if (typeof menuExpand != 'undefined') menuExpand.domNode.style.display = 'block';
         dijit.byId('borderContainer').resize();
     },
-    loadModuleTab: function(url, moduleId, moduleTitle, refreshOnShow) 
+    loadModuleTab: function(url, moduleId, moduleTitle, refreshOnShow, image) 
     {
+        
         if (typeof(refreshOnShow) == 'undefined') var refreshOnShow = false;
+        if (typeof(image) == 'undefined') var image = null;
         refreshOnShow = Boolean(parseInt(refreshOnShow));
         
         var self = this;
-        require(["dojox/layout/ContentPane"], function(ContentPane){
+        require(["dojox/layout/ContentPane", "dojox/html", "dojox/html/styles"], function(ContentPane, html, styles){
+            if (image) {
+                html.insertCssRule(
+                    ".iconClassModule"+moduleId, 
+                    "background-image: url("+base_url+"/upfiles/16/"+image+");" +
+                    "background-repeat: no-repeat;"+
+                    "width:16px;height: 16px;"
+                );
+            }
             if (!dojo.byId('mainTabModule'+moduleId)) {
                 var tab = tabContainer.addChild(
                     new ContentPane({
@@ -345,6 +355,7 @@ dojo.declare("zwei.Admportal", null, {
                         href: base_url + url,
                         style: {background: 'transparent', top: '0px'},
                         selected: true,
+                        iconClass: image ? "iconClassModule"+moduleId : "dijitNoIcon",
                         onClose: function() {
                             if (tabContainer.getChildren().length == 1) {
                                 self.minimizeMainPane();
