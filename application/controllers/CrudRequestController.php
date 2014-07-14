@@ -66,7 +66,7 @@ class CrudRequestController extends Zend_Controller_Action
             $file       = Zwei_Admin_Xml::getFullPath($this->_form->p);
             $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
         }
-        
+        //@todo migrar a Bootstrap
         if (!defined('DEFAULT_CHARTSET')) {
             define('DEFAULT_CHARSET', ini_get('default_charset'));
         }
@@ -319,11 +319,11 @@ class CrudRequestController extends Zend_Controller_Action
                     $collection[$i] = array();
                     foreach ($rowArray as $column => $value) {
                         if (!is_array($value)) {
-                            $collection[$i][$column] = (DEFAULT_CHARSET == 'UTF-8') ? html_entity_decode($value) : utf8_encode(html_entity_decode($value));
+                            $collection[$i][$column] = (DEFAULT_CHARSET == 'UTF-8') ? html_entity_decode($value, null, 'UTF-8') : utf8_encode(html_entity_decode($value));
                         } else {
                             foreach ($value as $column2 => $value2) {
                                 if (!is_array($value)) {
-                                    $collection[$i][$column][$column2] = (DEFAULT_CHARSET == 'UTF-8') ? html_entity_decode($value2) : utf8_encode(html_entity_decode($value2));
+                                    $collection[$i][$column][$column2] = (DEFAULT_CHARSET == 'UTF-8') ? html_entity_decode($value2, null, 'UTF-8') : utf8_encode(html_entity_decode($value2));
                                 } else {
                                     $collection[$i][$column][$column2] = $value2;
                                 }
