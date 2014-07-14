@@ -67,8 +67,9 @@ class CrudRequestController extends Zend_Controller_Action
             $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
         }
         
-        defined('DEFAULT_CHARTSET')
-            || define('DEFAULT_CHARTSET', ini_get('default_charset'));
+        if (!defined('DEFAULT_CHARTSET')) {
+            define('DEFAULT_CHARSET', ini_get('default_charset'));
+        }
     }
     
     /**
