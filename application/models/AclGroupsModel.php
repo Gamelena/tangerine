@@ -86,6 +86,7 @@ class AclGroupsModel extends DbTable_AclGroups
     public function addUsers($aclGroupsId)
     {
         $model = new DbTable_AclUsersGroups();
+        $usersModel = new AclUsersModel();
         
         $ad = $model->getAdapter();
         
@@ -123,6 +124,9 @@ class AclGroupsModel extends DbTable_AclGroups
     
             try {
                 $insert = $model->insert($data);
+                if ($insert) {
+                    $usersModel->notify($aclUsersId);
+                }
             } catch (Zend_Db_Exception $e) {
                 if ($e->getCode() == 23000) {
                     $printData = print_r($data, true);
@@ -131,6 +135,17 @@ class AclGroupsModel extends DbTable_AclGroups
             }
         }
         return $insert || $delete;
+    }
+    
+    /**
+     * Obtener los usuarios asociados al grupo.
+     * 
+     * @param int $aclGroupsId
+     * @return Zend_Db_Table_Row
+     */
+    public function fetchUsers($aclGroupsId)
+    {
+        return $this->fetchRow($aclGroupsId)->findDependentRowset("DbTable_AclUsers");
     }
 }
 

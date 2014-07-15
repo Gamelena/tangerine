@@ -107,7 +107,7 @@ class AclRolesModel extends DbTable_AclRoles
     {
         $data = $this->cleanDataParams($data);
         
-        //@TODO Backward Compatibility patch (BCP)
+        //@TODO "if" Backward Compatibility patch (BCP)
         if (!(Zend_Session::getSaveHandler() instanceof Zend_Session_SaveHandler_DbTable) && in_array('must_refresh', $this->info('cols'))) {
             $data['must_refresh'] = '1';
         }
