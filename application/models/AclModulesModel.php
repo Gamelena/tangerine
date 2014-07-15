@@ -58,11 +58,22 @@ class AclModulesModel extends DbTable_AclModules
                 return false;
             }
         }
-        Zwei_Utils_File::clearRecursive(ROOT_DIR . "/cache");
+        Zwei_Utils_File::clearRecursive(ROOT_DIR . "/cache", false, ROOT_DIR . "/cache/readme.txt");
         $writeContent = $this->writeContent($data);
         
         return $saveActions || $update || $writeContent;
     }
+    /**
+     * TODO terminar
+     * @param int $aclModulesId
+     */
+    public function fetchUsersAllowed($aclModulesId)
+    {
+        $aclUsers = new AclUsersModel();
+        $select = $aclUsers->select();
+        return $aclUsers->fetchAll($select);
+    }
+    
     
     /**
      * (non-PHPdoc)
@@ -121,12 +132,13 @@ class AclModulesModel extends DbTable_AclModules
                     $handle = fopen(COMPONENTS_ADMIN_PATH . '/' . $data['module'], "w+");
                     fwrite($handle, "<?xml version=\"1.0\"?>\n"
                         . "<component name=\"M&amp;oacute;dulos\" type=\"dojo-simple-crud\" target=\"EjemploModel\" list=\"true\""
-                        . " edit=\"true\" add=\"true\" delete=\"true\" clone=\"true\""
+                        . " delete=\"true\" edit=\"true\" add=\"true\" clone=\"true\""
                         . " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"components.xsd\">\n"
                         . "\t<elements>\n"
-                        . "\t\t<element target=\"id\" visible=\"true\" type=\"dijit-form-validation-text-box\" edit=\"true\" add=\"true\" clone=\"true\"></element>\n"
+                        . "\t\t<element name=\"Id\" target=\"id\" type=\"dijit-form-validation-text-box\" visible=\"true\" edit=\"disabled\" add=\"false\" clone=\"false\"></element>\n"
                         . "\t</elements>\n"
-                        . "\t<!--@todo esta es sólo una base de ejemplo, ver components.xsd para valores de component.type disponibles -->\n"
+                        . "\t<forms ajax=\"true\"></forms>"
+                        . "\t<!--@todo esta es sólo una base de ejemplo, ver components.xsd para definición de datos. -->\n"
                         . "</component>\n");
                     fclose($handle);
                     @chmod(COMPONENTS_ADMIN_PATH . '/' . $data['module'], 0777);

@@ -148,7 +148,6 @@ class AclUsersModel extends DbTable_AclUsers
             }
         }
         
-        Debug::write($update);
         if ($update) {
             $aWhere = self::whereToArray($where);
             $this->notify($aWhere['id']);
@@ -170,7 +169,6 @@ class AclUsersModel extends DbTable_AclUsers
             $cache = new Zwei_Controller_Plugin_Cache(Zwei_Controller_Config::getOptions());
             $cleaned = $cache->cleanByTags(array("userid{$sufix}"));
         }
-        Debug::write($cleaned);
         
         if (!(Zend_Session::getSaveHandler() instanceof Zend_Session_SaveHandler_DbTable)) { //@TODO BACKWARD compatibility
             Debug::write('!Zend_Session_SaveHandler_DbTable');

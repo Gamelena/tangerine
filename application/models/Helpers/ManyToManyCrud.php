@@ -37,15 +37,18 @@ class Helpers_ManyToManyCrud
     protected $_data = array();
     /**
      * 
-     * @param string $idName nombre de la primary
-     * @param array $modelsMap array de modelos
+     * @param string $idNameFrom
+     * @param string $idNameTo
+     * @param Zwei_Db_Table[] $modelsMap
+     * @return void
      */
-    public function __construct($idNameFrom, $idNameTo, array $modelsMap)
+    public function __construct($idNameFrom, $idNameTo, $modelsMap)
     {
         $this->_idNameFrom = $idNameFrom;
         $this->_idNameTo = $idNameTo;
         
         $this->_modelsMap = $modelsMap;
+        
         foreach ($this->_modelsMap as $index => $model) {
             $this->_data[$index] = array();
         }
@@ -68,19 +71,19 @@ class Helpers_ManyToManyCrud
     }
     
     /**
-     * @param $data Zend_Db_Table_Rowset
+     * @param $data Zend_Db_Table_Row|array
      * @return array
      */
     public function overloadDataForm($data)
     {
-        $data = $data->toArray();
+        if ($data instanceof Zend_Db_Table_Row) $data = $data->toArray();
         /**
          * @var $model Zwei_Db_Table
         */
         foreach ($this->_modelsMap as $index => $model) {
             $ad = $model->getAdapter();
             $where = array(
-                    $ad->quoteInto("{$this->_idNameFrom} = ?", $data['id'])
+                $ad->quoteInto("{$this->_idNameFrom} = ?", $data['id'])
             );
     
             $data[$index] = array();
