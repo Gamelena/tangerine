@@ -18,7 +18,7 @@ class Elements_DijitFormCheckBoxController extends Zend_Controller_Action
         $this->view->defaultValue = $r->getParam('defaultValue', '1');
         $this->view->uncheckedValue = $r->getParam('uncheckedValue', '0');
         $this->view->checked = $r->getParam('value') == $this->view->defaultValue ? "checked" : "";
-        if ($r->getParam('checked')) $this->view->checked = "checked";
+        if ($r->getParam('checked') && $r->getParam("mode") === 'add') $this->view->checked = "checked";
         $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? "readonly=\"readonly\"" : '';
         $this->view->disabled = $r->getParam('disabled') === 'true' || $r->getParam($r->getParam('mode')) == 'disabled' ? "disabled=\"disabled\"" : '';
         $this->view->onchange = $r->getParam('onchange', '');
