@@ -37,26 +37,29 @@ class Zwei_Utils_Table
     {
         $out = $html ? "<tr>" :  "";
         $i = 0;
-        $counter = is_a($rowset, 'Zend_Db_Table_Rowset') ? count($rowset[0]->toArray()) : count($rowset[0]);
+        $keys = array_keys($this->_name);
+        $counter = $rowset instanceof Zend_Db_Table_Rowset ? count($rowset[0]->toArray()) : count($rowset[0]);
         foreach ($rowset[0] as $target => $value) 
         {
-            $i++;
-            if (!isset($this->_xml)) {
-                if ($html) {
-                    $out .= "<th>$target</th>";
-                } else {
-                    $out .= stristr(",", $target) || stristr('"', $target) ? '"' . str_replace('"', "", $target) . '"' : $target;
+            if (in_array($target, $keys)) {
+                $i++;
+                if (!isset($this->_xml)) {
+                    if ($html) {
+                        $out .= "<th>$target</th>";
+                    } else {
+                        $out .= stristr(",", $target) || stristr('"', $target) ? '"' . str_replace('"', "", $target) . '"' : $target;
+                    }
+                } else if(!empty($this->_name[$target])) {
+                    if ($html) {
+                        $out .= "<th>{$this->_name[$target]}</th>";
+                    } else {
+                        $out .= stristr(",", $this->_name[$target]) || stristr('"', $this->_name[$target]) ? 
+                            '"' . str_replace('"', "", $this->_name[$target]) . '"' : 
+                            $this->_name[$target];
+                    }
                 }
-            } else if(!empty($this->_name[$target])) {
-                if ($html) {
-                    $out .= "<th>.$this->_name[$target].</th>";
-                } else {
-                    $out .= stristr(",", $this->_name[$target]) || stristr('"', $this->_name[$target]) ? 
-                        '"' . str_replace('"', "", $this->_name[$target]) . '"' : 
-                        $this->_name[$target];
-                }
+                if (!$html && $i < $counter) $out .= $separator;
             }
-            if (!$html && $i < $counter) $out .= $separator;
         }
         if ($html) $out .= "</tr>";
         $out .= "\r\n ";
@@ -74,19 +77,22 @@ class Zwei_Utils_Table
     {
         $out = $html ? "<tr>" :  "";
         $i = 0;
+        $keys = array_keys($this->_name);
         $counter = is_a($rowset, 'Zend_Db_Table_Rowset') ? count($rowset[$count]->toArray()) : count($rowset[$count]);
         foreach ($rowset[$count] as $target => $value) 
         {
-            $value = html_entity_decode($value);
-            $i++;
-            if (!empty($this->_name[$target]) || !isset($this->_xml)) {
-                if ($html) {
-                    $out .= "<td>$value</td>";
-                } else {
-                    $out .= $value && (stristr($separator, $value) || stristr('"', $value)) ? '"' . str_replace('"', "", $value) . '"' : $value;
+            if (in_array($target, $keys)) {
+                $value = html_entity_decode($value);
+                $i++;
+                if (!empty($this->_name[$target]) || !isset($this->_xml)) {
+                    if ($html) {
+                        $out .= "<td>$value</td>";
+                    } else {
+                        $out .= $value && (stristr($separator, $value) || stristr('"', $value)) ? '"' . str_replace('"', "", $value) . '"' : $value;
+                    }
                 }
+                if (!$html && $i < $counter) $out .= $separator;
             }
-            if (!$html && $i < $counter) $out .= $separator;
         }
         if ($html) $out .= "</tr>";
         $out .= "\r\n ";
@@ -110,7 +116,7 @@ class Zwei_Utils_Table
                 } else {
                   $this->_name[$element->getAttribute("target")] = html_entity_decode($element->getAttribute("name"));
                 }
-            }    
+            } 
         }
     }
     
@@ -137,13 +143,15 @@ class Zwei_Utils_Table
                 $this->_xml = "array";
             }
         }
-    
+        
         $count = count($rowset);
         $out = '';
     
         if (!empty($rowset) && count($rowset) > 0) {
+            if ($rowset instanceof Zend_Db_Table_Rowset) $rowset = $rowset->toArray();
+            
             $out .= $this->showTitles($rowset, false);
-            for ($i=0;$i<$count;$i++) {
+            for ($i=0; $i < $count; $i++) {
                 $out .= $this->showContent($rowset, $i, false);
             }
         }
@@ -180,7 +188,7 @@ class Zwei_Utils_Table
         $out = "<table border=\"1\">\n";
         if (!empty($rowset) && count($rowset) > 0) {
             $out .= $this->showTitles($rowset);
-            for ($i=0;$i<$count;$i++) {
+            for ($i = 0; $i < $count; $i++) {
                 $out .= $this->showContent($rowset, $i);
             }
         }        
