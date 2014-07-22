@@ -301,8 +301,6 @@ class Zwei_Admin_Acl extends Zend_Acl
         $select->where("approved = '1'");
         $select->order("order");
         
-        //Debug::writeBySettings($select->__toString(), 'query_log');
-        
         return ($this->_db->fetchAll($select));
     }
     
@@ -362,7 +360,8 @@ class Zwei_Admin_Acl extends Zend_Acl
     {
         $aclModulesModel = new AclModulesModel();
         //if ($this->_resource == null) $this->_resource = $module;//WORKAROUND @FIXME
-        if ($this->_resource == null) $this->_resource = $aclModulesModel->getModuleId($module);//@FIXME
+        //if ($this->_resource == null) 
+            $this->_resource = $aclModulesModel->getModuleId($module);//@FIXME
         //$allowed         = $this->isAllowed($this->_userInfo->acl_roles_id, $this->_resource, $permission);//@FIXME
         $rolesModulesActions = new AclRolesModulesActionsModel();
         $allowed = $rolesModulesActions->findAclModulesIdAclRolesId($this->_resource , $this->_userInfo->acl_roles_id, $aclActionsId)->count() > 0;//WORKAROUND @FIXME
