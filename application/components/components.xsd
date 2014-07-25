@@ -96,7 +96,7 @@
         <xsd:sequence>
             <xsd:element name="dialog" type="formsType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="customFunction" type="customFunctionType" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="excel" type="customFunctionType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="excel" type="excelType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="PaneType">
@@ -144,9 +144,15 @@
         <xsd:attribute name="target"/>
         <xsd:attribute name="onclick"/>
         <xsd:attribute name="name"/>
-        <xsd:attribute name="icon"/>
+        <xsd:attribute name="iconClass"/>
         <xsd:attribute name="title"/>
-        <xsd:attribute name="disabled"/>
+        <xsd:attribute name="disabled" type="xsd:boolean"/>
+    </xsd:complexType>
+    <xsd:complexType name="excelType">
+        <xsd:attribute name="name"/>
+        <xsd:attribute name="formatter" type="excelFormatter"/>
+        <xsd:attribute name="iconClass"/>
+        <xsd:attribute name="disabled" type="xsd:boolean"/>
     </xsd:complexType>
     <xsd:complexType name="elementType">
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
@@ -191,7 +197,6 @@
         <xsd:attribute name="prefix"/>
         <xsd:attribute name="tinyMceTemplate" />
         <xsd:attribute name="placeHolder" />
-        <xsd:attribute name="icon" />
         <xsd:attribute name="operator" type="operatorType"/>
     </xsd:complexType>
     <xsd:complexType name="thumbType">
@@ -205,6 +210,14 @@
             <xsd:enumeration value="false"/>
             <xsd:enumeration value="readonly"/>
             <xsd:enumeration value="disabled"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="excelFormatter">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Excel5"/>
+            <xsd:enumeration value="Excel2007"/>
+            <xsd:enumeration value="csv"/>
+            <xsd:enumeration value="html"/>
         </xsd:restriction>
     </xsd:simpleType>
     <xsd:simpleType name="operatorType">

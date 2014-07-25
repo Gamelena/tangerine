@@ -17,7 +17,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocat
         <element name="Usa Owner" target="ownership" type="dijit-form-check-box" formatter="utils.formatYesNo" visible="true" edit="true" add="true" clone="true"/>
         <element name="Orden" target="order" type="dijit-form-validation-text-box" regExp="[\d]+" invalidMessage="Solo números" visible="false" edit="true" add="true" clone="true"/>
         <element name="Acciones" target="actions" type="dojox-form-checked-multi-select" table="AclActionsModel" visible="false" edit="true" add="true" clone="true"/>
-        <element name="&amp;Iacute;cono" target="icons_id" field="image" type="dijit-form-filtering-select" formatter="utils.formatImage16" table="IconsModel" defaultValue="" defaultText="---Ninguno---" visible="true" edit="true" add="true" clone="true"/>
+        <element name="&amp;Iacute;cono" target="icons_id" field="image" type="dijit-form-filtering-select" formatter="utils.formatImage16" table="IconsModel" visible="true" defaultValue="" defaultText="---Ninguno---" edit="true" add="true" clone="true"/>
     </elements>
     <searchers>
         <group name="Buscar">
@@ -46,6 +46,28 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocat
             <tab name="&amp;Iacute;cono">
                 <element name=" " target="icons_id"/>
             </tab>
+            <!--<tab name="Contenido" add="false"> 
+                <element name=" " target="content" 
+                type="zwei-form-validation-textarea" edit="true" add="true" style="width:20em;height:20em;font-family:sans-serif;color:#406b9b;" 
+                required="false" disabled="true"  />
+            </tab>-->
         </tabs>
+        <onShow>
+            if (this.getChildrenByName('data[content]').length) {
+                var content = this.getChildrenByName('data[content]')[0];
+                content.set('required', false);
+                var row = content.domNode.parentNode;
+                row.title='Doble Click para editar';
+                
+                row.ondblclick=function(e){
+                    content.set('disabled', !content.get('disabled'));
+                    if (content.get('disabled')) {
+                        row.title='Doble Click para editar';
+                    } else {
+                        row.title='Doble Click para cancelar edición';
+                    }
+                };
+            }
+        </onShow>
     </forms>
 </component>
