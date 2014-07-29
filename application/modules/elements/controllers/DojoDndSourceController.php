@@ -2,7 +2,6 @@
 
 class Elements_DojoDndSourceController extends Zend_Controller_Action
 {
-
     /**
      * 
      * @var Zend_Db_Table_Abstract
