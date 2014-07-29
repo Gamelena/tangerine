@@ -140,7 +140,7 @@ dojo.declare("zwei.Admportal", null, {
                  }).then(
                      function(data) {
                          // Display the data sent from the server
-                         var pMenuBar = new MenuBar({id: 'arbolPrincipal', style: {padding : '0.6em'}});
+                         var pMenuBar = new MenuBar({id: 'arbolPrincipal'});
                          
                          
                          arrayUtil.forEach(data.items, function(item, i) {
@@ -149,6 +149,7 @@ dojo.declare("zwei.Admportal", null, {
         
                          pMenuBar.placeAt("mainMenu");
                          pMenuBar.startup();
+                         borderContainer.resize();
                          self.myMenu = pMenuBar;
                      },
                      function(error) {
@@ -160,7 +161,7 @@ dojo.declare("zwei.Admportal", null, {
                      var pSubMenu = item.children ? new DropDownMenu() : new Menu();
                      var widget;
                      
-                     menuParams = {id: "dijitEditorMenuModule" + item.id, label: (item.url ? '<span class="linkableItem"><a>' + item.label +'</a></span>'  : '<span>' + item.label + '</span>')};
+                     menuParams = {id: "dijitEditorMenuModule" + item.id, label: (item.url ? '<span class="linkableItem"><a style="color:inherit">' + item.label +'</a></span>'  : '<span>' + item.label + '</span>')};
                      
 
                      var loadModule = function() {
