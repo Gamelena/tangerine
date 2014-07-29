@@ -31,7 +31,8 @@ class Elements_DojoDndSourceController extends Zend_Controller_Action
             $this->_model = new $this->_model();
             $id = $r->getParam('tablePk') ? $r->getParam('tablePk') : 'id';
             
-            $primary = $this->_model->info(Zend_Db_Table::PRIMARY)[1];
+            $primary = $this->_model->info(Zend_Db_Table::PRIMARY);
+            $primary = $primary[1];
             
             if ($r->getParam('tableMethod')) {
                 $method = $r->getParam('tableMethod');
