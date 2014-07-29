@@ -1,0 +1,64 @@
+<script>
+    dojo.require('dojo.dnd.Source');
+    function findNodeTypeInput(element) {
+        return element.nodeName = 'INPUT';
+    }
+</script>
+<div class="dndWrapper" title="Arrastre y suelte items para seleccionar o deseleccionar">
+    <div class="dndContainer">
+    <h5>Seleccionados</h5>
+        <ul data-dojo-type="dojo.dnd.Source" data-dojo-props="accept: [ 'inStock', 'outStock' ]" id="wishlistNode" class="dndList inStock" >
+        <script type="dojo/connect" event="onDropExternal" args="source, nodes, copy">
+            var node;
+            for (var i = 0; i < nodes.length; i++) {
+                node = nodes[i];
+                for (var j = 0; j < node.childNodes.length; j ++) {
+                    if (node.childNodes[j].nodeName == 'INPUT') {
+                        node.childNodes[j].disabled = false;
+                        break;
+                    }
+                }
+            }
+        </script>
+<?php 
+foreach ($this->rsRight as $i => $v) :
+?>
+            <li class="dojoDndItem" dndType="inStock" title="<?=$v?>"><input type="hidden" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$i?>"/>
+            <?=$v?>
+            </li>
+<?php 
+endforeach;
+?>
+        </ul>
+    </div>
+    <div class="dndContainer">
+        <h5>No seleccionados</h5>
+        <ul data-dojo-type="dojo.dnd.Source" data-dojo-props="accept: [ 'inStock', 'outStock' ]" id="catalogNode" class="dndList outStock">
+            <script type="dojo/connect" event="onDropExternal" args="source, nodes, copy">
+            var node;
+            for (var i = 0; i < nodes.length; i++) {
+                node = nodes[i];
+                for (var j = 0; j < node.childNodes.length; j ++) {
+                    if (node.childNodes[j].nodeName == 'INPUT') {
+                        node.childNodes[j].disabled = true;
+                        break;
+                    }
+                }
+            }
+            </script>
+<?php 
+foreach ($this->rsPossible as $i => $v) :
+?>
+            <li class="dojoDndItem" dndType="outStock" title="<?=$v?>"><input type="hidden" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$i?>" disabled="disabled"/>
+            <?=$v?>
+            </li>
+<?php 
+endforeach;
+?>
+        </ul>
+    </div>
+</div>
+<style type="text/css">
+    @import url("/dojotoolkit/dojo/resources/dojo.css");
+    @import url("/dojotoolkit/dojo/resources/dnd.css");
+</style>

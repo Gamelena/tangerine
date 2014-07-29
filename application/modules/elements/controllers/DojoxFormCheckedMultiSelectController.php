@@ -2,7 +2,7 @@
 
 /**
  * Dojo Multiple Select
- * Para usarlo con XML debe estar adentro de un formulario que cargue datos vía ajax.
+ * Para usarlo con XML debe estar adentro de un formulario que cargue datos vía ajax @forms.ajax="true".
  * No habilitado para cargar datos directamente de DataGrid ya que este no permite arrays dentro de un recordset como en este caso.
  *
  *
