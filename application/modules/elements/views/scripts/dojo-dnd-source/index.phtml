@@ -8,7 +8,7 @@
                     searcher.set('style', {display:  (isHidden ? 'inline-block' : 'none')});
                     if (isHidden) searcher.focus();
                     " 
-                    style="cursor: pointer" title="Click para buscar."><?=$this->selectedTitle?></h5>
+                    style="cursor: pointer" title="Click para buscar."><a><?=$this->selectedTitle?></a></h5>
                 <input id="search<?=$this->domId. $this->i?>inStockSearch" type="text" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" data-dojo-props="
                 intermediateChanges: true,
                 onKeyDown: function (event) {
@@ -19,7 +19,7 @@
                     if (event.keyCode == dojo.keys.ESCAPE) {
                         dojo.stopEvent(event);
                         searcher.set('style', {display: 'none'});
-                        utils.showMessage('Haga click sobre el texto <b>&quot;<?=$this->selectedTitle?>&quot;</b> para volver a mostrar buscador', null, null, 'tr-left');
+                        searcher.set('value', '');
                     }
                 },
                 
@@ -67,7 +67,7 @@ endforeach;
                         searcher.set('style', {display:  (isHidden ? 'inline-block' : 'none')});
                         if (isHidden) searcher.focus();
                         " 
-                        style="cursor: pointer" title="Click para buscar."><?=$this->unselectedTitle?></h5>
+                        style="cursor: pointer" title="Click para buscar."><a><?=$this->unselectedTitle?></a></h5>
             <input id="search<?=$this->domId. $this->i?>outStockSearch" type="text" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" data-dojo-props="
                     intermediateChanges: true,
                     onKeyDown: function (event) {
@@ -78,7 +78,7 @@ endforeach;
                         if (event.keyCode == dojo.keys.ESCAPE) {
                             dojo.stopEvent(event);
                             searcher.set('style', {display: 'none'});
-                            utils.showMessage('Haga click sobre el texto <b>&quot;<?=$this->unselectedTitle?>&quot;</b> para volver a mostrar buscador', null, null, 'tr-left');
+                            searcher.set('value', '');
                         }
                     },
                     onChange: function(p) {
