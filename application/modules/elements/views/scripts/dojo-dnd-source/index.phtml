@@ -12,10 +12,17 @@
                 <input id="search<?=$this->domId. $this->i?>inStockSearch" type="text" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" data-dojo-props="
                 intermediateChanges: true,
                 onKeyDown: function (event) {
+                    var searcher = dijit.byId('search<?=$this->domId. $this->i?>inStockSearch');
                     if (event.keyCode == dojo.keys.ENTER) {
                         dojo.stopEvent(event);
                     }
+                    if (event.keyCode == dojo.keys.ESCAPE) {
+                        dojo.stopEvent(event);
+                        searcher.set('style', {display: 'none'});
+                        utils.showMessage('Haga click sobre el texto <b>&quot;<?=$this->selectedTitle?>&quot;</b> para volver a mostrar buscador', null, null, 'tr-left');
+                    }
                 },
+                
                 onChange: function(p) {
                     var value = this.get('value');
                     dojo.query('#inStock<?=$this->domId. $this->i?> .dojoDndItem').forEach(function(node) {
@@ -64,8 +71,14 @@ endforeach;
             <input id="search<?=$this->domId. $this->i?>outStockSearch" type="text" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" data-dojo-props="
                     intermediateChanges: true,
                     onKeyDown: function (event) {
+                        var searcher = dijit.byId('search<?=$this->domId. $this->i?>outStockSearch');
                         if (event.keyCode == dojo.keys.ENTER) {
                             dojo.stopEvent(event);
+                        }
+                        if (event.keyCode == dojo.keys.ESCAPE) {
+                            dojo.stopEvent(event);
+                            searcher.set('style', {display: 'none'});
+                            utils.showMessage('Haga click sobre el texto <b>&quot;<?=$this->unselectedTitle?>&quot;</b> para volver a mostrar buscador', null, null, 'tr-left');
                         }
                     },
                     onChange: function(p) {
