@@ -20,9 +20,11 @@ class Elements_DojoDndSourceController extends Zend_Controller_Action
         $this->view->i =  $r->getParam('i');
         $this->view->domId =  $r->getParam('domId');
         $this->view->target =  $r->getParam('target');
+        $this->view->selectedTitle =  $r->getParam('selectedTitle', 'Seleccionados');
+        $this->view->unselectedTitle =  $r->getParam('unselectedTitle', 'No seleccionados');
         
-        $this->view->rsPossible = array();
-        $this->view->rsRight = array();
+        $this->view->unselectedItems = array();
+        $this->view->selectedItems = array();
         
         $selected = array();
         
@@ -58,41 +60,52 @@ class Elements_DojoDndSourceController extends Zend_Controller_Action
             
             
             if ($r->getParam('defaultValue') || $r->getParam('defaultText')) {
-                $this->view->rsPossible[$r->getParam('defaultValue', '')] = $r->getParam('defaultText', '');
+                $this->view->unselectedItems[$r->getParam('defaultValue', '')] = $r->getParam('defaultText', '');
             }
              
-            Console::error($rows->toArray());
             foreach ($rows as $row) {
                 $selected = is_array($r->getParam('value', null)) && in_array($row->$primary, $r->getParam('value'));
                 
-            
-            
                 if ($r->getParam('tableField')) {
                     if ($selected) {
-                        $this->view->rsRight[$row[$id]] = $row[$r->getParam('tableField')];
+                        $this->view->selectedItems[$row[$id]] = $row[$r->getParam('tableField')];
                     } else {
-                        $this->view->rsPossible[$row[$id]] = $row[$r->getParam('tableField')];
+                        $this->view->unselectedItems[$row[$id]] = $row[$r->getParam('tableField')];
                     }
                 } else if ($r->getParam('field')) {
                     if ($selected) {
-                        $this->view->rsRight[$row[$id]] = $row[$r->getParam('field')];
+                        $this->view->selectedItems[$row[$id]] = $row[$r->getParam('field')];
                     } else {
-                        $this->view->rsPossible[$row[$id]] = $row[$r->getParam('field')];
+                        $this->view->unselectedItems[$row[$id]] = $row[$r->getParam('field')];
                     }
                 } else {
                     if ($selected) {
-                        $this->view->rsRight[$row[$id]] = $row["title"];
+                        $this->view->selectedItems[$row[$id]] = $row["title"];
                     } else {
-                        $this->view->rsPossible[$row[$id]] = $row["title"];
+                        $this->view->unselectedItems[$row[$id]] = $row["title"];
                     }
                 }
             }
             
         } else {
+            if (!$r->getParam('value')) {
+                $value = (isset($request->{$r->getParam('target')})) ? $request->{$r->getParam('target')} : null;
+            } else {
+                $value = $r->getParam('value');
+            }
             
+            $options = "";
+            $rows = $r->getParam('list') ? explode(",", $r->getParam('list')) : array();
+            
+            foreach ($rows as $row) {
+                $selected = $row == $value;
+                if ($selected) {
+                    $this->view->selectedItems[$row] = $row;
+                } else {
+                    $this->view->unselectedItems[$row] = $row;
+                }
+            }
         }
     }
-
-
 }
 

@@ -8,7 +8,7 @@
                     searcher.set('style', {display:  (isHidden ? 'inline-block' : 'none')});
                     if (isHidden) searcher.focus();
                     " 
-                    style="cursor: pointer" title="Click para buscar."> Seleccionados</h5>
+                    style="cursor: pointer" title="Click para buscar."><?=$this->selectedTitle?></h5>
                 <input id="search<?=$this->domId. $this->i?>inStockSearch" type="text" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" data-dojo-props="
                 intermediateChanges: true,
                 onKeyDown: function (event) {
@@ -41,7 +41,7 @@
             }
         </script>
 <?php 
-foreach ($this->rsRight as $i => $v) :
+foreach ($this->selectedItems as $i => $v) :
 ?>
             <li class="dojoDndItem" dndType="inStock" title="<?=$v?>"><input type="hidden" id="outStock<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$i?>"/>
             <?=$v?>
@@ -60,7 +60,7 @@ endforeach;
                         searcher.set('style', {display:  (isHidden ? 'inline-block' : 'none')});
                         if (isHidden) searcher.focus();
                         " 
-                        style="cursor: pointer" title="Click para buscar.">No seleccionados</h5>
+                        style="cursor: pointer" title="Click para buscar."><?=$this->unselectedTitle?></h5>
             <input id="search<?=$this->domId. $this->i?>outStockSearch" type="text" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" data-dojo-props="
                     intermediateChanges: true,
                     onKeyDown: function (event) {
@@ -94,7 +94,7 @@ endforeach;
             }
             </script>
 <?php 
-foreach ($this->rsPossible as $i => $v) :
+foreach ($this->unselectedItems as $i => $v) :
 ?>
             <li class="dojoDndItem" dndType="outStock" title="<?=$v?>"><input type="hidden" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$i?>" disabled="disabled"/>
             <?=$v?>
