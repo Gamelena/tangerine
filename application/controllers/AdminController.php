@@ -114,6 +114,8 @@ class AdminController extends Zend_Controller_Action
             @import "'.$this->baseDojoFolder.'/dojox/layout/resources/ExpandoPane.css";
             @import "'.$this->baseDojoFolder.'/dojox/form/resources/FileInput.css";
             @import "'.$this->baseDojoFolder.'/dojox/widget/Toaster/Toaster.css";
+            @import "'.$this->baseDojoFolder.'/resources/dojo.css";
+            @import "'.$this->baseDojoFolder.'/dojo/resources/dnd.css";
             @import "'.BASE_URL.'css/admin.css?version='.$this->view->noCache.'";
         ');
     }
@@ -154,11 +156,13 @@ class AdminController extends Zend_Controller_Action
             if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
                 $this->_redirect('admin/login');
             } else {
+                $file = Zwei_Admin_Xml::getFullPath($component);
+                if (!file_exists($file) && pathinfo($file, PATHINFO_EXTENSION) == 'xml') {
+                    throw new Zwei_Exception("No existe archivo $file.");
+                }
+                
                 if ($this->_acl->isUserAllowed($component, "LIST") || $this->_acl->isUserAllowed($component, "EDIT") || $this->_acl->isUserAllowed($component, "ADD")) {
-                    $file = Zwei_Admin_Xml::getFullPath($component);
-                    if (!file_exists($file) && pathinfo($file, PATHINFO_EXTENSION) == 'xml') {
-                        throw new Zwei_Exception("No existe archivo $file.");
-                    }
+                    
                     
                     try {
                         $xml = new Zwei_Admin_Xml($file, LIBXML_NOWARNING, 1);
