@@ -114,7 +114,6 @@ class AdminController extends Zend_Controller_Action
             @import "'.$this->baseDojoFolder.'/dojox/layout/resources/ExpandoPane.css";
             @import "'.$this->baseDojoFolder.'/dojox/form/resources/FileInput.css";
             @import "'.$this->baseDojoFolder.'/dojox/widget/Toaster/Toaster.css";
-            @import "'.$this->baseDojoFolder.'/resources/dojo.css";
             @import "'.$this->baseDojoFolder.'/dojo/resources/dnd.css";
             @import "'.BASE_URL.'css/admin.css?version='.$this->view->noCache.'";
         ');
@@ -364,5 +363,7 @@ class AdminController extends Zend_Controller_Action
     public function iframeAction()
     {
         $this->view->src = $this->getRequest()->getParam('p');
+        $modules = new AclModulesModel();
+        $this->view->moduleId = $modules->findModule($this->view->src, 'id')->id;
     }
 }
