@@ -30,11 +30,15 @@
                        var innerText = node.innerText || node.textContent;
                        if (self.value != '' && innerText.toLowerCase().indexOf(value.toLowerCase()) > 0) {
                            node.style.display='list-item';
+                       } else {
+                           var myParent = node.parentNode;
+                           myParent.removeChild(node);
+                           myParent.appendChild(node);
                        }
                     });
                 }" />
         </div>
-        <ul data-dojo-type="dojo.dnd.Source" data-dojo-props="accept: [ 'inStock', 'outStock' ]" id="inStock<?=$this->domId. $this->i?>" class="dndList inStock" >
+        <ul data-dojo-type="dojo/dnd/Source" data-dojo-props="accept: [ 'inStock', 'outStock' ], autoSync: true, simpleSelection: true" id="inStock<?=$this->domId. $this->i?>" class="dndList inStock">
         <script type="dojo/connect" event="onDropExternal" args="source, nodes, copy">
             var node;
             for (var i = 0; i < nodes.length; i++) {
@@ -48,10 +52,10 @@
             }
         </script>
 <?php 
-foreach ($this->selectedItems as $i => $v) :
+foreach ($this->selectedItems as $id => $name) :
 ?>
-            <li class="dojoDndItem" dndType="inStock" title="<?=$v?>"><input type="hidden" id="outStock<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$i?>"/>
-            <?=$v?>
+            <li class="dojoDndItem" dndType="inStock" title="<?=$name?>" id="item<?=$this->domId . $id?>"><input type="hidden" id="outStock<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$id?>"/>
+            <?=$name?>
             </li>
 <?php 
 endforeach;
@@ -89,11 +93,17 @@ endforeach;
                             var innerText = node.innerText || node.textContent;
                             if (self.value != '' && innerText.toLowerCase().indexOf(value.toLowerCase()) > 0) {
                                node.style.display='list-item';
+                               node.setAttribute('dndtype', 'outstock');
+                            } else {
+                               var myParent = node.parentNode;
+                               myParent.removeChild(node);
+                               myParent.appendChild(node);
                             }
+                            
                         });
                     }" />
         </div>
-        <ul data-dojo-type="dojo.dnd.Source" data-dojo-props="accept: [ 'inStock', 'outStock' ]" id="outStock<?=$this->domId. $this->i?>" class="dndList outStock">
+        <ul data-dojo-type="dojo/dnd/Source" data-dojo-props="accept: ['inStock', 'outStock'], autoSync: true, simpleSelection: true" id="outStock<?=$this->domId. $this->i?>" class="dndList outStock">
             <script type="dojo/connect" event="onDropExternal" args="source, nodes, copy">
             var node;
             for (var i = 0; i < nodes.length; i++) {
@@ -107,10 +117,10 @@ endforeach;
             }
             </script>
 <?php 
-foreach ($this->unselectedItems as $i => $v) :
+foreach ($this->unselectedItems as $id => $name) :
 ?>
-            <li class="dojoDndItem" dndType="outStock" title="<?=$v?>"><input type="hidden" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$i?>" disabled="disabled"/>
-            <?=$v?>
+            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id?>"><input type="hidden" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$id?>" disabled="disabled"/>
+            <?=$name?>
             </li>
 <?php 
 endforeach;
