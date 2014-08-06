@@ -47,7 +47,7 @@ class Zwei_Utils_Table
                     if ($html) {
                         $out .= "<th>$target</th>";
                     } else {
-                        $out .= stristr(",", $target) || stristr('"', $target) ? '"' . str_replace('"', "", $target) . '"' : $target;
+                        $out .= stristr($target, $separator) || stristr($target, '"') ? '"' . str_replace('"', "", $target) . '"' : $target;
                     }
                 } else if(!empty($this->_name[$target])) {
                     if ($html) {
@@ -88,7 +88,7 @@ class Zwei_Utils_Table
                     if ($html) {
                         $out .= "<td>$value</td>";
                     } else {
-                        $out .= $value && (stristr($separator, $value) || stristr('"', $value)) ? '"' . str_replace('"', "", $value) . '"' : $value;
+                        $out .= $value && (stristr($value, $separator) || stristr($value, '"')) ? '"' . str_replace('"', "", $value) . '"' : $value;
                     }
                 }
                 if (!$html && $i < $counter) $out .= $separator;
@@ -272,8 +272,7 @@ class Zwei_Utils_Table
             $row ++;
         } 
         
-
-        ob_end_clean();
+        ob_start();
         
         header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         header("Cache-Control: no-store, no-cache, must-revalidate");
