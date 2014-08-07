@@ -1,5 +1,13 @@
-#logosAdm {
-    padding: 0.2em 1em 0 1.6em !important;
+#arbolPrincipal {
+    padding: 0.6em;
+}
+
+.zweicom #logosAdm {
+    padding: 0.3em 1em 0 1.6em !important;
+}
+
+.claro #logosAdm, .tundra #logosAdm, .nihilo #logosAdm, .soria #logosAdm {
+    padding: 0.5em 1em 0 1.6em !important;
 }
 
 #personalWrapper{
@@ -10,10 +18,22 @@
 }
 
 #contentPaneTop {
-    height: 3.2em;
-    overflow: hidden;
+    height: auto;
 }
 
 .linkableItem a:hover {
     text-decoration: underline;
 }
+
+.zweicom #mainMenu {
+    padding-right: 20em;
+}
+
+.claro #mainMenu {
+    padding-right: 23em;
+}
+
+.tundra #mainMenu, .nihilo #mainMenu, .soria #mainMenu {
+    padding-right: 22em;
+}
+

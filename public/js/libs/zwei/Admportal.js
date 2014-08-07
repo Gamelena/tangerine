@@ -327,9 +327,8 @@ dojo.declare("zwei.Admportal", null, {
     },
     loadModuleTab: function(url, moduleId, moduleTitle, refreshOnShow, image) 
     {
-        
-        if (typeof(refreshOnShow) == 'undefined') var refreshOnShow = false;
-        if (typeof(image) == 'undefined') var image = null;
+        if (typeof(refreshOnShow) === 'undefined') var refreshOnShow = false;
+        if (typeof(image) === 'undefined') var image = null;
         refreshOnShow = Boolean(parseInt(refreshOnShow));
         
         var self = this;
@@ -391,13 +390,15 @@ dojo.declare("zwei.Admportal", null, {
         var areas = dojo.query('#' + containerId + ' > .settingsArea');
         
         for (var i=0; i < tabs.length; i++) {
-            tabs[i].style.background = '';
+            //tabs[i].style.background = '';
+            dojo.removeClass(tabs[i], 'active');
             areas[i].style.display = 'none';
         }
         
         try {
             dojo.byId(areaId).style.display='block';
-            dojo.byId(tabId).style.background='url("/dojotoolkit/dijit/themes/claro/images/activeGradient.png") #CFE5FA repeat-x';
+            //dojo.byId(tabId).style.background='url("/dojotoolkit/dijit/themes/claro/images/activeGradient.png") #CFE5FA repeat-x';
+            dojo.addClass(dojo.byId(tabId), 'active');
         } catch (e) {
             console.debug(e.message);
         }    

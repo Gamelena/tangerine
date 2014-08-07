@@ -88,9 +88,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->zweiExcelVersion = $this->_config->zwei->excel->version ? $this->_config->zwei->excel->version : 'csv';
         
         if ($this->getRequest()->getParam('p')) {
-            $this->_component = $this->getRequest()->getParam('p');
-            $file = Zwei_Admin_Xml::getFullPath($this->_component);
+            $file = Zwei_Admin_Xml::getFullPath($this->getRequest()->getParam('p'));
             $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+            $aclComponent = $this->_xml->getAttribute('aclComponent');
+            $this->_component = $aclComponent ? $aclComponent : $this->getRequest()->getParam('p');
         }
         
         $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';

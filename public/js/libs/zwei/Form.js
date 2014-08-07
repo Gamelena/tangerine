@@ -107,7 +107,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         var auxTwice;
         var self = this;
         
-        if (this.dijitFormSearch != undefined && this.dijitFormSearch != null) {
+        if (this.dijitFormSearch != null) {
             dojo.forEach(this.dijitFormSearch.getChildren(), function(entry, i) {
                 if (entry.type != 'submit' && entry.type != 'radio' && entry.type != 'button' && entry.get('disabled') != true) {
                     if (self.dijitFormSearch.getChildrenByName(entry.get('name')).length > 1) {
@@ -365,7 +365,9 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 if (dijit.byId(dialogId) == undefined) {
                     this.dijitDialog = new dojox.widget.DialogSimple({
                         title: this.title,
-                        id: dialogId
+                        id: dialogId,
+                        onShow: function() {console.log('onShow')},
+                        onHide: function() {console.log('onHide')}
                     });
                 } else {
                     this.dijitDialog = dijit.byId(dialogId);
@@ -388,7 +390,10 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      * @constructorParam dijit.form.DataGrid    this.dataGrid
      * @return void 
      */
-    showDialog: function() {
+    showDialog: function(params) {
+        if (typeof params == 'undefined')
+            var params = {};
+        
         var ids = '';
         var primaries = {};
         
@@ -399,6 +404,10 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     title: this.title,
                     id: dialogId
                 });
+                for (var index in params) {
+                    this.dijitDialog[index] = params[index];
+                }
+                
             } else {
                 this.dijitDialog = dijit.byId(dialogId);
             }

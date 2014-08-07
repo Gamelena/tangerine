@@ -1,3 +1,8 @@
+.active {
+    background: url("/dojotoolkit/dijit/themes/claro/images/activeGradient.png") #CFE5FA repeat-x;
+    color: #243C5F !important;
+}
+
 @font-face {
     font-family: 'ZapfHumnstBTBold';
     src: url('f/zapf_humanist_601_bold_bt-webfont.eot');
@@ -141,7 +146,6 @@ a {
     font-weight: lighter;
 }
 
-}
 #footer a {
     color: #FFFFFF;
     font-size: 10px;
@@ -362,6 +366,7 @@ a.settingsTab {
     border: 1px solid #769DC0;
     font-size: 12px;
     cursor: pointer;
+    color : #777;
 }
 
 #black_overlay {
@@ -692,16 +697,74 @@ a.settingsTab {
     padding: 6px;
 }
 
+/*Patch grid images*/
+.dojoxGridContent {
+    min-height: 100% !important;    
+}
+
 
 /*TinyMCE*/
 .mceIframeContainer {
     background: #fff !important;
 }
 
-
-#eficienciaChart > div {
-    margin: 0 auto;
+/*DND*/
+.dndWrapper{
+    height: 24em;
 }
+
+.dndWrapper a:HOVER{
+    text-decoration: underline;
+}
+.dndContainer{
+    height: 100%;
+    width: 190px;
+    display: inline-block;
+    margin: 0 auto;
+    float: left;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}
+
+.dndContainer h5{
+    text-align: center;
+    font-weight: normal;
+}
+.dndList{
+    height: 80%;
+    overflow: auto;
+    border: solid 1px rgb(210, 210, 210);
+    border-radius: 5px;
+    background-color: #E3EBEC;
+    list-style: none;
+}
+
+.dndList > li{
+    
+
+}
+
+.inStock {
+    list-style-type: disc;
+}
+
+.outStock {
+    color: rgb(125, 125, 125);
+    list-style-type: circle;
+}
+
+.outStock li{
+
+}
+
+.inStock li{
+
+}
+.dojoDndItemOver {
+    background-image: inherited;
+}
+
+
 
 .dojoxCheckedMultiSelect .dojoxCheckedMultiSelectWrapper {
     border-radius: 0.5em;
