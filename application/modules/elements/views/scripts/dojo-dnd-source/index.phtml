@@ -1,14 +1,14 @@
 <div class="dndWrapper" title="Arrastre y suelte los items para seleccionar o deseleccionar.\n Click ">
     <div class="dndContainer">
         <div style="margin: 0 auto; text-align: center ">
-                <h5 onclick="
+                <h4 onclick="
                     var searcher = dijit.byId('search<?=$this->domId. $this->i?>inStockSearch');
                     var isHidden = searcher.get('style').display == undefined || searcher.get('style').display == 'none';
                     
                     searcher.set('style', {display:  (isHidden ? 'inline-block' : 'none')});
                     if (isHidden) searcher.focus();
                     " 
-                    style="cursor: pointer" title="Click para buscar."><a><?=$this->selectedTitle?></a></h5>
+                    style="cursor: pointer" title="Click para buscar."><a><?=$this->selectedTitle?></a></h4>
                 <input id="search<?=$this->domId. $this->i?>inStockSearch" type="text" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" data-dojo-props="
                 intermediateChanges: true,
                 onKeyDown: function (event) {
@@ -64,14 +64,14 @@ endforeach;
     </div>
     <div class="dndContainer">
         <div style="margin: 0 auto; text-align: center ">
-            <h5 onclick="
+            <h4 onclick="
                         var searcher = dijit.byId('search<?=$this->domId. $this->i?>outStockSearch');
                         var isHidden = searcher.get('style').display == undefined || searcher.get('style').display == 'none';
                         
                         searcher.set('style', {display:  (isHidden ? 'inline-block' : 'none')});
                         if (isHidden) searcher.focus();
                         " 
-                        style="cursor: pointer" title="Click para buscar."><a><?=$this->unselectedTitle?></a></h5>
+                        style="cursor: pointer" title="Click para buscar."><a><?=$this->unselectedTitle?></a></h4>
             <input id="search<?=$this->domId. $this->i?>outStockSearch" type="text" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" data-dojo-props="
                     intermediateChanges: true,
                     onKeyDown: function (event) {
