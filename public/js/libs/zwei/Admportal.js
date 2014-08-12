@@ -380,9 +380,9 @@ dojo.declare("zwei.Admportal", null, {
             }
         });
     },
-    loadModuleSingle: function(url, moduleId, moduleTitle) 
+    loadModuleSingle: function(url, widget, tab) 
     {
-        var widget = dijit.byId("mainPane");
+        if (typeof widget === 'undefined') var widget = dijit.byId("mainPane");
         widget.set('href', base_url+url);
     },
     switchTabs: function(containerId, tabId, areaId) {
@@ -402,6 +402,16 @@ dojo.declare("zwei.Admportal", null, {
         } catch (e) {
             console.debug(e.message);
         }    
+    },
+    lockScreen: function(lock) {
+        if (typeof lock === 'undefined') var lock = true;
+        if (lock) {
+            dojo.byId('appLoader').style.opacity = 0.5;
+            dojo.byId('appLoader').style.display = 'block';
+            dojo.byId('appLoader').style.zIndex = 99999999;
+        } else {
+            dojo.byId('appLoader').style.display = 'none';
+        }
     },
     execFunction: function(method, params, domPrefix, object, primary){
         if (object == undefined) var object = ''; 

@@ -23,7 +23,7 @@ if (!$this->loadPartial) :
     if (count($this->tabs) > 1) :
         $tableWrapperClass = "settingsArea";
         foreach ($this->tabs as $tab) :
-            //if ($tab->getAttribute($this->mode) === 'true') :
+            //if ($tab->getAttribute($this->mode) !== 'false') :
             $style = $tab->getAttribute('style');
             $activeClass =  $i == 0 ? "active" : "";
             $i++;
@@ -43,7 +43,7 @@ if (!$this->loadPartial) :
         $dataDojoType = is_object($tab) && $tab->getAttribute('dojoType') ? "data-dojo-type=\"{$tab->getAttribute('dojoType')}\"" : "";
         $i++;
 ?>
-    <div id="<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>" class="settingsArea" <?=$style ?> <?=$dataDojoType?>>
+    <div id="<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>" class="settingsArea" <?=$style ?> <?=$dataDojoType?> data-dojo-props="executeScripts: true">
         <table>
 <?php 
         $k=0;
@@ -115,7 +115,7 @@ endif;
                 iframe: dojo.byId('ifrm_process')
             });
             <?=$this->onSubmit ?>
-            console.log('post submit');
+            admportal.lockScreen();
             var name, oldValue, response;
             var observer = form.watch("response", function(name, oldValue, response) {
                 if (response != null) {
@@ -123,6 +123,7 @@ endif;
                     if (response.todo == 'goToLogin') window.location.href = base_url + 'admin/login';
                     else if (response.todo == 'cargarArbolMenu') admportal.loadMainMenu();
                     this.set("response", null);
+                    admportal.lockScreen(false);
                 }
                 console.log('observer');
             });
@@ -130,7 +131,7 @@ endif;
             form.save();
             
         } catch (e) {
-            console.debug(e);
+            admportal.lockScreen(false);
             utils.showMessage(e.message, 'error');
         }
         return false;
