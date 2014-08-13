@@ -102,9 +102,6 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     {
         if (Zend_Auth::getInstance()->hasIdentity()) {
             $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
-            //if (isset($this->_user_info->user_name)) {
-                //$this->_acl = new Zwei_Admin_Acl($this->_user_info->user_name);
-            //}
         } 
         
         if (!empty($this->_adapter)) {     
@@ -112,6 +109,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         }
         
         $this->_form = new Zwei_Utils_Form();
+        parent::init();
     }
     
     
@@ -433,19 +431,21 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * @return array
      */
 
-    public function whereToArray($where)
+    static public function whereToArray($where)
     {
         $where = (array) $where;
         $return = array();
         
         foreach ($where as $string) {
-            $array = explode('=', $string);
-            if (stristr($array[0], ".")) {
-                $aux = explode(".", $array[0]);
-                $array[0] = str_replace("`", "", $aux[1]);
+            if (stristr($string, '=')) {
+                $array = explode('=', $string);
+                if (stristr($array[0], ".")) {
+                    $aux = explode(".", $array[0]);
+                    $array[0] = str_replace("`", "", $aux[1]);
+                }
+                
+                $return[trim(str_replace("`", "", $array[0]))] = trim(str_replace("'", "",$array[1]));
             }
-            
-            $return[trim(str_replace("`", "", $array[0]))] = trim(str_replace("'", "",$array[1]));
         }
         return $return;
     }

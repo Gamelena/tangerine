@@ -1,4 +1,4 @@
-<input type="text" id="<?=$this->domId.$this->i?>" name="<?=$this->target?>" value="T<?php echo str_replace('"','&quot;',$this->value)?>" <?php echo $this->readonly.$this->disabled.$this->required.$this->invalid_message.$this->prompt_message.$this->onblur?>
+<input type="text" id="<?=$this->domId.$this->i?>" name="<?=$this->target?>" value="T<?=str_replace('"','&quot;',$this->value)?>" <?php echo $this->readonly.$this->disabled.$this->required.$this->invalid_message.$this->prompt_message.$this->onblur?>
     data-dojo-type="dijit/form/TimeTextBox" data-dojo-props="constraints: {
             timePattern: 'HH:mm:ss',
             clickableIncrement: 'T00:15:00',

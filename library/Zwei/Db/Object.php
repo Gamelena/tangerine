@@ -102,7 +102,6 @@ class Zwei_Db_Object
                 $g = preg_replace('/[^(\x20-\x7F)]*/', '', $g);//Truco para eliminar caracteres no texto
                 $this->_select->group($g);
             }
-
         }
 
         $start = (isset($this->_form->start)) ? $this->_form->start : 0; 

@@ -9,7 +9,7 @@ class Zwei_Controller_Config
     /**
      * Bootstrap
      * 
-     * @return mixed
+     * @return Zend_Application_Bootstrap_Bootstrap
      */
     public static function getBootstrap()
     {
