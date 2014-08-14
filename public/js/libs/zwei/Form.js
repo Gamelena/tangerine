@@ -217,7 +217,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 self.utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
             }
             
-            if (self.iframe.detachEvent) {
+            if (self.iframe.detachEvent) {//IE
                 self.iframe.detachEvent('onload', postSave);
             } else {
                 dojo.disconnect(listener);
@@ -233,28 +233,17 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         } 
         
         
-        dojo.forEach(this.dijitForm.getChildren(), function(entry, i) {
-          //Enviar valores "negativos" para los checkboxes sin marcar, estos son temporalmente chequeados
-            if (entry.baseClass == "dijitContentPane") {
-                dojo.forEach(entry.getChildren(), function(subEntry, j) {
-                    if (subEntry.baseClass == 'dijitCheckBox' && !subEntry.get('checked')) {
-                        subEntry.set('bkpvalue', subEntry.get('value'));
-                        subEntry.set('subEntry', entry.get('uncheckedvalue'));
-                        fakeChecked.push(subEntry);
-                        require(["dojo/dom-class"], function(domClass){
-                            domClass.remove(dojo.byId(subEntry.get('id')).parentNode, 'dijitCheckBoxChecked')    
-                        });
-                    }
+        dojo.forEach(dojo.query('#' + this.dijitForm.get('id') + ' input[type=checkbox]') , function(domEntry, i) {
+            var entry = dijit.byId(domEntry.getAttribute('id'));
+            if (entry && entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
+                //Enviar valores "negativos" para los checkboxes sin marcar, estos son temporalmente chequeados.
+                entry.set('bkpvalue', entry.get('value'));
+                entry.set('value', entry.get('uncheckedvalue'));
+                fakeChecked.push(entry);
+                require(["dojo/dom-class"], function(domClass){
+                    //Ocultar por css "check" del checkbox para que usuario no crea que se envia valor "checked".
+                    domClass.remove(dojo.byId(entry.get('id')).parentNode, 'dijitCheckBoxChecked')    
                 });
-            } else {
-                if (entry.baseClass == 'dijitCheckBox' && !entry.get('checked')) {
-                    entry.set('bkpvalue', entry.get('value'));
-                    entry.set('value', entry.get('uncheckedvalue'));
-                    fakeChecked.push(entry);
-                    require(["dojo/dom-class"], function(domClass){
-                        domClass.remove(dojo.byId(entry.get('id')).parentNode, 'dijitCheckBoxChecked')    
-                    });
-                }
             }
         });
         
@@ -292,8 +281,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         if (confirm(messageConfirm)) {
             var self = this;
-            
-            
             
             if (!multiForm) {
                 items = [items[0]];
