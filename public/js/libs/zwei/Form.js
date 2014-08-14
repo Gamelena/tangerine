@@ -226,7 +226,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             self.set("response", response);
         }
         
-        if (this.iframe.attachEvent) {
+        if (this.iframe.attachEvent) {//IE
             this.iframe.attachEvent('onload', postSave);
         } else {
             var listener = dojo.connect(this.iframe, 'onload', postSave); 
@@ -241,6 +241,9 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                         subEntry.set('bkpvalue', subEntry.get('value'));
                         subEntry.set('subEntry', entry.get('uncheckedvalue'));
                         fakeChecked.push(subEntry);
+                        require(["dojo/dom-class"], function(domClass){
+                            domClass.remove(dojo.byId(subEntry.get('id')).parentNode, 'dijitCheckBoxChecked')    
+                        });
                     }
                 });
             } else {
@@ -248,6 +251,9 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     entry.set('bkpvalue', entry.get('value'));
                     entry.set('value', entry.get('uncheckedvalue'));
                     fakeChecked.push(entry);
+                    require(["dojo/dom-class"], function(domClass){
+                        domClass.remove(dojo.byId(entry.get('id')).parentNode, 'dijitCheckBoxChecked')    
+                    });
                 }
             }
         });
