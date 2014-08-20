@@ -10,26 +10,15 @@ class EventsController extends Zend_Controller_Action
     {
         $this->view->response = array('status' => 'OK');
         
-        
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             $this->view->response['status'] = 'AUTH_FAILED';
             $this->render();
         } else {
             $auth = Zend_Auth::getInstance();
             $authInfo = $auth->getStorage()->read();
-            //$aclRoles = new DbTable_AclRoles();
-            //$currentRole = $aclRoles->find($authInfo->acl_roles_id)->current();
             
-            $userModel = new DbTable_AclSession();
-            //$userFind = $aclUsers->find($authInfo->id);//<- @FIMXE - find() esto falla silenciosamente ¡?
-            
-            //WORKAROUND FIXME
-            $select = $userModel->select(false)
-                ->from($userModel->info(Zend_Db_Table::NAME, array('acl_users_id')))
-                ->where($userModel->getAdapter()->quoteInto('acl_users_id = ?', $authInfo->id));
-            
-            $userFind = $userModel->fetchAll($select);
-            //END WORKAROUND
+            $userModel = new AclSessionModel();
+            $userFind = $userModel->findByAclUsersId($authInfo->id);
             
             if ($userFind->count() <= 0) {
                 $this->view->response['status'] = 'AUTH_FAILED';
@@ -105,7 +94,6 @@ class EventsController extends Zend_Controller_Action
                 ->where($userModel->getAdapter()->quoteInto('acl_users_id = ?', $authInfo->id));
             
             $currentUser = $userModel->fetchRow($select);
-            Debug::write($currentUser->toArray());
             //END WORKAROUND
             
             $currentUser->must_refresh = '0';

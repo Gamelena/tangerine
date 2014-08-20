@@ -167,7 +167,7 @@ class AdminController extends Zend_Controller_Action
                         $xml = new Zwei_Admin_Xml($file, LIBXML_NOWARNING, 1);
                     } catch (Exception $e) {
                         $message = "Error al intentar parsear $file";
-                        Debug::write($message);
+                        Console::error($message);
                         $this->view->content = "<h2>$message<h2><center><img src=\"".BASE_URL."images/exception-xml.jpg\"/></center>";
                         $this->render('index');
                     }

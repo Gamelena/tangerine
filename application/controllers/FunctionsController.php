@@ -63,7 +63,7 @@ class FunctionsController extends Zend_Controller_Action
                 $response = $CustomFunctions->$method($params[0], $params[1], $params[2], $params[3], $params[4]);
                 break;
             default:
-                Zwei_Utils_Debug::write("Núm. de parámetros excedido ($count_params) para Zwei_Utils_CustomFunctions::$method($string_params)");
+                Console::error("Núm. de parámetros excedido ($count_params) para Zwei_Utils_CustomFunctions::$method($string_params)");
                 $response=false;
         }
 

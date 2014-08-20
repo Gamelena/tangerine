@@ -126,14 +126,14 @@ class CrudRequestController extends Zend_Controller_Action
                                 $j++;
                             }
                         } else {
-                            Debug::write("error al subir archivo a $path");
+                            Console::error("error al subir archivo a $path");
                         }
                     }
                     
                     if (isset($this->_form->deletedata)) {
                         foreach ($this->_form->deletedata as $i => $v) {
                             if (!@unlink($path . $v)) {
-                                Debug::write("no se pudo borrar " . $this->_form->pathdata[$i] . $v);
+                                Console::error("no se pudo borrar " . $this->_form->pathdata[$i] . $v);
                             }
                             $this->_form->data[$i] = '';
                         }
@@ -157,7 +157,7 @@ class CrudRequestController extends Zend_Controller_Action
                         } catch (Zend_Db_Exception $e) {
                             $this->_responseContent['state'] = 'ADD_FAIL';
                             $this->_responseContent['type'] = 'error';
-                            Zwei_Utils_Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
+                            Console::error("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
                         }
                     } else if ($this->_form->action == 'delete') {
                         if (isset($this->_form->primary)) {
@@ -169,7 +169,7 @@ class CrudRequestController extends Zend_Controller_Action
                             
                             $response = $this->_model->delete($where);
                         } else {
-                            Debug::write(array($this->_model->info('name'), "Se intento borrar sin parametros"));
+                            Console::error(array($this->_model->info('name'), "Se intento borrar sin parametros"));
                             $response = false;
                         }
                         
@@ -180,7 +180,6 @@ class CrudRequestController extends Zend_Controller_Action
                             $this->_responseContent['state'] = 'DELETE_FAIL';
                             $this->_responseContent['type'] = 'error';
                         }
-                        //Zwei_Utils_Debug::write($response);
                     } else if ($this->_form->action == 'edit') {
                         if (isset($this->_form->primary)) {
                             foreach ($this->_form->primary as $i => $v) {
@@ -205,14 +204,13 @@ class CrudRequestController extends Zend_Controller_Action
                             } catch (Zend_Db_Exception $e) {
                                 $this->_responseContent['state'] = 'UPDATE_FAIL';
                                 $this->_responseContent['type'] = 'error';
-                                Debug::write("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$classModel|" . $e->getTraceAsString());
+                                Console::error("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$classModel|" . $e->getTraceAsString());
                             }
                         } else {
-                            Debug::write(array($this->_model->info('name'), "Se intento actualizar sin parametros"));
+                            Console::error(array($this->_model->info('name'), "Se intento actualizar sin parametros"));
                             $this->_responseContent['state'] = 'UPDATE_FAIL';
                             $this->_responseContent['type'] = 'error';
                         }
-                        //Zwei_Utils_Debug::write($response);
                     }
                     
                     $this->_responseContent['todo'] = $this->_model->getAjaxTodo();
@@ -261,19 +259,14 @@ class CrudRequestController extends Zend_Controller_Action
                         
                         $table = new Zwei_Utils_Table();
                         
-                        if ($this->_form->excel_formatter != 'csv') {
-                            header('Content-type: application/vnd.ms-excel');
-                            header("Content-Disposition: attachment; filename={$this->_form->model}.xls");
-                            header("Pragma: no-cache");
-                            header("Expires: 0");
-                            
+                        if (in_array($this->_form->excel_formatter, array('Excel5', 'Excel2007'))) {
                             if (isset($this->_form->p)) {
-                                $content = $table->rowsetToHtml($data, $this->_form->p);
+                                $content = $table->rowsetToExcel($data, $this->_form->p);
                             } else {
-                                $content = $table->rowsetToHtml($data);
+                                $content = $table->rowsetToExcel($data);
                             }
                             $this->view->content = $content;
-                        } else {
+                        } else if ($this->_form->excel_formatter == 'csv') {
                             header("Pragma: public");
                             header("Expires: 0");
                             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -291,6 +284,18 @@ class CrudRequestController extends Zend_Controller_Action
                                 $content = $table->rowsetToCsv($data);
                             }
                             $this->view->content = chr(255) . chr(254) . mb_convert_encoding($content, 'UCS-2LE', 'UTF-8');
+                        } else {
+                            header('Content-type: application/vnd.ms-excel');
+                            header("Content-Disposition: attachment; filename={$this->_form->model}.xls");
+                            header("Pragma: no-cache");
+                            header("Expires: 0");
+                            
+                            if (isset($this->_form->p)) {
+                                $content = $table->rowsetToHtml($data, $this->_form->p);
+                            } else {
+                                $content = $table->rowsetToHtml($data);
+                            }
+                            $this->view->content = $content;
                         }
                         
                         $this->render();
@@ -419,7 +424,7 @@ class CrudRequestController extends Zend_Controller_Action
                     $this->_form->data[$id] = $v['filename'];
                 }
             } else if ($v['size'] > 0) {
-                Debug::write("error al subir archivo a $path");
+                Console::error("error al subir archivo a $path");
             }
             $count++;
         }
@@ -428,7 +433,7 @@ class CrudRequestController extends Zend_Controller_Action
         if (isset($this->_form->deletedata)) {
             foreach ($this->_form->deletedata as $id => $value) {
                 if (!unlink($this->_form->pathdata[$id] . $value)) {
-                    Debug::write("no se pudo borrar " . ROOT_DIR . '/upfiles/' . $value);
+                    Console::error("no se pudo borrar " . ROOT_DIR . '/upfiles/' . $value);
                 }
                 $this->_form->data[$id] = '';
             }
@@ -489,7 +494,7 @@ class CrudRequestController extends Zend_Controller_Action
             $thumb->resize($width, $height);
             $thumb->save($thumbPath . "/" . $infoFile['filename']);
         } catch (Exception $e) {
-            Debug::write($e->getMessage() . '-' . $e->getCode() . $e->getTraceAsString());
+            Console::error($e->getMessage() . '-' . $e->getCode() . $e->getTraceAsString());
             return false;
         }
     }

@@ -333,7 +333,7 @@ class AclModulesModel extends DbTable_AclModules
     }
     
     /**
-     * @param $data Zend_Db_Table_Rowset
+     * @param $data Zend_Db_Table_Row
      * @return array
      * @see Zwei_Db_Table::overloadDataForm()
      */

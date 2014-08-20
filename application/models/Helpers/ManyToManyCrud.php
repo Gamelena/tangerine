@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * Modelo auxiliar para modelos que trabajen con datos de n:n 
+ * Clase auxiliar para modelos que trabajen con datos con cardinalidad muchos a muchos. 
  * 
  * @example
  * <code>
@@ -30,11 +30,13 @@ class Helpers_ManyToManyCrud
      * @var array[string]=>Zend_Db_Table
      */
     protected $_modelsMap = array();
+    
     /**
      * 
      * @var array
      */
     protected $_data = array();
+    
     /**
      * 
      * @param string $idNameFrom
@@ -99,7 +101,7 @@ class Helpers_ManyToManyCrud
     
     /**
      *
-     * @param int $idServicio
+     * @param string $idFrom
      * @return boolean
      */
     public function saveAll($idFrom)
@@ -117,7 +119,7 @@ class Helpers_ManyToManyCrud
     /**
      *
      * @param Zwei_Db_Table $model
-     * @param int $idServicio
+     * @param string $idFrom
      * @param array $data
      * @return boolean
      */
@@ -162,8 +164,7 @@ class Helpers_ManyToManyCrud
             } catch (Zend_Db_Exception $e) {
                 if ($e->getCode() != 23000) {
                     Console::error($e->getMessage());
-                    $this->setMessage($e->getMessage());
-                    return false;
+                    //return false;
                 }
             }
         }
