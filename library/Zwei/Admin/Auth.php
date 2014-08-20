@@ -143,13 +143,16 @@ class Zwei_Admin_Auth
                     $row->user_agent = $_SERVER['HTTP_USER_AGENT'];
                     $row->save();
                 } else {
-                    $r = new Zend_Controller_Action_Helper_Redirector();
-                    $r->gotoUrl('/admin/login')->redirectAndExit();
+                    if (PHP_SAPI !== 'cli') { //Un Redirector fuera de un controlador mata silenciosamente a phpunit ya que usa exit(), lo evitamos.
+                        $r = new Zend_Controller_Action_Helper_Redirector();
+                        $r->gotoUrl('/admin/login');
+                    }
                 }
             }
         } catch (Exception $e) {
             Console::error($e->getMessage(), true);
-        } //PDOException is not catched :facepalm:
+        } //PDOException is not caught :facepalm:
+
     }
     
     /**

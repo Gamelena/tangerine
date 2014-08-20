@@ -3,16 +3,20 @@
  * Salida de mensajes a log ya consola de javascript.
  * Se require firePHP para firefox o equivalente.
  * 
- * Observación: la razón de multiplicación del código de las funciones con diferentes parámetros es porque 
- * debug_backtrace() retorna el contexto desde donde se invoca el método, si tuvieramos un método base 
- * el contexto sería ese método base por lo que el traceo carecería de utilidad. 
+ * Observación: Esta clase tiene mucha duplicación de código, la razón de esto es que NO podemos usar un método base
+ * que permitiría la reutilización de código, ya que debug_backtrace() retornaría siempre ese contexto base 
+ * en lugar de retornar el contexto que queremos depurar o dejar registrado. 
  *  
  */
 class Console
 {
     /**
-     * Escribe el reporte de error en un archivo de texto plano llamado debug
+     * Escribe el reporte en un archivo de log del sistema.
+     * Muestra salida por consola javascript si $showOutput=true.
+     * 
      * @param string $message - texto a escribir en archivo.
+     * @param boolean $showOutput
+     * @param boolean $write
      * @param string $file - ruta del archivo a escribir.
      */
     static function log($message = null, $showOutput = false, $write = true, $file = 'php://stdout')
@@ -38,8 +42,12 @@ class Console
     }
     
     /**
-     * Escribe el reporte de error en un archivo de texto plano llamado debug
+     * Escribe el reporte en un archivo de log del sistema.
+     * Muestra salida por consola javascript.
+     * 
      * @param string $message - texto a escribir en archivo.
+     * @param boolean $showOutput
+     * @param boolean $write
      * @param string $file - ruta del archivo a escribir.
      */
     static function info($message = null, $showOutput = true, $write = true, $file = 'php://stdout')
@@ -69,8 +77,12 @@ class Console
     }
     
     /**
-     * Escribe el reporte de error en un archivo de texto plano llamado debug
+     * Muestra salida por consola javascript.
+     * Escribe el reporte de error en un archivo de texto plano llamado debug si $write=true.
+     *  
      * @param string $message - texto a escribir en archivo.
+     * @param boolean $showOutput
+     * @param boolean $write
      * @param string $file - ruta del archivo a escribir.
      */
     static function debug($message = null, $showOutput = true, $write = false, $file = null)
@@ -100,8 +112,12 @@ class Console
     }
     
     /**
-     * Escribe el reporte de error en un archivo de texto plano llamado debug
+     * Muestra salida por consola javascript.
+     * Escribe el reporte en un archivo de error del sistema.
+     * 
      * @param string $message - texto a escribir en archivo.
+     * @param boolean $showOutput
+     * @param boolean $write
      * @param string $file - ruta del archivo a escribir.
      */
     static function warn($message = null, $showOutput = true, $write = true,$file = 'php://stderr')
@@ -128,8 +144,12 @@ class Console
     
     
     /**
-     * Escribe el reporte de error en un archivo de texto plano llamado debug
+     * Escribe el reporte en un archivo de error del sistema.
+     * Muestra salida por consola javascript si $showOutput = true.
+     * 
      * @param string $message - texto a escribir en archivo.
+     * @param boolean $showOutput
+     * @param boolean $write
      * @param string $file - ruta del archivo a escribir.
      */
     static function error($message = null, $showOutput = false, $write = true, $file = 'php://stderr')
