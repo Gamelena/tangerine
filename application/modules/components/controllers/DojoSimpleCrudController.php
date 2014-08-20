@@ -183,7 +183,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                     }
                     
                     if ($this->view->menu = 'contextMenu' || $this->view->menu = 'both') {
-                        $this->view->enableActions = "dijit.byId('{$this->view->domPrefix}btnExcel{$formatter}').set('disabled', false);";
+                        $this->view->enableActions .= "dijit.byId('{$this->view->domPrefix}btnExcel{$formatter}').set('disabled', false);";
                     }
                 }
             }
@@ -242,7 +242,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                 $this->view->dialogIndex = Zwei_Utils_String::toVarWord($this->view->dialogIndex);
             }
             
-            //Es posible añadir más valores al retorno de la query principal sobrecargando este método.
+            //Es posible añadir más valores al retorno de la query principal sobrecargando este Zwei_Db_Table::overloadDataForm.
             $this->view->data = $data;
             if (method_exists($this->_model, 'overloadDataForm')) $this->view->data = $this->_model->overloadDataForm($data);
         }
