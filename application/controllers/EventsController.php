@@ -6,6 +6,10 @@
 class EventsController extends Zend_Controller_Action
 {
 
+    /**
+     * Verificar status de usuario en sesión.
+     * @return void
+     */
     public function indexAction()
     {
         $this->view->response = array('status' => 'OK');
@@ -30,15 +34,8 @@ class EventsController extends Zend_Controller_Action
             $roleHasChanged = $currentUser->must_refresh == '1' ? true : false;
             
             if ($roleHasChanged) {
-                //WORKAROUND
                 $userModel = new DbTable_AclUsers();
-                $select = $userModel->select(false)
-                ->from($userModel->info(Zend_Db_Table::NAME, array('user_name', 'password')))
-                ->where($userModel->getAdapter()->quoteInto('id = ?', $authInfo->id));
-                
-                $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter(false);
-                $userFind = $userModel->fetchAll($select);
-                //END WORKAROUND
+                $userFind = $userModel->find($authInfo->id);
                 
                 if ($userFind->count() <= 0) {
                     $this->view->response['status'] = 'AUTH_FAILED';
@@ -49,6 +46,7 @@ class EventsController extends Zend_Controller_Action
                 $username = $currentUser->user_name;
                 $password = $currentUser->password;
                 
+                $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter(false);
                 $authAdapter->setIdentity($username)
                 ->setCredential($password);
 
@@ -68,6 +66,7 @@ class EventsController extends Zend_Controller_Action
     }
     /**
      * Actualiza los permisos del perfil en uso.
+     * @return void
      */
     public function updateRoleAction()
     {
@@ -86,17 +85,10 @@ class EventsController extends Zend_Controller_Action
             
             sleep(10);
 
-            $userModel = new DbTable_AclSession();
-            //$currentUser = $userModel->find($aclUsersId)->current();//<- @FIMXE - find() falla miserable y silenciosamente ¡?
-            //WORKAROUND FIXME
-            $select = $userModel->select(false)
-                ->from($userModel->info(Zend_Db_Table::NAME, array('acl_users_id')))
-                ->where($userModel->getAdapter()->quoteInto('acl_users_id = ?', $authInfo->id));
-            
-            $currentUser = $userModel->fetchRow($select);
-            //END WORKAROUND
-            
+            $userModel = new AclSessionModel();
+            $currentUser = $userFind = $userModel->findByAclUsersId($authInfo->id)->current();
             $currentUser->must_refresh = '0';
+            
             if ($currentUser->save()) {
                 $this->view->response['status'] = 'UPDATE_OK';
             }
