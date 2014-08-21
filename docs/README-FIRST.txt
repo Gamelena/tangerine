@@ -11,7 +11,7 @@ Requerimientos Básicos
 
 "Zend recommends the most current release of PHP for critical security and performance enhancements" 
 
-- Zend Framework 1.12 
+- Zend Framework 1.11.11 
 http://www.zend.com/community/downloads.
 descomprimirlo en /usr/share/php/Zend y agregar /usr/share/php/ al include_path en php.ini.
 
