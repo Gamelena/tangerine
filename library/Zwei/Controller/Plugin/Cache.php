@@ -40,7 +40,7 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
         if ($options instanceof Zend_Config && isset($options->resources->cacheManager->page) && !empty($options->resources->cacheManager->page->backend->options->cache_dir)) {
             $options = $options->resources->cacheManager->page->toArray();
         } else {
-            Debug::write("No hay valores para inicializar cache");
+            //Console::debug("No hay valores para inicializar cache");
             return;
         }
         
@@ -91,8 +91,8 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             
             if (false !== ($response = $this->getCache())) {
                 $response->sendResponse();
-                if (!isset($_SESSION["PWD"])) {
-                    exit;//TODO debe erradicarse exit() y die() de admportal para el funcionamiento de phpunit
+                if (PHP_SAPI !== 'cli') { //exit mata a phpunit.
+                    exit();
                 }
             }
         }
@@ -105,7 +105,7 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
     public function getCache()
     {
         if (isset($this->cache) && ($response = $this->cache->load($this->key)) != false) {
-            Debug::write("Trayendo de cache ".@$_SERVER['REQUEST_URI']);
+            //Debug::write("Trayendo de cache ".@$_SERVER['REQUEST_URI']);
             return $response;
         }
         return false;

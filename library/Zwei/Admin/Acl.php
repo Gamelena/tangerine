@@ -279,9 +279,9 @@ class Zwei_Admin_Acl extends Zend_Acl
              * @todo se considera la existencia de grupos para validar ownership, por ahora están ligados pero no necesariamente será así siempre.
              */
             if ($groups) {
-                $select->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR $this->_tb_groups_modules_actions.acl_groups_id IN ($groups) OR ownership='1'");
+                $select->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_db->quote($this->_userInfo->acl_roles_id)} OR $this->_tb_groups_modules_actions.acl_groups_id IN ($groups) OR ownership='1'");
             } else {
-                $select->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_userInfo->acl_roles_id} OR ownership='1'");
+                $select->where("$this->_tb_roles_modules_actions.acl_roles_id={$this->_db->quote($this->_userInfo->acl_roles_id)} OR ownership='1'");
             }
         } else {
             $fields['permission'] = new Zend_Db_Expr("'ALLOW'");

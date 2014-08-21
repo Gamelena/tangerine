@@ -1,18 +1,17 @@
 <?php
 
-class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
+class Elements_DijitFormSelectControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
 
     public function setUp()
     {
         $this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
-        $options = $this->bootstrap->getOptions(); $_SERVER['HTTP_HOST'] = $options['zwei']['uTesting']['httpHost'];
         parent::setUp();
     }
 
     public function testIndexAction()
     {
-        $params = array('action' => 'index', 'controller' => 'Index', 'module' => 'default');
+        $params = array('action' => 'index', 'controller' => 'DijitFormSelect', 'module' => 'elements');
         $urlParams = $this->urlizeOptions($params);
         $url = $this->url($urlParams);
         $this->dispatch($url);
@@ -21,7 +20,10 @@ class IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
         $this->assertModule($urlParams['module']);
         $this->assertController($urlParams['controller']);
         $this->assertAction($urlParams['action']);
-        $this->assertRedirect();
+        $this->assertQueryContentContains(
+            'div#view-content p',
+            'View script for controller <b>' . $params['controller'] . '</b> and script/action name <b>' . $params['action'] . '</b>'
+            );
     }
 
 

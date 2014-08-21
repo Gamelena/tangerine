@@ -97,18 +97,18 @@ class Zwei_Utils_Form
     
     /**
      * Upload de archivos
-     * @param $file
-     * @param $dest
-     * @param $max_size
-     * @return unknown_type
+     * @param string $file
+     * @param string $dest
+     * @param int $maxSize
+     * @param array $list
+     * @return array
      */
-    
-    public function upload($file, $dest, $max_size = 999999999999)
+    public function upload($file, $dest, $maxSize = 999999999999, $list = array(), $listIsBlack = true)
     {
         if (!empty($_FILES[$file]['name']) && is_array($_FILES[$file]['name'])) {
             $info = array();
             foreach ($_FILES[$file]['name'] as $i => $f) {
-                if ($_FILES[$file]['size'][$i] > 0 && $_FILES[$file]['size'][$i] < $max_size && substr($_FILES[$file]['name'][$i], -3, 3) != 'php') {
+                if ($_FILES[$file]['size'][$i] > 0 && $_FILES[$file]['size'][$i] < $maxSize && substr($_FILES[$file]['name'][$i], -3, 3) != 'php') {
                     $fp      = explode(".", $_FILES[$file]['name'][$i]);
                     $oldname = array();
                     foreach ($fp as $j => $v) {
@@ -118,20 +118,27 @@ class Zwei_Utils_Form
                     }
                     $oldname  = implode(".", $oldname);
                     $ext      = $fp[count($fp) - 1];
+                    $allowed = $listIsBlack ? !in_array($ext, $list) : in_array($ext, $list);
+                    
                     $filename = substr(md5(microtime() . $_FILES[$file]['tmp_name'][$i]), 0, 8) . Zwei_Utils_String::slugify($oldname) . ".$ext";
-                    if (move_uploaded_file($_FILES[$file]['tmp_name'][$i], $dest . "/" . $filename)) {
-                        $info[$i]['size']     = $_FILES[$file]['size'][$i];
-                        $info[$i]['filename'] = $filename;
-                        $info[$i]['ext']      = $ext;
+                    if ($allowed) {
+                        if (move_uploaded_file($_FILES[$file]['tmp_name'][$i], $dest . "/" . $filename)) {
+                            $info[$i]['size']     = $_FILES[$file]['size'][$i];
+                            $info[$i]['filename'] = $filename;
+                            $info[$i]['ext']      = $ext;
+                        } else {
+                            Debug::write("No se pudo subir archivo {$_FILES[$file]['tmp_name'][$i]} a $dest." / ".$filename");
+                            $info = false;
+                        }
                     } else {
-                        Debug::write("No se pudo subir archivo {$_FILES[$file]['tmp_name'][$i]} a $dest." / ".$filename");
+                        Debug::write("Extensión no permitida para {$_FILES[$file]['tmp_name'][$i]} a $dest." / ".$filename");
                         $info = false;
                     }
                 }
             }
             return $info;
         } else {
-            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $max_size && substr($_FILES[$file]['name'], -3, 3) != 'php') {
+            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $maxSize && substr($_FILES[$file]['name'], -3, 3) != 'php') {
                 $fp      = explode(".", $_FILES[$file]['name']);
                 $oldname = array();
                 foreach ($fp as $j => $v) {
@@ -169,7 +176,11 @@ class Zwei_Utils_Form
         }
         
         if (!is_array($value)) {
-            $value = htmlentities($this->_unescape($value), null, 'UTF-8');
+            if (strlen($value) <= 256) {//Si la longitud de $value es mucho más larga que esto $this->_unescape demora demasiado en procesar.
+                $value = htmlentities($this->_unescape($value), null, 'UTF-8');
+            } else {
+                $value = htmlentities($value, null, 'UTF-8');
+            }
         }
         return $value;
     }

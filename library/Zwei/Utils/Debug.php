@@ -9,7 +9,6 @@
  * 
  * @example: Zwei_Utils_Debug::write($mensaje)
  *
- *
  */
 class Zwei_Utils_Debug
 {
@@ -18,6 +17,7 @@ class Zwei_Utils_Debug
    * Escribe el reporte de error en un archivo de texto plano llamado debug
    * @param string $message - texto a escribir en archivo. 
    * @param string $file - ruta del archivo a escribir.
+   * @deprecated use Console::info instead
    */    
     static function write($message = null, $file = null )
     {

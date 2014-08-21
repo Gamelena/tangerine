@@ -83,6 +83,9 @@ class Zwei_Utils_Time
      */
     static public function createInterval($from, $to, $interval = "hours")
     {
+        $from = (int) $from;
+        $to = (int) $to;
+        
         $return = array();
         if ($interval == "hours") {
             $seconds = 3600;

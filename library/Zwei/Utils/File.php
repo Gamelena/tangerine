@@ -122,14 +122,13 @@ class Zwei_Utils_File
     /**
      * 
      */
-    public function getResponseFromService($url, $params='', $username=false, $password=false, $log=false, $typeOfResponse=false)
+    static public function getResponseFromService($url, $params='', $username=false, $password=false, $log=false, $typeOfResponse=false)
     {
         
         $ch = curl_init();
         if($params!=''){
             $url=$url."?".$params;
         }
-        Zwei_Utils_Debug::write($url);
         
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
