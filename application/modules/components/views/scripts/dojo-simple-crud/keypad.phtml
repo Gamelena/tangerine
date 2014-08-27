@@ -1,0 +1,247 @@
+<div class="keyPadWrapper">
+<?php
+if ($this->add) :
+?>
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconNewTask" id="<?=$this->domPrefix?>btnAdd" onClick="
+<?php 
+    if (!$this->multiForm) :
+?>
+            var form = new zwei.Form({
+                component: '<?=$this->component?>',
+                ajax: <?=$this->ajax ?>,
+                action: 'add',
+                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
+                dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                queryParams: '<?=$this->queryParams?>'
+            }); 
+            form.showDialog();
+<?php 
+    else :
+?>
+            var form = new zwei.Form({
+                component: '<?=$this->component?>',
+                prefix: '<?=$this->domPrefix?>',
+                ajax: <?=$this->ajax ?>,
+                action: 'add',
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                queryParams: '<?=$this->queryParams?>',
+                title: 'Agregar <?=$this->name?>'
+            }); 
+            form.showDialog();
+
+<?php 
+    endif;
+?>
+                    ">
+        Agregar <?=$this->name ?>
+        </button>
+    </div>
+<?php 
+endif;
+?>
+<?php 
+if ($this->edit) :
+?>
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconEdit" disabled="disabled" id="<?=$this->domPrefix?>btnEdit" onClick="
+<?php 
+    if (!$this->multiForm) :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'edit',
+                    dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
+                    queryParams: '<?=$this->queryParams?>',
+                    dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'),
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+                }); 
+                form.showDialog();
+<?php 
+    else :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'edit',
+                    title: 'Editar <?=$this->name ?>',
+                    queryParams: '<?=$this->queryParams?>',
+                    prefix: '<?=$this->domPrefix?>',
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    keys : <?=$this->jsPrimary?>
+                });
+                form.showMultipleDialogs();
+<?php 
+    endif;
+?>
+                ">
+            Editar <?=$this->name ?>
+        </button>
+    </div>
+<?php 
+endif;
+?>
+<?php 
+if ($this->delete) :
+?>
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconDelete" disabled="disabled" id="<?=$this->domPrefix?>btnDelete" onClick="
+<?php 
+    if (!$this->multiForm) :
+?>
+            var form = new zwei.Form({
+                ajax: <?=$this->ajax ?>,
+                action: 'delete',
+                component: '<?=$this->component?>',
+                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                model: '<?=$this->model?>',
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
+                keys : <?=$this->jsPrimary?>
+            });
+            
+            var observer = form.watch('response', function(name, oldValue, response) {
+                if (response != null) {
+                    <?=$this->onPostSubmit ?>
+                    if (response.todo == 'goToLogin') window.location.href = base_url + 'admin/login';
+                    else if (response.todo == 'cargarArbolMenu') admportal.loadMainMenu();
+                    this.set('response', null);
+                }
+            }); 
+             
+            form['delete']();
+<?php 
+    else :
+?>
+            var form = new zwei.Form({
+                ajax: <?=$this->ajax ?>,
+                action: 'delete',
+                component: '<?=$this->component?>',
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                model: '<?=$this->model?>',
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
+                keys : <?=$this->jsPrimary?>
+            });
+            
+            var observer = form.watch('response', function(name, oldValue, response) {
+                console.log(response);
+                if (response != null) {
+                    <?=$this->onPostSubmit ?>
+                    if (response.todo == 'goToLogin') window.location.href = base_url + 'admin/login';
+                    else if (response.todo == 'cargarArbolMenu') admportal.loadMainMenu();
+                    this.set('response', null);
+                }
+            }); 
+            
+            form['delete']();
+<?php 
+    endif;
+?>
+                ">
+            Eliminar <?=$this->name ?>
+        </button>
+    </div>
+<?php 
+endif;
+?>
+<?php
+if ($this->clone) :
+?>
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconNewTask" disabled="disabled" id="<?=$this->domPrefix?>btnClone" onClick="
+<?php 
+    if (!$this->multiForm) :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'clone',
+                    dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
+                    dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+                });
+                form.showDialog();
+<?php 
+    else :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'clone',
+                    title: 'Clonar <?=$this->name?>',
+                    prefix: '<?=$this->domPrefix?>',
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    keys : <?=$this->jsPrimary?>
+                });
+                form.showMultipleDialogs();
+<?php 
+    endif;
+?>
+                ">
+                Clonar <?=$this->name ?>
+        </button>
+    </div>
+<?php 
+endif;
+?>
+<?php 
+if ($this->changePassword) :
+?>
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconEdit" disabled="disabled" id="<?=$this->domPrefix?>btnChangePassword" onClick="
+            var form = new zwei.Form({
+                ajax: false,
+                component: '<?=$this->component?>',
+                action: 'edit',
+                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_editpass'), 
+                dijitForm: dijit.byId('<?=$this->domPrefix?>form_editpass'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+            }); 
+            form.showDialog()">
+            Cambiar Contrase&ntilde;a
+        </button>
+    </div>
+<?php 
+endif;
+?>
+<?php 
+foreach ($this->customFunctions as $i => $f) :
+    $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
+    $target = isset($f['target']) && !empty($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+    $disabled = isset($f['disabled']) && $f['disabled'] == 'true' ? 'disabled="disabled"' : '';
+    $title = isset($f['title']) ? " title=\"{$f['title']}\"" : '';
+?>
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" <?=$disabled.$title?> id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="<?=$onclick.$target?>" >
+        <?=$f['name'] ? $f['name'] : $f['target']?>
+        </button>
+    </div>
+<?php 
+endforeach;
+?>
+<?php 
+foreach ($this->excel as $i => $f) :
+    $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->zweiExcelVersion;
+    $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Descargar como Excel' ;
+    $disabled = $f->getAttribute('disabled') || !$this->list ? 'disabled="disabled"' : '';
+    $title = $f->getAttribute('title') ? " title=\"{$f->getAttribute('title')}\"" : '';
+?>
+
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f->getAttribute('iconClass') ? $f->getAttribute('iconClass') : 'dijitIconEdit'?>" <?=$disabled.$title?> id="<?=$this->domPrefix?>btnExcel<?=$formatter?>" onClick="
+            var form = new zwei.Form({
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 
+                queryParams: 'format=excel&excel_formatter=<?=$formatter?>',
+                iframe: dojo.byId('ifrm_process')
+            });
+            form.loadData()">
+            <?=$name?>
+        </button>
+    </div>
+<?php 
+endforeach;
+?>
+</div>

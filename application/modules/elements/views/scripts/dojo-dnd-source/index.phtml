@@ -1,0 +1,130 @@
+<div class="dndWrapper" title="Arrastre y suelte los items para seleccionar o deseleccionar.\n Click ">
+    <div class="dndContainer">
+        <div style="margin: 0 auto; text-align: center ">
+                <h4 onclick="
+                    var searcher = dijit.byId('search<?=$this->domId. $this->i?>inStockSearch');
+                    var isHidden = searcher.get('style').display == undefined || searcher.get('style').display == 'none';
+                    
+                    searcher.set('style', {display:  (isHidden ? 'inline-block' : 'none')});
+                    if (isHidden) searcher.focus();
+                    " 
+                    style="cursor: pointer" title="Click para buscar."><a><?=$this->selectedTitle?></a></h4>
+                <input id="search<?=$this->domId. $this->i?>inStockSearch" type="text" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" data-dojo-props="
+                intermediateChanges: true,
+                onKeyDown: function (event) {
+                    var searcher = dijit.byId('search<?=$this->domId. $this->i?>inStockSearch');
+                    if (event.keyCode == dojo.keys.ENTER) {
+                        dojo.stopEvent(event);
+                    }
+                    if (event.keyCode == dojo.keys.ESCAPE) {
+                        dojo.stopEvent(event);
+                        searcher.set('style', {display: 'none'});
+                        searcher.set('value', '');
+                    }
+                },
+                
+                onChange: function(p) {
+                    var value = this.get('value');
+                    dojo.query('#inStock<?=$this->domId. $this->i?> .dojoDndItem').forEach(function(node) {
+                       node.style.display = (value == '') ? 'list-item' : 'none';
+                       var innerText = node.innerText || node.textContent;
+                       if (self.value != '' && innerText.toLowerCase().indexOf(value.toLowerCase()) > 0) {
+                           node.style.display='list-item';
+                       } else {
+                           var myParent = node.parentNode;
+                           myParent.removeChild(node);
+                           myParent.appendChild(node);
+                       }
+                    });
+                }" />
+        </div>
+        <ul data-dojo-type="dojo/dnd/Source" data-dojo-props="accept: [ 'inStock', 'outStock' ], autoSync: true, simpleSelection: true" id="inStock<?=$this->domId. $this->i?>" class="dndList inStock">
+        <script type="dojo/connect" event="onDropExternal" args="source, nodes, copy">
+            var node;
+            for (var i = 0; i < nodes.length; i++) {
+                node = nodes[i];
+                for (var j = 0; j < node.childNodes.length; j ++) {
+                    if (node.childNodes[j].nodeName == 'INPUT') {
+                        node.childNodes[j].disabled = false;
+                        break;
+                    }
+                }
+            }
+        </script>
+<?php 
+foreach ($this->selectedItems as $id => $name) :
+?>
+            <li class="dojoDndItem" dndType="inStock" title="<?=$name?>" id="item<?=$this->domId . $id?>"><input type="hidden" id="outStock<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$id?>"/>
+            <?=$name?>
+            </li>
+<?php 
+endforeach;
+?>
+        </ul>
+    </div>
+    <div class="dndContainer">
+        <div style="margin: 0 auto; text-align: center ">
+            <h4 onclick="
+                        var searcher = dijit.byId('search<?=$this->domId. $this->i?>outStockSearch');
+                        var isHidden = searcher.get('style').display == undefined || searcher.get('style').display == 'none';
+                        
+                        searcher.set('style', {display:  (isHidden ? 'inline-block' : 'none')});
+                        if (isHidden) searcher.focus();
+                        " 
+                        style="cursor: pointer" title="Click para buscar."><a><?=$this->unselectedTitle?></a></h4>
+            <input id="search<?=$this->domId. $this->i?>outStockSearch" type="text" data-dojo-type="dijit/form/ValidationTextBox" style="display:none" data-dojo-props="
+                    intermediateChanges: true,
+                    onKeyDown: function (event) {
+                        var searcher = dijit.byId('search<?=$this->domId. $this->i?>outStockSearch');
+                        if (event.keyCode == dojo.keys.ENTER) {
+                            dojo.stopEvent(event);
+                        }
+                        if (event.keyCode == dojo.keys.ESCAPE) {
+                            dojo.stopEvent(event);
+                            searcher.set('style', {display: 'none'});
+                            searcher.set('value', '');
+                        }
+                    },
+                    onChange: function(p) {
+                        var value = this.get('value');
+                        console.debug(value);
+                        dojo.query('#outStock<?=$this->domId. $this->i?> .dojoDndItem').forEach(function(node) {
+                            node.style.display = (value == '') ? 'list-item' : 'none';
+                            var innerText = node.innerText || node.textContent;
+                            if (self.value != '' && innerText.toLowerCase().indexOf(value.toLowerCase()) > 0) {
+                               node.style.display='list-item';
+                               node.setAttribute('dndtype', 'outstock');
+                            } else {
+                               var myParent = node.parentNode;
+                               myParent.removeChild(node);
+                               myParent.appendChild(node);
+                            }
+                            
+                        });
+                    }" />
+        </div>
+        <ul data-dojo-type="dojo/dnd/Source" data-dojo-props="accept: ['inStock', 'outStock'], autoSync: true, simpleSelection: true" id="outStock<?=$this->domId. $this->i?>" class="dndList outStock">
+            <script type="dojo/connect" event="onDropExternal" args="source, nodes, copy">
+            var node;
+            for (var i = 0; i < nodes.length; i++) {
+                node = nodes[i];
+                for (var j = 0; j < node.childNodes.length; j ++) {
+                    if (node.childNodes[j].nodeName == 'INPUT') {
+                        node.childNodes[j].disabled = true;
+                        break;
+                    }
+                }
+            }
+            </script>
+<?php 
+foreach ($this->unselectedItems as $id => $name) :
+?>
+            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id?>"><input type="hidden" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$id?>" disabled="disabled"/>
+            <?=$name?>
+            </li>
+<?php 
+endforeach;
+?>
+        </ul>
+    </div>
+</div>

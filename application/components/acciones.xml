@@ -1,0 +1,8 @@
+<?xml version="1.0"?> 
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="components.xsd" 
+name="Acciones" type="dojo-simple-crud" target="AclActionsModel" list="true" edit="true" add="true" delete="false">
+    <elements>
+        <element name="ID" target="id" type="dijit-form-validation-text-box" visible="true" edit="false" add="true"/>
+        <element name="Acci&amp;oacute;n" target="title" type="dijit-form-validation-text-box" visible="true" edit="true" add="true" required="true"/>
+    </elements>
+</component>

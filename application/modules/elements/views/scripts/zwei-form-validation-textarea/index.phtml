@@ -1,0 +1,19 @@
+<textarea id="<?=$this->domId . $this->i?>" name="<?=$this->target?>" data-dojo-type="zwei.form.ValidationTextarea" <?=$this->readonly.$this->disabled.$this->required.$this->regExp.$this->trim.$this->invalidMessage.$this->promptMessage.$this->onblur.$this->style ?>
+<?php 
+if (!empty($this->maxlength)) :
+?>
+        onKeyDown="limitText(document.getElementById('<?=$this->domId . $this->i?>'), document.getElementById('<?=$this->domId . $this->i?>_countdown'), <?=$this->maxlength ?>);"
+        onKeyUp="limitText(document.getElementById('<?=$this->domId . $this->i?>'), document.getElementById('<?=$this->domId . $this->i?>_countdown'), <?=$this->maxlength ?>);" 
+        onclick="setTimeout('limitText(document.getElementById(\'<?=$this->domId . $this->i?>\'), document.getElementById(\'<?=$this->domId . $this->i?>_countdown\'), <?=$this->maxlength ?>)', 100);" 
+<?php 
+endif;
+?>>
+<?=str_replace('"','&quot;',$this->value)?>
+</textarea>
+<?php 
+if (!empty($this->maxlength)) :
+?>
+    <div class="aux"><input type="text" name="<?=$this->domId . $this->i?>_countdown" style="width:35px; float:left;" id="<?=$this->domId . $this->i?>_countdown" dojoType="dijit.form.ValidationTextBox" size="3" value="" readonly="" /><label class="tip">caracteres disponibles.</label></div>
+<?php 
+endif;
+?>

@@ -1,0 +1,26 @@
+<select data-dojo-type="dojox/form/CheckedMultiSelect" multiple="true" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" <?=$this->readonly.$this->disabled.$this->required.$this->trim.$this->invalidMessage.$this->promptMessage.$this->onblur.$this->value.$this->onchange.$this->onclick?>>
+<?php 
+if ($this->disabled) :
+?>
+    <script type="dojo/on" data-dojo-event="mouseover" data-dojo-args="e">
+    if (dojo.byId('<?=$this->domId.$this->i?>').disabled) { 
+        dijit.byId('<?=$this->domId.$this->i?>').set('disabled', true);
+        dojo.byId('<?=$this->domId.$this->i?>').disabled = true;
+    }
+    </script>
+<?php 
+endif;
+?>
+    <?=$this->options ?>
+</select>
+<?php 
+if (!empty($this->style)) :
+?>
+<style type="text/css">
+#widget_<?=$this->domId . $this->i?> .dojoxCheckedMultiSelectWrapper {
+    <?=$this->style?>
+}
+</style>
+<?php 
+endif;
+?>

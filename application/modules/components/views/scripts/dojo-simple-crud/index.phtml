@@ -1,0 +1,85 @@
+<?php 
+if ($this->mainPane != 'dijitTabs') :
+?>
+<h2><?=$this->name?></h2>
+<?php 
+endif;
+$requestForm = $_REQUEST;
+if ($this->ajax) $requestForm['loadPartial'] = 'true';
+?>
+<?php 
+if (isset($this->menus) && in_array($this->menus, array('contextMenu', 'both'))) :
+?>
+    <?=$this->action('context-menu', 'dojo-simple-crud', 'components', $_REQUEST)?>
+<?php 
+endif;
+?>
+<?=$this->includeJs?>
+<?php 
+if ($this->searchersOutsideContent) :
+?>
+    <div data-dojo-type="dijit/layout/ContentPane">
+        <?=$this->action('search', 'dojo-simple-crud', 'components', $_REQUEST)?>
+    </div>
+<?php 
+endif;
+?>
+<div id="<?=$this->domPrefix?>contentTab" data-dojo-type="<?=$this->containerDojoType?>" data-dojo-props="gutters:false" class="contentWrapper"  id="<?=$this->domPrefix?>contentWrapper" style="width:100%; heigth: 100%">
+    <div data-dojo-type="<?=$this->subContainerDojoType?>" data-dojo-props="gutters:false, region: 'top', executeScripts: true " style="width: 100%; height: 100%" title="<?=$this->name?>">
+        <div data-dojo-type="dojox/layout/ContentPane" data-dojo-props="region:'center', splitter:true, executeScripts: true, scriptHasHooks: true" class="contentCenter" id="<?=$this->domPrefix?>contentCenter" >
+        <script type="dojo/on" data-dojo-event="show">
+        <?=$this->onShow?>
+        </script>
+<?php 
+if (!$this->searchersOutsideContent) :
+?>
+            <?=$this->action('search', 'dojo-simple-crud', 'components', $_REQUEST)?>
+<?php 
+endif;
+?>
+            <?=$this->action('list', 'dojo-simple-crud', 'components', $_REQUEST)?>
+        </div>
+<?php 
+if (!$this->multiForm) :
+?>
+        <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="<?=$this->domPrefix?>dialog_edit" jsId="<?=$this->domPrefix?>dialog_edit" title="Editar <?=$this->name?>" <?=$this->styleDialog?> <?=$this->onloadDialog?> <?=$this->onshowDialog?> <?=$this->onhideDialog?>>
+            <?=$this->action('edit', 'dojo-simple-crud', 'components', $requestForm)?>
+        </div>
+        <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="<?=$this->domPrefix?>dialog_add" jsId="<?=$this->domPrefix?>dialog_add" title="Agregar <?=$this->name?>" <?=$this->styleDialog?> <?=$this->onloadDialog?> <?=$this->onshowDialog?> <?=$this->onhideDialog?>>
+            <?=$this->action('add', 'dojo-simple-crud', 'components', $requestForm)?>
+        </div>
+<?php 
+endif;
+?>
+      
+<?php 
+if ($this->changePassword) : 
+?>
+        <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="<?=$this->domPrefix?>dialog_editpass" jsId="<?=$this->domPrefix?>dialog_editpass" title="Cambiar Contrase&ntilde;a" <?=$this->styleDialog?> <?=$this->onloadDialog?> <?=$this->onshowDialog?> <?=$this->onhideDialog?>>
+            <?=$this->action('change-password', 'dojo-simple-crud', 'components', $_REQUEST)?>
+        </div>
+<?php 
+endif; 
+?>
+        <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>contentBottom" class="contentBottom">
+<?php 
+if (!isset($this->menus) || in_array($this->menus, array('keypad', 'both'))) :
+?>
+        <?=$this->action('keypad', 'dojo-simple-crud', 'components', $_REQUEST)?>
+<?php 
+endif;
+?>
+        </div>
+    </div>
+<?php 
+$i=0;
+foreach ($this->panes as $pane) :
+?>
+    <div data-dojo-type="dojox/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true, executeScripts: true <?=$pane->getAttribute('href') ? ', href: '.$pane->getAttribute('href') : ''?>" id="<?=$this->domPrefix?>Pane<?=$i?>" class="contentBottom"  title="<?=$pane->getAttribute('name')?>" onshow="<?=$pane->getAttribute('onshow')?>">
+    </div>
+<?php
+    $i++; 
+endforeach;
+?>
+</div>
+<input type="hidden" id="<?=$this->domPrefix?>DataUrl" value="" />

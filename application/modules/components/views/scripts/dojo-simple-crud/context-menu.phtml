@@ -1,0 +1,290 @@
+<script>
+dojo.require("dojox.grid.enhanced.plugins.Menu");
+dojo.require("dijit.Menu");
+dojo.require("dijit.MenuItem");
+dojo.require('dijit.MenuSeparator');
+dojo.require('dijit.PopupMenuItem');
+
+var menu<?=$this->domPrefix?> = new dijit.Menu({});
+<?php
+if ($this->add) :
+?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItemAdd')) dijit.byId('<?=$this->domPrefix?>MenuItemAdd').destroy(); 
+
+menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItemAdd',
+    label: "Agregar <?=$this->name ?>",
+    iconClass: "dijitIconNewTask",
+    onClick : function(e){
+<?php 
+    if (!$this->multiForm) :
+?>
+            var form = new zwei.Form({
+                component: '<?=$this->component?>',
+                ajax: <?=$this->ajax ?>,
+                action: 'add',
+                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
+                dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                queryParams: '<?=$this->queryParams?>'
+            }); 
+            form.showDialog();
+<?php 
+    else :
+?>
+            var form = new zwei.Form({
+                component: '<?=$this->component?>',
+                prefix: '<?=$this->domPrefix?>',
+                ajax: <?=$this->ajax ?>,
+                action: 'add',
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                queryParams: '<?=$this->queryParams?>',
+                title: 'Agregar <?=$this->name?>'
+            }); 
+            form.showDialog();
+
+<?php 
+    endif;
+?>
+    }
+}));
+<?php
+endif;
+?>
+<?php
+if ($this->edit) :
+?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItemEdit')) dijit.byId('<?=$this->domPrefix?>MenuItemEdit').destroy(); 
+
+menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItemEdit',
+    label: "Editar <?=$this->name ?>",
+    iconClass: "dijitIconEdit",
+    onClick : function(e){
+<?php 
+    if (!$this->multiForm) :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'edit',
+                    dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
+                    dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'),
+                    queryParams: '<?=$this->queryParams?>',
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+                }); 
+                form.showDialog();
+<?php 
+    else :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'edit',
+                    title: 'Editar <?=$this->name ?>',
+                    prefix: '<?=$this->domPrefix?>',
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    queryParams: '<?=$this->queryParams?>',
+                    keys : <?=$this->jsPrimary?>
+                }); 
+                form.showMultipleDialogs();
+<?php 
+    endif;
+?>
+    }
+}));
+<?php
+    if ($this->validateGroupEdit) :
+?>
+    dojo.connect(menu<?=$this->domPrefix?>, 'onOpen', function(e){
+        var items = dijit.byId('<?=$this->domPrefix?>dataGrid').selection.getSelected();
+        if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+        dijit.byId('<?=$this->domPrefix?>MenuItemEdit').set('disabled', items[0].admPortalIsAllowedEDIT!='1');
+    });
+<?php
+    endif;
+?>
+<?php
+endif;
+?>
+<?php 
+if ($this->delete) :
+?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItemDelete')) dijit.byId('<?=$this->domPrefix?>MenuItemDelete').destroy(); 
+    
+menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItemDelete',
+    label: "Eliminar <?=$this->name ?>",
+    iconClass: "dijitIconDelete",
+    onClick : function(){
+<?php 
+    if (!$this->multiForm) :
+?>
+            var form = new zwei.Form({
+                ajax: <?=$this->ajax ?>,
+                action: 'delete',
+                component: '<?=$this->component?>',
+                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                model: '<?=$this->model?>',
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
+                keys : <?=$this->jsPrimary?>
+            }); 
+            form['delete']();
+<?php 
+    else :
+?>
+            var form = new zwei.Form({
+                ajax: <?=$this->ajax ?>,
+                action: 'delete',
+                component: '<?=$this->component?>',
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                model: '<?=$this->model?>',
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
+                keys : <?=$this->jsPrimary?>
+            }); 
+            form['delete']();
+<?php 
+    endif;
+?>
+    }
+}));
+<?php
+    if ($this->validateGroupDelete) :
+?>
+        dojo.connect(menu<?=$this->domPrefix?>, 'onOpen', function(e){
+            var items = dijit.byId('<?=$this->domPrefix?>dataGrid').selection.getSelected();
+            if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+            dijit.byId('<?=$this->domPrefix?>MenuItemDelete').set('disabled', items[0].admPortalIsAllowedDELETE!='1');
+        });
+<?php
+    endif;
+?>
+<?php
+endif;
+?>
+<?php 
+if ($this->clone) :
+?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItemClone')) dijit.byId('<?=$this->domPrefix?>MenuItemClone').destroy(); 
+
+menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItemClone',
+    label: "Clonar <?=$this->name ?>",
+    iconClass: "dijitIconNewTask",
+    onClick : function(){
+<?php 
+    if (!$this->multiForm) :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'clone',
+                    dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
+                    dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+                });
+                form.showDialog();
+<?php 
+    else :
+?>
+                var form = new zwei.Form({
+                    ajax: <?=$this->ajax ?>,
+                    component: '<?=$this->component?>',
+                    action: 'clone',
+                    title: 'Clonar <?=$this->name?>',
+                    prefix: '<?=$this->domPrefix?>',
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    keys : <?=$this->jsPrimary?>
+                });
+                form.showMultipleDialogs();
+<?php 
+    endif;
+?>
+    }
+}));
+<?php
+endif;
+?>
+<?php 
+if ($this->changePassword) :
+?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItemChangePass')) dijit.byId('<?=$this->domPrefix?>MenuItemChangePass').destroy(); 
+
+menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItemChangePass',
+    label: "Cambiar Contraseña",
+    iconClass: "dijitIconEdit",
+    onClick : function(){
+        var form = new zwei.Form({
+            ajax: false,
+            component: '<?=$this->component?>',
+            action: 'edit',
+            dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_editpass'), 
+            dijitForm: dijit.byId('<?=$this->domPrefix?>form_editpass'), 
+            dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+        }); 
+        form.showDialog();
+    }
+}));
+<?php
+    if ($this->validateGroupEdit) :
+?>
+        dojo.connect(menucampanas_xml, 'onOpen', function(e){
+            var items = dijit.byId('<?=$this->domPrefix?>dataGrid').selection.getSelected();
+            if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+            dijit.byId('<?=$this->domPrefix?>MenuItemChangePass').set('disabled', items[0].admPortalIsAllowedEDIT!='1');
+        });
+<?php
+    endif;
+?>
+<?php
+endif;
+?>
+<?php 
+foreach ($this->customFunctions as $i => $f) :
+    $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
+    $target = isset($f['target']) && !empty($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+    $disabled = isset($f['disabled']) && $f['disabled'] == 'true' ? 'true' : 'false';
+?>
+if (dijit.byId('<?=$this->domPrefix?>MenuItem<?=$i?>')) dijit.byId('<?=$this->domPrefix?>MenuItem<?=$i?>').destroy(); 
+
+menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuItem<?=$i?>',
+    label: "<?=$f['name'] ? $f['name'] : $f['target']?>",
+    iconClass: "<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>",
+    disabled: <?=$disabled?>,
+    onClick : function(){
+        <?=$onclick.$target?>
+    }
+}));
+<?php 
+endforeach;
+?>
+<?php 
+foreach ($this->excel as $i => $f) :
+    $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->zweiExcelVersion;
+    $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Descargar como Excel' ;
+    $disabled = $f->getAttribute('disabled') || !$this->list ? 'true' : 'false';
+?>
+if (dijit.byId('<?=$this->domPrefix?>MenuExcel<?=$formatter?>')) dijit.byId('<?=$this->domPrefix?>MenuExcel<?=$formatter?>').destroy(); 
+menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuExcel<?=$formatter?>',
+    label: "<?=$name?>",
+    iconClass: "dijitLeaf",
+    disabled: <?=$disabled?>,
+    onClick : function(){
+        var form = new zwei.Form({
+            dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
+            dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 
+            queryParams: 'format=excel&excel_formatter=<?=$formatter?>',
+            iframe: dojo.byId('ifrm_process')
+        });
+        form.loadData();
+    }
+}));
+<?php 
+endforeach;
+?>
+menu<?=$this->domPrefix?>.startup();
+</script>

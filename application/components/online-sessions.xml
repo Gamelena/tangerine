@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="components.xsd" name="Sesiones"
+    type="dojo-simple-crud" target="AclSessionOnlineModel" list="true"
+    edit="false" add="false" delete="true">
+    <elements>
+        <element name="Id de Sesión" target="id"
+            type="dijit-form-validation-text-box" visible="true" />
+        <element name="Usuario" target="user_name"
+            type="dijit-form-validation-text-box" visible="true" />
+        <element name="Perfil" target="role_name"
+            type="dijit-form-validation-text-box" visible="true" />
+        <element name="IP" target="ip"
+            type="dijit-form-validation-text-box" visible="true" />
+        <element name="E-Mail" target="email"
+            type="dijit-form-validation-text-box" />
+        <element name="Última actividad" target="modified"
+            type="dijit-form-validation-text-box" visible="true" />
+    </elements>
+</component>

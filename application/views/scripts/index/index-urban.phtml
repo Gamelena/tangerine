@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Panel de Administracion</title>
+<meta http-equiv="content-language" content="es" />
+<script type="text/javascript">var base_url="<?=$this->base_url?>";</script>
+<?=$this->headStyle()?>
+<?=$this->dojo()?>
+<script type="text/javascript" src="<?=$this->base_url?>js/libs/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="<?=$this->base_url?>js/ajax.js"></script>
+<script type="text/javascript" src="<?=$this->base_url?>js/admin.js"></script>
+<script type="text/javascript" src="<?=$this->base_url?>js/md5.js"></script>
+</head>
+<body class="<?=$this->body_class?>">
+    <div class="container">
+        <div id="header">
+            <div class="logo"><?=$this->admin_title?></div>
+            <div class="disclaimer"><?=$this->admin_description?>. <a href="<?=$this->base_url?>index/logout"><b>Salir</b></a></div>
+            <?=$this->list?>
+        </div>
+        <div id="area" class="<?=$this->body_class?>">
+            <div id="ajax_box"><?=$this->content?></div>
+            <div class="bottom">&nbsp;</div>
+        </div>
+        <div class="brclear"></div>
+    </div>
+    <div id="black_overlay"></div>
+    <div id="popup">
+        <div style="text-align:right"><a href="javascript:void(0)"	onClick="close_popup()" title="Close">
+            <img style="display:inline" src="<?=$this->base_url?>images/close.png" /></a>
+        </div>
+        <div id="popup_body"></div>
+    </div>
+    <div id="context">
+        <div style="text-align:right"><a href="javascript:void(0)" onClick="close_context()" title="Close"><img style="display:inline" src="<?=$this->base_url?>images/close.png" /></a></div>
+        <div id="context_body"></div>
+    </div>
+</body>
+</html>

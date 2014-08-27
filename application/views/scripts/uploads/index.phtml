@@ -1,0 +1,24 @@
+<html>
+<head>
+<link rel="stylesheet" href="/dojotoolkit/dijit/themes/claro/claro.css" />
+<link rel="stylesheet"
+	href="/dojotoolkit/dojox/form/resources/FileInput.css" />
+<link rel="stylesheet" href="<?=$this->base_url?>/css/admin.css" />
+<script type="text/javascript" src="/dojotoolkit/dojo/dojo.js"
+	djConfig="isDebug:false, parseOnLoad: true, debugAtAllCosts:false"></script>
+<script type="text/javascript">
+		dojo.require("dojox.form.Uploader");
+	</script>
+</head>
+<body class="claro" style="background: #fff;">
+<form method="post"
+	action="<?=$this->base_url?>uploads/abonados-promocion?id=<?=$_REQUEST['id']?>"
+	id="myForm" enctype="multipart/form-data" target="ifrm_process"><input
+	class="browseButton" name="uploadedfile" multiple="false" type="file"
+	dojoType="dojox.form.Uploader" label="Seleccionar archivo"
+	id="uploader" /> <input type="submit" label="Cargar Abonados"
+	value="Cargar Abonados" dojoType="dijit.form.Button" /></form>
+<!--<textarea cols="50" rows="6" id="fileToUpload"></textarea>-->
+<iframe name="ifrm_process" id="ifrm_process" style="display: none;"></iframe>
+</body>
+</html>
