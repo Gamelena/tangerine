@@ -1,5 +1,7 @@
 Selenium es una herramienta para automatizar tests basados en browser.
 
+Para usarlo con phpunit debe estar instalada la extension phpunit-selenium
+
 Instalación 
 - Descargar el .jar Selenium SERVER desde http://www.seleniumhq.org/download/
 - Dejarlo el archivo en /usr/local/bin 

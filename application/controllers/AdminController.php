@@ -342,8 +342,8 @@ class AdminController extends Zend_Controller_Action
         
     
         $loginForm = new Zend_Dojo_Form();
-        $loginForm->setAction($this->_request->getBaseUrl().'/admin/login/')
-        ->setTranslator(new Zend_Translate('array',array("Value is required and can't be empty"=>"Este valor no puede ir vacío"),'es'))
+        $loginForm->setAction($this->_request->getBaseUrl() . '/admin/login/')
+        ->setTranslator(new Zend_Translate('array', array("Value is required and can't be empty"=>"Este valor no puede ir vacío"), 'es'))
 
         ->setMethod('post')
         ->setAttrib('id', 'loginForm')

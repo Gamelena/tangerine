@@ -263,9 +263,12 @@ dojo.declare("zwei.Admportal", null, {
                             this.openOnClick = true;
                         }     
                     },
-                    _createTreeNode: function(
-                        args) {
+                    _createTreeNode: function(args) {
                         var tnode = new dijit._TreeNode(args);
+                        if (typeof args.item.id !== 'undefined') {
+                        	var id = 'dijitEditorMenuModule' + args.item.id.toString();
+                        	tnode.set('id', id);
+                        }
                         tnode.labelNode.innerHTML = args.label;
                         return tnode;
                     },

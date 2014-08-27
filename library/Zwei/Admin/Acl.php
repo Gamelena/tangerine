@@ -364,7 +364,11 @@ class Zwei_Admin_Acl extends Zend_Acl
             $this->_resource = $aclModulesModel->getModuleId($module);//@FIXME
         //$allowed         = $this->isAllowed($this->_userInfo->acl_roles_id, $this->_resource, $permission);//@FIXME
         $rolesModulesActions = new AclRolesModulesActionsModel();
-        $allowed = $rolesModulesActions->findAclModulesIdAclRolesId($this->_resource , $this->_userInfo->acl_roles_id, $aclActionsId)->count() > 0;//WORKAROUND @FIXME
+        $allowed = $rolesModulesActions->findAclModulesIdAclRolesId(
+       		$this->_resource, 
+            $this->_userInfo->acl_roles_id, 
+        	$aclActionsId
+        )->count() > 0;//WORKAROUND @FIXME
         
         
         return $allowed;

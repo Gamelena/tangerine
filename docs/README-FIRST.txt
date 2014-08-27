@@ -13,7 +13,17 @@ Requerimientos Básicos
 
 - Zend Framework 1.11.11 
 http://www.zend.com/community/downloads.
-descomprimirlo en /usr/share/php/Zend y agregar /usr/share/php/ al include_path en php.ini.
+Descomprimirlo en y agregar la ruta de instalación a la variable "include_path" en los 2 archivos php.ini 
+	(un archivo es cargado por Apache y el otro para procesos CLI como phpunit) .
+Ejemplo:
+
+	include_path = ".:/usr/share/php:/usr/share/php/libzend-framework-php"
+	
+Verificar el charset configurado, para evitar problemas de charset se recomienda agregar.
+
+	default_charset = "UTF-8" 
+	
+	al archivo php.ini cargado por apache
 
 - Dojo Toolkit 1.9.1
 http://download.dojotoolkit.org/
@@ -34,7 +44,7 @@ Alias /dojotoolkit/ "/usr/share/javascript/dojotoolkit/"
 </Directory>
 
 
-- PHP Unit 3.5.15 (Opcional para hacer pruebas unitarias)
+- PHP Unit 3.5.15 o 3.7.28 (Opcional para hacer pruebas unitarias), no funciona con 3.6.*, otras versiones no han sido probadas.
 
 
 Para crear un nuevo proyecto con AdmPortal:
