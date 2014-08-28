@@ -271,3 +271,4 @@ CREATE TABLE IF NOT EXISTS `web_settings` (
 DROP TABLE IF EXISTS `tables_logged`;
 DROP VIEW IF EXISTS `tables_logged`;
 CREATE VIEW `tables_logged` AS select distinct `log_book`.`table` AS `id`,`log_book`.`table` AS `title` from `log_book` order by `log_book`.`table`;
+
