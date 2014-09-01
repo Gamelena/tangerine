@@ -109,7 +109,6 @@ class CrudRequestController extends Zend_Controller_Action
                     $aclAction = strtoupper($this->_form->action);
                     if ($validateXml[$aclAction]) {
                         $validatedCUD = $this->_model->validateXmlAcl($this->_form, $this->_xml);
-                        Console::debug(array($aclAction, $validatedCUD));
                         if (!$validatedCUD) {
                             $this->_responseContent['state'] = $aclAction . "_FAIL";
                             $this->_responseContent['message'] = 'Acceso denegado.';
