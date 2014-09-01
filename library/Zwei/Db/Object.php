@@ -122,7 +122,6 @@ class Zwei_Db_Object
         
         //Se imprime query en log debug según configuración del sitio
         if (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($this->_select->__toString(), 'query_log');
-        if (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($this->_select->getAdapter()->getConfig(), 'query_log');
         return $this->_select;
     }
     /**

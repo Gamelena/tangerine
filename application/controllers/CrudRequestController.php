@@ -40,6 +40,12 @@ class CrudRequestController extends Zend_Controller_Action
      */
     private $_xml;
     
+    /**
+     * Lista de control de accesos
+     * @var Zwei_Admin_Acl
+     */
+    private $_acl;
+    
     public function init()
     {
         $this->_form = new Zwei_Utils_Form();
@@ -81,11 +87,6 @@ class CrudRequestController extends Zend_Controller_Action
     
     public function indexAction()
     {
-        
-        /**
-         * [TODO] Validar segun perfil de usuario autorizado a obtener estos datos
-         */
-        
         if (isset($this->_form->format) && $this->_form->format == 'json') {
             $this->_helper->ContextSwitch->setAutoJsonSerialization(false)->addActionContext('index', 'json')->initContext();
         }
@@ -100,205 +101,229 @@ class CrudRequestController extends Zend_Controller_Action
                 throw new Zend_Application_Resource_Exception($classModel . ": " . $e->getMessage(), $e->getCode());
             }
             $this->view->collection = array();
-            
+            $validateXml = $this->_model->getValidateXmlAcl();
+                        
             if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
                 if (isset($this->_form->action)) {
-                    $where = array();
-                    
-                    foreach ($_FILES as $i => $v) {
-                        $tmpTargets = array_keys($v['name']);
-                        $target     = $tmpTargets[0];
-                        $path       = !empty($this->_form->pathdata[$target]) ? $this->_form->pathdata[$target] : ROOT_DIR . '/public/upfiles';
+                    $validatedCUD = true;
+                    $aclAction = strtoupper($this->_form->action);
+                    if ($validateXml[$aclAction]) {
+                        $validatedCUD = $this->_model->validateXmlAcl($this->_form, $this->_xml);
+                        Console::debug(array($aclAction, $validatedCUD));
+                        if (!$validatedCUD) {
+                            $this->_responseContent['state'] = $aclAction . "_FAIL";
+                            $this->_responseContent['message'] = 'Acceso denegado.';
+                            $this->_responseContent['type'] = 'error';
+                            $this->_responseContent['more'] = null;
+                            $this->_responseContent['todo'] = null;
+                        }
+                    }
+                    if ($validatedCUD) {
+                        $where = array();
                         
-                        $element = $this->_xml->getElements("@target='$target'");
-                        
-                        $infoFiles = $this->_form->upload($i, $path);
-                        if ($infoFiles) {
-                            $j = 0;
-                            foreach ($infoFiles as $k => $l) {
-                                $this->_form->data[$k] = $l['filename'];
-                                //Crear miniaturas de imagen si corresponde
-                                if ($element[$j]->existsChildren('thumb')) {
-                                    foreach ($element[$j]->thumb as $t) {
-                                        $this->createThumb($t, $l, $path);
+                        foreach ($_FILES as $i => $v) {
+                            $tmpTargets = array_keys($v['name']);
+                            $target     = $tmpTargets[0];
+                            $path       = !empty($this->_form->pathdata[$target]) ? $this->_form->pathdata[$target] : ROOT_DIR . '/public/upfiles';
+                            
+                            $element = $this->_xml->getElements("@target='$target'");
+                            
+                            $infoFiles = $this->_form->upload($i, $path);
+                            if ($infoFiles) {
+                                $j = 0;
+                                foreach ($infoFiles as $k => $l) {
+                                    $this->_form->data[$k] = $l['filename'];
+                                    //Crear miniaturas de imagen si corresponde
+                                    if ($element[$j]->existsChildren('thumb')) {
+                                        foreach ($element[$j]->thumb as $t) {
+                                            $this->createThumb($t, $l, $path);
+                                        }
                                     }
+                                    $j++;
                                 }
-                                $j++;
-                            }
-                        } else {
-                            Console::error("error al subir archivo a $path");
-                        }
-                    }
-                    
-                    if (isset($this->_form->deletedata)) {
-                        foreach ($this->_form->deletedata as $i => $v) {
-                            if (!@unlink($path . $v)) {
-                                Console::error("no se pudo borrar " . $this->_form->pathdata[$i] . $v);
-                            }
-                            $this->_form->data[$i] = '';
-                        }
-                    }
-                    
-                    
-                    if ($this->_form->action == 'add') {
-                        foreach ($this->_form->data as $i => $v) {
-                            $data[$i] = $v;
-                        }
-                        
-                        try {
-                            $response = $this->_model->insert($data);
-                            if ($response) {
-                                $this->_responseContent['state'] = 'ADD_OK';
-                                $this->_responseContent['type'] = 'message';
                             } else {
-                                $this->_responseContent['state'] = 'ADD_FAIL';
-                                $this->_responseContent['type'] = 'error';
+                                Console::error("error al subir archivo a $path");
                             }
-                        } catch (Zend_Db_Exception $e) {
-                            $this->_responseContent['state'] = 'ADD_FAIL';
-                            $this->_responseContent['type'] = 'error';
-                            Console::error("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
-                        }
-                    } else if ($this->_form->action == 'delete') {
-                        if (isset($this->_form->primary)) {
-                            foreach ($this->_form->primary as $i => $v) {
-                                $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $v);
-                            }
-                            if (count($where) == 1)
-                                $where = $where[0];
-                            
-                            $response = $this->_model->delete($where);
-                        } else {
-                            Console::error(array($this->_model->info('name'), "Se intento borrar sin parametros"));
-                            $response = false;
                         }
                         
-                        if ($response) {
-                            $this->_responseContent['state'] = 'DELETE_OK';
-                            $this->_responseContent['type'] = 'message';
-                        } else {
-                            $this->_responseContent['state'] = 'DELETE_FAIL';
-                            $this->_responseContent['type'] = 'error';
-                        }
-                    } else if ($this->_form->action == 'edit') {
-                        if (isset($this->_form->primary)) {
-                            foreach ($this->_form->primary as $i => $v) {
-                                $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $v);
+                        if (isset($this->_form->deletedata)) {
+                            foreach ($this->_form->deletedata as $i => $v) {
+                                if (!@unlink($path . $v)) {
+                                    Console::error("no se pudo borrar " . $this->_form->pathdata[$i] . $v);
+                                }
+                                $this->_form->data[$i] = '';
                             }
-                            if (count($where) == 1)
-                                $where = $where[0];
-                            
+                        }
+                        
+                        
+                        if ($this->_form->action == 'add') {
                             foreach ($this->_form->data as $i => $v) {
                                 $data[$i] = $v;
                             }
                             
                             try {
-                                $response = $this->_model->update($data, $where);
+                                $response = $this->_model->insert($data);
                                 if ($response) {
-                                    $this->_responseContent['state'] = 'UPDATE_OK';
+                                    $this->_responseContent['state'] = 'ADD_OK';
                                     $this->_responseContent['type'] = 'message';
                                 } else {
-                                    $this->_responseContent['state'] = 'UPDATE_FAIL';
+                                    $this->_responseContent['state'] = 'ADD_FAIL';
                                     $this->_responseContent['type'] = 'error';
                                 }
                             } catch (Zend_Db_Exception $e) {
+                                $this->_responseContent['state'] = 'ADD_FAIL';
+                                $this->_responseContent['type'] = 'error';
+                                Console::error("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
+                            }
+                        } else if ($this->_form->action == 'delete') {
+                            if (isset($this->_form->primary)) {
+                                foreach ($this->_form->primary as $i => $v) {
+                                    $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $v);
+                                }
+                                if (count($where) == 1)
+                                    $where = $where[0];
+                                
+                                $response = $this->_model->delete($where);
+                            } else {
+                                Console::error(array($this->_model->info('name'), "Se intento borrar sin parametros"));
+                                $response = false;
+                            }
+                            
+                            if ($response) {
+                                $this->_responseContent['state'] = 'DELETE_OK';
+                                $this->_responseContent['type'] = 'message';
+                            } else {
+                                $this->_responseContent['state'] = 'DELETE_FAIL';
+                                $this->_responseContent['type'] = 'error';
+                            }
+                        } else if ($this->_form->action == 'edit') {
+                            if (isset($this->_form->primary)) {
+                                foreach ($this->_form->primary as $i => $v) {
+                                    $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $v);
+                                }
+                                if (count($where) == 1)
+                                    $where = $where[0];
+                                
+                                foreach ($this->_form->data as $i => $v) {
+                                    $data[$i] = $v;
+                                }
+                                
+                                try {
+                                    $response = $this->_model->update($data, $where);
+                                    if ($response) {
+                                        $this->_responseContent['state'] = 'UPDATE_OK';
+                                        $this->_responseContent['type'] = 'message';
+                                    } else {
+                                        $this->_responseContent['state'] = 'UPDATE_FAIL';
+                                        $this->_responseContent['type'] = 'error';
+                                    }
+                                } catch (Zend_Db_Exception $e) {
+                                    $this->_responseContent['state'] = 'UPDATE_FAIL';
+                                    $this->_responseContent['type'] = 'error';
+                                    Console::error("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$classModel|" . $e->getTraceAsString());
+                                }
+                            } else {
+                                Console::error(array($this->_model->info('name'), "Se intento actualizar sin parametros"));
                                 $this->_responseContent['state'] = 'UPDATE_FAIL';
                                 $this->_responseContent['type'] = 'error';
-                                Console::error("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}|model:$classModel|" . $e->getTraceAsString());
                             }
-                        } else {
-                            Console::error(array($this->_model->info('name'), "Se intento actualizar sin parametros"));
-                            $this->_responseContent['state'] = 'UPDATE_FAIL';
-                            $this->_responseContent['type'] = 'error';
                         }
+                        
+                        $this->_responseContent['todo'] = $this->_model->getAjaxTodo();
+                        $this->_responseContent['more'] = $this->_model->getMore();
                     }
-                    
-                    $this->_responseContent['todo'] = $this->_model->getAjaxTodo();
-                    $this->_responseContent['more'] = $this->_model->getMore();
                 } else {
-                    //[TODO] validar permisos para listar
-                    $oDbObject = new Zwei_Db_Object($this->_form);
-                    $oSelect   = $oDbObject->select();
-                    
-                    if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) {
-                        $adapter = $this->_model->getZwAdapter();
+                    $validatedR = true;
+                    if ($validateXml['LIST']) {
+                        $validatedR = $this->_model->validateXmlAcl($this->_form, $this->_xml);
+                    } 
+               
+                    if ($validatedR) {
+                        $oDbObject = new Zwei_Db_Object($this->_form);
+                        $oSelect   = $oDbObject->select();
                         
-                        if (isset($adapter) && !empty($adapter))
-                            $this->_model->setAdapter($adapter);
-                        try {
-                            $data      = $this->_model->fetchAll($oSelect);
-                        } catch (Zend_Db_Exception $e) {
-                            throw new Zend_Db_Exception("$classModel::select() {$e->getMessage()}", $e->getCode());
-                        }
-                        if ($this->_model->count() === false) {
-                            $paginator = Zend_Paginator::factory($oSelect);
-                            $numRows   = $paginator->getTotalItemCount();
+                        if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) {
+                            $adapter = $this->_model->getZwAdapter();
+                            
+                            if (isset($adapter) && !empty($adapter))
+                                $this->_model->setAdapter($adapter);
+                            try {
+                                $data      = $this->_model->fetchAll($oSelect);
+                            } catch (Zend_Db_Exception $e) {
+                                throw new Zend_Db_Exception("$classModel::select() {$e->getMessage()}", $e->getCode());
+                            }
+                            if ($this->_model->count() === false) {
+                                $paginator = Zend_Paginator::factory($oSelect);
+                                $numRows   = $paginator->getTotalItemCount();
+                            } else {
+                                $numRows = $this->_model->count();
+                            }
                         } else {
-                            $numRows = $this->_model->count();
+                            $data = $this->_model->fetchAll();
                         }
+                        $i = 0;
+                        
+                        //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
+                        if (method_exists($this->_model, 'overloadDataList') && $this->_model->overloadDataList($data)) {
+                            if (!method_exists($this->_model, 'count') || $this->_model->count() === false) {
+                                $data      = $this->_model->overloadDataList($data);
+                                $countData = count($data);
+                                if ($numRows < $countData) {
+                                    $numRows = $countData;
+                                }
+                            }
+                        }
+                        
+                        //si ?format=excel exportamos el rowset a excel
+                        if (isset($this->_form->format) && $this->_form->format == 'excel') {
+                            $this->_helper->layout->disableLayout();
+                            $this->_helper->viewRenderer->setNoRender();
+                            
+                            $table = new Zwei_Utils_Table();
+                            
+                            if (in_array($this->_form->excel_formatter, array('Excel5', 'Excel2007'))) {
+                                if (isset($this->_form->p)) {
+                                    $content = $table->rowsetToExcel($data, $this->_form->p);
+                                } else {
+                                    $content = $table->rowsetToExcel($data);
+                                }
+                                $this->view->content = $content;
+                            } else if ($this->_form->excel_formatter == 'csv') {
+                                header("Pragma: public");
+                                header("Expires: 0");
+                                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                                header("Content-Type: application/force-download");
+                                header("Content-Type: application/octet-stream");
+                                header("Content-Type: application/download");
+                                header("Content-Disposition: attachment; filename={$this->_form->model}.csv");
+                                header('Content-Encoding: UTF-8');
+                                header('Content-type: text/csv; charset=UCS-2LE');
+                                
+                                
+                                if (isset($this->_form->p)) {
+                                    $content = $table->rowsetToCsv($data, $this->_form->p);
+                                } else {
+                                    $content = $table->rowsetToCsv($data);
+                                }
+                                $this->view->content = chr(255) . chr(254) . mb_convert_encoding($content, 'UCS-2LE', 'UTF-8');
+                            } else {
+                                header('Content-type: application/vnd.ms-excel');
+                                header("Content-Disposition: attachment; filename={$this->_form->model}.xls");
+                                header("Pragma: no-cache");
+                                header("Expires: 0");
+                                
+                                if (isset($this->_form->p)) {
+                                    $content = $table->rowsetToHtml($data, $this->_form->p);
+                                } else {
+                                    $content = $table->rowsetToHtml($data);
+                                }
+                                $this->view->content = $content;
+                            }
+                        
+                            $this->render();
+                        } 
                     } else {
-                        $data = $this->_model->fetchAll();
-                    }
-                    $i = 0;
-                    
-                    //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
-                    if (method_exists($this->_model, 'overloadDataList') && $this->_model->overloadDataList($data)) {
-                        if (!method_exists($this->_model, 'count') || $this->_model->count() === false) {
-                            $data      = $this->_model->overloadDataList($data);
-                            $countData = count($data);
-                            if ($numRows < $countData) {
-                                $numRows = $countData;
-                            }
-                        }
-                    }
-                    
-                    //si ?format=excel exportamos el rowset a excel
-                    if (isset($this->_form->format) && $this->_form->format == 'excel') {
-                        $this->_helper->layout->disableLayout();
-                        $this->_helper->viewRenderer->setNoRender();
-                        
-                        $table = new Zwei_Utils_Table();
-                        
-                        if (in_array($this->_form->excel_formatter, array('Excel5', 'Excel2007'))) {
-                            if (isset($this->_form->p)) {
-                                $content = $table->rowsetToExcel($data, $this->_form->p);
-                            } else {
-                                $content = $table->rowsetToExcel($data);
-                            }
-                            $this->view->content = $content;
-                        } else if ($this->_form->excel_formatter == 'csv') {
-                            header("Pragma: public");
-                            header("Expires: 0");
-                            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-                            header("Content-Type: application/force-download");
-                            header("Content-Type: application/octet-stream");
-                            header("Content-Type: application/download");
-                            header("Content-Disposition: attachment; filename={$this->_form->model}.csv");
-                            header('Content-Encoding: UTF-8');
-                            header('Content-type: text/csv; charset=UCS-2LE');
-                            
-                            
-                            if (isset($this->_form->p)) {
-                                $content = $table->rowsetToCsv($data, $this->_form->p);
-                            } else {
-                                $content = $table->rowsetToCsv($data);
-                            }
-                            $this->view->content = chr(255) . chr(254) . mb_convert_encoding($content, 'UCS-2LE', 'UTF-8');
-                        } else {
-                            header('Content-type: application/vnd.ms-excel');
-                            header("Content-Disposition: attachment; filename={$this->_form->model}.xls");
-                            header("Pragma: no-cache");
-                            header("Expires: 0");
-                            
-                            if (isset($this->_form->p)) {
-                                $content = $table->rowsetToHtml($data, $this->_form->p);
-                            } else {
-                                $content = $table->rowsetToHtml($data);
-                            }
-                            $this->view->content = $content;
-                        }
-                        
-                        $this->render();
+                        $data = array();
                     }
                 }
             } else {
@@ -306,7 +331,9 @@ class CrudRequestController extends Zend_Controller_Action
             }
             
             if (count($this->_responseContent) > 0) {
-                $this->_responseContent['message'] = $this->_model->getMessage();
+                if ($this->_model->getMessage() || !isset($this->_responseContent['message'])) {
+                    $this->_responseContent['message'] = $this->_model->getMessage();
+                }
                 $data                               = array(
                     'id' => '0',
                     'state' => $this->_responseContent['state'],

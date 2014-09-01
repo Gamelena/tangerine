@@ -90,9 +90,9 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * Flag que indica si deben ser validados los permisos modulo-usuario-accion si se hace un request via CrudRequestController.
      * @todo unimplemented, implementar en CrudRequestController
      *
-     * @var array(EDIT|ADD|DELETE|LIST)
+     * @var array
      */
-    protected $_validateModulePermissions = array('EDIT', 'ADD', 'DELETE');
+    protected $_validateXmlAcl = array('EDIT' => false, 'ADD' => false, 'DELETE' => false, 'LIST' => false);
     
     /**
      * Post Constructor.
@@ -112,7 +112,10 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         parent::init();
     }
     
-    
+    public function getValidateXmlAcl()
+    {
+        return $this->_validateXmlAcl;
+    }
     
     /**
      * Configura el adaptador de base de datos segun valores de atributo de configuración.
@@ -449,6 +452,27 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         }
         return $return;
     }
+    
+    /**
+     * 
+     * @param Zwei_Utils_Form<model, p, action> $form
+     * @param Zwei_Admin_Xml $xml
+     * @return boolean
+     */
+    public function validateXmlAcl($form, $xml)
+    {
+        $action = isset($form->action) ? strtoupper($form->action) : 'LIST';
+        $this->_acl = new Zwei_Admin_Acl();
+        $validatedList = true;
+        if ($xml->getAttribute('target') !== $form->model) {
+            $validatedList = false;
+            Console::error("{$form->model} no existe en {$form->p}");
+        } else if (!$this->_acl->isUserAllowed($form->p, $action)) {
+            $validatedList = false;
+        }
+        return $validatedList;
+    }
+    
     
     /**
      * get primary key
