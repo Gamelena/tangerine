@@ -69,6 +69,10 @@ if (!$this->loadPartial) :
                 $params['domId'] = $this->domPrefix . "_{$modAux}_".$this->dialogIndex;
                 $params['mode'] = $this->mode;
                 $params['i'] = $j;
+                if (!isset($params['type'])) {
+                    throw new Zwei_Exception("Nodo XML <element> debe tener atributo 'type'.");
+                }
+                
                 $hidden = $params['type'] == 'hidden' ? ' style="display:none"' : '';
                 
                 if (isset($_REQUEST[$params['target']])) $params['value'] = $_REQUEST[$params['target']]; //Esto aplica para formularios cargados vía ajax

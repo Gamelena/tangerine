@@ -61,7 +61,7 @@ class Zwei_Utils_Array
      * @param SimpleXMLElement $xml
      * @return SimpleXMLElement
      */
-    static function toXml($array, $xml)
+    static function toXml(array $array, $xml)
     {
         foreach ($array as $k => $v) {
             if (is_object($v)) $v = (array) $v;
