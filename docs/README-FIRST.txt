@@ -10,7 +10,7 @@ Requerimientos Básicos
 5.2.4 o superior (idealmente php 5.5).
 
 
-- Zend Framework 1.*
+- Zend Framework 1.11.*
 - PhpUnit 3.7.*
 
 INSTALACION DE DEPENDENCIAS
@@ -40,7 +40,7 @@ Son 2 archivos: un archivo para cli y un archivo para apache (en Ubuntu /etc/php
 	/usr/share/php/phpunit/phpunit/PHPUnit
 	
 Debiera quedar algo similar a esto
-	include_path = ".:/usr/share/php:/usr/share/php/zendframework/zendframework1/library:/usr/share/php/phpunit/phpunit/PHPUnit"
+	include_path = ".:/usr/share/php:/usr/share/php/zendframework/zendframework1/library:/usr/share/php/phpunit/phpunit:/usr/share/php/phpunit/phpunit/PHPUnit"
 
 	
 Para evitar problemas de charset en los caracteres especiales en el despliegue web, se debe agregar 

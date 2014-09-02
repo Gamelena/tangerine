@@ -5,8 +5,12 @@ class CrudRequestControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 
     public function setUp()
     {
-        $this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
+        $this->bootstrap = $this->bootstrap = new Zend_Application(
+            APPLICATION_ENV,
+            $_ENV['APPLICATION_CONFIG']
+        );
         $options = $this->bootstrap->getBootstrap()->getOptions();
+        $_SERVER['HTTP_HOST'] = $options['zwei']['uTesting']['httpHost'];
         parent::setUp();
     }
 

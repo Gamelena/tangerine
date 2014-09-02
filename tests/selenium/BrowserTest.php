@@ -1,9 +1,12 @@
 <?php
-class WebTest extends PHPUnit_Extensions_Selenium2TestCase
+class BrowserTest extends PHPUnit_Extensions_Selenium2TestCase
 {
     protected function setUp()
     {
-        $this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
+        $this->bootstrap = new Zend_Application(
+            APPLICATION_ENV,
+            $_ENV['APPLICATION_CONFIG']
+        );
         $options = $this->bootstrap->getBootstrap()->getOptions();
        
         defined('PHPUNIT_BASE_URL') 
@@ -53,7 +56,7 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
         $this->initUserInfo();
         $this->iterateTree($modules->getTree());
         
-        sleep(PHPUNIT_WAITSECONDS);
+        sleep(PHPUNIT_WAITSECONDS*5);
     }
     
     public function iterateTree($tree)
@@ -65,15 +68,13 @@ class WebTest extends PHPUnit_Extensions_Selenium2TestCase
                 $item->click();
                 sleep(PHPUNIT_WAITSECONDS/5);
             } catch (PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
-                echo "No pude abrir item dijitEditorMenuModule{$branch['id']}\n";
+                echo "No pude abrir item dijitEditorMenuModule{$branch['id']}, parent {$branch['parent_id']}\n";
                 return true;
             }
-            if ($branch['children']) {
+            if (isset($branch['children'])) {
+                var_dump($branch);
                 $this->iterateTree($branch['children']);
             }
-        }
-        foreach ($openLater as $item) {
-            $this->byId($item)->click();
         }
     }
     
