@@ -101,7 +101,9 @@ class CrudRequestController extends Zend_Controller_Action
                 throw new Zend_Application_Resource_Exception($classModel . ": " . $e->getMessage(), $e->getCode());
             }
             $this->view->collection = array();
-            $validateXml = $this->_model->getValidateXmlAcl();
+            $validateXml = method_exists($this->_model, 'getValidateXmlAcl') 
+                ? $this->_model->getValidateXmlAcl()
+                : array('EDIT' => false, 'ADD' => false, 'DELETE' => false, 'LIST' => false);
                         
             if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
                 if (isset($this->_form->action)) {
