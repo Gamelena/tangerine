@@ -28,5 +28,7 @@ class DbTable_AclModules extends Zwei_Db_TableLoggeable
             'refColumns'        => array('id')
         )
     );
+    
+    protected $_validateXmlAcl = array('EDIT' => true, 'ADD' => true, 'DELETE' => true, 'LIST' => false);
 }
 
