@@ -4,8 +4,31 @@
     "config": {
         "vendor-dir": "/usr/share/php"
     },
+    "repositories": [
+    	{
+            "type": "package",
+            "package": {
+                "name": "zend/zendframework",
+                "version" : "1.11.9",
+                "source": {
+                    "url": "http://framework.zend.com/svn/framework/standard",
+                    "type": "svn",
+                    "reference": "tags/release-1.11.9/"
+                },
+                "autoload": {
+                    "psr-0": {
+                        "Zend": "library",
+                        "ZendX" : "library"
+                    }
+                },
+                "config": {
+                    "bin-dir": "bin"
+                }
+            }
+        }
+    ],
     "require": {
-        "zendframework/zendframework1": "1.*"
+        "zend/zendframework" : "*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
