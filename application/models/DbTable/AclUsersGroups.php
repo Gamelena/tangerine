@@ -17,5 +17,7 @@ class DbTable_AclUsersGroups extends Zwei_Db_Table
             'refColumns'        => array('id')
         )
     );
+    
+    protected $_validateXmlAcl = array('EDIT' => true, 'ADD' => true, 'DELETE' => true, 'LIST' => false);
 }
 

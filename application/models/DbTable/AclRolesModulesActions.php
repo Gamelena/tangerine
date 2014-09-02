@@ -28,5 +28,7 @@ class DbTable_AclRolesModulesActions extends Zwei_Db_Table
             'onUpdate'          => self::RESTRICT
         )
     );
+    
+    protected $_validateXmlAcl = array('EDIT' => true, 'ADD' => true, 'DELETE' => true, 'LIST' => false);
 }
 
