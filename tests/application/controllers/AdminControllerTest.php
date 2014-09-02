@@ -6,7 +6,10 @@ class AdminControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 
     public function setUp()
     {
-        $this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
+        $this->bootstrap = $this->bootstrap = new Zend_Application(
+            APPLICATION_ENV,
+            $_ENV['APPLICATION_CONFIG']
+        );
         $options = $this->bootstrap->getBootstrap()->getOptions();
         $_SERVER['HTTP_HOST'] = $options['zwei']['uTesting']['httpHost'];
         parent::setUp();
@@ -72,15 +75,7 @@ class AdminControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
         $url = $this->url($urlParams);
         $this->dispatch($url);
         $this->assertQueryCount('form#loginForm', 1);
-        /*
-        $this->getRequest()->setMethod('Post')
-        ->setPost(array(
-                'username' => 'zweicom',
-                'password' => 'zweicom'
-        ));
-        
-        $this->dispatch('/admin/login');
-        //$this->assertRedirect();
+        $this->assertQueryContentContains('.login-form .header h1', 'Suscripciones');
         
     }
 
@@ -99,12 +94,8 @@ class AdminControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
         $this->assertModule($urlParams['module']);
         $this->assertController($urlParams['controller']);
         $this->assertAction($urlParams['action']);
-        /*
-        $this->assertQueryContentContains(
-            'div#view-content p',
-            'View script for controller <b>' . $params['controller'] . '</b> and script/action name <b>' . $params['action'] . '</b>'
-            );
-            */
+        
+        $this->assertRedirect('/admin/login');
     }
 
     public function testComponentsAction()
@@ -160,6 +151,8 @@ class AdminControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
     {
         
         $params = array('action' => 'iframe', 'controller' => 'Admin', 'module' => 'default');
+        $params['p'] = 'http://192.168.11.66:8080/gda-workbench/org.kie.workbench.KIEWebapp/KIEWebapp.html';
+        
         $urlParams = $this->urlizeOptions($params);
         $url = $this->url($urlParams);
         $this->dispatch($url);
