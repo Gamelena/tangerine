@@ -249,9 +249,7 @@ class CrudRequestController extends Zend_Controller_Action
                             if (isset($adapter) && !empty($adapter))
                                 $this->_model->setAdapter($adapter);
                             try {
-                                
                                 $data      = $this->_model->fetchAll($oSelect);
-                                
                             } catch (Zend_Db_Exception $e) {
                                 throw new Zend_Db_Exception("$classModel::select() {$e->getMessage()}", $e->getCode());
                             }

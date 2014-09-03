@@ -38,7 +38,6 @@ class AdminController extends Zend_Controller_Action
      */
     public function init()
     {
-        Console::debug(Zend_Version::VERSION);
         $config = Zwei_Controller_Config::getOptions();
         $confLayout = $config->zwei->layout;
         $r = $this->getRequest();

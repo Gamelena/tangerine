@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<projectProfile type="default" version="1.11.11">
+<projectProfile type="default"  version="1.11.11">
   <projectDirectory>
     <projectProfileFile filesystemName=".zfproject.xml"/>
     <applicationDirectory classNamePrefix="">
@@ -33,13 +33,8 @@
           <actionMethod actionName="userHasGroupsAllowed"/>
           <actionMethod actionName="getUserInfo"/>
         </controllerFile>
-        <controllerFile controllerName="Demo">
-          <actionMethod actionName="index"/>
-        </controllerFile>
       </controllersDirectory>
-      <formsDirectory>
-        <formFile formName="Fuu"/>
-      </formsDirectory>
+      <formsDirectory enabled="false"/>
       <layoutsDirectory enabled="false"/>
       <modelsDirectory>
         <modelFile modelName="AclModulesModel"/>
@@ -312,9 +307,6 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Acl">
             <viewScriptFile forActionName="getUserInfo"/>
-          </viewControllerScriptsDirectory>
-          <viewControllerScriptsDirectory forControllerName="Demo">
-            <viewScriptFile forActionName="index"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>

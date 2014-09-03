@@ -7,7 +7,7 @@ README
 Requerimientos Básicos
 
 - PHP Version
-5.2.4 o superior (idealmente php 5.5).
+5.4 o superior (ZF soportal php 5.2.4, pero no Composer).
 
 
 - Zend Framework 1.11.*
