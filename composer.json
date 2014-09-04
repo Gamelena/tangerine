@@ -1,9 +1,6 @@
 {
-    "name": "zweicom/admportal",
-    "description": "Paquetes requeridos para admportal",
-    "config": {
-        "vendor-dir": "/usr/share/php"
-    },
+    "name": "glearning/tangerine",
+    "description": "Paquetes requeridos para tangerine",
     "repositories": [
     	{
             "type": "package",
@@ -39,8 +36,8 @@
     },
     "authors": [
         {
-            "name": "Desarrollo",
-            "email": "desarrollo@zweicom.com"
+            "name": "Rodrigo Riquelme",
+            "email": "rodrigo.riquelme.e@zweicom.com"
         }
     ],
     "minimum-stability": "stable"
