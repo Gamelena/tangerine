@@ -131,9 +131,7 @@ endif;
                 }
                 console.log('observer');
             });
-
             form.save();
-            
         } catch (e) {
             admportal.lockScreen(false);
             utils.showMessage(e.message, 'error');

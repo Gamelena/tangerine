@@ -112,6 +112,35 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         parent::init();
     }
     
+    /**
+     * Método Mágico PHP que permite usar self::findBy$field($value) 
+     * sin tener que escribir los finders para cada campo para cada una de las tablas. 
+     * 
+     * @param string $function
+     * @param string $args
+     * @param string $args
+     */
+    public function __call($function, $args)
+    {
+        $value = $args[0];
+        $camelCase = isset($args[1]);
+        
+        if (substr('findById', 0, 6) == 'findBy') {
+            $criteria = substr($function, 6);
+            if (!$camelCase) $criteria = strtolower($criteria);
+            else $criteria = Zwei_Utils_String::toFunctionWord($criteria);    
+            
+            $select = $this->select()
+            ->from($this->_name)
+            ->where($criteria . ' = ?', $value);
+            return $this->fetchAll($select);
+        } else {
+            throw new Exception("No existe " . __CLASS__ . "::" . $function);
+        }
+        
+    }
+    
+    
     public function getValidateXmlAcl()
     {
         return $this->_validateXmlAcl;

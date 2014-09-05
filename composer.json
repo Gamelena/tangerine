@@ -1,8 +1,12 @@
 {
     "name": "zweicom/admportal",
-    "description": "Paquetes requeridos para admportal",
+    "description": "Admportal 1",
+    "type": "library",
     "config": {
         "vendor-dir": "/usr/share/php"
+    },
+    "require": {
+        "php": ">=5.4.1"
     },
     "repositories": [
     	{
