@@ -1,4 +1,4 @@
-tangerine
+Tangerine
 =========
 
 Escalable and modular CMS and RMS, based in Zend Framework and Dojo Toolkit, integrated in XML components 
