@@ -770,3 +770,63 @@ a.settingsTab {
     border-radius: 0.5em;
     border-color: #5FAFB0;
 }
+
+/*Zwei Theme*/
+
+.zweiIconCsv {
+	background-image:  url('i/csv.png');
+	width: 16px;
+    height: 16px;
+}
+
+.zweicom .dojoxGridHeader .dojoxGridCell {
+    padding-top: 1em;
+    padding-bottom: 1em;
+	font-weight: bold;
+}
+.zweicom .dojoxGridCell {
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+.zweicom .dijitButtonNode {
+	padding-top: 0.4em;
+	padding-bottom: 0.4em;
+}
+
+.zweicom .dijitDialogTitleBar {
+    padding : 0.8em;	
+}
+
+.zweicom  a.settingsTab  {
+	font-weight: bold;
+	padding: 0.5em;
+}
+.zweicom #personalWrapper {
+	top: 0.3em;
+}
+
+.zweicom .dijitMenuItem {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+	margin: 0;
+	color: #243C5F;
+	font-weight: bold;
+}
+
+.zweicom .settingsArea {
+	overflow: hidden;
+}
+
+.zweicom .dijitDialogCloseIcon {
+	top: 8px;
+}
+
+.zweicom .dijitSelect input, .zweicom .dijitTextBox input {
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
+}
+
+.zweicom .dojoxMultiSelectItem {
+	padding: 0.3em;
+}

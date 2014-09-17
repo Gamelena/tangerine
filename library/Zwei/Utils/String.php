@@ -38,14 +38,15 @@ class Zwei_Utils_String {
     }	
     
     /**
-     * Transforma una variable a un string que sigue las convenciones Zend
-     * de nombres de clases (no incluye namespaces virtuales)
+     * Transforma una variable a un string que sigue las convenciones Zend o Java
+     * de nombres de clases (no incluye seudo namespaces de ZF 1)
      * @param $string
      * @param $limiter
      * @return string
      */
     
-    public static function toClassWord($string, $limiter="_") {
+    public static function toClassWord($string, $limiter="_")
+    {
         $string = explode($limiter, $string);
         
         if (is_array($string)) {
@@ -67,17 +68,18 @@ class Zwei_Utils_String {
      * @return string
      */
     
-    public static function toFunctionWord($string, $limiter="_") {
+    public static function toFunctionWord($string, $limiter="_")
+    {
         $string = explode($limiter, $string);
         
         if (is_array($string)) {
             $return = "";
             $i = 0;
             foreach ($string as $s) {
-                $return .= ($i==0) ? $s : ucfirst($s);
+                $return .= ($i==0) ? strtolower($s) : ucfirst($s);
                 $i++; 
             }
-        }else{
+        } else {
             $return=$string;
         }
         return $return;		
@@ -91,7 +93,8 @@ class Zwei_Utils_String {
      * @return string
      */	
     
-    public static function toVarWord($string){
+    public static function toVarWord($string)
+    {
         $string = preg_replace("/(?<=[a-zA-Z])(?=[A-Z])/", "_", $string);
         $string = preg_replace("/[\.\*-]/", "_", $string);
         return $string;
