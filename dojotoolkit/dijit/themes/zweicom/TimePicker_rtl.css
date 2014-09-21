@@ -1,0 +1,4 @@
+.dj_ie6-rtl .zweicom .dijitTimePickerMarkerHover,
+.dj_ie7-rtl .zweicom .dijitTimePickerMarkerHover {
+        border-top: 0; /* IE6/7 bug causes mouseover/out event storm */
+}

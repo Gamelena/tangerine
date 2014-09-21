@@ -1,0 +1,91 @@
+
+/* Menu */
+.zweicom .dijitMenuBar {
+  border: 1px solid #b5bcc7;
+  margin: 0;
+  padding: 0;
+  background-color: #efefef;
+  background-image: url("images/standardGradient.png");
+  background-repeat: repeat-x;
+  background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
+  background-image: -o-linear-gradient(rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
+  _background-image: none;
+}
+.zweicom .dijitMenu {
+  background-color: #ffffff;
+  border: 1px solid #759dc0;
+  /* so adjoining borders of MenuBar/ComboBox and Menu overlap, avoiding double border */
+
+  margin: -1px 0;
+}
+
+.zweicom .dijitBorderContainer .dijitMenuBar {
+	border:1px solid #B1BADF;
+}
+
+.zweicom .dijitMenuItem {
+	font-family: sans-serif;
+	margin: 0;
+	color: #243C5F;
+}
+.zweicom .dijitMenuBar .dijitMenuItem {
+	padding: 4px 5px;
+}
+
+.zweicom .dijitMenuPreviousButton, .zweicom .dijitMenuNextButton {
+	font-style: italic;
+}
+.zweicom .dijitMenuItem TD {
+	padding:1px;
+}
+
+.zweicom .dijitMenuPassive .dijitMenuItemHover,
+.zweicom .dijitComboBoxMenu .dijitMenuItemHover,
+.zweicom .dijitMenuItemSelected {
+	background-color: #d9e6f9; /* #95a0b0; #555555; #aaaaaa; #646464;  #60a1ea; #848484; */
+	color: #243C5F;
+}
+
+.zweicom .dijitMenuItemIcon {
+	width: 15px;
+	height: 15px;
+}
+
+.zweicom .dijitMenuExpand {
+	width:15px;
+	height:15px;
+	background-image: url('images/spriteRoundedIconsSmall.png');
+	background-position: -30px top;
+}
+.dj_ie6 .zweicom .dijitMenuExpand {
+	background-image: url('images/spriteRoundedIconsSmall.gif');
+}
+
+.zweicom .dijitMenuSeparator {
+	height: 1px;
+}
+
+/* separator can be two pixels -- set border of either one to 0 to have only one */
+.zweicom .dijitMenuSeparatorTop {
+	border-bottom: 1px solid #fff; /*97adcb; */
+}
+
+.zweicom .dijitMenuSeparatorBottom {
+	border-top: 1px solid #8ba0bd;
+}
+
+/* the checked menu item */
+.zweicom .dijitCheckedMenuItemIconChar {
+	display: none;
+}
+
+.zweicom .dijitCheckedMenuItemIcon {
+	background-image: url('images/spriteCheckbox.gif');
+	background-position: -80px;
+}
+
+.zweicom .dijitCheckedMenuItemChecked .dijitCheckedMenuItemIcon {
+	background-position: -64px;
+}
