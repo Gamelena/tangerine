@@ -67,7 +67,7 @@ class AdminController extends Zend_Controller_Action
             $this->view->adminTitle = $settings->find('titulo_adm')->current()->value;
             $this->view->urlLogoOper = $settings->find('url_logo_oper')->current()->value;
         } catch (Zend_Db_Exception $e){
-            Console::warn($e->getMessage());
+            Console::warn($e->getMessage(), APPLICATION_ENV !== 'production');
         }
 
         if ($this->_template != '' && $this->_template != 'dojo') {
