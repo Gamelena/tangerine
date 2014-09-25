@@ -121,7 +121,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * Por defecto convierte $field de Canonical Case a Underscore. Ej: 'IdClasePlataforma' ==> 'id_clase_plataforma'
      * 
      * @param string $function
-     * @param string $args[0] - valor para $field a buscar
+     * @param string $args[0] - $value (valor para $field)
      * @param string $args[1] - si es true, NO hace conversion de Canonical Case a Undercore.
      */
     public function __call($function, $args)
