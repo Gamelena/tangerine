@@ -125,7 +125,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $value = $args[0];
         $camelCase = isset($args[1]);
         
-        if (substr('findById', 0, 6) == 'findBy') {
+        if (substr($function, 0, 6) == 'findBy') {
             $criteria = substr($function, 6);
             if (!$camelCase) $criteria = strtolower($criteria);
             else $criteria = Zwei_Utils_String::toFunctionWord($criteria);    
