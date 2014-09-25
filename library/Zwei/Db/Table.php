@@ -113,26 +113,32 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     }
     
     /**
-     * Método Mágico PHP que permite usar self::findBy$field($value) 
-     * sin tener que escribir los finders para cada campo para cada una de las tablas. 
+     * __call() es lanzado al invocar un método inaccesible en un contexto de objeto.
+     * @link http://php.net/manual/es/language.oop5.overloading.php
+     * 
+     * Permite usar self::findBy$field($value) sin tener que escribir los finders manualmente.
+     * 
+     * Por defecto convierte $field de Canonical Case a Underscore. Ej: 'IdClasePlataforma' ==> 'id_clase_plataforma'
      * 
      * @param string $function
-     * @param string $args
-     * @param string $args
+     * @param string $args[0] - valor para $field a buscar
+     * @param string $args[1] - si es true, NO hace conversion de Canonical Case a Undercore.
      */
     public function __call($function, $args)
     {
         $value = $args[0];
-        $camelCase = isset($args[1]);
-        
+        $camelCase = isset($args[1]) ? $args[1] : false;
+                
         if (substr($function, 0, 6) == 'findBy') {
             $criteria = substr($function, 6);
-            if (!$camelCase) $criteria = strtolower($criteria);
-            else $criteria = Zwei_Utils_String::toFunctionWord($criteria);    
             
+            if (!$camelCase) 
+                $criteria = strtolower(Zwei_Utils_String::toVarWord($criteria));
+ 
             $select = $this->select()
-            ->from($this->_name)
-            ->where($criteria . ' = ?', $value);
+                ->from($this->_name)
+                ->where($criteria . ' = ?', $value);
+            
             return $this->fetchAll($select);
         } else {
             throw new Exception("No existe " . __CLASS__ . "::" . $function);
