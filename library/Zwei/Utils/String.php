@@ -22,7 +22,7 @@ class Zwei_Utils_String {
     }
     
     /**
-     * Reemplaza caracteres especiales por estandar internacionales. 
+     * Reemplaza caracteres especiales por no especiales. 
      * @param $string string
      * @param $nospaces boolean, reemplazar espacios por underscores.
      * @return string
@@ -38,8 +38,8 @@ class Zwei_Utils_String {
     }	
     
     /**
-     * Transforma una variable a un string que sigue las convenciones Zend o Java
-     * de nombres de clases (no incluye seudo namespaces de ZF 1)
+     * Transforma un string a Canonical Case
+     *
      * @param $string
      * @param $limiter
      * @return string
@@ -61,8 +61,7 @@ class Zwei_Utils_String {
     }
     
     /**
-     * Transforma una variable a un string que sigue las convenciones Zend
-     * de nombres de métodos
+     * Transforma un string CamelCase
      * @param $string
      * @param $limiter
      * @return string
@@ -120,7 +119,8 @@ class Zwei_Utils_String {
     }
     
     /**
-     * Elimina caracteres no texto de un string
+     * Elimina caracteres no texto de un string, util para casos de basura hexadecimal o binaria en un string.
+     * 
      * @param string $text
      * @return string
      */

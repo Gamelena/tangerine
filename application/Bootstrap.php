@@ -1,9 +1,21 @@
 <?php
-
+/**
+ *
+ * Gestor de arranque de la aplicación.
+ *
+ */
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
+    /**
+     *
+     * @var Zend_Config
+     */
     protected $_config;
     
+    /**
+     * Inicia el autoloader de clases.
+     * @return void
+     */
     protected function _initAutoLoad()
     {
         require_once 'Zend/Loader/Autoloader.php';
@@ -23,6 +35,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         //$loader->pushAutoloader(new Zwei_Autoloader_PhpThumb());
     }
     
+    /**
+     * Carga constantes globales
+     * @return void
+     */
     public function loadConstants()
     {
         if (!defined('PHP_VERSION_ID')) {
@@ -68,6 +84,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return new Zend_Config($this->getOptions());
     }
     
+    /**
+     * Corre la aplicación.
+     * @return void
+     */
     public function run()
     {
         try {
