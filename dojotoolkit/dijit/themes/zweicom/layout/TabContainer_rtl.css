@@ -22,7 +22,7 @@
 }
 
 .dijitRtl .zweicom .dijitTabPaneWrapper {
-	#zoom: 1;
+	zoom: 1;
 }
 
 .dj_ie-rtl .zweicom .dijitTabContainerLeft-tabs {
