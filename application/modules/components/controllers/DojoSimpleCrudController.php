@@ -259,6 +259,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->dijitDataGridId = $r->getParam('dijitDataGridId', $this->view->domPrefix . 'dataGrid');
         $this->view->dijitFormSearchId = $r->getParam('dijitFormSearchId', $this->view->domPrefix . 'formSearch');
         
+        $customFunctions = $this->_xml->xpath("//component/forms/helpers/customFunction");
+        $this->view->customFunctions = $customFunctions ? $customFunctions : array();
+        
         $this->view->includeJs = $this->_xml->getAttribute('jsForm') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('jsForm')."?noCache={$this->view->noCache}\"></script>" : '';
     }
     
