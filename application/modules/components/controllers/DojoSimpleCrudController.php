@@ -48,7 +48,12 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      * @var string
      */
     private $_component = null;
-
+    
+    /**
+     * Nombre de archivo XML que debe usarse para validar permisos.
+     * @var string 
+     */
+    private $_aclComponent = null;
     /**
      * Configuración global.
      * @var Zend_Config
@@ -90,20 +95,20 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         if ($this->getRequest()->getParam('p')) {
             $file = Zwei_Admin_Xml::getFullPath($this->getRequest()->getParam('p'));
             $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
-            $aclComponent = $this->_xml->getAttribute('aclComponent');
-            $this->_component = $aclComponent ? $aclComponent : $this->getRequest()->getParam('p');
+            $this->_component = $this->getRequest()->getParam('p');
+            $this->_aclComponent = $this->_xml->getAttribute('aclComponent') ? $this->_xml->getAttribute('aclComponent') : $this->_component;
         }
         
         $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
         $this->view->domPrefix = isset($this->view->mainPane) && $this->view->mainPane == 'dijitTabs' ? Zwei_Utils_String::toVarWord($this->getRequest()->getParam('p')) : '';
         
-        if ($this->_acl->userHasRoleAllowed($this->_component, 'EDIT')) {
+        if ($this->_acl->userHasRoleAllowed($this->_aclComponent, 'EDIT')) {
             $this->view->validateGroupEdit = false;
         } else {
             $this->view->validateGroupEdit = true;
         }
         
-        if ($this->_acl->userHasRoleAllowed($this->_component, 'DELETE')) {
+        if ($this->_acl->userHasRoleAllowed($this->_aclComponent, 'DELETE')) {
             $this->view->validateGroupDelete = false;
         } else {
             $this->view->validateGroupDelete = true;
@@ -131,8 +136,12 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."?noCache={$this->view->noCache}\"></script>\n" : '';
         $this->view->onShow = $this->_xml->getAttribute('onShow') ? $this->_xml->getAttribute('onShow') : '';
-        if ($this->_xml->xpath("//component/forms")) $forms = $this->_xml->xpath("//component/forms");
-        if ($this->_xml->xpath("//component/helpers")) $helpers = $this->_xml->xpath("//component/helpers");
+        if ($this->_xml->xpath("//component/forms")) {
+            $forms = $this->_xml->xpath("//component/forms");
+        }
+        if ($this->_xml->xpath("//component/helpers")) {
+            $helpers = $this->_xml->xpath("//component/helpers");
+        }
         
         $this->view->styleDialog = $this->_xml->xpath("//component/forms[@style]") ? "style=\"{$forms[0]->getAttribute('style')}\"" : '';
         $this->view->onloadDialog = $this->_xml->xpath("//component/forms[@onload]") ? "onload=\"{$forms[0]->getAttribute('onload')}\"" : '';
@@ -169,7 +178,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->view->onPostSubmit = $this->_xml->xpath('//component/searchers/onPostSubmit') ? dom_import_simplexml($this->_xml->searchers->onPostSubmit)->textContent : '';
             
             $customFunctions = $this->_xml->xpath("//searchers/helpers/customFunction");
-            $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'LIST') ? $customFunctions : array();
+            $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_aclComponent, 'LIST') ? $customFunctions : array();
             
             $this->view->enableActions = "";
             //Activar botones y menu de acciones al hacer submit
@@ -267,11 +276,11 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $this->view->name = $this->_xml->getAttribute('name');
         
-        $this->view->add = $this->_xml->getAttribute('add') && $this->_xml->getAttribute("add") == 'true' && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
-        $this->view->list = $this->_xml->getAttribute('list') && $this->_xml->getAttribute("list") == 'true' && $this->_acl->isUserAllowed($this->_component, 'LIST') ? true : false;
-        $this->view->edit = $this->_xml->getAttribute('edit') && $this->_xml->getAttribute("edit") == 'true'  && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? true : false;
-        $this->view->clone = $this->_xml->getAttribute('clone') && $this->_xml->getAttribute("clone") == 'true'  && $this->_acl->isUserAllowed($this->_component, 'ADD') ? true : false;
-        $this->view->delete = $this->_xml->getAttribute('delete') && $this->_xml->getAttribute("delete") == 'true' && $this->_acl->isUserAllowed($this->_component, 'DELETE') ? true : false;
+        $this->view->add = $this->_xml->getAttribute('add') && $this->_xml->getAttribute("add") == 'true' && $this->_acl->isUserAllowed($this->_aclComponent, 'ADD') ? true : false;
+        $this->view->list = $this->_xml->getAttribute('list') && $this->_xml->getAttribute("list") == 'true' && $this->_acl->isUserAllowed($this->_aclComponent, 'LIST') ? true : false;
+        $this->view->edit = $this->_xml->getAttribute('edit') && $this->_xml->getAttribute("edit") == 'true'  && $this->_acl->isUserAllowed($this->_aclComponent, 'EDIT') ? true : false;
+        $this->view->clone = $this->_xml->getAttribute('clone') && $this->_xml->getAttribute("clone") == 'true'  && $this->_acl->isUserAllowed($this->_aclComponent, 'ADD') ? true : false;
+        $this->view->delete = $this->_xml->getAttribute('delete') && $this->_xml->getAttribute("delete") == 'true' && $this->_acl->isUserAllowed($this->_aclComponent, 'DELETE') ? true : false;
         $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
         
         
@@ -279,7 +288,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
         $customFunctions = $this->_xml->xpath("//component/helpers/customFunction");
-        $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_component, 'EDIT') ? $customFunctions : array();
+        $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_aclComponent, 'EDIT') ? $customFunctions : array();
         $excel = $this->_xml->xpath("//component/helpers/excel");
         $this->view->excel = $excel ? $excel : array();
         
@@ -375,7 +384,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         }
         
         if ($this->_xml->getAttribute('add') === 'true') {
-            if ($this->_acl->userHasRoleAllowed($this->_component, 'ADD')) {
+            if ($this->_acl->userHasRoleAllowed($this->_aclComponent, 'ADD')) {
                 $this->view->onRowClick .= "
                 if (dijit.byId('{$this->view->domPrefix}btnClone') != undefined) dijit.byId('{$this->view->domPrefix}btnClone').set('disabled', false);
                 ";
