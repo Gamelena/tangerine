@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<projectProfile type="default"  version="1.11.11">
+<projectProfile type="default" version="1.11.11">
   <projectDirectory>
     <projectProfileFile filesystemName=".zfproject.xml"/>
     <applicationDirectory classNamePrefix="">
@@ -202,6 +202,9 @@
             <controllerFile controllerName="DojoDndSource">
               <actionMethod actionName="index"/>
             </controllerFile>
+            <controllerFile controllerName="DijitEditor">
+              <actionMethod actionName="index"/>
+            </controllerFile>
           </controllersDirectory>
           <formsDirectory enabled="false"/>
           <layoutsDirectory enabled="false"/>
@@ -253,6 +256,9 @@
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="DojoDndSource">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DijitEditor">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>

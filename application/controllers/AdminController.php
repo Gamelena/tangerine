@@ -347,6 +347,7 @@ class AdminController extends Zend_Controller_Action
 
         ->setMethod('post')
         ->setAttrib('id', 'loginForm')
+        //->setAttrib('onsubmit', "this['password'].value=hex_md5(this['password'].value)")
         ->addElement($username)
         ->addElement($password)
         ->addElement($theme)

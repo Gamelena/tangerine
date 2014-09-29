@@ -23,7 +23,6 @@
 		Otherwise the actual input element.
 	*/
 	background:#fff url("../images/validationInputBg.png") repeat-x top left;
-	#background:#fff url('../images/validationInputBg.gif') repeat-x top left;
 }
 .zweicom .dijitSelect,
 .zweicom .dijitTextBox,

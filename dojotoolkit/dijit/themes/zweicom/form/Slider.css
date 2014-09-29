@@ -50,7 +50,6 @@
 }
 .zweicom .dijitSliderFocused .dijitSliderImageHandleH {
 	background-image:url("../images/preciseSliderThumbFocus.png");
-	#background-image:url("../images/preciseSliderThumbFocus.gif");
 }
 
 .dj_ie6 .zweicom .dijitSliderImageHandleH {
@@ -74,12 +73,10 @@
 	width:20px;
 	height:15px;
 	background:url("../images/sliderThumb.png") no-repeat center center;
-	#background:url("../images/sliderThumb.gif") no-repeat center center;
 }
 
 .zweicom .dijitSliderFocused .dijitSliderImageHandleV {
 	background-image:url("../images/sliderThumbFocus.png");
-	#background-image:url("../images/sliderThumbFocus.gif");
 }
 
 .zweicom .dijitSliderBottomBumper {
@@ -97,12 +94,10 @@
 .zweicom .dijitSliderIncrementIconH,
 .zweicom .dijitSliderIncrementIconV {
 	background:url('../images/spriteRoundedIconsSmall.png') no-repeat -45px top;
-	#background:url('../images/spriteRoundedIconsSmall.gif') no-repeat -45px top;
 	width:15px; height:15px;
 }
 .zweicom .dijitSliderIncrementIconH {
 	background:url('../images/spriteRoundedIconsSmall.png') no-repeat -30px top;
-	#background:url('../images/spriteRoundedIconsSmall.gif') no-repeat -30px top;
 }
 
 .zweicom .dijitSliderDecrementIconH,
@@ -110,11 +105,9 @@
 	width:15px;
 	height:15px;
 	background:url('../images/spriteRoundedIconsSmall.png') no-repeat -15px top;
-	#background:url('../images/spriteRoundedIconsSmall.gif') no-repeat -15px top;
 }
 .zweicom .dijitSliderDecrementIconH {
 	background:url('../images/spriteRoundedIconsSmall.png') no-repeat 0 top;
-	#background:url('../images/spriteRoundedIconsSmall.gif') no-repeat 0 top;
 }
 
 .zweicom .dijitSliderButtonInner {

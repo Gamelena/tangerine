@@ -108,6 +108,23 @@ endif;
     endforeach;
 //endif;
 ?>
+    <div class="keyPadWrapper" style="clear: both;">
+
+<?php 
+foreach ($this->customFunctions as $i => $f) :
+        $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
+        $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+?>
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFormFunction<?=$i?>" onClick="<?=$onclick.$target?>">
+        <?=$f['name'] ? $f['name'] : $f['target']?>
+        </button>
+    </div>
+
+<?php 
+endforeach;
+?>
+    </div>
     <script type="dojo/method" event="onSubmit">
     if (this.validate()) {
         try {
