@@ -54,7 +54,7 @@ class AclGroupsModel extends DbTable_AclGroups
      * (non-PHPdoc)
      * @see Zwei_Db_Table::insert()
      */
-    public function insert($data)
+    public function insert(array $data)
     {
         $data = $this->cleanDataParams($data);
         $lastInsertedId = parent::insert($data);
@@ -65,7 +65,7 @@ class AclGroupsModel extends DbTable_AclGroups
      * (non-PHPdoc)
      * @see Zwei_Db_Table::update()
      */
-    public function update($data, $where)
+    public function update(array $data, $where)
     {
         $data = $this->cleanDataParams($data);
         $update = parent::update($data, $where);
