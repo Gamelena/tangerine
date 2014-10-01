@@ -27,9 +27,9 @@ class AclUsersModel extends DbTable_AclUsers
      * @return Zend_Db_Table_Select
      * @see Zend_Db_Table_Abstract::select()
      */
-    public function select()
+    public function select($withFromPart = self::SELECT_WITHOUT_FROM_PART)
     {
-        $select = new Zend_Db_Table_Select($this);
+        $select = parent::select($withFromPart);
         $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
         $select->from($this->_name, array('id', 'user_name', 'acl_roles_id', 'first_names', 'last_names', 'email', 'approved'));
         $select->joinLeft($this->_name_roles, "$this->_name.acl_roles_id = $this->_name_roles.id", "role_name");
@@ -92,7 +92,7 @@ class AclUsersModel extends DbTable_AclUsers
      * se genera la password repitiendo el nombre de usuario en md5
      * @return int
      */
-    public function insert($data)
+    public function insert(array $data)
     {
         if (!isset($data["password"])) {
             $data["password"] = md5($data[$this->_generate_pass]);
@@ -135,7 +135,7 @@ class AclUsersModel extends DbTable_AclUsers
      * 
      * @see Zwei_Db_TableLoggeable::update()
      */
-    public function update($data, $where)
+    public function update(array $data, $where)
     {
         try {
             $update = parent::update($data, $where);

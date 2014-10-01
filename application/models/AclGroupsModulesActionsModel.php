@@ -51,7 +51,7 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
      * @param string $where
      * @see Zwei_Db_Table::update()
      */
-    public function update($data, $where)
+    public function update(array $data, $where)
     {
         $data = $this->cleanDataParams($data);
         $delete = $this->_deleteUnchecked ? $this->deleteUnchecked($data, $where) : false;
@@ -92,7 +92,7 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
      * @return int
      * @see Zwei_Db_Table::insert()
      */
-    public function insert($data)
+    public function insert(array $data)
     {
         $data = $this->cleanDataParams($data);
         $insert = parent::insert($data);
@@ -170,11 +170,11 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
      * @return Zend_Db_Table_Select
      * @see Zend_Db_Table_Abstract::select()
      */
-    public function select()
+    public function select($withFromPart = self::SELECT_WITH_FROM_PART)
     {
-        $select = new Zend_Db_Table_Select($this);
+        $select = parent::select($withFromPart);
         $select->setIntegrityCheck(false);
-        $select->from($this->_name);
+        //$select->from($this->_name);
         $select->joinLeft($this->_nameModulesActions,
                 "$this->_name.acl_modules_actions_id=$this->_nameModulesActions.id",
                 array('acl_modules_id', 'acl_actions_id')

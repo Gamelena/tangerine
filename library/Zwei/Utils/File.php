@@ -15,7 +15,7 @@ class Zwei_Utils_File
      * @param boolean
      * @return boolean
      */
-    public function clearRecursive($dir, $remove_dir = false, $exclude = array()) {
+    static public function clearRecursive($dir, $remove_dir = false, $exclude = array()) {
         $exclude = (array) $exclude;
         $return = false;
         foreach (glob($dir . '/*') as $file) {
@@ -34,7 +34,7 @@ class Zwei_Utils_File
      * @param $folder string - carpeta
      * @return boolean
      */
-    public function isNotEmptyFolder($folder)
+    static public function isNotEmptyFolder($folder)
     { 
         if (! is_dir($folder)) 
             return false; // not a dir 
@@ -46,7 +46,8 @@ class Zwei_Utils_File
         } 
     } 
     
-    public static function getEncoding($filename) {
+    static public function getEncoding($filename)
+    {
         return mb_detect_encoding(file_get_contents($filename));
     }
     
@@ -56,7 +57,7 @@ class Zwei_Utils_File
      * @param int $lines
      * @return string 
      */
-    public function getSeparator($filename, $linesToReview = 5)
+    static public function getSeparator($filename, $linesToReview = 5)
     {
         $handle = fopen($filename, 'r');
         $tabs = array();
@@ -113,7 +114,7 @@ class Zwei_Utils_File
      * Obtener extensión de nombre de archivo
      * @param string $filename
      */
-    public function getExtension($filename)
+    static public function getExtension($filename)
     {
         $fp = explode(".", $filename);
         return $fp[count($fp) - 1];
@@ -163,7 +164,7 @@ class Zwei_Utils_File
     
     
     
-    public function getRemoteFile($url)
+    static public function getRemoteFile($url)
     {
         // get the host name and url path
         $parsedUrl = parse_url($url);

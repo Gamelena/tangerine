@@ -61,7 +61,7 @@ class Helpers_ManyToManyCrud
      * @return array
      * @see Zwei_Db_Table::cleanDataParams()
      */
-    public function cleanDataParams($data)
+    public function cleanDataParams(array $data)
     {
         foreach ($this->_modelsMap as $index => $model) {
             if (isset($data[$index])) {

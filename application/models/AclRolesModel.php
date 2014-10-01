@@ -49,9 +49,9 @@ class AclRolesModel extends DbTable_AclRoles
      * (non-PHPdoc)
      * @see Zend_Db_Table_Abstract::select()
      */
-    public function select()
+    public function select($withFromPart = self::SELECT_WITH_FROM_PART)
     {
-        $select = new Zend_Db_Table_Select($this);
+        $select = parent::select($withFromPart);
 
         //Si no pertenece al role_id 1, no puede ver a otros usuarios con ese perfil
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
@@ -103,7 +103,7 @@ class AclRolesModel extends DbTable_AclRoles
      * (non-PHPdoc)
      * @see Zwei_Db_Table::update()
      */
-    public function update($data, $where)
+    public function update(array $data, $where)
     {
         $data = $this->cleanDataParams($data);
         
@@ -165,7 +165,7 @@ class AclRolesModel extends DbTable_AclRoles
      * (non-PHPdoc)
      * @see Zwei_Db_Table::insert()
      */
-    public function insert($data)
+    public function insert(array $data)
     {
         $data = $this->cleanDataParams($data);
         try {

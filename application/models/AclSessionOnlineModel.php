@@ -17,9 +17,9 @@ class AclSessionOnlineModel extends DbTable_AclSession
      * @return Zend_Db_Table_Select
      * @see Zend_Db_Table_Abstract::select()
      */
-    public function select()
+    public function select($withFromPart = self::SELECT_WITHOUT_FROM_PART)
     {
-        $select = parent::select(false);
+        $select = parent::select($withFromPart);
         $select->setIntegrityCheck(false);
         
         $select->from($this->_name, array('id', 'ip', 'user_agent', 'modified'));
