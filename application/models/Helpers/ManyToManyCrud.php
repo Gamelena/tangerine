@@ -127,10 +127,10 @@ class Helpers_ManyToManyCrud
     {
         $ad = $model->getAdapter();
     
-        //(1) Inicialización clausula SQL WHERE para borrar permisos
+        //(1) Inicialización clausula SQL WHERE para borrar 
         $where = array();
     
-        //(2) Se deben borrar todas las plataformas asociados a este perfil ...
+        //(2) Se deben borrar todas los item asociados a este elemento ...
         $where[] = $ad->quoteInto("{$this->_idNameFrom}= ?", $idFrom);
     
         $whereOr = array();
@@ -140,7 +140,7 @@ class Helpers_ManyToManyCrud
             $whereOr[] = $ad->quote($idTo);
         }
     
-        //(3) ... excepto las plataformas que se encuentren chequeadas en formulario
+        //(3) ... excepto los elementos que se encuentren chequeados en formulario
         if (!empty($data)) {
             $list = implode(",", $whereOr);
             $where[] = "($this->_idNameTo) NOT IN ($list)";
@@ -151,7 +151,7 @@ class Helpers_ManyToManyCrud
     
         if (!empty($data)) $return = $delete;
     
-        //(5) Agregar las plataformas que fueron chequeadas.
+        //(5) Agregar los elementos que fueron chequeadas.
         $insert =  false;
         foreach ($data as $idTo) {
             $data = array(
@@ -164,7 +164,6 @@ class Helpers_ManyToManyCrud
             } catch (Zend_Db_Exception $e) {
                 if ($e->getCode() != 23000) {
                     Console::error($e->getMessage());
-                    //return false;
                 }
             }
         }
