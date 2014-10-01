@@ -15,7 +15,7 @@ class Zwei_Utils_File
      * @param boolean
      * @return boolean
      */
-    public function clearRecursive($dir, $remove_dir = false, $exclude = array()) {
+    static public function clearRecursive($dir, $remove_dir = false, $exclude = array()) {
         $exclude = (array) $exclude;
         $return = false;
         foreach (glob($dir . '/*') as $file) {
@@ -34,7 +34,7 @@ class Zwei_Utils_File
      * @param $folder string - carpeta
      * @return boolean
      */
-    public function isNotEmptyFolder($folder)
+    static public function isNotEmptyFolder($folder)
     { 
         if (! is_dir($folder)) 
             return false; // not a dir 
@@ -46,7 +46,8 @@ class Zwei_Utils_File
         } 
     } 
     
-    public static function getEncoding($filename) {
+    static public function getEncoding($filename)
+    {
         return mb_detect_encoding(file_get_contents($filename));
     }
     
@@ -56,7 +57,7 @@ class Zwei_Utils_File
      * @param int $lines
      * @return string 
      */
-    public function getSeparator($filename, $linesToReview = 5)
+    static public function getSeparator($filename, $linesToReview = 5)
     {
         $handle = fopen($filename, 'r');
         $tabs = array();
@@ -113,28 +114,41 @@ class Zwei_Utils_File
      * Obtener extensión de nombre de archivo
      * @param string $filename
      */
-    public function getExtension($filename)
+    static public function getExtension($filename)
     {
         $fp = explode(".", $filename);
         return $fp[count($fp) - 1];
     }
     
     /**
+     * Invocar URL via CURL
      * 
+     * @param string $url
+     * @param string $params
+     * @param string $username
+     * @param string $password
+     * @param string $method GET|POST|DELETE|HEAD
      */
-    static public function getResponseFromService($url, $params='', $username=false, $password=false, $log=false, $typeOfResponse=false)
+    static public function getResponseFromService($url, $params = null, $username = null, $password = null, $method = 'GET')
     {
         
         $ch = curl_init();
-        if($params!=''){
-            $url=$url."?".$params;
-        }
+        
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+        
+        if ($params) {
+            if ($method !== 'POST') {
+                $url = $url."?".$params;
+            } else {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+            }
+        } 
         
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        if($username){
+        if ($username) {
             curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         }   
@@ -150,7 +164,7 @@ class Zwei_Utils_File
     
     
     
-    public function getRemoteFile($url)
+    static public function getRemoteFile($url)
     {
         // get the host name and url path
         $parsedUrl = parse_url($url);

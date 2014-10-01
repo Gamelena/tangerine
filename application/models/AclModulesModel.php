@@ -310,9 +310,9 @@ class AclModulesModel extends DbTable_AclModules
      * @return Zend_Db_Table_Select
      */
     
-    public function select($withFromPart = Zend_Db_Table::WITHOUT_FROM_PART)
+    public function select($withFromPart = self::SELECT_WITHOUT_FROM_PART)
     {
-        $select = ParentIterator::select($withFromPart);
+        $select = parent::select($withFromPart);
         $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
         $select->from($this->_name)->joinLeft(array(
             'parent' => $this->_name

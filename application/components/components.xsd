@@ -70,6 +70,7 @@
             <xsd:element name="onSubmit" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="onShow" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="tabs" type="tabsType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="helpers" type="helpersType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:choice>
         <xsd:attribute name="ajax" type="xsd:boolean" />
         <xsd:attribute name="style"/>

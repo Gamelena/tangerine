@@ -199,7 +199,12 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             else if (dojo.byId(iframeId).contentDocument.getElementsByTagName('body')[0]) //firefox
                 rawResponse = dojo.byId(iframeId).contentDocument.getElementsByTagName('body')[0].innerHTML;
             
-            var response = dojo.json.parse(rawResponse);
+            try {
+            	var response = dojo.json.parse(rawResponse);
+            } catch (e) {
+            	utils.showMessage(e.message, 'error');
+            	return false;
+            }
             
                         
             if (response.message != '' && response.message != null) {
