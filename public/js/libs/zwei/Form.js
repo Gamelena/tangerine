@@ -202,7 +202,10 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             try {
             	var response = dojo.json.parse(rawResponse);
             } catch (e) {
+            	console.error(e.message);
             	utils.showMessage(e.message, 'error');
+            	admportal = new zwei.Admportal();
+            	admportal.lockScreen(false);
             	return false;
             }
             
