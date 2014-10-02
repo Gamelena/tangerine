@@ -1,3 +1,4 @@
-<div data-dojo-type="dijit/Editor" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>" data-dojo-props="<?=$this->dataDojoProps?>" <?=$this->style?>>
+<div data-dojo-type="dijit/Editor" id="<?=$this->domId . $this->i?>Editor" onChange="dijit.byId('<?=$this->domId . $this->i?>').set('value', this.get('value'))"  name="<?=$this->target?>Editor" data-dojo-props="<?=$this->dataDojoProps?>"  <?=$this->style?>>
     <?=$this->value?>
 </div>
+<input type="hidden" data-dojo-type="dijit/form/ValidationTextBox" id="<?=$this->domId . $this->i?>"  name="<?=$this->target?>" value="<?=$this->value?>"  />
