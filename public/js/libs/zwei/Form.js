@@ -54,8 +54,11 @@ dojo.declare("zwei.Form", dojo.Stateful, {
     /**
      * string
      */
-    
     queryParams: '',
+    /**
+     * string
+     */
+    component: null,
     /**
      * string
      */
@@ -300,8 +303,12 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 var xhrContent = {
                     'model': this.model,
                     'action': 'delete',
-                    'format': 'json' 
+                    'format': 'json'
                 };
+                
+                if (this.component) {
+                	xhrContent.p = this.component;
+                }
                 
                 for (var i = 0; i < this.keys.length; i++) {
                     xhrContent['primary['+this.keys[i]+']'] = encodeURIComponent(items[j][this.keys[i]]);

@@ -498,7 +498,9 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $action = isset($form->action) ? strtoupper($form->action) : 'LIST';
         $this->_acl = new Zwei_Admin_Acl();
         $validatedList = true;
-        if ($xml->getAttribute('target') !== $form->model) {
+        if (!$xml) {
+            return false;
+        } else if ($xml->getAttribute('target') !== $form->model) {
             $validatedList = false;
             Console::error("{$form->model} no existe en {$form->p}");
         } else if (!$this->_acl->isUserAllowed($form->p, $action)) {
