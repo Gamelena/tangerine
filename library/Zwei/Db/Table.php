@@ -463,7 +463,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     }
     
     /**
-     * Convierte un string "string sql where" a un array asociativo campo=>valor
+     * Convierte un string sql where "$campo=$valor" a un array($campo=>$valor)
      * @param $string
      * @return array
      */
