@@ -1,7 +1,7 @@
 <?php 
 /**
- * Salida de mensajes a log ya consola de javascript.
- * Se require firePHP para firefox o equivalente.
+ * Salida de mensajes a archivos de log y/o consola de javascript.
+ * Se requiere firePHP para firefox o equivalente para consola javascript.
  * 
  * Observación: Esta clase tiene mucha duplicación de código, la razón de esto es que NO podemos usar un método base
  * que permitiría la reutilización de código, ya que debug_backtrace() retornaría siempre ese contexto base 
