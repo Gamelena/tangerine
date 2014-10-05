@@ -105,14 +105,14 @@ if (!$this->loadPartial) :
 ?>
         <div class="keyPadWrapper" style="clear: both;">
 <?php
-        foreach ($tab->xpath("helpers/customFunction") as $function) :
+        foreach ($tab->xpath("helpers/customFunction") as $i => $function) :
             $f = (array) $function->attributes();
             $f = $f['@attributes'];
-            $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
+            $onclick = isset($f['onclick']) ? $f['onclick'] . ';' : '';
             $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
 ?>
         <div class="keyPadButton">
-            <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFormFunction<?=$i?>" onClick="<?=$onclick.$target?>">
+            <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?><?=$modAux?>btnFormFunction<?=$i?>" onClick="<?=$onclick . $target?>">
             <?=$f['name'] ? $f['name'] : $f['target']?>
             </button>
         </div>
@@ -150,7 +150,7 @@ foreach ($this->customFunctions as $i => $f) :
         $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
 ?>
     <div class="keyPadButton">
-        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFormFunction<?=$i?>" onClick="<?=$onclick.$target?>">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?><?=$modAux?>btnFormFunction<?=$i?>" onClick="<?=$onclick.$target?>">
         <?=$f['name'] ? $f['name'] : $f['target']?>
         </button>
     </div>
