@@ -29,10 +29,28 @@
                     "bin-dir": "bin"
                 }
             }
-        }
+        },
+        {
+	    	"type": "package",
+	    	"package": {
+	        	"name": "PHPOffice/PHPExcel",
+	        	"version": "1.7.8",
+	        	"source": {
+	            	"url": "https://github.com/PHPOffice/PHPExcel.git",
+	            	"type": "git",
+	            	"reference": "PHPExcel_1.7.8"
+	        	},
+	        	"autoload": {
+	            	"psr-0": {
+	                	"PHPExcel": "Classes/"
+	            	}
+	        	}
+	       	}
+	    }
     ],
     "require": {
-        "zend/zendframework" : "*"
+        "zend/zendframework" : "*",
+        "PHPOffice/PHPExcel" : "*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
