@@ -12,6 +12,16 @@ dojo.declare("zwei.Utils", null, {
         myToaster.setContent(message, type, duration);
         myToaster.show();
     },
+    centerDialog: function(dijitDialog)
+    {
+        try {
+            dijitDialog.hide();
+            dijitDialog.show();
+            dijitDialog.resize();
+        } catch (e) {
+            console.info(e.message);
+        }
+    },
     getHtmlTranslationTable: function (table, quote_style) {
         // http://kevin.vanzonneveld.net
         // +   original by: Philip Peterson
