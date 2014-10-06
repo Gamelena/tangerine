@@ -21,8 +21,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocat
     </elements>
     <searchers>
         <group name="Buscar">
-            <element target="parent.title" />
             <element target="acl_modules.title"/>
+            <element target="parent.title" />
             <element target="acl_modules.module" operator="=" />
         </group>
     </searchers>

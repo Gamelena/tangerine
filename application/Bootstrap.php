@@ -115,14 +115,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         $frontController->throwExceptions(true);
         
-        if ($this->_config->resources->multidb) {
-            $this->bootstrap('multidb');
-            $resource = $this->getPluginResource('multidb');
-            $db = $resource->getDb('dn');//reemplazar 'dn' por el namespace multidb por defecto definido para el proyecto
-        } else {
-            $db = Zend_Db::factory($this->_config->resources->db);
-        }
-        
         Zwei_Db_Table::setDefaultAdapter($db);
         Zwei_Db_Table::setDefaultLogMode($this->_config->zwei->db->table->logbook);
         

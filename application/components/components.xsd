@@ -118,6 +118,7 @@
         <xsd:attribute name="name" />
         <xsd:attribute name="onClick" />
         <xsd:attribute name="dojoType" />
+        <xsd:attribute name="style" />
     </xsd:complexType>
     <xsd:complexType name="paneType">
         <xsd:attribute name="name" />
@@ -195,6 +196,7 @@
         <xsd:attribute name="onblur" />
         <xsd:attribute name="onload" />
         <xsd:attribute name="required" type="xsd:boolean" />
+        <xsd:attribute name="autocomplete" type="onOffType" />
         <xsd:attribute name="regExp"/>
         <xsd:attribute name="trim"/>
         <xsd:attribute name="url" type="xsd:anyURI"/>
@@ -222,6 +224,12 @@
         <xsd:attribute name="height" />
         <xsd:attribute name="path"/>
     </xsd:complexType>
+    <xsd:simpleType name="onOffType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="on"/>
+            <xsd:enumeration value="off"/>
+        </xsd:restriction>
+    </xsd:simpleType>
     <xsd:simpleType name="editType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="true"/>
