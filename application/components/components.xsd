@@ -85,6 +85,7 @@
             <xsd:element name="tabs" type="tabsType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="onPostSubmit" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="onSubmit" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="helpers" type="helpersType" minOccurs="0" maxOccurs="1"/>
         </xsd:choice>
         <xsd:attribute name="ajax" />
         <xsd:attribute name="style"/>
@@ -112,6 +113,7 @@
     <xsd:complexType name="tabType">
         <xsd:sequence>
             <xsd:element name="element" type="elementType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="helpers" type="helpersType" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
         <xsd:attribute name="name" />
         <xsd:attribute name="onClick" />
@@ -245,8 +247,8 @@
             <xsd:enumeration value="&amp;gt;&amp;lt;"/>
             <xsd:enumeration value="&amp;gt;"/>
             <xsd:enumeration value="&amp;lt;"/>
-            <xsd:enumeration value="&amp;gt;="/>
-            <xsd:enumeration value="&amp;lt;="/>
+            <xsd:enumeration value="&#38;gt;="/>
+            <xsd:enumeration value="&#38;lt;="/>
         </xsd:restriction>
     </xsd:simpleType>
     <xsd:simpleType name="componentTypeType">
