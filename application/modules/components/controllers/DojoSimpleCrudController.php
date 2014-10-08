@@ -220,7 +220,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->dialogIndex = $r->getParam('dialogIndex', '');
         
         $this->view->onShow = $this->_xml->xpath('//component/forms/onShow') ? dom_import_simplexml($this->_xml->forms->onShow)->textContent : '';
-        $this->view->onHide = $this->_xml->xpath('//component/forms/onHide') ? dom_import_simplexml($this->_xml->forms->onHide)->textContent : '';//FIXME deaf listener onHide
+        $this->view->onHide = $this->_xml->xpath('//component/forms/onHide') ? dom_import_simplexml($this->_xml->forms->onHide)->textContent : '';//TODO deaf listener onHide
         $this->view->onSubmit = $this->_xml->xpath('//component/forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
         $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
 

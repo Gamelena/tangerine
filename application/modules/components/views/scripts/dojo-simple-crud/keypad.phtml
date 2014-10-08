@@ -14,7 +14,8 @@ if ($this->add) :
                 dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
                 dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                queryParams: '<?=$this->queryParams?>'
+                queryParams: '<?=$this->queryParams?>',
+                onHide: function (){<?=$this->onHide?>}
             }); 
             form.showDialog();
 <?php 
@@ -27,7 +28,8 @@ if ($this->add) :
                 action: 'add',
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                 queryParams: '<?=$this->queryParams?>',
-                title: 'Agregar <?=$this->name?>'
+                title: 'Agregar <?=$this->name?>',
+                onHide: function (){<?=$this->onHide?>}
             }); 
             form.showDialog();
 
@@ -56,7 +58,8 @@ if ($this->edit) :
                     dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
                     queryParams: '<?=$this->queryParams?>',
                     dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'),
-                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    onHide: function (){<?=$this->onHide?>}
                 }); 
                 form.showDialog();
 <?php 
@@ -70,7 +73,8 @@ if ($this->edit) :
                     queryParams: '<?=$this->queryParams?>',
                     prefix: '<?=$this->domPrefix?>',
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                    keys : <?=$this->jsPrimary?>
+                    keys : <?=$this->jsPrimary?>,
+                    onHide: function (){<?=$this->onHide?>}
                 });
                 form.showMultipleDialogs();
 <?php 
@@ -99,7 +103,8 @@ if ($this->delete) :
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                 model: '<?=$this->model?>',
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
-                keys : <?=$this->jsPrimary?>
+                keys : <?=$this->jsPrimary?>,
+                onHide: function (){<?=$this->onHide?>}
             });
             
             var observer = form.watch('response', function(name, oldValue, response) {
@@ -122,7 +127,8 @@ if ($this->delete) :
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                 model: '<?=$this->model?>',
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
-                keys : <?=$this->jsPrimary?>
+                keys : <?=$this->jsPrimary?>,
+                onHide: function (){<?=$this->onHide?>}
             });
             
             var observer = form.watch('response', function(name, oldValue, response) {
@@ -160,7 +166,8 @@ if ($this->clone) :
                     action: 'clone',
                     dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
                     dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
-                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    onHide: function (){<?=$this->onHide?>}
                 });
                 form.showDialog();
 <?php 
@@ -173,7 +180,8 @@ if ($this->clone) :
                     title: 'Clonar <?=$this->name?>',
                     prefix: '<?=$this->domPrefix?>',
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                    keys : <?=$this->jsPrimary?>
+                    keys : <?=$this->jsPrimary?>,
+                    onHide: function (){<?=$this->onHide?>}
                 });
                 form.showMultipleDialogs();
 <?php 
@@ -197,7 +205,8 @@ if ($this->changePassword) :
                 action: 'edit',
                 dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_editpass'), 
                 dijitForm: dijit.byId('<?=$this->domPrefix?>form_editpass'), 
-                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                onHide: function (){<?=$this->onHide?>}
             }); 
             form.showDialog()">
             Cambiar Contrase&ntilde;a
@@ -235,7 +244,8 @@ foreach ($this->excel as $i => $f) :
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 
                 queryParams: 'format=excel&excel_formatter=<?=$formatter?>',
-                iframe: dojo.byId('ifrm_process')
+                iframe: dojo.byId('ifrm_process'),
+                onHide: function (){<?=$this->onHide?>}
             });
             form.loadData()">
             <?=$name?>

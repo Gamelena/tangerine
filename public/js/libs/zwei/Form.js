@@ -84,8 +84,13 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      */
     model: null,
     /**
+     * @return void 
+     */
+    onHide: function(){},
+    /**
      * 
      * @param Object args 
+     * @return void 
      */
     constructor: function(args){
         dojo.require('dojox.widget.DialogSimple');
@@ -374,8 +379,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     this.dijitDialog = new dojox.widget.DialogSimple({
                         title: this.title,
                         id: dialogId,
-                        onShow: function() {console.log('onShow')},
-                        onHide: function() {console.log('onHide')}
+                        onHide: this.onHide
                     });
                 } else {
                     this.dijitDialog = dijit.byId(dialogId);
