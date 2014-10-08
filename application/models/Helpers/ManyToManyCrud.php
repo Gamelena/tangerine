@@ -41,7 +41,7 @@ class Helpers_ManyToManyCrud
      * 
      * @param string $idNameFrom
      * @param string $idNameTo
-     * @param Zwei_Db_Table[] $modelsMap
+     * @param Zwei_Db_Table[] |  Zwei_Db_Table $modelsMap
      * @return void
      */
     public function __construct($idNameFrom, $idNameTo, $modelsMap)
@@ -49,7 +49,7 @@ class Helpers_ManyToManyCrud
         $this->_idNameFrom = $idNameFrom;
         $this->_idNameTo = $idNameTo;
         
-        $this->_modelsMap = $modelsMap;
+        $this->_modelsMap = (array) $modelsMap;
         
         foreach ($this->_modelsMap as $index => $model) {
             $this->_data[$index] = array();
