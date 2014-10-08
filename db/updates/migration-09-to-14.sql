@@ -1,8 +1,11 @@
+-- Procedure para migrar base de datos de Admportal 0.9 Strawberry a Admportal 1.3 Tangerine
+-- @example CALL upgradeAdmportal09to13($oldDb, $newDb);
+
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS `upgradeAdmportal09to13`$$
+DROP PROCEDURE IF EXISTS `upgradeAdmportal09to14`$$
 
-CREATE PROCEDURE `upgradeAdmportal09to13`(
+CREATE PROCEDURE `upgradeAdmportal09to14`(
     IN dbOld tinytext, 
     IN dbNew tinytext
 )
@@ -372,6 +375,7 @@ BEGIN
       `first_names` varchar(50) NOT NULL,
       `last_names` varchar(50) NOT NULL,
       `email` varchar(50) NOT NULL,
+      `image` varchar(255) NULL,
       `approved` enum("0","1") NOT NULL DEFAULT "0",
       PRIMARY KEY (`id`),
       UNIQUE KEY `user_name` (`user_name`)
