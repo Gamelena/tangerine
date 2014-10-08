@@ -156,6 +156,7 @@ CREATE TABLE IF NOT EXISTS `acl_session` (
   `acl_roles_id` int(11) NOT NULL,
   `modified` int(11) DEFAULT NULL,
   `lifetime` int(11) DEFAULT NULL,
+  `image` VARCHAR(255) DEFAULT NULL,
   `data` text,
   `ip` varchar(20) NOT NULL,
   `user_agent` varchar(255) NOT NULL,
