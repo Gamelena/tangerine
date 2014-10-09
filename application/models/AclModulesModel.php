@@ -132,7 +132,7 @@ class AclModulesModel extends DbTable_AclModules
                     $handle = fopen(COMPONENTS_ADMIN_PATH . '/' . $data['module'], "w+");
                     fwrite($handle, "<?xml version=\"1.0\"?>\n"
                         . "<component name=\"M&amp;oacute;dulos\" type=\"dojo-simple-crud\" target=\"EjemploModel\" list=\"true\""
-                        . " delete=\"true\" edit=\"true\" add=\"true\" clone=\"true\""
+                        . " delete=\"true\" edit=\"true\" add=\"true\" clone=\"true\" serverPagination=\"true\""
                         . " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"components.xsd\">\n"
                         . "\t<elements>\n"
                         . "\t\t<element name=\"Id\" target=\"id\" type=\"dijit-form-validation-text-box\" visible=\"true\" edit=\"disabled\" add=\"false\" clone=\"false\"></element>\n"
