@@ -87,8 +87,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     protected $_more = null;
     
     /**
-     * Flag que indica si deben ser validados los permisos modulo-usuario-accion si se hace un request via CrudRequestController.
-     * @todo unimplemented, implementar en CrudRequestController
+     * Hash que indica si deben ser validados los permisos modulo-usuario-accion.
      *
      * @var array
      */
@@ -146,7 +145,10 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         
     }
     
-    
+    /**
+     * Hash que indica si deben ser validados los permisos modulo-usuario-accion.
+     * @return array:
+     */
     public function getValidateXmlAcl()
     {
         return $this->_validateXmlAcl;
@@ -488,19 +490,30 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     }
     
     /**
+     * Valida los permisos de usuario en sesion en modelo $form->model para ejecutar $form->action 
+     * según permisos sobre archivo xml $form->p.
      * 
      * @param Zwei_Utils_Form<model, p, action> $form
      * @param Zwei_Admin_Xml $xml
      * @return boolean
      */
-    public function validateXmlAcl($form, $xml)
+    public function validateXmlAcl($form, $xml = null)
     {
         $action = isset($form->action) ? strtoupper($form->action) : 'LIST';
         $this->_acl = new Zwei_Admin_Acl();
         $validatedList = true;
+        
         if (!$xml) {
-            return false;
-        } else if ($xml->getAttribute('target') !== $form->model) {
+            //Si esto es llamado desde CrudRequestController SIEMPRE existe $xml y nunca entra acá.
+            if (isset ($form->p)) {
+                $file = Zwei_Admin_Xml::getFullPath($form->p);
+                $xml  = new Zwei_Admin_Xml($file, 0, 1);
+            } else {
+                return false;
+            }
+        }
+        
+        if ($xml->getAttribute('target') !== $form->model) {
             $validatedList = false;
             Console::error("{$form->model} no existe en {$form->p}");
         } else if (!$this->_acl->isUserAllowed($form->p, $action)) {

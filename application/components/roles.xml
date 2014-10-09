@@ -33,11 +33,16 @@
                 <element target="role_name" />
                 <element target="description" />
             </tab>
-            <tab name="Permisos">
+            <tab name="Permisos" onClick="
+            	if (!$globals[this.parentElement.id + 'centered']) { 
+            		utils.centerDialog(dijit.byId(this.parentElement.id).getParent()); 
+            		$globals[this.parentElement.id + 'centered'] = true;
+        		}">
                 <element target="permissions" />
             </tab>
         </tabs>
         <onShow>
+        	$globals[this.id + 'centered'] = false;	
             dojo.query('#'+this.id+' .dndContainer').forEach(function(container) {container.style.width='26em'});
         </onShow>
     </forms>
