@@ -101,7 +101,10 @@ class CrudRequestController extends Zend_Controller_Action
                 throw new Zend_Application_Resource_Exception($classModel . ": " . $e->getMessage(), $e->getCode());
             }
             $this->view->collection = array();
-            $validateXml = method_exists($this->_model, 'getValidateXmlAcl') 
+            
+            //Es posible que $this->_model NO sea un modelo Zwei_Db_Table y sea una implementación de Zwei_Admin_ModelInterface
+            //en cuyo caso no existe el método 'getValidateXmlAcl'
+            $validateXml = method_exists($this->_model, '$this->_model') 
                 ? $this->_model->getValidateXmlAcl()
                 : array('EDIT' => false, 'ADD' => false, 'DELETE' => false, 'LIST' => false);
                         
