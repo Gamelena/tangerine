@@ -363,7 +363,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->dataDojoType = $this->_xml->getAttribute('serverPagination') === "true" ? 'dojox/data/QueryReadStore' : 'dojo/data/ItemFileReadStore';
         $this->view->gridDojoType = $this->_xml->getAttribute('gridDojoType') ? $this->_xml->getAttribute('gridDojoType') : 'dojox/grid/EnhancedGrid';
         $menus = in_array($this->_config->zwei->layout->menus, array('contextMenu', 'both')) ? "menus:{selectedRegionMenu: menu{$this->view->domPrefix}}," : '';
-        $this->view->plugins = $this->_xml->getAttribute('plugins') ? $this->_xml->getAttribute('plugins') : "{ $menus pagination: {defaultPageSize:25, maxPageStep: 5 }}";
+        
+        $pagination = !Zwei_UserAgent::isMobile() ? "pagination: {defaultPageSize:25, maxPageStep: 5 }" : '';
+        
+        $this->view->plugins = $this->_xml->getAttribute('plugins') ? $this->_xml->getAttribute('plugins') : "{ $menus $pagination}";
         $this->view->onRowClick = $this->_xml->getAttribute('onRowClick') ? $this->_xml->getAttribute('onRowClick') : false;
         $this->view->onFetchComplete = $this->_xml->getAttribute('onFetchComplete') ? $this->_xml->getAttribute('onFetchComplete') : false;
         $this->view->searchHideSubmit = $this->_xml->getAttribute('searchHideSubmit') === "true" ? true : false;
