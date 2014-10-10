@@ -9,7 +9,17 @@ endif;
 <?php 
 if ($this->elements) :
 ?>
-    <table data-dojo-type="<?=$this->gridDojoType ?>" id="<?=$this->domPrefix?>dataGrid" jsId="<?=$this->domPrefix?>dataGrid" data-dojo-props="<?=$this->store?> plugins:<?=$this->plugins ?>, noDataMessage:'<?=$this->noDataMessage?>', onRowDblClick: function(){<?=$this->onRowDblClick?>}<?=$this->canSort?>" class="dataGrid" style="height: 50em;">
+    <script>
+    </script>
+    <table data-dojo-type="<?=$this->gridDojoType ?>" id="<?=$this->domPrefix?>dataGrid" jsId="<?=$this->domPrefix?>dataGrid" data-dojo-props="
+        <?=$this->store?> 
+        onload: function(){console.debug(dataGridHeight)},
+        style: {
+            'height': <?=Zwei_UserAgent::isMobile() ? "'200em'" : "(window.innerHeight - 290) + 'px'"?>
+        },
+        plugins:<?=$this->plugins ?>, 
+        noDataMessage:'<?=$this->noDataMessage?>', 
+        onRowDblClick: function(){<?=$this->onRowDblClick?>}<?=$this->canSort?>" class="dataGrid">
 <?php 
     if ($this->onFetchComplete) :
 ?>
