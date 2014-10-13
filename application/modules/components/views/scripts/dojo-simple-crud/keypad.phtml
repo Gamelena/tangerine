@@ -244,8 +244,7 @@ foreach ($this->excel as $i => $f) :
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 
                 queryParams: 'format=excel&excel_formatter=<?=$formatter?>',
-                iframe: dojo.byId('ifrm_process'),
-                onHide: function (){<?=$this->onHide?>}
+                iframe: dojo.byId('ifrm_process')
             });
             form.loadData()">
             <?=$name?>
