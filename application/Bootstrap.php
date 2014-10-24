@@ -115,7 +115,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         $frontController->throwExceptions(true);
         
-        Zwei_Db_Table::setDefaultAdapter($db);
         Zwei_Db_Table::setDefaultLogMode($this->_config->zwei->db->table->logbook);
         
         
