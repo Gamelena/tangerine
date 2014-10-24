@@ -38,7 +38,7 @@ class Zwei_Utils_String {
     }	
     
     /**
-     * Transforma un string a Canonical Case
+     * Transforma un string a UpperCamelCase
      *
      * @param $string
      * @param $limiter
@@ -61,7 +61,7 @@ class Zwei_Utils_String {
     }
     
     /**
-     * Transforma un string CamelCase
+     * Transforma un string lowerCamelCase
      * @param $string
      * @param $limiter
      * @return string
