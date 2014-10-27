@@ -115,11 +115,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         $frontController->throwExceptions(true);
         
-        Zwei_Db_Table::setDefaultAdapter($db);
         Zwei_Db_Table::setDefaultLogMode($this->_config->zwei->db->table->logbook);
         
         
-        parent::run();
+    	try {
+			parent::run();
+		} catch (Zend_Controller_Dispatcher_Exception $e) {
+			throw new Zend_Controller_Dispatcher_Exception("\n\nRevise 'resources.frontController.moduleDirectory' y 'resources.frontController.controllerDirectory' en 'application.ini'\n" . $e -> getMessage() . $e -> getTraceAsString());
+		}
     }
 }
 

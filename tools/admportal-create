@@ -5,12 +5,15 @@ ZWC_ADMPORTAL_PATH=$ZWC_ADMPORTAL
 DEST_PATH=$PWD
 
 read -p "Ingrese adaptador de DB (por defecto Pdo_Mysql):" DB_ADAPTER  
-#DB_ADAPTER=Pdo_Mysql
 DB_ADAPTER=${DB_ADAPTER:-Pdo_Mysql}
 
 echo " "
 echo Ingrese nombre de su DB NAME:
 read DB_NAME
+
+echo " "
+read -p "Ingrese DB HOST (por defecto localhost):" DB_HOST    
+DB_HOST=${DB_HOST:-localhost}
 
 echo " "
 echo Ingrese nombre de su DB USER:
@@ -21,7 +24,7 @@ echo Ingrese su DB PASSWORD:
 read DB_PASS
 
 
-echo Se seleccionaron los sig parámetros: DB_ADAPTER:$DB_ADAPTER, DB:$DB_NAME, USER:$DB_USER, PASSWORD:$DB_PASS
+echo Se seleccionaron los sig parámetros: DB_ADAPTER:$DB_ADAPTER, HOST:$DB_HOST, DB:$DB_NAME, USER:$DB_USER, PASSWORD:$DB_PASS
 echo " "
 
 read -p "¿Desea crear la base de datos MySQL? (S/N) (por defecto N):" CREATE_DATABASE    
@@ -72,11 +75,11 @@ read -p "¿Desea crear y poblar tablas básicas MySQL de AdmPortal? (S/N) (por d
 CREATE_TABLES=${CREATE_TABLES:-S}
 
 if [[ "$CREATE_TABLES" = "S" ]]; then
-        echo mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/admportal.sql" $DB_NAME
-        mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/admportal.sql" $DB_NAME
+        echo mysql -u$DB_USER -h$DB_HOST -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/admportal.sql" $DB_NAME
+        mysql -u$DB_USER -h$DB_HOST -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/admportal.sql" $DB_NAME
         echo " "
         echo mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/basicdata.sql" $DB_NAME
-        mysql -u$DB_USER -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/basicdata.sql" $DB_NAME
+        mysql -u$DB_USER -h$DB_HOST -p$DB_PASS -e "source $ZWC_ADMPORTAL_PATH/db/basicdata.sql" $DB_NAME
 fi
 
 
