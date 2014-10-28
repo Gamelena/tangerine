@@ -41,7 +41,8 @@ if (!Zwei_UserAgent::isMobile()) :
             dijit.byId('<?=$this->domPrefix?>contentCenter').resize();
         };
         dojo.addOnLoad(function() {
-            dojo.connect(window, "onresize", resize<?=$this->domPrefix?>Grid);
+            //dijit.byId("<?=$this->domPrefix?>contentCenter").resize();
+            //dojo.connect(window, "onresize", resize<?=$this->domPrefix?>Grid);
         });
 <?php
 endif;

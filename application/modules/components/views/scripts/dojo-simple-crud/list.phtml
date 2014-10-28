@@ -15,7 +15,7 @@ if ($this->elements) :
         <?=$this->store?> 
         onload: function(){console.debug(dataGridHeight)},
         style: {
-            'height': <?=Zwei_UserAgent::isMobile() ? "'200em'" : "(window.innerHeight - 290) + 'px'"?>
+            'min-height': <?=Zwei_UserAgent::isMobile() ? "'200em'" : "(window.innerHeight - 290) + 'px'"?>
         },
         plugins:<?=$this->plugins ?>, 
         noDataMessage:'<?=$this->noDataMessage?>', 
