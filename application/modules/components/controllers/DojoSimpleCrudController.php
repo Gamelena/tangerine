@@ -153,7 +153,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->subContainerDojoType = $this->view->containerDojoType == 'dijit/layout/BorderContainer' ? '' : 'dijit/layout/ContentPane';
         $this->view->searchersOutsideContent = $this->_xml->xpath("//component/searchers[@outsideContent='true']") ? true : false;
         $this->view->panes = $this->_xml->xpath("//component/pane") ? $this->_xml->xpath("//component/pane") : array();
-        $this->view->script = $this->_xml->xpath('//component/script') ? "<script>\n" . dom_import_simplexml($this->_xml->script)->textContent . "</script>\n" : '';
+        $this->view->script = $this->_xml->xpath("//component/script") ? "<script>\n" . dom_import_simplexml($this->_xml->script)->textContent . "</script>\n" : '';
         
         if ($this->view->changePassword) {
             $this->view->primary = $this->_model->info(Zend_Db_Table::PRIMARY);

@@ -104,7 +104,7 @@ class CrudRequestController extends Zend_Controller_Action
             
             //Es posible que $this->_model NO sea un modelo Zwei_Db_Table y sea una implementación de Zwei_Admin_ModelInterface
             //en cuyo caso no existe el método 'getValidateXmlAcl'
-            $validateXml = method_exists($this->_model, '$this->_model') 
+            $validateXml = method_exists($this->_model, 'getValidateXmlAcl') 
                 ? $this->_model->getValidateXmlAcl()
                 : array('EDIT' => false, 'ADD' => false, 'DELETE' => false, 'LIST' => false);
                         
