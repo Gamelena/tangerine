@@ -8,6 +8,7 @@
             <xsd:element name="searchers" type="searchersType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="forms" type="formsType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="helpers" type="helpersType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="script" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="pane" type="paneType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:choice>
         <xsd:attribute name="target" use="required" type="xsd:normalizedString"/>

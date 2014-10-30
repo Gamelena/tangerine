@@ -15,6 +15,7 @@ if (isset($this->menus) && in_array($this->menus, array('contextMenu', 'both')))
 endif;
 ?>
 <?=$this->includeJs?>
+<?=$this->script?>
 <?php 
 if ($this->searchersOutsideContent) :
 ?>
@@ -41,6 +42,7 @@ if (!Zwei_UserAgent::isMobile()) :
             dijit.byId('<?=$this->domPrefix?>contentCenter').resize();
         };
         dojo.addOnLoad(function() {
+            dijit.byId("<?=$this->domPrefix?>contentCenter").resize();
             //dojo.connect(window, "onresize", resize<?=$this->domPrefix?>Grid);
         });
 <?php
