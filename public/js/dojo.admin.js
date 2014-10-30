@@ -1,6 +1,7 @@
 var globalOpc;
 var globalModuleId;
 var globalModule;
+var $globals = {};
 
 /**
  * carga inicial
