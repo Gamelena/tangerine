@@ -1,6 +1,7 @@
 dojo.declare("zwei.Admportal", null, {
     intervalListener: null,
     utils: null,
+    noCache: null,
     template: 'default',
     constructor: function(args)
     {

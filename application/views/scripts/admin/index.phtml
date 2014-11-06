@@ -23,7 +23,7 @@
     <?=$this->list?>
     <script type="text/javascript">
     var utils = new zwei.Utils();
-    var admportal = new zwei.Admportal();
+    var admportal = new zwei.Admportal({noCache: '<?=$this->noCache?>'});
     // Create a Standby instance
     dojo.addOnLoad(function() {
         var appStandBy = new dojox.widget.Standby({
