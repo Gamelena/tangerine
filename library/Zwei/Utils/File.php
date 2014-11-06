@@ -10,6 +10,7 @@ class Zwei_Utils_File
 {
 
     /**
+     * Borrar contenido de un directorio.
      * 
      * @param string - ruta 
      * @param boolean
@@ -30,6 +31,7 @@ class Zwei_Utils_File
     }
     
     /**
+     * Determinar si carpeta no está vacía.
      * 
      * @param $folder string - carpeta
      * @return boolean
@@ -46,13 +48,21 @@ class Zwei_Utils_File
         } 
     } 
     
+    /**
+     * Obtener codificación de archivo.
+     * 
+     * @param string $filename
+     * @return string
+     */
     static public function getEncoding($filename)
     {
         return mb_detect_encoding(file_get_contents($filename));
     }
     
     /**
-     * 
+     * Lee el comienzo del cuerpo de un archivo para buscar caracteres separadores de campos como ",", ";" y "\t", 
+     * esos caracteres son comunes en esquema csv.
+     *  
      * @param string $filename
      * @param int $lines
      * @return string 

@@ -147,15 +147,16 @@ CREATE TABLE IF NOT EXISTS `acl_roles_modules_actions` (
 
 --
 -- Estructura de tabla para la tabla `acl_session`
---
+-- 
 
 DROP TABLE IF EXISTS `acl_session`;
 CREATE TABLE IF NOT EXISTS `acl_session` (
   `id` char(32) NOT NULL DEFAULT '0',
-  `acl_users_id` int(11) NOT NULL,
-  `acl_roles_id` int(11) NOT NULL,
-  `modified` int(11) DEFAULT NULL,
-  `lifetime` int(11) DEFAULT NULL,
+  `acl_users_id` int(10) NOT NULL,
+  `acl_roles_id` int(10) NOT NULL,
+  `created` int(10) UNSIGNED DEFAULT NULL;
+  `modified` int(10) UNSIGNED DEFAULT NULL,
+  `lifetime` int(10)  UNSIGNED DEFAULT NULL,
   `image` VARCHAR(255) DEFAULT NULL,
   `data` text,
   `ip` varchar(20) NOT NULL,

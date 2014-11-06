@@ -117,11 +117,11 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * 
      * Permite usar self::findBy$field($value) sin tener que escribir los finders manualmente.
      * 
-     * Por defecto convierte $field de Canonical Case a Underscore. Ej: 'IdClasePlataforma' ==> 'id_clase_plataforma'
+     * Por defecto convierte $field de UpperCamelCase a Underscore. Ej: 'IdClasePlataforma' ==> 'id_clase_plataforma'
      * 
      * @param string $function
      * @param string $args[0] - $value (valor para $field)
-     * @param string $args[1] - si es true, NO hace conversion de Canonical Case a Undercore.
+     * @param string $args[1] - si es true, NO hace conversion de UpperCamelCase a undercore.
      */
     public function __call($function, $args)
     {
