@@ -68,7 +68,7 @@ class AclSessionOnlineModel extends DbTable_AclSession
     {
         $aWhere = self::whereToArray($where);
         if ($aWhere['id'] == Zend_Session::getId()) {
-            $this->setMessage("No puede borrar su propia sesión.");
+            $this->setMessage("No puede borrar su propia sesión. <br/> Para cerrar sesión use 'Salir'.");
             return false;
         }
         return parent::delete($where);
