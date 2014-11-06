@@ -53,8 +53,8 @@ class AclSessionOnlineModel extends DbTable_AclSession
             //le damos 2 segundos más como margen de error (12 en total)
             if ((int) $d['modified'] > (time() - 12)) {
                 $timeout = $d['modified'] + $config->zwei->session->timeout;
-                $data[$i]['expires'] = date('Y-m-d h:i:s', $timeout);
-                $data[$i]['modified'] = date('Y-m-d h:i:s', $d['modified']);
+                $data[$i]['expires'] = date('Y-m-d H:i:s', $timeout);
+                $data[$i]['modified'] = date('Y-m-d H:i:s', $d['modified']);
             } else {
                 unset($data[$i]);
             }
