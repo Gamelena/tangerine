@@ -19,7 +19,7 @@ class Console
      * @param boolean $write
      * @param string $file - ruta del archivo a escribir.
      */
-    static function log($message = null, $showOutput = false, $write = true, $file = 'php://stdout')
+    static function log($message = null, $showOutput = false, $write = true, $file = 'php://stderr')
     {
         $trace = debug_backtrace() ;
         if  ($message !== null ){
@@ -50,7 +50,7 @@ class Console
      * @param boolean $write
      * @param string $file - ruta del archivo a escribir.
      */
-    static function info($message = null, $showOutput = true, $write = true, $file = 'php://stdout')
+    static function info($message = null, $showOutput = true, $write = true, $file = 'php://stderr')
     {
         $logger = new Zend_Log();
         $writer = new Zend_Log_Writer_Firebug();
