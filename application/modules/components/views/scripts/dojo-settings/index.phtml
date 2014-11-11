@@ -1,11 +1,11 @@
-<div dojoType="dijit.layout.TabContainer" style="width: 100%; height: 100%;" tabStrip="true" class="mainContent">
+<div data-dojo-type="dijit/layout/TabContainer" style="width: 100%; height: 100%;" tabStrip="true" class="mainContent">
 <?php
 $i = 0;
 foreach ($this->groups as $group) :
     $selected = ($i == 0) ? ' selected="true"' : '';
 ?>
-<div dojoType="dijit.layout.ContentPane" title="<?=$group['group']?>" <?=$selected?>>
-    <div dojoType="dijit.form.Form" id="<?=$this->domPrefix . $i?>_form" jsId="<?=$this->domPrefix . $i?>_form"  class="formSearch" encType="multipart/form-data" target="ifrm_process" action="<?=BASE_URL.'crud-request/multi-update' ?>" method="post">
+<div data-dojo-type="dijit/layout/ContentPane" title="<?=$group['group']?>" <?=$selected?>>
+    <div data-dojo-type="dijit/form/Form" id="<?=$this->domPrefix . $i?>_form" jsId="<?=$this->domPrefix . $i?>_form"  class="formSearch" encType="multipart/form-data" target="ifrm_process" action="<?=BASE_URL.'crud-request/multi-update' ?>" method="post">
         <div class="formSettingsInputs">
 <?php 
     $subgroups = $this->model->getSubGroups($group['group']);
@@ -44,7 +44,7 @@ foreach ($this->groups as $group) :
             return false;
         }
         </script>
-        <button type="submit" dojoType="dijit.form.Button" iconClass="dijitIconSave" id="<?=$this->domPrefix ?>btnSaveSettings<?=$i?>">Guardar</button>
+        <button type="submit" data-dojo-type="dijit/form/Button" iconClass="dijitIconSave" id="<?=$this->domPrefix ?>btnSaveSettings<?=$i?>">Guardar</button>
         <input type="hidden" name="model" value="<?=get_class($this->model) ?>" />
         <input type="hidden" name="nocache" value="<?=uniqid('nocache') ?>" />
     </div>
