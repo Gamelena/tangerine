@@ -417,6 +417,19 @@ dojo.declare("zwei.Admportal", null, {
             dojo.byId('appLoader').style.display = 'none';
         }
     },
+    resizeGrid: function(domPrefix){
+        if (dojo.byId(domPrefix + 'contentCenter')) {
+            var paneHeight = dojo.contentBox(dojo.byId(domPrefix + 'contentCenter')).h;
+            var searcherHeight = dojo.byId(domPrefix + 'formSearch') 
+               ? dojo.contentBox(dojo.byId(domPrefix + 'formSearch')).h 
+               : 0;
+            dojo.contentBox(dojo.byId(domPrefix + 'dataGrid'), {h: paneHeight - searcherHeight - 12});
+            dijit.byId(domPrefix + 'dataGrid').resize();
+        } else {
+            console.info('no hay dojo.byId("' + domPrefix + 'contentCenter"');
+        }
+        
+    },
     execFunction: function(method, params, domPrefix, object, primary){
         if (object == undefined) var object = ''; 
         if (primary == undefined) var primary = 'id'; 
