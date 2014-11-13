@@ -420,6 +420,7 @@ dojo.declare("zwei.Admportal", null, {
     resizeGrid: function(domPrefix){
         if (dojo.byId(domPrefix + 'contentCenter')) {
             var paneHeight = dojo.contentBox(dojo.byId(domPrefix + 'contentCenter')).h;
+            
             var searcherHeight = dojo.byId(domPrefix + 'formSearch') 
                ? dojo.contentBox(dojo.byId(domPrefix + 'formSearch')).h 
                : 0;
@@ -429,13 +430,13 @@ dojo.declare("zwei.Admportal", null, {
             
             var paginators = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridPaginator')
             
+            
             if (paginators.length > 0) {
                 var paginator = paginators[0];
                 var gridMasterHeader = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridMasterHeader')[0];
                 var gridMasterView = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridMasterView')[0];
                 var gridView = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridView')[0];
                 var gridScrollbox = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridScrollbox')[0];
-                
                 
                 var gridHeaderHeight = dojo.contentBox(gridMasterHeader).h;
                 var paginatorHeight = dojo.contentBox(paginator).h;
@@ -445,13 +446,10 @@ dojo.declare("zwei.Admportal", null, {
                 dojo.contentBox(gridMasterView, {h: newHeight});
                 dojo.contentBox(gridView, {h: newHeight});
                 dojo.contentBox(gridScrollbox, {h: newHeight});
-            } else {
-            	console.info('no hay dojo.byId("' + domPrefix + 'gridPaginator"');
             }
             
-            
         } else {
-            console.info('no hay dojo.byId("' + domPrefix + 'contentCenter"');
+            console.info('no existe dojo.byId("' + domPrefix + 'contentCenter")');
         }
         
     },
