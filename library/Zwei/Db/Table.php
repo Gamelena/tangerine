@@ -6,7 +6,7 @@
  * @version $Id:$
  * @since 0.1
  */
-class Zwei_Db_Table extends Zend_Db_Table_Abstract
+class Zwei_Db_Table extends Zend_Db_Table_Abstract implements Zwei_Admin_ModelInterface
 {
     /**
      * Campo etiqueta o título, util cuando se usa el modelo para graficar en 2 dimensiones

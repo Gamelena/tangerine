@@ -7,8 +7,6 @@
  */
 interface Zwei_Admin_ModelInterface
 {
-    const PRIMARY          = 'primary';
-    
     public function select();
     
     public function insert(array $data);
@@ -18,5 +16,7 @@ interface Zwei_Admin_ModelInterface
     public function fetchAll();
     
     public function fetchRow();
+    
+    public function info();
 
 }
