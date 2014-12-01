@@ -169,5 +169,10 @@ class Helpers_ManyToManyCrud
         }
         return $insert || $delete;
     }
+    
+    public function getData()
+    {
+        return $this->_data;
+    }
 }
 
