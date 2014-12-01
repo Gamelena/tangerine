@@ -46,6 +46,14 @@
                 for (var j = 0; j < node.childNodes.length; j ++) {
                     if (node.childNodes[j].nodeName == 'INPUT') {
                         node.childNodes[j].disabled = false;
+<?php
+if ($this->saveUnselected) :                      
+?>
+                        node.childNodes[j].name = '<?=$this->target?>[]';
+                
+<?php
+endif;
+?>
                         break;
                     }
                 }
@@ -111,6 +119,15 @@ endforeach;
                 for (var j = 0; j < node.childNodes.length; j ++) {
                     if (node.childNodes[j].nodeName == 'INPUT') {
                         node.childNodes[j].disabled = true;
+<?php
+if ($this->saveUnselected) :                      
+?>
+                        node.childNodes[j].disabled = false;
+                        node.childNodes[j].name = '<?=$this->unselectedTarget?>[]';
+                
+<?php
+endif;
+?>
                         break;
                     }
                 }
@@ -119,7 +136,7 @@ endforeach;
 <?php 
 foreach ($this->unselectedItems as $id => $name) :
 ?>
-            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id?>"><input type="hidden" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" value="<?=$id?>" disabled="disabled"/>
+            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id?>"><input type="hidden" id="<?=$this->domId . $this->i?>" name="<?=$this->unselectedTarget?>[]" value="<?=$id?>" disabled="<?=$this->saveUnselected ? 'false': 'true'?>"/>
             <?=$name?>
             </li>
 <?php 
