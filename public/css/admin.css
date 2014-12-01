@@ -572,7 +572,7 @@ a.settingsTab {
 	font-weight: bold;
 }
 
-.settingsArea > table th, .tabForm a, {
+.settingsArea > table th, .tabForm a {
     color: #243C5F;
 }
 
