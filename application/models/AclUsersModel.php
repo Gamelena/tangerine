@@ -107,7 +107,7 @@ class AclUsersModel extends DbTable_AclUsers
                 $this->setMessage('Nombre de Usuario en uso.');
                 return false;
             } else {
-                Zwei_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
+                Console::error("error:".$e->getMessage()."code");
             }
         }
         return $last_insert_id;
