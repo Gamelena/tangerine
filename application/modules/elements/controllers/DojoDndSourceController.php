@@ -60,7 +60,7 @@ class Elements_DojoDndSourceController extends Zend_Controller_Action
                     $select = $this->_model->select(array("title", $id));
                 }
             }
-            if (method_exists($select, "__toString")) Debug::writeBySettings($select->__toString(), 'query_log');
+            if (method_exists($select, "__toString")) Console::debug($select->__toString());
             $rows = $this->_model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.
             
             if ($r->getParam('value')) {
