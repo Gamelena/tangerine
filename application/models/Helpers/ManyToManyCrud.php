@@ -170,9 +170,9 @@ class Helpers_ManyToManyCrud
         return $insert || $delete;
     }
     
-    public function getData()
+    public function getData($index = null)
     {
-        return $this->_data;
+        return $index ? $this->_data[$index] : $this->_data;
     }
 }
 
