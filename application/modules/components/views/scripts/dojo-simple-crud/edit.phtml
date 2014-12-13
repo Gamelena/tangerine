@@ -105,21 +105,22 @@ if (!$this->loadPartial) :
 ?>
         <div class="keyPadWrapper" style="clear: both;">
 <?php
-        foreach ($tab->xpath("helpers/customFunction") as $i => $function) :
+        foreach ($tab->xpath("helpers/customFunction") as $num => $function) :
             $f = (array) $function->attributes();
             $f = $f['@attributes'];
             $onclick = isset($f['onclick']) ? $f['onclick'] . ';' : '';
             $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
 ?>
-        <div class="keyPadButton">
-            <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?><?=$modAux?>btnFormFunctionTab<?=$this->dialogIndex?><?=$i?>" onClick="<?=$onclick . $target?>">
-            <?=$f['name'] ? $f['name'] : $f['target']?>
-            </button>
-        </div>
+            <div class="keyPadButton">
+                <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?><?=$modAux?>btnFormFunctionTab<?=$this->dialogIndex?><?=$num?>" onClick="<?=$onclick . $target?>">
+                <?=$f['name'] ? $f['name'] : $f['target']?>
+                </button>
+            </div>
 <?php 
         endforeach;
 ?>
         </div>
+        <div class="brclear"></div>
 <?php
     endif;
 ?>
@@ -145,15 +146,15 @@ endif;
     <div class="keyPadWrapper" style="clear: both;">
 
 <?php 
-foreach ($this->customFunctions as $i => $f) :
+foreach ($this->customFunctions as $num => $f) :
         $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
         $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
 ?>
-    <div class="keyPadButton">
-        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?><?=$modAux?>btnFormFunction<?=$this->dialogIndex?><?=$i?>" onClick="<?=$onclick.$target?>">
-        <?=$f['name'] ? $f['name'] : $f['target']?>
-        </button>
-    </div>
+        <div class="keyPadButton">
+            <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?><?=$modAux?>btnFormFunction<?=$this->dialogIndex?><?=$num?>" onClick="<?=$onclick.$target?>">
+            <?=$f['name'] ? $f['name'] : $f['target']?>
+            </button>
+        </div>
 
 <?php 
 endforeach;

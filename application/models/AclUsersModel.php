@@ -37,7 +37,7 @@ class AclUsersModel extends DbTable_AclUsers
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where('acl_roles_id <> ?', '1');
         }
-        $select->order('user_name');
+        $select->order("$this->_name.user_name");
 
         return $select;
     }

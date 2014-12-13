@@ -123,7 +123,7 @@ class Helpers_ManyToManyCrud
      * @param array $data
      * @return boolean
      */
-    public function save($model, $idFrom, $data)
+    public function save($model, $idFrom, $dataTo)
     {
         $ad = $model->getAdapter();
     
@@ -136,12 +136,12 @@ class Helpers_ManyToManyCrud
         $whereOr = array();
     
         $permissionsRows = array();
-        foreach ($data as $idTo) {
+        foreach ($dataTo as $idTo) {
             $whereOr[] = $ad->quote($idTo);
         }
     
         //(3) ... excepto los elementos que se encuentren chequeados en formulario
-        if (!empty($data)) {
+        if (!empty($dataTo)) {
             $list = implode(",", $whereOr);
             $where[] = "($this->_idNameTo) NOT IN ($list)";
         }
@@ -149,11 +149,11 @@ class Helpers_ManyToManyCrud
         //(4) Clausula WHERE lista, ahora borremos.
         $delete = $model->delete($where);
     
-        if (!empty($data)) $return = $delete;
+        if (!empty($dataTo)) $return = $delete;
     
         //(5) Agregar los elementos que fueron chequeadas.
         $insert =  false;
-        foreach ($data as $idTo) {
+        foreach ($dataTo as $idTo) {
             $data = array(
                     $this->_idNameFrom => $idFrom,
                     $this->_idNameTo => $idTo
