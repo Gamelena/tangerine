@@ -617,7 +617,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             } catch (Zend_Acl_Role_Registry_Exception $e) {
                 //Si se elimina un perfil con permisos asociados se genera esta Exception 
                 //ya que aun no son borrados los permisos asociados, generando una inconsistencia referencial, 
-                //estos permisos se borrarán despues, una forma de evitar esto es borrando en cascada por ORM o DB.
+                //estos permisos se borrarán justo despues de este paso, una forma de evitar esta excepción es borrando en cascada por ORM o DB.
             }
         }
     }
