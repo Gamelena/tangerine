@@ -37,7 +37,7 @@ class AclUsersModel extends DbTable_AclUsers
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where('acl_roles_id <> ?', '1');
         }
-        $select->order('user_name');
+        $select->order("$this->_name.user_name");
 
         return $select;
     }
@@ -107,7 +107,7 @@ class AclUsersModel extends DbTable_AclUsers
                 $this->setMessage('Nombre de Usuario en uso.');
                 return false;
             } else {
-                Zwei_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
+                Console::error("error:".$e->getMessage()."code");
             }
         }
         return $last_insert_id;
