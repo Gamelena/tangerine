@@ -61,13 +61,7 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
                 $select = $model->$method();
                 $title = "title";
             } else {
-                if ($r->getParam('tableField')) {
-                    $select = $model->select(array($r->getParam('tableField'), $id));
-                } else if ($r->getParam('field')){
-                    $select = $model->select(array($r->getParam('field'), $id));
-                } else {
-                    $select = $model->select(array("title", $id));
-                }
+                $select = $model->select();
             }
             if (method_exists($select, "__toString")) Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.

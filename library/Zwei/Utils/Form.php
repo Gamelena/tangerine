@@ -18,6 +18,7 @@
  */
 class Zwei_Utils_Form
 {
+    public $forbiddenExtensions = array('py', 'php', 'pl', 'cgi', 'bin', 'sh');
     /**
      * 
      * @param $array array - si existe se transforma $array a objeto y se retorna, ignorando el $_REQUEST por defecto.
@@ -108,7 +109,7 @@ class Zwei_Utils_Form
         if (!empty($_FILES[$file]['name']) && is_array($_FILES[$file]['name'])) {
             $info = array();
             foreach ($_FILES[$file]['name'] as $i => $f) {
-                if ($_FILES[$file]['size'][$i] > 0 && $_FILES[$file]['size'][$i] < $maxSize && substr($_FILES[$file]['name'][$i], -3, 3) != 'php') {
+                if ($_FILES[$file]['size'][$i] > 0 && $_FILES[$file]['size'][$i] < $maxSize && !in_array(substr($_FILES[$file]['name'][$i], -3, 3), $this->forbiddenExtensions)) {
                     $fp      = explode(".", $_FILES[$file]['name'][$i]);
                     $oldname = array();
                     foreach ($fp as $j => $v) {
@@ -138,7 +139,7 @@ class Zwei_Utils_Form
             }
             return $info;
         } else {
-            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $maxSize && substr($_FILES[$file]['name'], -3, 3) != 'php') {
+            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $maxSize && !in_array(substr($_FILES[$file]['name'][$i], -3, 3), $this->forbiddenExtensions)) {
                 $fp      = explode(".", $_FILES[$file]['name']);
                 $oldname = array();
                 foreach ($fp as $j => $v) {

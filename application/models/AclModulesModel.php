@@ -57,6 +57,7 @@ class AclModulesModel extends DbTable_AclModules
                 $this->setMessage("Clave repetida. COMPONENTE debe ser único.");
                 return false;
             }
+            $this->setMessage($e->getMessage());
         }
         Zwei_Utils_File::clearRecursive(ROOT_DIR . "/cache", false, ROOT_DIR . "/cache/readme.txt");
         $writeContent = $this->writeContent($data);
@@ -147,6 +148,8 @@ class AclModulesModel extends DbTable_AclModules
                     Console::log("No se pudo crear el archivo " . COMPONENTS_ADMIN_PATH . '/' . $data['module']);
                 }
             }
+        } else if (empty ($data['type'])) {
+            $data['type'] = null;
         }
         
         if (isset($data['content'])) {

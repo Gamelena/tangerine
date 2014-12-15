@@ -1,0 +1,19 @@
+<!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
+<component name="Grupos" type="dojo-simple-crud" target="AclGroupsModel" edit="true" add="true" delete="true" list="true" clone="true" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="components.xsd" style="min-height:427px;width:417px;">
+    <elements>
+        <element name="Nombre" target="title" required="true" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"></element>
+        <element name="Descripción" target="description" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"></element>
+    </elements>
+    <forms ajax="true">
+        <tabs>
+            <tab name="Datos Básicos">
+                <element target="title"/>
+                <element target="description"/> 
+            </tab>
+            <tab name="Usuarios">
+                <element name="Usuarios" target="usuarios" type="dojox-form-checked-multi-select" table="AclUsersModel" field="user_name" visible="true" edit="true" add="true"/>
+            </tab>
+        </tabs>
+    </forms>
+</component>

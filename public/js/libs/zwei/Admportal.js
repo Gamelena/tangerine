@@ -404,7 +404,7 @@ dojo.declare("zwei.Admportal", null, {
             //dojo.byId(tabId).style.background='url("/dojotoolkit/dijit/themes/claro/images/activeGradient.png") #CFE5FA repeat-x';
             dojo.addClass(dojo.byId(tabId), 'active');
         } catch (e) {
-            console.debug(e.message);
+            console.debug(areaId, e.message);
         }    
     },
     lockScreen: function(lock) {

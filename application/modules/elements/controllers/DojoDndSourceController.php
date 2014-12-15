@@ -16,12 +16,23 @@ class Elements_DojoDndSourceController extends Zend_Controller_Action
     public function indexAction()
     {
         $r = $this->getRequest();
-        
+
         $this->view->i =  $r->getParam('i');
         $this->view->domId =  $r->getParam('domId');
         $this->view->target =  $r->getParam('target');
         $this->view->selectedTitle =  $r->getParam('selectedTitle', 'Seleccionados');
         $this->view->unselectedTitle =  $r->getParam('unselectedTitle', 'No seleccionados');
+        $this->view->saveUnselected = $r->getParam('saveUnselected', false);
+        $this->view->editable = $r->getParam('editable', false);//@todo implement me in view
+        $this->view->droppable = $r->getParam('droppable', false);//@todo implement me in view
+        
+        
+        $this->view->unselectedTarget = $this->view->target;
+        
+        if ($this->view->saveUnselected) {
+            $this->view->unselectedTarget = 'data[tangerineUnselected]';
+        }
+        
         
         $this->view->unselectedItems = array();
         $this->view->selectedItems = array();
@@ -41,13 +52,7 @@ class Elements_DojoDndSourceController extends Zend_Controller_Action
                 $select = $this->_model->$method();
                 $title = "title";
             } else {
-                if ($r->getParam('tableField')) {
-                    $select = $this->_model->select(array($r->getParam('tableField'), $id));
-                } else if ($r->getParam('field')){
-                    $select = $this->_model->select(array($r->getParam('field'), $id));
-                } else {
-                    $select = $this->_model->select(array("title", $id));
-                }
+                $select = $this->_model->select();
             }
             if (method_exists($select, "__toString")) Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $this->_model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.
