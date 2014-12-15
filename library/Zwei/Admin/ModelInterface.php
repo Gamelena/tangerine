@@ -1,7 +1,7 @@
 <?php 
 /**
- * Interface que debieran implementar los modelos no db 
- * para ser compatible con los modelos Zend_Db_Table que espera AdmPortal
+ * Interface que debieran implementar los modelos  
+ * para ser compatibles con los flujos de AdmPortal
  * @author rodrigo
  *
  */
@@ -16,7 +16,5 @@ interface Zwei_Admin_ModelInterface
     public function fetchAll();
     
     public function fetchRow();
-    
-    public function info();
 
 }

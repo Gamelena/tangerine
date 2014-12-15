@@ -19,8 +19,6 @@ class AclSessionOnlineModel extends DbTable_AclSession
      */
     public function select($withFromPart = self::SELECT_WITHOUT_FROM_PART)
     {
-        $config = Zwei_Controller_Config::getOptions();
-        
         $select = parent::select($withFromPart);
         $select->setIntegrityCheck(false);
         
