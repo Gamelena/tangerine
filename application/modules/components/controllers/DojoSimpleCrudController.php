@@ -449,22 +449,42 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                         form.showDialog();";
                 }
             } else {
-                $this->view->onRowDblClick = "
-                    var items = this.selection.getSelected();
-                    if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
-                    if (items[0].admPortalIsAllowedEDIT=='1') {
-                        var form = new zwei.Form({
-                            ajax: $ajax,
-                            component: '{$this->_component}',
-                            action: 'edit',
-                            queryParams: '{$_SERVER['QUERY_STRING']}',
-                            dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
-                            dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
-                            dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
-                        }); 
-                        form.showDialog();
-                    }
-                ";
+                if ($this->view->multiForm) {
+                    $this->view->onRowDblClick = "
+                        var items = this.selection.getSelected();
+                        if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+                        if (items[0].admPortalIsAllowedEDIT=='1') {
+                            var form = new zwei.Form({
+                                ajax: $ajax,
+                                component: '{$this->_component}',
+                                action: 'edit',
+                                title: 'Editar {$this->_xml->getAttribute("name")}',
+                                queryParams: '{$_SERVER['QUERY_STRING']}',
+                                prefix: '{$this->view->domPrefix}',
+                                dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid'),
+                                keys : $jsPrimary
+                            }); 
+                            form.showMultipleDialogs();
+                        }
+                    ";
+                } else {
+                    $this->view->onRowDblClick = "
+                        var items = this.selection.getSelected();
+                        if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+                        if (items[0].admPortalIsAllowedEDIT=='1') {
+                            var form = new zwei.Form({
+                                ajax: $ajax,
+                                component: '{$this->_component}',
+                                action: 'edit',
+                                queryParams: '{$_SERVER['QUERY_STRING']}',
+                                dijitDialog: dijit.byId('{$this->view->domPrefix}dialog_edit'), 
+                                dijitForm: dijit.byId('{$this->view->domPrefix}form_edit'), 
+                                dijitDataGrid: dijit.byId('{$this->view->domPrefix}dataGrid')
+                            }); 
+                            form.showDialog();
+                        }
+                    ";
+                }
             }
         }
         
