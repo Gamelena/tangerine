@@ -101,17 +101,18 @@ class Elements_DojoxFormCheckedMultiSelectBinaryController extends Zend_Controll
             }
         } else {
             if (!$r->getParam('value')) {
-                $value = (isset($request->{$this->target})) ? $request->{$this->target} : null;
+                $value = (isset($request->{$this->view->target})) ? $request->{$this->view->target} : null;
             } else {
                 $value = $r->getParam('value');
             }
         
             $options = "";
             $rows = explode(",", $r->getParam('list'));
-            foreach ($rows as $row) {
+            foreach ($rows as $i => $row) {
+                Console::debug(array($i, pow(2, $i)));
                 //Zwei_Utils_Debug::write('$id='.$id.'$row='.$row.'$value='.$value);
                 $selected = $row == $value ? "selected" : "";
-                $options .= "<option value=\"".$row."\" ".$selected." >$row</option>\r\n";
+                $options .= "<option value=\"".pow(2, $i)."\" ".$selected." >$row</option>\r\n";
             }
         
         }
