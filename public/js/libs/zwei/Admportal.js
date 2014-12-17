@@ -418,7 +418,7 @@ dojo.declare("zwei.Admportal", null, {
         }
     },
     resizeGrid: function(domPrefix){
-        if (dojo.byId(domPrefix + 'contentCenter')) {
+        if (dojo.byId(domPrefix + 'contentCenter') && dijit.byId(domPrefix + 'dataGrid')) {
             var paneHeight = dojo.contentBox(dojo.byId(domPrefix + 'contentCenter')).h;
             
             var searcherHeight = dojo.byId(domPrefix + 'formSearch') 
@@ -449,7 +449,7 @@ dojo.declare("zwei.Admportal", null, {
             }
             
         } else {
-            console.info('no existe dojo.byId("' + domPrefix + 'contentCenter")');
+            console.info('no existen: dojo.byId("' + domPrefix + 'contentCenter") y/o dijit.byId("'+ domPrefix + 'dataGrid")');
         }
         
     },

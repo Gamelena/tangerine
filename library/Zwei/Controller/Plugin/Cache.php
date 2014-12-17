@@ -88,10 +88,11 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             
             $this->tags[] = "userid{$userInfo->id}";
             $this->tags[] = "roleid{$userInfo->acl_roles_id}";
+            $this->tags[] = "component" . Zwei_Utils_String::toVarWord($request->getParam("p"));
             
             if (false !== ($response = $this->getCache())) {
                 $response->sendResponse();
-                if (PHP_SAPI !== 'cli') { //exit mata a phpunit.
+                if (PHP_SAPI !== 'cli') { //exit mata silenciosamente a phpunit.
                     exit();
                 }
             }
@@ -105,7 +106,7 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
     public function getCache()
     {
         if (isset($this->cache) && ($response = $this->cache->load($this->key)) != false) {
-            //Debug::write("Trayendo de cache ".@$_SERVER['REQUEST_URI']);
+            Debug::write("Trayendo de cache ".@$_SERVER['REQUEST_URI']);
             return $response;
         }
         return false;

@@ -140,7 +140,7 @@ endif;
 $i = 0;
 foreach ($this->unselectedItems as $id => $name) :
 ?>
-            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id?>"><input type="hidden" id="outStockInput<?=$this->domId . $i?>" name="<?=$this->unselectedTarget?>[]" value="<?=$id?>" <?=$this->saveUnselected ? '' : 'disabled="disabled"'?>"/>
+            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id?>"><input type="hidden" id="outStockInput<?=$this->domId . $i?>" name="<?=$this->unselectedTarget?>[]" value="<?=$id?>" <?=$this->saveUnselected ? '' : 'disabled="disabled"'?>/>
             <?=$name?>
             </li>
 <?php 
