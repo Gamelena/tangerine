@@ -147,11 +147,20 @@ endif;
         };
         
         var gotError = function(error, request){
-            console.debug(request);
-            console.debug(error);
-            //alert("¡Vaya! ha ocurrido un error: " +  error);
+            console.error(error, request);
         };
-
     });
+    var downloadChartCsv = function() {
+        var iframe = dojo.byId('ifrm_process');
+        iframe.src = base_url + 'components/dojo-chart/excel?<?=$this->excelParams?>';
+        
+    } 
 </script>
 <button type="button" class="dijitIconPrint" style="width:21px;position:absolute;top:24px;left:16px;" iconClass="dijitIconPrint" id="btnPrint" title="Imprimir" onClick="window.print();"></button>
+<?php 
+if ($this->excel) :
+?>
+<button type="button" class="dijitIconTable"  style="width:21px;position:absolute;top:24px;left:40px;" iconClass="dijitIconTable" id="btnCsv" title="Descargar CSV" onClick="downloadChartCsv();"></button>
+<?php 
+endif;
+?>
