@@ -139,7 +139,7 @@ class Zwei_Utils_Form
             }
             return $info;
         } else {
-            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $maxSize && !in_array(substr($_FILES[$file]['name'][$i], -3, 3), $this->forbiddenExtensions)) {
+            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $maxSize && !in_array(substr($_FILES[$file]['name'], -3, 3), $this->forbiddenExtensions)) {
                 $fp      = explode(".", $_FILES[$file]['name']);
                 $oldname = array();
                 foreach ($fp as $j => $v) {
