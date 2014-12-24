@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `acl_session` (
   `id` char(32) NOT NULL DEFAULT '0',
   `acl_users_id` int(10) NOT NULL,
   `acl_roles_id` int(10) NOT NULL,
-  `created` int(10) UNSIGNED DEFAULT NULL;
+  `created` int(10) UNSIGNED DEFAULT NULL,
   `modified` int(10) UNSIGNED DEFAULT NULL,
   `lifetime` int(10)  UNSIGNED DEFAULT NULL,
   `image` VARCHAR(255) DEFAULT NULL,

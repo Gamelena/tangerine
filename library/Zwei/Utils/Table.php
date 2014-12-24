@@ -136,8 +136,10 @@ class Zwei_Utils_Table
                 $row = $rowset[0];
                 $j = 0;
                 foreach($row as $i => $v) {
-                    $this->_name[$i] = $component[$j];
-                    $j++;
+                    if (isset($component[$j])) {
+                        $this->_name[$i] = $component[$j];
+                        $j++;
+                    }
                 }
     
                 $this->_xml = "array";

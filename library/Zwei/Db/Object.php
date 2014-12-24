@@ -108,7 +108,7 @@ class Zwei_Db_Object
         $count = (isset($this->_form->count)) ? $this->_form->count : false;
         $sort = (isset($this->_form->sort)) ? $this->_form->sort : false;
         
-        if ($sort && (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select"))) {
+        if ($sort && $this->_select instanceof Zend_Db_Select) {
             $this->_select->reset(Zend_Db_Select::ORDER);
             if (preg_match("/^-(.*)/", $sort)) {
                 $sort = substr($sort, 1);
@@ -118,10 +118,14 @@ class Zwei_Db_Object
             }
         }
         
-        if ($count && is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) $this->_select->limit($count, $start);
+        if ($count && $this->_select instanceof Zend_Db_Select) {
+            $this->_select->limit($count, $start);
+        }
         
         //Se imprime query en log debug según configuración del sitio
-        if (is_a($this->_select, "Zend_Db_Table_Select") || is_a($this->_select, "Zend_Db_Select")) Zwei_Utils_Debug::writeBySettings($this->_select->__toString(), 'query_log');
+        if ($this->_select instanceof Zend_Db_Select) {
+            Zwei_Utils_Debug::writeBySettings($this->_select->__toString(), 'query_log');
+        }
         return $this->_select;
     }
     /**

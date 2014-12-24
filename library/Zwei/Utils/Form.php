@@ -1,9 +1,17 @@
 <?php
 /**
- * Manejador de Requests. 
+ * Manejador de Requests.
  * 
  * Encapsula los $_POST, $_GET y $_FILES, codifica/decodifica los datos ingresados como html_entities UTF-8.
  * Los valores de los resultados son datos HTML.
+ * 
+ * Es aconsejable usar esta clase para manejar los $_GET y $_POST fuera de controladoes.
+ * 
+ * Para controladores Zend_Controller usar es aconsejable $this->getRequest() para los $_GET y $_POST en lugar de Zwei_Utils_Form, usar sólo para upload de archivos,
+ * ya que Zend_Controller::getRequest() ofrece mejor compatibilidad con Zend_Test_PHPUnit_ControllerTestCase.
+ * 
+ * 
+ *  
  * 
  * @package Zwei_Utils
  * @version $Id:$
@@ -139,7 +147,7 @@ class Zwei_Utils_Form
             }
             return $info;
         } else {
-            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $maxSize && !in_array(substr($_FILES[$file]['name'][$i], -3, 3), $this->forbiddenExtensions)) {
+            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $maxSize && !in_array(substr($_FILES[$file]['name'], -3, 3), $this->forbiddenExtensions)) {
                 $fp      = explode(".", $_FILES[$file]['name']);
                 $oldname = array();
                 foreach ($fp as $j => $v) {

@@ -246,7 +246,7 @@ class CrudRequestController extends Zend_Controller_Action
                         $oDbObject = new Zwei_Db_Object($this->_form);
                         $oSelect   = $oDbObject->select();
                         
-                        if (is_a($oSelect, "Zend_Db_Table_Select") || is_a($oSelect, "Zend_Db_Select")) {
+                        if ($oSelect instanceof Zend_Db_Select) {
                             $adapter = $this->_model->getZwAdapter();
                             
                             if (isset($adapter) && !empty($adapter))
@@ -256,6 +256,7 @@ class CrudRequestController extends Zend_Controller_Action
                             } catch (Zend_Db_Exception $e) {
                                 throw new Zend_Db_Exception("$classModel::select() {$e->getMessage()}", $e->getCode());
                             }
+                            
                             if ($this->_model->count() === false) {
                                 $paginator = Zend_Paginator::factory($oSelect);
                                 $numRows   = $paginator->getTotalItemCount();
@@ -302,7 +303,6 @@ class CrudRequestController extends Zend_Controller_Action
                                 header("Content-Disposition: attachment; filename={$this->_form->model}.csv");
                                 header('Content-Encoding: UTF-8');
                                 header('Content-type: text/csv; charset=UCS-2LE');
-                                
                                 
                                 if (isset($this->_form->p)) {
                                     $content = $table->rowsetToCsv($data, $this->_form->p);

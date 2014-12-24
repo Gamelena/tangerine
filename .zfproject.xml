@@ -91,6 +91,13 @@
               <actionMethod actionName="edit"/>
               <actionMethod actionName="add"/>
             </controllerFile>
+            <controllerFile controllerName="DojoChart">
+              <actionMethod actionName="index"/>
+              <actionMethod actionName="excel"/>
+              <actionMethod actionName="bars"/>
+              <actionMethod actionName="lines"/>
+              <actionMethod actionName="pie"/>
+            </controllerFile>
           </controllersDirectory>
           <formsDirectory enabled="false"/>
           <layoutsDirectory enabled="false"/>
@@ -105,12 +112,6 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="DojoSettings">
                 <viewScriptFile forActionName="index"/>
-              </viewControllerScriptsDirectory>
-              <viewControllerScriptsDirectory forControllerName="dojo-simple-crud">
-                <viewScriptFile forActionName="edit"/>
-              </viewControllerScriptsDirectory>
-              <viewControllerScriptsDirectory forControllerName="dojo-simple-crud">
-                <viewScriptFile forActionName="search"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
                 <viewScriptFile forActionName="list"/>
@@ -147,6 +148,21 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="GroupsModules">
                 <viewScriptFile forActionName="add"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoChart">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoChart">
+                <viewScriptFile forActionName="excel"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoChart">
+                <viewScriptFile forActionName="bars"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoChart">
+                <viewScriptFile forActionName="lines"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoChart">
+                <viewScriptFile forActionName="pie"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
@@ -401,6 +417,13 @@
                 <testApplicationActionMethod forActionName="index"/>
                 <testApplicationActionMethod forActionName="edit"/>
                 <testApplicationActionMethod forActionName="add"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoChart">
+                <testApplicationActionMethod forActionName="index"/>
+                <testApplicationActionMethod forActionName="excel"/>
+                <testApplicationActionMethod forActionName="bars"/>
+                <testApplicationActionMethod forActionName="lines"/>
+                <testApplicationActionMethod forActionName="pie"/>
               </testApplicationControllerFile>
             </testApplicationControllerDirectory>
           </testApplicationModuleDirectory>
