@@ -30,7 +30,7 @@ dojo.declare("zwei.Admportal", null, {
     initListeners: function()
     {
         var self = this;
-        this.intervalListener = setInterval(function(){self.listenUserStatus();}, 10000);
+        this.intervalListener = setInterval(function(){self.listenUserStatus();}, 30000);
     },
     listenUserStatus: function()
     {

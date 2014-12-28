@@ -109,9 +109,12 @@ class Elements_DojoxFormCheckedMultiSelectBinaryController extends Zend_Controll
             $options = "";
             $rows = explode(",", $r->getParam('list'));
             foreach ($rows as $i => $row) {
-                Console::debug(array($i, pow(2, $i)));
+                Console::debug(array($i, pow(2, $i), $value));
                 //Zwei_Utils_Debug::write('$id='.$id.'$row='.$row.'$value='.$value);
-                $selected = $row == $value ? "selected" : "";
+                $selected = "";
+                if ($value & pow(2, $i)) {
+                    $selected = "selected=\"selected\"";
+                }
                 $options .= "<option value=\"".pow(2, $i)."\" ".$selected." >$row</option>\r\n";
             }
         
