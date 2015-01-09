@@ -38,7 +38,7 @@
                     });
                 }" />
         </div>
-        <ul data-dojo-type="dojo/dnd/Source" data-dojo-props="accept: [ 'inStock<?=$this->i?>', 'outStock<?=$this->i?>' ], autoSync: true, simpleSelection: true" id="inStock<?=$this->domId. $this->i?>" class="dndList inStock">
+        <ul data-dojo-type="dojo/dnd/Source" data-dojo-props="accept: [ 'inStock', 'outStock' ], autoSync: true, simpleSelection: true" id="inStock<?=$this->domId. $this->i?>" class="dndList inStock">
         <script type="dojo/connect" event="onDropExternal" args="source, nodes, copy">
             var node;
             for (var i = 0; i < nodes.length; i++) {
@@ -63,7 +63,7 @@ endif;
 $i=0;
 foreach ($this->selectedItems as $id => $name) :
 ?>
-            <li class="dojoDndItem" dndType="inStock<?=$this->i?>" title="<?=$name?>" id="item<?=$this->domId . $i . $this->i?>"><input type="hidden" id="inStockInput<?=$this->domId . $i . $this->i?>" name="<?=$this->target?>[]" value="<?=$id?>"/>
+            <li class="dojoDndItem" dndType="inStock" title="<?=$name?>" id="item<?=$this->domId . $i . $this->i?>"><input type="hidden" id="inStockInput<?=$this->domId . $i . $this->i?>" name="<?=$this->target?>[]" value="<?=$id?>"/>
             <?=$name?>
             </li>
 <?php
@@ -103,7 +103,7 @@ endforeach;
                             var innerText = node.innerText || node.textContent;
                             if (self.value != '' && innerText.toLowerCase().indexOf(value.toLowerCase()) > 0) {
                                node.style.display='list-item';
-                               node.setAttribute('dndtype', 'outstock<?=$this->i?>');
+                               node.setAttribute('dndtype', 'outstock');
                             } else {
                                var myParent = node.parentNode;
                                myParent.removeChild(node);
@@ -113,7 +113,7 @@ endforeach;
                         });
                     }" />
         </div>
-        <ul data-dojo-type="dojo/dnd/Source" data-dojo-props="accept: ['inStock<?=$this->i?>', 'outStock<?=$this->i?>'], autoSync: true, simpleSelection: true" id="outStock<?=$this->domId. $this->i?>" class="dndList outStock">
+        <ul data-dojo-type="dojo/dnd/Source" data-dojo-props="accept: ['inStock', 'outStock'], autoSync: true, simpleSelection: true" id="outStock<?=$this->domId. $this->i?>" class="dndList outStock">
             <script type="dojo/connect" event="onDropExternal" args="source, nodes, copy">
             var node;
             for (var i = 0; i < nodes.length; i++) {
@@ -140,7 +140,7 @@ endif;
 $i = 0;
 foreach ($this->unselectedItems as $id => $name) :
 ?>
-            <li class="dojoDndItem" dndType="outStock<?=$this->i?>" title="<?=$name?>" id="item<?=$this->domId . $id . $this->i?>"><input type="hidden" id="outStockInput<?=$this->domId . $i . $this->i?>" name="<?=$this->unselectedTarget?>[]" value="<?=$id?>" <?=$this->saveUnselected ? '' : 'disabled="disabled"'?>"/>
+            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id . $this->i?>"><input type="hidden" id="outStockInput<?=$this->domId . $i . $this->i?>" name="<?=$this->unselectedTarget?>[]" value="<?=$id?>" <?=$this->saveUnselected ? '' : 'disabled="disabled"'?>"/>
             <?=$name?>
             </li>
 <?php 
