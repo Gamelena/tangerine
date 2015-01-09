@@ -309,7 +309,7 @@ class CrudRequestController extends Zend_Controller_Action
                                 } else {
                                     $content = $table->rowsetToCsv($data);
                                 }
-                                $this->view->content = chr(255) . chr(254) . mb_convert_encoding($content, 'UCS-2LE', 'UTF-8');
+                                $this->view->content = chr(255) . chr(254) . mb_convert_encoding($content, 'UCS-2LE', 'UTF-8');//hack para prevenir advertencias de MS Excel
                             } else {
                                 header('Content-type: application/vnd.ms-excel');
                                 header("Content-Disposition: attachment; filename={$this->_form->model}.xls");

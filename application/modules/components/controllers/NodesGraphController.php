@@ -31,16 +31,20 @@ class Components_NodesGraphController extends Zend_Controller_Action
     
     public function init()
     {
-        $this->_modelNodes = new MensajesModel();
-        $this->_modelLinks = new TreeLinksModel();
-        $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
-        
-        $this->view->domPrefix = isset($config->zwei->layout->mainPane) && $config->zwei->layout->mainPane == 'dijitTabs'
-            ? str_replace('.', '_', $this->_xmlNodes)
-            : '';
-        $this->view->domPrefix2 = isset($config->zwei->layout->mainPane) && $config->zwei->layout->mainPane == 'dijitTabs'
-            ? str_replace('.', '_', $this->_xmlLinks)
-            : '';
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+            $this->_redirect('admin/login');
+        } else {
+            $this->_modelNodes = new MensajesModel();
+            $this->_modelLinks = new TreeLinksModel();
+            $config = new Zend_Config($this->getInvokeArg('bootstrap')->getOptions());
+            
+            $this->view->domPrefix = isset($config->zwei->layout->mainPane) && $config->zwei->layout->mainPane == 'dijitTabs'
+                ? str_replace('.', '_', $this->_xmlNodes)
+                : '';
+            $this->view->domPrefix2 = isset($config->zwei->layout->mainPane) && $config->zwei->layout->mainPane == 'dijitTabs'
+                ? str_replace('.', '_', $this->_xmlLinks)
+                : '';
+        }
     }
 
     public function indexAction()
