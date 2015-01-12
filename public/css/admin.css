@@ -688,6 +688,8 @@ a.settingsTab {
 .formSearchSubmit .submit{
     float: right;
     margin-right: 9px;
+    position: relative;
+    top: -5px;
 }
 
 .formSearchItemContainer .item {
