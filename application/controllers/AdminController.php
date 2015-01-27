@@ -365,6 +365,7 @@ class AdminController extends Zend_Controller_Action
     {
         $this->view->src = $this->getRequest()->getParam('p');
         $modules = new AclModulesModel();
-        $this->view->moduleId = $modules->findModule($this->view->src, 'id')->id;
+        $findModule = $modules->findModule($this->view->src, 'id');
+        $this->view->moduleId = $findModule ? $findModule->id : '0';
     }
 }
