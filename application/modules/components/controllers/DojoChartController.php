@@ -101,7 +101,7 @@ class Components_DojoChartController extends Zend_Controller_Action
         }
         
         $uri = html_entity_decode(urldecode($this->_request->getParam('uri')));
-        $port = $_SERVER['SERVER_PORT'] != '80' ? '' . $_SERVER['SERVER_PORT'] : '';
+        $port = $_SERVER['SERVER_PORT'] != '80' ? ':' . $_SERVER['SERVER_PORT'] : '';
         if (! empty($uri)) {
             $aUri = parse_url($uri);
             if (! empty($aUri)) {
@@ -127,9 +127,7 @@ class Components_DojoChartController extends Zend_Controller_Action
                 $aParams['p'] = $this->_request->getParam('p');
                 
                 $httpParams = http_build_query($aParams);
-                $this->view->url = $aUri['scheme'] . ":$port//" . $aUri['host'] .
-                         $aUri['path'] . '?' .
-                         str_replace('%3B', ';', $httpParams);
+                $this->view->url = $aUri['scheme'] . "://" . $aUri['host'] . $port . $aUri['path'] . '?' .  str_replace('%3B', ';', $httpParams);
             }
         }
         $aParams['format'] = 'excel';
