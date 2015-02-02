@@ -166,15 +166,16 @@ input,textarea,select {
 }
 
 #tituloAdm {
-    text-align: left;
-    font-family: 'resagokrbold', serif;
+    color: #50a032;
     float: left;
+    font-family: "resagokrbold",serif;
+    font-size: 23px;
+    font-weight: bold;
     padding-left: 18px;
     padding-top: 5px;
-    font-size: 23px;
-    color: #fff;
-    text-shadow: 0.2em 0em 1em black, 0.2em 0.1em 0.3em black;
-    filter: progid:DXImageTransform.Microsoft.Shadow(color='gray', Direction=135, Strength=6);
+    text-align: left;
+    text-shadow: 0.2em 0 1em white, 0.2em 0.1em 0.3em white;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='white', Direction=135, Strength=6);
 }
 
 #logosAdm {
