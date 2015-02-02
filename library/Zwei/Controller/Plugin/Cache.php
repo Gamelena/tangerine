@@ -73,7 +73,8 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
         } else {
             $userInfo = Zend_Auth::getInstance()->getStorage()->read();
             //Dependiendo el usuario pertenece o no a grupos se debe serializar el cache por id de usuario o id de perfil.
-            $cacheUserRoleHash = !empty($userInfo->groups) ? "userid{$userInfo->id}" : "roleid{$userInfo->acl_roles_id}"; 
+            $cacheUserRoleHash = !empty($userInfo->groups) ? "userid{$userInfo->id}" : "roleid{$userInfo->acl_roles_id}";
+            //$cacheUserRoleHash = empty($userInfo->groups) ? "roleid{$userInfo->acl_roles_id}" : "roleid{$userInfo->acl_roles_id}-groupsids" . implode("_", $userInfo->groups);
             
             if ($request->getControllerName() == "admin" && $request->getActionName() == "components") {
                 $this->key = md5(BASE_URL . $request->getPathInfo() . $request->getParam("p")) . $cacheUserRoleHash;

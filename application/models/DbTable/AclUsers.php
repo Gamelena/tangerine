@@ -11,7 +11,7 @@ class DbTable_AclUsers extends Zwei_Db_TableLoggeable
      *
      * @var array
      */
-    //protected $_dependentTables = array('DbTable_AclUsersGroups');
+    protected $_dependentTables = array('DbTable_AclUsersGroups');
     
     
     protected $_referenceMap = array(

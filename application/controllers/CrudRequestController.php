@@ -139,8 +139,8 @@ class CrudRequestController extends Zend_Controller_Action
                                     $this->_form->data[$k] = $l['filename'];
                                     //Crear miniaturas de imagen si corresponde
                                     if ($element[$j]->existsChildren('thumb')) {
-                                        foreach ($element[$j]->thumb as $t) {
-                                            $this->createThumb($t, $l, $path);
+                                        foreach ($element[$j]->thumb as $thumb) {
+                                            $this->createThumb($thumb, $l, $path);
                                         }
                                     }
                                     $j++;
@@ -503,21 +503,22 @@ class CrudRequestController extends Zend_Controller_Action
     protected function createThumb(Zwei_Admin_Xml $node, $infoFile, $path)
     {
         try {
-            if (preg_match("/^\{ROOT_DIR\}(.*)$/", $node->getAttribute('path'), $matches)) {
-                $thumbPath = ROOT_DIR . $matches[1];
-            } else if (preg_match("/^\{APPLICATION_PATH\}(.*)$/", $node->getAttribute('path'), $matches)) {
-                $thumbPath = APPLICATION_PATH . $matches[1];
-            } else if ($node->getAttribute('path')) {
-                $thumbPath = $node->getAttribute('path');
-            } else {
-                $thumbPath = $path;
+            $thumbPath = $path;
+            if ($node->getAttribute('path')) {
+                //La RegExp busca constantes declaradas entre llaves en atributo xml "path"
+                //ej {ROOT_DIR}/myupfiles
+                if (preg_match("/^\{(.*)\}(.*)$/", $node->getAttribute('path'), $matches)) {
+                    $thumbPath = constant($matches[1]) . $matches[2];
+                } else {
+                    $thumbPath = $node->getAttribute('path');
+                }
             }
             
             //[TODO] cambiar configuracion del Autoloader en Bootstrap para no usar require_once
             require_once ADMPORTAL_APPLICATION_PATH . '/../library/PhpThumb/ThumbLib.inc.php';
             
-            if (!file_exists($path))
-                mkdir($path, 0777, true);
+            if (!file_exists($thumbPath))
+                mkdir($thumbPath, 0777, true);
             $thumb  = PhpThumbFactory::create($path . "/" . $infoFile['filename']);
             $width  = $node->getAttribute('width') ? $node->getAttribute('width') : 0;
             $height = $node->getAttribute('height') ? $node->getAttribute('height') : 0;

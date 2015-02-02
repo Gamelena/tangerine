@@ -27,8 +27,8 @@ read DB_PASS
 echo Se seleccionaron los sig parámetros: DB_ADAPTER:$DB_ADAPTER, HOST:$DB_HOST, DB:$DB_NAME, USER:$DB_USER, PASSWORD:$DB_PASS
 echo " "
 
-read -p "¿Desea crear la base de datos MySQL? (S/N) (por defecto N):" CREATE_DATABASE    
-CREATE_DATABASE=${CREATE_DATABASE:-N}
+basread -p "¿Desea crear la base de datos MySQL? (S/N) (por defecto S):" CREATE_DATABASE    
+CREATE_DATABASE=${CREATE_DATABASE:-S}
 
 
 if [[ "$CREATE_DATABASE" = "S" ]]; then
@@ -224,6 +224,7 @@ echo "      chmod 777 -R  $DEST_PATH/web/log/ $DEST_PATH/web/cache/ $DEST_PATH/w
 echo " "
 echo Happy AdmPortal\'ing.
 echo " "
+
 
 
 

@@ -62,7 +62,6 @@ if ($this->edit) :
     </div>
     <script type="dojo/method" event="onSubmit">
     if (this.validate()) {
-        console.debug(this);
         utils.showMessage('Datos Guardados');
         dijit.byId('groups_modulesdialog_edit').hide();
     } else {

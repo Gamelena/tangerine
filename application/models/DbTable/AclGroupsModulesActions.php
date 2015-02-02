@@ -18,17 +18,17 @@ class DbTable_AclGroupsModulesActions extends Zwei_Db_Table
             'refTableClass'     => 'DbTable_AclModulesActions',
             'refColumns'        => array('id'),
             'onDelete'          => self::CASCADE,
-            'onUpdate'          => self::RESTRICT
+            'onUpdate'          => self::CASCADE
         ),
         'acl_groups' => array(
             'columns'           => array('acl_groups_id'),
             'refTableClass'     => 'DbTable_AclGroups',
             'refColumns'        => array('id'),
             'onDelete'          => self::CASCADE,
-            'onUpdate'          => self::RESTRICT
+            'onUpdate'          => self::CASCADE
         )
     );
     
-    protected $_validateXmlAcl = array('EDIT' => true, 'ADD' => true, 'DELETE' => true, 'LIST' => false);
+//     protected $_validateXmlAcl = array('EDIT' => true, 'ADD' => true, 'DELETE' => true, 'LIST' => false);
 }
 

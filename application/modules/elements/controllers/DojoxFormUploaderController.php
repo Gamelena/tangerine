@@ -25,18 +25,18 @@ class Elements_DojoxFormUploaderController extends Zend_Controller_Action
         $this->view->url = $r->getParam('url') ? "url=\"{$r->getParam('url')}\"" : 'url=""';
         $this->view->baseUrlPath = $r->getParam('url') ? $r->getParam('url') : BASE_URL . '/upfiles/';
         
-        if (preg_match("/^\{BASE_URL\}(.*)$/", $r->getParam('url'), $matches)) {
-            $this->view->url = "url=\"".BASE_URL . $matches[1]."\"";
-            $this->view->baseUrlPath = BASE_URL . $matches[1];
+        //La RegExp busca constantes declaradas entre llaves en atributo xml "path"
+        //ej {BASE_URL}/myupfiles
+        if (preg_match("/^\{(.*)\}(.*)$/", $r->getParam('url'), $matches)) {
+            $this->view->url = "url=\"".constant($matches[1]) . $matches[2]."\"";
+            $this->view->baseUrlPath = constant($matches[1]) . $matches[2];
         }
         
         $this->view->path = $r->getParam('path');
         
-        if (preg_match("/^\{ROOT_DIR\}(.*)$/", $this->view->path, $matches)) {
-            $this->view->path = ROOT_DIR . $matches[1];
-        } else if (preg_match("/^\{APPLICATION_PATH\}(.*)$/", $this->view->path, $matches)) {
-            $this->view->path = APPLICATION_PATH . $matches[1];
-        } 
+        if (preg_match("/^\{(.*)\}(.*)$/", $this->view->path, $matches)) {
+            $this->view->path = constant($matches[1]) . $matches[2];
+        }
         
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';

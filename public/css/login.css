@@ -187,12 +187,12 @@ CONTENT
 }
 
 .user-icon {
-    top:97px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
+    top:102px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
     background: rgba(65,72,72,0.75) url(../images/user-icon.png) no-repeat center;  
 }
 
 .pass-icon {
-    top:156px;
+    top:168px;
     background: rgba(65,72,72,0.75) url(../images/pass-icon.png) no-repeat center;
 }
 
@@ -293,7 +293,7 @@ CORPORATIVO
 	width: 103px;
 	height: 105px;
 	left: -7%;
-	top: 5%;
+	top: 6%;
 	z-index: 9999;
 	position: absolute;
 }
