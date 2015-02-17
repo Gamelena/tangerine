@@ -4,7 +4,10 @@ README
 Requerimientos Básicos
 
 - PHP Version
-5.4 o superior
+
+>= 5.2.4 para sitios web (requerimiento mínimo)
+
+>= 5.4 o superior para tests unitarios (versión recomendada, incluye mejoras en performance y seguridad.)
 
 
 - Zend Framework 1.11.*
