@@ -7,6 +7,8 @@ var $globals = {};
  * carga inicial
  * @returns void
  */
+//dojo.registerModulePath("myapp", base_url + "/js/myapp");
+
 var initLoad = function() 
 {
     admportal.loadEvents();

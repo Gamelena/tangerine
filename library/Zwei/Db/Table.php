@@ -123,13 +123,13 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * @param string $args[0] - $value (valor para $field)
      * @param string $args[1] - si es true, NO hace conversion de UpperCamelCase a undercore.
      */
-    public function __call($function, $args)
+    public function __call($method, $args)
     {
         $value = $args[0];
         $camelCase = isset($args[1]) ? $args[1] : false;
                 
-        if (substr($function, 0, 6) == 'findBy') {
-            $criteria = substr($function, 6);
+        if (substr($method, 0, 6) == 'findBy') {
+            $criteria = substr($method, 6);
             
             if (!$camelCase) 
                 $criteria = strtolower(Zwei_Utils_String::toVarWord($criteria));
@@ -140,7 +140,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             
             return $this->fetchAll($select);
         } else {
-            throw new Exception("No existe " . __CLASS__ . "::" . $function);
+            throw new BadMethodCallException("No existe " . __CLASS__ . "::" . $method);
         }
         
     }
