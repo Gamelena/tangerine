@@ -56,7 +56,7 @@ class Zwei_Db_Object
      */
     public function __construct($form, $select = false)
     {
-        if (is_a($form, 'Zwei_Utils_Form')) {
+        if ($form instanceof Zwei_Utils_Form) {
             $this->_form = $form;
         } else { //en este punto $form debe ser array
             $this->_form = new Zwei_Utils_Form($form);
@@ -99,7 +99,7 @@ class Zwei_Db_Object
             } 
             
             foreach ($groups as $g) {
-                $g = preg_replace('/[^(\x20-\x7F)]*/', '', $g);//Truco para eliminar caracteres no texto
+                $g = preg_replace('/[^(\x20-\x7F)]*/', '', $g);//Hack para eliminar caracteres no texto (shit happens)
                 $this->_select->group($g);
             }
         }

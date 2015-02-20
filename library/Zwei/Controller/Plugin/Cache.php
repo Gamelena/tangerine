@@ -46,12 +46,21 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
         
         $options['frontend']['options']['automatic_serialization'] = true;
         
-        $this->cache = Zend_Cache::factory(
-            'Output',
-            'File',
-            $options['frontend']['options'],
-            $options['backend']['options']
-        );
+        try {
+            $this->cache = Zend_Cache::factory(
+                'Output',
+                'File',
+                $options['frontend']['options'],
+                $options['backend']['options']
+            );
+        } catch (Zend_Cache_Exception $e) {
+            $message = $e->getMessage();
+            if (stristr($e->getMessage(), 'cache_dir is not writable')) {
+                $path = realpath($options['backend']['options']['cache_dir']);
+                $message .= ". Se necesitan permisos de escritura en '$path'";
+            }
+            throw new Zend_Cache_Exception($message);
+        }
     }
     
     /**
@@ -73,7 +82,8 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
         } else {
             $userInfo = Zend_Auth::getInstance()->getStorage()->read();
             //Dependiendo el usuario pertenece o no a grupos se debe serializar el cache por id de usuario o id de perfil.
-            $cacheUserRoleHash = !empty($userInfo->groups) ? "userid{$userInfo->id}" : "roleid{$userInfo->acl_roles_id}"; 
+            $cacheUserRoleHash = !empty($userInfo->groups) ? "userid{$userInfo->id}" : "roleid{$userInfo->acl_roles_id}";
+            //$cacheUserRoleHash = empty($userInfo->groups) ? "roleid{$userInfo->acl_roles_id}" : "roleid{$userInfo->acl_roles_id}-groupsids" . implode("_", $userInfo->groups);
             
             if ($request->getControllerName() == "admin" && $request->getActionName() == "components") {
                 $this->key = md5(BASE_URL . $request->getPathInfo() . $request->getParam("p")) . $cacheUserRoleHash;
