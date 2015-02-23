@@ -519,6 +519,7 @@ class CrudRequestController extends Zend_Controller_Action
             
             if (!file_exists($thumbPath))
                 mkdir($thumbPath, 0777, true);
+
             $thumb  = PhpThumbFactory::create($path . "/" . $infoFile['filename']);
             $width  = $node->getAttribute('width') ? $node->getAttribute('width') : 0;
             $height = $node->getAttribute('height') ? $node->getAttribute('height') : 0;

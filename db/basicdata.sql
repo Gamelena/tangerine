@@ -1,5 +1,51 @@
+-- phpMyAdmin SQL Dump
+-- version 4.0.10deb1
+-- http://www.phpmyadmin.net
 --
--- Volcado de datos para la tabla `acl_modules`
+-- Host: localhost
+-- Generation Time: Feb 23, 2015 at 09:19 AM
+-- Server version: 5.5.41-0ubuntu0.14.04.1
+-- PHP Version: 5.5.9-1ubuntu4.6
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Database: `admportal_ticket`
+--
+
+--
+-- Truncate table before insert `acl_actions`
+--
+
+TRUNCATE TABLE `acl_actions`;
+--
+-- Dumping data for table `acl_actions`
+--
+
+INSERT INTO `acl_actions` (`id`, `title`) VALUES
+('ADD', 'Agregar'),
+('DELETE', 'Eliminar'),
+('EDIT', 'Editar'),
+('LIST', 'Listar');
+
+--
+-- Truncate table before insert `acl_groups`
+--
+
+TRUNCATE TABLE `acl_groups`;
+--
+-- Truncate table before insert `acl_groups_modules_actions`
+--
+
+TRUNCATE TABLE `acl_groups_modules_actions`;
+--
+-- Truncate table before insert `acl_modules`
+--
+
+TRUNCATE TABLE `acl_modules`;
+--
+-- Dumping data for table `acl_modules`
 --
 
 INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `refresh_on_load`, `type`, `approved`, `order`, `root`, `ownership`, `icons_id`) VALUES
@@ -9,16 +55,21 @@ INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `refres
 (4, 11, 'M&oacute;dulos', 'modules.xml', '1', '0', 'xml', '1', 1, '1', '0', 6),
 (5, 10, 'Usuarios', 'users.xml', '1', '0', 'xml', '1', 1, '0', '0', 17),
 (6, 10, 'Permisos', 'permissions.xml', '0', '0', 'xml', '0', 3, '1', '0', 0),
-(7, 11, 'Servidor', 'phpinfo.xml', '1', '0', 'xml', '1', 6, '1', '0', 13),
+(7, 11, 'Servidor', 'phpinfo.xml', '1', '0', 'xml', '1', 6, '1', '0', 22),
 (8, 10, 'Perfiles', 'roles.xml', '1', '0', 'xml', '1', 2, '1', '0', 7),
-(9, 11, 'Configuraci&oacute;n Global', 'settings.xml', '1', '0', 'xml', '1', 5, '1', '0', 13),
-(10, 1, 'Perfilamiento', NULL, '1', '0', '', '1', 1, '0', '0', 2),
-(11, 1, 'Sitio', NULL, '1', '0', '', '1', 2, '0', '0', 2),
+(9, 11, 'Configuraci&oacute;n Global', 'settings.xml', '1', '0', 'xml', '1', 5, '1', '0', 20),
+(10, 1, 'Perfilamiento', NULL, '1', '0', '', '1', 1, '0', '0', 5),
+(11, 1, 'Sitio', NULL, '1', '0', '', '1', 2, '0', '0', 13),
 (12, 11, '&Iacute;conos', 'icons.xml', '1', '0', 'xml', '1', 7, '1', '0', 16),
-(13, 9, 'Avanzado', 'settings-advanced.xml', '1', '0', 'xml', '1', 0, '1', '0', 4);
+(13, 9, 'Avanzado', 'settings-advanced.xml', '1', '0', 'xml', '1', 0, '1', '0', 21);
 
 --
--- Volcado de datos para la tabla `acl_modules_actions`
+-- Truncate table before insert `acl_modules_actions`
+--
+
+TRUNCATE TABLE `acl_modules_actions`;
+--
+-- Dumping data for table `acl_modules_actions`
 --
 
 INSERT INTO `acl_modules_actions` (`id`, `acl_modules_id`, `acl_actions_id`) VALUES
@@ -52,11 +103,13 @@ INSERT INTO `acl_modules_actions` (`id`, `acl_modules_id`, `acl_actions_id`) VAL
 (291, 13, 'EDIT'),
 (292, 13, 'LIST');
 
--- --------------------------------------------------------
-
-
 --
--- Volcado de datos para la tabla `acl_roles`
+-- Truncate table before insert `acl_roles`
+--
+
+TRUNCATE TABLE `acl_roles`;
+--
+-- Dumping data for table `acl_roles`
 --
 
 INSERT INTO `acl_roles` (`id`, `role_name`, `description`, `approved`, `must_refresh`) VALUES
@@ -64,11 +117,13 @@ INSERT INTO `acl_roles` (`id`, `role_name`, `description`, `approved`, `must_ref
 (2, 'Administrador', 'Administrador con acceso a hacer modificaciones administrativas y manejo de usuarios.', '1', '0'),
 (3, 'Consultas', 'Acceso a listados y reportes.', '1', '0');
 
--- --------------------------------------------------------
-
-
 --
--- Volcado de datos para la tabla `acl_roles_modules_actions`
+-- Truncate table before insert `acl_roles_modules_actions`
+--
+
+TRUNCATE TABLE `acl_roles_modules_actions`;
+--
+-- Dumping data for table `acl_roles_modules_actions`
 --
 
 INSERT INTO `acl_roles_modules_actions` (`id`, `acl_roles_id`, `acl_modules_actions_id`, `permission`) VALUES
@@ -118,11 +173,27 @@ INSERT INTO `acl_roles_modules_actions` (`id`, `acl_roles_id`, `acl_modules_acti
 (147, 1, 287, 'ALLOW'),
 (148, 1, 288, 'ALLOW');
 
--- --------------------------------------------------------
+--
+-- Truncate table before insert `acl_session`
+--
 
+TRUNCATE TABLE `acl_session`;
+--
+-- Dumping data for table `acl_session`
+--
+
+INSERT INTO `acl_session` (`id`, `acl_users_id`, `acl_roles_id`, `created`, `modified`, `lifetime`, `image`, `data`, `ip`, `user_agent`, `must_refresh`) VALUES
+('e9fnhpu857tfgfurrudb7ia3c5', 1, 1, 1424692753, 1424693969, 864000, NULL, 'Zend_Auth|a:3:{s:7:"timeout";i:1424695480;s:10:"requestUri";s:46:"/admin/modules?dojo.preventCache=1424693080658";s:7:"storage";O:8:"stdClass":11:{s:2:"id";s:1:"1";s:12:"acl_roles_id";s:1:"1";s:9:"user_name";s:7:"zweicom";s:11:"first_names";s:7:"Soporte";s:10:"last_names";s:7:"Zweicom";s:5:"email";s:20:"tecnicos@zweicom.com";s:8:"approved";s:1:"1";s:4:"foto";N;s:12:"must_refresh";s:1:"0";s:16:"sessionNamespace";s:17:"ticketElectronico";s:6:"groups";a:0:{}}}', '127.0.0.1', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0', '0'),
+('hkmdr8dv18doha9fvrqinl8ob1', 1, 1, 1421246333, 1421248736, 864000, NULL, 'Zend_Auth|a:3:{s:7:"timeout";i:1421251136;s:10:"requestUri";s:12:"/admin/login";s:7:"storage";N;}', '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 FirePHP/4Chrome', '0'),
+('r4o39q1buo2b0nqudq56v8e0f1', 1, 1, 1424439370, 1424442681, 864000, NULL, 'Zend_Auth|a:3:{s:7:"timeout";i:1424445081;s:10:"requestUri";s:12:"/admin/login";s:7:"storage";N;}', '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36', '0');
 
 --
--- Volcado de datos para la tabla `acl_users`
+-- Truncate table before insert `acl_users`
+--
+
+TRUNCATE TABLE `acl_users`;
+--
+-- Dumping data for table `acl_users`
 --
 
 INSERT INTO `acl_users` (`id`, `acl_roles_id`, `user_name`, `password`, `first_names`, `last_names`, `email`, `approved`, `foto`, `must_refresh`) VALUES
@@ -130,10 +201,23 @@ INSERT INTO `acl_users` (`id`, `acl_roles_id`, `user_name`, `password`, `first_n
 (2, 2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'Cliente', 'administrador@telefonicamoviles.com.pe', '1', NULL, '0'),
 (3, 3, 'consultas', '83da1fbc8f1a993de3f31cec6d7bf5b2', 'Consultas', 'Cliente', '', '1', NULL, '0');
 
--- --------------------------------------------------------
-
 --
--- Volcado de datos para la tabla `web_icons`
+-- Truncate table before insert `acl_users_groups`
+--
+
+TRUNCATE TABLE `acl_users_groups`;
+--
+-- Truncate table before insert `log_book`
+--
+
+TRUNCATE TABLE `log_book`;
+--
+-- Truncate table before insert `web_icons`
+--
+
+TRUNCATE TABLE `web_icons`;
+--
+-- Dumping data for table `web_icons`
 --
 
 INSERT INTO `web_icons` (`id`, `title`, `image`) VALUES
@@ -153,21 +237,28 @@ INSERT INTO `web_icons` (`id`, `title`, `image`) VALUES
 (14, 'Audit', '751f9170audit.png'),
 (15, 'Setup', '0d7df408setup-l.png'),
 (16, 'USSD', 'c62b4507bitdefender-ussd-wipe-stopper.png'),
-(17, 'User', 'a4c40f07actions-im-user-icon.png');
-
--- --------------------------------------------------------
+(17, 'User', 'a4c40f07actions-im-user-icon.png'),
+(18, 'Package', 'c244255a50px-crystal-package.png'),
+(19, 'Sale', '8a6ca637activshow-icon.png'),
+(20, 'Global', '9f8eb80dworld.png'),
+(21, 'Setup Warning', '11e455ecsetup.png'),
+(22, 'Server', '3ff898e8server-icon.png'),
+(23, 'Reporte', '7612a7b7reports.png'),
+(24, 'CSV', 'ad4c5a07csv.png');
 
 --
--- Volcado de datos para la tabla `web_settings`
+-- Truncate table before insert `web_settings`
+--
+
+TRUNCATE TABLE `web_settings`;
+--
+-- Dumping data for table `web_settings`
 --
 
 INSERT INTO `web_settings` (`id`, `list`, `value`, `type`, `description`, `ord`, `group`, `function`, `approved`, `path`, `url`, `regExp`, `invalidMessage`, `promptMessage`, `formatter`, `xml_children`) VALUES
-('credits', '', '&copy; Zweicom 2014', 'dijit-form-validation-text-box', '', 2, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
+('credits', '', '&copy; Zweicom 2015', 'dijit-form-validation-text-box', '', 2, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
 ('query_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', NULL, '', '', '', '', ''),
-('titulo_adm', '', 'Hola Mundo', 'dijit-form-validation-text-box', '', 1, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
+('titulo_adm', '', 'Ticket Electr&oacute;nico', 'dijit-form-validation-text-box', '', 1, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
 ('transactions_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', NULL, '', '', '', '', ''),
-('url_logo_oper', '', 'b07d49fdlogo-zweicom-big.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="56" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;'),
+('url_logo_oper', '', 'e41cfd29logo-movistar68x50.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="56" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;'),
 ('url_logo_zweicom', '', 'b28576bblogo-zweicom-26x34.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="18" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;\r\n');
-
--- --------------------------------------------------------
-
