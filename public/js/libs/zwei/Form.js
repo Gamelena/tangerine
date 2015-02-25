@@ -84,8 +84,13 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      */
     model: null,
     /**
+     * @return void 
+     */
+    onHide: function(){},
+    /**
      * 
      * @param Object args 
+     * @return void 
      */
     constructor: function(args){
         dojo.require('dojox.widget.DialogSimple');
@@ -187,7 +192,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
 
         //escuchar al iframe, como si el post normal hablara en ajax pero con posibilidad de hacer file uploads :)
 
-        var postSave = function() {
+        var listenIframe = function() {
             //Desmarcar checkbox con valores negativos
             dojo.forEach(fakeChecked, function(entry, i) {
                 entry.set('value', entry.get('bkpvalue'));
@@ -229,7 +234,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             }
             
             if (self.iframe.detachEvent) {//IE
-                self.iframe.detachEvent('onload', postSave);
+                self.iframe.detachEvent('onload', listenIframe);
             } else {
                 dojo.disconnect(listener);
             }
@@ -238,9 +243,9 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         }
         
         if (this.iframe.attachEvent) {//IE
-            this.iframe.attachEvent('onload', postSave);
+            this.iframe.attachEvent('onload', listenIframe);
         } else {
-            var listener = dojo.connect(this.iframe, 'onload', postSave); 
+            var listener = dojo.connect(this.iframe, 'onload', listenIframe); 
         } 
         
         
@@ -351,6 +356,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      * @return void 
      */
     showMultipleDialogs: function() {
+        dojo.require('zwei.utils.String');
         this.primary = {};
         if (this.action != 'add') {
             var items = this.dijitDataGrid.selection.getSelected();
@@ -364,7 +370,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 
                 if (this.primary) {
                     for (var index in this.primary) {
-                        this.sufix += this.primary[index];
+                        this.sufix += this.primary[index].toVarWord();
                     }
                 }
                 
@@ -374,8 +380,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     this.dijitDialog = new dojox.widget.DialogSimple({
                         title: this.title,
                         id: dialogId,
-                        onShow: function() {console.log('onShow')},
-                        onHide: function() {console.log('onHide')}
+                        onHide: this.onHide
                     });
                 } else {
                     this.dijitDialog = dijit.byId(dialogId);
