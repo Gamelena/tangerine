@@ -10,6 +10,9 @@
         String.prototype.removeDiacritics = function () {
             return self.removeDiacritics(this);
         };
+        String.prototype.toVarWord = function () {
+            return self.toVarWord(this);
+        };
     },
     defaultDiacriticsRemovalMap : [
         {'base':'A', 'letters':/[\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F]/g},
@@ -105,6 +108,11 @@
         for(var i=0; i< this.changes.length; i++) {
             str = str.replace( this.changes[i].letters, this.changes[i].base);
         }
+        return str;
+    },
+    toVarWord: function (str) {
+        str = str.replace(/([a-zA-Z])(?=[A-Z])/g, "\$1_");
+        str = str.replace(/[\.\*-]/g, "_");
         return str;
     }
 }))();
