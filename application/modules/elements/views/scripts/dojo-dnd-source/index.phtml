@@ -63,7 +63,7 @@ endif;
 $i=0;
 foreach ($this->selectedItems as $id => $name) :
 ?>
-            <li class="dojoDndItem" dndType="inStock" title="<?=$name?>" id="item<?=$this->domId . $i . $this->i?>"><input type="hidden" id="inStockInput<?=$this->domId . $i . $this->i?>" name="<?=$this->target?>[]" value="<?=$id?>"/>
+            <li class="dojoDndItem" dndType="inStock" title="<?=$name?>" id="item<?=$this->domId . $id . $this->i?>"><input type="hidden" id="inStockInput<?=$this->domId . $id . $this->i?>" name="<?=$this->target?>[]" value="<?=$id?>"/>
             <?=$name?>
             </li>
 <?php
@@ -140,7 +140,7 @@ endif;
 $i = 0;
 foreach ($this->unselectedItems as $id => $name) :
 ?>
-            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id . $this->i?>"><input type="hidden" id="outStockInput<?=$this->domId . $i . $this->i?>" name="<?=$this->unselectedTarget?>[]" value="<?=$id?>" <?=$this->saveUnselected ? '' : 'disabled="disabled"'?>/>
+            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id . $this->i?>"><input type="hidden" id="outStockInput<?=$this->domId . $id . $this->i?>" name="<?=$this->unselectedTarget?>[]" value="<?=$id?>" <?=$this->saveUnselected ? '' : 'disabled="disabled"'?>/>
             <?=$name?>
             </li>
 <?php 
