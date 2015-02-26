@@ -370,7 +370,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 
                 if (this.primary) {
                     for (var index in this.primary) {
-                        this.sufix += this.primary[index].toVarWord();
+                        this.sufix += this.primary[index].toString().toVarWord();
                     }
                 }
                 

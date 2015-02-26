@@ -1,5 +1,5 @@
 <?php
-class Zwei_Db_Mongo implements Zwei_Admin_ModelInterface
+class Zwei_Db_Mongo extends Mongo
 {
     
     /**
@@ -9,16 +9,16 @@ class Zwei_Db_Mongo implements Zwei_Admin_ModelInterface
      *
      * @return void
      */
-    public function init()
-    {
-    }
+//     public function init()
+//     {
+//     }
     
     
-    public function __construct()
-    {
-        $connect = new MongoClient();
-        $this->init();
-    }
+//     public function __construct()
+//     {
+//         $connect = new MongoClient();
+//         $this->init();
+//     }
     
     /**
      * Sets the default Zend_Db_Adapter_Abstract for all Zend_Db_Table objects.
@@ -44,7 +44,7 @@ class Zwei_Db_Mongo implements Zwei_Admin_ModelInterface
     
     public function update(array $data, $where)
     {
-        
+        return parent::update($data, $where);
     }
     
     public function fetchAll()

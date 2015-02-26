@@ -46,12 +46,21 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
         
         $options['frontend']['options']['automatic_serialization'] = true;
         
-        $this->cache = Zend_Cache::factory(
-            'Output',
-            'File',
-            $options['frontend']['options'],
-            $options['backend']['options']
-        );
+        try {
+            $this->cache = Zend_Cache::factory(
+                'Output',
+                'File',
+                $options['frontend']['options'],
+                $options['backend']['options']
+            );
+        } catch (Zend_Cache_Exception $e) {
+            $message = $e->getMessage();
+            if (stristr($e->getMessage(), 'cache_dir is not writable')) {
+                $path = realpath($options['backend']['options']['cache_dir']);
+                $message .= ". Se necesitan permisos de escritura en '$path'";
+            }
+            throw new Zend_Cache_Exception($message);
+        }
     }
     
     /**
