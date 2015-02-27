@@ -22,13 +22,11 @@ class Elements_DojoxFormUploaderController extends Zend_Controller_Action
         $this->view->readonly = $r->getParam('readonly', '') === 'true' ? "readonly=\"readonly\"" : '';
         $this->view->disabled = $r->getParam('disabled', '') === 'true' ? "disabled=\"disabled\"" : '';
         $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
-        $this->view->url = $r->getParam('url') ? "url=\"{$r->getParam('url')}\"" : 'url=""';
         $this->view->baseUrlPath = $r->getParam('url') ? $r->getParam('url') : BASE_URL . '/upfiles/';
         
         //La RegExp busca constantes declaradas entre llaves en atributo xml "path"
         //ej {BASE_URL}/myupfiles
         if (preg_match("/^\{(.*)\}(.*)$/", $r->getParam('url'), $matches)) {
-            $this->view->url = "url=\"".constant($matches[1]) . $matches[2]."\"";
             $this->view->baseUrlPath = constant($matches[1]) . $matches[2];
         }
         
