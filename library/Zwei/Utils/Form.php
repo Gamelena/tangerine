@@ -26,13 +26,67 @@
  */
 class Zwei_Utils_Form
 {
-    public $forbiddenExtensions = array('py', 'php', 'pl', 'cgi', 'bin', 'sh');
+    /**
+     * Forbidden Extensions
+     * 
+     * @var array
+     */
+    private $_forbiddenExtensions = array('py', 'php', 'pl', 'cgi', 'bin', 'sh');
+    
+    /**
+     * 
+     * @return array()
+     */
+    public function getForbiddenExtension()
+    {
+        return $this->_forbiddenExtensions;
+    }
+    
+    /**
+     * 
+     * @param array $forbiddenExtensions
+     */
+    public function setForbiddenExtensions(array $forbiddenExtensions)
+    {
+        $this->_forbiddenExtensions = $forbiddenExtensions;
+    }
+    
+    /**
+     * Forbid Extension $extension
+     * 
+     * @param string $extension
+     */
+    public function forbidExtension($extension)
+    {
+        $this->_forbiddenExtensions[] = $extension;
+    }
+    
+    /**
+     * Allow upload files with extension $extension
+     * 
+     * @param string $extension
+     * @return boolean
+     */
+    public function allowExtension($extension)
+    {
+        $modified = false;
+        
+        foreach ($this->_forbiddenExtensions as $i => $ext) {
+            if ($extension == $ext) {
+                unset($this->_forbiddenExtensions[$i]);
+                $modified = true;
+                break;
+            }
+        }
+        return $modified;
+    }
+    
     /**
      * 
      * @param $array array - si existe se transforma $array a objeto y se retorna, ignorando el $_REQUEST por defecto.
      * @return void
      */
-    public function __construct($array = false)
+    public function __construct($array = null)
     {
         if ($array) {
             foreach ($array as $k => $v) {
@@ -117,7 +171,7 @@ class Zwei_Utils_Form
         if (!empty($_FILES[$file]['name']) && is_array($_FILES[$file]['name'])) {
             $info = array();
             foreach ($_FILES[$file]['name'] as $i => $f) {
-                if ($_FILES[$file]['size'][$i] > 0 && $_FILES[$file]['size'][$i] < $maxSize && !in_array(substr($_FILES[$file]['name'][$i], -3, 3), $this->forbiddenExtensions)) {
+                if ($_FILES[$file]['size'][$i] > 0 && $_FILES[$file]['size'][$i] < $maxSize && !in_array(substr($_FILES[$file]['name'][$i], -3, 3), $this->_forbiddenExtensions)) {
                     $fp      = explode(".", $_FILES[$file]['name'][$i]);
                     $oldname = array();
                     foreach ($fp as $j => $v) {
@@ -147,7 +201,7 @@ class Zwei_Utils_Form
             }
             return $info;
         } else {
-            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $maxSize && !in_array(substr($_FILES[$file]['name'], -3, 3), $this->forbiddenExtensions)) {
+            if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $maxSize && !in_array(substr($_FILES[$file]['name'], -3, 3), $this->_forbiddenExtensions)) {
                 $fp      = explode(".", $_FILES[$file]['name']);
                 $oldname = array();
                 foreach ($fp as $j => $v) {

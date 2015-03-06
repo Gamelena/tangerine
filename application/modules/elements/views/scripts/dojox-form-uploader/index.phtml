@@ -1,4 +1,4 @@
-<input type="file"  id="<?php echo $this->domId . $this->i?>" name="<?php echo $this->target?>" value="<?php echo $this->value ?>" label="Seleccionar" data-dojo-props="showInput:'before',isDebug:true" <?php echo $this->disabled.$this->url.$this->required.$this->onblur.$this->invalid_message.$this->prompt_message ?>/>
+<input type="file" data-dojo-type="dojox/form/Uploader" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>" label="Seleccionar" data-dojo-props="showInput:'before',isDebug:true" <?=$this->disabled.$this->required.$this->onblur.$this->invalid_message.$this->prompt_message?>/>
 <?php 
 if (!empty($this->value)) :
 ?>
@@ -6,27 +6,27 @@ if (!empty($this->value)) :
 <?php 
     if (preg_match("/formatImage/", $this->formatter)) :
 ?>
-    <img alt="<?php echo $this->value?>" src="<?php echo $this->baseUrlPath ?><?php echo $this->value?>">
-    <span class="fileName"><i><?php echo $this->value?></i></span>
+    <img alt="<?=$this->value?>" src="<?=$this->baseUrlPath ?><?=$this->value?>">
+    <span class="fileName"><i><?=$this->value?></i></span>
 <?php 
     endif;
 ?>
 <?php 
     foreach ($this->thumbs as $i => $t) : 
 ?>
-    <input type="hidden" id="thumb_<?php echo $this->domId . $this->i . $i?>" name="thumb<?php echo $this->target?>[<?php echo $i?>][path]" value="<?php echo $t->getAttribute('path') ?>" data-dojo-type="dijit.form.ValidationTextBox" />
-    <input type="hidden" id="thumbwidth_<?php echo $this->domId . $this->i . $i?>" name="thumb<?php echo $this->target?>[<?php echo $i?>][width]" value="<?php echo $t->getAttribute('width') ?>" data-dojo-type="dijit.form.ValidationTextBox" />
-    <input type="hidden" id="thumbheight_<?php echo $this->domId . $this->i . $i?>" name="thumb<?php echo $this->target?>[<?php echo $i?>][height]" value="<?php echo $t->getAttribute('height') ?>" data-dojo-type="dijit.form.ValidationTextBox" />
+    <input type="hidden" id="thumb_<?=$this->domId . $this->i . $i?>" name="thumb<?=$this->target?>[<?=$i?>][path]" value="<?=$t->getAttribute('path') ?>" data-dojo-type="dijit.form.ValidationTextBox" />
+    <input type="hidden" id="thumbwidth_<?=$this->domId . $this->i . $i?>" name="thumb<?=$this->target?>[<?=$i?>][width]" value="<?=$t->getAttribute('width') ?>" data-dojo-type="dijit.form.ValidationTextBox" />
+    <input type="hidden" id="thumbheight_<?=$this->domId . $this->i . $i?>" name="thumb<?=$this->target?>[<?=$i?>][height]" value="<?=$t->getAttribute('height') ?>" data-dojo-type="dijit.form.ValidationTextBox" />
 <?php 
     endforeach;
 ?>
 
     <span class="fileDelete">
-        <label for="delete<?php echo $this->target?>" style="padding-left: 18px;">Eliminar</label>
-        <input type="checkbox" id="delete_<?php echo $this->domId . $this->i?>" data-dojo-type="dijit.form.CheckBox" name="delete<?php echo $this->target?>" value="<?php echo $this->value ?>" />
+        <label for="delete<?=$this->target?>" style="padding-left: 18px;">Eliminar</label>
+        <input type="checkbox" id="delete_<?=$this->domId . $this->i?>" data-dojo-type="dijit.form.CheckBox" name="delete<?=$this->target?>" value="<?=$this->value ?>" />
     </span>
 </div>
 <?php 
 endif;
 ?>
-<input type="hidden" data-dojo-type="dijit.form.ValidationTextBox" id="path_<?php echo $this->domId . $this->i?>" name="path<?php echo $this->target?>" value="<?php echo $this->path ?>"/>
+<input type="hidden" data-dojo-type="dijit.form.ValidationTextBox" id="path_<?=$this->domId . $this->i?>" name="path<?=$this->target?>" value="<?=$this->path ?>"/>

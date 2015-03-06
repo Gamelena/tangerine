@@ -30,6 +30,6 @@ class DbTable_AclModulesActions extends Zwei_Db_Table
         )
     );
     
-    //protected $_validateXmlAcl = array('EDIT' => true, 'ADD' => true, 'DELETE' => true, 'LIST' => false);
+    protected $_validateXmlAcl = array('EDIT' => true, 'ADD' => true, 'DELETE' => true, 'LIST' => false);
 }
 

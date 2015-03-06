@@ -125,8 +125,8 @@ class CrudRequestController extends Zend_Controller_Action
                     if ($validatedCUD) {
                         $where = array();
                         
-                        foreach ($_FILES as $i => $v) {
-                            $tmpTargets = array_keys($v['name']);
+                        foreach ($_FILES as $i => $file) {
+                            $tmpTargets = array_keys($file['name']);
                             $target     = $tmpTargets[0];
                             $path       = !empty($this->_form->pathdata[$target]) ? $this->_form->pathdata[$target] : ROOT_DIR . '/public/upfiles';
                             
@@ -135,25 +135,25 @@ class CrudRequestController extends Zend_Controller_Action
                             $infoFiles = $this->_form->upload($i, $path);
                             if ($infoFiles) {
                                 $j = 0;
-                                foreach ($infoFiles as $k => $l) {
-                                    $this->_form->data[$k] = $l['filename'];
+                                foreach ($infoFiles as $k => $uploaded) {
+                                    $this->_form->data[$k] = $uploaded['filename'];
                                     //Crear miniaturas de imagen si corresponde
                                     if ($element[$j]->existsChildren('thumb')) {
                                         foreach ($element[$j]->thumb as $thumb) {
-                                            $this->createThumb($thumb, $l, $path);
+                                            $this->createThumb($thumb, $uploaded, $path);
                                         }
                                     }
                                     $j++;
                                 }
                             } else {
-                                Console::error("error al subir archivo a $path");
+                                Console::error(array("error al subir archivo a $path", $file));
                             }
                         }
                         
                         if (isset($this->_form->deletedata)) {
-                            foreach ($this->_form->deletedata as $i => $v) {
-                                if (!@unlink($path . $v)) {
-                                    Console::error("no se pudo borrar " . $this->_form->pathdata[$i] . $v);
+                            foreach ($this->_form->deletedata as $i => $file) {
+                                if (!@unlink($path . $file)) {
+                                    Console::error("no se pudo borrar " . $this->_form->pathdata[$i] . $file);
                                 }
                                 $this->_form->data[$i] = '';
                             }
@@ -161,8 +161,8 @@ class CrudRequestController extends Zend_Controller_Action
                         
                         
                         if ($this->_form->action == 'add') {
-                            foreach ($this->_form->data as $i => $v) {
-                                $data[$i] = $v;
+                            foreach ($this->_form->data as $i => $myData) {
+                                $data[$i] = $myData;
                             }
                             
                             try {
@@ -181,8 +181,8 @@ class CrudRequestController extends Zend_Controller_Action
                             }
                         } else if ($this->_form->action == 'delete') {
                             if (isset($this->_form->primary)) {
-                                foreach ($this->_form->primary as $i => $v) {
-                                    $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $v);
+                                foreach ($this->_form->primary as $i => $primary) {
+                                    $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $primary);
                                 }
                                 if (count($where) == 1)
                                     $where = $where[0];
@@ -202,14 +202,14 @@ class CrudRequestController extends Zend_Controller_Action
                             }
                         } else if ($this->_form->action == 'edit') {
                             if (isset($this->_form->primary)) {
-                                foreach ($this->_form->primary as $i => $v) {
-                                    $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $v);
+                                foreach ($this->_form->primary as $i => $primary) {
+                                    $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $primary);
                                 }
                                 if (count($where) == 1)
                                     $where = $where[0];
                                 
-                                foreach ($this->_form->data as $i => $v) {
-                                    $data[$i] = $v;
+                                foreach ($this->_form->data as $i => $myData) {
+                                    $data[$i] = $myData;
                                 }
                                 
                                 try {

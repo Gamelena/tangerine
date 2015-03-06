@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /**
  * Interface que debieran implementar los modelos  
  * para ser compatibles con los flujos de AdmPortal
@@ -7,16 +8,16 @@
  */
 interface Zwei_Admin_ModelInterface
 {
-    public function select();
-    
-    public function insert(array $data);
-    
-    public function update(array $data, $where);
-    
-    public function fetchAll();
-    
-    public function fetchRow();
-    
-    public function info($key);
 
+    public function select ();
+
+    public function insert (array $data);
+
+    public function update (array $data, $where);
+
+    public function fetchAll ();
+
+    public function fetchRow ();
+
+    public function info ($key);
 }
