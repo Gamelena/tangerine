@@ -32,6 +32,12 @@ class Zwei_Utils_File_Uploader
     
     /**
      * 
+     * @var boolean
+     */
+    private $_truncate = false;
+    
+    /**
+     * 
      * @param Zwei_Admin_Xml $xml
      * @param Zwei_Utils_Form $form
      */
@@ -51,6 +57,15 @@ class Zwei_Utils_File_Uploader
     public function setPath($path)
     {
         $this->_path = $path;
+    }
+    
+    /**
+     * 
+     * @param boolean $value
+     */
+    public function truncate($value = true)
+    {
+        $this->_truncate = $value;
     }
     
     /**
@@ -105,10 +120,15 @@ class Zwei_Utils_File_Uploader
                     if (!empty($line[0])) {
                         $push = false;
                         foreach ($this->_columns as $j => $column) {
+                            $text = trim(Zwei_Utils_String::textify($line[$j]));
+                            $validate = (!$column->getAttribute("required") || !$column->getAttribute("required") != 'true' || $text !== '') &&
+                            (!$column->getAttribute("regExp") || preg_match("/{$column->getAttribute("regExp")}/", $text));
                             
-                            $text = Zwei_Utils_String::textify($line[$j]);
-                            
-                            if ($firstLine && $text == $column->getAttribute('name')) { //Si primera línea corresponde a titulos declarados en XML, no se procesa.
+                            if (($firstLine && $text == $column->getAttribute('name'))) { //Si primera línea corresponde a titulos declarados en XML, no se procesa.
+                                break;
+                            } else if (!$validate) {
+                                Console::error(array("'$text' No pasó la validación", $column->getAttribute("regExp"), $column->getAttribute("required")));
+                                $data = array();
                                 break;
                             } else {
                                 $data[$column->getAttribute('target')] = $ad->quote(trim($text));
@@ -158,27 +178,36 @@ class Zwei_Utils_File_Uploader
     private function iterateFile($aQueries, $action, &$processed)
     {
         $columnNames = array();
+        $replaceNameKey = array();
         $auxQuery = implode($aQueries, ",\n");
         $tableName = $this->_model->info(Zend_Db_Table::NAME);
         $ad = $this->_model->getAdapter();
+        
         /**
          * @var $column Zwei_Admin_Xml
          */
         foreach ($this->_columns as $i => $column) {
             $columnNames[] = $ad->quoteIdentifier($column->getAttribute('target'));
+            $replaceNameKey[] = $ad->quoteIdentifier($column->getAttribute('target')) . "=VALUES(" . $ad->quoteIdentifier($column->getAttribute('target')) . ")";
         }
         
         $columns = implode(",", $columnNames);
+        $columnsReplace =  implode(",", $replaceNameKey);
         
         if ($action == 'load') {
-             $query = "REPLACE INTO `$tableName` ($columns) VALUES $auxQuery";
+             $query = "INSERT INTO `$tableName` ($columns) VALUES $auxQuery ON DUPLICATE KEY UPDATE $columnsReplace";
+        } else if ($action == 'insert') {
+             if ($this->_truncate) {
+                $this->_model->delete();
+             }
+             $query = "INSERT IGNORE INTO `$tableName` ($columns) VALUES $auxQuery";
         } else if ($action == 'delete') {
              $query = "DELETE FROM `$tableName` WHERE  ($columns) IN ($auxQuery)";
         }
         
-        Console::log($query);
+        
         $executed = $ad->query($query);
         $processed += $executed->rowCount();
+        Console::log($query);
     }
-    
 }
