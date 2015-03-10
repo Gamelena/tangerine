@@ -1,0 +1,79 @@
+<script>
+    var massUpload = {
+        serverProcessing: false,
+        onBegin: function(){
+            this.serverProcessing = false;
+        },
+        onProgress: function(data)
+        {
+            var serverProcessing = false;
+            dijit.byId("progressBar").set('value', data.percent);
+            if (data.percent == '100%' && !this.serverProcessing) {
+                dijit.byId("progressBar").set('indeterminate', true);
+                utils.showMessage('Archivo subido correctamente.', 'message');
+                utils.showMessage('Procesando archivo en servidor.', 'message', '15000');
+                this.serverProcessing = true;
+            }
+        },
+        onComplete: function(data)
+        {
+            utils.showMessage(data.message, data.type, '15000');
+            if (data.error == '0') {
+                var form = new zwei.Form({
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
+                    iframe: dojo.byId('ifrm_process')
+                });
+                form.loadData();
+                dijit.byId('loadArchivo').hide();
+            } else {
+                dojo.byId('progressBar').style.display='none';
+                dijit.byId("progressBar").set('value', 0);
+            }
+        },
+        onError: function(error)
+        {
+            console.warning(error);
+            utils.showMessage(error.message, 'error', '15000');
+            dojo.byId('progressBar').style.display='none';
+            dijit.byId("progressBar").set('value', 0);
+        }
+    };
+</script>
+<form data-dojo-type="dijit/form/Form" method="post" enctype="multipart/form-data" name="uploadsForm" id="uploadsForm" action="<?=BASE_URL?>components/dojo-simple-crud/upload" target="ifrm_process" >
+    <table>
+        <tr>
+            <th> Archivo</th>
+            <td><input type="file" name="file" data-dojo-type="dojox/form/Uploader"  id="frm<?=$this->list_id . "_" . $this->accion?>UploadFile" label="Seleccionar Archivo .csv" 
+            data-dojo-props="showInput:'before',isDebug:true, onProgress:massUpload.onProgress, onComplete:massUpload.onComplete, onBegin: massUpload.onBegin,required: true" required="true" />
+            <div style="display:none;" indeterminate="false" id="progressBar" class="progBar" dojoType="dijit/ProgressBar"></div>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2"><button type="submit" id="frm<?=$this->list_id . "_" . $this->accion?>Submit" data-dojo-type="dijit/form/Button">Subir Archivo</button></th>
+        </tr>
+        <tr style="display:none;">
+            <th colspan="2">
+                <input type="hidden" name="model" value="<?=$this->model?>"/>
+                <input type="hidden" name="format" value="json"/>
+<?php 
+foreach ($this->keys as $key => $value) :
+?>
+                <input type="hidden" name="<?=$key?>" value="<?=$value?>"/>
+<?php 
+endforeach;
+?>
+                <input type="hidden" name="accion" value="<?=$this->accion?>"/>
+                <input type="hidden" name="p" value="<?=$this->component?>"/>
+            </th>
+        </tr>
+    </table>
+    <script type="dojo/method" event="onSubmit">
+        if (this.validate()) {
+            dojo.byId('progressBar').style.display='block';
+            return true;
+        } else {
+            dojo.byId('progressBar').style.display='none';
+        }
+    </script>
+</form>

@@ -271,7 +271,7 @@ if (dijit.byId('<?=$this->domPrefix?>MenuExcel<?=$formatter?>')) dijit.byId('<?=
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     id: '<?=$this->domPrefix?>MenuExcel<?=$formatter?>',
     label: "<?=$name?>",
-    iconClass: "dijitLeaf",
+    iconClass: "<?=$f->getAttribute('iconClass') ? $f->getAttribute('iconClass') : 'dijitLeaf'?>",
     disabled: <?=$disabled?>,
     onClick : function(){
         var form = new zwei.Form({
@@ -286,5 +286,33 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
 <?php 
 endforeach;
 ?>
+<?php 
+foreach ($this->uploaders as $i => $f) :
+    $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Cargar Archivo' ;
+    $disabled = $f->getAttribute('disabled') ? 'true' : 'false';
+    $title = $f->getAttribute('title') ? " title=\"{$f->getAttribute('title')}\"" : '';
+    $action = $f->getAttribute('action') ? $f->getAttribute('action') : '';
+?>
+if (dijit.byId('<?=$this->domPrefix?><?=$this->domPrefix?>MenuUploader<?=$i?>')) dijit.byId('<?=$this->domPrefix?><?=$this->domPrefix?>MenuUploader<?=$i?>').destroy(); 
+menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
+    id: '<?=$this->domPrefix?>MenuUploader<?=$i?>',
+    label: "<?=$name?>",
+    iconClass: "<?=$f->getAttribute('iconClass') ? $f->getAttribute('iconClass') : 'dijitLeaf'?>",
+    disabled: <?=$disabled?>,
+    onClick : function(){
+    	dojo.require('zwei.Uploader');
+        var uploader = new zwei.Uploader({
+            component: '<?=$this->component?>',
+            dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
+            dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'),
+            iframe: dojo.byId('ifrm_process')
+        });
+        uploader.showDialog('<?=$action?>');
+    }
+}));
+<?php 
+endforeach;
+?>
+
 menu<?=$this->domPrefix?>.startup();
 </script>

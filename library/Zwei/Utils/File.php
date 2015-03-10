@@ -20,7 +20,7 @@ class Zwei_Utils_File
         $exclude = (array) $exclude;
         $return = false;
         foreach (glob($dir . '/*') as $file) {
-            if(is_dir($file)) {
+            if (is_dir($file)) {
                 $return = Zwei_Utils_File::clearRecursive($file);
             } else if (!in_array($file, $exclude)) {
                 $return = unlink($file);
