@@ -121,12 +121,14 @@ class Zwei_Utils_File_Uploader
                         $push = false;
                         foreach ($this->_columns as $j => $column) {
                             $text = trim(Zwei_Utils_String::textify($line[$j]));
+                            
+                            //Se valida contra las 'regExp' y los 'required' declarados en XML
                             $validate = (!$column->getAttribute("required") || !$column->getAttribute("required") != 'true' || $text !== '') &&
                             (!$column->getAttribute("regExp") || preg_match("/{$column->getAttribute("regExp")}/", $text));
                             
                             if (($firstLine && $text == $column->getAttribute('name'))) { //Si primera línea corresponde a titulos declarados en XML, no se procesa.
                                 break;
-                            } else if (!$validate) {
+                            } else if (!$validate && $action != 'delete') {
                                 Console::error(array("'$text' No pasó la validación", $column->getAttribute("regExp"), $column->getAttribute("required")));
                                 $data = array();
                                 break;
