@@ -428,7 +428,7 @@ class AclModulesModel extends DbTable_AclModules
         
         $row = $this->fetchRow($select);
         if (!$row) {
-            Console::error("No se encuentra módulo $module");
+            Console::error("No se encuentra módulo '$module'");
             return false;
         } else {
             return $this->fetchRow($select)->id;

@@ -136,11 +136,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->name = $this->_xml->getAttribute('name');
         $this->view->includeJs = $this->_xml->getAttribute('js') ? "<script src=\"".BASE_URL.'js/'.$this->_xml->getAttribute('js')."?noCache={$this->view->noCache}\"></script>\n" : '';
         $this->view->onShow = $this->_xml->getAttribute('onShow') ? $this->_xml->getAttribute('onShow') : '';
+        
         if ($this->_xml->xpath("//component/forms")) {
             $forms = $this->_xml->xpath("//component/forms");
-        }
-        if ($this->_xml->xpath("//component/helpers")) {
-            $helpers = $this->_xml->xpath("//component/helpers");
         }
         
         $this->view->styleDialog = $this->_xml->xpath("//component/forms[@style]") ? "style=\"{$forms[0]->getAttribute('style')}\"" : '';
@@ -292,7 +290,45 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
         $customFunctions = $this->_xml->xpath("//component/helpers/customFunction");
+        $uploaders = $this->_xml->xpath("//component/helpers/uploader");
+        
         $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_aclComponent, 'EDIT') ? $customFunctions : array();
+        $filterUploaders = $uploaders ? $uploaders : array();
+        
+        $this->view->uploaders = array();
+        if (count($filterUploaders)) {
+            
+            /**
+             * @var $uploader Zwei_Admin_Xml
+             */
+            foreach ($filterUploaders as $i => $uploader) {
+                $uploaderAction = $uploader->getAttribute('action') ? $uploader->getAttribute('action') : null;
+                if ($uploaderAction) {
+                    if ($uploaderAction === 'load') {
+                        if ($this->_acl->isUserAllowed($this->_aclComponent, 'EDIT') && $this->_acl->isUserAllowed($this->_aclComponent, 'ADD')) {
+                            $this->view->uploaders[] = $uploader;
+                        }
+                    } else if ($uploaderAction === 'edit') {
+                        if ($this->_acl->isUserAllowed($this->_aclComponent, 'EDIT')) {
+                            $this->view->uploaders[] = $uploader;
+                        }
+                    } else if ($uploaderAction === 'add') {
+                        if ($this->_acl->isUserAllowed($this->_aclComponent, 'ADD')) {
+                            $this->view->uploaders[] = $uploader;
+                        }
+                    } else if ($uploaderAction === 'delete') {
+                        if ($this->_acl->isUserAllowed($this->_aclComponent, 'DELETE')) {
+                            $this->view->uploaders[] = $uploader;
+                        }
+                    } else {
+                        //@TODO habilitar permisos para otras acciones acá de ser necesario en el futuro.
+                        $this->view->uploaders[] = $uploader;
+                    }
+                }
+            }
+        }
+        
+        
         $excel = $this->_xml->xpath("//component/helpers/excel");
         $this->view->excel = $excel ? $excel : array();
         
@@ -552,5 +588,47 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $this->initKeys();
     }
+    
+    /**
+     * Accion cargas masivas
+     * 
+     * @return void
+     */
+    public function uploadAction()
+    {
+        $uploader = new Zwei_Utils_File_Uploader($this->_xml);
+        
+        if (!$_FILES) {
+            $this->view->response = array(
+                'error' => '9',
+                'message' => 'No se ha subido archivo.',
+                'size' => '0'
+            );
+        } else {
+            foreach ($_FILES as $i => $file) { //Se espera solo un archivo
+                $this->view->response = $uploader->process($file, $this->getRequest()->getParam('accion'));
+            }
+        }
+    }
+    
+    /**
+     * Formulario archivo
+     *
+     * @return void
+     */
+    public function uploadFormAction()
+    {
+        $r = $this->getRequest();
+        $this->view->component = $r->getParam('p');
+        $this->view->accion = $r->getParam('accion');
+        
+        $this->view->keys = array();
+        $keys = $r->getParam('keys', array());
+        
+        foreach ($keys as $key => $value) {
+            $this->view->keys[$key] = $value;
+        }
+    }
+    
 }
 

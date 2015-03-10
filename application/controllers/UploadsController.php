@@ -22,13 +22,13 @@ class UploadsController extends Zend_Controller_Action
      */
     public function abonadosPromocionAction()
     {
-        $Form=new Zwei_Utils_Form();
+        $form=new Zwei_Utils_Form();
         Zwei_Utils_Debug::write($_FILES);
         //$FileHandler = new Zwei_Utils_FileHandler();
         //$result = $FileHandler->saveFilesToUserDir(ROOT_DIR. '/upload/');
 
         $target = "/tmp/";
-        $target = $target . "abonados_promociones_".$Form->id ;
+        $target = $target . "abonados_promociones_".$form->id ;
 
         Zwei_Utils_Debug::write($target);
         if (move_uploaded_file($_FILES['uploadedfiles']['tmp_name'][0], $target)) {
@@ -46,8 +46,8 @@ class UploadsController extends Zend_Controller_Action
 
             if($db->query($query)){
                 try{
-                 //if($Abonados->insert(array("msisdn"=>"SELECT msisdn FROM abonados_tmp","id_promocion"=>$Form->id))){
-                    $query="INSERT IGNORE INTO abonados (msisdn, id_promocion) SELECT msisdn, $Form->id FROM abonados_tmp";
+                 //if($Abonados->insert(array("msisdn"=>"SELECT msisdn FROM abonados_tmp","id_promocion"=>$form->id))){
+                    $query="INSERT IGNORE INTO abonados (msisdn, id_promocion) SELECT msisdn, $form->id FROM abonados_tmp";
                     Zwei_Utils_Debug::writeBySettings($query, 'query_log');
                     if($db->query($query)){
                         unlink($target);

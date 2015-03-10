@@ -14,8 +14,7 @@ if ($this->add) :
                 dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
                 dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                queryParams: '<?=$this->queryParams?>',
-                onHide: function (){<?=$this->onHide?>}
+                queryParams: '<?=$this->queryParams?>'
             }); 
             form.showDialog();
 <?php 
@@ -28,8 +27,7 @@ if ($this->add) :
                 action: 'add',
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                 queryParams: '<?=$this->queryParams?>',
-                title: 'Agregar <?=$this->name?>',
-                onHide: function (){<?=$this->onHide?>}
+                title: 'Agregar <?=$this->name?>'
             }); 
             form.showDialog();
 
@@ -58,8 +56,7 @@ if ($this->edit) :
                     dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_edit'), 
                     queryParams: '<?=$this->queryParams?>',
                     dijitForm: dijit.byId('<?=$this->domPrefix?>form_edit'),
-                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                    onHide: function (){<?=$this->onHide?>}
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
                 }); 
                 form.showDialog();
 <?php 
@@ -73,8 +70,7 @@ if ($this->edit) :
                     queryParams: '<?=$this->queryParams?>',
                     prefix: '<?=$this->domPrefix?>',
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                    keys : <?=$this->jsPrimary?>,
-                    onHide: function (){<?=$this->onHide?>}
+                    keys : <?=$this->jsPrimary?>
                 });
                 form.showMultipleDialogs();
 <?php 
@@ -103,8 +99,7 @@ if ($this->delete) :
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                 model: '<?=$this->model?>',
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
-                keys : <?=$this->jsPrimary?>,
-                onHide: function (){<?=$this->onHide?>}
+                keys : <?=$this->jsPrimary?>
             });
             
             var observer = form.watch('response', function(name, oldValue, response) {
@@ -127,8 +122,7 @@ if ($this->delete) :
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                 model: '<?=$this->model?>',
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
-                keys : <?=$this->jsPrimary?>,
-                onHide: function (){<?=$this->onHide?>}
+                keys : <?=$this->jsPrimary?>
             });
             
             var observer = form.watch('response', function(name, oldValue, response) {
@@ -166,8 +160,7 @@ if ($this->clone) :
                     action: 'clone',
                     dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
                     dijitForm: dijit.byId('<?=$this->domPrefix?>form_add'), 
-                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                    onHide: function (){<?=$this->onHide?>}
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
                 });
                 form.showDialog();
 <?php 
@@ -180,8 +173,7 @@ if ($this->clone) :
                     title: 'Clonar <?=$this->name?>',
                     prefix: '<?=$this->domPrefix?>',
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                    keys : <?=$this->jsPrimary?>,
-                    onHide: function (){<?=$this->onHide?>}
+                    keys : <?=$this->jsPrimary?>
                 });
                 form.showMultipleDialogs();
 <?php 
@@ -205,8 +197,7 @@ if ($this->changePassword) :
                 action: 'edit',
                 dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_editpass'), 
                 dijitForm: dijit.byId('<?=$this->domPrefix?>form_editpass'), 
-                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                onHide: function (){<?=$this->onHide?>}
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')
             }); 
             form.showDialog()">
             Cambiar Contrase&ntilde;a
@@ -216,6 +207,9 @@ if ($this->changePassword) :
 endif;
 ?>
 <?php 
+/**
+ * @var $f Zwei_Admin_Xml 
+ */
 foreach ($this->customFunctions as $i => $f) :
     $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
     $target = isset($f['target']) && !empty($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
@@ -247,6 +241,30 @@ foreach ($this->excel as $i => $f) :
                 iframe: dojo.byId('ifrm_process')
             });
             form.loadData()">
+            <?=$name?>
+        </button>
+    </div>
+<?php 
+endforeach;
+?>
+<?php 
+foreach ($this->uploaders as $i => $f) :
+    $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Cargar Archivo' ;
+    $disabled = $f->getAttribute('disabled') || !$this->list ? 'disabled="disabled"' : '';
+    $title = $f->getAttribute('title') ? " title=\"{$f->getAttribute('title')}\"" : '';
+    $action = $f->getAttribute('action') ? $f->getAttribute('action') : '';
+?>
+
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f->getAttribute('iconClass') ? $f->getAttribute('iconClass') : 'dijitIconEdit'?>" <?=$disabled.$title?> id="<?=$this->domPrefix?>btnUploader<?=$i?>" onClick="
+            dojo.require('zwei.Uploader');
+            var uploader = new zwei.Uploader({
+                component: '<?=$this->component?>',
+                dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
+                dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'),
+                iframe: dojo.byId('ifrm_process')
+            });
+            uploader.showDialog('<?=$action?>');">
             <?=$name?>
         </button>
     </div>
