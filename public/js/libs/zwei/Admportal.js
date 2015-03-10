@@ -30,7 +30,7 @@ dojo.declare("zwei.Admportal", null, {
     initListeners: function()
     {
         var self = this;
-        this.intervalListener = setInterval(function(){self.listenUserStatus();}, 10000);
+        this.intervalListener = setInterval(function(){self.listenUserStatus();}, 30000);
     },
     listenUserStatus: function()
     {
@@ -164,7 +164,7 @@ dojo.declare("zwei.Admportal", null, {
                      
                      menuParams = {id: "dijitEditorMenuModule" + item.id, label: (item.url ? '<span class="linkableItem"><a style="color:inherit">' + item.label +'</a></span>'  : '<span>' + item.label + '</span>')};
                      
-
+                     
                      var loadModule = function() {
                          self.loadModuleTab(item.url, item.id, item.label, item.refresh_on_load, item.image);
                      };

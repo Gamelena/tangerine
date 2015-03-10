@@ -234,7 +234,6 @@ dojo.declare("zwei.Utils", null, {
     formatImage32: function(value) {
         return value != '' ? "<img src=\"" + base_url + '/upfiles/32/' + value + "\" />" : '';
     },
-    
     formatYesNo: function(value) {
         if (typeof value  == "undefined"){
             return value;
@@ -258,7 +257,7 @@ dojo.declare("zwei.Utils", null, {
             if ( !done && (!this.readyState ||
                 this.readyState == "loaded" || this.readyState == "complete") ) {
                 done = true;
-                if (typeof f == 'function') f();
+                if (typeof f === "function") f();
             // cleans up a little memory:
                 script.onload = script.onreadystatechange = null;
                 head.removeChild(script);
