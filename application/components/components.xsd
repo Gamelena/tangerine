@@ -95,11 +95,12 @@
         <xsd:attribute name="onhide"/>
     </xsd:complexType>
     <xsd:complexType name="helpersType">
-        <xsd:sequence>
+        <xsd:choice minOccurs="1" maxOccurs="unbounded">
             <xsd:element name="dialog" type="formsType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="customFunction" type="customFunctionType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="excel" type="excelType" minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:sequence>
+            <xsd:element name="uploader" type="uploaderType" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:choice>
     </xsd:complexType>
     <xsd:complexType name="PaneType">
         <xsd:attribute name="onshow"/>
@@ -170,6 +171,14 @@
         <xsd:attribute name="formatter" type="excelFormatter"/>
         <xsd:attribute name="iconClass"/>
         <xsd:attribute name="disabled" type="xsd:boolean"/>
+    </xsd:complexType>
+        <xsd:complexType name="uploaderType">
+        <xsd:attribute name="name"/>
+        <xsd:attribute name="iconClass"/>
+        <xsd:attribute name="action"/>
+        <xsd:attribute name="processClass"/><!-- @todo por implementar -->
+        <xsd:attribute name="processMethod"/><!-- @todo por implementar -->
+        <xsd:attribute name="truncate" type="xsd:boolean" />
     </xsd:complexType>
     <xsd:complexType name="elementType">
         <xsd:choice minOccurs="0" maxOccurs="unbounded">
