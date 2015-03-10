@@ -1,3 +1,4 @@
+dojo.require('dojox.gfx.Mover');
 define(["dojo/has", "dojo/_base/event"],
     function(has, event){
 
