@@ -17,8 +17,8 @@
         },
         onComplete: function(data)
         {
-            utils.showMessage(data.message, data.type, '15000');
-            if (data.error == '0') {
+            utils.showMessage(data.message, (data.error == '0' ? 'message' : 'error'), '15000');
+            if (data.error <= '1') {
                 var form = new zwei.Form({
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                     dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),

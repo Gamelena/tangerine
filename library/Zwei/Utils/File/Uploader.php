@@ -31,6 +31,11 @@ class Zwei_Utils_File_Uploader
     private $_model;
     
     /**
+     * @var int
+     */
+    private $_processed = 0;
+    
+    /**
      * 
      * @var boolean
      */
@@ -87,10 +92,8 @@ class Zwei_Utils_File_Uploader
         $ext = Zwei_Utils_File::getExtension($file['name']);
         //Si se supera el valor de la variable de configuración "upload_max_filesize", $_FILE['size'] retorna 0
         if ($file['size'] == 0) {
-            $response = array(
-                'error' => '9',
-                'message' => "El archivo no puede pesar más de " . ini_get('upload_max_filesize') . " bytes"
-            );
+            $response['error'] = '9';
+            $response['message'] = "El archivo no puede pesar más de " . ini_get('upload_max_filesize') . " bytes";
         } else if ($ext == 'csv') {
             $form = new Zwei_Utils_Form();
             
@@ -107,12 +110,14 @@ class Zwei_Utils_File_Uploader
             
             $handle = fopen($filename, 'r');
             $ad = $this->_model->getAdapter();
+            $processed = 0;
             
             /**
              * @var $column Zwei_Admin_Xml
              */
             $i = 0;
             $firstLine = true;
+            $errors = 0;
             
             while ($line = fgetcsv($handle, null, $separator)) {
                 $validateLine = !empty($line) && count($line) >= count($this->_columns);
@@ -130,6 +135,7 @@ class Zwei_Utils_File_Uploader
                                 break;
                             } else if (!$validate && $action !== 'delete') {
                                 Console::error(array("'$text' No pasó la validación", $column->getAttribute("regExp"), $column->getAttribute("required")));
+                                $errors++;
                                 $data = array();
                                 break;
                             } else {
@@ -158,15 +164,15 @@ class Zwei_Utils_File_Uploader
                 $this->iterateFile($aQueries, $action, $processed);
             }
             
-            $response = array(
-                    'error' => '0',
-                    'message' => "Archivo procesado"
-            );
+            $response['error'] = $processed > 0 ? '0' : '1';
+            $response['message'] = $action != 'delete' ? "Ingresados y/o actualizados $processed registros." : "Eliminados $processed registros.";
+            if ($errors) {
+                $response['message'] .= "$errors registros no se pudieron procesar.";
+            }
+            
         } else {
-            $response = array(
-                'error' => '9',
-                'message' => "Extensión de archivo no permitida para '{$file['name']}'"
-            );
+            $response['error'] = '9';
+            $response['message'] = "Extensión de archivo no permitida para '{$file['name']}'";
         }
         return $response;
     }
@@ -210,6 +216,5 @@ class Zwei_Utils_File_Uploader
         
         $executed = $ad->query($query);
         $processed += $executed->rowCount();
-        Console::log(array($query, $processed . " filas afectadas"));
     }
 }
