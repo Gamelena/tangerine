@@ -128,7 +128,7 @@ class Zwei_Utils_File_Uploader
                             
                             if (($firstLine && $text == $column->getAttribute('name'))) { //Si primera línea corresponde a titulos declarados en XML, no se procesa.
                                 break;
-                            } else if (!$validate && $action != 'delete') {
+                            } else if (!$validate && $action !== 'delete') {
                                 Console::error(array("'$text' No pasó la validación", $column->getAttribute("regExp"), $column->getAttribute("required")));
                                 $data = array();
                                 break;
@@ -210,6 +210,6 @@ class Zwei_Utils_File_Uploader
         
         $executed = $ad->query($query);
         $processed += $executed->rowCount();
-        Console::log($query);
+        Console::log(array($query, $processed . " filas afectadas"));
     }
 }
