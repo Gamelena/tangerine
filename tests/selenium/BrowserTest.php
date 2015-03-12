@@ -43,7 +43,8 @@ class BrowserTest extends PHPUnit_Extensions_Selenium2TestCase
         $model = new SettingsModel();
         $row = $model->find('titulo_adm')->current();
         
-        $this->assertEquals($row->value, $this->title());
+        
+        $this->assertEquals($row->value, htmlentities($this->title()));
         
         $this->byId('username')->value(PHPUNIT_USERNAME);
         $this->byId('password')->value(PHPUNIT_PASSWORD);
@@ -77,8 +78,4 @@ class BrowserTest extends PHPUnit_Extensions_Selenium2TestCase
             }
         }
     }
-    
-
-    
- 
 }
