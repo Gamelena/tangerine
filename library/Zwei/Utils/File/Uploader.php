@@ -206,7 +206,7 @@ class Zwei_Utils_File_Uploader
              $query = "INSERT INTO `$tableName` ($columns) VALUES $auxQuery ON DUPLICATE KEY UPDATE $columnsReplace";
         } else if ($action == 'insert') {
              if ($this->_truncate) {
-                $this->_model->delete();
+                $ad->query("TRUNCATE TABLE `$tableName`");
              }
              $query = "INSERT IGNORE INTO `$tableName` ($columns) VALUES $auxQuery";
         } else if ($action == 'delete') {
