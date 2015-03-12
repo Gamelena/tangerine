@@ -220,9 +220,6 @@
             <controllerFile controllerName="DojoxFormCheckedMultiSelectBinary">
               <actionMethod actionName="index"/>
             </controllerFile>
-            <controllerFile controllerName="DojoDnDSource">
-              <actionMethod actionName="index"/>
-            </controllerFile>
             <controllerFile controllerName="DojoDndSource">
               <actionMethod actionName="index"/>
             </controllerFile>

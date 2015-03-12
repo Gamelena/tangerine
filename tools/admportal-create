@@ -194,6 +194,17 @@ echo " "
 echo Eliminando resources.frontController.moduleDirectory autogenerado por zf tool
 sed -i '/resources.frontController.moduleDirectory =/d' $DEST_PATH/web/application/configs/application.ini 
 
+echo " "
+echo "Generando tests unitarios"
+rm -rf $DEST_PATH/web/tests/
+mkdir -p $DEST_PATH/web/tests/application/controllers/
+mkdir -p $DEST_PATH/web/tests/library/
+mkdir -p $DEST_PATH/web/tests/selenium/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/application/controllers/ $DEST_PATH/web/tests/application/controllers/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/selenium/ $DEST_PATH/web/tests/selenium/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/bootstrap.php $DEST_PATH/web/tests/bootstrap.php
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/phpunit.xml $DEST_PATH/web/tests/phpunit.xml
+
 
 echo " "
 echo \*\*\* Listo, para configurar el servidor con VHOST revise ejemplo en $DEST_PATH/web/docs/README.txt. \*\*\*
