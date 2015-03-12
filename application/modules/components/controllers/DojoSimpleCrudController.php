@@ -596,9 +596,32 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      */
     public function uploadAction()
     {
-        $uploader = new Zwei_Utils_File_Uploader($this->_xml);
-        foreach ($_FILES as $i => $file) {
-            $this->view->response = $uploader->process($file, $this->getRequest()->getParam('accion'));
+        $r = $this->getRequest();
+        $action = $r->getParam('accion');
+        
+        if ($action) {
+            $allowed = 
+                ($action === 'load' && $this->_acl->isUserAllowed($this->_component, 'EDIT') && $this->_acl->isUserAllowed($this->_component, 'ADD')) ||
+                ($action === 'delete' && $this->_acl->isUserAllowed($this->_component, 'DELETE')) ||
+                ($action === 'insert' && $this->_acl->isUserAllowed($this->_component, 'ADD'));
+            
+            if ($allowed) {
+                $this->view->response = array(
+                    'error' => '9',
+                    'message' => 'No se ha subido archivo.',
+                    'size' => '0'
+                );
+                
+                $uploader = new Zwei_Utils_File_Uploader($this->_xml);
+                
+                if ($r->getParam('truncate') == '1' && $this->_acl->isUserAllowed($this->_component, 'DELETE')) {
+                    $uploader->truncate();
+                }
+                
+                foreach ($_FILES as $i => $file) { //Se espera solo un archivo
+                    $this->view->response = $uploader->process($file, $action);
+                }
+            }
         }
     }
     
@@ -612,6 +635,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $r = $this->getRequest();
         $this->view->component = $r->getParam('p');
         $this->view->accion = $r->getParam('accion');
+        $this->view->truncate = $r->getParam('truncate');
         
         $this->view->keys = array();
         $keys = $r->getParam('keys', array());

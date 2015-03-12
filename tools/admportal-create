@@ -191,6 +191,11 @@ echo guardando variable zwei.session.namespace con valor ${PWD##*/} en applicati
 sed -i "s/ADMPORTAL_SITENAME/${PWD##*/}/g" $DEST_PATH/web/application/configs/application.ini
 
 echo " "
+echo Eliminando resources.frontController.moduleDirectory autogenerado por zf tool
+sed -i '/resources.frontController.moduleDirectory =/d' $DEST_PATH/web/application/configs/application.ini 
+
+
+echo " "
 echo \*\*\* Listo, para configurar el servidor con VHOST revise ejemplo en $DEST_PATH/web/docs/README.txt. \*\*\*
 echo \*\*\* Si no desea usar VHOST considere el siguiente script para configurar un ALIAS de Apache. \*\*\*
 echo " " 

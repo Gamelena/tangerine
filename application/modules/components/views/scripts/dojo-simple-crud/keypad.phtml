@@ -253,6 +253,7 @@ foreach ($this->uploaders as $i => $f) :
     $disabled = $f->getAttribute('disabled') || !$this->list ? 'disabled="disabled"' : '';
     $title = $f->getAttribute('title') ? " title=\"{$f->getAttribute('title')}\"" : '';
     $action = $f->getAttribute('action') ? $f->getAttribute('action') : '';
+    $truncate = $f->getAttribute('truncate') ? $f->getAttribute('truncate') : 'false';
 ?>
 
     <div class="keyPadButton">
@@ -262,7 +263,8 @@ foreach ($this->uploaders as $i => $f) :
                 component: '<?=$this->component?>',
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'),
-                iframe: dojo.byId('ifrm_process')
+                iframe: dojo.byId('ifrm_process'),
+                truncate: '<?=$truncate?>'
             });
             uploader.showDialog('<?=$action?>');">
             <?=$name?>
