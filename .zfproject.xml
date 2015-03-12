@@ -79,6 +79,8 @@
               <actionMethod actionName="clone"/>
               <actionMethod actionName="changePassword"/>
               <actionMethod actionName="contextMenu"/>
+              <actionMethod actionName="upload"/>
+              <actionMethod actionName="uploadForm"/>
             </controllerFile>
             <controllerFile controllerName="DojoSettings">
               <actionMethod actionName="index"/>
@@ -163,6 +165,12 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="DojoChart">
                 <viewScriptFile forActionName="pie"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="upload"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="uploadForm"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
@@ -406,6 +414,8 @@
                 <testApplicationActionMethod forActionName="clone"/>
                 <testApplicationActionMethod forActionName="changePassword"/>
                 <testApplicationActionMethod forActionName="contextMenu"/>
+                <testApplicationActionMethod forActionName="upload"/>
+                <testApplicationActionMethod forActionName="uploadForm"/>
               </testApplicationControllerFile>
               <testApplicationControllerFile forControllerName="DojoSettings">
                 <testApplicationActionMethod forActionName="index"/>
