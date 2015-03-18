@@ -119,6 +119,14 @@ class Zwei_Utils_File_Uploader
             $firstLine = true;
             $errors = 0;
             
+            if ($this->_truncate) {
+                if ($action === 'insert') {
+                    $ad->query("TRUNCATE TABLE `{$this->_model->info(Zend_Db_Table::NAME)}`");
+                } else {
+                    Console::error("truncate sólo es compatible con insert", true, true);
+                }
+            }
+            
             while ($line = fgetcsv($handle, null, $separator)) {
                 $validateLine = !empty($line) && count($line) >= count($this->_columns);
                 if ($validateLine) {
@@ -205,9 +213,6 @@ class Zwei_Utils_File_Uploader
         if ($action == 'load') {
              $query = "INSERT INTO `$tableName` ($columns) VALUES $auxQuery ON DUPLICATE KEY UPDATE $columnsReplace";
         } else if ($action == 'insert') {
-             if ($this->_truncate) {
-                $this->_model->delete();
-             }
              $query = "INSERT IGNORE INTO `$tableName` ($columns) VALUES $auxQuery";
         } else if ($action == 'delete') {
              $query = "DELETE FROM `$tableName` WHERE  ($columns) IN ($auxQuery)";

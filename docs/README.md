@@ -26,8 +26,6 @@ Ahora debieramos tener disponible el comando 'composer'
 2. Instalar dependencias de Admportal
 
 Moverse a la raiz de admportal (donde está composer.json) y configurar composer como superusuario
-
-	composer init
 	composer install
 
 3. Configurar PHP con los paquetes instalados

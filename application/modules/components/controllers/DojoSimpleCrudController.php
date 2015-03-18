@@ -614,7 +614,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                 
                 $uploader = new Zwei_Utils_File_Uploader($this->_xml);
                 
-                if ($r->getParam('truncate') == '1' && $this->_acl->isUserAllowed($this->_component, 'DELETE')) {
+                if ($r->getParam('truncate') === 'true' && $this->_acl->isUserAllowed($this->_component, 'DELETE')) {
                     $uploader->truncate();
                 }
                 

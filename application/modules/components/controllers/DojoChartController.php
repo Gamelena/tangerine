@@ -100,7 +100,11 @@ class Components_DojoChartController extends Zend_Controller_Action
             $this->view->model = $this->_xml->getAttribute("target");
         }
         
+                
         $uri = html_entity_decode(urldecode($this->_request->getParam('uri')));
+        
+        Console::debug($uri);
+        
         $port = $_SERVER['SERVER_PORT'] != '80' ? ':' . $_SERVER['SERVER_PORT'] : '';
         if (! empty($uri)) {
             $aUri = parse_url($uri);

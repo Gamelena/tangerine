@@ -49,8 +49,8 @@ TRUNCATE TABLE `acl_modules`;
 --
 
 INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `refresh_on_load`, `type`, `approved`, `order`, `root`, `ownership`, `icons_id`) VALUES
-(1, NULL, 'Configuraci&oacute;n', NULL, '1', '0', '', '1', 11, '0', '0', 12),
-(2, NULL, 'Reportes Generales', NULL, '1', '0', 'xml', '1', 6, '0', '0', 1),
+(1, NULL, 'Configuraci&oacute;n', NULL, '1', '0', NULL, '1', 11, '0', '0', 12),
+(2, NULL, 'Reportes Generales', NULL, '1', '0', NULL, '1', 6, '0', '0', 1),
 (3, NULL, 'Datos Personales', 'personal-info.xml', '0', '0', 'xml', '1', 0, '0', '0', NULL),
 (4, 11, 'M&oacute;dulos', 'modules.xml', '1', '0', 'xml', '1', 1, '1', '0', 6),
 (5, 10, 'Usuarios', 'users.xml', '1', '0', 'xml', '1', 1, '0', '0', 17),
@@ -58,8 +58,8 @@ INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `refres
 (7, 11, 'Servidor', 'phpinfo.xml', '1', '0', 'xml', '1', 6, '1', '0', 22),
 (8, 10, 'Perfiles', 'roles.xml', '1', '0', 'xml', '1', 2, '1', '0', 7),
 (9, 11, 'Configuraci&oacute;n Global', 'settings.xml', '1', '0', 'xml', '1', 5, '1', '0', 20),
-(10, 1, 'Perfilamiento', NULL, '1', '0', '', '1', 1, '0', '0', 5),
-(11, 1, 'Sitio', NULL, '1', '0', '', '1', 2, '0', '0', 13),
+(10, 1, 'Perfilamiento', NULL, '1', '0', NULL, '1', 1, '0', '0', 5),
+(11, 1, 'Sitio', NULL, '1', '0', NULL, '1', 2, '0', '0', 13),
 (12, 11, '&Iacute;conos', 'icons.xml', '1', '0', 'xml', '1', 7, '1', '0', 16),
 (13, 9, 'Avanzado', 'settings-advanced.xml', '1', '0', 'xml', '1', 0, '1', '0', 21);
 
@@ -258,7 +258,7 @@ TRUNCATE TABLE `web_settings`;
 INSERT INTO `web_settings` (`id`, `list`, `value`, `type`, `description`, `ord`, `group`, `function`, `approved`, `path`, `url`, `regExp`, `invalidMessage`, `promptMessage`, `formatter`, `xml_children`) VALUES
 ('credits', '', '&copy; Zweicom 2015', 'dijit-form-validation-text-box', '', 2, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
 ('query_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', NULL, '', '', '', '', ''),
-('titulo_adm', '', 'Ticket Electr&oacute;nico', 'dijit-form-validation-text-box', '', 1, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
+('titulo_adm', '', 'Hola Mundo', 'dijit-form-validation-text-box', '', 1, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
 ('transactions_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', NULL, '', '', '', '', ''),
-('url_logo_oper', '', 'e41cfd29logo-movistar68x50.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="56" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;'),
+('url_logo_oper', '', 'b07d49fdlogo-zweicom-big.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="56" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;'),
 ('url_logo_zweicom', '', 'b28576bblogo-zweicom-26x34.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="18" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;\r\n');

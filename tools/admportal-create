@@ -16,7 +16,7 @@ read -p "Ingrese DB HOST (por defecto localhost):" DB_HOST
 DB_HOST=${DB_HOST:-localhost}
 
 echo " "
-echo Ingrese nombre de su DB USER:
+echo "Ingrese nombre de su DB USER (Usuario web):"
 read DB_USER
 
 echo " "
@@ -27,7 +27,7 @@ read DB_PASS
 echo Se seleccionaron los sig parámetros: DB_ADAPTER:$DB_ADAPTER, HOST:$DB_HOST, DB:$DB_NAME, USER:$DB_USER, PASSWORD:$DB_PASS
 echo " "
 
-basread -p "¿Desea crear la base de datos MySQL? (S/N) (por defecto S):" CREATE_DATABASE    
+read -p "¿Desea crear la base de datos MySQL (si no existe) y asignar los privilegios? (S/N) (por defecto S):" CREATE_DATABASE    
 CREATE_DATABASE=${CREATE_DATABASE:-S}
 
 
@@ -189,6 +189,22 @@ echo " "
 echo guardando variable zwei.session.namespace con valor ${PWD##*/} en application.ini
 
 sed -i "s/ADMPORTAL_SITENAME/${PWD##*/}/g" $DEST_PATH/web/application/configs/application.ini
+
+echo " "
+echo Eliminando resources.frontController.moduleDirectory autogenerado por zf tool
+sed -i '/resources.frontController.moduleDirectory =/d' $DEST_PATH/web/application/configs/application.ini 
+
+echo " "
+echo "Generando tests unitarios"
+rm -rf $DEST_PATH/web/tests/
+mkdir -p $DEST_PATH/web/tests/application/controllers/
+mkdir -p $DEST_PATH/web/tests/library/
+mkdir -p $DEST_PATH/web/tests/selenium/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/application/controllers/ $DEST_PATH/web/tests/application/controllers/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/selenium/ $DEST_PATH/web/tests/selenium/
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/bootstrap.php $DEST_PATH/web/tests/bootstrap.php
+rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/phpunit.xml $DEST_PATH/web/tests/phpunit.xml
+
 
 echo " "
 echo \*\*\* Listo, para configurar el servidor con VHOST revise ejemplo en $DEST_PATH/web/docs/README.txt. \*\*\*

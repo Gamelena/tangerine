@@ -453,7 +453,7 @@ class Zwei_Admin_Acl extends Zend_Acl
     {
         $allowed = false;
         $aclModulesModel = new AclModulesModel();
-        if ($this->_module != $module) {
+        if ($this->_module != $module) { //Se evita hacer query si se está preguntando por módulo ya cargado.
             $this->_moduleRow = $aclModulesModel->findModule($module);
             $this->_module = $module;
         }

@@ -77,8 +77,8 @@ class Zwei_Admin_Auth
     {
         $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
         $dbAdapter = isset($resource) && $resource->getDb("auth") ?
-        $resource->getDb("auth") :
-        Zend_Db_Table::getDefaultAdapter();
+            $resource->getDb("auth") :
+            Zend_Db_Table::getDefaultAdapter();
     
         $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
         $authUsersTable = 'acl_users';

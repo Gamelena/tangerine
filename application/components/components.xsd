@@ -175,7 +175,7 @@
         <xsd:complexType name="uploaderType">
         <xsd:attribute name="name"/>
         <xsd:attribute name="iconClass"/>
-        <xsd:attribute name="action"/>
+        <xsd:attribute name="action" type="uploaderActionType"/>
         <xsd:attribute name="processClass"/><!-- @todo por implementar -->
         <xsd:attribute name="processMethod"/><!-- @todo por implementar -->
         <xsd:attribute name="truncate" type="xsd:boolean" />
@@ -246,6 +246,13 @@
             <xsd:enumeration value="false"/>
             <xsd:enumeration value="readonly"/>
             <xsd:enumeration value="disabled"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="uploaderActionType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="load"/>
+            <xsd:enumeration value="insert"/>
+            <xsd:enumeration value="delete"/>
         </xsd:restriction>
     </xsd:simpleType>
     <xsd:simpleType name="excelFormatter">
