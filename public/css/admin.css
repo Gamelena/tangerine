@@ -796,14 +796,35 @@ a.settingsTab {
     border-radius: 0.5em;
     border-color: #5FAFB0;
 }
-
-/*Zwei Theme*/
-
+/*Icons*/
 .zweiIconCsv {
 	background-image:  url('i/csv.png');
 	width: 16px;
     height: 16px;
 }
+
+/*Icons*/
+.zweiIconCsv {
+	background-image:  url('i/csv.png');
+	width: 16px;
+    height: 16px;
+}
+
+.zweiIconUpload {
+	background-image:  url('i/upload.png');
+	width: 16px;
+    height: 16px;
+}
+
+.zweiIconDownload {
+	background-image:  url('i/download.png');
+	width: 16px;
+    height: 16px;
+}
+
+
+
+/*Zwei Theme*/
 
 .zweicom .dojoxGridHeader .dojoxGridCell {
     padding-top: 1em;
