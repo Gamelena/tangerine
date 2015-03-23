@@ -19,5 +19,4 @@ interface Zwei_Admin_ModelInterface
 
     public function fetchRow ();
 
-    public function info ($key);
 }

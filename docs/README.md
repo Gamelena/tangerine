@@ -53,7 +53,7 @@ Agregar
 	alias zf='/usr/share/php/zendframework/zendframework1/bin/zf.sh'
 
 	
-5. Instalar Dojo Toolkit 1.9.1
+5. Instalar Dojo Toolkit 1.10.0
 
 http://download.dojotoolkit.org/
 
