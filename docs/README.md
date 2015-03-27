@@ -26,8 +26,6 @@ Ahora debieramos tener disponible el comando 'composer'
 2. Instalar dependencias de Admportal
 
 Moverse a la raiz de admportal (donde está composer.json) y configurar composer como superusuario
-
-	composer init
 	composer install
 
 3. Configurar PHP con los paquetes instalados
@@ -55,7 +53,7 @@ Agregar
 	alias zf='/usr/share/php/zendframework/zendframework1/bin/zf.sh'
 
 	
-5. Instalar Dojo Toolkit 1.9.1
+5. Instalar Dojo Toolkit 1.10.0
 
 http://download.dojotoolkit.org/
 
