@@ -203,6 +203,8 @@
         <xsd:attribute name="onchange" />
         <xsd:attribute name="disabled" type="xsd:boolean" />
         <xsd:attribute name="onclick" />
+        <xsd:attribute name="onkeypress" />
+        <xsd:attribute name="onkeyup" />
         <xsd:attribute name="onblur" />
         <xsd:attribute name="onload" />
         <xsd:attribute name="required" type="xsd:boolean" />

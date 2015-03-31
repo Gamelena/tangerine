@@ -17,7 +17,7 @@
         <element name="Permisos" target="permissions"
             type="dojo-dnd-source" table="AclModulesActionsModel"
             tableMethod="selectAllActions" visible="false" edit="true"
-            add="true" clone="true" style="height:450px !important;" selectedTitle="Permisos seleccionados" unselectedTitle="Permisos" />
+            add="true" clone="true" style="height:450px !important;" selectedTitle="Permisos seleccionados" unselectedTitle="Permisos NO seleccionados" />
     </elements>
     <searchers>
         <group name="Perfil">
