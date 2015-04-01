@@ -154,7 +154,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->script = $this->_xml->xpath("//component/script") ? "<script>\n" . dom_import_simplexml($this->_xml->script)->textContent . "</script>\n" : '';
         
         $this->initKeys();
-        
         $this->view->showKeyPad = $this->view->hasActions && (!isset($this->view->menus) || in_array($this->view->menus, array('keypad', 'both')));
         
         if ($this->view->changePassword) {

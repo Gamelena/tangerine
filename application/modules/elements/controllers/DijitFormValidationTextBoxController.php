@@ -25,6 +25,8 @@ class Elements_DijitFormValidationTextBoxController extends Zend_Controller_Acti
         $this->view->regExp = $r->getParam('regExp') ? " pattern=\"{$r->getParam('regExp')}\"" : '';
         $this->view->onchange = $r->getParam('onchange') ? " onchange=\"{$r->getParam('onchange')}\"" : '';
         $this->view->onclick = $r->getParam('onclick') ? " onclick=\"{$r->getParam('onclick')}\"" : '';
+        $this->view->onkeypress = $r->getParam('onkeypress') ? " onkeypress=\"{$r->getParam('onkeypress')}\"" : '';
+        $this->view->onkeyup = $r->getParam('onkeyup') ? " onkeyup=\"{$r->getParam('onkeyup')}\"" : '';
         $this->view->placeHolder = $r->getParam('placeHolder') ? " placeHolder=\"{$r->getParam('placeHolder')}\"" : '';
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? " invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? " promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
