@@ -1,0 +1,117 @@
+
+<style type="text/css">
+@import "/dojotoolkit/dojox/calendar/themes/claro/Calendar.css";
+
+@import "<?=BASE_URL?>css/calendar.css";
+
+@import "<?=BASE_URL?>css/asyncStore.css";
+</style>
+<div class="claro">
+ <div id="loadingPanel"
+  style="position: absolute; z-index: 10; width: 100%; height: 100%; background: #ffffff">
+  <span style="background: #DBEB8F; padding: 2px">Cargando...</span>
+ </div>
+ <div data-dojo-id="calendar" data-dojo-type="dojox/calendar/Calendar"
+  data-dojo-props="columnViewProps:{minHours:0, maxHours: 24}"
+  style="position: absolute; left: 10px; top: 60px; bottom: 30px; right: 10px">
+ </div>
+ <div id="hint"
+  style="position: absolute; left: 10px; height: 15px; bottom: 10px; right: 10px; color: #999; overflow: auto"></div>
+</div>
+<script type="text/javascript">
+var modelBase;
+var item;
+require(["dojo/ready", "dojo/_base/declare", "dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/array", "dojo/_base/fx", "dojo/on", 
+         "dojo/date/locale", "dojo/parser",    "dojo/Deferred", "dojo/dom", "dojo/dom-construct",    "dojo/store/Memory", 
+         "dojo/store/Observable",    "dojox/calendar/Calendar", "dijit/Calendar", "dijit/Menu", "dijit/MenuItem"    ],
+
+    function(ready, declare, lang, has, arr, fx, on, locale, parser, Deferred, dom, domConstruct,
+        Memory, Observable, Calendar){
+
+        ready(function(){
+            setTimeout(function(){
+            // Display different hint every 10 seconds 
+                                    
+            
+            var someData = [];
+                                    
+            var startOfWeek = calendar.floorToWeek(new calendar.dateClassObj());
+            console.debug(startOfWeek);
+
+<?php 
+foreach ($this->franja as $i => $f) :
+?>
+            var newObj = {
+                id: <?=$f->id . $i?>,
+                summary: "Franja " + <?=$f->id?>,
+                startTime: new Date(<?=$f->Y1?>, <?=$f->m1?>, <?=$f->d1?>, <?=$f->H1?>, <?=$f->i1?>, <?=$f->s1?>),
+                endTime: new Date(<?=$f->Y2?>, <?=$f->m2?>, <?=$f->d2?>, <?=$f->H2?>, <?=$f->i2?>, <?=$f->s2?>)
+            };
+            someData.push(newObj);
+<?php 
+endforeach;
+?>        
+           
+            
+            // BEGIN HACK
+            // Hack to simulate some latency when adding / updating an event.
+            // Observable is breaking completely the inheritance chain
+            var store = new Observable(Memory({data: someData}));
+            var oldPut = store.put;
+            store.put = function(value, options){
+                setTimeout(lang.hitch(this, function(){
+                    oldPut.call(this, value, options);
+                }), 3000);
+                return new Deferred();
+            };
+            // END HACK
+            
+            calendar.set("store", store);
+            calendar.set("date", startOfWeek);
+            // Enable creation of event interactively by ctrl clicking grid.
+            var createItem = function(view, d, e){
+                console.debug('createItem');
+                // create item by maintaining control key
+                if(!e.ctrlKey || e.shiftKey || e.altKey){
+                    return null;
+                }
+            
+                // create a new event
+                var start, end;
+                var colView = calendar.columnView;
+                var cal = calendar.dateModule;
+                
+                if(view == colView){
+                    start = calendar.floorDate(d, "minute", colView.timeSlotDuration);
+                    end = cal.add(start, "minute", colView.timeSlotDuration); 
+                }else{
+                    start = calendar.floorToDay(d);
+                    end = cal.add(start, "day", 1);
+                }
+                
+                item = {
+                    id: id,
+                    created: true,
+                    summary: "Franja " + id,
+                    startTime: start,
+                    endTime: end,
+                    allDay: view.viewKind == "matrix"
+                };
+                
+                id++;    
+                return item;                            
+            };
+            
+                                                                                                                                
+            // Hide loading panel when application is ready
+            fx.fadeOut({
+                node:"loadingPanel", 
+                onEnd: function(node){
+                    node.parentNode.removeChild(node)
+                }
+            }).play(500);
+        }, 1000);
+    });
+});
+</script>
+
