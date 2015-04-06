@@ -100,6 +100,12 @@ class CrudRequestController extends Zend_Controller_Action
             } catch (Zend_Application_Resource_Exception $e) {
                 throw new Zend_Application_Resource_Exception($classModel . ": " . $e->getMessage(), $e->getCode());
             }
+            
+            if (!$this->_model instanceof Zend_Db_Table_Abstract && !$this->_model instanceof Zwei_Admin_ModelInterface) {
+                throw new Zwei_Exception("$classModel no es una instancia de Zend_Db_Table_Abstract ni implementa Zwei_Admin_ModelInterface");
+            }
+            
+            
             $this->view->collection = array();
             
             //Es posible que $this->_model NO sea un modelo Zwei_Db_Table y sea una implementación de Zwei_Admin_ModelInterface
@@ -177,7 +183,7 @@ class CrudRequestController extends Zend_Controller_Action
                             } catch (Zend_Db_Exception $e) {
                                 $this->_responseContent['state'] = 'ADD_FAIL';
                                 $this->_responseContent['type'] = 'error';
-                                Console::error("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}");
+                                Console::error(array("Zend_Db_Exception:{$e->getMessage()},Code:{$e->getCode()}", $data));
                             }
                         } else if ($this->_form->action == 'delete') {
                             if (isset($this->_form->primary)) {
