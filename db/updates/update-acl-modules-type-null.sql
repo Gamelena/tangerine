@@ -1,1 +1,1 @@
-ALTER TABLE  `acl_modules` CHANGE  `type`  `type` ENUM(  'xml',  'zend_module',  'iframe' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL ;
+ALTER TABLE  `acl_modules` CHANGE  `type`  `type` ENUM(  'xml',  'zend_module',  'iframe' ) NULL DEFAULT NULL ;
