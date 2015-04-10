@@ -89,6 +89,7 @@ class AclModulesModel extends DbTable_AclModules
             $lastInsertedId = parent::insert($data);
         } catch (Zend_Db_Exception $e) {
             if ($e->getCode() == 23000) {
+                Console::log($e->getMessage(), APPLICATION_ENV !== 'production');
                 $this->setMessage("Clave repetida. COMPONENTE debe ser único.");
                 return false;
             }
