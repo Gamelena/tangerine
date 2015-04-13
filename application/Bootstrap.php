@@ -113,7 +113,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         //Plugin para cache de páginas
         $frontController->registerPlugin(new Zwei_Controller_Plugin_Cache($this->_config));
         
-        $frontController->throwExceptions(true);
+        $frontController->throwExceptions(false);
         
         Zwei_Db_Table::setDefaultLogMode($this->_config->zwei->db->table->logbook);
         
