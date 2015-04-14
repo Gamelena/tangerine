@@ -113,16 +113,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         //Plugin para cache de páginas
         $frontController->registerPlugin(new Zwei_Controller_Plugin_Cache($this->_config));
         
-        $frontController->throwExceptions(false);
-        
         Zwei_Db_Table::setDefaultLogMode($this->_config->zwei->db->table->logbook);
         
-        
-    	try {
-			parent::run();
-		} catch (Zend_Controller_Dispatcher_Exception $e) {
-			throw new Zend_Controller_Dispatcher_Exception("\n\nRevise 'resources.frontController.moduleDirectory' y 'resources.frontController.controllerDirectory' en 'application.ini'\n" . $e -> getMessage() . $e -> getTraceAsString());
-		}
+        try {
+            parent::run();
+        } catch (Zend_Controller_Dispatcher_Exception $e) {
+            throw new Zend_Controller_Dispatcher_Exception("\n\nRevise 'resources.frontController.moduleDirectory' y 'resources.frontController.controllerDirectory' en 'application.ini'\n" . $e -> getMessage() . $e -> getTraceAsString());
+        }
     }
 }
 
