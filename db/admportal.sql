@@ -84,14 +84,14 @@ CREATE TABLE IF NOT EXISTS `acl_modules` (
   `module` char(200) DEFAULT NULL COMMENT 'Url de módulo, puede ser archivo XML, URl de controlador o módulo ZF',
   `tree` enum('0','1') NOT NULL DEFAULT '1',
   `refresh_on_load` enum('0','1') NOT NULL DEFAULT '0' COMMENT 'Define si módulo debe ser refrescado al reseleccionar la pestaña, en caso contrario mantendrá el estatus de como se dejó al abandonarla.',
-  `type` enum('xml','zend_module','legacy','iframe') DEFAULT 'xml',
+  `type` enum('xml','zend_module','iframe') DEFAULT NULL,
   `approved` enum('0','1') NOT NULL DEFAULT '1',
   `order` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT 'Orden en que aparece en arbol',
   `root` enum('0','1') NOT NULL DEFAULT '0' COMMENT 'Define si solo puede acceder perfil ROOT (en configuracion por defecto acl_roles_id = 1)',
   `ownership` enum('0','1') NOT NULL DEFAULT '0' COMMENT 'Indica si modulo usa modelo con reglas de owner, funciona con type=xml, ver Zwei_Db_Table::isOwner(item, user)',
   `icons_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `module` (`module`)
+  UNIQUE KEY `module` (`module`, `type`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 

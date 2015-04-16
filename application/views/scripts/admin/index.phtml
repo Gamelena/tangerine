@@ -5,11 +5,6 @@
     <meta http-equiv="content-language" content="es" />
     <title><?=$this->adminTitle?></title>
     <link href="<?=BASE_URL?>favicon.ico" rel="shortcut icon"/>
-    <script type="text/javascript">
-    var base_url="<?=BASE_URL?>";
-    var layout=<?=$this->layout?>;
-    var multiForm=<?=$this->multiForm?>; 
-    </script>
     <style type="text/css">
     html, body {
         width: 100%;
@@ -19,8 +14,19 @@
     }
     </style>
     <?=$this->headStyle()?>
+    <script type="text/javascript">
+        var base_url="<?=BASE_URL?>";
+        var layout=<?=$this->layout?>;
+        var multiForm=<?=$this->multiForm?>; 
+    </script>
+<?php
+foreach ($this->javascriptLibs as $library) :
+?>
+    <script type="text/javascript" src="<?=$library?>"></script>
+<?php
+endforeach;
+?>
     <?=$this->dojo()?>
-    <?=$this->list?>
     <script type="text/javascript">
     var utils = new zwei.Utils();
     var admportal = new zwei.Admportal({noCache: '<?=$this->noCache?>'});
@@ -36,7 +42,7 @@
         // Add pre-loading
     });
 
-    function preLoading(){
+    function preLoading() {
         setTimeout(function() {
             dojo.fadeOut({
                 node: "appLoader",

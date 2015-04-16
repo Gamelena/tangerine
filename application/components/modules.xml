@@ -15,10 +15,10 @@
         <element name="M&amp;oacute;dulo Padre" target="parent.title"
             type="dijit-form-validation-text-box" visible="false" edit="false"
             add="false" />
-        <element name="M&amp;oacute;dulo" target="title"
+        <element name="Nombre" target="title"
             type="dijit-form-validation-text-box" visible="true" edit="true"
             add="true" clone="true" />
-        <element name="M&amp;oacute;dulo" target="acl_modules.title"
+        <element name="Nombre" target="acl_modules.title"
             type="dijit-form-validation-text-box" visible="false" edit="false"
             add="false" />
         <element name="Componente" target="module"

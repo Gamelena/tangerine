@@ -331,11 +331,11 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             }
         }
         
-        $this->view->hasActions = $this->view->add || $this->view->edit || $this->view->clone || $this->view->delete || !empty($this->view->customFunctions) || !empty($this->view->uploaders);
         
         $excel = $this->_xml->xpath("//component/helpers/excel");
         $this->view->excel = $excel ? $excel : array();
         
+        $this->view->hasActions = $this->view->add || $this->view->edit || $this->view->clone || $this->view->delete || !empty($this->view->customFunctions) || !empty($this->view->uploaders) || !empty($this->view->excel);
         
         //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? 'true' : 'false';

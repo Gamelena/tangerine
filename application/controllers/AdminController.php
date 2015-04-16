@@ -14,22 +14,30 @@ class AdminController extends Zend_Controller_Action
      * @var string
      */
     private $_dojoTheme = 'claro';
+    
     /**
      *
      * @var string
      */
     private $_template = 'default';
+    
     /**
      *
      * @var Zwei_Db_Table
      */
     private $_model;
+    
     /**
      * 
      * @var Zwei_Admin_Acl
      */
     private $_acl;
     
+    /**
+     * 
+     * @var Zend_Config
+     */
+    private $_config;
     
     /**
      * Post Constructor
@@ -38,17 +46,17 @@ class AdminController extends Zend_Controller_Action
      */
     public function init()
     {
-        $config = Zwei_Controller_Config::getOptions();
-        $confLayout = $config->zwei->layout;
+        $this->_config = Zwei_Controller_Config::getOptions();
+        $confLayout = $this->_config->zwei->layout;
         $r = $this->getRequest();
         
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         if ($userInfo) $this->_acl = new Zwei_Admin_Acl();
         
-        $this->baseDojoFolder = isset($config->zwei->js->dojo->baseUrl) ? $config->zwei->js->dojo->baseUrl : '/dojotoolkit';
-        if (isset($config->resources->dojo->cdnbase)) $this->baseDojoFolder = $config->resources->dojo->cdnbase . '/' . $config->resources->dojo->cdnversion;
+        $this->baseDojoFolder = isset($this->_config->zwei->js->dojo->baseUrl) ? $this->_config->zwei->js->dojo->baseUrl : '/dojotoolkit';
+        if (isset($this->_config->resources->dojo->cdnbase)) $this->baseDojoFolder = $this->_config->resources->dojo->cdnbase . '/' . $this->_config->resources->dojo->cdnversion;
         
-        $this->view->noCache = isset($config->zwei->resources) ? $config->zwei->resources->noCache : ''; 
+        $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : ''; 
         
         if ($confLayout->dojoTheme) $this->_dojoTheme = $confLayout->dojoTheme;
         if ($r->getParam('theme')) $this->_dojoTheme = $r->getParam('theme');
@@ -118,13 +126,26 @@ class AdminController extends Zend_Controller_Action
             @import "'.BASE_URL.'css/admin.css?version='.$this->view->noCache.'";
         ');
     }
+    
+    /**
+     * Carga librerías javascripts configuradas.
+     * @return void
+     */
+    private function enableJavascriptLibs()
+    {
+        $this->view->javascriptLibs = isset($this->_config->zwei->javascript->libs) ? $this->_config->zwei->javascript->libs->toArray() : array();
+    }
+    
+    
     /**
      * Acción layout pantalla principal}
      * @return void
      */
     public function indexAction()
     {
+        $this->enableJavascriptLibs();
         $this->enableDojo();
+        
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_redirect('admin/login');
         } else {
@@ -133,9 +154,8 @@ class AdminController extends Zend_Controller_Action
             $this->view->first_names = $userInfo->first_names;
             $this->view->last_names = $userInfo->last_names;
             $this->view->user_id = $userInfo->id;
-            $config = Zwei_Controller_Config::getOptions();
-            $this->view->layout = isset($config->zwei->layout->mainPane) ? "'".$config->zwei->layout->mainPane."'" : 'undefined';//Para backward compatibility, TODO deprecar
-            $this->view->multiForm = isset($config->zwei->form->multiple) && !empty($config->zwei->form->multiple) ? 'true' : 'false';//Para backward compatibility, TODO deprecar
+            $this->view->layout = isset($this->_config->zwei->layout->mainPane) ? "'".$this->_config->zwei->layout->mainPane."'" : 'undefined';//Para backward compatibility, TODO deprecar
+            $this->view->multiForm = isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple) ? 'true' : 'false';//Para backward compatibility, TODO deprecar
     
             if ($this->_template != 'default') {
                 $this->_helper->viewRenderer("index-$this->_template");

@@ -100,10 +100,10 @@ class Elements_DojoxFormCheckedMultiSelectBinaryController extends Zend_Controll
                 }
             }
         } else {
-            if (!$r->getParam('value')) {
+            if (!$r->getParam('value') && !$r->getParam('defaultValue')) {
                 $value = (isset($request->{$this->view->target})) ? $request->{$this->view->target} : null;
             } else {
-                $value = $r->getParam('value');
+                $value = $r->getParam('value', $r->getParam('defaultValue'));
             }
         
             $options = "";
