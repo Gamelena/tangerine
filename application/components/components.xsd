@@ -300,6 +300,7 @@
             <xsd:enumeration value="dijit-form-time-text-box"/>
             <xsd:enumeration value="dijit-form-validation-text-box"/>
             <xsd:enumeration value="dojox-form-uploader"/>
+            <xsd:enumeration value="dojox-widget-color-picker"/>
             <xsd:enumeration value="dojo-dnd-source"/>
             <xsd:enumeration value="hidden"/>
             <xsd:enumeration value="list-files"/>

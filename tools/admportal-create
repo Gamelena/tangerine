@@ -16,7 +16,7 @@ read -p "Ingrese DB HOST (por defecto localhost):" DB_HOST
 DB_HOST=${DB_HOST:-localhost}
 
 echo " "
-echo "Ingrese nombre de su DB USER (Usuario web):"
+echo "Ingrese nombre de su DB USER:"
 read DB_USER
 
 echo " "

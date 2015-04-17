@@ -84,6 +84,10 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      */
     model: null,
     /**
+     * string
+     */
+    title: null,
+    /**
      * @return void 
      */
     onHide: function(){},
