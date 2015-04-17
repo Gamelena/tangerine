@@ -1,14 +1,15 @@
-<link rel="stylesheet" href="/dojotoolkit/dojox/widget/ColorPicker/ColorPicker.css" />
-<div data-dojo-type="dijit/form/DropDownButton">
-    <span>
-        Seleccione ...
-    </span>
-    <div data-dojo-type="dojox/widget/ColorPicker" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>" onchange="dojo.byId('<?=$this->domId . $this->i?>Color').style.backgroundColor=this.get('value')"></div>
-</div>
-<span id="<?=$this->domId . $this->i?>Color" style="  height: 1.9em;
-  width: 6.5em;
-  float: right;
-  background-color: <?=$this->value?>;
-  top: 0.3em;
-  position: relative;">
-</span>
+<table style="border-spacing: 0px">
+    <tr>
+        <td>
+            <link rel="stylesheet" href="/dojotoolkit/dojox/widget/ColorPicker/ColorPicker.css" />
+            <div data-dojo-type="dijit/form/DropDownButton">
+                <span>
+                    Seleccione ...
+                </span>
+                <div data-dojo-type="dojox/widget/ColorPicker" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>" onchange="dojo.byId('<?=$this->domId . $this->i?>Color').style.backgroundColor=this.get('value')"></div>
+            </div>
+        </td>
+        <td id="<?=$this->domId . $this->i?>Color" style="background-color: <?=$this->value?>; min-width: 2em; padding: 0.3em">
+        </td>
+    </tr>
+</table>
