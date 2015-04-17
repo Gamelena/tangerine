@@ -384,8 +384,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     this.dijitDialog = new dojox.widget.DialogSimple({
                         title: this.title,
                         id: dialogId,
-                        onShow: function() {dojo.byId('dijit_DialogUnderlay_0').style.zIndex='0'},
-                        onHide: function() {dojo.byId('dijit_DialogUnderlay_0').style.zIndex='0'}
+                        onHide: this.onHide
                     });
                 } else {
                     this.dijitDialog = dijit.byId(dialogId);
