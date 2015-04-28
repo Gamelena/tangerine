@@ -6,7 +6,8 @@ class Zwei_Git_Differences{
 	var $json2;
 
 	var $salidaJson;
-	    
+
+	
 	function __construct($json1, $json2){
 		$this->json1 = $json1;
 		$this->json2 = $json2;
@@ -34,8 +35,6 @@ class Zwei_Git_Differences{
 
 		//Genera Path Completo
 		$arrayPath = explode(".",$path);
-		//print_r($arrayPath);
-		//echo "<br> array path 0:".$arrayPath[0];
 
 		return $arrayPath[0];
 	}
@@ -54,11 +53,10 @@ class Zwei_Git_Differences{
 
 		//Genera Path Completo
 		$arrayPath = explode(".",$path);
-		//print_r($arrayPath);
-		//echo "<br> array path 1:".$arrayPath[1];
 
 		return $arrayPath[1];
 	}
+
 
 
 
@@ -80,12 +78,10 @@ class Zwei_Git_Differences{
 				$pathCompleto = $pathCompleto.".".$arrayPath[$j];
 			}
 		}
-		//echo "<br>---Path Completo:".$pathCompleto;
 	
 		//Fin Retorna Path Completo
 		return $pathCompleto;
 	}
-
 
 
 
@@ -101,9 +97,7 @@ class Zwei_Git_Differences{
 	function getDiferenciasEntreArrayFinal($aArray1, $aArray2)
 	{
 	  //echo "<br>----------------------------------------------";
-	  //echo "<br> INGRESO EN: arrayRecursiveDiffFinalAdelante.";
 
-	  //$aReturn = array();
 	  static $pathActual = "";
 	  static $arrayPath = array();
 	  static $posicion = 0;
@@ -117,11 +111,7 @@ class Zwei_Git_Differences{
 
 	  //Recorrido de Array 1
 	  foreach ($aArray1 as $mKey => $mValue)
-	  {	    
-		    //echo "<br> Array 1 - KEY:".$mKey;
-		    //echo "<br> Array 1 - Valor:".$mValue;
-		    //echo "<br> PATH:".$pathCompleto = setPathCompleto($arrayPath);
-
+	  {
 		    //si existe la key ($mKey) del array 1, en el array 2
 		    if (array_key_exists($mKey, $aArray2))
 		    {
@@ -159,10 +149,10 @@ class Zwei_Git_Differences{
 
 							//Genera array de salida
 							$posicionArraySalida = count($arraySalida);
-							$arraySalida[$posicionArraySalida][accion] = "modificado";
-							$arraySalida[$posicionArraySalida][path] = $pathCompleto;
-							$arraySalida[$posicionArraySalida][antiguo] = $mValue;
-							$arraySalida[$posicionArraySalida][nuevo] = $aArray2[$mKey];
+							$arraySalida[$posicionArraySalida]["accion"] = "modificado";
+							$arraySalida[$posicionArraySalida]["path"] = $pathCompleto;
+							$arraySalida[$posicionArraySalida]["antiguo"] = $mValue;
+							$arraySalida[$posicionArraySalida]["nuevo"] = $aArray2[$mKey];
 						}
 			      }//fin else
 		    }//fin if 
@@ -184,9 +174,9 @@ class Zwei_Git_Differences{
 				//Genera array de salida
 				$posicionArraySalida = count($arraySalida);
 
-				$arraySalida[$posicionArraySalida][accion] = "eliminado";
-				$arraySalida[$posicionArraySalida][path] = $pathTemporal;//$pathCompleto;
-				$arraySalida[$posicionArraySalida][antiguo] = $mValue;
+				$arraySalida[$posicionArraySalida]["accion"] = "eliminado";
+				$arraySalida[$posicionArraySalida]["path"] = $pathTemporal;//$pathCompleto;
+				$arraySalida[$posicionArraySalida]["antiguo"] = $mValue;
 		
 		    }//fin else
 
@@ -195,29 +185,22 @@ class Zwei_Git_Differences{
 
 	  //Recorre Array2
 	  foreach ($aArray2 as $clave2 => $valor2)
-	  {
-		    //echo "<br> ARRAY 2 ";
+	  {		    
 		    if (array_key_exists($clave2, $aArray1))
 		    {
-			//echo "<br> ARRAY 2 - EXISTE ";
-			//Existe la clave2 del Array 2 en Array 1
+				//echo "<br> ARRAY 2 - EXISTE ";				
 		    }//fin if
 		    else //No Existe la clave2 del Array 2 en Array 1
 		    {
-			//echo "<br> ARRAY 2 - NO EXISTE ";
-
 				//Setea el Path Completo
 				$pathCompleto = self::setPathCompleto($arrayPath);
 				$pathTemporal = $pathCompleto.".".$clave2;
-			
-				//echo "<br> PATH COMPLETO:".$pathCompleto;
-				//echo "<br> PATH COMPLETO:".$pathTemporal;
 
 				//Genera array de salida
 				$posicionArraySalida = count($arraySalida);
-				$arraySalida[$posicionArraySalida][accion] = "agregado";
-				$arraySalida[$posicionArraySalida][path]   = $pathTemporal;    //$pathCompleto;
-				$arraySalida[$posicionArraySalida][nuevo]  = $aArray2[$clave2];
+				$arraySalida[$posicionArraySalida]["accion"] = "agregado";
+				$arraySalida[$posicionArraySalida]["path"]   = $pathTemporal;    //$pathCompleto;
+				$arraySalida[$posicionArraySalida]["nuevo"]  = $aArray2[$clave2];
 		    }//fin else
 
 	  }//fin foreach array2
@@ -251,18 +234,15 @@ class Zwei_Git_Differences{
 
 		foreach ($arrayDiferencias as $clave => $valor){
 
-			$keyPrincipal = self::getRaiz($arrayDiferencias[$clave][path]);
-			//echo "<br> Muestra key Principal:".$keyPrincipal;
+			$keyPrincipal = self::getRaiz($arrayDiferencias[$clave]["path"]);			
 
-			$keySecundaria = self::getKeyNumerica($arrayDiferencias[$clave][path]);
-			//echo "<br> Muestra key Secundaria:".$keySecundaria;
+			$keySecundaria = self::getKeyNumerica($arrayDiferencias[$clave]["path"]);
 
 			if($keyPrincipal == "nodes"){
 
 				if($keySecundariaActual != $keySecundaria){
 					$posicionNodes = 0;
 
-					//echo "<br> Leyendo raiz nodes";
 					$arrayDiferenciasFinal[$keyPrincipal][$keySecundaria][$posicionNodes] = $valor;
 					++$posicionNodes;
 
@@ -277,11 +257,9 @@ class Zwei_Git_Differences{
 
 				if($keySecundariaActual != $keySecundaria){
 					$posicionNodes = 0;
-
-					//echo "<br> Leyendo raiz edges";
+					
 					$arrayDiferenciasFinal[$keyPrincipal][$keySecundaria][$posicionNodes] = $valor;
 					++$posicionNodes;
-
 
 				}else if($keySecundariaActual == $keySecundaria){
 
@@ -296,7 +274,6 @@ class Zwei_Git_Differences{
 
 		return $arrayDiferenciasFinal;
 	}
-
 
 
 
@@ -319,47 +296,46 @@ class Zwei_Git_Differences{
 	}
 
 }//fin clase
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-	
-	
-	$objeto = new Zwei_Git_Differences("json1_version3.json", "json2_version3.json");
-  
+	/*
+	$objeto = new Zwei_Git_Differences("json1_version3.json", "json2_version3.json");  
 	//Get Nombre de jSon1 y jSon2
 	$nombreJson1 = $objeto->getJsonUno(); //funciona
 	$nombreJson2 = $objeto->getJsonDos(); //funciona
-
-
+	
+	echo "<br> El nombre del JSON 1 es:".$nombreJson1;
+	echo "<br> El nombre del JSON 2 es:".$nombreJson2;	
+	echo "<br><br><br><br>";
+	
 	//Procesa JSON 1
 	//echo "<br><br><br>Procesando JSON 1<br>";
-	$data  = file_get_contents($nombreJson1);
+	//$data  = file_get_contents($nombreJson1);
+	$data  = file_get_contents("/home/ddiaz/ZWEICOM/admportal/application/modules/components/controllers/".$nombreJson1);	
 	$arrayJson1 = json_decode($data, true);
-	//print_r($arrayJson1);
-
-
+	echo "<br>";
+	print_r($arrayJson1);
+	echo "<br><br><br><br>";	
+	
 	//Procesa JSON 2
 	//echo "<br><br><br>Procesando JSON 2<br>";
-	$data2  = file_get_contents($nombreJson2);
+	//$data2  = file_get_contents($nombreJson2);
+	$data2  = file_get_contents("/home/ddiaz/ZWEICOM/admportal/application/modules/components/controllers/".$nombreJson2);
 	$arrayJson2 = json_decode($data2, true);
-	//print_r($arrayJson2);
-
-
+	echo "<br>";
+	print_r($arrayJson2);
+	echo "<br><br><br><br>";	
+	
+	//Genera Array de Diferencias
 	$arrayDiferencias = $objeto->getDiferenciasEntreArrayFinal($arrayJson1, $arrayJson2);
-	//echo "<br><br><br>Imprime Estructura con las Diferencias Encontradas:<br>";
-	//print_r($arrayDiferencias);	//echo "<br><br><br><br>";
-
-
+	echo "<br><br><br>Imprime Estructura con las Diferencias Encontradas:<br>";
+	print_r($arrayDiferencias);	echo "<br><br><br><br>";
+	
 	//invoca funcion que setea el array de acuerdo a la salida requerida (Agregando la raiz y key numerica)
-	//echo "<br><br><br>Imprime estructura con las Diferencias Formateadas:<br>";
+	echo "<br><br><br>Imprime estructura con las Diferencias Formateadas:<br>";
 	$arrayDiferenciasFinal = $objeto->setFormatoArrayFinal($arrayDiferencias);
-	//print_r($arrayDiferenciasFinal);    //echo "<br><br><br><br>";
-
-
-	//echo "<br><br><br>Genera JSON a partir de Array de Diferencias Final:<br>";
-	$jSonFinal = json_encode($arrayDiferenciasFinal, true);
+	print_r($arrayDiferenciasFinal);    echo "<br><br><br><br>";
+	*/	
+	
+	/*//echo "<br><br><br>Genera JSON a partir de Array de Diferencias Final:<br>";
+	$jSonFinal = json_encode($arrayDiferenciasFinal, true);*/
 ?>
