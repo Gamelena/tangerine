@@ -32,6 +32,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             . PATH_SEPARATOR . ADMPORTAL_APPLICATION_PATH . '/forms'
             . PATH_SEPARATOR . get_include_path()
         );
+        
+        //Autoloader de Composer
+        if (file_exists('/usr/share/php/autoload.php')) {
+            require_once '/usr/share/php/autoload.php';
+        }
         //$loader->pushAutoloader(new Zwei_Autoloader_PhpThumb());
     }
     
