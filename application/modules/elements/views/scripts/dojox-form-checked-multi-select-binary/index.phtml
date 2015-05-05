@@ -22,7 +22,7 @@ endif;
 ?>
     <?=$this->options ?>
 </select>
-<input type="hidden" value="<?=$this->value?>" id="<?=$this->domId.$this->i?>" name="<?=$this->target?>"/>
+<input data-dojo-type="dijit/form/TextBox" type="hidden" value="<?=$this->value?>" id="<?=$this->domId.$this->i?>" name="<?=$this->target?>"/>
 <?php 
 if (!empty($this->style)) :
 ?>
