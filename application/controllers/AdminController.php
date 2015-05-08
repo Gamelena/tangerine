@@ -176,21 +176,22 @@ class AdminController extends Zend_Controller_Action
                 $this->_redirect('admin/login');
             } else {
                 $file = Zwei_Admin_Xml::getFullPath($component);
-                if (!file_exists($file) && pathinfo($file, PATHINFO_EXTENSION) == 'xml') {
+                if (!file_exists($file) && pathinfo($file, PATHINFO_EXTENSION) === 'xml') {
                     throw new Zwei_Exception("No existe archivo $file.");
                 }
                 
-                if ($this->_acl->isUserAllowed($component, "LIST") || $this->_acl->isUserAllowed($component, "EDIT") || $this->_acl->isUserAllowed($component, "ADD")) {
-                    
-                    
-                    try {
-                        $xml = new Zwei_Admin_Xml($file, LIBXML_NOWARNING, 1);
-                    } catch (Exception $e) {
-                        $message = "Error al intentar parsear $file";
-                        Console::error($message);
-                        $this->view->content = "<h2>$message<h2><center><img src=\"".BASE_URL."images/exception-xml.jpg\"/></center>";
-                        $this->render('index');
-                    }
+                try {
+                    $xml = new Zwei_Admin_Xml($file, LIBXML_NOWARNING, 1);
+                } catch (Exception $e) {
+                    $message = "Error al intentar parsear $file";
+                    Console::error($message);
+                    $this->view->content = "<h2>$message<h2><center><img src=\"".BASE_URL."images/exception-xml.jpg\"/></center>";
+                    $this->render('index');
+                }
+                
+                $aclComponent = $xml->getAttribute('aclComponent') ? $xml->getAttribute('aclComponent') : $component;
+                
+                if ($this->_acl->isUserAllowed($aclComponent, "LIST") || $this->_acl->isUserAllowed($aclComponent, "EDIT") || $this->_acl->isUserAllowed($aclComponent, "ADD")) {
                     
                     if (stristr($xml->getAttribute('type'), '.')) {
                         list($controller, $action) = explode('.', $xml->getAttribute('type'));
@@ -203,7 +204,7 @@ class AdminController extends Zend_Controller_Action
                     
                     $this->view->content =  $this->view->action($action, $controller, 'components', $this->getRequest()->getParams());
                 } else {
-                    $this->view->content = "<h2>Acceso denegado a módulo $component</h2><center><img src=\"".BASE_URL."images/access-denied.jpg\"/ alt=\"\"></center>";
+                    $this->view->content = "<h2>Acceso denegado a módulo $aclComponent</h2><center><img src=\"".BASE_URL."images/access-denied.jpg\"/ alt=\"\"></center>";
                 }
             }
         } else {
