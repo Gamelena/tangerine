@@ -16,7 +16,7 @@ read -p "Ingrese DB HOST (por defecto localhost):" DB_HOST
 DB_HOST=${DB_HOST:-localhost}
 
 echo " "
-echo "Ingrese nombre de su DB USER (Nuevo usuario a crear):"
+echo "Ingrese nombre de su DB USER:"
 read DB_USER
 
 echo " "
@@ -27,7 +27,7 @@ read DB_PASS
 echo Se seleccionaron los sig parámetros: DB_ADAPTER:$DB_ADAPTER, HOST:$DB_HOST, DB:$DB_NAME, USER:$DB_USER, PASSWORD:$DB_PASS
 echo " "
 
-read -p "¿Desea crear la base de datos MySQL? (S/N) (por defecto S):" CREATE_DATABASE    
+read -p "¿Desea crear la base de datos MySQL (si no existe) y asignar los privilegios? (S/N) (por defecto S):" CREATE_DATABASE    
 CREATE_DATABASE=${CREATE_DATABASE:-S}
 
 
