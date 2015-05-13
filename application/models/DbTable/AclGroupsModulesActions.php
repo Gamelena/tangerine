@@ -18,14 +18,14 @@ class DbTable_AclGroupsModulesActions extends Zwei_Db_Table
             'refTableClass'     => 'DbTable_AclModulesActions',
             'refColumns'        => array('id'),
             'onDelete'          => self::CASCADE,
-            'onUpdate'          => self::RESTRICT
+            'onUpdate'          => self::CASCADE
         ),
         'acl_groups' => array(
             'columns'           => array('acl_groups_id'),
             'refTableClass'     => 'DbTable_AclGroups',
             'refColumns'        => array('id'),
             'onDelete'          => self::CASCADE,
-            'onUpdate'          => self::RESTRICT
+            'onUpdate'          => self::CASCADE
         )
     );
     

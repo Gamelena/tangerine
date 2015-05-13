@@ -1,8 +1,15 @@
 <?php
 /**
  * Controlador de edición de grupos.
- * 
- * @author rodrigo.riquelme@zweicom.com
+ *
+ * @example
+ * <code>
+ *  <!DOCTYPE section PUBLIC "//COMPONENTS/" "components.dtd">
+    <component name="Equipos" type="groups-modules" target="AclGroupsModulesActionsModel"
+        edit="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="components.xsd">
+    </component>
+ * </code>
  *
  */
 class Components_GroupsModulesController extends Zend_Controller_Action

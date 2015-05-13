@@ -75,7 +75,7 @@ class AclModulesModel extends DbTable_AclModules
         return $aclUsers->fetchAll($select);
     }
     
-    
+
     /**
      * (non-PHPdoc)
      * @see Zwei_Db_Table::insert()
@@ -278,15 +278,13 @@ class AclModulesModel extends DbTable_AclModules
                 $arrNodes[$key]['refresh_on_load'] = $branch['refresh_on_load'];
                 $arrNodes[$key]['module']          = $branch['module'];
                 
-                $arrNodes[$key]['label'] = PHP_VERSION_ID >= 50400 ? html_entity_decode($branch['title']) : utf8_encode(html_entity_decode($branch['title']));
+                $arrNodes[$key]['label'] = html_entity_decode($branch['title']);
                 
                 $prefix = "";
                 if ($branch['type'] == 'zend_module') {
                     $prefix = "";
                 } else if ($branch['type'] == 'xml') {
                     $prefix = "admin/components?p=";
-                } else if ($branch['type'] == 'legacy') {
-                    $prefix = "admin/legacy?p=";
                 } else if ($branch['type'] == 'iframe') {
                     $prefix = "admin/iframe?p=";
                 }
