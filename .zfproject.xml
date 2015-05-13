@@ -33,6 +33,9 @@
           <actionMethod actionName="userHasGroupsAllowed"/>
           <actionMethod actionName="getUserInfo"/>
         </controllerFile>
+        <controllerFile controllerName="Schedule">
+          <actionMethod actionName="index"/>
+        </controllerFile>
       </controllersDirectory>
       <formsDirectory enabled="false"/>
       <layoutsDirectory enabled="false"/>
@@ -99,6 +102,9 @@
               <actionMethod actionName="bars"/>
               <actionMethod actionName="lines"/>
               <actionMethod actionName="pie"/>
+            </controllerFile>
+            <controllerFile controllerName="Schedule">
+              <actionMethod actionName="index"/>
             </controllerFile>
           </controllersDirectory>
           <formsDirectory enabled="false"/>
@@ -172,6 +178,9 @@
               <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
                 <viewScriptFile forActionName="uploadForm"/>
               </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Schedule">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
             <viewFiltersDirectory/>
@@ -224,6 +233,9 @@
               <actionMethod actionName="index"/>
             </controllerFile>
             <controllerFile controllerName="DijitEditor">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DojoxWidgetColorPicker">
               <actionMethod actionName="index"/>
             </controllerFile>
           </controllersDirectory>
@@ -282,6 +294,9 @@
               <viewControllerScriptsDirectory forControllerName="DijitEditor">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoxWidgetColorPicker">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
             <viewFiltersDirectory/>
@@ -334,6 +349,9 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Acl">
             <viewScriptFile forActionName="getUserInfo"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Schedule">
+            <viewScriptFile forActionName="index"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>
@@ -393,6 +411,9 @@
             <testApplicationActionMethod forActionName="userHasGroupsAllowed"/>
             <testApplicationActionMethod forActionName="getUserInfo"/>
           </testApplicationControllerFile>
+          <testApplicationControllerFile forControllerName="Schedule">
+            <testApplicationActionMethod forActionName="index"/>
+          </testApplicationControllerFile>
         </testApplicationControllerDirectory>
         <testApplicationModulesDirectory>
           <testApplicationModuleDirectory forModuleName="components">
@@ -431,6 +452,9 @@
                 <testApplicationActionMethod forActionName="bars"/>
                 <testApplicationActionMethod forActionName="lines"/>
                 <testApplicationActionMethod forActionName="pie"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="Schedule">
+                <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
             </testApplicationControllerDirectory>
           </testApplicationModuleDirectory>
@@ -479,6 +503,9 @@
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
               <testApplicationControllerFile forControllerName="DojoDndSource">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoxWidgetColorPicker">
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
             </testApplicationControllerDirectory>
