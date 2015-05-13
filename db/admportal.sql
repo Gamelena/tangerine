@@ -152,15 +152,14 @@ CREATE TABLE IF NOT EXISTS `acl_roles_modules_actions` (
 DROP TABLE IF EXISTS `acl_session`;
 CREATE TABLE IF NOT EXISTS `acl_session` (
   `id` char(32) NOT NULL DEFAULT '0',
-  `acl_users_id` int(10) NOT NULL,
-  `acl_roles_id` int(10) NOT NULL,
+  `acl_users_id` int(10) DEFAULT NULL,
+  `acl_roles_id` int(10) DEFAULT NULL,
   `created` int(10) UNSIGNED DEFAULT NULL,
   `modified` int(10) UNSIGNED DEFAULT NULL,
   `lifetime` int(10)  UNSIGNED DEFAULT NULL,
-  `image` VARCHAR(255) DEFAULT NULL,
   `data` text,
-  `ip` varchar(20) NOT NULL,
-  `user_agent` varchar(255) NOT NULL,
+  `ip` varchar(20) DEFAULT NULL,
+  `user_agent` varchar(255) DEFAULT NULL,
   `must_refresh` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

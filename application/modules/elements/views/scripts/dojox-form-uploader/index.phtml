@@ -6,7 +6,7 @@ if (!empty($this->value)) :
 <?php 
     if (preg_match("/formatImage/", $this->formatter)) :
 ?>
-    <img alt="<?=$this->value?>" src="<?=$this->baseUrlPath ?><?=$this->value?>">
+    <img alt="<?=$this->value?>" src="<?=$this->baseUrlPath ?><?=$this->value?>" style="max-height: 90px;">
     <span class="fileName"><i><?=$this->value?></i></span>
 <?php 
     endif;

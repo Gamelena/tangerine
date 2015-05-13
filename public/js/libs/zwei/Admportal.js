@@ -21,6 +21,7 @@ dojo.declare("zwei.Admportal", null, {
     loadEvents: function()
     {
         dojo.connect(dojo.byId("btnSalir"), "onclick", function(){
+            alert('salir');
             window.location = base_url+"admin/logout";
         });
         dojo.connect(dijit.byId("tabContainer"), "selectChild", function(page){ 

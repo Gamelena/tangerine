@@ -153,9 +153,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->panes = $this->_xml->xpath("//component/pane") ? $this->_xml->xpath("//component/pane") : array();
         $this->view->script = $this->_xml->xpath("//component/script") ? "<script>\n" . dom_import_simplexml($this->_xml->script)->textContent . "</script>\n" : '';
         
-        $this->initKeys();
-        $this->view->showKeyPad = $this->view->hasActions && (!isset($this->view->menus) || in_array($this->view->menus, array('keypad', 'both')));
-        
         if ($this->view->changePassword) {
             $this->view->primary = $this->_model->info(Zend_Db_Table::PRIMARY);
         }
@@ -335,7 +332,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $excel = $this->_xml->xpath("//component/helpers/excel");
         $this->view->excel = $excel ? $excel : array();
         
-        $this->view->hasActions = $this->view->add || $this->view->edit || $this->view->clone || $this->view->delete || !empty($this->view->customFunctions) || !empty($this->view->uploaders) || !empty($this->view->excel);
         
         //if (!$ajax === 'false' && $this->_xml->xpath("//forms/edit[@ajax='true']")) $ajax = 'true';
         $this->view->ajax = $ajax === 'true' ? 'true' : 'false';

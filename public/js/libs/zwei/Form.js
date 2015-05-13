@@ -84,10 +84,6 @@ dojo.declare("zwei.Form", dojo.Stateful, {
      */
     model: null,
     /**
-     * string
-     */
-    title: null,
-    /**
      * @return void 
      */
     onHide: function(){},
@@ -413,6 +409,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
         
         var ids = '';
         var primaries = {};
+        console.debug(this.title);
         
         if (this.dijitDialog == null) {
             var dialogId = this.prefix + 'dialog_' + this.action;

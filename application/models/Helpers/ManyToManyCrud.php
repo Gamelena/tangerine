@@ -162,9 +162,9 @@ class Helpers_ManyToManyCrud
             try {
                 $insert = $model->insert($data);
             } catch (Zend_Db_Exception $e) {
-                if ($e->getCode() != 23000) {
+
                     Console::error($e->getMessage());
-                }
+
             }
         }
         return $insert || $delete;

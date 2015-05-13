@@ -76,15 +76,15 @@ if ($this->changePassword) :
 <?php 
 endif; 
 ?>
-<?php 
-if ($this->showKeyPad) :
-?>
         <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="<?=$this->domPrefix?>contentBottom" class="contentBottom">
+<?php 
+if (!isset($this->menus) || in_array($this->menus, array('keypad', 'both'))) :
+?>
         <?=$this->action('keypad', 'dojo-simple-crud', 'components', $_REQUEST)?>
-        </div>
 <?php 
 endif;
 ?>
+        </div>
     </div>
 <?php 
 $i=0;

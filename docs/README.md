@@ -34,11 +34,11 @@ Agregar los siguientes paths
 a las variables "include_path" en de los archivos php.ini. 
 Son 2 archivos: un archivo para cli y un archivo para apache (en Ubuntu /etc/php5/cli/php.ini y etc/php5/apache2/php.ini)
 
-	/usr/share/php/zendframework/zendframework1/library
+	/usr/share/php/zend/zendframework/library
 	/usr/share/php/phpunit/phpunit/PHPUnit
 	
 Debiera quedar algo similar a esto
-	include_path = ".:/usr/share/php:/usr/share/php/zendframework/zendframework1/library:/usr/share/php/phpunit/phpunit:/usr/share/php/phpunit/phpunit/PHPUnit"
+	include_path = ".:/usr/share/php:/usr/share/php/zend/zendframework/library:/usr/share/php/phpunit/phpunit:/usr/share/php/phpunit/phpunit/PHPUnit"
 
 	
 Para evitar problemas de charset en los caracteres especiales en el despliegue web, se debe agregar 
@@ -50,7 +50,7 @@ al archivo php.ini cargado por apache.
 	sudo gedit ~/.bashrc
 Agregar
 	export PATH=/usr/share/php/bin:$PATH
-	alias zf='/usr/share/php/zendframework/zendframework1/bin/zf.sh'
+	alias zf='/usr/share/php/zend/zendframework/bin/zf.sh'
 
 	
 5. Instalar Dojo Toolkit 1.10.0
@@ -136,5 +136,15 @@ Alias /ussd-admportal "/proyectos/ussd-admportal/web/public/"
     AllowOverride All
         allow from all
     SetEnv APPLICATION_ENV development
+</Directory>
+
+---
+Para solucionar problemas de permisos "forbidden by application config"
+
+Agregar a apache2.conf
+<Directory /$carpeta de proyectos/>
+	Options Indexes FollowSymLinks
+	AllowOverride None
+	Require all granted
 </Directory>
 

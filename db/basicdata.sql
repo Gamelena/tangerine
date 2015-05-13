@@ -174,20 +174,6 @@ INSERT INTO `acl_roles_modules_actions` (`id`, `acl_roles_id`, `acl_modules_acti
 (148, 1, 288, 'ALLOW');
 
 --
--- Truncate table before insert `acl_session`
---
-
-TRUNCATE TABLE `acl_session`;
---
--- Dumping data for table `acl_session`
---
-
-INSERT INTO `acl_session` (`id`, `acl_users_id`, `acl_roles_id`, `created`, `modified`, `lifetime`, `image`, `data`, `ip`, `user_agent`, `must_refresh`) VALUES
-('e9fnhpu857tfgfurrudb7ia3c5', 1, 1, 1424692753, 1424693969, 864000, NULL, 'Zend_Auth|a:3:{s:7:"timeout";i:1424695480;s:10:"requestUri";s:46:"/admin/modules?dojo.preventCache=1424693080658";s:7:"storage";O:8:"stdClass":11:{s:2:"id";s:1:"1";s:12:"acl_roles_id";s:1:"1";s:9:"user_name";s:7:"zweicom";s:11:"first_names";s:7:"Soporte";s:10:"last_names";s:7:"Zweicom";s:5:"email";s:20:"tecnicos@zweicom.com";s:8:"approved";s:1:"1";s:4:"foto";N;s:12:"must_refresh";s:1:"0";s:16:"sessionNamespace";s:17:"ticketElectronico";s:6:"groups";a:0:{}}}', '127.0.0.1', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0', '0'),
-('hkmdr8dv18doha9fvrqinl8ob1', 1, 1, 1421246333, 1421248736, 864000, NULL, 'Zend_Auth|a:3:{s:7:"timeout";i:1421251136;s:10:"requestUri";s:12:"/admin/login";s:7:"storage";N;}', '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 FirePHP/4Chrome', '0'),
-('r4o39q1buo2b0nqudq56v8e0f1', 1, 1, 1424439370, 1424442681, 864000, NULL, 'Zend_Auth|a:3:{s:7:"timeout";i:1424445081;s:10:"requestUri";s:12:"/admin/login";s:7:"storage";N;}', '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36', '0');
-
---
 -- Truncate table before insert `acl_users`
 --
 
