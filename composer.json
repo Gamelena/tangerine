@@ -2,9 +2,6 @@
 	"name": "zweicom/admportal",
 	"description": "Admportal 1",
 	"type": "library",
-	"config": {
-		"vendor-dir": "/usr/share/php"
-	},
 	"require": {
 		"php": ">=5.4.1"
 	},
@@ -49,14 +46,15 @@
 	],
 	"require": {
 		"zend/zendframework": "*",
-		"PHPOffice/PHPExcel": "*"
-	},
-	"require-dev": {
+		"PHPOffice/PHPExcel": "*",
 		"phpunit/phpunit": "3.7.*",
 		"phpunit/phpunit-selenium": ">=1.2",
 		"phpunit/dbunit": ">=1.2",
 		"phpunit/php-invoker": "1.*",
 		"phpunit/phpunit-story": ">=1"
+	},
+	"require-dev": {
+
 	},
 	"authors": [
 		{
