@@ -46,6 +46,9 @@
 		}
 	],
 	"require": {
+
+	},
+	"require-dev": {
 		"zend/zendframework": "*",
 		"PHPOffice/PHPExcel": "*",
 		"phpunit/phpunit": "3.7.*",
@@ -53,9 +56,6 @@
 		"phpunit/dbunit": ">=1.2",
 		"phpunit/php-invoker": "1.*",
 		"phpunit/phpunit-story": ">=1"
-	},
-	"require-dev": {
-
 	},
 	"authors": [
 		{
