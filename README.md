@@ -5,7 +5,7 @@ Requerimientos Básicos
 
 - PHP Version
 
->= 5.2.4 para sitios web (requerimiento mínimo)
+>= 5.2.4 para sitios web (requerimiento mínimo pero no recomendado)
 
 >= 5.4 o superior para tests unitarios (versión recomendada, incluye mejoras en performance y seguridad.)
 
@@ -18,27 +18,17 @@ INSTALACION DE DEPENDENCIAS
 
 1. Instalar Composer
 
-	curl -sS https://getcomposer.org/installer | php -- --install-dir=bin
+	curl -sS https://getcomposer.org/installer | php -- 
 	mv composer.phar /usr/local/bin/composer
 
 Ahora debieramos tener disponible el comando 'composer'
 
-2. Instalar dependencias de Admportal
-
-Moverse a la raiz de admportal (donde está composer.json) y configurar composer como superusuario
-	composer install
-
-3. Configurar PHP con los paquetes instalados
+2. Instalar Bower
+	Bower es un paquete NPM, por lo que instalaremos Node.js y NPM
+	sudo apt-get install nodejs npm nodejs-legacy
+	sudo npm install bower -g
 	
-Agregar los siguientes paths
-a las variables "include_path" en de los archivos php.ini. 
-Son 2 archivos: un archivo para cli y un archivo para apache (en Ubuntu /etc/php5/cli/php.ini y etc/php5/apache2/php.ini)
-
-	/usr/share/php/zend/zendframework/library
-	/usr/share/php/phpunit/phpunit/PHPUnit
-	
-Debiera quedar algo similar a esto
-	include_path = ".:/usr/share/php:/usr/share/php/zend/zendframework/library:/usr/share/php/phpunit/phpunit:/usr/share/php/phpunit/phpunit/PHPUnit"
+3. ejecutar ./install.sh y seguir las instrucciones post instalación
 
 	
 Para evitar problemas de charset en los caracteres especiales en el despliegue web, se debe agregar 
@@ -46,57 +36,10 @@ al archivo php.ini cargado por apache.
 
 	default_charset = "UTF-8" 
 
-4. Agregar variables de ambiente
-	sudo gedit ~/.bashrc
-Agregar
-	export PATH=/usr/share/php/bin:$PATH
-	alias zf='/usr/share/php/zend/zendframework/bin/zf.sh'
-
-	
-5. Instalar Dojo Toolkit 1.10.0
-
-http://download.dojotoolkit.org/
-
-Configurar Apache para ser accessible desde la url http://localhost/dojotoolkit. 
-Considere agregar 
-	Include alias/*.conf
-	
-Al final de apache2.conf y agregar cada uno de los alias.
-
-Considerar el sig. ejemplo: 
-
-	Alias /dojotoolkit/ "/usr/share/javascript/dojotoolkit/"
-	<Directory "/usr/share/javascript/dojotoolkit/">
-	    Options Indexes MultiViews FollowSymLinks
-	    AllowOverride None
-	    Order deny,allow
-	    Allow from all
-	</Directory>
-
-
-Para crear un nuevo proyecto con AdmPortal
-==========================================
-
-1. Crear variables de entorno, agregar las siguiente líneas al ~/.bashrc asumiendo que AdmPortal está instalado en $DEVELBASE/admportal 
-
-	DEVELBASE="/{Carpeta de desarrollo de proyectos}"
-	export ZWC_ADMPORTAL=$DEVELBASE/admportal
-	export PATH=$PATH:$ZWC_ADMPORTAL/tools  
-	export APPLICATION_ENV=development
-
-2. Hacer un Alias para las librerias javascript de zweicom, donde "/proyectos/admportal/" es la ruta donde se instaló admportal
-
-	Alias /libs "/proyectos/admportal/public/js/libs/"
-	<Directory "/proyectos/admportal/public/js/libs/">
-	    Options Indexes MultiViews FollowSymLinks
-	    AllowOverride None
-	    Order deny,allow
-	    Allow from all
-	</Directory>
-
-3. Ubicarse en consola en la carpeta del proyecto, dentro de esta carpeta se creará una subcarpeta llamada web donde estará el proyecto web.
-
-4. Ejecutar admportal-create 
+CREACION DE MANTENEDORES
+========================
+4. Moverse a una nueva carpeta y ejecutar 
+	admportal-create 
 	Deberá ingresar: 
 	Tipo de DB (MySQL por omisión), nombre de DB, Usuario DB, Password DB, 
 	estos parámetros pueden ser ser de una instancia de DB ya existente o para crear una nueva DB.
