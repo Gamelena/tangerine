@@ -1,6 +1,7 @@
 {
 	"name": "zweicom/admportal",
-	"description": "Admportal 1",
+	"description": "Admportal",
+	"version": "1.5.4",
 	"type": "library",
 	"require": {
 		"php": ">=5.4.1"
