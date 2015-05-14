@@ -21,7 +21,6 @@ dojo.declare("zwei.Admportal", null, {
     loadEvents: function()
     {
         dojo.connect(dojo.byId("btnSalir"), "onclick", function(){
-            alert('salir');
             window.location = base_url+"admin/logout";
         });
         dojo.connect(dijit.byId("tabContainer"), "selectChild", function(page){ 
@@ -419,49 +418,40 @@ dojo.declare("zwei.Admportal", null, {
         }
     },
     resizeGrid: function(domPrefix){
-        if (dojo.byId(domPrefix + 'contentCenter')) {
-        	
-            var searcherHeight = dojo.byId(domPrefix + 'formSearch') 
-            ? dojo.contentBox(dojo.byId(domPrefix + 'formSearch')).h 
-            : 0;
-            
+        if (dojo.byId(domPrefix + 'contentCenter') && dijit.byId(domPrefix + 'dataGrid')) {
             var paneHeight = dojo.contentBox(dojo.byId(domPrefix + 'contentCenter')).h;
             
-            var innerHeight = paneHeight - searcherHeight - 12;
+            var searcherHeight = dojo.byId(domPrefix + 'formSearch') 
+               ? dojo.contentBox(dojo.byId(domPrefix + 'formSearch')).h 
+               : 0;
+            var gridHeight = paneHeight - searcherHeight - 12;
+            dojo.contentBox(dojo.byId(domPrefix + 'dataGrid'), {h: gridHeight});
+            dijit.byId(domPrefix + 'dataGrid').resize();
             
-            if (dijit.byId(domPrefix + 'dataGrid')) {
+            var paginators = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridPaginator')
+            
+            
+            if (paginators.length > 0) {
+                var paginator = paginators[0];
+                var gridMasterHeader = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridMasterHeader')[0];
+                var gridMasterView = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridMasterView')[0];
+                var gridView = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridView')[0];
+                var gridScrollbox = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridScrollbox')[0];
                 
-                dojo.contentBox(dojo.byId(domPrefix + 'dataGrid'), {h: innerHeight});
-                dijit.byId(domPrefix + 'dataGrid').resize();
+                var gridHeaderHeight = dojo.contentBox(gridMasterHeader).h;
+                var paginatorHeight = dojo.contentBox(paginator).h;
                 
-                var paginators = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridPaginator');
+                var newHeight = gridHeight - gridHeaderHeight - paginatorHeight;
                 
-                
-                if (paginators.length > 0) {
-                    var paginator = paginators[0];
-                    var gridMasterHeader = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridMasterHeader')[0];
-                    var gridMasterView = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridMasterView')[0];
-                    var gridView = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridView')[0];
-                    var gridScrollbox = dojo.query('#' + domPrefix + 'dataGrid .dojoxGridScrollbox')[0];
-                    
-                    var gridHeaderHeight = dojo.contentBox(gridMasterHeader).h;
-                    var paginatorHeight = dojo.contentBox(paginator).h;
-                    
-                    var innerHeight = innerHeight - gridHeaderHeight - paginatorHeight;
-                    
-                }
-                
-                dojo.contentBox(gridMasterView, {h: innerHeight});
-                dojo.contentBox(gridView, {h: innerHeight});
-                dojo.contentBox(gridScrollbox, {h: innerHeight});
-            } else {
-            	console.info('no existe: dijit.byId("' + domPrefix + 'dataGrid")');
+                dojo.contentBox(gridMasterView, {h: newHeight});
+                dojo.contentBox(gridView, {h: newHeight});
+                dojo.contentBox(gridScrollbox, {h: newHeight});
             }
             
-
         } else {
-            console.info('no existe: dojo.byId("' + domPrefix + 'contentCenter")');
+            console.info('no existen: dojo.byId("' + domPrefix + 'contentCenter") y/o dijit.byId("'+ domPrefix + 'dataGrid")');
         }
+        
     },
     execFunction: function(method, params, domPrefix, object, primary){
         if (object == undefined) var object = ''; 

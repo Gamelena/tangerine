@@ -264,10 +264,8 @@ class CrudRequestController extends Zend_Controller_Action
                             }
                             
                             if ($this->_model->count() === false) {
-                                Console::debug($oSelect->__toString());
                                 $paginator = Zend_Paginator::factory($oSelect);
                                 $numRows   = $paginator->getTotalItemCount();
-                                Console::debug($oSelect->__toString());
                             } else {
                                 $numRows = $this->_model->count();
                             }

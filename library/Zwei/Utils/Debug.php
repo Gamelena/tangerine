@@ -9,7 +9,6 @@
  * 
  * @example: Zwei_Utils_Debug::write($mensaje)
  *
- *
  */
 class Zwei_Utils_Debug
 {
