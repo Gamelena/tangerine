@@ -7,7 +7,7 @@ Requerimientos Básicos
 
 >= 5.2.4 para sitios web (requerimiento mínimo pero no recomendado)
 
->= 5.4 o superior para tests unitarios (versión recomendada, incluye mejoras en performance y seguridad.)
+>= 5.4 o superior para tests unitarios (versión recomendada)
 
 
 - Zend Framework 1.11.*
@@ -24,11 +24,16 @@ INSTALACION DE DEPENDENCIAS
 Ahora debieramos tener disponible el comando 'composer'
 
 2. Instalar Bower
-	Bower es un paquete NPM, por lo que instalaremos Node.js y NPM
+
+Bower es un paquete NPM, por lo que instalaremos Node.js y NPM
 	sudo apt-get install nodejs npm nodejs-legacy
 	sudo npm install bower -g
 	
-3. ejecutar ./install.sh y seguir las instrucciones post instalación
+3. ejecutar 
+
+	./install.sh 
+	
+y seguir las instrucciones post instalación
 
 	
 Para evitar problemas de charset en los caracteres especiales en el despliegue web, se debe agregar 
@@ -53,41 +58,35 @@ CREACION DE MANTENEDORES
 	     tener en cuenta que en este caso, las actualizaciones y mejoras que se hagan en AdmPortal en estos elementos no serán reflejados en la nueva aplicación.    
 
 
-Perfiles y Usuarios por defecto en caso de generación automática de tablas:
-
-	Soporte         user: zweicom, password: zweicom
-	Administrador   user: admin,   password: admin
-	Consultas       user: consultas, password: consultas
 
 
 TIP: para agregar nuevos módulos ZF ejecutar dentro del proyecto
 $ zf create module {módulo} 
 
-NOTA: TODOS LOS COMPONENTES MVC deben ser creados con el comando "zf" y no manualmente para la generación
-automatica de tests
+Los componentes deben ser creados con el comando "zf" y no manualmente para la generación automatica de tests
 ver
-        zf create module  ?
-        zf create controller ?
-        zf create model ?
-        zf create db-table ?
-        zf create form ?
+	zf create module  ?
+	zf create controller ?
+	zf create model ?
+	zf create db-table ?
+	zf create form ?
 
 Directiva Alias de ejemplo
 
 Alias /ussd-admportal "/proyectos/ussd-admportal/web/public/"
-<Directory "/proyectos/ussd-admportal/web/public/">
-    AllowOverride All
-        allow from all
-    SetEnv APPLICATION_ENV development
-</Directory>
+	<Directory "/proyectos/ussd-admportal/web/public/">
+	    AllowOverride All
+	        allow from all
+	    SetEnv APPLICATION_ENV development
+	</Directory>
 
 ---
 Para solucionar problemas de permisos "forbidden by application config"
 
 Agregar a apache2.conf
-<Directory /$carpeta de proyectos/>
-	Options Indexes FollowSymLinks
-	AllowOverride None
-	Require all granted
-</Directory>
+	<Directory /$carpeta de proyectos/>
+		Options Indexes FollowSymLinks
+		AllowOverride None
+		Require all granted
+	</Directory>
 
