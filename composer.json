@@ -45,18 +45,11 @@
 					}
 				}
 			}
-		}, {
-			"type": "composer",
-			"url": "http://zoopcommerce.github.io/pixie"
 		}
 	],
 	"require": {
 		"zend/zendframework": "*",
-		"PHPOffice/PHPExcel": "*",
-		"dojo/dojo": "~1.9",
-		"dojo/dijit": "~1.9",
-		"dojo/dojox": "~1.9",
-		"dojo/util": "~1.9"
+		"PHPOffice/PHPExcel": "*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "3.7.*",
@@ -64,9 +57,6 @@
 		"phpunit/dbunit": ">=1.2",
 		"phpunit/php-invoker": "1.*",
 		"phpunit/phpunit-story": ">=1"
-	},
-	"extra": {
-		"zoop-js-path": "public/js/dojotoolkit"
 	},
 	"authors": [
 		{
