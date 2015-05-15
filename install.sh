@@ -1,4 +1,4 @@
-sudo composer install && sudo composer update && bower install && cp -R dojotoolkit/* bower_components/ && cp -n $PWD/vendor/zend/zendframework/bin/zf.sh $PWD/vendor/zend/zendframework/bin/zf
+composer install && composer update && bower install && cp -R dojotoolkit/* bower_components/ && cp -n $PWD/vendor/zend/zendframework/bin/zf.sh $PWD/vendor/zend/zendframework/bin/zf
 
 echo "Dependencias instaladas"
 echo " "
