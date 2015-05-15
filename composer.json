@@ -55,8 +55,7 @@
 		"phpunit/phpunit-selenium": ">=1.2",
 		"phpunit/dbunit": ">=1.2",
 		"phpunit/php-invoker": "1.*",
-		"phpunit/phpunit-story": ">=1",
-		"kzykhys/git": "1.0.*@dev"
+		"phpunit/phpunit-story": ">=1"
 	},
 	"authors": [
 		{
