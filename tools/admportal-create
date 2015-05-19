@@ -205,6 +205,10 @@ rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/selenium/ $DEST_PATH/web/tests
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/bootstrap.php $DEST_PATH/web/tests/bootstrap.php
 rsync -r --exclude=.svn $ZWC_ADMPORTAL_PATH/tests/phpunit.xml $DEST_PATH/web/tests/phpunit.xml
 
+echo "Creando instaladores"
+touch $DEST_PATH/web/install.sh
+echo "export TMPPATH=\$PWD && sudo mkdir -p /opt/admportal && sudo chown -R \$USER /opt/admportal/ && composer install && composer update && cd /opt/admportal/zweicom/admportal/ && ./install.sh && cd \$TMPPATH" > $DEST_PATH/web/install.sh
+cp $ZWC_ADMPORTAL_PATH/docs/composer-app-template.json $DEST_PATH/web/composer.json
 
 echo " "
 echo \*\*\* Listo, para configurar el servidor con VHOST revise ejemplo en $DEST_PATH/web/docs/README.txt. \*\*\*
