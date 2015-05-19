@@ -1,0 +1,61 @@
+<script>
+dojo.require("dojox.grid.enhanced.plugins.Menu");
+dojo.require("dijit.Menu");
+dojo.require("dijit.MenuItem");
+dojo.require('dijit.MenuSeparator');
+dojo.require('dijit.PopupMenuItem');
+
+var menugroups_modules = new dijit.Menu({});
+menugroups_modules.addChild(new dijit.MenuItem({
+    label: "<?=$this->actionForm?> Grupos",
+    iconClass: "dijitIconEdit",
+    onClick : function(e){
+        var dijitDialog = dijit.byId('groups_modulesdialog_edit');
+        var items = dijit.byId('groups_modulesdataGrid').selection.getSelected();
+        if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+        dijitDialog.set('href', base_url + 'components/groups-modules/edit?id='+items[0].id+'&acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>&p=<?=$this->p?>');
+        dijitDialog.set('title', '<?=$this->actionForm?> equipo ' + items[0].title + '<?=$this->itemName?>');
+        dijitDialog.show();
+    }
+}));
+menugroups_modules.startup();
+</script>
+<div id="groups_modulescontentTab" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false" class="contentWrapper" style="width:100%">
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:true" class="contentCenter">
+        <span data-dojo-type="dojo/data/ItemFileReadStore" id="groups_modulesstoreGrid" jsId="groups_modulesstoreGrid" data-dojo-props="url: '<?=BASE_URL?>crud-request?model=AclGroupsModel&format=json&p=groups.xml'"></span>
+        <table data-dojo-type="dojox/grid/EnhancedGrid" id="groups_modulesdataGrid" jsId="groups_modulesdataGrid" data-dojo-props="store: groups_modulesstoreGrid, plugins:{ menus:{selectedRegionMenu: menugroups_modules}, pagination: {defaultPageSize:25, maxPageStep: 5 }}, clientSort:true, selectable: true, onFetchComplete: function (items) { console.debug(items) }, noDataMessage:'Sin datos.', onRowDblClick: function(){
+            var dijitDialog = dijit.byId('groups_modulesdialog_edit');
+            var items = dijit.byId('groups_modulesdataGrid').selection.getSelected();
+            if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+            dijitDialog.set('href', base_url + 'components/groups-modules/edit?id='+items[0].id+'&acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>&p=<?=$this->p?>');
+            dijitDialog.set('title', '<?=$this->actionForm?> equipo ' + items[0].title);
+            dijitDialog.show();}" class="dataGrid" style="height: 50em;">
+            <script type="dojo/connect" data-dojo-event="onRowClick" data-dojo-args="e">
+                if (dijit.byId('groups_modulesbtnEdit') != undefined) dijit.byId('groups_modulesbtnEdit').set('disabled', false);
+            </script>
+            <thead>
+                <tr>
+                    <th field="title" editable="false" formatter="" width="">Nombre</th>
+                    <th field="description" editable="false" formatter="" width="50%">Descripci&oacute;n</th>
+                </tr>
+            <thead>
+        </table>
+    </div>
+    <div data-dojo-type="dojox/widget/DialogSimple" executeScripts="true" id="groups_modulesdialog_edit" jsId="groups_modulesdialog_edit" title="<?=$this->actionForm?> Grupo"    >
+    </div>
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true" id="groups_modulescontentBottom" class="contentBottom">
+        <div class="keyPadWrapper">
+            <div class="keyPadButton">
+                <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconEdit" disabled="disabled" id="groups_modulesbtnEdit" onClick="
+                    var dijitDialog = dijit.byId('groups_modulesdialog_edit');
+                    var items = dijit.byId('groups_modulesdataGrid').selection.getSelected();
+                    if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
+                    dijitDialog.set('href', base_url + 'components/groups-modules/edit?id='+items[0].id+'&acl_modules_id=<?=$this->aclModulesId?>&acl_modules_item_id=<?=$this->aclModulesItemId?>&p=<?=$this->p?>');
+                    dijitDialog.show();
+                    dijitDialog.set('title', '<?=$this->actionForm?> equipo ' + items[0].title);">
+                    <?=$this->actionForm?> Grupo  
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

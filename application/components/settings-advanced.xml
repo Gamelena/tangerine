@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<component name="Configuraci&amp;oacute;n" type="dojo-simple-crud"
+    target="SettingsModel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="components.xsd" list="true" edit="true"
+    add="true">
+    <elements>
+        <element name="Variable" target="id"
+            type="dijit-form-validation-text-box" regExp="^\w+$"
+            required="true" edit="disabled" add="true" visible="true"></element>
+        <element name="Descripción" target="description"
+            type="dijit-form-validation-text-box" visible="true" edit="true"
+            add="true"></element>
+        <element name="Tipo" target="type"
+            type="dijit-form-filtering-select"
+            list="dijit-form-check-box;dijit-form-combo-box;dijit-form-date-text-box;dijit-form-filtering-select;dijit-form-textarea;dijit-form-validation-text-box;dojox-form-checked-multi-select;dojox-form-checked-multi-select-binary;dojox-form-uploader;tiny-mce-zwei-form-validation-textarea"
+            edit="true" add="true" visible="true"></element>
+        <element name="Valor" target="value"
+            type="dijit-form-validation-text-box" edit="false" add="true"
+            visible="true"></element>
+        <element name="Path" target="path"
+            type="dijit-form-validation-text-box" edit="true" add="true"
+            visible="true"></element>
+        <element name="URL" target="url"
+            type="dijit-form-validation-text-box" edit="true" add="true"
+            visible="true"></element>
+        <element name="XML Anidado" target="xml_children" type="dijit-form-textarea"
+            style="height:3em;" edit="true" add="true" visible="true"
+            required="false"></element>
+        <element name="Aprobado" target="approved" type="dijit-form-check-box"
+            edit="true" add="true" visible="true" formatter="utils.formatYesNo"></element>
+    </elements>
+    <forms ajax="true"></forms>
+    <searchers>
+        <element target="id" required="false"></element>
+        <element target="description"></element>
+        <element target="type" defaultValue="" defaultText=""></element>
+    </searchers>
+</component>
+
+

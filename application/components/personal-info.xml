@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="components.xsd" name="Informaci&amp;oacute;n"
+    type="dojo-simple-crud" target="PersonalInfoModel" list="true"
+    plugins="{}" edit="true" add="false" delete="false">
+    <elements>
+        <element name="ID" target="id"
+            type="dijit-form-validation-text-box" visible="false" edit="false"
+            add="false" />
+        <element name="Usuario" target="user_name"
+            type="dijit-form-validation-text-box" visible="true" edit="false"
+            add="true" />
+        <element name="Nombres" target="first_names"
+            type="dijit-form-validation-text-box" visible="true" edit="true"
+            add="true" />
+        <element name="Apellidos" target="last_names"
+            type="dijit-form-validation-text-box" visible="true" edit="true"
+            add="true" />
+        <element name="E-Mail" target="email"
+            type="dijit-form-validation-text-box" regExp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}"
+            invalidMessage="mail no valido" visible="true" edit="true"
+            add="true" />
+    </elements>
+    <forms>
+        <changePassword>
+            <element target="password" />
+        </changePassword>
+    </forms>
+</component>

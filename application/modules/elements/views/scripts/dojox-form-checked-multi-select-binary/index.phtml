@@ -1,0 +1,36 @@
+<select data-dojo-type="dojox/form/CheckedMultiSelect" multiple="true" id="helper<?=$this->domId.$this->i?>" name="helper<?=$this->target?>[]" <?=$this->readonly.$this->disabled.$this->required.$this->invalidMessage.$this->promptMessage.$this->onblur.$this->onchange.$this->onclick ?>>
+    <script type="dojo/connect" data-dojo-event="onChange" data-dojo-args="e">
+        dojo.byId('<?=$this->domId.$this->i?>').value = '0';
+        dojo.forEach(this.options, function(e) {
+            if (e.selected) {
+                var value = parseInt(dojo.byId('<?=$this->domId.$this->i?>').value) + parseInt(e.value);
+                dojo.byId('<?=$this->domId.$this->i?>').value = value;
+            }
+        });
+    </script>
+<?php 
+if ($this->disabled) :
+?>
+    <script type="dojo/on" data-dojo-event="mouseover" data-dojo-args="e">
+    if (dojo.byId('helper<?=$this->domId.$this->i?>').disabled) { 
+        dijit.byId('helper<?=$this->domId.$this->i?>').set('disabled', true);
+        dojo.byId('<?=$this->domId.$this->i?>').disabled = true;
+    }
+    </script>
+<?php 
+endif;
+?>
+    <?=$this->options ?>
+</select>
+<input data-dojo-type="dijit/form/TextBox" type="hidden" value="<?=$this->value?>" id="<?=$this->domId.$this->i?>" name="<?=$this->target?>"/>
+<?php 
+if (!empty($this->style)) :
+?>
+<style type="text/css">
+#widget_helper<?=$this->domId.$this->i?> .dojoxCheckedMultiSelectWrapper {
+    <?=$this->style?>
+}
+</style>
+<?php 
+endif;
+?>

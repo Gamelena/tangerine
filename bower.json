@@ -1,0 +1,27 @@
+{
+  "name": "admportal",
+  "version": "1.5.3",
+  "authors": [
+    "rodrigo <rodrigo.riquelme@zweicom.com>"
+  ],
+  "description": "Base de mantenedores web",
+  "keywords": [
+    "dojo",
+    "ui",
+    "rms"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "/usr/share/javascript",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "dojo": "~1.10.4",
+    "dijit": "~1.10.4",
+    "dojox": "~1.10.4"
+  }
+}

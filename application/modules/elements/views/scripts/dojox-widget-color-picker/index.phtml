@@ -1,0 +1,17 @@
+<table style="border-spacing: 0px">
+	<tr>
+		<td>
+			<link rel="stylesheet"
+				href="/dojotoolkit/dojox/widget/ColorPicker/ColorPicker.css" />
+			<div data-dojo-type="dijit/form/DropDownButton">
+				<span> Seleccione ... </span>
+				<div data-dojo-type="dojox/widget/ColorPicker"
+					id="<?=$this->domId . $this->i?>ColorPicker" name="<?=$this->target?>ColorPicker"
+					onchange="dojo.byId('<?=$this->domId . $this->i?>Color').style.backgroundColor=this.get('value'); dojo.byId('<?=$this->domId . $this->i?>').value=this.get('value')"></div>
+			</div>
+			<input type="hidden" value="<?=$this->value?>" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>" />
+		</td>
+		<td id="<?=$this->domId . $this->i?>Color" style="background-color: <?=$this->value?>; min-width: 2em; padding: 0.3em">
+		</td>
+	</tr>
+</table>

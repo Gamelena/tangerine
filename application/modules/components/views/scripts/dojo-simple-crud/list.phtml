@@ -1,0 +1,47 @@
+<?php
+if ($this->list) :
+?>
+<span data-dojo-type="<?=$this->dataDojoType ?>" id="<?=$this->domPrefix?>storeGrid" jsId="<?=$this->domPrefix?>storeGrid" data-dojo-props="url: '<?=BASE_URL?>crud-request?model=<?=$this->model?>&format=json&<?=$this->queryParams?>'"></span>
+<?php 
+endif;
+?>
+<div id="<?=$this->domPrefix?>gridPane">
+<?php 
+if ($this->elements) :
+?>
+    <script>
+    </script>
+    <table data-dojo-type="<?=$this->gridDojoType ?>" id="<?=$this->domPrefix?>dataGrid" jsId="<?=$this->domPrefix?>dataGrid" data-dojo-props="
+        <?=$this->store?> 
+        plugins:<?=$this->plugins ?>, 
+        noDataMessage:'<?=$this->noDataMessage?>',
+        onRowDblClick: function(){<?=$this->onRowDblClick?>}<?=$this->canSort?>" class="dataGrid" style="height: 50em;">
+    <script type="dojo/aspect" data-dojo-advice="after" data-dojo-method="_onFetchComplete" data-dojo-args="e">
+        admportal.resizeGrid("<?=$this->domPrefix?>");
+        <?=$this->onFetchComplete?>
+    </script>
+<?php 
+    if ($this->onRowClick) :
+?>
+        <script type="dojo/connect" data-dojo-event="onRowClick" data-dojo-args="e">
+        <?=$this->onRowClick?>
+        </script>
+<?php 
+    endif;
+?>
+        <thead>
+            <tr>
+<?php
+    foreach ($this->elements as $e) :
+?>
+            <th field="<?=$e->getAttribute('field') ? $e->getAttribute('field') : $e->getAttribute('target') ?>" editable="false" formatter="<?=$e->getAttribute('formatter')?>" width="<?=$e->getAttribute('width')?>"><?=$e->getAttribute('name')?></th>
+<?php  
+    endforeach;
+?>
+            </tr>
+        </thead>
+    </table>
+<?php 
+endif;
+?>
+</div>

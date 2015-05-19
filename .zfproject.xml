@@ -1,0 +1,518 @@
+<?xml version="1.0"?>
+<projectProfile type="default" version="1.11.11">
+  <projectDirectory>
+    <projectProfileFile filesystemName=".zfproject.xml"/>
+    <applicationDirectory classNamePrefix="">
+      <apisDirectory enabled="false"/>
+      <configsDirectory>
+        <applicationConfigFile type="ini"/>
+      </configsDirectory>
+      <controllersDirectory>
+        <controllerFile controllerName="Index">
+          <actionMethod actionName="index"/>
+        </controllerFile>
+        <controllerFile controllerName="Error"/>
+        <controllerFile controllerName="CrudRequest">
+          <actionMethod actionName="index"/>
+        </controllerFile>
+        <controllerFile controllerName="Admin">
+          <actionMethod actionName="index"/>
+          <actionMethod actionName="login"/>
+          <actionMethod actionName="logout"/>
+          <actionMethod actionName="components"/>
+          <actionMethod actionName="modules"/>
+          <actionMethod actionName="iframe"/>
+        </controllerFile>
+        <controllerFile controllerName="DojoDnDSource">
+          <actionMethod actionName="index"/>
+        </controllerFile>
+        <controllerFile controllerName="Acl">
+          <actionMethod actionName="index"/>
+          <actionMethod actionName="isUserAllowed"/>
+          <actionMethod actionName="userHasRoleAllowed"/>
+          <actionMethod actionName="userHasGroupsAllowed"/>
+          <actionMethod actionName="getUserInfo"/>
+        </controllerFile>
+        <controllerFile controllerName="Schedule">
+          <actionMethod actionName="index"/>
+        </controllerFile>
+      </controllersDirectory>
+      <formsDirectory enabled="false"/>
+      <layoutsDirectory enabled="false"/>
+      <modelsDirectory>
+        <modelFile modelName="AclModulesModel"/>
+        <modelFile modelName="AclPermissionsModel"/>
+        <modelFile modelName="AclRolesModel"/>
+        <modelFile modelName="AclUsersModel"/>
+        <modelFile modelName="LogBookModel"/>
+        <modelFile modelName="PermissionsModel"/>
+        <modelFile modelName="PersonalInfoModel"/>
+        <modelFile modelName="SettingsModel"/>
+        <dbTableDirectory>
+          <dbTableFile dbTableName="AclModules"/>
+          <dbTableFile dbTableName="AclPermissions"/>
+          <dbTableFile dbTableName="AclRoles"/>
+          <dbTableFile dbTableName="AclUsers"/>
+          <dbTableFile dbTableName="WebPermissions"/>
+          <dbTableFile dbTableName="WebSettings"/>
+          <dbTableFile dbTableName="AclActions"/>
+          <dbTableFile dbTableName="AclModulesActions"/>
+          <dbTableFile dbTableName="AclRolesModulesActions"/>
+        </dbTableDirectory>
+        <modelFile modelName="TreeNodesModel"/>
+        <modelFile modelName="AclActionsModel"/>
+        <modelFile modelName="AclModulesActionsModel"/>
+        <modelFile modelName="AclRolesModulesActionsModel"/>
+        <modelFile modelName="AclGroupsModulesActionsModel"/>
+        <modelFile modelName="AclUsersGroupsModel"/>
+      </modelsDirectory>
+      <modulesDirectory>
+        <moduleDirectory moduleName="components">
+          <apisDirectory enabled="false"/>
+          <configsDirectory enabled="false"/>
+          <controllersDirectory>
+            <controllerFile controllerName="NodesGraph">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DojoSimpleCrud">
+              <actionMethod actionName="index"/>
+              <actionMethod actionName="list"/>
+              <actionMethod actionName="add"/>
+              <actionMethod actionName="keypad"/>
+              <actionMethod actionName="clone"/>
+              <actionMethod actionName="changePassword"/>
+              <actionMethod actionName="contextMenu"/>
+              <actionMethod actionName="upload"/>
+              <actionMethod actionName="uploadForm"/>
+            </controllerFile>
+            <controllerFile controllerName="DojoSettings">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="PhpInfo">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="GroupsModules">
+              <actionMethod actionName="index"/>
+              <actionMethod actionName="edit"/>
+              <actionMethod actionName="add"/>
+            </controllerFile>
+            <controllerFile controllerName="DojoChart">
+              <actionMethod actionName="index"/>
+              <actionMethod actionName="excel"/>
+              <actionMethod actionName="bars"/>
+              <actionMethod actionName="lines"/>
+              <actionMethod actionName="pie"/>
+            </controllerFile>
+            <controllerFile controllerName="Schedule">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+          </controllersDirectory>
+          <formsDirectory enabled="false"/>
+          <layoutsDirectory enabled="false"/>
+          <modelsDirectory/>
+          <viewsDirectory>
+            <viewScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="NodesGraph">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSettings">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="list"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="search"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="edit"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="PhpInfo">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="add"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="keypad"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="clone"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="changePassword"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="contextMenu"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="GroupsModules">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="GroupsModules">
+                <viewScriptFile forActionName="edit"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="GroupsModules">
+                <viewScriptFile forActionName="add"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoChart">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoChart">
+                <viewScriptFile forActionName="excel"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoChart">
+                <viewScriptFile forActionName="bars"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoChart">
+                <viewScriptFile forActionName="lines"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoChart">
+                <viewScriptFile forActionName="pie"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="upload"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSimpleCrud">
+                <viewScriptFile forActionName="uploadForm"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Schedule">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+            </viewScriptsDirectory>
+            <viewHelpersDirectory/>
+            <viewFiltersDirectory/>
+          </viewsDirectory>
+        </moduleDirectory>
+        <moduleDirectory moduleName="elements">
+          <apisDirectory enabled="false"/>
+          <configsDirectory enabled="false"/>
+          <controllersDirectory>
+            <controllerFile controllerName="DijitFormDateTextBox">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DojoxFormCheckedMultiSelect">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DijitFormCheckBox">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DijitFormComboBox">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DijitFormFilteringSelect">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DijitFormTextArea">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DojoxFormUploader">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="ZweiFormValidationTextarea">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="Hidden">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="TinyMce">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DijitFormValidationTextBox">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="ListFiles">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DojoxFormCheckedMultiSelectBinary">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DojoDndSource">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DijitEditor">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DojoxWidgetColorPicker">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+          </controllersDirectory>
+          <formsDirectory enabled="false"/>
+          <layoutsDirectory enabled="false"/>
+          <modelsDirectory>
+            <dbTableDirectory enabled="false"/>
+          </modelsDirectory>
+          <viewsDirectory>
+            <viewScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DijitFormDateTextBox">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoxFormCheckedMultiSelect">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DijitFormCheckBox">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DijitFormComboBox">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DijitFormFilteringSelect">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DijitFormTextArea">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoxFormUploader">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="ZweiFormValidationTextarea">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="Hidden">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="TinyMce">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DijitFormValidationTextBox">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="ListFiles">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoxFormCheckedMultiSelectBinary">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoDnDSource">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoDndSource">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DijitEditor">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoxWidgetColorPicker">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+            </viewScriptsDirectory>
+            <viewHelpersDirectory/>
+            <viewFiltersDirectory/>
+          </viewsDirectory>
+        </moduleDirectory>
+      </modulesDirectory>
+      <viewsDirectory>
+        <viewScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Index">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Error">
+            <viewScriptFile forActionName="error"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="CrudRequest">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Admin">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Admin">
+            <viewScriptFile forActionName="login"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Admin">
+            <viewScriptFile forActionName="logout"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Admin">
+            <viewScriptFile forActionName="components"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Admin">
+            <viewScriptFile forActionName="modules"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Admin">
+            <viewScriptFile forActionName="iframe"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="DojoDnDSource">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Acl">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Acl">
+            <viewScriptFile forActionName="isUserAllowed"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Acl">
+            <viewScriptFile forActionName="userHasRoleAllowed"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Acl">
+            <viewScriptFile forActionName="userHasGroupsAllowed"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Acl">
+            <viewScriptFile forActionName="getUserInfo"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Schedule">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+        </viewScriptsDirectory>
+        <viewHelpersDirectory/>
+        <viewFiltersDirectory enabled="false"/>
+      </viewsDirectory>
+      <bootstrapFile filesystemName="Bootstrap.php"/>
+    </applicationDirectory>
+    <dataDirectory enabled="false">
+      <cacheDirectory enabled="false"/>
+      <searchIndexesDirectory enabled="false"/>
+      <localesDirectory enabled="false"/>
+      <logsDirectory enabled="false"/>
+      <sessionsDirectory enabled="false"/>
+      <uploadsDirectory enabled="false"/>
+    </dataDirectory>
+    <docsDirectory>
+      <file filesystemName="README.txt"/>
+    </docsDirectory>
+    <libraryDirectory>
+      <zfStandardLibraryDirectory enabled="false"/>
+    </libraryDirectory>
+    <publicDirectory>
+      <publicStylesheetsDirectory enabled="false"/>
+      <publicScriptsDirectory enabled="false"/>
+      <publicImagesDirectory enabled="false"/>
+      <publicIndexFile filesystemName="index.php"/>
+      <htaccessFile filesystemName=".htaccess"/>
+    </publicDirectory>
+    <projectProvidersDirectory enabled="false"/>
+    <temporaryDirectory enabled="false"/>
+    <testsDirectory>
+      <testPHPUnitConfigFile filesystemName="phpunit.xml"/>
+      <testPHPUnitBootstrapFile filesystemName="bootstrap.php"/>
+      <testApplicationDirectory>
+        <testApplicationControllerDirectory>
+          <testApplicationControllerFile forControllerName="Index">
+            <testApplicationActionMethod forActionName="index"/>
+          </testApplicationControllerFile>
+          <testApplicationControllerFile forControllerName="CrudRequest">
+            <testApplicationActionMethod forActionName="index"/>
+          </testApplicationControllerFile>
+          <testApplicationControllerFile forControllerName="Admin">
+            <testApplicationActionMethod forActionName="index"/>
+            <testApplicationActionMethod forActionName="login"/>
+            <testApplicationActionMethod forActionName="logout"/>
+            <testApplicationActionMethod forActionName="components"/>
+            <testApplicationActionMethod forActionName="modules"/>
+            <testApplicationActionMethod forActionName="iframe"/>
+          </testApplicationControllerFile>
+          <testApplicationControllerFile forControllerName="DojoDnDSource">
+            <testApplicationActionMethod forActionName="index"/>
+          </testApplicationControllerFile>
+          <testApplicationControllerFile forControllerName="Acl">
+            <testApplicationActionMethod forActionName="index"/>
+            <testApplicationActionMethod forActionName="isUserAllowed"/>
+            <testApplicationActionMethod forActionName="userHasRoleAllowed"/>
+            <testApplicationActionMethod forActionName="userHasGroupsAllowed"/>
+            <testApplicationActionMethod forActionName="getUserInfo"/>
+          </testApplicationControllerFile>
+          <testApplicationControllerFile forControllerName="Schedule">
+            <testApplicationActionMethod forActionName="index"/>
+          </testApplicationControllerFile>
+        </testApplicationControllerDirectory>
+        <testApplicationModulesDirectory>
+          <testApplicationModuleDirectory forModuleName="components">
+            <testApplicationControllerDirectory>
+              <testApplicationControllerFile forControllerName="Index">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="NodesGraph">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoSimpleCrud">
+                <testApplicationActionMethod forActionName="index"/>
+                <testApplicationActionMethod forActionName="list"/>
+                <testApplicationActionMethod forActionName="add"/>
+                <testApplicationActionMethod forActionName="keypad"/>
+                <testApplicationActionMethod forActionName="clone"/>
+                <testApplicationActionMethod forActionName="changePassword"/>
+                <testApplicationActionMethod forActionName="contextMenu"/>
+                <testApplicationActionMethod forActionName="upload"/>
+                <testApplicationActionMethod forActionName="uploadForm"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoSettings">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="PhpInfo">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="GroupsModules">
+                <testApplicationActionMethod forActionName="index"/>
+                <testApplicationActionMethod forActionName="edit"/>
+                <testApplicationActionMethod forActionName="add"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoChart">
+                <testApplicationActionMethod forActionName="index"/>
+                <testApplicationActionMethod forActionName="excel"/>
+                <testApplicationActionMethod forActionName="bars"/>
+                <testApplicationActionMethod forActionName="lines"/>
+                <testApplicationActionMethod forActionName="pie"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="Schedule">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+            </testApplicationControllerDirectory>
+          </testApplicationModuleDirectory>
+          <testApplicationModuleDirectory forModuleName="elements">
+            <testApplicationControllerDirectory>
+              <testApplicationControllerFile forControllerName="DijitFormDateTextBox">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoxFormCheckedMultiSelect">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DijitFormCheckBox">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DijitFormComboBox">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DijitFormFilteringSelect">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DijitFormTextArea">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoxFormUploader">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="ZweiFormValidationTextarea">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="Hidden">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="TinyMce">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DijitFormValidationTextBox">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="ListFiles">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoxFormCheckedMultiSelectBinary">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoDnDSource">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoDndSource">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DojoxWidgetColorPicker">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+            </testApplicationControllerDirectory>
+          </testApplicationModuleDirectory>
+        </testApplicationModulesDirectory>
+      </testApplicationDirectory>
+      <testLibraryDirectory/>
+    </testsDirectory>
+  </projectDirectory>
+</projectProfile>

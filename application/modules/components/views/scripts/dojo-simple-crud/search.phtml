@@ -1,0 +1,163 @@
+<form data-dojo-type="dijit/form/Form" <?=$this->hide?> class="formSearch" id="<?=$this->domPrefix?>formSearch" jsId="<?=$this->domPrefix?>formSearch" encType="multipart/form-data" action="" method="">
+<?php 
+if (count($this->groups) > 0) :
+?>
+    <div class="formSearchInputs">
+
+<?php 
+    $i = 0;
+    $hideSubmit = true;
+    foreach ($this->groups as $group) :
+        $params = (array) $group->attributes();
+        $params = $params['@attributes'];
+        $params['domId'] =  $this->domPrefix.'_search_';
+        $params['i'] = $i;
+        
+        if (isset($this->searchRequest[$group->getAttribute('target')]))
+            $params['value'] = $this->searchRequest[$group->getAttribute('target')]['value'];
+        
+        $hidden = $params['type'] == 'hidden' ? 'style="display:none;"' : '';
+        if ($hidden === '') $hideSubmit = false; //Si hay por lo menos un input.type != 'hidden', mostrar submit
+?>
+        <div class="formSearchItemContainer" <?=$hidden?> name="<?=$group->getAttribute('target')?>_container">
+            <div class="item">
+                <label for="search" class="formSearchItemLabel" name="<?=$group->getAttribute('target')?>_label" ><?=$group->getAttribute('name')?></label>
+                <?=$this->action('index', $group->getAttribute('type'), 'elements', $params);?>
+                <input type="hidden" value="<?=$group->getAttribute('format')?>" id="<?=$this->domPrefix.'_search_'.$i?>_format" name="<?=$group->getAttribute('target')?>_format" />
+                <input type="hidden" value="<?=$group->getAttribute('operator')?>" id="<?=$this->domPrefix.'_search_'.$i?>_operator" name="<?=$group->getAttribute('target')?>_operator" />
+<?php 
+    if ($group->getAttribute('sufix')) :
+?>
+                <input type="hidden" value="<?=$group->getAttribute('sufix')?>" id="<?=$this->domPrefix.'_search_'.$i?>_sufix" name="<?=$group->getAttribute('target')?>_sufix" />
+
+<?php 
+
+    endif;
+    if ($group->getAttribute('prefix')) :
+?>
+                <input type="hidden" value="<?=$group->getAttribute('prefix')?>" id="<?=$this->domPrefix.'_search_'.$i?>_prefix" name="<?=$group->getAttribute('target')?>_prefix" />
+
+<?php 
+    endif;
+?>
+            </div>
+
+<?php 
+       $k = 0;
+       if (count($group->children()) > 1) :
+           if ($group->getAttribute('operator') != 'between') :
+?>
+           <div class="formSearchSelectors">
+
+<?php
+               foreach ($group->children() as $element) :
+                   if ($element->getAttribute('name')) {
+                      $eName = $element->getAttribute('name');
+                   } else {
+                      $targets = $this->xml->getElements("@target='{$element->getAttribute('target')}'");
+                      $eName = $targets[0]->getAttribute('name');
+                   }
+?>
+                <div class="formSearchSelectorItem">
+                    <input data-dojo-type="dijit/form/RadioButton" id="<?=$this->domPrefix?>searchFields[<?=$i?>][<?=$k?>]" name="switchFields[<?=$i?>]" <?php if ($k == 0) echo 'checked="checked"' ?> value="<?=$element->getAttribute('target') ?>" type="radio" onClick="dijit.byId('<?=$this->domPrefix . '_search_' . $i?>').set('name', this.value)" />
+                    <label for="<?=$element->getAttribute('target')?>"><?=$eName?></label>
+                </div>
+
+<?php 
+                $k++;
+                endforeach;
+?>
+            </div>
+<?php
+            else :
+                $j=0;
+                foreach ($group->children() as $element) :
+                    $j++;
+                    if ($j >= 2) :
+?>
+            <input type="hidden" id="<?=$this->domPrefix . '_search_' . $i?>_sufix<?=$j?>" value="<?=$element->getAttribute('sufix')?>" name="<?=$group->getAttribute('target')?>_sufix" />
+            <input type="hidden" id="<?=$this->domPrefix . '_search_' . $i?>_prefix<?=$j?>" value="<?=$element->getAttribute('prefix')?>" name="<?=$group->getAttribute('target')?>_prefix" />
+
+<?php 
+                    endif;
+                endforeach;
+            endif;
+        endif;
+?>
+        </div>
+
+<?php 
+        $i++;
+    endforeach;
+    $hidden = $hideSubmit ? 'style="display:none;"' : '';
+    if ($hidden) :
+?>
+    <script type="text/javascript">
+        dojo.byId('<?=$this->domPrefix?>formSearch').style.display='none';
+    </script>
+
+<?php
+    endif; 
+?>
+    </div>
+<?php 
+endif;
+?>
+    <div class="formSearchSubmit">
+        <input type="hidden" name="model" value="<?=$this->model ?>" />
+        <input type="hidden" name="format" value="json" />
+        <input type="hidden" name="storeType" value="<?=$this->storeType?>" />
+        <input type="hidden" name="p" value="<?=$this->p?>" />
+
+<?php 
+if (!$this->hideSubmit) :
+?>
+        <button type="submit" class="submit" data-dojo-type="dijit/form/Button" iconClass="dijitIconSearch" id="<?=$this->domPrefix?>btnBuscar">Buscar</button>
+<?php 
+endif;
+?>
+    </div>
+    <div class="keyPadWrapper" style="clear: both;">
+
+<?php 
+foreach ($this->customFunctions as $i => $f) :
+        $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
+        $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+?>
+    <div class="keyPadButton">
+        <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="<?=$onclick.$target?>">
+        <?=$f['name'] ? $f['name'] : $f['target']?>
+        </button>
+    </div>
+
+<?php 
+endforeach;
+?>
+    </div>
+
+<?php 
+if (!$this->hideSubmit) :
+?>
+    <script type="dojo/method" event="onSubmit">
+        if (this.validate()) {
+            try {
+                <?=$this->onSubmit ?>
+                <?=$this->enableActions?>
+                var form = new zwei.Form({dijitFormSearch: this, dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')});
+                form.loadData();
+                <?=$this->onPostSubmit ?>
+            } catch(e) {
+                console.log(e);
+                utils.showMessage(e.message, 'error');
+            }
+        } else {
+            utils.showMessage('Por favor corrija los campos marcados.', 'error');
+        }
+        return false;
+    </script>
+
+<?php 
+endif;
+?>
+</form>
+

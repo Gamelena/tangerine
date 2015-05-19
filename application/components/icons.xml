@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="components.xsd" name="&amp;Iacute;conos"
+    type="dojo-simple-crud" target="IconsModel" list="true" edit="true"
+    add="true" delete="true">
+    <elements>
+        <element name="ID" target="id"
+            type="dijit-form-validation-text-box" visible="true" edit="false"
+            add="false" />
+        <element name="Nombre" target="title"
+            type="dijit-form-validation-text-box" visible="true" edit="true"
+            add="true" required="true" />
+        <element name="Im&amp;aacute;gen" target="image"
+            type="dojox-form-uploader" formatter="utils.formatImage32"
+            url="{BASE_URL}/upfiles/32/" visible="true" edit="true" add="true">
+            <thumb width="16" height="16"
+                path="{ROOT_DIR}/public/upfiles/16" />
+            <thumb width="32" height="32"
+                path="{ROOT_DIR}/public/upfiles/32" />
+        </element>
+    </elements>
+    <forms ajax="true"></forms>
+</component>

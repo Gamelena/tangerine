@@ -1,0 +1,10 @@
+/* Menu */
+
+.dijitRtl .zweicom .dijitMenuItem .dijitMenuItemIcon {
+	padding-left: 3px;
+	padding-right: 0;
+}
+
+.dijitRtl .zweicom .dijitMenuItem .dijitMenuExpand {
+	background-position: left top;
+}

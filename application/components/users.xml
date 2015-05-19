@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<component name="Usuarios" type="dojo-simple-crud" target="AclUsersModel"
+	list="true" edit="true" add="true" delete="true"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="components.xsd">
+	<elements>
+		<element name="Usuario" target="user_name"
+			type="dijit-form-validation-text-box" visible="true" edit="false"
+			add="true" required="true" />
+		<element name="Nombres" target="first_names"
+			type="dijit-form-validation-text-box" visible="true" edit="true" add="true"
+			required="true" />
+		<element name="E-Mail" target="email"
+			regExp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}"
+			invalidMessage="mail no valido" type="dijit-form-validation-text-box"
+			visible="true" edit="true" add="true" />
+		<element name="Perfil" target="acl_roles_id" defaultValue=""
+			type="dijit-form-filtering-select" table="AclRolesModel" field="role_name"
+			visible="true" edit="true" add="true" />
+		<element name="Activo" target="approved" type="dijit-form-check-box"
+			formatter="utils.formatYesNo" visible="true" edit="true" add="true" />
+		<element name="Activo" target="acl_users.approved" type="dijit-form-check-box"
+			formatter="utils.formatYesNo" visible="false" edit="false" add="false" />
+		<!--<element name="Grupos" target="grupos" type="dojox-form-checked-multi-select" 
+			table="AclGroupsModel" field="title" visible="false" edit="disabled" style="width:164px;"/> -->
+	</elements>
+	<searchers>
+		<group name="Datos Personales">
+			<element target="user_name" />
+			<element target="first_names" />
+			<element target="email" />
+		</group>
+		<element target="acl_roles_id" defaultText="Todo" operator="=" />
+		<element target="acl_users.approved" operator="="
+			type="dijit-form-filtering-select"
+			data="[{id:' ', name: 'Todo'}, {id: '0', name: 'No'}, {id: '1', name: 'Sí'}]"
+			trim="true" defaultValue=" " />
+	</searchers>
+	<forms ajax="true">
+		<changePassword>
+			<element target="password" />
+		</changePassword>
+	</forms>
+</component> 

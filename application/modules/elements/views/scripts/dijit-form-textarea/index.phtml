@@ -1,0 +1,3 @@
+<textarea id="<?=$this->domId . $this->i?>" name="<?=$this->target?>" data-dojo-type="dijit/form/Textarea" <?=$this->readonly.$this->disabled.$this->required.$this->regexp.$this->trim.$this->invalid_message.$this->prompt_message.$this->onblur.$this->style ?>>
+<?=str_replace('"','&quot;',$this->value)?>
+</textarea>

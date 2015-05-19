@@ -1,0 +1,163 @@
+body {
+	margin: 0;
+	padding: 0;
+	font: 10px normal Arial, Helvetica, sans-serif;
+	overflow: scroll;
+	background: url("i/bgmetal2.png") repeat-x fixed center top #757575;
+}
+
+.container {
+	width: 960px;
+	margin: 0 auto;
+	position: relative;
+}
+
+.container #header {
+	background: #ddd url(i/body_bg.gif) repeat-x;
+	padding-top: 120px;
+	margin-top: 12px;
+}
+
+.container #header .disclaimer {
+	color: #999999;
+	display: block;
+	padding: 100px 18px 7px;
+	position: absolute;
+	right: 0;
+	text-align: right;
+	top: 0;
+}
+
+.container #header .disclaimer a {
+	color: #ccc;
+}
+
+.container #header .logo {
+	color: #FFFFFF;
+	font-size: 4em;
+	font-weight: bold;
+	padding: 40px 0 0 23px;
+	position: absolute;
+	top: 0;
+}
+
+ul.topnav {
+	list-style: none;
+	padding: 0 20px;
+	margin: 0;
+	float: left;
+	width: 920px;
+	background: #222;
+	font-size: 1.2em;
+	background: url(i/topnav_bg.gif) repeat-x;
+}
+
+ul.topnav li {
+	float: left;
+	margin: 0;
+	padding: 0 15px 0 0;
+	position: relative; /*--Declare X and Y axis base--*/
+}
+
+ul.topnav li a {
+	padding: 10px 5px;
+	color: #fff;
+	display: block;
+	text-decoration: none;
+	float: left;
+}
+
+ul.topnav li a:hover {
+	background: url(i/topnav_hover.gif) no-repeat center top;
+}
+
+ul.topnav li span { /*--Drop down trigger styles--*/
+	width: 17px;
+	height: 35px;
+	float: left;
+	background: url(i/subnav_btn.gif) no-repeat center top;
+}
+
+ul.topnav li span.subhover {
+	background-position: center bottom;
+	cursor: pointer;
+}  /*--Hover effect for trigger--*/
+ul.topnav li ul.subnav {
+	list-style: none;
+	position: absolute;
+	/*--Important - Keeps subnav from affecting main navigation flow--*/
+	left: 0;
+	top: 35px;
+	background: #333;
+	margin: 0;
+	padding: 0;
+	display: none;
+	float: left;
+	width: 170px;
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	border: 1px solid #111;
+	z-index: 9999;
+}
+
+ul.topnav li ul.subnav li {
+	margin: 0;
+	padding: 0;
+	border-top: 1px solid #252525; /*--Create bevel effect--*/
+	border-bottom: 1px solid #444; /*--Create bevel effect--*/
+	clear: both;
+	width: 170px;
+}
+
+html ul.topnav li ul.subnav li a {
+	float: left;
+	width: 145px;
+	background: #333 url(i/dropdown_linkbg.gif) no-repeat 10px center;
+	padding-left: 20px;
+}
+
+html ul.topnav li ul.subnav li a:hover {
+	/*--Hover effect for subnav links--*/
+	background: #222 url(i/dropdown_linkbg.gif) no-repeat 10px center;
+}
+
+#header img {
+	margin: 20px 0 10px;
+}
+
+#content input[type="submit"],input[type="button"] {
+	background: url("i/panel-button-active.png") no-repeat scroll 0 2px
+		transparent !important;
+	border: 0 none;
+	color: #FFFFFF !important;
+	font-weight: bold !important;
+	height: 33px;
+	width: 128px;
+}
+
+#content h3 {
+	background-color: #000000;
+	padding: 5px;
+}
+
+.form_bottom {
+	margin: 0 auto;
+	display: table;
+}
+
+#content .mask {
+	background: none repeat scroll 0 0 #000000;
+	color: #FFFFFF;
+	opacity: 0.7;
+	padding: 14px;
+}
+
+#content input {
+	color: #000;
+}
+
+#popup_body,#context_body {
+	background: none repeat scroll 0 0 #333949;
+}

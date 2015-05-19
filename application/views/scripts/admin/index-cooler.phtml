@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="es" />
+    <title><?=$this->adminTitle?></title>
+    <link href="<?=BASE_URL?>favicon.ico" rel="shortcut icon"/>
+    <script type="text/javascript">
+    var base_url="<?=BASE_URL?>";
+    var layout=<?=$this->layout?>;
+    var multiForm=<?=$this->multiForm?>; 
+    </script>
+    <style type="text/css">
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+    }
+    </style>
+    <?=$this->headStyle()?>
+    <?=$this->dojo()?>
+    <?=$this->list?>
+    <script type="text/javascript">
+    var utils = new zwei.Utils();
+    var admportal = new zwei.Admportal({template: "<?=$this->template?>", noCache: '<?=$this->noCache?>'});
+    // Create a Standby instance
+    dojo.addOnLoad(function() {
+        var appStandBy = new dojox.widget.Standby({
+            target: "borderContainer",
+            imageText: "Loading ..."
+        });
+        document.body.appendChild(appStandBy.domNode);
+        appStandBy.startup();
+        initLoad(<?=$this->layout?>);
+        // Add pre-loading
+    });
+
+    function preLoading(){
+        setTimeout(function() {
+            dojo.fadeOut({
+                node: "appLoader",
+                duration: 500,
+                onEnd: function() {
+                    dojo.style("appLoader", "display", "none");
+                }
+            }).play();
+        }, 500);
+    }   
+    </script>
+    <script type="text/javascript" defer="true" src="<?=BASE_URL?>js/dojo.admin.js?noCache=<?=$this->noCache?>"></script>
+</head>
+<body class="<?=$this->bodyClass?>" onload="preLoading();">
+    <!--[if lt IE 9]>
+    <div style='border: 1px solid #F7941D; background: #FEEFDA; text-align: center; clear: both; height: 75px; position: relative;'>
+    <div style='position: absolute; right: 3px; top: 3px; font-family: courier new; font-weight: bold;'><a href='#' onclick='javascript:this.parentNode.parentNode.style.display="none"; return false;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-cornerx.jpg' style='border: none;' alt='Cierra este aviso'/></a></div>
+    <div style='width: 640px; margin: 0 auto; text-align: left; padding: 0; overflow: hidden; color: black;'>
+      <div style='width: 75px; float: left;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-warning.jpg' alt='¡Aviso!'/></div>
+      <div style='width: 275px; float: left; font-family: Arial, sans-serif;'>
+        <div style='font-size: 14px; font-weight: bold; margin-top: 12px;'>Usted está usando un navegador obsoleto.</div>
+        <div style='font-size: 12px; margin-top: 6px; line-height: 12px;'>Para navegar mejor por este sitio, por favor, actualice su navegador.</div>
+      </div>
+      <div style='width: 75px; float: left;'><a href='http://www.mozilla-europe.org/es/firefox/' target='_blank'><img src='<?=BASE_URL?>/images/ie6nomore-firefox.jpg' style='border: none;' alt='Get Firefox 3.5'/></a></div>
+      <div style='width: 75px; float: left;'><a href='http://www.microsoft.com/es-es/download/internet-explorer-9-details.aspx' target='_blank'><img src='<?=BASE_URL?>/images/ie6nomore-ie9.jpg' style='border: none;' alt='Get Internet Explorer 9'/></a></div>
+      <div style='width: 73px; float: left;'><a href='http://www.apple.com/es/safari/download/' target='_blank'><img src='<?=BASE_URL?>/images/ie6nomore-safari.jpg' style='border: none;' alt='Get Safari 4'/></a></div>
+      <div style='float: left;'><a href='http://www.google.com/chrome?hl=es' target='_blank'><img src='<?=BASE_URL?>/images/ie6nomore-chrome.jpg' style='border: none;' alt='Get Google Chrome'/></a></div>
+    </div>
+    </div>
+    <![endif]-->
+    <!-- Loader -->
+    <div id="appLoader" class="appLoader">
+        <div>Cargando ...</div>
+    </div>
+    <!-- /Loader -->
+    <div data-dojo-type="dijit/layout/BorderContainer" id="borderContainer" jsId="borderContainer" data-dojo-props="design: 'headline', region: 'center', gutters: true" >
+        <div data-dojo-type="dojox/layout/ContentPane" id="contentPaneTop" jsId="contentPaneTop" data-dojo-props="region: 'top', executeScripts: true, scriptHasHooks: true" style="min-height: 37px;">
+            <div id="logosAdm" title="<?=$this->adminTitle?>"></div>
+            <div id="mainMenu"></div>
+            <div id="tituloAdm" style="display:none;"></div>
+            <div id="personalWrapper">
+                <div style="text-align: right; float: right;">
+                    <button data-dojo-type="dijit/form/DropDownButton" iconClass="dijitIconConfigure"><span>Bienvenido <?=$this->user_name?></span>
+                        <div data-dojo-type="dijit/Menu" id="confMenu" style="display: none;">
+                            <div data-dojo-type="dijit/MenuItem" id="btnConfPersonal"
+                                iconClass="dijitIconTask"
+                                onclick="admportal.loadModuleTab('admin/components?p=personal-info.xml', '<?=uniqid() ?>', 'Datos Personales')">
+                            Datos Personales</div>
+                       </div>
+                    </button>
+                    <button type="button" data-dojo-type="dijit/form/Button" name="btnSalir" id="btnSalir" iconClass="dijitIconFilter">Salir</button>
+                </div>
+            </div>
+        </div>
+        <!-- Panel central -->
+        <div id="mainPane" jsId="mainPane" id="mainPane" data-dojo-type="dojox/layout/ContentPane"  data-dojo-props="region: 'center', splitter: true, executeScripts: true, scriptHasHooks: true">
+            <div data-dojo-type="dijit/layout/TabContainer" jsId="tabContainer" id="tabContainer" data-dojo-props="executeScripts: true, scriptHasHooks: true, tabPosition: 'bottom'" style="width:100%;height:100%;top:0px;" tabPosition="top"></div>
+        </div>
+        <div data-dojo-type="dojox/layout/ContentPane" jsId="contentPaneBottom" id="contentPaneBottom" data-dojo-props='region:"bottom"'>
+            <span style="float:right;margin-right: 6px">
+                <span style="float: left; padding-right: 10px;" id="zweicomLegend">&nbsp;</span> <img id="zweicomLogo" src="" />  
+            </span>
+        </div>
+    </div>
+    <div data-dojo-type="dojox/widget/Toaster" jsId="firstToaster" data-dojo-props="positionDirection:'br-left'" id="firstToaster"></div>
+    <iframe name="ifrm_process" id="ifrm_process" style="display: none;"  src="" ></iframe>
+    <iframe name="ifrm_events" id="ifrm_events" style="display: none;"  src="" ></iframe>
+</body>
+</html>

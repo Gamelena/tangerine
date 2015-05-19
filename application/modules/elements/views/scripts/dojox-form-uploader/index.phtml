@@ -1,0 +1,32 @@
+<input type="file" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>" label="Seleccionar" data-dojo-props="showInput:'before',isDebug:true" <?=$this->disabled.$this->required.$this->onblur.$this->invalid_message.$this->prompt_message?>/>
+<?php 
+if (!empty($this->value)) :
+?>
+<div class="fileDetails">
+<?php 
+    if (preg_match("/formatImage/", $this->formatter)) :
+?>
+    <img alt="<?=$this->value?>" src="<?=$this->baseUrlPath ?><?=$this->value?>" style="max-height: 90px;">
+    <span class="fileName"><i><?=$this->value?></i></span>
+<?php 
+    endif;
+?>
+<?php 
+    foreach ($this->thumbs as $i => $t) : 
+?>
+    <input type="hidden" id="thumb_<?=$this->domId . $this->i . $i?>" name="thumb<?=$this->target?>[<?=$i?>][path]" value="<?=$t->getAttribute('path') ?>" data-dojo-type="dijit.form.ValidationTextBox" />
+    <input type="hidden" id="thumbwidth_<?=$this->domId . $this->i . $i?>" name="thumb<?=$this->target?>[<?=$i?>][width]" value="<?=$t->getAttribute('width') ?>" data-dojo-type="dijit.form.ValidationTextBox" />
+    <input type="hidden" id="thumbheight_<?=$this->domId . $this->i . $i?>" name="thumb<?=$this->target?>[<?=$i?>][height]" value="<?=$t->getAttribute('height') ?>" data-dojo-type="dijit.form.ValidationTextBox" />
+<?php 
+    endforeach;
+?>
+
+    <span class="fileDelete">
+        <label for="delete<?=$this->target?>" style="padding-left: 18px;">Eliminar</label>
+        <input type="checkbox" id="delete_<?=$this->domId . $this->i?>" data-dojo-type="dijit.form.CheckBox" name="delete<?=$this->target?>" value="<?=$this->value ?>" />
+    </span>
+</div>
+<?php 
+endif;
+?>
+<input type="hidden" data-dojo-type="dijit.form.ValidationTextBox" id="path_<?=$this->domId . $this->i?>" name="path<?=$this->target?>" value="<?=$this->path ?>"/>
