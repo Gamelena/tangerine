@@ -46,4 +46,3 @@ echo "agregar a la variable \"include_path\" las rutas"
 echo ":$PWD/vendor/zend/zendframework/library:$PWD/vendor/phpunit/phpunit"
 echo " "
 
-

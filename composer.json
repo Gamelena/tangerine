@@ -1,7 +1,7 @@
 {
-	"name": "zweicom/admportal",
-	"description": "Admportal",
-	"version": "1.5.3",
+	"name": "gamelena/tangerine",
+	"description": "Tangerine",
+	"version": "1.5.4",
 	"type": "library",
 	"require": {
 		"php": ">=5.4.1"
@@ -59,8 +59,8 @@
 	},
 	"authors": [
 		{
-			"name": "Desarrollo",
-			"email": "desarrollo@zweicom.com"
+			"name": "Rodrigo",
+			"email": "rodrigo.riquelme.e@gmail.com"
 		}
 	],
 	"minimum-stability": "stable"
