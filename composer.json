@@ -1,10 +1,8 @@
 {
-	"name": "zweicom/admportal",
-	"description": "Admportal 1",
+	"name": "gamelena/tangerine",
+	"description": "Tangerine",
+	"version": "1.5.4",
 	"type": "library",
-	"config": {
-		"vendor-dir": "/usr/share/php"
-	},
 	"require": {
 		"php": ">=5.4.1"
 	},
@@ -48,10 +46,11 @@
 		}
 	],
 	"require": {
-		"zend/zendframework": "*",
-		"PHPOffice/PHPExcel": "*"
+
 	},
 	"require-dev": {
+		"zend/zendframework": "*",
+		"PHPOffice/PHPExcel": "*",
 		"phpunit/phpunit": "3.7.*",
 		"phpunit/phpunit-selenium": ">=1.2",
 		"phpunit/dbunit": ">=1.2",
