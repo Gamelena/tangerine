@@ -24,6 +24,7 @@ echo "Alias /dojotoolkit \"$PWD/bower_components\"
 <Directory \"$PWD/bower_components\">
 	Options Indexes FollowSymLinks
 	AllowOverride None
+	Require all granted
 	Allow from all
 </Directory>
 "
@@ -34,6 +35,7 @@ echo "Alias /libs \"$PWD/public/js/libs\"
 <Directory \"$PWD/public/js/libs\">
 	Options Indexes FollowSymLinks
 	AllowOverride None
+	Require all granted
 	Allow from all
 </Directory>
 "
@@ -45,5 +47,4 @@ echo "--------------------------------------------------------------------------
 echo "agregar a la variable \"include_path\" las rutas" 
 echo ":$PWD/vendor/zend/zendframework/library:$PWD/vendor/phpunit/phpunit"
 echo " "
-
 
