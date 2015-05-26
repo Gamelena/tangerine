@@ -1,6 +1,7 @@
 dojo.declare("zwei.Uploader", dojo.Stateful, {
 	dijitFormSearch : null,
 	dijitDataGrid : null,
+	uploadsControllerAction : null,
 	truncate: '',
 	component : null,
 	iframe : dojo.byId('ifrm_process'),
@@ -16,7 +17,11 @@ dojo.declare("zwei.Uploader", dojo.Stateful, {
 		var href = base_url + '/components/dojo-simple-crud/upload-form?'
 				+ this.queryKeys + '&accion=' + accion + '&jsUploaderInstance='
 				+ this.jsUploaderInstance + "&p=" + this.component + "&truncate=" + this.truncate;
-
+		
+		if (this.path) {
+			href += '&path=' + this.path;
+		}
+		
 		if (!dijit.byId('fileUploaderDlg')) {
 			var myDialog = new dojox.widget.DialogSimple({
 				id : 'fileUploaderDlg',
