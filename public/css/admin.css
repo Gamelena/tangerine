@@ -796,12 +796,6 @@ a.settingsTab {
     border-radius: 0.5em;
     border-color: #5FAFB0;
 }
-/*Icons*/
-.zweiIconCsv {
-	background-image:  url('i/csv.png');
-	width: 16px;
-    height: 16px;
-}
 
 /*Icons*/
 .zweiIconCsv {
