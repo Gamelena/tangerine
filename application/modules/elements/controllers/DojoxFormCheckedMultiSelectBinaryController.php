@@ -49,12 +49,17 @@ class Elements_DojoxFormCheckedMultiSelectBinaryController extends Zend_Controll
         $options = "";
         $selected = array();
         
+        if (!$r->getParam('value') && !$r->getParam('defaultValue')) {
+            $value = (isset($request->{$this->view->target})) ? $request->{$this->view->target} : null;
+        } else {
+            $value = $r->getParam('value', $r->getParam('defaultValue'));
+        }
+        
         if ($r->getParam('table')) {
             $id = $r->getParam('tablePk') ? $r->getParam('tablePk') : 'id';
             
             $className = $r->getParam('table');
             $model = new $className;
-            $primary = method_exists($model, 'info') ? $model->info(Zwei_Db_Table::PRIMARY) : 'id';
         
             if ($r->getParam('tableMethod')) {
                 $method = $r->getParam('tableMethod');
@@ -69,28 +74,22 @@ class Elements_DojoxFormCheckedMultiSelectBinaryController extends Zend_Controll
                     $select = $model->select(array("title", $id));
                 }
             }
+            
             if (method_exists($select, "__toString")) Debug::writeBySettings($select->__toString(), 'query_log');
+            
             $rows = $model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.
-        
-            if ($r->getParam('value')) {
-                $value = $r->getParam('value');
-            } else {
-                $value = $r->getParam('target') ? $r->getParam('target') : null;
-            }
-        
             
             if ($r->getParam('defaultValue') || $r->getParam('defaultText')) {
                 $options .= "<option value=\"{$r->getParam('defaultValue', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
             }
            
         
-            foreach ($rows as $row) {
+            foreach ($rows as $i => $row) {
                 $selected = "";
-                if ($r->getParam('value') & $row[$primary]) {
+                if ($value & pow(2, $i)) {
                     $selected = "selected=\"selected\"";
                 }
-        
-        
+                
                 if ($r->getParam('tableField')) {
                     $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$r->getParam('tableField')]}</option>\r\n";
                 } else if ($r->getParam('field')) {
@@ -100,13 +99,6 @@ class Elements_DojoxFormCheckedMultiSelectBinaryController extends Zend_Controll
                 }
             }
         } else {
-            if (!$r->getParam('value') && !$r->getParam('defaultValue')) {
-                $value = (isset($request->{$this->view->target})) ? $request->{$this->view->target} : null;
-            } else {
-                $value = $r->getParam('value', $r->getParam('defaultValue'));
-            }
-        
-            $options = "";
             $rows = explode(",", $r->getParam('list'));
             foreach ($rows as $i => $row) {
                 //Zwei_Utils_Debug::write('$id='.$id.'$row='.$row.'$value='.$value);
