@@ -293,7 +293,7 @@ foreach ($this->uploaders as $i => $f) :
     $title = $f->getAttribute('title') ? " title=\"{$f->getAttribute('title')}\"" : '';
     $action = $f->getAttribute('action') ? $f->getAttribute('action') : '';
     $truncate = $f->getAttribute('truncate') ? $f->getAttribute('truncate') : 'false';
-    $path = $f->getAttribute('path')  ? $f->getAttribute('path') : 'null';
+    $path = $f->getAttribute('path')  ? "'{$f->getAttribute('path')}'" : 'null';
 ?>
 if (dijit.byId('<?=$this->domPrefix?>MenuUploader<?=$i?>')) dijit.byId('<?=$this->domPrefix?>MenuUploader<?=$i?>').destroy(); 
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
@@ -309,7 +309,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
             dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'),
             iframe: dojo.byId('ifrm_process'),
             truncate: '<?=$truncate?>',
-            path: '<?=$path?>'
+            path: <?=$path?>
         });
         uploader.showDialog('<?=$action?>');
     }
