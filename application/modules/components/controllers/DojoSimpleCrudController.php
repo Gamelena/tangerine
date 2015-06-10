@@ -633,6 +633,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function uploadFormAction()
     {
         $r = $this->getRequest();
+        $this->view->path = $r->getParam('path') ? BASE_URL . $r->getParam('path') : BASE_URL . 'components/dojo-simple-crud/upload';
         $this->view->component = $r->getParam('p');
         $this->view->accion = $r->getParam('accion');
         $this->view->truncate = $r->getParam('truncate');

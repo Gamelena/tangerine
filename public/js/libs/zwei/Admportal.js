@@ -376,8 +376,20 @@ dojo.declare("zwei.Admportal", null, {
                 });
                 dojo.byId('tabContainer_tablist_mainTabModule' + moduleId).style.cursor = 'pointer';
             } else {
+                var refreshed = false;
+                if (base_url + url != dijit.byId('mainTabModule' + moduleId).get('href')) {
+                    dijit.byId('mainTabModule' + moduleId).set('href', base_url + url);
+                    refreshed = true;
+                }
+                
+                if (moduleTitle) {
+                    dijit.byId('mainTabModule' + moduleId).set('title', moduleTitle);
+                }
+                
                 if (dijit.byId('mainTabModule' + moduleId).get('selected', true)) {
-                    dijit.byId('mainTabModule' + moduleId).refresh();
+                    if (!refreshed) {	
+                        dijit.byId('mainTabModule' + moduleId).refresh();
+                    }
                 } else {
                     tabContainer.selectChild(dijit.byId('mainTabModule' + moduleId));
                 }

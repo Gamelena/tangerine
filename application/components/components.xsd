@@ -174,6 +174,7 @@
     </xsd:complexType>
         <xsd:complexType name="uploaderType">
         <xsd:attribute name="name"/>
+        <xsd:attribute name="path"/>
         <xsd:attribute name="iconClass"/>
         <xsd:attribute name="action" type="uploaderActionType"/>
         <xsd:attribute name="processClass"/><!-- @todo por implementar -->

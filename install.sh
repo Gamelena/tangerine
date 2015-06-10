@@ -1,4 +1,10 @@
-composer install && composer update && bower install && cp -R dojotoolkit/* bower_components/ && cp -n $PWD/vendor/zend/zendframework/bin/zf.sh $PWD/vendor/zend/zendframework/bin/zf
+composer install
+composer update
+bower install
+cp -R dojotoolkit/* bower_components/ 
+cp -R bower_components/dojo-calendar/* bower_components/dojox/calendar/
+cp -n $PWD/vendor/zend/zendframework/bin/zf.sh $PWD/vendor/zend/zendframework/bin/zf
+
 
 echo "Dependencias instaladas"
 echo " "
@@ -24,6 +30,7 @@ echo "Alias /dojotoolkit \"$PWD/bower_components\"
 <Directory \"$PWD/bower_components\">
 	Options Indexes FollowSymLinks
 	AllowOverride None
+	Require all granted
 	Allow from all
 </Directory>
 "
@@ -34,6 +41,7 @@ echo "Alias /libs \"$PWD/public/js/libs\"
 <Directory \"$PWD/public/js/libs\">
 	Options Indexes FollowSymLinks
 	AllowOverride None
+	Require all granted
 	Allow from all
 </Directory>
 "

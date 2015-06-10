@@ -1,0 +1,65 @@
+{
+	"config": {
+		"vendor-dir": "/opt/admportal"
+	},
+	"name": "zweicom/miadmin",
+	"description": "Mi admin",
+	"license": "Zweicom",
+	"authors": [
+		{
+			"name": "desarrollo",
+			"email": "desarrollo@zweicom.com"
+		}
+	],
+	"repositories": [
+		{
+			"type": "svn",
+			"url": "svn://saruman/admportal/"
+		},
+		{
+			"type": "package",
+			"package": {
+				"name": "zend/zendframework",
+				"version": "1.11.9",
+				"source": {
+					"url": "http://framework.zend.com/svn/framework/standard",
+					"type": "svn",
+					"reference": "tags/release-1.11.9/"
+				},
+				"autoload": {
+					"psr-0": {
+						"Zend": "library",
+						"ZendX": "library"
+					}
+				},
+				"config": {
+					"bin-dir": "bin"
+				}
+			}
+		},
+		{
+			"type": "package",
+			"package": {
+				"name": "PHPOffice/PHPExcel",
+				"version": "1.7.8",
+				"source": {
+					"url": "https://github.com/PHPOffice/PHPExcel.git",
+					"type": "git",
+					"reference": "PHPExcel_1.7.8"
+				},
+				"autoload": {
+					"psr-0": {
+						"PHPExcel": "Classes/"
+					}
+				}
+			}
+		}
+	],
+	"require": {
+		"zweicom/admportal": "*",
+		"symfony/options-resolver": "2.3",
+		"symfony/process": "2.3",
+		"kzykhys/git": "1.0.*@dev"
+	},
+	"minimum-stability": "dev"
+}
