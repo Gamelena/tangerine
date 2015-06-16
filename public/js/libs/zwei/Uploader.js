@@ -3,7 +3,10 @@ dojo.declare("zwei.Uploader", dojo.Stateful, {
 	dijitDataGrid : null,
 	uploadsControllerAction : null,
 	truncate: '',
+	queryKeys: '',
 	component : null,
+	onShow: function(){console.log('on show')},
+	onHide: function(){console.log('on hide')},
 	iframe : dojo.byId('ifrm_process'),
 	constructor : function(args) {
 		dojo.mixin(this, args);
@@ -12,7 +15,15 @@ dojo.declare("zwei.Uploader", dojo.Stateful, {
 		dojo.require('dojox.widget.DialogSimple');
 		dojo.require('dojox.form.Uploader');
 		dojo.require('dijit.ProgressBar');
-		this.dijitFormSearch = dijit.byId(this.domPrefix + 'formSearch');
+		
+		if (this.dijitFormSearch) {
+			var keys = [];
+			for (var index in this.dijitFormSearch.get('value')) {
+				console.log(index, this.dijitFormSearch.get('value')[index]);
+				keys.push('keys[' + index + ']=' + this.dijitFormSearch.get('value')[index]);
+			}
+			this.queryKeys += keys.join('&');
+		}
 
 		var href = base_url + '/components/dojo-simple-crud/upload-form?'
 				+ this.queryKeys + '&accion=' + accion + '&jsUploaderInstance='
@@ -27,7 +38,9 @@ dojo.declare("zwei.Uploader", dojo.Stateful, {
 				id : 'fileUploaderDlg',
 				title : 'Cargar Archivo',
 				executeScripts : true,
-				href : href
+				href : href,
+				onShow: this.onShow,
+				onHide: this.onHide
 			});
 		} else {
 			dijit.byId('fileUploaderDlg').set('href', href);
