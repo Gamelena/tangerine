@@ -48,7 +48,7 @@ class Elements_DijitFormComboBoxController extends Zend_Controller_Action
         
         if ($r->getParam('data') && $r->getParam('mode') == 'add' && $r->getParam('defaultValue') !== false) {
             $this->view->value =  $r->getParam('defaultValue');
-        } else if ($r->getParam('data') && $r->getParam('value') !== false) {
+        } else if ($r->getParam('value') !== false) {
             $this->view->value = $r->getParam('value');
         } else {
             $this->view->value =  $r->getParam('defaultValue') && !$r->getParam('defaultText') ? $r->getParam('defaultValue') : '';
