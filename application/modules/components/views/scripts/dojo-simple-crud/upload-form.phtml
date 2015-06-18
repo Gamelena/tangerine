@@ -1,51 +1,12 @@
-<script>
-    var massUpload = {
-        serverProcessing: false,
-        onBegin: function(){
-            this.serverProcessing = false;
-        },
-        onProgress: function(data)
-        {
-            var serverProcessing = false;
-            dijit.byId("progressBar").set('value', data.percent);
-            if (data.percent == '100%' && !this.serverProcessing) {
-                dijit.byId("progressBar").set('indeterminate', true);
-                utils.showMessage('Archivo subido correctamente.', 'message');
-                utils.showMessage('Procesando archivo en servidor.', 'message', '15000');
-                this.serverProcessing = true;
-            }
-        },
-        onComplete: function(data)
-        {
-            utils.showMessage(data.message, (data.error == '0' ? 'message' : 'error'), '15000');
-            if (data.error <= '1') {
-                var form = new zwei.Form({
-                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
-                    dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
-                    iframe: dojo.byId('ifrm_process')
-                });
-                form.loadData();
-                dijit.byId('fileUploaderDlg').hide();
-            } else {
-                dojo.byId('progressBar').style.display='none';
-                dijit.byId("progressBar").set('value', 0);
-            }
-        },
-        onError: function(error)
-        {
-            console.warning(error);
-            utils.showMessage(error.message, 'error', '15000');
-            dojo.byId('progressBar').style.display='none';
-            dijit.byId("progressBar").set('value', 0);
-        }
-    };
-</script>
 <form data-dojo-type="dijit/form/Form" method="post" enctype="multipart/form-data" name="uploadsForm" id="uploadsForm" action="<?=$this->path?>" target="ifrm_process" >
+    <script type="dojo/on" data-dojo-event="show">
+        dijit.byId("frm<?=$this->list_id . "_" . $this->accion?>UploadFile").set('required', true);
+    </script>
     <table>
         <tr>
             <th> Archivo</th>
             <td><input type="file" name="file" data-dojo-type="dojox/form/Uploader"  id="frm<?=$this->list_id . "_" . $this->accion?>UploadFile" label="Seleccionar Archivo .csv" 
-            data-dojo-props="showInput:'before',isDebug:true, onProgress:massUpload.onProgress, onComplete:massUpload.onComplete, onBegin: massUpload.onBegin,required: true" required="true" />
+            data-dojo-props="showInput:'before', onProgress:massUpload.onProgress, onComplete:massUpload.onComplete, onBegin: massUpload.onBegin, required: true" required="true" />
             <div style="display:none;" indeterminate="false" id="progressBar" class="progBar" dojoType="dijit/ProgressBar"></div>
             </td>
         </tr>
@@ -78,3 +39,44 @@ endforeach;
         }
     </script>
 </form>
+<script>
+    var massUpload = {
+        serverProcessing: false,
+        onBegin: function(){
+            this.serverProcessing = false;
+        },
+        onProgress: function(data)
+        {
+            var serverProcessing = false;
+            dijit.byId("progressBar").set('value', data.percent);
+            if (data.percent == '100%' && !this.serverProcessing) {
+                dijit.byId("progressBar").set('indeterminate', true);
+                utils.showMessage('Procesando archivo en servidor.', 'message', '15000');
+                this.serverProcessing = true;
+            }
+        },
+        onComplete: function(data)
+        {
+            utils.showMessage(data.message, (data.error == '0' ? 'message' : 'error'), '15000');
+            if (data.error <= '1') {
+                var form = new zwei.Form({
+                    dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
+                    dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
+                    iframe: dojo.byId('ifrm_process')
+                });
+                form.loadData();
+                dijit.byId('fileUploaderDlg').hide();
+            } else {
+                dojo.byId('progressBar').style.display='none';
+                dijit.byId("progressBar").set('value', 0);
+            }
+        },
+        onError: function(error)
+        {
+            console.warning(error);
+            utils.showMessage(error.message, 'error', '15000');
+            dojo.byId('progressBar').style.display='none';
+            dijit.byId("progressBar").set('value', 0);
+        }
+    };
+</script>
