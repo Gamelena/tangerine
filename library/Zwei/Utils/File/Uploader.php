@@ -1,4 +1,21 @@
 <?php 
+/**
+ * Cargador de archivos genérico
+ * 
+ * @example
+ * <code>
+ * 
+ * 	<helpers>
+		<excel formatter="csv" name="Descargar CSV" iconClass="zweiIconDownload"/>
+		<uploader name="Cargar CSV" action="load" truncate="true" iconClass="zweiIconUpload"></uploader>
+	</helpers>
+ * 
+ * 
+ * </code>
+ * 
+ * @fixme para que excel descargable sea compatible con Uploader, las columnas de la tabla (DB) deben estar declaradas en el mismo orden de las columnas de DataGrid (elements.element en XML).
+ *
+ */
 class Zwei_Utils_File_Uploader
 {
     /**
