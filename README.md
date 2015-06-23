@@ -88,28 +88,40 @@ ver
 
 Directiva Alias de ejemplo
 
-> Alias /ussd-admportal "/proyectos/ussd-admportal/web/public/"
-> 	&lt;Directory "/proyectos/ussd-admportal/web/public/"&gt;
-> 	    AllowOverride All
-> 	        allow from all
-> 	    SetEnv APPLICATION_ENV development
-> &lt;/Directory&gt;
-
+```
+Alias /ussd-admportal "/proyectos/ussd-admportal/web/public/"
+<Directory "/proyectos/ussd-admportal/web/public/">
+	AllowOverride All
+	Allow from all
+    SetEnv APPLICATION_ENV development
+</Directory>
+```
 ---
+
+FAQ
+===
 Para solucionar problemas de permisos "forbidden by application config"
 
 Agregar a apache2.conf
 
-> 	&lt;Directory /$carpeta de proyectos/&gt; 		
->   Options Indexes
->   FollowSymLinks
->   AllowOverride None 		
->    Require all granted
-> 	&lt;/Directory&gt;
+```
+<Directory "/$carpeta de proyectos/">
+   Options Indexes
+   FollowSymLinks
+   AllowOverride None 		
+   Require all granted #Apache2.4
+   #Order allow,deny #Apache 2.2 
+   #Allow from all #Apache 2.2
+</Directory>
+```
+```
+<Directory "/opt/admportal/"> 		
+   Options Indexes
+   FollowSymLinks
+   AllowOverride None 		
+   Require all granted #Apache2.4
+   #Order allow,deny #Apache 2.2 
+   #Allow from all #Apache 2.2
+</Directory>
 
-> 	&lt;Directory /opt/admportal/&gt; 		
->   Options Indexes
->   FollowSymLinks
->   AllowOverride None 		
->    Require all granted
-> 	&lt;/Directory&gt;
+```
