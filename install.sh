@@ -50,7 +50,7 @@ echo $ADMPORTALPATH;
 cd $ADMPORTALPATH 
 
 VENDOR_DIR="$( echo "$COMPOSER_PATH" | sed -e 's/\//\\\//g')"
-SALIDA="$(sed -i -e "s/\${COMPOSER_PATH}/$VENDOR_DIR/" composer.tmplt > composer.json)"
+SALIDA="$(sed -i -e "s/\${COMPOSER_PATH}/$VENDOR_DIR/" composer.json)"
 
 $COMPOSER_EXEC install $1
 $COMPOSER_EXEC update $1
