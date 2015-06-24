@@ -50,14 +50,14 @@ echo $ADMPORTALPATH;
 cd $ADMPORTALPATH 
 
 VENDOR_DIR="$( echo "$COMPOSER_PATH" | sed -e 's/\//\\\//g')"
-SALIDA="$(sed -e "s/\${COMPOSER_PATH}/$VENDOR_DIR/" composer.tmplt > composer.json)"
+SALIDA="$(sed -i -e "s/\${COMPOSER_PATH}/$VENDOR_DIR/" composer.tmplt > composer.json)"
 
 $COMPOSER_EXEC install $1
 $COMPOSER_EXEC update $1
 $COMPOSER_PATH/bower/bin/bower install --allow-root
 cp -R dojotoolkit/* bower_components/ 
 cp -R bower_components/dojo-calendar/* bower_components/dojox/calendar/
-cp -n vendor/zend/zendframework/bin/zf.sh vendor/zend/zendframework/bin/zf
+cp -n $COMPOSER_PATH/zend/zendframework/bin/zf.sh $COMPOSER_PATH/zend/zendframework/bin/zf
 
 
 echo "Dependencias instaladas"
@@ -68,7 +68,7 @@ echo "--------------------------------------------------------------------------
 echo "Recuerde agregar estas variable de ambiente a su archivo ~/.bashrc (o equivalente)"
 echo "ZWC_ADMPORTAL=$ADMPORTALPATH"
 echo "export PATH=\$ZWC_ADMPORTAL/tools:\$PATH"
-echo "export PATH=$ADMPORTALPATH/vendor/zend/zendframework/bin:\$PATH"
+echo "export PATH=$COMPOSER_PATH/zend/zendframework/bin:\$PATH"
 echo " "
 echo "----------------------------------------------------------------------------------"
 echo "Apache aliases"
@@ -95,6 +95,6 @@ echo "--------------------------------------------------------------------------
 echo "php.ini"
 echo "-----------------------------------------------------------------------------------"
 echo "agregar a la variable \"include_path\" las rutas" 
-echo ":$ADMPORTALPATH/vendor/zend/zendframework/library:$ADMPORTALPATH/vendor/phpunit/phpunit"
+echo ":$COMPOSER_PATH/zend/zendframework/library:$COMPOSER_PATH/phpunit/phpunit"
 echo " "
 
