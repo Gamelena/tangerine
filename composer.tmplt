@@ -6,6 +6,9 @@
 	"require": {
 		"php": ">=5.4.1"
 	},
+        "config": {
+                "vendor-dir": "${COMPOSER_PATH}"
+        },
 	"repositories": [
 		{
 			"type": "package",

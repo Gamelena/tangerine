@@ -1,9 +1,63 @@
-composer install
-composer update
-bower install
+#!/bin/bash
+
+if [ -z "$COMPOSER_PATH" ]; then
+	echo "No esta definida la ruta de repositorio composer ( COMPOSER_PATH )"
+	exit 255;
+else
+	mkdir -p $COMPOSER_PATH
+fi
+
+COMPOSER_EXEC=$(which composer)
+if [ -x "$COMPOSER_EXEC" ] ; then
+	if [ ! -f $COMPOSER_PATH/composer.phar ];
+	then
+		cd $COMPOSER_PATH
+		curl -sS https://getcomposer.org/installer | php --
+		if [ ! -f $COMPOSER_PATH/composer.phar ];
+		then
+			echo "No se pudo obtener composer!!!!!!"
+			exit 255;
+		fi;
+		mv $COMPOSER_PATH/composer.phar $COMPOSER_PATH/composer.sh
+		COMPOSER_EXEC=$COMPOSER_PATH/composer.sh
+	fi
+fi
+
+ADMPORTALPATH=$COMPOSER_PATH/zweicom/admportal
+if [ ! -d $ADMPORTALPATH ];
+then
+	svn co svn://saruman/admportal/trunk $ADMPORTALPATH
+else
+	svn update $ADMPORTALPATH
+fi
+
+if [ ! -f $COMPOSER_PATH/bower/bin/bower ];
+then
+	mkdir -p $COMPOSER_PATH/bower
+	cd $COMPOSER_PATH/bower
+	npm install bower
+	if [ ! -f node_modules/bower/bin/bower ];
+	then
+		echo "No se pudo instalar bower!!!!!!"
+		exit 255;
+	fi;
+	mv node_modules tmp
+	mv  tmp/bower/* .
+	rm -Rf tmp
+fi
+
+echo $ADMPORTALPATH;
+cd $ADMPORTALPATH 
+
+VENDOR_DIR="$( echo "$COMPOSER_PATH" | sed -e 's/\//\\\//g')"
+SALIDA="$(sed -e "s/\${COMPOSER_PATH}/$VENDOR_DIR/" composer.tmplt > composer.json)"
+
+$COMPOSER_EXEC install $1
+$COMPOSER_EXEC update $1
+$COMPOSER_PATH/bower/bin/bower install --allow-root
 cp -R dojotoolkit/* bower_components/ 
 cp -R bower_components/dojo-calendar/* bower_components/dojox/calendar/
-cp -n $PWD/vendor/zend/zendframework/bin/zf.sh $PWD/vendor/zend/zendframework/bin/zf
+cp -n vendor/zend/zendframework/bin/zf.sh vendor/zend/zendframework/bin/zf
 
 
 echo "Dependencias instaladas"
@@ -12,9 +66,9 @@ echo "--------------------------------------------------------------------------
 echo "Variables de Ambiente"
 echo "----------------------------------------------------------------------------------"
 echo "Recuerde agregar estas variable de ambiente a su archivo ~/.bashrc (o equivalente)"
-echo "ZWC_ADMPORTAL=$PWD"
+echo "ZWC_ADMPORTAL=$ADMPORTALPATH"
 echo "export PATH=\$ZWC_ADMPORTAL/tools:\$PATH"
-echo "export PATH=$PWD/vendor/zend/zendframework/bin:\$PATH"
+echo "export PATH=$ADMPORTALPATH/vendor/zend/zendframework/bin:\$PATH"
 echo " "
 echo "----------------------------------------------------------------------------------"
 echo "Apache aliases"
@@ -24,21 +78,11 @@ echo "Una buena idea es generar agregar la línea
 	Include alias/*.conf 
 	al final de su archivo /etc/apache2/apache2.conf o /etc/httpd/httpd.conf"
 echo " "
-echo "Crear archivo /etc/apache2/alias/dojotoolkit.conf o /etc/httpd/alias/dojotoolkit.conf con el contenido:"
-echo " "
-echo "Alias /dojotoolkit \"$PWD/bower_components\"
-<Directory \"$PWD/bower_components\">
-	Options Indexes FollowSymLinks
-	AllowOverride None
-	Require all granted
-	Allow from all
-</Directory>
-"
 echo " "
 echo "Crear archivo /etc/apache2/alias/libs.conf o /etc/httpd/alias/libs.conf con el contenido:"
 echo " "
-echo "Alias /libs \"$PWD/public/js/libs\"
-<Directory \"$PWD/public/js/libs\">
+echo "Alias /libs \"$ADMPORTALPATH/public/js/libs\"
+<Directory \"$ADMPORTALPATH/public/js/libs\">
 	Options Indexes FollowSymLinks
 	AllowOverride None
 	Require all granted
@@ -51,6 +95,6 @@ echo "--------------------------------------------------------------------------
 echo "php.ini"
 echo "-----------------------------------------------------------------------------------"
 echo "agregar a la variable \"include_path\" las rutas" 
-echo ":$PWD/vendor/zend/zendframework/library:$PWD/vendor/phpunit/phpunit"
+echo ":$ADMPORTALPATH/vendor/zend/zendframework/library:$ADMPORTALPATH/vendor/phpunit/phpunit"
 echo " "
 
