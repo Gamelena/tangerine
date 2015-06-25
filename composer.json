@@ -62,7 +62,7 @@
 	],
 	"minimum-stability": "stable",
 	"scripts" : {
-		"pre-archive-cmd": [
+		"post-install-cmd": [
 			"bower install",
 			"cp -R dojotoolkit/* bower_components/",
 			"cp -R bower_components/dojo-calendar/* bower_components/dojox/calendar/"
