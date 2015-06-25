@@ -3,10 +3,7 @@
 	"description": "Admportal",
 	"version": "2.0",
 	"type": "library",
-	"require": {
-		"php": ">=5.4.1"
-	},
-	"repositories": [
+	"repositories-dev": [
 		{
 			"type": "package",
 			"package": {
@@ -46,6 +43,7 @@
 		}
 	],
 	"require": {
+		"php": ">=5.4.1",
 		"zend/zendframework": "1.11.9",
 		"PHPOffice/PHPExcel": "1.7.8"
 	},
