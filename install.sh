@@ -1,63 +1,45 @@
 #!/bin/bash
 
-if [ -z "$COMPOSER_PATH" ]; then
-	echo "No esta definida la ruta de repositorio composer ( COMPOSER_PATH )"
-	exit 255;
-else
-	mkdir -p $COMPOSER_PATH
-fi
-
 COMPOSER_EXEC=$(which composer)
-if [ -x "$COMPOSER_EXEC" ] ; then
-	if [ ! -f $COMPOSER_PATH/composer.phar ];
+if [ ! -x "$COMPOSER_EXEC" ];
+then
+	if [ ! -f /tmp/composer.phar ];
 	then
-		cd $COMPOSER_PATH
+		cd /tmp
 		curl -sS https://getcomposer.org/installer | php --
-		if [ ! -f $COMPOSER_PATH/composer.phar ];
+		if [ ! -f /tmp/composer.phar ];
 		then
 			echo "No se pudo obtener composer!!!!!!"
 			exit 255;
 		fi;
-		mv $COMPOSER_PATH/composer.phar $COMPOSER_PATH/composer.sh
-		COMPOSER_EXEC=$COMPOSER_PATH/composer.sh
+		COMPOSER_EXEC=/tmp/composer.sh
 	fi
 fi
 
-ADMPORTALPATH=$COMPOSER_PATH/zweicom/admportal
-if [ ! -d $ADMPORTALPATH ];
-then
-	svn co svn://saruman/admportal/trunk $ADMPORTALPATH
-else
-	svn update $ADMPORTALPATH
-fi
 
-if [ ! -f $COMPOSER_PATH/bower/bin/bower ];
+BOWER_EXEC=$(which bower)
+if [ ! -x "$BOWER_EXEC" ];
 then
-	mkdir -p $COMPOSER_PATH/bower
-	cd $COMPOSER_PATH/bower
-	npm install bower
-	if [ ! -f node_modules/bower/bin/bower ];
+	npm install bower -g
+	if [ ! -f /usr/bin/bower ];
 	then
 		echo "No se pudo instalar bower!!!!!!"
 		exit 255;
 	fi;
-	mv node_modules tmp
-	mv  tmp/bower/* .
-	rm -Rf tmp
 fi
 
-echo $ADMPORTALPATH;
-cd $ADMPORTALPATH 
-
-VENDOR_DIR="$( echo "$COMPOSER_PATH" | sed -e 's/\//\\\//g')"
-SALIDA="$(sed -i -e "s/\${COMPOSER_PATH}/$VENDOR_DIR/" composer.json)"
+if [ -z "$ADMPORTALPATH" ];
+then
+        export ADMPORTALPATH="/opt/admportal"
+        echo "No esta definida la ruta de instalacion para la web de ussd ( USSDPATH ), tomando por defecto $ADMPORTALPATH"
+fi
 
 $COMPOSER_EXEC install $1
 $COMPOSER_EXEC update $1
-$COMPOSER_PATH/bower/bin/bower install --allow-root
-cp -R dojotoolkit/* bower_components/ 
-cp -R bower_components/dojo-calendar/* bower_components/dojox/calendar/
-cp -n $COMPOSER_PATH/zend/zendframework/bin/zf.sh $COMPOSER_PATH/zend/zendframework/bin/zf
+rm -f /tmp/zweicom_admporta*
+$COMPOSER_EXEC archive --dir /tmp
+mkdir -p $ADMPORTALPATH
+tar xf /tmp/zweicom-admportal* -C $ADMPORTALPATH
 
 
 echo "Dependencias instaladas"
@@ -95,6 +77,6 @@ echo "--------------------------------------------------------------------------
 echo "php.ini"
 echo "-----------------------------------------------------------------------------------"
 echo "agregar a la variable \"include_path\" las rutas" 
-echo ":$COMPOSER_PATH/zend/zendframework/library:$COMPOSER_PATH/phpunit/phpunit"
+echo ":$ADMPORTALPATH/zend/zendframework/library:$ADMPORTALPATH/phpunit/phpunit"
 echo " "
 
