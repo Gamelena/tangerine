@@ -6,9 +6,6 @@
 	"require": {
 		"php": ">=5.4.1"
 	},
-        "config": {
-                "vendor-dir": "${COMPOSER_PATH}"
-        },
 	"repositories": [
 		{
 			"type": "package",
@@ -67,8 +64,10 @@
 	],
 	"minimum-stability": "stable",
 	"scripts" : {
-		"post-install-cmd": [
-		     "php installer.php"
+		"pre-archive-cmd": [
+			"bower install",
+			"cp -R dojotoolkit/* bower_components/",
+			"cp -R bower_components/dojo-calendar/* bower_components/dojox/calendar/"
 		 ]
 	}
 }
