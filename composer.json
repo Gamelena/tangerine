@@ -65,5 +65,10 @@
 			"email": "desarrollo@zweicom.com"
 		}
 	],
-	"minimum-stability": "stable"
+	"minimum-stability": "stable",
+	"scripts" : {
+		"post-install-cmd": [
+		     "php installer.php"
+		 ]
+	}
 }
