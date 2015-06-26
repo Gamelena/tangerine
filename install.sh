@@ -36,11 +36,13 @@ fi
 
 $COMPOSER_EXEC install $1
 $COMPOSER_EXEC update $1
-rm -f /tmp/zweicom_admporta*
-$COMPOSER_EXEC archive --dir /tmp
+$COMPOSER_EXEC archive --dir ..
+gzip -9 ../zweicom-admportal*.tar
+
+echo "Se genero ../zweicom-admpotal*.tar.gz, para instalar:
 mkdir -p $ADMPORTALPATH
 tar xf /tmp/zweicom-admportal* -C $ADMPORTALPATH
-
+"
 
 echo "Dependencias instaladas"
 echo " "
