@@ -1,7 +1,6 @@
 {
 	"name": "zweicom/admportal",
 	"description": "Admportal",
-	"version": "trunk",
 	"type": "library",
 	"repositories": [
 		{
@@ -44,8 +43,8 @@
 	],
 	"require": {
 		"php": ">=5.4.1",
-		"zend/zendframework": "*@dev",
-		"PHPOffice/PHPExcel": "*@dev"
+		"zend/zendframework": "*",
+		"PHPOffice/PHPExcel": "*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "3.7.*",
