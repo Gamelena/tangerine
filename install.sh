@@ -47,7 +47,7 @@ gzip -f -9 ../zweicom-admportal*.tar
 
 echo "Se genero ../zweicom-admpotal*.tar.gz, para instalar:
 mkdir -p $ADMPORTALPATH
-tar xf /tmp/zweicom-admportal* -C $ADMPORTALPATH
+tar xf ../zweicom-admportal* -C $ADMPORTALPATH
 "
 
 echo "Dependencias instaladas"
@@ -85,6 +85,6 @@ echo "--------------------------------------------------------------------------
 echo "php.ini"
 echo "-----------------------------------------------------------------------------------"
 echo "agregar a la variable \"include_path\" las rutas" 
-echo ":$ADMPORTALPATH/zend/zendframework/library:$ADMPORTALPATH/phpunit/phpunit"
+echo ":$ADMPORTALPATH/vendor/zend/zendframework/library:$ADMPORTALPATH/vendor/phpunit/phpunit"
 echo " "
 
