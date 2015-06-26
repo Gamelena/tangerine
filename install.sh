@@ -34,10 +34,16 @@ then
         echo "No esta definida la ruta de instalacion para la web de ussd ( USSDPATH ), tomando por defecto $ADMPORTALPATH"
 fi
 
-$COMPOSER_EXEC install $1
-$COMPOSER_EXEC update $1
+COMPOSER_OPT="--no-dev"
+if [ "$1" = "--dev" ];
+then
+        COMPOSER_OPT=""
+fi
+
+$COMPOSER_EXEC install $COMPOSER_OPT
+$COMPOSER_EXEC update $COMPOSER_OPT
 $COMPOSER_EXEC archive --dir ..
-gzip -9 ../zweicom-admportal*.tar
+gzip -f -9 ../zweicom-admportal*.tar
 
 echo "Se genero ../zweicom-admpotal*.tar.gz, para instalar:
 mkdir -p $ADMPORTALPATH
