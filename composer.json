@@ -43,8 +43,8 @@
 	],
 	"require": {
 		"php": ">=5.4.1",
-		"zend/zendframework": "*",
-		"PHPOffice/PHPExcel": "*"
+		"zend/zendframework": "*@dev",
+		"PHPOffice/PHPExcel": "*@dev"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "3.7.*",
