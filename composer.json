@@ -59,7 +59,6 @@
 			"email": "desarrollo@zweicom.com"
 		}
 	],
-	"minimum-stability": "dev",
 	"scripts" : {
 		"pre-archive-cmd": [
 			"bower install",
