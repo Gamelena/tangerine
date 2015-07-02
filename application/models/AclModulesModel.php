@@ -341,14 +341,14 @@ class AclModulesModel extends DbTable_AclModules
      */
     public function overloadDataForm($data)
     {
-        $data           = $data->toArray();
-        $modulesActions = new DbTable_AclModulesActions();
-        $select         = $modulesActions->select()->where($modulesActions->getAdapter()->quoteInto("acl_modules_id = ?", $data['id']));
-        
-        Debug::writeBySettings($select->__toString(), 'query_log');
-        
+        $data            = $data->toArray();
         $data['actions'] = array();
-        $actions         = $modulesActions->fetchAll($select);
+        
+        $modulesActions  = new DbTable_AclModulesActions();
+        /**
+         * @var $actions Zend_Db_Table_Rowset 
+         */
+        $actions         = $modulesActions->findByAclModulesId($data['id']);
         if ($actions->count() > 0) {
             foreach ($actions as $a) {
                 $data['actions'][] = $a['acl_actions_id'];
@@ -420,17 +420,13 @@ class AclModulesModel extends DbTable_AclModules
      */
     public function getModuleId($module)
     {
-        $select = new Zend_Db_Table_Select($this);
-        $select->from($this->_name, array(
-            'id'
-        ))->where($this->getAdapter()->quoteInto('module = ?', $module));
-        
-        $row = $this->fetchRow($select);
+        $aclModules = new DbTable_AclModules();
+        $row = $aclModules->findByModule($module);
         if (!$row) {
             Console::error("No se encuentra módulo '$module'");
             return false;
         } else {
-            return $this->fetchRow($select)->id;
+            return $row->current()->id;
         }
     }
     
