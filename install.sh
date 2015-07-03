@@ -75,8 +75,9 @@ echo "Alias /libs \"$ADMPORTALPATH/public/js/libs\"
 <Directory \"$ADMPORTALPATH/public/js/libs\">
 	Options Indexes FollowSymLinks
 	AllowOverride None
-	Require all granted
-	Allow from all
+	Require all granted #Apache2.4 (eliminar en apache 2.2)
+   	#Order allow,deny #Apache 2.2 (descomentar en apache 2.2)
+   	#Allow from all #Apache 2.2 (descomentar en apache 2.2)
 </Directory>
 "
 echo "Recuerde habilitar Mod Rewrite"
