@@ -61,9 +61,9 @@
 	],
 	"scripts" : {
 		"pre-archive-cmd": [
-			"bower install",
-			"cp -R dojotoolkit/* bower_components/",
-			"cp -R bower_components/dojo-calendar/* bower_components/dojox/calendar/"
+			"bower install --allow-root",
+			"cp -f -R dojotoolkit/* bower_components/",
+			"cp -f -R bower_components/dojo-calendar/* bower_components/dojox/calendar/"
 		 ]
 	}
 }

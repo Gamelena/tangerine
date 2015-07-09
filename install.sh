@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export COMPOSER_PROCESS_TIMEOUT=1200
 COMPOSER_EXEC=$(which composer)
 if [ ! -x "$COMPOSER_EXEC" ];
 then
@@ -46,8 +47,8 @@ $COMPOSER_EXEC archive --dir ..
 gzip -f -9 ../zweicom-admportal*.tar
 
 echo "Se genero ../zweicom-admpotal*.tar.gz, para instalar:
-mkdir -p $ADMPORTALPATH
-tar xf ../zweicom-admportal* -C $ADMPORTALPATH
+sudo mkdir -p $ADMPORTALPATH
+sudo tar -zxf ../zweicom-admportal* -C $ADMPORTALPATH
 "
 
 echo "Dependencias instaladas"
