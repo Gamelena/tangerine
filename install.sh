@@ -47,8 +47,9 @@ $COMPOSER_EXEC archive --dir ..
 gzip -f -9 ../zweicom-admportal*.tar
 
 echo " "
-echo "============================================================================"
-echo "Se genero ../zweicom-admportal*.tar.gz, PARA INSTALAR EJECUTE LOS COMANDOS:
+echo "======================================================================================"
+echo "Se genero ../zweicom-admportal*.tar.gz, PARA INSTALAR EJECUTE LOS SIGUIENTES COMANDOS:"
+echo "--------------------------------------------------------------------------------------"
 sudo mkdir -p $ADMPORTALPATH
 sudo tar -zxf ../zweicom-admportal* -C $ADMPORTALPATH
 "
@@ -58,8 +59,10 @@ echo " "
 echo "Dependencias instaladas"
 echo " "
 echo "----------------------------------------------------------------------------------"
-echo "Variables de Ambiente para desarrollo  (la ruta \"$ADMPORTALPATH\" aplica sólo si fueron ejecutados manualmente los comandos anteriores)"
+echo "Variables de Ambiente para desarrollo"
+echo "(La ruta \"$ADMPORTALPATH\" aplica solo si fueron ejecutados los comandos del recuadro anterior)"
 echo "----------------------------------------------------------------------------------"
+echo " "
 echo "Recuerde agregar estas variable de ambiente a su archivo ~/.bashrc (o equivalente)"
 echo "ZWC_ADMPORTAL=$ADMPORTALPATH"
 echo "export PATH=\$ZWC_ADMPORTAL/tools:\$PATH"
