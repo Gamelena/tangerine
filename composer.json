@@ -1,7 +1,7 @@
 {
 	"name": "zweicom/admportal",
 	"description": "Admportal",
-	"type": "shared-package",
+	"type": "library",
 	"repositories": [
 		{
 			"type": "package",
