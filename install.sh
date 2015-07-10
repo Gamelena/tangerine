@@ -32,7 +32,7 @@ fi
 if [ -z "$ADMPORTALPATH" ];
 then
         export ADMPORTALPATH="/opt/admportal"
-        echo "No esta definida la ruta de instalacion para la web de ussd ( USSDPATH ), tomando por defecto $ADMPORTALPATH"
+	        echo "No esta definida la variable ( ADMPORTALPATH ), usando $ADMPORTALPATH para generar la documentación post-instalación."
 fi
 
 COMPOSER_OPT="--no-dev"
@@ -46,15 +46,19 @@ $COMPOSER_EXEC update $COMPOSER_OPT
 $COMPOSER_EXEC archive --dir ..
 gzip -f -9 ../zweicom-admportal*.tar
 
-echo "Se genero ../zweicom-admpotal*.tar.gz, para instalar:
+echo " "
+echo "============================================================================"
+echo "Se genero ../zweicom-admportal*.tar.gz, PARA INSTALAR EJECUTE LOS COMANDOS:
 sudo mkdir -p $ADMPORTALPATH
 sudo tar -zxf ../zweicom-admportal* -C $ADMPORTALPATH
 "
+echo "============================================================================"
+echo " "
 
 echo "Dependencias instaladas"
 echo " "
 echo "----------------------------------------------------------------------------------"
-echo "Variables de Ambiente"
+echo "Variables de Ambiente para desarrollo  (la ruta \"$ADMPORTALPATH\" aplica sólo si fueron ejecutados manualmente los comandos anteriores)"
 echo "----------------------------------------------------------------------------------"
 echo "Recuerde agregar estas variable de ambiente a su archivo ~/.bashrc (o equivalente)"
 echo "ZWC_ADMPORTAL=$ADMPORTALPATH"
@@ -69,6 +73,18 @@ echo "Una buena idea es generar agregar la línea
 	Include alias/*.conf 
 	al final de su archivo /etc/apache2/apache2.conf o /etc/httpd/httpd.conf"
 echo " "
+echo "Crear archivo /etc/apache2/alias/dojotoolkit.conf o /etc/httpd/alias/dojotoolkit.conf con el contenido:"
+echo " "
+echo " "
+echo "Alias /dojotoolkit \"$ADMPORTALPATH/bower_components\"
+<Directory \"$ADMPORTALPATH/bower_components\">
+	Options Indexes FollowSymLinks
+	AllowOverride None
+	Require all granted #Apache2.4 (eliminar en apache 2.2)
+   	#Order allow,deny #Apache 2.2 (descomentar en apache 2.2)
+   	#Allow from all #Apache 2.2 (descomentar en apache 2.2)
+</Directory>
+"
 echo " "
 echo "Crear archivo /etc/apache2/alias/libs.conf o /etc/httpd/alias/libs.conf con el contenido:"
 echo " "
