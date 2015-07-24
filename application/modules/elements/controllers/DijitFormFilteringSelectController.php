@@ -43,6 +43,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         }
         
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? " invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
+        $this->view->missingMessage = $r->getParam('missingMessage') ? "missingMessage=\"{$r->getParam('missingMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? " promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         $this->view->placeHolder = $r->getParam('placeHolder') ? " placeHolder=\"{$r->getParam('placeHolder')}\"" : '';
         
@@ -73,7 +74,10 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         if ($r->getParam('table')) {
             $id = $r->getParam('tablePk', 'id');
             $className = $r->getParam('table');
-
+            
+            /**
+             * @var $model Zwei_Db_Table
+             */
             $model = new $className();
     
             if ($r->getParam('tableMethod')) {
@@ -94,15 +98,18 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
             
             try {
                 $rows = $model->fetchAll($select);
+                if ($r->getParam('overloadDataList')) {
+                    $rows = $model->overloadDataList($rows);
+                }
             } catch (Zend_Db_Exception $e) {
+                if (!isset($methodName)) $methodName = 'select';
                 throw new Zend_Db_Exception("$className::$methodName() {$e->getMessage()}", $e->getCode());
             }
-
+            
             if ($r->getParam('defaultValue') || $r->getParam('defaultValue') === '' || $r->getParam('defaultText') || $r->getParam('defaultText') === '') {
                 $options .= "<option value=\"{$r->getParam('defaultValue', '')}\" label=\"{$r->getParam('defaultText', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
             }
-    
-    
+            
             foreach ($rows as $row) {
                 $selected = $row[$id] == $value ? "selected=\"selected\"" : "";
                 if ($r->getParam('tableField')) {

@@ -151,6 +151,7 @@
         <xsd:attribute name="tablePk"/>
         <xsd:attribute name="tableMethod"/>
         <xsd:attribute name="invalidMessage"/>
+        <xsd:attribute name="missingMessage"/>
         <xsd:attribute name="promptMessage"/>
         <xsd:attribute name="list"/>
         <xsd:attribute name="formatter"/>

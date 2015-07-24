@@ -52,7 +52,7 @@ if ($this->data) :
 endif;
 ?>
 <select data-dojo-type="dijit/form/FilteringSelect" id="<?=$this->domId.$this->i?>" name="<?=$this->target?>" onchange="<?=$this->onchange?>" onload="dijit.byId('<?=$this->domId . $this->i?>').set('value', dijit.byId('<?=$this->domId . $this->i?>').get('value'));<?=$this->onload ?>" data-dojo-props="<?=$store?>" 
-    <?=$value.$this->readonly.$this->disabled.$this->required.$this->invalidMessage.$this->onshow.
+    <?=$value.$this->readonly.$this->disabled.$this->required.$this->invalidMessage.$this->missingMessage.$this->onshow.
     $this->promptMessage.$this->placeHolder.$this->onblur.$this->onclick.$this->trim ?> <?php if ($this->formatter) echo " searchAttr=\"name\" labelAttr=\"$labelName\" labelType=\"html\""?>>
     <?=$this->options ? $this->options : '' ?>
 </select>
