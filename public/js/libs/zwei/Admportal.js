@@ -143,7 +143,6 @@ dojo.declare("zwei.Admportal", null, {
                          // Display the data sent from the server
                          var pMenuBar = new MenuBar({id: 'arbolPrincipal'});
                          
-                         
                          arrayUtil.forEach(data.items, function(item, i) {
                              pMenuBar.addChild(recursiveMakeMenuItem(item) );
                          });
@@ -159,11 +158,10 @@ dojo.declare("zwei.Admportal", null, {
                  );
                  
                  function recursiveMakeMenuItem(item) {
-                     var pSubMenu = item.children ? new DropDownMenu() : new Menu();
+                     var pSubMenu = new Menu();
                      var widget;
                      
                      menuParams = {id: "dijitEditorMenuModule" + item.id, label: (item.url ? '<span class="linkableItem"><a style="color:inherit">' + item.label +'</a></span>'  : '<span>' + item.label + '</span>')};
-                     
                      
                      var loadModule = function() {
                          self.loadModuleTab(item.url, item.id, item.label, item.refresh_on_load, item.image);
@@ -181,10 +179,7 @@ dojo.declare("zwei.Admportal", null, {
                              }
                              widget = new MenuItem(menuParams); 
                          }
-                         
-                         
                      } else {
-                         //pSubMenu = new Menu();
                          if (item.url) {
                              if (item.children) {
                                  menuParams.onDblClick = loadModule;
@@ -193,7 +188,6 @@ dojo.declare("zwei.Admportal", null, {
                              }
                          }
                          widget = item.children ? new PopupMenuBarItem(menuParams) : new MenuBarItem(menuParams);
-
                      }
                      
                      if (item.image) {

@@ -16,6 +16,9 @@ class Elements_DojoxWidgetColorPickerController extends Zend_Controller_Action
         $this->view->target =  $r->getParam('target');
         
         $this->view->value =  $r->getParam('value', $r->getParam('defaultValue', ''));
+        if (empty($this->view->value)) {
+            $this->view->value = 'transparent';
+        }
     }
 
 

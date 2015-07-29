@@ -240,7 +240,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
             }
             
             self.set("response", response);
-        }
+        };
         
         if (this.iframe.attachEvent) {//IE
             this.iframe.attachEvent('onload', listenIframe);
@@ -258,7 +258,7 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                 fakeChecked.push(entry);
                 require(["dojo/dom-class"], function(domClass){
                     //Ocultar por css "check" del checkbox para que usuario no crea que se envia valor "checked".
-                    domClass.remove(dojo.byId(entry.get('id')).parentNode, 'dijitCheckBoxChecked')    
+                    domClass.remove(dojo.byId(entry.get('id')).parentNode, 'dijitCheckBoxChecked');
                 });
             }
         });
@@ -459,20 +459,20 @@ dojo.declare("zwei.Form", dojo.Stateful, {
                     //Poblar campos con datos fila de datagrid seleccionada
                     dojo.forEach(this.dijitForm.getChildren(), function(entry, i){
                         name = entry.get('name').replace('data[', '').replace(']', '');
-                        if (typeof(item[name]) != 'undefined') {
-                            if (entry.baseClass == "dijitContentPane") {
+                        if (typeof(item[name]) !== 'undefined') {
+                            if (entry.baseClass === "dijitContentPane") {
                                 dojo.forEach(entry.getChildren(), function(subEntry, j) {
-                                    if (subEntry.baseClass == 'dijitCheckBox' && !subEntry.get('checked')) {
+                                    if (subEntry.baseClass === 'dijitCheckBox' && !subEntry.get('checked')) {
                                         subEntry.set('bkpvalue', subEntry.get('value'));
                                         subEntry.set('subEntry', entry.get('uncheckedvalue'));
                                         fakeChecked.push(subEntry);
                                     }
                                 });
                             } else {
-                                if (entry.baseClass != 'dijitCheckBox') {
+                                if (entry.baseClass !== 'dijitCheckBox') {
                                     entry.set('value', item[name]);
                                 } else {
-                                    entry.set('checked', entry.value == item[name]);
+                                    entry.set('checked', entry.value === item[name]);
                                 }
                             }
                         }

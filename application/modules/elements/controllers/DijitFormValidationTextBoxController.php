@@ -29,6 +29,7 @@ class Elements_DijitFormValidationTextBoxController extends Zend_Controller_Acti
         $this->view->onkeyup = $r->getParam('onkeyup') ? " onkeyup=\"{$r->getParam('onkeyup')}\"" : '';
         $this->view->placeHolder = $r->getParam('placeHolder') ? " placeHolder=\"{$r->getParam('placeHolder')}\"" : '';
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? " invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
+        $this->view->missingMessage = $r->getParam('missingMessage') ? "missingMessage=\"{$r->getParam('missingMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? " promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         $this->view->autocomplete= $r->getParam('autocomplete') ? " autocomplete=\"{$r->getParam('autocomplete')}\"" : '';
         $this->view->maxlength = $r->getParam('maxlength')? " maxLength=\"{$r->getParam('maxlength')}\"" : '';

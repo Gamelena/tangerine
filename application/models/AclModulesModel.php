@@ -422,7 +422,7 @@ class AclModulesModel extends DbTable_AclModules
     {
         $aclModules = new DbTable_AclModules();
         $row = $aclModules->findByModule($module);
-        if (!$row) {
+        if (!$row->count()) {
             Console::error("No se encuentra módulo '$module'");
             return false;
         } else {

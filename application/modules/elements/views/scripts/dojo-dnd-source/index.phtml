@@ -45,7 +45,7 @@
                 node = nodes[i];
                 for (var j = 0; j < node.childNodes.length; j ++) {
                     if (node.childNodes[j].nodeName == 'INPUT') {
-                        node.childNodes[j].disabled = false;
+                        dijit.byId(node.childNodes[j].id).set('disabled', false);
 <?php
 if ($this->saveUnselected) :
 ?>
@@ -63,7 +63,7 @@ endif;
 $i=0;
 foreach ($this->selectedItems as $id => $name) :
 ?>
-            <li class="dojoDndItem" dndType="inStock" title="<?=$name?>" id="item<?=$this->domId . $id . $this->i?>"><input type="hidden" id="inStockInput<?=$this->domId . $id . $this->i?>" name="<?=$this->target?>[]" value="<?=$id?>"/>
+            <li class="dojoDndItem" dndType="inStock" title="<?=$name?>" id="item<?=$this->domId . $id . $this->i?>"><input type="hidden" id="inStockInput<?=$this->domId . $id . $this->i?>" data-dojo-type="dijit/form/TextBox" name="<?=$this->target?>[]" value="<?=$id?>"/>
             <?=$name?>
             </li>
 <?php
@@ -127,7 +127,7 @@ if ($this->saveUnselected) :
 <?php
 else :
 ?>
-                        node.childNodes[j].disabled = true;
+                        dijit.byId(node.childNodes[j].id).set('disabled', true);
 <?php
 endif;
 ?>
@@ -140,7 +140,7 @@ endif;
 $i = 0;
 foreach ($this->unselectedItems as $id => $name) :
 ?>
-            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id . $this->i?>"><input type="hidden" id="outStockInput<?=$this->domId . $id . $this->i?>" name="<?=$this->unselectedTarget?>[]" value="<?=$id?>" <?=$this->saveUnselected ? '' : 'disabled="disabled"'?>/>
+            <li class="dojoDndItem" dndType="outStock" title="<?=$name?>" id="item<?=$this->domId . $id . $this->i?>"><input type="hidden" id="outStockInput<?=$this->domId . $id . $this->i?>" data-dojo-type="dijit/form/TextBox" name="<?=$this->unselectedTarget?>[]" value="<?=$id?>" <?=$this->saveUnselected ? '' : 'disabled="disabled"'?>/>
             <?=$name?>
             </li>
 <?php 
