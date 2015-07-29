@@ -8,18 +8,19 @@
 				<div data-dojo-type="dojox/widget/ColorPicker"
 					id="<?=$this->domId . $this->i?>ColorPicker" name="<?=$this->target?>ColorPicker"
 					value="<?=$this->value?>" 
-					onchange="dojo.byId('<?=$this->domId . $this->i?>Color').style.backgroundColor=this.get('value'); dojo.byId('<?=$this->domId . $this->i?>').value=this.get('value');"></div>
+					onchange="dojo.byId('<?=$this->domId . $this->i?>Color').style.backgroundColor=this.get('value'); dijit.byId('<?=$this->domId . $this->i?>').set('value', this.get('value'));
+					dijit.byId('<?=$this->domId . $this->i?>CheckTransparent').set('checked', false)"></div>
 			</div>
-			<!-- <label for="<?=$this->domId . $this->i?>">Transparente</label> -->
-			<!--<input type="checkbox" data-dojo-type="dijit/form/CheckBox" id="<?=$this->domId . $this->i?>CheckTransparent" name="transparent" onchange="
+			<label for="<?=$this->domId . $this->i?>">Transparente</label>
+			<input type="checkbox" data-dojo-type="dijit/form/CheckBox" id="<?=$this->domId . $this->i?>CheckTransparent" name="transparent" onchange="
 			if (this.get('checked')) {
 			    dojo.byId('<?=$this->domId . $this->i?>Color').style.backgroundColor = 'transparent'; 
-			    dojo.byId('<?=$this->domId . $this->i?>Color').value = 'transparent';
+			    dijit.byId('<?=$this->domId . $this->i?>').set('value', 'transparent');
 			} else {
 			    dojo.byId('<?=$this->domId . $this->i?>Color').style.backgroundColor = dijit.byId('<?=$this->domId . $this->i?>ColorPicker').get('value'); 
-			    dojo.byId('<?=$this->domId . $this->i?>Color').value = dijit.byId('<?=$this->domId . $this->i?>ColorPicker').get('value');
-		    }" />
-			<input type="hidden" value="<?=$this->value?>" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>"/>  -->
+			    dijit.byId('<?=$this->domId . $this->i?>').set('value', dijit.byId('<?=$this->domId . $this->i?>ColorPicker').get('value'));
+		    }" <?=($this->value === 'transparent') ? 'checked="checked"' : ''  ?>/>
+			<input type="hidden" value="<?=$this->value?>" data-dojo-type="dijit/form/TextBox" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>"/>
 		</td>
 		<td id="<?=$this->domId . $this->i?>Color" style="background-color: <?=$this->value?>; min-width: 2em; padding: 0.3em">
 		</td>
