@@ -31,7 +31,10 @@ class Elements_DijitFormValidationTextBoxController extends Zend_Controller_Acti
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? " invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
         $this->view->missingMessage = $r->getParam('missingMessage') ? "missingMessage=\"{$r->getParam('missingMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? " promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
-        $this->view->autocomplete= $r->getParam('autocomplete') ? " autocomplete=\"{$r->getParam('autocomplete')}\"" : '';
+        $this->view->autocomplete = $r->getParam('autocomplete') ? " autocomplete=\"{$r->getParam('autocomplete')}\"" : '';
+        $this->view->autocorrect = $r->getParam('autocorrect') ? " autocorrect=\"{$r->getParam('autocorrect')}\"" : '';
+		$this->view->autocapitalize = $r->getParam('autocapitalize') ? " autocapitalize=\"{$r->getParam('autocapitalize')}\"" : '';
+        $this->view->spellcheck = $r->getParam('spellcheck') ? " spellcheck=\"{$r->getParam('spellcheck')}\"" : '';
         $this->view->maxlength = $r->getParam('maxlength')? " maxLength=\"{$r->getParam('maxlength')}\"" : '';
         $this->view->trim = $r->getParam('trim', '') === 'true' ? " trim=\"true\"" : '';
     }
