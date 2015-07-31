@@ -213,6 +213,9 @@
         <xsd:attribute name="onload" />
         <xsd:attribute name="required" type="xsd:boolean" />
         <xsd:attribute name="autocomplete" type="onOffType" />
+        <xsd:attribute name="autocorrect" type="onOffType" />
+        <xsd:attribute name="autocapitalize" type="onOffType" />
+        <xsd:attribute name="spellcheck" type="xsd:boolean" />
         <xsd:attribute name="regExp"/>
         <xsd:attribute name="trim"/>
         <xsd:attribute name="url" type="xsd:anyURI"/>

@@ -16,16 +16,22 @@ class Elements_ZweiFormValidationTextareaController extends Zend_Controller_Acti
         $this->view->target =  $r->getParam('target');
         
         $this->view->value =  $r->getParam('value', $r->getParam('defaultValue', ''));
-        $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? "readonly=\"readonly\"" : '';
-        $this->view->disabled = $r->getParam('disabled') === 'true' || $r->getParam($r->getParam('mode')) == 'disabled' ? "disabled=\"disabled\"" : '';
-        $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
+        $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? " readonly=\"readonly\"" : '';
+        $this->view->disabled = $r->getParam('disabled') === 'true' || $r->getParam($r->getParam('mode')) == 'disabled' ? " disabled=\"disabled\"" : '';
+        $this->view->required = $r->getParam('required', '') === 'true' ? " required=\"true\"" : '';
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
-        $this->view->style = $r->getParam('style') ? "style=\"{$r->getParam('style')}\"" : '';
-        $this->view->regExp = $r->getParam('regExp') ? "regExp=\"{$r->getParam('regExp')}\"" : '';
+        
+        $this->view->autocomplete = $r->getParam('autocomplete') ? " autocomplete=\"{$r->getParam('autocomplete')}\"" : '';
+        $this->view->autocorrect = $r->getParam('autocorrect') ? " autocorrect=\"{$r->getParam('autocorrect')}\"" : '';
+		$this->view->autocapitalize = $r->getParam('autocapitalize') ? " autocapitalize=\"{$r->getParam('autocapitalize')}\"" : '';
+        $this->view->spellcheck = $r->getParam('spellcheck') ? " spellcheck=\"{$r->getParam('spellcheck')}\"" : '';
+        
+        $this->view->style = $r->getParam('style') ? " style=\"{$r->getParam('style')}\"" : '';
+        $this->view->regExp = $r->getParam('regExp') ? " regExp=\"{$r->getParam('regExp')}\"" : '';
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
-        $this->view->promptMessage= $r->getParam('promptMessage') ? "promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
+        $this->view->promptMessage= $r->getParam('promptMessage') ? " promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         $this->view->maxlength = $r->getParam('maxlength', '');
-        $this->view->trim = $r->getParam('trim', '') === 'true' ? "trim=\"true\"" : '';
+        $this->view->trim = $r->getParam('trim', '') === 'true' ? " trim=\"true\"" : '';
     }
 }
 
