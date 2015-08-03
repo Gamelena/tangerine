@@ -57,19 +57,15 @@ class Elements_DojoDndSourceController extends Zend_Controller_Action
             if (method_exists($select, "__toString")) Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $this->_model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.
             
-            if ($r->getParam('value')) {
-                $value = $r->getParam('value');
-            } else {
-                $value = $r->getParam('target') ? $r->getParam('target') : null;
+            $value = $r->getParam('value');
+            
+            if ($r->getParam('value') && !is_array($r->getParam('value'))) {
+                $value = json_decode($r->getParam('value'));
             }
             
-            
-            if ($r->getParam('defaultValue') || $r->getParam('defaultText')) {
-                $this->view->unselectedItems[$r->getParam('defaultValue', '')] = $r->getParam('defaultText', '');
-            }
              
             foreach ($rows as $row) {
-                $selected = is_array($r->getParam('value', null)) && in_array($row->$primary, $r->getParam('value'));
+                $selected = is_array($value) && in_array($row->$primary, $value);
                 
                 if ($r->getParam('tableField')) {
                     if ($selected) {
