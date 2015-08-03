@@ -143,6 +143,15 @@ Ejemplo de configuración de suite de pruebas
     </php>
 </phpunit>
 ```
+SETUP DE PRUEBAS
+================
+Se debe especificar la URL BASE en el archivo application.ini
+
+Ejemplo:
+```
+ zwei.uTesting.httpHost = "localhost/ussd-arboles-canvas"
+```
+
 
 ---
 
