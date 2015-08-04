@@ -101,19 +101,17 @@ TESTING
 Las dependencias instaladas con require-dev con composer resuelven los requerimientos para las pruebas basadas en el servidor.
 
 Para ejecutar los tests basados en browser se debe instalar Selenium server.
-Para usarlo con phpunit debe estar instalada la extension phpunit-selenium la cual es instalada con composer.
-
-Por convención estos tests están escritos en web/tests/selenium/
-
 Instalación de Selenium
 - Descargar el .jar Selenium SERVER desde http://www.seleniumhq.org/download/
 - Dejarlo el archivo en /usr/local/bin 
 - Ejecutarlo como .jar
-
-
 ```
 java -jar /usr/local/bin/selenium-server-standalone-2.42.2.jar
 ```
+
+
+Para usarlo con phpunit debe estar instalada la extension phpunit-selenium la cual es instalada con composer.
+Por convención los tests de selenium están escritos en web/tests/selenium/
 
 Es necesario crear alias para selenium en ~/.bashrc (o equivalente) para escribir una secuencia de comandos de testing compatible en diferentes sistemas.
 Y así escribir, por ejemplo, un archivo "tests.sh" único que ejecute las pruebas en diferentes ambientes.
