@@ -199,7 +199,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         } else {
             $this->view->groups = array();
             $this->view->hideSubmit = true;
-            $this->view->hide = 'style="display:none;"';
+            $this->view->hide = !Zwei_UserAgent::isInternetExplorer() ? 'style="display:none;"' : '';
             $this->view->customFunctions = array();
         }
     }
