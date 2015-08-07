@@ -56,7 +56,9 @@ class AdminController extends Zend_Controller_Action
         $this->baseDojoFolder = isset($this->_config->zwei->js->dojo->baseUrl) ? $this->_config->zwei->js->dojo->baseUrl : '/dojotoolkit';
         if (isset($this->_config->resources->dojo->cdnbase)) $this->baseDojoFolder = $this->_config->resources->dojo->cdnbase . '/' . $this->_config->resources->dojo->cdnversion;
         
-        $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : ''; 
+        $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : '';
+        
+        $this->view->ieMinVersion = isset($this->_config->zwei->browser->ieMinVersion) ? $this->_config->zwei->browser->ieMinVersion : '9';
         
         if ($confLayout->dojoTheme) $this->_dojoTheme = $confLayout->dojoTheme;
         if ($r->getParam('theme')) $this->_dojoTheme = $r->getParam('theme');
