@@ -71,7 +71,7 @@ Después se podrán escoger las opciones:
    AdmPortal en estos elementos no serán reflejados en la nueva
    aplicación.
 
- 
+
 
 
 TIP: para agregar nuevos módulos ZF ejecutar dentro del proyecto
@@ -96,6 +96,61 @@ Alias /ussd-admportal "/proyectos/ussd-admportal/web/public/"
     SetEnv APPLICATION_ENV development
 </Directory>
 ```
+TESTING
+=======
+Las dependencias instaladas con require-dev con composer resuelven los requerimientos para las pruebas basadas en el servidor.
+
+Para ejecutar los tests basados en browser se debe instalar Selenium server.
+Instalación de Selenium
+- Descargar el .jar Selenium SERVER desde http://www.seleniumhq.org/download/
+- Dejarlo el archivo en /usr/local/bin 
+- Ejecutarlo como .jar
+```
+java -jar /usr/local/bin/selenium-server-standalone-2.42.2.jar
+```
+
+
+Para usarlo con phpunit debe estar instalada la extension phpunit-selenium la cual es instalada con composer.
+Por convención los tests de selenium están escritos en web/tests/selenium/
+
+Es necesario crear alias para selenium en ~/.bashrc (o equivalente) para escribir una secuencia de comandos de testing compatible en diferentes sistemas.
+Y así escribir, por ejemplo, un archivo "tests.sh" único que ejecute las pruebas en diferentes ambientes.
+```
+alias selenium="java -jar /usr/local/bin/selenium-server-standalone-2.42.2.jar"
+```
+Ejecutar selenium antes de iniciar los tests unitarios
+
+Los Tests se escriben en la carpeta web/tests
+
+Ejemplo de configuración de suite de pruebas
+
+```
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/3.7/phpunit.xsd"
+    bootstrap="./bootstrap.php" colors="true">
+    <testsuite name="Application Test Suite">
+        <directory>./application</directory>
+        <directory>./library</directory>
+        <directory>./selenium</directory>
+    </testsuite>
+    <php>
+        <const name="PHPUNIT_USERNAME" value="zweicom"/>
+        <const name="PHPUNIT_PASSWORD" value="zweicom"/>
+        <const name="PHPUNIT_BROWSER" value="opera"/>
+        <const name="PHPUNIT_WAITSECONDS" value="5"/>
+    </php>
+</phpunit>
+```
+SETUP DE PRUEBAS
+================
+Se debe especificar la URL BASE en el archivo application.ini
+
+Ejemplo:
+```
+ zwei.uTesting.httpHost = "localhost/ussd-arboles-canvas"
+```
+
+
 ---
 
 FAQ

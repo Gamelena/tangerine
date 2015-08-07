@@ -66,24 +66,17 @@ class Elements_DojoxFormCheckedMultiSelectController extends Zend_Controller_Act
             if (method_exists($select, "__toString")) Debug::writeBySettings($select->__toString(), 'query_log');
             $rows = $model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.
         
-            if ($r->getParam('value')) {
-                $value = $r->getParam('value');
-            } else {
-                $value = $r->getParam('target') ? $r->getParam('target') : null;
-            }
-        
+            $value = $r->getParam('value');
             
-            if ($r->getParam('defaultValue') || $r->getParam('defaultText')) {
-                $options .= "<option value=\"{$r->getParam('defaultValue', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
+            if ($r->getParam('value') && !is_array($r->getParam('value'))) {
+                $value = json_decode($r->getParam('value'));
             }
-           
-        
+            
             foreach ($rows as $row) {
                 $selected = "";
-                if (is_array($r->getParam('value', null)) && in_array($row->$primary, $r->getParam('value'))) {
+                if (is_array($value) && in_array($row->$primary, $value)) {
                     $selected = "selected=\"selected\"";
                 }
-        
         
                 if ($r->getParam('tableField')) {
                     $options .= "<option value=\"".$row[$id]."\" ".$selected." >{$row[$r->getParam('tableField')]}</option>\r\n";

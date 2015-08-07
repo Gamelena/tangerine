@@ -1,5 +1,7 @@
 <form data-dojo-type="dijit/form/Form" <?=$this->hide?> class="formSearch" id="<?=$this->domPrefix?>formSearch" jsId="<?=$this->domPrefix?>formSearch" encType="multipart/form-data" action="" method="">
 <?php 
+$hidden = '';
+
 if (count($this->groups) > 0) :
 ?>
     <div class="formSearchInputs">
@@ -90,7 +92,7 @@ if (count($this->groups) > 0) :
         $i++;
     endforeach;
     $hidden = $hideSubmit ? 'style="display:none;"' : '';
-    if ($hidden) :
+    if ($hidden && !Zwei_UserAgent::isInternetExplorer()) :
 ?>
     <script type="text/javascript">
         dojo.byId('<?=$this->domPrefix?>formSearch').style.display='none';
@@ -103,7 +105,7 @@ if (count($this->groups) > 0) :
 <?php 
 endif;
 ?>
-    <div class="formSearchSubmit">
+    <div class="formSearchSubmit" <?=$hidden?>>
         <input type="hidden" name="model" value="<?=$this->model ?>" />
         <input type="hidden" name="format" value="json" />
         <input type="hidden" name="storeType" value="<?=$this->storeType?>" />

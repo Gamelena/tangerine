@@ -17,7 +17,7 @@ dojo.declare("zwei.Utils", null, {
         try {
             dijitDialog.hide();
             dijitDialog.show();
-            //dijitDialog.resize();
+            dijitDialog.resize();
         } catch (e) {
             console.info(e.message);
         }
