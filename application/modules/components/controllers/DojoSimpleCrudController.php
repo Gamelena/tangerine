@@ -275,7 +275,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->primary = implode(";", $this->_model->info('primary'));
         $this->view->jsPrimary = "['".implode("','",  $this->_model->info('primary'))."']";
         
-        
         $this->view->name = $this->_xml->getAttribute('name');
         
         $this->view->add = $this->_xml->getAttribute('add') && $this->_xml->getAttribute("add") == 'true' && $this->_acl->isUserAllowed($this->_aclComponent, 'ADD') ? true : false;
@@ -284,7 +283,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->clone = $this->_xml->getAttribute('clone') && $this->_xml->getAttribute("clone") == 'true'  && $this->_acl->isUserAllowed($this->_aclComponent, 'ADD') ? true : false;
         $this->view->delete = $this->_xml->getAttribute('delete') && $this->_xml->getAttribute("delete") == 'true' && $this->_acl->isUserAllowed($this->_aclComponent, 'DELETE') ? true : false;
         $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
-        
         
         $this->view->component = $this->_component;
         
@@ -298,12 +296,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
          */
         foreach ($customFunctions as $function) {
             $action = $function->getAttribute('aclAction') ? $function->getAttribute('aclAction') : 'EDIT';
-            Console::debug(array($this->_aclComponent, $action));
             if ($this->_acl->isUserAllowed($this->_aclComponent, $action)) {
                 $this->view->customFunctions[] = $function;
             }
-            
-           
         }
         
         $filterUploaders = $uploaders ? $uploaders : array();
