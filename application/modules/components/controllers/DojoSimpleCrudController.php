@@ -292,7 +292,20 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $customFunctions = $this->_xml->xpath("//component/helpers/customFunction");
         $uploaders = $this->_xml->xpath("//component/helpers/uploader");
         
-        $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_aclComponent, 'EDIT') ? $customFunctions : array();
+        $this->view->customFunctions = array();
+        /**
+         * @var $function Zwei_Admin_Xml
+         */
+        foreach ($customFunctions as $function) {
+            $action = $function->getAttribute('aclAction') ? $function->getAttribute('aclAction') : 'EDIT';
+            Console::debug(array($this->_aclComponent, $action));
+            if ($this->_acl->isUserAllowed($this->_aclComponent, $action)) {
+                $this->view->customFunctions[] = $function;
+            }
+            
+           
+        }
+        
         $filterUploaders = $uploaders ? $uploaders : array();
         
         $this->view->uploaders = array();

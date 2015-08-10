@@ -164,6 +164,7 @@
         <xsd:attribute name="onclick"/>
         <xsd:attribute name="name"/>
         <xsd:attribute name="iconClass"/>
+        <xsd:attribute name="aclAction"/>
         <xsd:attribute name="title"/>
         <xsd:attribute name="disabled" type="xsd:boolean"/>
     </xsd:complexType>
