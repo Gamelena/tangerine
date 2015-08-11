@@ -118,12 +118,14 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? true : false;
         $this->view->multiForm = $this->ajax ? true : false;
         //Se agrega nombre de modelo a mensaje de Exception
-        try {
-            $this->_model = new $className();
-        } catch (Zend_Application_Resource_Exception $e) {
-            throw new Zend_Application_Resource_Exception("$className: {$e->getMessage()}", $e->getCode());
-        } catch (Zend_Db_Exception $e) {
-            throw new Zend_Db_Exception("$className: {$e->getMessage()}", $e->getCode());
+        if (!empty($className)) {
+            try {
+                $this->_model = new $className();
+            } catch (Zend_Application_Resource_Exception $e) {
+                throw new Zend_Application_Resource_Exception("$className: {$e->getMessage()}", $e->getCode());
+            } catch (Zend_Db_Exception $e) {
+                throw new Zend_Db_Exception("$className: {$e->getMessage()}", $e->getCode());
+            }
         }
     }
 
@@ -272,9 +274,11 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      */
     public function initKeys()
     {
-        $this->view->model = $this->_xml->getAttribute('target');
-        $this->view->primary = implode(";", $this->_model->info('primary'));
-        $this->view->jsPrimary = "['".implode("','",  $this->_model->info('primary'))."']";
+        if ($this->_xml->getAttribute('target')) {
+            $this->view->model = $this->_xml->getAttribute('target');
+            $this->view->primary = implode(";", $this->_model->info('primary'));
+            $this->view->jsPrimary = "['".implode("','",  $this->_model->info('primary'))."']";
+        }
         
         $this->view->name = $this->_xml->getAttribute('name');
         
