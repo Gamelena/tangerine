@@ -238,6 +238,7 @@
         <xsd:attribute name="tinyMceTemplate" />
         <xsd:attribute name="placeHolder" />
         <xsd:attribute name="operator" type="operatorType"/>
+        <xsd:attribute name="aclAction" type="xsd:string"/>
     </xsd:complexType>
     <xsd:complexType name="thumbType">
         <xsd:attribute name="width" />

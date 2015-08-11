@@ -97,6 +97,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
             $this->_component = $this->getRequest()->getParam('p');
             $this->_aclComponent = $this->_xml->getAttribute('aclComponent') ? $this->_xml->getAttribute('aclComponent') : $this->_component;
+            $this->view->aclComponent = $this->_aclComponent;
         }
         
         $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
@@ -217,6 +218,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $r = $this->getRequest();
         $this->view->p = $this->_component;
         $this->view->xml = $this->_xml;
+        $this->view->acl = $this->_acl;
         $this->view->mode = $mode;
         $this->view->loadPartial = $r->getParam('loadPartial', false);
         $this->view->dialogIndex = $r->getParam('dialogIndex', '');
