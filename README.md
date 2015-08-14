@@ -7,7 +7,7 @@ Requerimientos Básicos
 
 >= 5.2.4 para sitios web (requerimiento mínimo pero no recomendado)
 
->= 5.4 o superior para tests unitarios (versión recomendada)
+>= 5.4 o superior para tests unitarios y composer (versión recomendada)
 
 
 INSTALACION DE DEPENDENCIAS
@@ -134,8 +134,8 @@ Ejemplo de configuración de suite de pruebas
         <directory>./selenium</directory>
     </testsuite>
     <php>
-        <const name="PHPUNIT_USERNAME" value="zweicom"/>
-        <const name="PHPUNIT_PASSWORD" value="zweicom"/>
+        <const name="PHPUNIT_USERNAME" value="rodrigo"/>
+        <const name="PHPUNIT_PASSWORD" value="rodrigo"/>
         <const name="PHPUNIT_BROWSER" value="opera"/>
         <const name="PHPUNIT_WAITSECONDS" value="5"/>
     </php>
