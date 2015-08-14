@@ -42,7 +42,7 @@ if (!$this->loadPartial) :
     $i=0;
     $j=0;
     /**
-    * @var Zwei_Admin_Xml $tab
+    * @var $tab Zwei_Admin_Xml 
     */
     foreach ($this->tabs as $tab) :
         $style = $i == 0 ? 'style="display:block"' : 'style="display:none"'; 
@@ -52,11 +52,17 @@ if (!$this->loadPartial) :
     <div id="<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>" class="settingsArea" <?=$style ?> <?=$dataDojoType?> data-dojo-props="executeScripts: true">
         <table>
 <?php 
-        $k=0;
-        
+        $k = 0;
+        /**
+         * @var $acl Zwei_Admin_Acl
+         */
+        $acl = $this->acl;
+        /**
+         * @var $elements array
+         */
         $elements = is_object($tab) ? $tab->xpath("element") : $tab;
         /**
-        * @var Zwei_Admin_Xml $element
+        * @var $element Zwei_Admin_Xml 
         */
         foreach ($elements as $element) :
             $j++;
@@ -64,8 +70,9 @@ if (!$this->loadPartial) :
             $hidden = '';
             $params = (array) $element->attributes();
             $params = $params['@attributes'];
+            $authenticated = !$element->getAttribute('aclAction') || $acl->isUserAllowed($this->aclComponent, $element->getAttribute('aclAction'));
             
-            if (isset($params[$this->mode]) && $params[$this->mode] !== 'false') :
+            if ($element->getAttribute($this->mode) && $element->getAttribute($this->mode) !== 'false' && $authenticated) :
                 if ($element->existsChildren('tinyMceInit')) {
                     $params['tinyMceInit'] = dom_import_simplexml($element->tinyMceInit)->textContent;
                 }
@@ -77,7 +84,7 @@ if (!$this->loadPartial) :
                     }
                 }
                 
-                $params['domId'] = $this->domPrefix . "_{$modAux}_".$this->dialogIndex;
+                $params['domId'] = "{$this->domPrefix}_{$modAux}_{$this->dialogIndex}";
                 $params['mode'] = $this->mode;
                 $params['i'] = $j;
                 if (!isset($params['type'])) {

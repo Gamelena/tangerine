@@ -164,6 +164,7 @@
         <xsd:attribute name="onclick"/>
         <xsd:attribute name="name"/>
         <xsd:attribute name="iconClass"/>
+        <xsd:attribute name="aclAction"/>
         <xsd:attribute name="title"/>
         <xsd:attribute name="disabled" type="xsd:boolean"/>
     </xsd:complexType>
@@ -237,6 +238,7 @@
         <xsd:attribute name="tinyMceTemplate" />
         <xsd:attribute name="placeHolder" />
         <xsd:attribute name="operator" type="operatorType"/>
+        <xsd:attribute name="aclAction" type="xsd:string"/>
     </xsd:complexType>
     <xsd:complexType name="thumbType">
         <xsd:attribute name="width" />

@@ -97,6 +97,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
             $this->_component = $this->getRequest()->getParam('p');
             $this->_aclComponent = $this->_xml->getAttribute('aclComponent') ? $this->_xml->getAttribute('aclComponent') : $this->_component;
+            $this->view->aclComponent = $this->_aclComponent;
         }
         
         $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
@@ -118,12 +119,14 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? true : false;
         $this->view->multiForm = $this->ajax ? true : false;
         //Se agrega nombre de modelo a mensaje de Exception
-        try {
-            $this->_model = new $className();
-        } catch (Zend_Application_Resource_Exception $e) {
-            throw new Zend_Application_Resource_Exception("$className: {$e->getMessage()}", $e->getCode());
-        } catch (Zend_Db_Exception $e) {
-            throw new Zend_Db_Exception("$className: {$e->getMessage()}", $e->getCode());
+        if (!empty($className)) {
+            try {
+                $this->_model = new $className();
+            } catch (Zend_Application_Resource_Exception $e) {
+                throw new Zend_Application_Resource_Exception("$className: {$e->getMessage()}", $e->getCode());
+            } catch (Zend_Db_Exception $e) {
+                throw new Zend_Db_Exception("$className: {$e->getMessage()}", $e->getCode());
+            }
         }
     }
 
@@ -149,9 +152,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->changePassword = $this->_xml->xpath("//component/forms/changePassword") ? true : false;
         $this->view->containerDojoType = $this->_xml->getAttribute('containerDojoType') ? $this->_xml->getAttribute('containerDojoType') : 'dijit/layout/BorderContainer';
         $this->view->subContainerDojoType = $this->view->containerDojoType == 'dijit/layout/BorderContainer' ? '' : 'dijit/layout/ContentPane';
-        $this->view->searchersOutsideContent = $this->_xml->xpath("//component/searchers[@outsideContent='true']") ? true : false;
         $this->view->panes = $this->_xml->xpath("//component/pane") ? $this->_xml->xpath("//component/pane") : array();
         $this->view->script = $this->_xml->xpath("//component/script") ? "<script>\n" . dom_import_simplexml($this->_xml->script)->textContent . "</script>\n" : '';
+        $this->view->hasElements = $this->_xml->xpath("//component/elements/element") ? true : false;
+        $this->view->searchersOutsideContent = $this->_xml->xpath("//component/searchers[@outsideContent='true']") || !$this->view->hasElements ? true : false;
         
         if ($this->view->changePassword) {
             $this->view->primary = $this->_model->info(Zend_Db_Table::PRIMARY);
@@ -214,6 +218,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $r = $this->getRequest();
         $this->view->p = $this->_component;
         $this->view->xml = $this->_xml;
+        $this->view->acl = $this->_acl;
         $this->view->mode = $mode;
         $this->view->loadPartial = $r->getParam('loadPartial', false);
         $this->view->dialogIndex = $r->getParam('dialogIndex', '');
@@ -271,10 +276,11 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      */
     public function initKeys()
     {
-        $this->view->model = $this->_xml->getAttribute('target');
-        $this->view->primary = implode(";", $this->_model->info('primary'));
-        $this->view->jsPrimary = "['".implode("','",  $this->_model->info('primary'))."']";
-        
+        if ($this->_xml->getAttribute('target')) {
+            $this->view->model = $this->_xml->getAttribute('target');
+            $this->view->primary = implode(";", $this->_model->info('primary'));
+            $this->view->jsPrimary = "['".implode("','",  $this->_model->info('primary'))."']";
+        }
         
         $this->view->name = $this->_xml->getAttribute('name');
         
@@ -285,14 +291,23 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->delete = $this->_xml->getAttribute('delete') && $this->_xml->getAttribute("delete") == 'true' && $this->_acl->isUserAllowed($this->_aclComponent, 'DELETE') ? true : false;
         $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
         
-        
         $this->view->component = $this->_component;
         
         $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
         $customFunctions = $this->_xml->xpath("//component/helpers/customFunction");
         $uploaders = $this->_xml->xpath("//component/helpers/uploader");
         
-        $this->view->customFunctions = $customFunctions && $this->_acl->isUserAllowed($this->_aclComponent, 'EDIT') ? $customFunctions : array();
+        $this->view->customFunctions = array();
+        /**
+         * @var $function Zwei_Admin_Xml
+         */
+        foreach ($customFunctions as $function) {
+            $action = $function->getAttribute('aclAction') ? $function->getAttribute('aclAction') : 'EDIT';
+            if ($this->_acl->isUserAllowed($this->_aclComponent, $action)) {
+                $this->view->customFunctions[] = $function;
+            }
+        }
+        
         $filterUploaders = $uploaders ? $uploaders : array();
         
         $this->view->uploaders = array();
