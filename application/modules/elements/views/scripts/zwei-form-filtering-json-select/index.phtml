@@ -1,0 +1,14 @@
+<?php 
+$store = '';
+$value = '';
+if ($this->data) :
+    $labelName = 'name';
+    $value = " value=\"$this->value\"";
+?>
+<?php 
+endif;
+?>
+<select data-dojo-type="zwei/form/FilteringJsonSelect" id="<?=$this->domId.$this->i?>" name="<?=$this->target?>" onchange="<?=$this->onchange?>" onload="dijit.byId('<?=$this->domId . $this->i?>').set('value', dijit.byId('<?=$this->domId . $this->i?>').get('value'));<?=$this->onload ?>" data-dojo-props="url: '<?=$this->url?>'" 
+    <?=$value. $this->readonly.$this->disabled.$this->required.$this->invalidMessage.$this->missingMessage.$this->onshow.
+    $this->promptMessage.$this->onkeypress.$this->placeHolder.$this->onblur.$this->onclick.$this->trim.$this->style ?> <?php if ($this->formatter) echo " searchAttr=\"name\" labelAttr=\"$labelName\" labelType=\"html\""?>>
+</select>
