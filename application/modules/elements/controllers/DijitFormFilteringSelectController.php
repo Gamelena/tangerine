@@ -35,6 +35,7 @@ class Elements_DijitFormFilteringSelectController extends Zend_Controller_Action
         $this->view->onchange = $r->getParam('onchange') ? $formatter.$r->getParam('onchange') : $formatter;
         
         $this->view->onclick = $r->getParam('onclick') ? " onclick=\"{$r->getParam('onclick')}\"" : '';
+        $this->view->onkeypress = $r->getParam('onkeypress') ? " onkeypress=\"{$r->getParam('onkeypress')}\"" : '';
         $this->view->onshow = $r->getParam('onshow') ? " onShow=\"{$r->getParam('onshow')}\"" : '';
         $this->view->onload = $r->getParam('onload', '');
         
