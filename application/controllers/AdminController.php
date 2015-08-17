@@ -110,7 +110,6 @@ class AdminController extends Zend_Controller_Action
         ->requireModule("zwei.Utils")
         ->requireModule("zwei.Admportal")
         ->requireModule("zwei.Form")
-        ->requireModule("zwei.form.ValidationTextarea")
         ->requireModule("dojox.grid.enhanced.plugins.Pagination")
         ->requireModule("dojox.form.CheckedMultiSelect")
         ;
