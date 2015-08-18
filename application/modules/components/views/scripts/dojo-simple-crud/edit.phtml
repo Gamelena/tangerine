@@ -45,11 +45,12 @@ if (!$this->loadPartial) :
     * @var $tab Zwei_Admin_Xml 
     */
     foreach ($this->tabs as $tab) :
-        $style = $i == 0 ? 'style="display:block"' : 'style="display:none"'; 
+        $style = $i == 0 ? ' style="display:block"' : ' style="display:none"'; 
         $dataDojoType = is_object($tab) && $tab->getAttribute('dojoType') ? "data-dojo-type=\"{$tab->getAttribute('dojoType')}\"" : "";
+        $href =  is_object($tab) && $tab->getAttribute('href') ? " href=\"{$tab->getAttribute('href')}\"" : "";
         $i++;
 ?>
-    <div id="<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>" class="settingsArea" <?=$style ?> <?=$dataDojoType?> data-dojo-props="executeScripts: true">
+    <div id="<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>" class="settingsArea"<?=$style ?><?=$dataDojoType?><?=$href?> data-dojo-props="executeScripts: true">
         <table>
 <?php 
         $k = 0;

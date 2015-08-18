@@ -1,0 +1,66 @@
+
+{
+	"nodes":{
+		"57712":{
+			"data":{
+				"id":"57712",
+				"name":"Init",
+				"typeNode":"0"
+			},
+			"metadata":{
+				"algo" : "info algo"
+			},
+			"metadata222":{
+				"algo" : "info algo ELIMINADO",
+				"algo2" : "info algo2 version1 ELIMINADO NO ESTA EN JSON 2",
+				"algo3" : "info algo3 version1 ELIMINADO NO ESTA EN JSON 2",
+				"algo4":{
+					"algo" : "info algo"
+				}
+
+			}
+		},
+		"57713":{
+			"data":{
+				"id":"57713",
+				"name":"Init13",
+				"typeNode":"0"
+			},
+			"metadata":{
+				"algo" : "info algo NODO COMPLETO ELIMINADO EN JSON 2 - 57713"
+			}
+		}
+	},
+	"edges":{
+		"30398":{
+			"data":{
+				"id":"30398",
+				"name":"*/*/*",
+				"source":"1000006129",
+				"target":"57713"
+			},
+			"databbb":{
+				"id":"30398",
+				"name":"*/*/*",
+				"source":"1000006129",
+				"target":"57713"
+			}
+		},
+		"30399":{
+			"data":{
+				"id":"30399",
+				"name":"*",
+				"source":"1000006129",
+				"target":"57713"
+			}
+		},
+		"30400":{
+			"data":{
+				"id":"30400",
+				"name":"aaa",
+				"source":"1000006129",
+				"target":"57713"
+			}
+		}
+	}
+}

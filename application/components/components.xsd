@@ -314,6 +314,7 @@
             <xsd:enumeration value="hidden"/>
             <xsd:enumeration value="list-files"/>
             <xsd:enumeration value="tiny-mce"/>
+            <xsd:enumeration value="zwei-form-filtering-json-select"/>
             <xsd:enumeration value="zwei-form-validation-textarea"/>
         </xsd:restriction>
     </xsd:simpleType>
