@@ -11,6 +11,7 @@ class Elements_ZweiFormFilteringJsonSelectController extends Zend_Controller_Act
     public function indexAction()
     {
         $r = $this->getRequest();
+        $dataDojoProps = array();
         
         $this->view->i =  $r->getParam('i');
         $this->view->domId =  $r->getParam('domId');
@@ -19,14 +20,21 @@ class Elements_ZweiFormFilteringJsonSelectController extends Zend_Controller_Act
         $this->view->formatter = $r->getParam('formatter', false);
         $this->view->data = $r->getParam('data', false);
         $this->view->mode = $r->getParam('mode');
-        $this->view->url = $r->getParam('url');
         $this->view->style = $r->getParam('style') ? " style=\"{$r->getParam('style')}\"" : "";
         
         //La RegExp busca constantes declaradas entre llaves en atributo xml "path"
         //ej {BASE_URL}/myupfiles
+        
         if (preg_match("/^\{(.*)\}(.*)$/", $r->getParam('url'), $matches)) {
-            $this->view->url = constant($matches[1]) . $matches[2];
+            $dataDojoProps[] = "url:'". constant($matches[1]) . $matches[2] ."'";
+        } else {
+            $dataDojoProps[] = "url:'{$r->getParam('url')}'";
         }
+        
+        if ($r->getParam("unbounded")) {
+            $dataDojoProps[] = "unbounded:{$r->getParam('unbounded')}";
+        }
+        
         
         $this->view->trim = $r->getParam('trim') ? "trim=\"{$r->getParam('trim')}\"" : '';
         $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? " readonly=\"readonly\"" : '';
@@ -59,6 +67,8 @@ class Elements_ZweiFormFilteringJsonSelectController extends Zend_Controller_Act
         } else {
             $this->view->value =  $r->getParam('defaultValue') && !$r->getParam('defaultText') ? $r->getParam('defaultValue') : '';
         }
+        
+        $this->view->dataDojoProps = implode(",", $dataDojoProps);
     }
 }
 

@@ -1,7 +1,7 @@
 require(['dojo/_base/declare', "dijit/form/FilteringSelect"], function(declare, FilteringSelect) {
 	declare("zwei/form/FilteringJsonSelect", [FilteringSelect], {
 		url : null,
-		unboundedArrays: null,
+		unbounded: null,
 		constructor : function(args) {
 			dojo.mixin(this, args);
 			this.inherited(arguments);
@@ -43,7 +43,7 @@ require(['dojo/_base/declare', "dijit/form/FilteringSelect"], function(declare, 
 						if (isNaN(piece)) {
 							basePath += "." + piece;
 						} else {
-							basePath += "[" + piece + "]"
+							basePath += "[" + piece + "]";
 						}
 					});
 					var basePath = levels.join(".");

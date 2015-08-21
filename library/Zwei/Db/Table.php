@@ -502,6 +502,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         $action = isset($form->action) ? strtoupper($form->action) : 'LIST';
         $this->_acl = new Zwei_Admin_Acl();
         $validatedList = true;
+        $component = $form->p;
         
         if (!$xml) {
             //Si esto es llamado desde CrudRequestController SIEMPRE existe $xml y nunca entra acá.
@@ -513,10 +514,15 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             }
         }
         
+        if ($xml->getAttribute('aclComponent')) {
+            //Si existe tag aclComponent en XML, entonces se validan permisos en función de archivo declarado en aclComponent.
+            $component = $xml->getAttribute('aclComponent');
+        }
+        
         if ($xml->getAttribute('target') !== $form->model) {
             $validatedList = false;
-            Console::error("{$form->model} no existe en {$form->p}");
-        } else if (!$this->_acl->isUserAllowed($form->p, $action)) {
+            Console::error("{$form->model} no existe en $component");
+        } else if (!$this->_acl->isUserAllowed($component, $action)) {
             $validatedList = false;
         }
         return $validatedList;

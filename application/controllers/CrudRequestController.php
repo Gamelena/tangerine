@@ -73,7 +73,7 @@ class CrudRequestController extends Zend_Controller_Action
             $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
         }
         //@todo migrar a Bootstrap
-        if (!defined('DEFAULT_CHARTSET')) {
+        if (!defined('DEFAULT_CHARSET')) {
             define('DEFAULT_CHARSET', ini_get('default_charset'));
         }
     }
