@@ -1,6 +1,9 @@
-require(['dojo/_base/declare', "dijit/form/FilteringSelect"], function(declare, FilteringSelect) {
-	declare("zwei/form/FilteringJsonSelect", [FilteringSelect], {
+define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, FilteringSelect) {
+	// module:
+	// zwei/form/FilteringJsonSelect
+	return declare("zwei.form.FilteringJsonSelect", [FilteringSelect], {
 		url : null,
+		unbounded : null,
 		constructor : function(args) {
 			dojo.mixin(this, args);
 			this.inherited(arguments);
@@ -31,19 +34,49 @@ require(['dojo/_base/declare', "dijit/form/FilteringSelect"], function(declare, 
 			var self = this;
 			var levels = text.split(".");
 			var isDot = text[text.length - 1] === ".";
+			var isLeftSquareBracket = text[text.length - 1] === "[";
 			var data = [];
 			var basePath = '';
 			require(["dojo/store/Memory", "dojox/json/query"], function(Memory, query) {
-				if (isDot) {
+				if (isDot || isLeftSquareBracket) {
+					var basePath = '';
+					var value = '';
+					dojo.forEach(levels, function(piece) {
+						if (isNaN(piece)) {
+							basePath += "." + piece;
+						} else {
+							basePath += "[" + piece + "]";
+						}
+					});
 					var basePath = levels.join(".");
-					results = query("$." + basePath.slice(0, -1), items);
+					var results = query("$." + basePath.slice(0, -1), items);
+					var first = true;
+					var firstIndex = null;
 					for (var index in results) {
 						if ( typeof results === 'object') {
-							data.push({
-								id : basePath + index,
-								name : basePath + index
-							});
+							if ( results instanceof Array) {
+								value = basePath.substring(0, basePath.length - 1) + "[" + index + "]";
+								data.push({
+									id : value,
+									name : value
+								});
+
+								if (!first) {
+									firstIndex = index;
+									first = false;
+								}
+							} else if (isDot) {
+								value = basePath + index;
+								data.push({
+									id : value,
+									name : value
+								});
+							}
 						}
+
+					}
+					if (firstIndex) {
+						self.set('value', basePath.substring(0, basePath.length - 1) + "[" + firstIndex + "]");
 					}
 				} else {
 					for (var index in items) {
@@ -64,4 +97,4 @@ require(['dojo/_base/declare', "dijit/form/FilteringSelect"], function(declare, 
 			});
 		}
 	});
-}); 
+});
