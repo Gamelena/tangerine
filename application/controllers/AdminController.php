@@ -58,7 +58,17 @@ class AdminController extends Zend_Controller_Action
         
         $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : '';
         
-        $this->view->ieMinVersion = isset($this->_config->zwei->browser->ieMinVersion) ? $this->_config->zwei->browser->ieMinVersion : '9';
+        $this->view->isObsoleteBrowser = false;
+        
+        $ieMinVersion = isset($this->_config->zwei->browser->ieMinVersion) ? $this->_config->zwei->browser->ieMinVersion : null;
+        
+        if ($ieMinVersion) {
+            $userAgent = new Zwei_UserAgent();
+            if ($userAgent->getBrowser() === Zwei_UserAgent::BROWSER_IE && $userAgent->getVersion() < $ieMinVersion) {
+                $this->view->isObsoleteBrowser = true;
+            }
+        }
+        
         
         if ($confLayout->dojoTheme) $this->_dojoTheme = $confLayout->dojoTheme;
         if ($r->getParam('theme')) $this->_dojoTheme = $r->getParam('theme');
