@@ -55,6 +55,8 @@ class Elements_DijitFormComboBoxController extends Zend_Controller_Action
             $this->view->value =  $r->getParam('defaultValue') && !$r->getParam('defaultText') ? $r->getParam('defaultValue') : '';
         }
         
+        $this->view->value=str_replace("'", "\'", $this->view->value);
+        
         $this->view->options = !$this->view->data ? $this->options() : false;
     }
 

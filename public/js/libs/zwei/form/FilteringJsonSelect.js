@@ -1,7 +1,9 @@
-require(['dojo/_base/declare', "dijit/form/FilteringSelect"], function(declare, FilteringSelect) {
-	declare("zwei/form/FilteringJsonSelect", [FilteringSelect], {
+define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, FilteringSelect) {
+	// module:
+	// zwei/form/FilteringJsonSelect
+	return declare("zwei.form.FilteringJsonSelect", [FilteringSelect], {
 		url : null,
-		unbounded: null,
+		unbounded : null,
 		constructor : function(args) {
 			dojo.mixin(this, args);
 			this.inherited(arguments);
@@ -47,12 +49,12 @@ require(['dojo/_base/declare', "dijit/form/FilteringSelect"], function(declare, 
 						}
 					});
 					var basePath = levels.join(".");
-					var results = query("$." + basePath.slice(0, -1), items);
+					var results = query("$." + basePath.slice(0, -1).replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), items);
 					var first = true;
 					var firstIndex = null;
 					for (var index in results) {
-						if (typeof results === 'object') {
-							if (results instanceof Array) {
+						if ( typeof results === 'object') {
+							if ( results instanceof Array) {
 								value = basePath.substring(0, basePath.length - 1) + "[" + index + "]";
 								data.push({
 									id : value,
@@ -93,6 +95,6 @@ require(['dojo/_base/declare', "dijit/form/FilteringSelect"], function(declare, 
 					});
 				}
 			});
-}
+		}
 	});
-}); 
+});

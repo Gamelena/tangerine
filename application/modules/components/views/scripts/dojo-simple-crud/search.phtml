@@ -92,7 +92,7 @@ if (count($this->groups) > 0) :
         $i++;
     endforeach;
     $hidden = $hideSubmit ? 'style="display:none;"' : '';
-    if ($hidden && !Zwei_UserAgent::isInternetExplorer()) :
+    if ($hidden && !$this->isInternetExplorer) :
 ?>
     <script type="text/javascript">
         dojo.byId('<?=$this->domPrefix?>formSearch').style.display='none';

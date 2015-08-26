@@ -5,13 +5,13 @@
     <table>
         <tr>
             <th> Archivo</th>
-            <td><input type="file" name="file" data-dojo-type="dojox/form/Uploader"  id="frm<?=$this->list_id . "_" . $this->accion?>UploadFile" label="Seleccionar Archivo .csv" 
+            <td><input type="file" name="file" data-dojo-type="dojox/form/Uploader"  id="<?=$this->domPrefix?>frm<?=$this->list_id . "_" . $this->accion?>UploadFile" label="Seleccionar Archivo .csv" 
             data-dojo-props="showInput:'before', onProgress:massUpload.onProgress, onComplete:massUpload.onComplete, onBegin: massUpload.onBegin, required: true" required="true" />
-            <div style="display:none;" indeterminate="false" id="progressBar" class="progBar" dojoType="dijit/ProgressBar"></div>
+            <div style="display:none;" indeterminate="false" id="<?=$this->domPrefix?>progressBar" class="progBar" dojoType="dijit/ProgressBar"></div>
             </td>
         </tr>
         <tr>
-            <th colspan="2"><button type="submit" id="frm<?=$this->list_id . "_" . $this->accion?>Submit" data-dojo-type="dijit/form/Button">Subir Archivo</button></th>
+            <th colspan="2"><button type="submit" id="<?=$this->domPrefix?>frm<?=$this->list_id . "_" . $this->accion?>Submit" data-dojo-type="dijit/form/Button">Subir Archivo</button></th>
         </tr>
         <tr style="display:none;">
             <th colspan="2">
@@ -32,10 +32,10 @@ endforeach;
     </table>
     <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
-            dojo.byId('progressBar').style.display='block';
+            dojo.byId('<?=$this->domPrefix?>progressBar').style.display='block';
             return true;
         } else {
-            dojo.byId('progressBar').style.display='none';
+            dojo.byId('<?=$this->domPrefix?>progressBar').style.display='none';
         }
     </script>
 </form>
@@ -50,7 +50,7 @@ endforeach;
             var serverProcessing = false;
             dijit.byId("progressBar").set('value', data.percent);
             if (data.percent == '100%' && !this.serverProcessing) {
-                dijit.byId("progressBar").set('indeterminate', true);
+                dijit.byId("<?=$this->domPrefix?>progressBar").set('indeterminate', true);
                 utils.showMessage('Procesando archivo en servidor.', 'message', '15000');
                 this.serverProcessing = true;
             }
@@ -67,16 +67,16 @@ endforeach;
                 form.loadData();
                 dijit.byId('fileUploaderDlg').hide();
             } else {
-                dojo.byId('progressBar').style.display='none';
-                dijit.byId("progressBar").set('value', 0);
+                dojo.byId('<?=$this->domPrefix?>progressBar').style.display='none';
+                dijit.byId("<?=$this->domPrefix?>progressBar").set('value', 0);
             }
         },
         onError: function(error)
         {
             console.warning(error);
             utils.showMessage(error.message, 'error', '15000');
-            dojo.byId('progressBar').style.display='none';
-            dijit.byId("progressBar").set('value', 0);
+            dojo.byId('<?=$this->domPrefix?>progressBar').style.display='none';
+            dijit.byId("<?=$this->domPrefix?>progressBar").set('value', 0);
         }
     };
 </script>

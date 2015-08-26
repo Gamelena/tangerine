@@ -1,5 +1,7 @@
-require(['dojo/_base/declare', "dijit/form/ValidationTextBox", "dijit/form/SimpleTextarea"], function(declare, ValidationTextBox, SimpleTextarea) {
-	declare("zwei/form/ValidationTextarea", [ValidationTextBox, SimpleTextarea], {
+define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "dijit/form/SimpleTextarea"], function(declare, ValidationTextBox, SimpleTextarea) {
+	// module:
+	// zwei/form/ValidationTextarea
+	return declare("zwei.form.ValidationTextarea", [ValidationTextBox, SimpleTextarea], {
 		invalidMessage : "\u00e9ste campo es requerido",
 
 		firstValidation : true,

@@ -169,6 +169,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function searchAction()
     {
         $this->view->p = $this->_component;
+        $userAgent = new Zwei_UserAgent();
+        $this->view->isInternetExplorer = $userAgent->getBrowser() === Zwei_UserAgent::BROWSER_IE;
         $this->view->model = $this->_xml->getAttribute('target');
         $this->view->hide = '';
         if (isset($this->_xml->searchers)) {
@@ -203,7 +205,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         } else {
             $this->view->groups = array();
             $this->view->hideSubmit = true;
-            $this->view->hide = !Zwei_UserAgent::isInternetExplorer() ? 'style="display:none;"' : '';
+            $this->view->hide = $this->view->isInternetExplorer ? 'style="display:none;"' : '';
             $this->view->customFunctions = array();
         }
     }
@@ -401,6 +403,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      */
     public function listAction()
     {
+        $userAgent = new Zwei_UserAgent();
         $this->view->p = $this->_component;
         $this->view->model = $this->_xml->getAttribute('target');
         $primary = $this->_model->info(Zend_Db_Table::PRIMARY);
@@ -416,7 +419,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->gridDojoType = $this->_xml->getAttribute('gridDojoType') ? $this->_xml->getAttribute('gridDojoType') : 'dojox/grid/EnhancedGrid';
         $menus = in_array($this->_config->zwei->layout->menus, array('contextMenu', 'both')) ? "menus:{selectedRegionMenu: menu{$this->view->domPrefix}}," : '';
         
-        $pagination = !Zwei_UserAgent::isMobile() && $this->_xml->getAttribute('serverPagination') === "true" ? "pagination: {defaultPageSize:25, maxPageStep: 5, id: '{$this->view->domPrefix}gridPaginator', style: {position: 'relative'}}" : '';
+        $pagination = !$userAgent->isMobile() && $this->_xml->getAttribute('serverPagination') === "true" ? "pagination: {defaultPageSize:25, maxPageStep: 5, id: '{$this->view->domPrefix}gridPaginator', style: {position: 'relative'}}" : '';
         
         $this->view->plugins = $this->_xml->getAttribute('plugins') ? $this->_xml->getAttribute('plugins') : "{ $menus $pagination}";
         $this->view->onRowClick = $this->_xml->getAttribute('onRowClick') ? $this->_xml->getAttribute('onRowClick') : false;
