@@ -1,4 +1,100 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>ExtraData</b> and script/action name <b>index</b></p>
+<script type="text/javascript">
+dojo.require('zwei.ExtraData');
+var extradata = new zwei.ExtraData();
+</script>
+<span data-dojo-type="dojo/data/ItemFileWriteStore"
+ data-dojo-id="<?=$this->domPrefix?>extraDataStore"
+ data-dojo-props="url:'<?=BASE_URL?>crud-request?model=<?=$this->model?>&format=json&search[<?=$this->idExtraDataName?>][value]=<?=$this->idExtraDataValue?>&search[<?=$this->idExtraDataName?>][operator]=%3D&p=<?=$this->component?>&noCache=<?=uniqid()?>'">
+</span>
+<form data-dojo-type="dijit/form/Form" class="formSearch" id="<?=$this->domPrefix?>formSearch_<?=$this->idExtraDataValue?>" action="" method="" style="display: none;">
+    <div class="formSearchInputs">
+        <div class="formSearchItemContainer"  name="name_container">
+            <div class="item">
+                <input data-dojo-type="dijit/form/ValidationTextBox" type="text" id="<?=$this->domPrefix?>_search_0_<?=$this->idExtraDataValue?>" name="<?=$this->idExtraDataName?>" value="<?=$this->idExtraDataValue?>""  />
+                <input type="hidden" value="" id="<?=$this->domPrefix?>_search_0_format" name="<?=$this->idExtraDataName?>_format" />
+                <input type="hidden" value="" id="<?=$this->domPrefix?>_search_0_operator" name="<?=$this->idExtraDataName?>_operator" />
+            </div>
+        </div>
+    </div>
+    <div class="formSearchSubmit" >
+        <input type="hidden" name="model" value="<?=$this->model?>" />
+        <input type="hidden" name="format" value="json" />
+        <input type="hidden" name="operator" value="=" />
+        <input type="hidden" name="p" value="<?=$this->component?>" />
+    </div>
+</form>
+
+<table data-dojo-type="dojox/grid/DataGrid" id="<?=$this->domPrefix?>extraDataGrid_<?=$this->idExtraDataValue?>" jsId="extraDataGrid"
+ 
+ data-dojo-props="store: <?=$this->domPrefix?>extraDataStore,
+    /*query: { nombre '*' },*/
+    rowsPerPage: 20,
+    clientSort: true,
+    noDataMessage: 'No hay variables',
+    selectionMode: 'single',
+    style: 'width: 100%; height: 200px;',
+    /*onClick: function() {
+        this.resize();
+    },*/
+    onApplyCellEdit: function(inValue, inRowIndex, inFieldIndex) {
+        extradata.model = '<?=$this->editableModel?>';
+        extradata.applyEdit('<?=$this->model?>', inValue, this, <?=$this->idParentEditorName ? "'$this->idParentEditorName'" : 'null'?>);
+    },
+    onCellDblClick: function(e){
+        extradata.edit(e, this)
+    }">
+ <thead>
+  <tr>
+   <th width="50%" field="name">Variable</th>
+   <th width="auto" field="value" editable="true">Valor</th>
+  </tr>
+ </thead>
+</table>
+<div class="extraDataListContainer" style="width: 100%; min-height: 2em; min-width: 300px;">
+ <div class="keyPadWrapper">
+  <?php 
+  //if ($this->isAllowedAdd) :
+  ?>
+  <button data-dojo-type="dijit/form/Button" type="button">
+   Agregar Variable
+   <script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
+             if (dijit.byId('<?=$this->domPrefix?>form_add')) dijit.byId('<?=$this->domPrefix?>form_add').destroyRecursive();
+
+             var form = new zwei.Form({
+                ajax: true,
+                component: '<?=$this->component?>',
+                action: 'add',
+                prefix: '<?=$this->domPrefix?>',
+                dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
+                dijitForm : dijit.byId('<?=$this->domPrefix?>form_add'),
+                dijitDataGrid : dijit.byId('<?=$this->domPrefix?>extraDataGrid_<?=$this->idExtraDataValue?>'),
+                dijitFormSearch : dijit.byId('<?=$this->domPrefix?>formSearch_<?=$this->idExtraDataValue?>'),
+                queryParams: 'p=<?=$this->component?>&<?=$this->idExtraDataName?>=<?=$this->idExtraDataValue?>'
+            }); 
+            form.showDialog();
+            </script>
+  </button>
+  <?php 
+  //endif;
+  //if ($this->isAllowedDelete) :
+  ?>
+  <button data-dojo-type="dijit.form.Button" type="button">
+   Remover variable
+   <script type="dojo/method" data-dojo-event="onClick"
+    data-dojo-args="evt">
+                extradata.idExtraDataName = '<?=$this->idExtraDataName?>';
+                extradata.idExtraDataValue = '<?=$this->idExtraDataValue?>';
+                extradata.removeVars('<?=$this->model?>', dijit.byId('<?=$this->domPrefix?>extraDataGrid_<?=$this->idExtraDataValue?>'));
+            </script>
+  </button>
+  <?php 
+  //endif;
+  ?>
+ </div>
+</div>
+</div>
+<div data-dojo-type="dijit/Tooltip"
+ data-dojo-props="connectId:'<?=$this->domPrefix?>extraDataGrid<?=$this->idExtraDataName?>_<?=$this->idExtraDataValue?>',position:['after']">
+ <strong>Doble click</strong> en los <strong>valores</strong> para
+ editarlos.
 </div>
