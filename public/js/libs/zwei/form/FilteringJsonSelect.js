@@ -49,7 +49,7 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 						}
 					});
 					var basePath = levels.join(".");
-					var results = query("$." + basePath.slice(0, -1), items);
+					var results = query("$." + basePath.slice(0, -1).replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), items);
 					var first = true;
 					var firstIndex = null;
 					for (var index in results) {

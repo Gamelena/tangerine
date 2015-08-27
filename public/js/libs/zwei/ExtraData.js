@@ -3,11 +3,13 @@ dojo.declare("zwei.ExtraData", null, {
 	idName : null,
 	idValue : null,
 	dijitFormSearch : null,
-	dijitFormSearch : null,
-	dijitDataGrid : null,
+	dijitDialog : null,
 	tabId : null,
 	openedTabs : [],
 	resizedLayouts : [],
+	constructor : function(args) {
+		dojo.mixin(this, args);
+	},
 	reset : function(tabId) {
 		if ( typeof tabId === 'undefined') {
 			this.openedTabs = [];
@@ -27,10 +29,10 @@ dojo.declare("zwei.ExtraData", null, {
 		this.form = dijit.byId(tab.parentNode.id);
 
 		this.container = dijit.byId(domPrefixAndId[0] + 'tab_' + domOpc + domPrefixAndId[1]);
-		console.debug(domPrefixAndId[0] + 'tab_' + domOpc + domPrefixAndId[1]);
 		this.idName = idName;
-		this.idValue = this.form.getChildrenByName('data[id]').length ? this.form
-		.getChildrenByName('data[id]')[0].get('value') : null;
+		this.idValue = this.form.getChildrenByName('data[id]').length ? 
+			this.form.getChildrenByName('data[id]')[0].get('value') : 
+			null;
 		this.component = component;
 	},
 	resizeContent : function(tab) {
@@ -48,16 +50,28 @@ dojo.declare("zwei.ExtraData", null, {
 	},
 	isOpenedList : false,
 	list : function(tabId, idName) {
-		if ( typeof tabId === 'undefined')
+		dojo.require('zwei.utils.String');
+		var domPrefix = this.component.toVarWord();
+		
+		if (dijit.byId(domPrefix + 'dataGrid')) {
+			dijit.byId(domPrefix + 'dataGrid').destroyRecursive();
+		}
+
+		if (typeof tabId === 'undefined')
 			var tabId = false;
 
-		if ( typeof idName != 'undefined') {
-			this.idValue = this.form.getChildrenByName('data[' + idName + ']').length ? this.form
-			.getChildrenByName('data[' + idName + ']')[0].get('value') : null;
+		if (typeof idName != 'undefined') {
+			this.idValue = this.form.getChildrenByName('data[' + idName + ']').length ? 
+				this.form.getChildrenByName('data[' + idName + ']')[0].get('value') : 
+				null;
 		}
 
 		if (!tabId || this.openedTabs.indexOf(tabId) < 0) {
-			this.container.set('href', base_url + 'suscripciones/extra-data?search[' + this.idName + '][value]=' + this.idValue + '&search[' + this.idName + '][operator]=%3D&p=' + this.component);
+			this.container.set('href', base_url
+					+ 'components/extra-data?search[' + this.idName
+					+ '][value]=' + this.idValue + '&search['
+					+ this.idName + '][operator]=%3D&p='
+					+ this.component + '&' + this.idName + '=' + this.value);
 			this.openedTabs.push(this.tabId);
 		}
 	},
@@ -66,7 +80,7 @@ dojo.declare("zwei.ExtraData", null, {
 			var tabId = false;
 
 		if (!tabId || this.openedTabs.indexOf(tabId) < 0) {
-			this.container.set('href', base_url + 'suscripciones/extra-data/list-attributes?search[' + this.idName + '][value]=' + this.idValue + '&search[' + this.idName + '][operator]=%3D&p=' + this.component);
+			this.container.set('href', base_url + 'components/extra-data/list-attributes?search[' + this.idName + '][value]=' + this.idValue + '&search[' + this.idName + '][operator]=%3D&p=' + this.component);
 
 			this.openedTabs.push(this.tabId);
 		}
@@ -86,7 +100,7 @@ dojo.declare("zwei.ExtraData", null, {
 
 		if (!tabId || this.openedTabs.indexOf(tabId) < 0) {
 			admportal.lockScreen();
-			this.container.set('href', base_url + 'suscripciones/extra-data/edit-attributes?search[' + this.idName + '][value]=' + this.idValue + '&search[' + this.idName + '][operator]=%3D&hashName=' + hashName + '&p=' + this.component + ( idParentEditorName ? '&idParentEditorName=' + idParentEditorName : ''));
+			this.container.set('href', base_url + 'components/extra-data/edit-attributes?search[' + this.idName + '][value]=' + this.idValue + '&search[' + this.idName + '][operator]=%3D&hashName=' + hashName + '&p=' + this.component + ( idParentEditorName ? '&idParentEditorName=' + idParentEditorName : ''));
 			dojo.aspect.after(this.container, 'onLoad', function() {
 				setTimeout(function() {
 					admportal.lockScreen(false);
@@ -102,13 +116,13 @@ dojo.declare("zwei.ExtraData", null, {
 	applyEdit : function(model, inValue, dataGrid, idParentEditorName) {
 		var rowSelected = dataGrid.selection.getSelected()[0];
 		var myId = rowSelected.id[0];
-		var nombre = rowSelected.nombre[0];
+		var name = rowSelected.name[0];
 
 		var xhrContent = {
 			model : model,
 			action : 'edit',
 			format : 'json',
-			'data[valor]' : inValue,
+			'data[value]' : inValue,
 			p : this.component,
 			'primary[id]' : myId
 		};
@@ -128,7 +142,7 @@ dojo.declare("zwei.ExtraData", null, {
 			load : function(response) {
 				console.debug(response);
 				if (response.state == 'UPDATE_OK') {
-					utils.showMessage('Se ha actualizado el valor de <strong>' + nombre + '</strong> a &quot;' + inValue + '&quot;');
+					utils.showMessage('Se ha actualizado el valor de <strong>' + name + '</strong> a &quot;' + inValue + '&quot;');
 				}
 			},
 			error : function(message) {
@@ -244,13 +258,13 @@ dojo.declare("zwei.ExtraData", null, {
 	applyEditAttribute : function(model, inValue, dataGrid) {
 		var rowSelected = dataGrid.selection.getSelected()[0];
 		var myId = rowSelected.id[0];
-		var nombre = rowSelected.nombre[0];
+		var name = rowSelected.name[0];
 
 		var xhrContent = {
 			model : model,
 			action : 'edit',
 			format : 'json',
-			'data[nombre]' : nombre,
+			'data[name]' : name,
 			p : this.component,
 			'primary[id]' : myId
 		};
@@ -265,7 +279,7 @@ dojo.declare("zwei.ExtraData", null, {
 			load : function(response) {
 				console.debug(response);
 				if (response.state == 'UPDATE_OK') {
-					utils.showMessage('Se ha actualizado el valor de <strong>' + nombre + '</strong>');
+					utils.showMessage('Se ha actualizado el valor de <strong>' + name + '</strong>');
 				}
 			},
 			error : function(message) {
@@ -277,6 +291,7 @@ dojo.declare("zwei.ExtraData", null, {
 	removeVars : function(model, dataGrid) {
 		var self = this;
 		var items = dataGrid.selection.getSelected();
+
 		if (items.length) {
 			var message = items.length > 1 ? '¿Borrar ' + items.length + ' elementos seleccionados?' : '¿Borrar un elemento seleccionado';
 
@@ -293,7 +308,7 @@ dojo.declare("zwei.ExtraData", null, {
 						format : 'json'
 					};
 
-					xhrContent['primary[id]'] = items[j].id[0];
+					xhrContent['primary[id]'] = items[j].id;
 
 					dojo.xhrPost({
 						url : base_url + 'crud-request',
