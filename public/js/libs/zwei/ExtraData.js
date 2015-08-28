@@ -123,8 +123,8 @@ dojo.declare("zwei.ExtraData", null, {
 			action : 'edit',
 			format : 'json',
 			'data[value]' : inValue,
-			p : this.component,
-			'primary[id]' : myId
+			'primary[id]' : myId,
+			p : this.component
 		};
 
 		if (idParentEditorName) {

@@ -3,32 +3,35 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 	// zwei/form/FilteringJsonSelect
 	return declare("zwei.form.FilteringJsonSelect", [FilteringSelect], {
 		url : null,
+		items : null,
 		unbounded : null,
 		constructor : function(args) {
 			dojo.mixin(this, args);
 			this.inherited(arguments);
-		},
-		postCreate : function() {
-			this.inherited(arguments);
-			this.refreshValues();
-			dojo.connect(this.domNode, 'onkeypress', this, 'refreshValues');
-		},
-		refreshValues : function() {
-			var url = this.url;
 			var self = this;
 			dojo.xhrGet({
-				url : url,
+				url : args.url,
 				handleAs : 'json',
 				load : function(items) {
 					self.items = items;
-					var text = self.textbox.value;
-					self.iterateLevels(text, items);
-					self.set('store', self.store);
+					self.refreshValues(items);
 				},
 				error : function(e) {
 					utils.showMessage(e.message, 'error');
 				}
 			});
+
+		},
+		postCreate : function() {
+			this.inherited(arguments);
+			this.refreshValues();
+			dojo.connect(this.domNode, 'onkeyup', this, 'refreshValues');
+		},
+		refreshValues : function() {
+			var url = this.url;
+			var text = this.textbox.value;
+			this.iterateLevels(text, this.items);
+			//self.set('store', self.store);
 		},
 		iterateLevels : function(text, items) {
 			var self = this;
@@ -36,8 +39,20 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 			var isDot = text[text.length - 1] === ".";
 			var isLeftSquareBracket = text[text.length - 1] === "[";
 			var data = [];
+			var isIndex = false;
 			var basePath = '';
+			
 			require(["dojo/store/Memory", "dojox/json/query"], function(Memory, query) {
+				if (self.unbounded) {
+					isIndex = text.match("\\[([0-9]+)$");
+					if (isIndex) {
+						data.push({
+							id : text + "]",
+							name : text + "]"
+						});
+					}
+				}
+
 				if (isDot || isLeftSquareBracket) {
 					var basePath = '';
 					var value = '';
@@ -49,19 +64,19 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 						}
 					});
 					var basePath = levels.join(".");
-					var results = query("$." + basePath.slice(0, -1).replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), items);
+					var results = query("$." + basePath.slice(0, -1), items);
 					var first = true;
 					var firstIndex = null;
 					for (var index in results) {
-						if ( typeof results === 'object') {
-							if ( results instanceof Array) {
+						if (typeof results === 'object') {
+							if (results instanceof Array && !self.unbounded) {
 								value = basePath.substring(0, basePath.length - 1) + "[" + index + "]";
 								data.push({
 									id : value,
 									name : value
 								});
 
-								if (!first) {
+								if (first) {
 									firstIndex = index;
 									first = false;
 								}

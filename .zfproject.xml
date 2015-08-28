@@ -106,6 +106,9 @@
             <controllerFile controllerName="Schedule">
               <actionMethod actionName="index"/>
             </controllerFile>
+            <controllerFile controllerName="ExtraData">
+              <actionMethod actionName="index"/>
+            </controllerFile>
           </controllersDirectory>
           <formsDirectory enabled="false"/>
           <layoutsDirectory enabled="false"/>
@@ -181,6 +184,9 @@
               <viewControllerScriptsDirectory forControllerName="Schedule">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="ExtraData">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
             <viewFiltersDirectory/>
@@ -236,6 +242,9 @@
               <actionMethod actionName="index"/>
             </controllerFile>
             <controllerFile controllerName="DojoxWidgetColorPicker">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="ZweiFormFilteringJsonSelect">
               <actionMethod actionName="index"/>
             </controllerFile>
           </controllersDirectory>
@@ -295,6 +304,9 @@
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="DojoxWidgetColorPicker">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="ZweiFormFilteringJsonSelect">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
@@ -456,6 +468,9 @@
               <testApplicationControllerFile forControllerName="Schedule">
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="ExtraData">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
             </testApplicationControllerDirectory>
           </testApplicationModuleDirectory>
           <testApplicationModuleDirectory forModuleName="elements">
@@ -506,6 +521,9 @@
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
               <testApplicationControllerFile forControllerName="DojoxWidgetColorPicker">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="ZweiFormFilteringJsonSelect">
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
             </testApplicationControllerDirectory>

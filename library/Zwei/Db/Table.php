@@ -296,6 +296,10 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             Debug::writeBySettings($logMessage . "\nValores Originales antes de Modificar : " . $differences, 'transactions_log', '1', "../log/transactions");
         }
         
+        if ($update === 0) {
+            $this->setMessage("Sin Cambios");
+            return true;
+        }
         return $update;
     }
 
