@@ -136,7 +136,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
             isset($params['password']) ? $params['password'] : $this->_params['password'],
             isset($params['database']) ? $params['database'] : $this->_params['database'],
             isset($params['hashfunc']) ? $params['hashfunc'] : $this->_params['hashfunc'] 
-        );
+        ) or trigger_error(monetdb_last_error(), E_USER_ERROR);
     }
     
     
