@@ -30,13 +30,21 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     protected $_primary = null;
     
     /**
-     * 
-     * @var Zend_Config
+     * parámetros de conexión por defecto de monetdb_connect()
+     * @var array
      */
-    protected $_params;
+    protected $_params = array(
+        'dialect' => 'sql',
+        'host' => '127.0.0.1',
+        'port' => '50000',
+        'username' => 'monetdb',
+        'password' => 'monetdb',
+        'database' => 'demo',
+        'hashfunc' => ''
+    );
     
     /**
-     * @var array
+     * @var string
      */
     protected $_adapter;
     
@@ -50,31 +58,41 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      */
     protected $_isFiltered = true;
     /**
+     * 
+     * @var int
+     */
+    protected $_count = 0;
+    
+    
+    /**
      * Hash que indica si deben ser validados los permisos modulo-usuario-accion.
      *
      * @var array
      */
     protected $_validateXmlAcl = array('EDIT' => false, 'ADD' => false, 'DELETE' => false, 'LIST' => false);
     
-    
+    /**
+     * Se inicializa y carga adaptador declarado
+     * 
+     * @param string $adapter - indice hash zwei.monet-multidb.{$adapter} de archivo configuración de arranque, usualmente (db.ini o application.ini).
+     */
     public function __construct($adapter = null)
     {
         $options = Zwei_Controller_Config::getOptions();
+        
+        $params = array();
         if ($adapter === null) {
             if (isset($options->zwei->monetdb)) {
-                $this->_params = $options->zwei->monetdb->params->toArray(); 
+                $params = $options->zwei->monetdb->params->toArray(); 
             }
         } else {
-            $this->_params = $options->zwei->monet_multidb->{$adapter}->toArray();
+            $params = $options->zwei->monet_multidb->{$adapter}->toArray();
         }
 
-        if (!isset($this->_params['dialect'])) $this->_params['dialect'] = 'sql';
-        if (!isset($this->_params['host'])) $this->_params['host'] = '127.0.0.1';
-        if (!isset($this->_params['port'])) $this->_params['port'] = '50000';
-        if (!isset($this->_params['username'])) $this->_params['username'] = 'monetdb';
-        if (!isset($this->_params['password'])) $this->_params['password'] = 'monetdb';
-        if (!isset($this->_params['database'])) $this->_params['database'] = 'test';
-        if (!isset($this->_params['hashfunc'])) $this->_params['hashfunc'] = '';
+        foreach ($params as $i => $param)
+        {
+            $this->_params[$i] = $param;
+        }
         
         $this->connect();
         $this->init();
@@ -117,7 +135,13 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     
     public function select()
     {
-        return "SELECT * from {$this->_name}";
+        /**
+         * @fixme estamos iniciando el generador de querys con adaptador SQL por defecto, NO MonetDB, aunque la query es parchada en Zwei_Db_TableMonet_Select::__toString().
+         * 
+         * @todo esto debiera inicializarse con new Zwei_Db_TableMonet_Select($this->getAdapter()).
+         */
+        $select = new Zwei_Db_TableMonet_Select(Zend_Db_Table::getDefaultAdapter());
+        return $select->from($this->_name);
     }
     
     public function fetchAll($select = null)
@@ -125,12 +149,14 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         $data = array();
         
         if (!$select) {
-            $select = $this->select();
+            $select = $this->select()->__toString();
+        } else if ($select instanceof Zend_Db_Select) {
+            $select = $select->__toString();
         }
-        
         $result = monetdb_query($this->_connection, $select)
             or trigger_error(monetdb_last_error(), E_USER_ERROR);
         
+        $this->_count = monetdb_num_rows($result);
         while ($row =  monetdb_fetch_object($result)) {
             $data[] = $row;
         }
@@ -138,10 +164,15 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         return $data;
     }
     
-    
-    public function fetchRow()
+    public function count()
     {
+        return $this->_count;
+    }
     
+    
+    public function fetchRow($select = null)
+    {
+        
     }
     
     public function isFiltered()
