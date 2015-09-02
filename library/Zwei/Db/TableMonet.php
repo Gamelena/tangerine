@@ -53,16 +53,17 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      * @var monetdb_connect resource
      */
     protected $_connection;
+    
     /**
      * 
      */
-    protected $_isFiltered = true;
+    protected $_isFiltered = false;
+    
     /**
      * 
      * @var int
      */
     protected $_count = 0;
-    
     
     /**
      * Hash que indica si deben ser validados los permisos modulo-usuario-accion.
@@ -109,6 +110,12 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     {
     }
     
+    public function getAdapter()
+    {
+        return new Zwei_Db_TableMonet_Adapter();
+    }
+    
+    
     /**
      * Configura el adaptador de base de datos segun valores de atributo de configuración.
      * resources.multidb.{$adapter}.*
@@ -144,6 +151,10 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         return $select->from($this->_name);
     }
     
+    /**
+     * @param $select Zwei_Db_Table_Monet
+     * @see Zwei_Admin_ModelInterface::fetchAll()
+     */
     public function fetchAll($select = null)
     {
         $data = array();
