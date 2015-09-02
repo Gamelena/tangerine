@@ -155,7 +155,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->panes = $this->_xml->xpath("//component/pane") ? $this->_xml->xpath("//component/pane") : array();
         $this->view->script = $this->_xml->xpath("//component/script") ? "<script>\n" . dom_import_simplexml($this->_xml->script)->textContent . "</script>\n" : '';
         $this->view->hasElements = $this->_xml->xpath("//component/elements/element") ? true : false;
-        $this->view->searchersOutsideContent = $this->_xml->xpath("//component/searchers[@outsideContent='true']") || !$this->view->hasElements ? true : false;
+        $this->view->searchersOutsideContent = $this->_xml->xpath("//component/searchers[@outsideContent='true']") && $this->view->hasElements ? true : false;;
         
         if ($this->view->changePassword) {
             $this->view->primary = $this->_model->info(Zend_Db_Table::PRIMARY);
@@ -280,6 +280,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         if ($this->_xml->getAttribute('target')) {
             $this->view->model = $this->_xml->getAttribute('target');
+            if (!$this->_model->info('primary')) {
+                Console::error("Se debe implementar {$this->view->model}::info('primary')", true);
+            }
+            
             $this->view->primary = implode(";", $this->_model->info('primary'));
             $this->view->jsPrimary = "['".implode("','",  $this->_model->info('primary'))."']";
         }
