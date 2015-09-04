@@ -66,7 +66,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     protected $_count = 0;
     
     /**
-     * Hash que indica si deben ser validados los permisos modulo-usuario-accion.
+     * Hash que indica si deben ser validados los permisos modulo-usuario-accion en api rest.
      *
      * @var array
      */
@@ -77,25 +77,8 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      * 
      * @param string $adapter - indice hash zwei.monet-multidb.{$adapter} de archivo configuración de arranque, usualmente (db.ini o application.ini).
      */
-    public function __construct($adapter = null)
+    public function __construct()
     {
-        $options = Zwei_Controller_Config::getOptions();
-        
-        $params = array();
-        if ($adapter === null) {
-            if (isset($options->zwei->monetdb)) {
-                $params = $options->zwei->monetdb->params->toArray(); 
-            }
-        } else {
-            $params = $options->zwei->monet_multidb->{$adapter}->toArray();
-        }
-
-        foreach ($params as $i => $param)
-        {
-            $this->_params[$i] = $param;
-        }
-        
-        $this->connect();
         $this->init();
     }
     
@@ -108,6 +91,23 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      */
     public function init()
     {
+        $options = Zwei_Controller_Config::getOptions();
+        
+        $params = array();
+        if ($this->_adapter === null) {
+            if (isset($options->zwei->monetdb)) {
+                $params = $options->zwei->monetdb->params->toArray();
+            }
+        } else {
+            $params = $options->zwei->monet_multidb->{$this->_adapter}->toArray();
+        }
+        
+        foreach ($params as $i => $param)
+        {
+            $this->_params[$i] = $param;
+        }
+        
+        $this->connect();
     }
     
     public function getAdapter()
@@ -143,9 +143,10 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     public function select()
     {
         /**
-         * @fixme estamos iniciando el generador de querys con adaptador SQL por defecto, NO MonetDB, aunque la query es parchada en Zwei_Db_TableMonet_Select::__toString().
+         * @fixme estamos iniciando el generador de querys con adaptador SQL por defecto, usualmente MySQL, 
+         * aunque la query es parchada en Zwei_Db_TableMonet_Select::__toString() para compatibilizarla con Monet DB, no deja de ser un parche.
          * 
-         * @todo esto debiera inicializarse con new Zwei_Db_TableMonet_Select($this->getAdapter()).
+         * @todo esto debiera inicializarse con new Zwei_Db_TableMonet_Select($this->getAdapter()), $this->getAdapter debiera retornar un Zwei_Db_TableMonet_Adapter.
          */
         $select = new Zwei_Db_TableMonet_Select(Zend_Db_Table::getDefaultAdapter());
         return $select->from($this->_name);
@@ -178,6 +179,18 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     public function count()
     {
         return $this->_count;
+    }
+    
+    /**
+     * Retorna atributo resources.multidb.{$_adapter}.
+     * Lleva prefijo Zw para distinguirlo de método nativo Zend_Db_Table_Abstract::getAdapter()
+     *
+     *
+     * @return string
+     */
+    public function getZwAdapter()
+    {
+        return $this->_adapter;
     }
     
     
