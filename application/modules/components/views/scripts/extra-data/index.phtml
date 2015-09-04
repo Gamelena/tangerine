@@ -2,10 +2,16 @@
 dojo.require('zwei.ExtraData');
 var extradata = new zwei.ExtraData();
 </script>
+<?php 
+if ($this->list) :
+?>
 <span data-dojo-type="dojo/data/ItemFileWriteStore"
  data-dojo-id="<?=$this->domPrefix?>extraDataStore"
  data-dojo-props="url:'<?=BASE_URL?>crud-request?model=<?=$this->model?>&format=json&search[<?=$this->idExtraDataName?>][value]=<?=$this->idExtraDataValue?>&search[<?=$this->idExtraDataName?>][operator]=%3D&p=<?=$this->component?>&noCache=<?=uniqid()?>'">
 </span>
+<?php 
+endif;
+?>
 <form data-dojo-type="dijit/form/Form" class="formSearch" id="<?=$this->domPrefix?>formSearch_<?=$this->idExtraDataValue?>" action="" method="" style="display: none;">
     <div class="formSearchInputs">
         <div class="formSearchItemContainer"  name="name_container">
@@ -24,9 +30,8 @@ var extradata = new zwei.ExtraData();
     </div>
 </form>
 
-<table data-dojo-type="dojox/grid/DataGrid" id="<?=$this->domPrefix?>extraDataGrid_<?=$this->idExtraDataValue?>" jsId="extraDataGrid"
- 
- data-dojo-props="store: <?=$this->domPrefix?>extraDataStore,
+<table data-dojo-type="dojox/grid/DataGrid" id="<?=$this->domPrefix?>extraDataGrid_<?=$this->idExtraDataValue?>" jsId="extraDataGrid" 
+ data-dojo-props="<?=$this->store?>
     /*query: { nombre '*' },*/
     rowsPerPage: 20,
     clientSort: true,
@@ -53,7 +58,7 @@ var extradata = new zwei.ExtraData();
 <div class="extraDataListContainer" style="width: 100%; min-height: 2em; min-width: 300px;">
  <div class="keyPadWrapper">
   <?php 
-  //if ($this->isAllowedAdd) :
+  if (true) :
   ?>
   <button data-dojo-type="dijit/form/Button" type="button">
    Agregar Variable
@@ -64,6 +69,7 @@ var extradata = new zwei.ExtraData();
                 ajax: true,
                 component: '<?=$this->component?>',
                 action: 'add',
+                title: 'Agregar Variable',
                 prefix: '<?=$this->domPrefix?>',
                 dijitDialog: dijit.byId('<?=$this->domPrefix?>dialog_add'), 
                 dijitForm : dijit.byId('<?=$this->domPrefix?>form_add'),
@@ -74,10 +80,6 @@ var extradata = new zwei.ExtraData();
             form.showDialog();
             </script>
   </button>
-  <?php 
-  //endif;
-  //if ($this->isAllowedDelete) :
-  ?>
   <button data-dojo-type="dijit.form.Button" type="button">
    Remover variable
    <script type="dojo/method" data-dojo-event="onClick"
@@ -88,13 +90,11 @@ var extradata = new zwei.ExtraData();
             </script>
   </button>
   <?php 
-  //endif;
+  endif;
   ?>
  </div>
 </div>
-</div>
 <div data-dojo-type="dijit/Tooltip"
- data-dojo-props="connectId:'<?=$this->domPrefix?>extraDataGrid<?=$this->idExtraDataName?>_<?=$this->idExtraDataValue?>',position:['after']">
- <strong>Doble click</strong> en los <strong>valores</strong> para
- editarlos.
+ data-dojo-props="connectId:'<?=$this->domPrefix?>extraDataGrid_<?=$this->idExtraDataValue?>',position:['after']">
+ <strong>Doble click</strong> en celdas de columna <strong>Valor</strong> para editar.
 </div>

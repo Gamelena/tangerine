@@ -33,7 +33,9 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     static protected $_defaultLogMode = false;
     
     /**
-     * Campos sobre los cuales se puede realizar la búsqueda por defecto, esto tambien se puede hacer vía XML
+     * Campos sobre los cuales se puede realizar la búsqueda por defecto, esto tambien se puede hacer vía XML.
+     * @deprecated usar XML en su lugar.
+     * 
      * @var array
      */
     protected $_search_fields = false;
@@ -103,9 +105,9 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
         } 
         
-        if (!empty($this->_adapter)) {     
-            $this->setAdapter($this->_adapter);  
-        }
+//         if (!empty($this->_adapter)) {     
+//             $this->setAdapter($this->_adapter);  
+//         }
         
         $this->_form = new Zwei_Utils_Form();
         parent::init();
@@ -166,7 +168,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      */
     public function setAdapter($adapter) 
     {
-        $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
+        $resource = Zwei_Controller_Config::getResourceMultiDb();
         $db = $resource->getDb($adapter);
         $this->_setAdapter($db);
     }

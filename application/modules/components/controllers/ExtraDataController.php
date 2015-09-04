@@ -41,6 +41,7 @@ class Components_ExtraDataController extends Zend_Controller_Action
         
         if ($this->_xml->getAttribute('target')) {
             $this->view->model = $this->view->editableModel = $this->_xml->getAttribute('target');
+            $this->view->list = $this->_xml->getAttribute('list') === "true" ? true : false;
             $this->view->component = $component;
             $this->view->domPrefix = Zwei_Utils_String::toVarWord($this->view->component);
             $this->view->extraDataParams = array();
@@ -71,7 +72,8 @@ class Components_ExtraDataController extends Zend_Controller_Action
     {
         $r = $this->getRequest();
         $this->initPermissions();
-    
+        
+        $this->view->store = $this->view->list ? "store: {$this->view->domPrefix}extraDataStore," : "";
         $this->view->editableModel = $this->_xml->getAttribute('target');
         $this->view->idParentEditorName = $r->getParam('idParentEditorName');
     }
