@@ -56,6 +56,8 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 				if (isDot || isLeftSquareBracket || (typeof evt !== 'undefined' && evt.keyCode == dojo.keys.BACKSPACE)) {
 					var basePath = '';
 					var value = '';
+					var backspacePressed = evt.keyCode === dojo.keys.BACKSPACE;
+					
 					dojo.forEach(levels, function(piece) {
 						if (isNaN(piece)) {
 							basePath += "." + piece;
@@ -65,14 +67,9 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 					});
 					var basePath = levels.join(".");
 
-					if (self.unbounded && isDot && text.match("^(.*)\\[.*")) {
+
+					if (self.unbounded && isDot && !backspacePressed && text.match("^(.*)\\[.*")) {
 						var value = text.match("^(.*)\\[.*")[1];
-						
-						if (evt.keyCode == dojo.keys.BACKSPACE) {
-							console.log('que no haga boing');
-						}
-
-
 						var results = query("$." + value + '[0]', items);
 					} else {
 						var results = query("$." + basePath.slice(0, -1), items);
