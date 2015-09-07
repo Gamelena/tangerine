@@ -110,6 +110,10 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         $this->connect();
     }
     
+    /**
+     * 
+     * @return Zwei_Db_TableMonet_Adapter
+     */
     public function getAdapter()
     {
         return new Zwei_Db_TableMonet_Adapter();

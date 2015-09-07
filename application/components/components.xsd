@@ -105,6 +105,7 @@
     <xsd:complexType name="PaneType">
         <xsd:attribute name="onshow"/>
         <xsd:attribute name="onhide"/>
+        <xsd:attribute name="disabled" type="xsd:boolean"/>
         <xsd:attribute name="name"/>
     </xsd:complexType>
     <xsd:complexType name="tabsType">

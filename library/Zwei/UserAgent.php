@@ -113,7 +113,10 @@ class Zwei_UserAgent
 
     const OPERATING_SYSTEM_UNKNOWN = 'unknown';
     
-   
+    /**
+     * 
+     * @param string $userAgent
+     */
     public function __construct($userAgent = "")
     {
         $this->reset();
