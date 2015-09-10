@@ -66,6 +66,7 @@ class AdminController extends Zend_Controller_Action
             $userAgent = new Zwei_UserAgent();
             if ($userAgent->getBrowser() === Zwei_UserAgent::BROWSER_IE && $userAgent->getVersion() < $ieMinVersion) {
                 $this->view->isObsoleteBrowser = true;
+                $this->view->ieMinVersion = $ieMinVersion;
             }
         }
         
