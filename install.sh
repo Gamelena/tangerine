@@ -105,6 +105,6 @@ echo "--------------------------------------------------------------------------
 echo "php.ini"
 echo "-----------------------------------------------------------------------------------"
 echo "agregar a la variable \"include_path\" las rutas" 
-echo ":$ADMPORTALPATH/vendor/zend/zendframework/library:$ADMPORTAL/application/controllers:$ADMPORTALPATH/vendor/phpunit/phpunit"
+echo ":$ADMPORTALPATH/vendor/zend/zendframework/library:$ADMPORTALPATH/vendor/phpunit/phpunit"
 echo " "
 
