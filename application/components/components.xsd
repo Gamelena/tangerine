@@ -213,6 +213,8 @@
         <xsd:attribute name="onkeyup" />
         <xsd:attribute name="onblur" />
         <xsd:attribute name="onload" />
+        <xsd:attribute name="minimum" type="xsd:integer" />
+        <xsd:attribute name="maximum" type="xsd:integer" />
         <xsd:attribute name="required" type="xsd:boolean" />
         <xsd:attribute name="autocomplete" type="onOffType" />
         <xsd:attribute name="autocorrect" type="onOffType" />
@@ -306,6 +308,7 @@
             <xsd:enumeration value="dijit-form-combo-box"/>
             <xsd:enumeration value="dijit-form-date-text-box"/>
             <xsd:enumeration value="dijit-form-filtering-select"/>
+            <xsd:enumeration value="dijit-form-horizontal-slider"/>
             <xsd:enumeration value="dijit-form-select"/>
             <xsd:enumeration value="dijit-form-textarea"/>
             <xsd:enumeration value="dijit-form-time-text-box"/>
