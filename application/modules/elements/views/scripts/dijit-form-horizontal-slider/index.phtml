@@ -1,11 +1,11 @@
 <div>
-        <div >
+        <div>
             <input type="text" id="<?=$this->domId.$this->i?>" data-dojo-type="dijit/form/ValidationTextBox" 
             data-dojo-props="
             value: '<?=$this->value?>',
             required: true,
-            onChange: function(value) {
-                dijit.byId('<?=$this->domId.$this->i?>Slider').set('value', value);
+            onKeyUp: function() {
+                dijit.byId('<?=$this->domId.$this->i?>Slider').set('value', this.get('value'));
             },
             validator: function() {
                 return this.get('value') >= <?=$this->minimum?> && this.get('value') <= <?=$this->maximum?>;
