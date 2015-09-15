@@ -105,9 +105,9 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
             $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
         } 
         
-//         if (!empty($this->_adapter)) {     
-//             $this->setAdapter($this->_adapter);  
-//         }
+        if (!empty($this->_adapter)) {     
+            $this->setAdapter($this->_adapter);  
+        }
         
         $this->_form = new Zwei_Utils_Form();
         parent::init();

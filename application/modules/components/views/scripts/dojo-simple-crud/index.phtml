@@ -88,8 +88,9 @@ if ($this->hasElements) :
 endif;
 $i=0;
 foreach ($this->panes as $pane) :
+    $disabled = $pane->getAttribute('disabled') === "true" ? ' disabled="true"' : "";
 ?>
-    <div data-dojo-type="dojox/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true, executeScripts: true <?=$pane->getAttribute('href') ? ', href: '.$pane->getAttribute('href') : ''?>" id="<?=$this->domPrefix?>Pane<?=$i?>" class="contentBottom"  title="<?=$pane->getAttribute('name')?>" onshow="<?=$pane->getAttribute('onshow')?>">
+    <div data-dojo-type="dojox/layout/ContentPane" data-dojo-props="region:'bottom', splitter:true, executeScripts: true <?=$pane->getAttribute('href') ? ', href: '.$pane->getAttribute('href') : ''?>" id="<?=$this->domPrefix?>Pane<?=$i?>" class="contentBottom" <?=$disabled?>  title="<?=$pane->getAttribute('name')?>" onshow="<?=$pane->getAttribute('onshow')?>">
     </div>
 <?php
     $i++; 
