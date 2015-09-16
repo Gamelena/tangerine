@@ -115,41 +115,44 @@ dojo.declare("zwei.ExtraData", null, {
 	},
 	applyEdit : function(model, inValue, dataGrid, idParentEditorName) {
 		var rowSelected = dataGrid.selection.getSelected()[0];
-		var myId = rowSelected.id[0];
 		var name = rowSelected.name[0];
+		if (!model) {
+			//utils.showMessage('Se ha actualizado el valor de <strong>' + name + '</strong> a &quot;' + inValue + '&quot;', 'warning');
+		} else {
+			var myId = rowSelected.id[0];
+			var xhrContent = {
+				model : model,
+				action : 'edit',
+				format : 'json',
+				'data[value]' : inValue,
+				'primary[id]' : myId,
+				p : this.component
+			};
 
-		var xhrContent = {
-			model : model,
-			action : 'edit',
-			format : 'json',
-			'data[value]' : inValue,
-			'primary[id]' : myId,
-			p : this.component
-		};
-
-		if (idParentEditorName) {
-			xhrContent['data[' + idParentEditorName + ']'] = this.form
-			.getChildrenByName('data[id]')[0].get('value');
-		}
-
-		dojo.xhrPost({
-			url : base_url + 'crud-request',
-			content : xhrContent,
-			sync : true,
-			preventCache : true,
-			handleAs : 'json',
-			timeout : 5000,
-			load : function(response) {
-				console.debug(response);
-				if (response.state == 'UPDATE_OK') {
-					utils.showMessage('Se ha actualizado el valor de <strong>' + name + '</strong> a &quot;' + inValue + '&quot;');
-				}
-			},
-			error : function(message) {
-				utils.showMessage('Error en comunicacion de datos. error: ' + message, 'error');
-				return false;
+			if (idParentEditorName) {
+				xhrContent['data[' + idParentEditorName + ']'] = this.form
+				.getChildrenByName('data[id]')[0].get('value');
 			}
-		});
+
+			dojo.xhrPost({
+				url : base_url + 'crud-request',
+				content : xhrContent,
+				sync : true,
+				preventCache : true,
+				handleAs : 'json',
+				timeout : 5000,
+				load : function(response) {
+					console.debug(response);
+					if (response.state == 'UPDATE_OK') {
+						utils.showMessage('Actualizado valor de <strong>' + name + '</strong> a &quot;' + inValue + '&quot;', 'warning');
+					}
+				},
+				error : function(message) {
+					utils.showMessage('Error en comunicacion de datos. error: ' + message, 'error');
+					return false;
+				}
+			});
+		}
 
 	},
 	form : {
@@ -287,6 +290,52 @@ dojo.declare("zwei.ExtraData", null, {
 				return false;
 			}
 		});
+	},
+	formatValidationTextBox: function(value){
+		var widget = new dijit.form.ValidationTextBox({
+			value : value,
+			onChange : function(e) {
+				console.debug(e);
+			}
+		});
+		widget.set('name', 'data[extradata][]');
+		widget.set('required', false);
+		console.debug(widget);
+
+		widget._destroyOnRemove = true;
+		return widget;
+	},
+	addTupleToGrid : function(extraDataGrid, values) {
+		var added = false;
+		var item = {
+			name: values['data[name]'], 
+			value: values['data[value]']
+		};
+		var data = {identifier: 'name', label: 'value'};
+		
+		data.items = [];
+		
+		if (extraDataGrid.store) {
+			extraDataGrid.store.fetch({
+				onComplete: getAndAddItem
+			});
+		} else {
+			store = new dojo.data.ItemFileWriteStore({data: data});
+			addItem(item);
+		}
+		
+		function getAndAddItem(items){
+			data.items = items;
+			store = new dojo.data.ItemFileWriteStore({data: data}); 
+			addItem(item);
+		}
+		
+		function addItem(item) {
+			added = store.newItem(item);
+		} 
+		
+		extraDataGrid.setStore(store);
+		return added;
 	},
 	removeVars : function(model, dataGrid) {
 		var self = this;

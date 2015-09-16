@@ -41,26 +41,26 @@ class Components_ExtraDataController extends Zend_Controller_Action
         
         if ($this->_xml->getAttribute('target')) {
             $this->view->model = $this->view->editableModel = $this->_xml->getAttribute('target');
-            $this->view->list = $this->_xml->getAttribute('list') === "true" ? true : false;
-            $this->view->component = $component;
-            $this->view->domPrefix = Zwei_Utils_String::toVarWord($this->view->component);
-            $this->view->extraDataParams = array();
-            $this->view->idParentEditorName = null;
-    
-            $search = $r->getParam('search', array());
-    
-            //yes, se espera solo un elemento
-            foreach ($search as $id => $s) {
-                $this->view->idExtraDataName = $id;
-                $this->view->idExtraDataValue = $s['value'] ? $s['value'] : '0';
-            }
-    
             $this->_model = new $this->view->model();
-    
-            $this->_acl = new Zwei_Admin_Acl();
         } else {
-            throw new Zwei_Exception("$component no tiene atributo target válido");
+            Console::debug("Modelo Offline");
         }
+        
+        $this->view->list = $this->_xml->getAttribute('list') === "true" ? true : false;
+        $this->view->component = $component;
+        $this->view->domPrefix = Zwei_Utils_String::toVarWord($this->view->component);
+        $this->view->extraDataParams = array();
+        $this->view->idParentEditorName = null;
+        
+        $search = $r->getParam('search', array());
+        
+        //yes, se espera solo un elemento
+        foreach ($search as $id => $s) {
+            $this->view->idExtraDataName = $id;
+            $this->view->idExtraDataValue = $s['value'] ? $s['value'] : '0';
+        }
+        
+        $this->_acl = new Zwei_Admin_Acl();
     }
 
     /**

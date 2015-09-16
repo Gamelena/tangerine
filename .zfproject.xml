@@ -247,6 +247,9 @@
             <controllerFile controllerName="ZweiFormFilteringJsonSelect">
               <actionMethod actionName="index"/>
             </controllerFile>
+            <controllerFile controllerName="DijitFormHorizontalSlider">
+              <actionMethod actionName="index"/>
+            </controllerFile>
           </controllersDirectory>
           <formsDirectory enabled="false"/>
           <layoutsDirectory enabled="false"/>
@@ -307,6 +310,9 @@
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="ZweiFormFilteringJsonSelect">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DijitFormHorizontalSlider">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
@@ -524,6 +530,9 @@
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
               <testApplicationControllerFile forControllerName="ZweiFormFilteringJsonSelect">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DijitFormHorizontalSlider">
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
             </testApplicationControllerDirectory>
