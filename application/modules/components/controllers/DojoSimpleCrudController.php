@@ -229,37 +229,40 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->onHide = $this->_xml->xpath('//component/forms/onHide') ? dom_import_simplexml($this->_xml->forms->onHide)->textContent : '';//FIXME deaf listener onHide
         $this->view->onSubmit = $this->_xml->xpath('//component/forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
         $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
-
-        $this->view->model = $this->_xml->getAttribute('target');
-        $this->view->modelPrimary = $this->_model->info(Zend_Db_Table::PRIMARY);
         $this->view->tabs = $this->_xml->getTabsWithElements(true, "@$mode='true' or @$mode='readonly' or @$mode='disabled'");
         
-        if (($mode == 'edit' || $mode == 'clone') && $this->view->ajax) {
-            $a = $this->_model->getAdapter();
-            
-            $select = $this->_model->select();
-
-            foreach ($r->getParam('primary', array()) as $i => $v) { 
-                //Concatenar nombre de campo con tabla principal en caso de que campo exista en la tabla,
-                //esto previene posibles errores de ambiguedad de nombre de campo cuando se use join
-                if (in_array($i, $this->_model->info(Zend_Db_Table::COLS))) { 
-                    $i = $this->_model->info(Zend_Db_Table::NAME) . ".$i";
+        $this->view->model = $this->_xml->getAttribute('target');
+        
+        $this->view->modelPrimary = array();
+        if ($this->view->model) {
+            $this->view->modelPrimary = $this->_model->info(Zend_Db_Table::PRIMARY);
+            if (($mode == 'edit' || $mode == 'clone') && $this->view->ajax) {
+                $a = $this->_model->getAdapter();
+                
+                $select = $this->_model->select();
+    
+                foreach ($r->getParam('primary', array()) as $i => $v) { 
+                    //Concatenar nombre de campo con tabla principal en caso de que campo exista en la tabla,
+                    //esto previene posibles errores de ambiguedad de nombre de campo cuando se use join
+                    if (in_array($i, $this->_model->info(Zend_Db_Table::COLS))) { 
+                        $i = $this->_model->info(Zend_Db_Table::NAME) . ".$i";
+                    }
+                    $select->where($a->quoteInto($a->quoteIdentifier($i). " = ?", $v));
                 }
-                $select->where($a->quoteInto($a->quoteIdentifier($i). " = ?", $v));
-            }
-            if (method_exists($select, '__toString')) Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
-            $data = $this->_model->fetchRow($select);
-            if ($this->view->multiForm) {
-                $this->view->dialogIndex = '';
-                foreach ($this->_model->info('primary') as $primary) {
-                    $this->view->dialogIndex .= $data[$primary];
+                if (method_exists($select, '__toString')) Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
+                $data = $this->_model->fetchRow($select);
+                if ($this->view->multiForm) {
+                    $this->view->dialogIndex = '';
+                    foreach ($this->_model->info('primary') as $primary) {
+                        $this->view->dialogIndex .= $data[$primary];
+                    }
+                    $this->view->dialogIndex = Zwei_Utils_String::toVarWord($this->view->dialogIndex);
                 }
-                $this->view->dialogIndex = Zwei_Utils_String::toVarWord($this->view->dialogIndex);
+                
+                //Es posible añadir más valores al retorno de la query principal sobrecargando este Zwei_Db_Table::overloadDataForm.
+                $this->view->data = $data;
+                if (method_exists($this->_model, 'overloadDataForm')) $this->view->data = $this->_model->overloadDataForm($data);
             }
-            
-            //Es posible añadir más valores al retorno de la query principal sobrecargando este Zwei_Db_Table::overloadDataForm.
-            $this->view->data = $data;
-            if (method_exists($this->_model, 'overloadDataForm')) $this->view->data = $this->_model->overloadDataForm($data);
         }
         $this->view->dijitDialogId = $r->getParam('dijitDialogId', $this->view->domPrefix . 'dialog_' . $mode . $this->view->dialogIndex);
         $this->view->dijitDataGridId = $r->getParam('dijitDataGridId', $this->view->domPrefix . 'dataGrid');

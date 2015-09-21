@@ -1,6 +1,6 @@
 <div>
         <div>
-            <input type="text" id="<?=$this->domId.$this->i?>" data-dojo-type="dijit/form/ValidationTextBox" 
+            <input type="text" id="<?=$this->domId.$this->i?>" data-dojo-type="dijit/form/ValidationTextBox" <?=$this->promptMessage . $this->invalidMessage?>
             data-dojo-props="
             value: '<?=$this->value?>',
             required: true,

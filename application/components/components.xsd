@@ -120,6 +120,7 @@
         </xsd:sequence>
         <xsd:attribute name="name" />
         <xsd:attribute name="onClick" />
+        <xsd:attribute name="onShow" />
         <xsd:attribute name="dojoType" />
         <xsd:attribute name="style" />
     </xsd:complexType>
