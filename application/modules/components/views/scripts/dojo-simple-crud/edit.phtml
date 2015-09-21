@@ -48,10 +48,13 @@ if (!$this->loadPartial) :
         $style = $i == 0 ? ' style="display:block"' : ' style="display:none"'; 
         $dataDojoType = is_object($tab) && $tab->getAttribute('dojoType') ? "data-dojo-type=\"{$tab->getAttribute('dojoType')}\"" : "";
         $href =  is_object($tab) && $tab->getAttribute('href') ? " href=\"{$tab->getAttribute('href')}\"" : "";
-        $onShow =  is_object($tab) && $tab->getAttribute('onShow') ? ", onShow:function(){{$tab->getAttribute('onShow')}}\"" : "";
+        $onShow =  is_object($tab) && $tab->getAttribute('onShow') ? " onshow=\"{$tab->getAttribute('onShow')}\"" : "";
+        $onDownloadEnd =  is_object($tab) && $tab->getAttribute('onDownloadEnd') ? " onDownloadEnd=\"{$tab->getAttribute('onDownloadEnd')}\"" : "";
+        $onDownloadStart =  is_object($tab) && $tab->getAttribute('onDownloadStart') ? " onDownloadStart=\"{$tab->getAttribute('onDownloadStart')}\"" : "";
+        $onDownloadError =  is_object($tab) && $tab->getAttribute('onDownloadError') ? " onDownloadError=\"{$tab->getAttribute('onDownloadError')}\"" : "";
         $i++;
 ?>
-    <div id="<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>" class="settingsArea"<?=$style ?><?=$dataDojoType?><?=$href?> data-dojo-props="executeScripts: true <?=$onShow?>">
+    <div id="<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>" class="settingsArea"<?=$style ?><?=$dataDojoType?><?=$href?><?=$onShow?><?=$onDownloadEnd?><?=$onDownloadStart?><?=$onDownloadError?> data-dojo-props="executeScripts: true">
         <table>
 <?php 
         $k = 0;

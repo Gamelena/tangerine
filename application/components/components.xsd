@@ -121,6 +121,9 @@
         <xsd:attribute name="name" />
         <xsd:attribute name="onClick" />
         <xsd:attribute name="onShow" />
+        <xsd:attribute name="onDownloadStart" />
+        <xsd:attribute name="onDownloadEnd" />
+        <xsd:attribute name="onDownloadError" />
         <xsd:attribute name="dojoType" />
         <xsd:attribute name="style" />
     </xsd:complexType>

@@ -40,7 +40,6 @@ endif;
         this.resize();
     },*/
     onApplyCellEdit: function(inValue, inRowIndex, inFieldIndex) {
-        console.debug('onapply');
         dojo.require('zwei.ExtraData');
         var extradata = new zwei.ExtraData();
 
@@ -68,7 +67,6 @@ endif;
    Agregar Variable
    <script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
              if (dijit.byId('<?=$this->domPrefix?>form_add')) dijit.byId('<?=$this->domPrefix?>form_add').destroyRecursive();
-
              var form = new zwei.Form({
                 ajax: true,
                 component: '<?=$this->component?>',

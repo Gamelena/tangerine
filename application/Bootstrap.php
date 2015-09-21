@@ -71,7 +71,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
         
         $this->_config = $this->getConfig();
-        if (isset($this->_config->zwei->date->defaultTimezone)) date_default_timezone_set($this->_config->zwei->date->defaultTimezone);
+        //if (isset($this->_config->zwei->date->defaultTimezone)) date_default_timezone_set($this->_config->zwei->date->defaultTimezone);
         
         defined('ADMPORTAL_APPLICATION_PATH') || define('ADMPORTAL_APPLICATION_PATH', $this->_config->zwei->admportal->applicationPath);
         
