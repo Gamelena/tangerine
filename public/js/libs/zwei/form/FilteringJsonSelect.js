@@ -5,12 +5,22 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 		url : null,
 		items : null,
 		unbounded : null,
+		iteratedLevels : 0,
+		maximum: null,
 		constructor : function(args) {
 			dojo.mixin(this, args);
 			this.inherited(arguments);
+			this.loadItems();
+		},
+		setUrl: function(url) {
+			this.url = url;
+			this.set('value', '');
+			this.loadItems();
+		},
+		loadItems : function() {
 			var self = this;
 			dojo.xhrGet({
-				url : args.url,
+				url : this.url,
 				handleAs : 'json',
 				load : function(items) {
 					self.items = items;
@@ -19,18 +29,38 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 				error : function(e) {
 					utils.showMessage(e.message, 'error');
 				}
+			});	
+		},
+		loadItemsByQuery : function(pattern) {
+//			this.loadItems(); 
+			var self = this;
+			var data = [];
+			require(["dojo/store/Memory", "dojox/json/query", "dojo/keys"], function(Memory, query, keys) {
+				var results = query("$." + pattern, self.items);
+				for (var index in results) {
+					data.push({
+						id : pattern + '.' + index,
+						name : pattern + '.' + index
+					});
+				}
+				
+				self.store = new Memory({
+					data : data
+				});
 			});
-
 		},
 		postCreate : function() {
 			this.inherited(arguments);
 			this.refreshValues();
-			dojo.connect(this.domNode, 'onkeyup', this, 'refreshValues');
+			if (this.maximum === null || this.maximum > 1) {//actualmente solo soporta restriccion en un nivel "this.maximum=1"
+				dojo.connect(this.domNode, 'onkeyup', this, 'refreshValues');
+			}
 		},
 		refreshValues : function(evt) {
 			var url = this.url;
 			var text = this.textbox.value;
 			this.iterateLevels(text, this.items, evt);
+			this.set('value', this.metavalue);
 			//self.set('store', self.store);
 		},
 		iterateLevels : function(text, items, evt) {
