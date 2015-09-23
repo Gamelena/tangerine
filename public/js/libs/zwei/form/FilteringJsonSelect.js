@@ -14,8 +14,8 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 		},
 		setUrl: function(url) {
 			this.url = url;
-			this.set('value', '');
 			this.loadItems();
+			this.set('value', '');
 		},
 		loadItems : function() {
 			var self = this;
@@ -37,6 +37,9 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 			var data = [];
 			require(["dojo/store/Memory", "dojox/json/query", "dojo/keys"], function(Memory, query, keys) {
 				var results = query("$." + pattern, self.items);
+				self.items = {};
+				self.items[pattern] = results;
+
 				for (var index in results) {
 					data.push({
 						id : pattern + '.' + index,
@@ -57,10 +60,11 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 			}
 		},
 		refreshValues : function(evt) {
-			var url = this.url;
 			var text = this.textbox.value;
 			this.iterateLevels(text, this.items, evt);
-			this.set('value', this.metavalue);
+			if (this.metavalue !== '') {
+				this.set('value', this.metavalue);
+			}
 			//self.set('store', self.store);
 		},
 		iterateLevels : function(text, items, evt) {
@@ -96,7 +100,6 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 						}
 					});
 					var basePath = levels.join(".");
-
 
 					if (self.unbounded && isDot && !backspacePressed && text.match("^(.*)\\[.*")) {
 						var value = text.match("^(.*)\\[.*")[1];
