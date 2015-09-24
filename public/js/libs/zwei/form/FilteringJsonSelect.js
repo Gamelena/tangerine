@@ -36,9 +36,14 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 			var self = this;
 			var data = [];
 			var pieces = pattern.split(".");
+			var results = [];
 
 			require(["dojo/store/Memory", "dojox/json/query", "dojo/keys"], function(Memory, query, keys) {
-				var results = query("$." + pattern, self.items);
+				try {
+					results = query("$." + pattern, self.items);
+				} catch (e) {
+					console.error(e.message);
+				}
 				var length = pieces.length;
 
 				self.items = {};
