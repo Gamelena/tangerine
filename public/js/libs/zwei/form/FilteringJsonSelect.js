@@ -35,10 +35,24 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 //			this.loadItems(); 
 			var self = this;
 			var data = [];
+			var pieces = pattern.split(".");
+
 			require(["dojo/store/Memory", "dojox/json/query", "dojo/keys"], function(Memory, query, keys) {
 				var results = query("$." + pattern, self.items);
+				var length = pieces.length;
+
 				self.items = {};
-				self.items[pattern] = results;
+				
+				if (length === 1) {
+					self.items[pattern] = results;
+				} else if (length === 2) {
+					self.items[pieces[0]] = {};
+					self.items[pieces[0]][pieces[1]] = results;
+				} else if (length === 3) {
+					self.items[pieces[0]] = {};
+					self.items[pieces[0]][pieces[1]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]] = results;
+				}
 
 				for (var index in results) {
 					data.push({
@@ -99,9 +113,9 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 							basePath += "[" + piece + "]";
 						}
 					});
-					var basePath = levels.join(".");
+				var basePath = levels.join(".");
 
-					if (self.unbounded && isDot && !backspacePressed && text.match("^(.*)\\[.*")) {
+				if (self.unbounded && isDot && !backspacePressed && text.match("^(.*)\\[.*")) {
 						var value = text.match("^(.*)\\[.*")[1];
 						var results = query("$." + value + '[0]', items);
 					} else {

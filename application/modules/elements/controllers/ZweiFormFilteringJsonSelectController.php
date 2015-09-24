@@ -61,7 +61,7 @@ class Elements_ZweiFormFilteringJsonSelectController extends Zend_Controller_Act
         
         $this->view->value = $r->getParam('value');
 
-        Console::debug([$r->getParams(), $this->view->value]);
+
         
         $this->view->dataDojoProps = implode(",", $dataDojoProps);
     }
