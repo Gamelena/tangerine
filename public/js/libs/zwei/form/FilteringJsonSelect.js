@@ -5,33 +5,110 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 		url : null,
 		items : null,
 		unbounded : null,
+		iteratedLevels : 0,
+		maximum: null,
 		constructor : function(args) {
 			dojo.mixin(this, args);
 			this.inherited(arguments);
+			this.loadItems();
+		},
+		setUrl: function(url) {
+			this.url = url;
+			this.loadItems();
+			this.set('value', '');
+		},
+		_finishedLoadItems : function()
+		{
+			console.log(this.data);
+		},
+		_finishedLoadItemsByQuery : function()
+		{
+			console.log(this.data);	
+		},
+		loadItems : function() {
 			var self = this;
 			dojo.xhrGet({
-				url : args.url,
+				url : this.url,
 				handleAs : 'json',
 				load : function(items) {
 					self.items = items;
 					self.refreshValues(items);
+					self._finishedLoadItems();
 				},
 				error : function(e) {
 					utils.showMessage(e.message, 'error');
 				}
-			});
+			});	
+		},
+		loadItemsByQuery : function(pattern) {
+//			this.loadItems(); 
+			var self = this;
+			var data = [];
+			var pieces = pattern.split(".");
+			var results = [];
 
+			require(["dojo/store/Memory", "dojox/json/query", "dojo/keys"], function(Memory, query, keys) {
+				try {
+					results = query("$." + pattern, self.items);
+				} catch (e) {
+					console.error(e.message);
+				}
+				var length = pieces.length;
+
+				self.items = {};
+				
+				if (length === 1) {
+					self.items[pattern] = results;
+				} else if (length === 2) {
+					self.items[pieces[0]] = {};
+					self.items[pieces[0]][pieces[1]] = results;
+				} else if (length === 3) {
+					self.items[pieces[0]] = {};
+					self.items[pieces[0]][pieces[1]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]] = results;
+				} else if (length === 4) {
+					self.items[pieces[0]] = {};
+					self.items[pieces[0]][pieces[1]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]][pieces[3]] = results;
+				} else if (length === 5) {
+					self.items[pieces[0]] = {};
+					self.items[pieces[0]][pieces[1]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]][pieces[3]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]][pieces[3]][pieces[4]] = results;
+				}
+
+
+
+
+				for (var index in results) {
+					data.push({
+						id : pattern + '.' + index,
+						name : pattern + '.' + index
+					});
+				}
+				
+				self.store = new Memory({
+					data : data
+				});
+				self._finishedLoadItemsByQuery();
+			});
 		},
 		postCreate : function() {
 			this.inherited(arguments);
 			this.refreshValues();
-			dojo.connect(this.domNode, 'onkeyup', this, 'refreshValues');
+			if (this.maximum === null || this.maximum > 1) {//actualmente solo soporta restriccion en un nivel "this.maximum=1"
+				dojo.connect(this.domNode, 'onkeyup', this, 'refreshValues');
+			}
 		},
 		refreshValues : function(evt) {
-			var url = this.url;
 			var text = this.textbox.value;
 			this.iterateLevels(text, this.items, evt);
-			//self.set('store', self.store);
+			if (this.metavalue && this.metavalue !== '') {
+				this.set('value', this.metavalue);
+			}
+			//this.setStore(this.store);
 		},
 		iterateLevels : function(text, items, evt) {
 			var self = this;
@@ -66,7 +143,6 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 						}
 					});
 					var basePath = levels.join(".");
-
 
 					if (self.unbounded && isDot && !backspacePressed && text.match("^(.*)\\[.*")) {
 						var value = text.match("^(.*)\\[.*")[1];

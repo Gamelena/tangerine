@@ -31,10 +31,9 @@ class Elements_ZweiFormFilteringJsonSelectController extends Zend_Controller_Act
             $dataDojoProps[] = "url:'{$r->getParam('url')}'";
         }
         
-        if ($r->getParam("unbounded")) {
-            $dataDojoProps[] = "unbounded:{$r->getParam('unbounded')}";
-        }
-        
+        if ($r->getParam("unbounded")) $dataDojoProps[] = "unbounded:{$r->getParam('unbounded')}";
+        if ($r->getParam('maximum')) $dataDojoProps[] = "maximum:{$r->getParam('maximum')}";
+        if ($r->getParam('value') !== '') $dataDojoProps[] = "value:'{$r->getParam('value')}'";
         
         $this->view->trim = $r->getParam('trim') ? "trim=\"{$r->getParam('trim')}\"" : '';
         $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? " readonly=\"readonly\"" : '';
@@ -60,13 +59,9 @@ class Elements_ZweiFormFilteringJsonSelectController extends Zend_Controller_Act
         $this->view->promptMessage= $r->getParam('promptMessage') ? " promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         $this->view->placeHolder = $r->getParam('placeHolder') ? " placeHolder=\"{$r->getParam('placeHolder')}\"" : '';
         
-        if ($r->getParam('data') && in_array($r->getParam('mode'), array('add', null)) && $r->getParam('defaultValue') !== false) {
-            $this->view->value =  $r->getParam('defaultValue');
-        } else if ($r->getParam('data') && $r->getParam('value') !== false) {
-            $this->view->value = $r->getParam('value');
-        } else {
-            $this->view->value =  $r->getParam('defaultValue') && !$r->getParam('defaultText') ? $r->getParam('defaultValue') : '';
-        }
+        $this->view->value = $r->getParam('value');
+
+
         
         $this->view->dataDojoProps = implode(",", $dataDojoProps);
     }

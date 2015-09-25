@@ -345,45 +345,49 @@ dojo.declare("zwei.ExtraData", null, {
 			var message = items.length > 1 ? '¿Borrar ' + items.length + ' elementos seleccionados?' : '¿Borrar un elemento seleccionado';
 
 			if (confirm(message)) {
-
-				for (var j = 0; j < items.length; j++) {
-					if (items[j].i != undefined && items[j].r._items != undefined) {
-						items[j] = items[j].i;
-					}// workaround, a Dojo bug?
-
-					var xhrContent = {
-						model : model,
-						action : 'delete',
-						format : 'json'
-					};
-
-					xhrContent['primary[id]'] = items[j].id;
-
-					dojo.xhrPost({
-						url : base_url + 'crud-request',
-						content : xhrContent,
-						handleAs : 'json',
-						sync : true,
-						preventCache : true,
-						timeout : 5000,
-						load : function(response) {
-							if (response.state == 'DELETE_OK') {
-								utils.showMessage('Se ha borrado correctamente.');
-								var newStore = new dojo.data.ItemFileWriteStore({
-									url : dataGrid.store.url
-								});
-								dataGrid.setStore(newStore);
-
-							} else if (response.state == 'DELETE_FAIL') {
-								utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
-							}
-						},
-						error : function(message) {
-							utils.showMessage('Error en comunicacion de datos. error: ' + message, 'error');
-							return false;
+				if (!model) {
+					for (var j = 0; j < items.length; j++) {
+						dataGrid.store.deleteItem(items[j]);
+					}
+				} else {
+					for (var j = 0; j < items.length; j++) {
+						if (items[j].i != undefined && items[j].r._items != undefined) {
+							items[j] = items[j].i;
 						}
-					});
-					//
+
+						var xhrContent = {
+							model : model,
+							action : 'delete',
+							format : 'json'
+						};
+
+						xhrContent['primary[id]'] = items[j].id;
+
+						dojo.xhrPost({
+							url : base_url + 'crud-request',
+							content : xhrContent,
+							handleAs : 'json',
+							sync : true,
+							preventCache : true,
+							timeout : 5000,
+							load : function(response) {
+								if (response.state == 'DELETE_OK') {
+									utils.showMessage('Se ha borrado correctamente.');
+									var newStore = new dojo.data.ItemFileWriteStore({
+										url : dataGrid.store.url
+									});
+									dataGrid.setStore(newStore);
+
+								} else if (response.state == 'DELETE_FAIL') {
+									utils.showMessage('Ha ocurrido un error, verifique datos o intente más tarde', 'error');
+								}
+							},
+							error : function(message) {
+								utils.showMessage('Error en comunicacion de datos. error: ' + message, 'error');
+								return false;
+							}
+						});
+					}
 				}
 			}
 		} else {
