@@ -17,6 +17,14 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 			this.loadItems();
 			this.set('value', '');
 		},
+		_finishedLoadItems : function()
+		{
+			console.log(this.data);	
+		},
+		_finishedLoadItemsByQuery : function()
+		{
+			console.log(this.data);	
+		},
 		loadItems : function() {
 			var self = this;
 			dojo.xhrGet({
@@ -25,6 +33,7 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 				load : function(items) {
 					self.items = items;
 					self.refreshValues(items);
+					self._finishedLoadItems();
 				},
 				error : function(e) {
 					utils.showMessage(e.message, 'error');
@@ -57,7 +66,21 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 					self.items[pieces[0]] = {};
 					self.items[pieces[0]][pieces[1]] = {};
 					self.items[pieces[0]][pieces[1]][pieces[2]] = results;
+				} else if (length === 4) {
+					self.items[pieces[0]] = {};
+					self.items[pieces[0]][pieces[1]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]][pieces[3]] = results;
+				} else if (length === 5) {
+					self.items[pieces[0]] = {};
+					self.items[pieces[0]][pieces[1]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]][pieces[3]] = {};
+					self.items[pieces[0]][pieces[1]][pieces[2]][pieces[3]][pieces[4]] = results;
 				}
+
+
+
 
 				for (var index in results) {
 					data.push({
@@ -69,6 +92,7 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 				self.store = new Memory({
 					data : data
 				});
+				self._finishedLoadItemsByQuery();
 			});
 		},
 		postCreate : function() {
@@ -81,10 +105,10 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 		refreshValues : function(evt) {
 			var text = this.textbox.value;
 			this.iterateLevels(text, this.items, evt);
-			if (this.metavalue !== '') {
+			if (this.metavalue && this.metavalue !== '') {
 				this.set('value', this.metavalue);
 			}
-			//self.set('store', self.store);
+			//this.setStore(this.store);
 		},
 		iterateLevels : function(text, items, evt) {
 			var self = this;
@@ -118,9 +142,9 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 							basePath += "[" + piece + "]";
 						}
 					});
-				var basePath = levels.join(".");
+					var basePath = levels.join(".");
 
-				if (self.unbounded && isDot && !backspacePressed && text.match("^(.*)\\[.*")) {
+					if (self.unbounded && isDot && !backspacePressed && text.match("^(.*)\\[.*")) {
 						var value = text.match("^(.*)\\[.*")[1];
 						var results = query("$." + value + '[0]', items);
 					} else {
