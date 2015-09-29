@@ -19,7 +19,7 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 		},
 		_finishedLoadItems : function()
 		{
-			console.log(this.data);	
+			console.log(this.data);
 		},
 		_finishedLoadItemsByQuery : function()
 		{
@@ -27,18 +27,22 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 		},
 		loadItems : function() {
 			var self = this;
-			dojo.xhrGet({
-				url : this.url,
-				handleAs : 'json',
-				load : function(items) {
-					self.items = items;
-					self.refreshValues(items);
-					self._finishedLoadItems();
-				},
-				error : function(e) {
-					utils.showMessage(e.message, 'error');
-				}
-			});	
+			if (self.url) {
+				dojo.xhrGet({
+					url : this.url,
+					handleAs : 'json',
+					load : function(items) {
+						self.items = items;
+						self.refreshValues(items);
+						self._finishedLoadItems();
+					},
+					error : function(e) {
+						utils.showMessage(e.message, 'error');
+					}
+				});	
+			} else {
+				console.log('url is not setted');
+			}
 		},
 		loadItemsByQuery : function(pattern) {
 //			this.loadItems(); 
