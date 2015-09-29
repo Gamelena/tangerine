@@ -43,8 +43,16 @@
 	],
 	"require": {
 		"php": ">=5.4.1",
+		"ext-libxml": "*",
+		"ext-mbstring": "*",
+		"ext-dom": "*",
+		"ext-gd": "*",
 		"zend/zendframework": "*",
 		"PHPOffice/PHPExcel": "*"
+	},
+	"suggest": {
+		"ext-gd": "to use GD library based image processing.",
+		"ext-imagick": "to use Imagick based image processing."
 	},
 	"require-dev": {
 		"phpunit/phpunit": "3.7.*",
