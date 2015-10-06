@@ -18,7 +18,7 @@
                 name="<?=$this->target?>"
                 data-dojo-type="dijit/form/HorizontalSlider"
                 data-dojo-props="
-                value: <?=$this->value?>,
+                value: <?=!empty($this->value) ? $this->value : '0' ?>,
                 minimum: <?=$this->minimum?>,
                 maximum: <?=$this->maximum?>,
                 discreteValues: <?=$this->discreteValues?>,
