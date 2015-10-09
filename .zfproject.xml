@@ -87,6 +87,7 @@
             </controllerFile>
             <controllerFile controllerName="DojoSettings">
               <actionMethod actionName="index"/>
+              <actionMethod actionName="xml"/>
             </controllerFile>
             <controllerFile controllerName="PhpInfo">
               <actionMethod actionName="index"/>
@@ -186,6 +187,9 @@
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="ExtraData">
                 <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSettings">
+                <viewScriptFile forActionName="xml"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>

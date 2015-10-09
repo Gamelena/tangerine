@@ -55,7 +55,7 @@ class SettingsModel extends Zwei_Db_Table
     {
         $select = new Zend_Db_Table_Select($this);
         $select->distinct();
-        $select->from(array('s' => $this->_name), 'group');
+        $select->from($this->_name, 'group');
         Debug::writeBySettings($select->__toString(), 'query_log');
         return $this->fetchAll($select)->toArray();
     }

@@ -5,7 +5,7 @@ foreach ($this->groups as $group) :
     $selected = ($i == 0) ? ' selected="true"' : '';
 ?>
 <div data-dojo-type="dijit/layout/ContentPane" title="<?=$group['group']?>" <?=$selected?>>
-    <div data-dojo-type="dijit/form/Form" id="<?=$this->domPrefix . $i?>_form" jsId="<?=$this->domPrefix . $i?>_form"  class="formSearch" encType="multipart/form-data" target="ifrm_process" action="<?=BASE_URL.'crud-request/multi-update' ?>" method="post">
+    <form data-dojo-type="dijit/form/Form" id="<?=$this->domPrefix . $i?>_form" jsId="<?=$this->domPrefix . $i?>_form"  class="formSearch" encType="multipart/form-data" target="ifrm_process" action="<?=BASE_URL.'crud-request/multi-update' ?>" method="post">
         <div class="formSettingsInputs">
 <?php 
     $subgroups = $this->model->getSubGroups($group['group']);
@@ -15,10 +15,10 @@ foreach ($this->groups as $group) :
 ?>
             <div class="formSettingsItemContainer" title="<?=nl2br($params['description'])?>">
                 <div class="item">
-                    <label class="formSearchItemLabel"><?=$params['id'] ?></label>
+                    <label class="formSearchItemLabel"><?=isset($params['name']) ? $params['name'] : $params['id'] ?></label>
 <?php 
         //if (!empty($sg['function'])&&class_exists($sg['function'])) {$f = new $sg['function'];$f->setId($i);}
-        $params['target'] = "data['{$params['id']}']";
+        $params['target'] = "data[{$params['id']}]";
 ?>
                     <?=$this->action('index', $params['type'], 'elements', $params);?>
                 </div>
@@ -30,6 +30,7 @@ foreach ($this->groups as $group) :
         </div>
         <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
+            <?=$this->onSubmit?>
             var form = new zwei.Form({dijitForm:this, iframe: dojo.byId('ifrm_process')});
             form.save();
             var observer = form.watch("response", function(name, oldValue, response) {
@@ -47,7 +48,7 @@ foreach ($this->groups as $group) :
         <button type="submit" data-dojo-type="dijit/form/Button" iconClass="dijitIconSave" id="<?=$this->domPrefix ?>btnSaveSettings<?=$i?>">Guardar</button>
         <input type="hidden" name="model" value="<?=get_class($this->model) ?>" />
         <input type="hidden" name="nocache" value="<?=uniqid('nocache') ?>" />
-    </div>
+    </form>
 </div>
 <?php 
 endforeach;
