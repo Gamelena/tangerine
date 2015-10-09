@@ -38,7 +38,8 @@ class Components_DojoSettingsController extends Zend_Controller_Action
         
         $this->_config = Zwei_Controller_Config::getOptions();
         
-        $this->_xml = new Zwei_Admin_Xml($this->_file, 0, 1);
+        $file = Zwei_Admin_Xml::getFullPath($this->getRequest()->getParam('p'));
+        $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
         $model = $this->_xml->getAttribute('target');
         $this->_model = new $model();
         
