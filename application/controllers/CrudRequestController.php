@@ -478,9 +478,20 @@ class CrudRequestController extends Zend_Controller_Action
         
         $i = 0;
         foreach ($this->_form->data as $id => $value) {
-            $id         = str_replace("'", '', $id);
-            $row        = $this->_model->find($id)->current();
-            $row->value = $value;
+            $columnValueName = isset($this->_model->columnValueName) ? $this->_model->columnValueName : 'value';
+            $found      = $this->_model->find($id);
+            if ($found->count()) {
+                $row = $this->_model->find($id)->current();
+            } else {
+                $row = $this->_model->createRow();
+                $primary = $this->_model->info(Zend_Db_Table::PRIMARY);
+                
+                //es un loop pero solo espera un array de un elemento
+                foreach ($primary as $pk) {
+                    $row->$pk = $id;
+                }
+            }
+            $row->$columnValueName = $value;
             if ($row->save())
                 $updated++;
         }

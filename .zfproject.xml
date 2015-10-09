@@ -87,6 +87,7 @@
             </controllerFile>
             <controllerFile controllerName="DojoSettings">
               <actionMethod actionName="index"/>
+              <actionMethod actionName="xml"/>
             </controllerFile>
             <controllerFile controllerName="PhpInfo">
               <actionMethod actionName="index"/>
@@ -104,6 +105,9 @@
               <actionMethod actionName="pie"/>
             </controllerFile>
             <controllerFile controllerName="Schedule">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="ExtraData">
               <actionMethod actionName="index"/>
             </controllerFile>
           </controllersDirectory>
@@ -181,6 +185,12 @@
               <viewControllerScriptsDirectory forControllerName="Schedule">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="ExtraData">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DojoSettings">
+                <viewScriptFile forActionName="xml"/>
+              </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
             <viewFiltersDirectory/>
@@ -236,6 +246,12 @@
               <actionMethod actionName="index"/>
             </controllerFile>
             <controllerFile controllerName="DojoxWidgetColorPicker">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="ZweiFormFilteringJsonSelect">
+              <actionMethod actionName="index"/>
+            </controllerFile>
+            <controllerFile controllerName="DijitFormHorizontalSlider">
               <actionMethod actionName="index"/>
             </controllerFile>
           </controllersDirectory>
@@ -295,6 +311,12 @@
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="DojoxWidgetColorPicker">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="ZweiFormFilteringJsonSelect">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="DijitFormHorizontalSlider">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>
@@ -456,6 +478,9 @@
               <testApplicationControllerFile forControllerName="Schedule">
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="ExtraData">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
             </testApplicationControllerDirectory>
           </testApplicationModuleDirectory>
           <testApplicationModuleDirectory forModuleName="elements">
@@ -506,6 +531,12 @@
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
               <testApplicationControllerFile forControllerName="DojoxWidgetColorPicker">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="ZweiFormFilteringJsonSelect">
+                <testApplicationActionMethod forActionName="index"/>
+              </testApplicationControllerFile>
+              <testApplicationControllerFile forControllerName="DijitFormHorizontalSlider">
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
             </testApplicationControllerDirectory>

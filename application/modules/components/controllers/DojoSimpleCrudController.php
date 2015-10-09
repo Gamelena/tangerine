@@ -230,7 +230,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->onSubmit = $this->_xml->xpath('//component/forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
         $this->view->onPostSubmit = $this->_xml->xpath('//component/forms/onPostSubmit') ? dom_import_simplexml($this->_xml->forms->onPostSubmit)->textContent : '';
         $this->view->tabs = $this->_xml->getTabsWithElements(true, "@$mode='true' or @$mode='readonly' or @$mode='disabled'");
-        
         $this->view->model = $this->_xml->getAttribute('target');
         
         $this->view->modelPrimary = array();
