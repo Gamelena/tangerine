@@ -17,6 +17,11 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 			this.loadItems();
 			this.set('value', '');
 		},
+		setItems: function(items) {
+			this.items = items;
+			this.loadItems();
+			this.set('value', '');
+		},
 		_finishedLoadItems : function()
 		{
 			console.log(this.data);
@@ -40,6 +45,9 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 						utils.showMessage(e.message, 'error');
 					}
 				});	
+			} else if (self.items !== null) {
+				self.refreshValues(items);
+				self._finishedLoadItems();
 			} else {
 				console.log('url is not defined, loading empty list');
 				require(["dojo/store/Memory"], function(Memory) {
