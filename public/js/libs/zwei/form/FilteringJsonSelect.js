@@ -27,7 +27,7 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 		},
 		loadItems : function() {
 			var self = this;
-			if (self.url) {
+			if (self.url && self.url !== "") {
 				dojo.xhrGet({
 					url : this.url,
 					handleAs : 'json',
@@ -41,11 +41,17 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 					}
 				});	
 			} else {
-				console.log('url is not setted');
+				console.log('url is not defined, loading empty list');
+				require(["dojo/store/Memory"], function(Memory) {
+					self.store = new Memory({
+						data : []
+					});
+					self._finishedLoadItems();	
+				});
+
 			}
 		},
 		loadItemsByQuery : function(pattern) {
-//			this.loadItems(); 
 			var self = this;
 			var data = [];
 			var pieces = pattern.split(".");
@@ -82,8 +88,6 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 					self.items[pieces[0]][pieces[1]][pieces[2]][pieces[3]] = {};
 					self.items[pieces[0]][pieces[1]][pieces[2]][pieces[3]][pieces[4]] = results;
 				}
-
-
 
 
 				for (var index in results) {
