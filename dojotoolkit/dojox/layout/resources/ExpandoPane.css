@@ -309,3 +309,37 @@
     .dj_ie6 .zweicom .dojoxExpandoIcon {
         background-image: url('../../../dijit/themes/zweicom/images/spriteRoundedIconsSmall.gif');
     }
+    
+    .flat .dojoxExpandoTitle {
+        height:16px;
+        font-size:0.9em;
+        font-weight:bold;
+        padding:3px;
+        padding-top:6px;
+        padding-bottom:5px;
+        background:#007ac9;
+        border-left: 1px solid #B1BADF;
+        border-right: 1px solid #B1BADF;
+        color: #fff;
+    }
+    
+    .flat .dojoxExpandoClosed .dojoxExpandoTitle {
+        background: none;
+        background-color: #F0F4FC;
+        border: none;
+    }
+    
+    .flat .dojoxExpandoClosed {
+        background: none;
+        background-color: #F0F4FC;
+        border: 1px solid #B1BADF !important;
+    }
+    
+    .flat .dojoxExpandoIcon {
+        background-image: url('../../../dijit/themes/zweicom/images/spriteRoundedIconsSmall.png');
+    }
+    
+    .dj_ie6 .flat .dojoxExpandoIcon {
+        background-image: url('../../../dijit/themes/zweicom/images/spriteRoundedIconsSmall.gif');
+    }
+    
