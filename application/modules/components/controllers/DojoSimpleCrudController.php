@@ -86,7 +86,6 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
         $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
-        $this->getFrontController()->getInstance()->addModuleDirectory(APPLICATION_PATH . '/modules/elements');
         
         $this->_config = Zwei_Controller_Config::getOptions();
         $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : '';
