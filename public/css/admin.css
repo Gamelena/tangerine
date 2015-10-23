@@ -166,16 +166,15 @@ input,textarea,select {
 }
 
 #tituloAdm {
-    color: #50a032;
-    float: left;
-    font-family: "resagokrbold",serif;
-    font-size: 23px;
-    font-weight: bold;
-    padding-left: 18px;
-    padding-top: 5px;
     text-align: left;
-    text-shadow: 0.2em 0 1em white, 0.2em 0.1em 0.3em white;
-    filter: progid:DXImageTransform.Microsoft.Shadow(color='white', Direction=135, Strength=6);
+    font-family: 'resagokrbold', serif;
+    float: left;
+    padding-left: 18px;
+    padding-top: 7px;
+    font-size: 23px;
+    color: #50A032;
+/*    text-shadow: 0.2em 0em 1em white, 0.2em 0.1em 0.1em white;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='white', Direction=135, Strength=6);*/
 }
 
 #logosAdm {
@@ -185,7 +184,7 @@ input,textarea,select {
 }
 
 #logosAdm img{
-    height: 33px;
+    height: 34px;
 }
 
 
@@ -353,6 +352,53 @@ form .login {
     
 }
 
+.dijitTreeContainer {
+	width: 100%;
+}
+
+.flat .dijitCheckBox {
+	margin-right: 0.5em;
+}
+
+.flat .dijitVisible {
+	background: #368dbc;
+
+}
+
+.flat ..dojoxMultiSelectItem {
+	padding: 0.2em;
+}
+
+
+.flat .dojoxGrid .dojoxGridCell {
+    padding: 1em !important;
+}
+
+.flat .dojoxExpandoPane .dojoxExpandoWrapper {
+    background-color: #5e6a71;
+    color: #fff;
+}
+
+.flat #infoUsr {
+	color: #fff;
+}
+
+.flat #tituloAdm{
+	color: #fff;
+}
+
+.flat .formSearchItemContainer label {
+    color: #fff;
+}
+
+.flat #contentPaneBottom{
+	color: #fff;
+	font-weight: bold;
+}
+
+.flat .dijitIconFile:before, .flat .dijitLeaf:before {
+	content: initial;
+}
 .popup_title {
     font-weight: bold;
     font-size: 13px;
@@ -366,8 +412,29 @@ a.settingsTab {
     border: 1px solid #769DC0;
     font-size: 12px;
     cursor: pointer;
-    color : #777;
+    color: #777;
 }
+
+.flat .formSearch .dijitRadio, .flat .formSearch .dijitRadioIcon {
+	border: 1px solid #FFFFFF;
+}
+
+.flat .formSearch .dijitRadio:after,  .flat .formSearch .dijitRadioIcon:after {
+	background: #fff;
+}
+
+.flat a.settingsTab {
+    display: block;
+    float: left;
+    padding: 1em;
+    margin-right: 2px;
+    border: 1px solid #769DC0;
+    font-size: 12px;
+    cursor: pointer;
+    color: #777;
+    font-weight: bold;
+}
+
 
 #black_overlay {
     display: none;
@@ -554,30 +621,6 @@ a.settingsTab {
     font-weight: normal;
 }
 
-.settingsArea {
-	
-}
-
-.settingsArea > table {
-	margin: 0 auto;
-}
-
-.settingsArea > table td {
-	
-}
-
-.settingsArea > table th {
-	padding: 0.3em;
-	color: #243C5F;
-	word-wrap: break-word;
-	font-weight: bold;
-}
-
-.settingsArea > table th, .tabForm a {
-    color: #243C5F;
-}
-
-
 /*image shadow*/
 .img-shadow {
     float:right;
@@ -689,8 +732,6 @@ a.settingsTab {
 .formSearchSubmit .submit{
     float: right;
     margin-right: 9px;
-    position: relative;
-    top: -5px;
 }
 
 .formSearchItemContainer .item {
@@ -706,7 +747,7 @@ a.settingsTab {
 }
 
 .contentBottom{
-    height: 2.7em;
+    height: 3em;
 }
     
 .contentCenter{
@@ -734,14 +775,25 @@ a.settingsTab {
     background: #fff !important;
 }
 
+
+#eficienciaChart > div {
+    margin: 0 auto;
+}
+
+.dojoxCheckedMultiSelect .dojoxCheckedMultiSelectWrapper {
+    border-radius: 0.5em;
+    border-color: #5FAFB0;
+}
+
 /*DND*/
 .dndWrapper{
     height: 24em;
 }
 
 .dndWrapper a:HOVER{
-    text-decoration: underline;
+	text-decoration: underline;
 }
+
 .dndContainer{
     height: 100%;
     width: 190px;
@@ -792,17 +844,20 @@ a.settingsTab {
 
 
 
+
 .dojoxCheckedMultiSelect .dojoxCheckedMultiSelectWrapper {
     border-radius: 0.5em;
     border-color: #5FAFB0;
 }
 
-/*Icons*/
+/*Zwei Theme*/
+
 .zweiIconCsv {
 	background-image:  url('i/csv.png');
 	width: 16px;
     height: 16px;
 }
+
 
 .zweiIconUpload {
 	background-image:  url('i/upload.png');
@@ -816,16 +871,24 @@ a.settingsTab {
     height: 16px;
 }
 
-
-
-/*Zwei Theme*/
-
-.zweicom .dojoxGridHeader .dojoxGridCell {
+.zweicom .dojoxGridHeader .dojoxGridCell, .flat .dojoxGridHeader .dojoxGridCell {
     padding-top: 1em;
     padding-bottom: 1em;
 	font-weight: bold;
 }
-.zweicom .dojoxGridCell {
+
+.flat .dojoxGridHeader .dojoxGridCell {
+    padding-top: 1em;
+    padding-bottom: 1em;
+	font-weight: bold;
+	background: #007AC9;
+	color: #fff;
+}
+.flat .keyPadWrapper { 
+    background-color: #fff;
+}
+
+.zweicom .dojoxGridCell, .flat .dojoxGridCell {
 	padding-top: 1em;
 	padding-bottom: 1em;
 }
@@ -868,11 +931,15 @@ a.settingsTab {
 	padding-bottom: 0.3em;
 }
 
-.zweicom .dijitPlaceHolder {
-    padding-bottom: 0.3em;
-    padding-top: 0.3em;
-}
-
 .zweicom .dojoxMultiSelectItem {
 	padding: 0.3em;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
