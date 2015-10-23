@@ -97,9 +97,11 @@ class AdminController extends Zend_Controller_Action
             ');         
         }
         
+        $color = $this->_dojoTheme === 'flat' ? '#02456D' : '#131313';
+        
         $this->view->headStyle()->appendStyle('
             .'.$this->_dojoTheme.'{
-               color: #131313;
+               color: '.$color.';
                font-family: Arial,Verdana, Helvetica,sans-serif;
                font-size: 0.75em;
             }
