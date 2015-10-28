@@ -6,26 +6,6 @@
 		{
 			"type": "package",
 			"package": {
-				"name": "zend/zendframework",
-				"version": "1.11.9",
-				"source": {
-					"url": "http://framework.zend.com/svn/framework/standard",
-					"type": "svn",
-					"reference": "tags/release-1.11.9/"
-				},
-				"autoload": {
-					"psr-0": {
-						"Zend": "library",
-						"ZendX": "library"
-					}
-				},
-				"config": {
-					"bin-dir": "bin"
-				}
-			}
-		}, {
-			"type": "package",
-			"package": {
 				"name": "PHPOffice/PHPExcel",
 				"version": "1.7.8",
 				"source": {
@@ -46,8 +26,7 @@
 		"ext-libxml": "*",
 		"ext-mbstring": "*",
 		"ext-dom": "*",
-		"ext-gd": "*",
-		"zend/zendframework": "*",
+		"zendframework/zendframework1": "*",
 		"PHPOffice/PHPExcel": "*"
 	},
 	"suggest": {
