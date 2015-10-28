@@ -1,6 +1,6 @@
 {
   "name": "admportal",
-  "version": "1.5.4",
+  "version": "1.5.7",
   "authors": [
     "rodrigo <rodrigo.riquelme@zweicom.com>"
   ],
@@ -23,6 +23,7 @@
     "dojo": "~1.10.4",
     "dijit": "~1.10.4",
     "dojox": "~1.10.4",
-    "dojo-calendar": "*"
+    "dojo-calendar": "*",
+    "dgrid": "~0.4.0"
   }
 }

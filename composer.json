@@ -1,6 +1,7 @@
 {
 	"name": "zweicom/admportal",
 	"description": "Admportal",
+	"version": "1.5.7",
 	"type": "library",
 	"repositories": [
 		{
