@@ -27,6 +27,7 @@
 		"ext-libxml": "*",
 		"ext-mbstring": "*",
 		"ext-dom": "*",
+                "ext-mysql": "*",
 		"zendframework/zendframework1": "*",
 		"PHPOffice/PHPExcel": "*"
 	},
