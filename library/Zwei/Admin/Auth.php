@@ -42,7 +42,7 @@ class Zwei_Admin_Auth
      */
     public static function getInstance()
     {
-        if (null === self::$_instance) {
+        if (self::$_instance === null) {
             self::$_instance = new self();
         }
 
@@ -56,7 +56,9 @@ class Zwei_Admin_Auth
      */
     public function hasIdentity()
     {
-        if (!Zend_Auth::getInstance()->hasIdentity()) return false;
+        if (!Zend_Auth::getInstance()->hasIdentity()) {
+            return false;
+        }
         
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         $options = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
@@ -70,10 +72,10 @@ class Zwei_Admin_Auth
     
     /**
      * Autentificación contra DB.
-     * 
+     * @param string $encryption - Metodo SQL de Encriptación.
      * @return Zend_Auth_Adapter_DbTable
      */
-    public function getAuthAdapter($hash = 'MD5')
+    public function getAuthAdapter($encryption = 'MD5')
     {
         $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
         $dbAdapter = isset($resource) && $resource->getDb("auth") ?
@@ -89,8 +91,8 @@ class Zwei_Admin_Auth
         ->setIdentityColumn($authUserName)
         ->setCredentialColumn($authPassword);
         
-        if (!empty($hash)) {
-            $authAdapter->setCredentialTreatment($hash.'(?) and approved="1"');
+        if (!empty($encryption)) {
+            $authAdapter->setCredentialTreatment($encryption.'(?) and approved="1"');
         } else {
             $authAdapter->setCredentialTreatment('? and approved="1"');
         }
@@ -109,8 +111,7 @@ class Zwei_Admin_Auth
         $auth = Zend_Auth::getInstance();
         $userInfo = $authAdapter->getResultRowObject(null, 'password');
         
-        $options = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
-        $config = new Zend_Config($options);
+        $config = Zwei_Controller_Config::getOptions();
         
         if (isset($config->zwei->session->namespace)) {
             $userInfo->sessionNamespace = $config->zwei->session->namespace;
@@ -125,7 +126,6 @@ class Zwei_Admin_Auth
         foreach ($buffGroups as $g) {
             $groups[] = $g['acl_groups_id'];
         }
-        
         
         $userInfo->groups = $groups;
         $authStorage->write($userInfo);

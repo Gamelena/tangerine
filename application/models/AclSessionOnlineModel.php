@@ -52,10 +52,11 @@ class AclSessionOnlineModel extends DbTable_AclSession
         
         $modifiedDelayed = time() - 12;
         $select->where(
-                $this->getAdapter()->quoteInto('modified > ?', $modifiedDelayed)
+                $this->getAdapter()->quoteInto("$this->_name.modified > ?", $modifiedDelayed)
         );
-        $select->where("acl_users_id <> '0'");
-        $select->order("modified DESC");
+        $select->where("$this->_name.acl_users_id <> '0'");
+        $select->order("$this->_name.modified DESC");
+        
         
         return $select;
     }
@@ -86,6 +87,13 @@ class AclSessionOnlineModel extends DbTable_AclSession
         return $data;
     }
 
+    /**
+     * Deletes existing rows.
+     *
+     * @param  array|string $where SQL WHERE clause(s).
+     * @return int          The number of rows deleted.
+     * @see Zwei_Db_Table::delete()
+     */
     public function delete ($where)
     {
         $aWhere = self::whereToArray($where);
@@ -95,6 +103,16 @@ class AclSessionOnlineModel extends DbTable_AclSession
             return false;
         }
         return parent::delete($where);
+    }
+    
+    /**
+     * 
+     * @param int $aclUsersId
+     * @return Zend_Db_Table_Rowset_Abstract
+     */
+    public function findByAclUsersId($aclUsersId)
+    {
+        return $this->fetchAll($this->getAdapter()->quoteInto("$this->_name.acl_users_id = ? ", $aclUsersId));
     }
 }
 
