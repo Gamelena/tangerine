@@ -1,9 +1,4 @@
 <?php
-/**
- * Ruta de instalación por defecto de adaptador MonetDB en Debian y Ubuntu.
- * @link https://www.monetdb.org/downloads/deb/
- */
-require_once '/usr/share/php/monetdb/php_monetdb.php';
 
 /**
  * 
@@ -92,6 +87,17 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     public function init()
     {
         $options = Zwei_Controller_Config::getOptions();
+        
+        if (isset($options->zwei->monetdb) && isset($options->zwei->monetdb->driverFile)) {
+            require_once $options->zwei->monetdb->driverFile;
+        } else {
+            /**
+             * Ruta de instalación por defecto de adaptador MonetDB en Debian y Ubuntu.
+             * @link https://www.monetdb.org/downloads/deb/
+             */
+            require_once '/usr/share/php/monetdb/php_monetdb.php';
+        }
+        
         
         $params = array();
         if ($this->_adapter === null) {
