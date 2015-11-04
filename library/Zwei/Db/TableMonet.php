@@ -49,16 +49,17 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      */
     protected $_connection;
     
-    /**
-     * 
-     */
-    protected $_isFiltered = false;
+    const SELECT_WITH_FROM_PART    = true;
+    const SELECT_WITHOUT_FROM_PART = false;
     
     /**
      * 
      * @var int
      */
     protected $_count = 0;
+    
+    
+    protected $_is_filtered;
     
     /**
      * Hash que indica si deben ser validados los permisos modulo-usuario-accion en api rest.
@@ -75,6 +76,17 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     public function __construct()
     {
         $this->init();
+    }
+    
+    
+    /**
+     * Flag para especificar que ignore filtros en Zwei_Db_Object
+     * y aplique filtros en modelo
+     * @return boolean
+     */
+    public function isFiltered()
+    {
+        return $this->_is_filtered;
     }
     
     /**
@@ -150,7 +162,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     }
     
     
-    public function select()
+    public function select($withFromPart = self::SELECT_WITH_FROM_PART)
     {
         /**
          * @fixme estamos iniciando el generador de querys con adaptador SQL por defecto, usualmente MySQL, 
@@ -158,9 +170,28 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
          * 
          * @todo esto debiera inicializarse con new Zwei_Db_TableMonet_Select($this->getAdapter()), $this->getAdapter debiera retornar un Zwei_Db_TableMonet_Adapter.
          */
+        
         $select = new Zwei_Db_TableMonet_Select(Zend_Db_Table::getDefaultAdapter());
-        return $select->from($this->_name);
+        
+        if ($withFromPart === self::SELECT_WITH_FROM_PART) {
+            $select->from($this->_name);
+        }
+        
+        return $select;
     }
+    
+    /**
+     * Query a raw SQL string.
+     * 
+     * @param string $query
+     * @return unknown
+     */
+    public function query($query)
+    {
+        $result = monetdb_query($this->_connection, monetdb_escape_string($query)) or trigger_error(monetdb_last_error());
+        return $result;
+    }
+    
     
     /**
      * @param $select Zwei_Db_Table_Monet
@@ -207,11 +238,6 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     public function fetchRow($select = null)
     {
         
-    }
-    
-    public function isFiltered()
-    {
-        return $this->_isFiltered;
     }
     
     public function info($key)
