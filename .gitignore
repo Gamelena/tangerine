@@ -1,0 +1,9 @@
+bower_components/*
+vendor/*
+.settings/*
+composer.lock
+.buildpath
+.project
+log/*
+cache/*
+
