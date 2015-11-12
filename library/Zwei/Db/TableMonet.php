@@ -39,6 +39,12 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     );
     
     /**
+     * parámetros enviados por $_REQUEST
+     * @var Zwei_Utils_Form
+     */
+    protected $_form;
+    
+    /**
      * @var string
      */
     protected $_adapter;
@@ -124,7 +130,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         {
             $this->_params[$i] = $param;
         }
-        
+        $this->_form = new Zwei_Utils_Form();
         $this->connect();
     }
     
