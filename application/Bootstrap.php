@@ -1,6 +1,7 @@
 <?php
 /**
- *
+ * @namespace application
+ * 
  * Gestor de arranque de la aplicación.
  *
  */
@@ -63,15 +64,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         defined('APPLICATION_PATH') || define('APPLICATION_PATH', ROOT_DIR . '/application');
         defined('COMPONENTS_ADMIN_PATH') || define('COMPONENTS_ADMIN_PATH', APPLICATION_PATH.'/components');
         defined('BASE_URL') || define('BASE_URL', PROTO.$_SERVER['HTTP_HOST'].dirname($_SERVER["SCRIPT_NAME"]).$eop);
-        defined('TEMPLATE') || define('TEMPLATE', '');//template alternativo [TODO] esto es para desarrollo futuro
 
         
         // Define application environment
-        defined('APPLICATION_ENV')
-        || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+        // Define application environment
+        defined('APPLICATION_ENV') ||
+                 define('APPLICATION_ENV', 
+                        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
         
         $this->_config = $this->getConfig();
-        //if (isset($this->_config->zwei->date->defaultTimezone)) date_default_timezone_set($this->_config->zwei->date->defaultTimezone);
         
         defined('ADMPORTAL_APPLICATION_PATH') || define('ADMPORTAL_APPLICATION_PATH', $this->_config->zwei->admportal->applicationPath);
         
