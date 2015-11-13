@@ -1,9 +1,16 @@
-bower_components/*
-vendor/*
-.settings/*
-composer.lock
+vendor/
+tests/ci/
+log/
 .buildpath
 .project
-log/*
-cache/*
+.idea/
+.settings/
+composer.lock
+*.iml
+web/cache/*
+web/log/*
+web/tests/ci/*
+web/tests/logs/*
+web/tests/pdepend/*
+
 
