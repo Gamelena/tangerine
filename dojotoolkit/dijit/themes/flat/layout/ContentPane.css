@@ -21,7 +21,6 @@
  *	set background-color and padding of ContentPane nested within a BorderContainer 
  */
 .dijitContentPane {
-  background: #3c8dbc;
   padding: 0;
 }
 /* contentpane in other layouts */
@@ -30,7 +29,7 @@
 .dijitTabContainerBottom-dijitContentPane,
 .dijitTabContainerRight-dijitContentPane,
 .dijitAccordionContainer-dijitContentPane {
-  background: #fff;
+  background: #EAEAEA;
   padding: 4px;
   left: 0 !important;
   top: 0 !important;

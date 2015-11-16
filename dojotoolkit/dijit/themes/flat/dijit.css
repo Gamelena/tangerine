@@ -31,9 +31,9 @@ table.dijitInline {
 	display: none !important;
 }
 .dijitVisible {
-	
-	display: block !important;	
-	position: relative;			
+	display: block !important;
+	position: relative;
+	background: #EAEAEA;
 }
 .dj_ie6 .dijitComboBox .dijitInputContainer,
 .dijitInputContainer {
@@ -245,12 +245,10 @@ td.dijitButtonContents {
 	border:1px solid gray;
 }
 .dijitButtonNode {
-	
 	border:1px solid gray;
 	margin:0;
 	line-height:20px;
-	vertical-align: middle;
-	#vertical-align: auto;
+	vertical-align: middle;#vertical-align:auto;
 	text-align:center;
 	white-space: nowrap;
 }
@@ -325,7 +323,6 @@ div.dijitArrowButton {
 	float: none;
 }
 .dijitInputInner {
-	
 	border:0 !important;
 	background-color:transparent !important;
 	width:100% !important;
@@ -1117,6 +1114,7 @@ body .dijitAlignClient { position: absolute; }
 }
 .dijitTabContainerTop-tabs {
 	border-bottom: 1px solid black;
+	background: #3C8DBC;
 }
 .dijitTabContainerTop-container {
 	border-top: 0;
