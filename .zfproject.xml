@@ -254,6 +254,9 @@
             <controllerFile controllerName="DijitFormHorizontalSlider">
               <actionMethod actionName="index"/>
             </controllerFile>
+            <controllerFile controllerName="ZweiFormDateTimeTextBox">
+              <actionMethod actionName="index"/>
+            </controllerFile>
           </controllersDirectory>
           <formsDirectory enabled="false"/>
           <layoutsDirectory enabled="false"/>
@@ -317,6 +320,9 @@
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="DijitFormHorizontalSlider">
+                <viewScriptFile forActionName="index"/>
+              </viewControllerScriptsDirectory>
+              <viewControllerScriptsDirectory forControllerName="ZweiFormDateTimeTextBox">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
             </viewScriptsDirectory>

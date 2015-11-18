@@ -1,6 +1,6 @@
 <?php
 
-class Elements_DijitFormDateTextBoxController extends Zend_Controller_Action
+class Elements_ZweiFormDateTextBoxController extends Zend_Controller_Action
 {
     public function init()
     {
