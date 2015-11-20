@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"name": "gamelena/tangerine",
 	"description": "Tangerine",
 	"version": "1.5.4",
@@ -6,10 +7,17 @@
 	"require": {
 		"php": ">=5.4.1"
 	},
+=======
+	"name": "zweicom/admportal",
+	"description": "Admportal",
+	"version": "1.5.7",
+	"type": "library",
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 	"repositories": [
 		{
 			"type": "package",
 			"package": {
+<<<<<<< HEAD
 				"name": "zend/zendframework",
 				"version": "1.11.9",
 				"source": {
@@ -30,6 +38,8 @@
 		}, {
 			"type": "package",
 			"package": {
+=======
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 				"name": "PHPOffice/PHPExcel",
 				"version": "1.7.8",
 				"source": {
@@ -46,11 +56,27 @@
 		}
 	],
 	"require": {
+<<<<<<< HEAD
 
 	},
 	"require-dev": {
 		"zend/zendframework": "*",
 		"PHPOffice/PHPExcel": "*",
+=======
+		"php": ">=5.4.1",
+		"ext-libxml": "*",
+		"ext-mbstring": "*",
+		"ext-dom": "*",
+		"ext-mysql": "*",
+		"zendframework/zendframework1": "*",
+		"PHPOffice/PHPExcel": "*"
+	},
+	"suggest": {
+		"ext-gd": "to use GD library based image processing.",
+		"ext-imagick": "to use Imagick based image processing."
+	},
+	"require-dev": {
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 		"phpunit/phpunit": "3.7.*",
 		"phpunit/phpunit-selenium": ">=1.2",
 		"phpunit/dbunit": ">=1.2",
@@ -59,9 +85,23 @@
 	},
 	"authors": [
 		{
+<<<<<<< HEAD
 			"name": "Rodrigo",
 			"email": "rodrigo.riquelme.e@gmail.com"
 		}
 	],
 	"minimum-stability": "stable"
+=======
+			"name": "Desarrollo",
+			"email": "desarrollo@zweicom.com"
+		}
+	],
+	"scripts" : {
+		"pre-archive-cmd": [
+			"bower install --allow-root",
+			"cp -f -R dojotoolkit/* bower_components/",
+			"cp -f -R bower_components/dojo-calendar/* bower_components/dojox/calendar/"
+		 ]
+	}
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 }

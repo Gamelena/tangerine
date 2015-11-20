@@ -42,7 +42,11 @@ class Zwei_Admin_Auth
      */
     public static function getInstance()
     {
+<<<<<<< HEAD
         if (self::$_instance === null) {
+=======
+        if (null === self::$_instance) {
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
             self::$_instance = new self();
         }
 
@@ -56,9 +60,13 @@ class Zwei_Admin_Auth
      */
     public function hasIdentity()
     {
+<<<<<<< HEAD
         if (!Zend_Auth::getInstance()->hasIdentity()) {
             return false;
         }
+=======
+        if (!Zend_Auth::getInstance()->hasIdentity()) return false;
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         $options = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
@@ -72,10 +80,17 @@ class Zwei_Admin_Auth
     
     /**
      * Autentificación contra DB.
+<<<<<<< HEAD
      * @param string $encryption - Metodo SQL de Encriptación.
      * @return Zend_Auth_Adapter_DbTable
      */
     public function getAuthAdapter($encryption = 'MD5')
+=======
+     * 
+     * @return Zend_Auth_Adapter_DbTable
+     */
+    public function getAuthAdapter($hash = 'MD5')
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
     {
         $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
         $dbAdapter = isset($resource) && $resource->getDb("auth") ?
@@ -91,8 +106,13 @@ class Zwei_Admin_Auth
         ->setIdentityColumn($authUserName)
         ->setCredentialColumn($authPassword);
         
+<<<<<<< HEAD
         if (!empty($encryption)) {
             $authAdapter->setCredentialTreatment($encryption.'(?) and approved="1"');
+=======
+        if (!empty($hash)) {
+            $authAdapter->setCredentialTreatment($hash.'(?) and approved="1"');
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         } else {
             $authAdapter->setCredentialTreatment('? and approved="1"');
         }
@@ -111,7 +131,12 @@ class Zwei_Admin_Auth
         $auth = Zend_Auth::getInstance();
         $userInfo = $authAdapter->getResultRowObject(null, 'password');
         
+<<<<<<< HEAD
         $config = Zwei_Controller_Config::getOptions();
+=======
+        $options = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
+        $config = new Zend_Config($options);
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         
         if (isset($config->zwei->session->namespace)) {
             $userInfo->sessionNamespace = $config->zwei->session->namespace;
@@ -127,6 +152,10 @@ class Zwei_Admin_Auth
             $groups[] = $g['acl_groups_id'];
         }
         
+<<<<<<< HEAD
+=======
+        
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         $userInfo->groups = $groups;
         $authStorage->write($userInfo);
         

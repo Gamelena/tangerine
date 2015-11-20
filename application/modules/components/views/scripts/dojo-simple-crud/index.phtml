@@ -22,7 +22,11 @@ endif;
 ?>
 <div id="<?=$this->domPrefix?>contentTab" data-dojo-type="<?=$this->containerDojoType?>" data-dojo-props="gutters:false, style:{width:'100%', height: '100%'}" class="contentWrapper">
 <?php 
+<<<<<<< HEAD
 if ($this->hasElements) :
+=======
+if ($this->hasElements || ($this->hasSearchers && $this->model)) :
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 ?>
     <div data-dojo-type="<?=$this->subContainerDojoType?>" data-dojo-props="gutters:false, region: 'top', executeScripts: true " style="width: 100%; height: 100%" title="<?=$this->name?>">
         <div data-dojo-type="dojox/layout/ContentPane" id="<?=$this->domPrefix?>contentCenter" data-dojo-props="region:'center', splitter:true, executeScripts: true, scriptHasHooks: true" class="contentCenter">

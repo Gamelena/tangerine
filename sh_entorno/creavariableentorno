@@ -1,0 +1,12 @@
+#!/bin/bash
+ZWC_ADMPORTAL_PATH=$ZWC_ADMPORTAL
+DEST_PATH=$PWD
+
+VAR_=$PWD
+cd ..
+VAR=$PWD
+cd
+
+sed -i '$ i\DEVELBASE='${VAR##*/} .bashrc
+sed -i '$ i\export ZWC_ADMPORTAL='${DEVELBASE##*/}$VAR_ .bashrc
+sed -i '$ i\export PATH='$PATH:$ZWC_ADMPORTAL/tools .bashrc

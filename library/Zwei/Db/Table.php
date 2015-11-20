@@ -300,7 +300,10 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         
         if ($update === 0) {
             $this->setMessage("Sin Cambios");
+<<<<<<< HEAD
             return true;
+=======
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         }
         return $update;
     }

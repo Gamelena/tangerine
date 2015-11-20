@@ -18,6 +18,7 @@ class Elements_DijitFormSelectController extends Zend_Controller_Action
         $this->view->domId =  $r->getParam('domId');
         $this->view->target =  $r->getParam('target');
         
+<<<<<<< HEAD
         $this->view->formatter = $r->getParam('formatter', false);
         $this->view->data = $r->getParam('data', false);
         $this->view->mode = $r->getParam('mode');
@@ -37,18 +38,42 @@ class Elements_DijitFormSelectController extends Zend_Controller_Action
         $this->view->onclick = $r->getParam('onclick') ? " onclick=\"{$r->getParam('onclick')}\"" : '';
         $this->view->onkeypress = $r->getParam('onkeypress') ? " onkeypress=\"{$r->getParam('onkeypress')}\"" : '';
         $this->view->onshow = $r->getParam('onshow') ? " onShow=\"{$r->getParam('onshow')}\"" : '';
+=======
+        $this->view->data = $r->getParam('data', false);
+        $this->view->mode = $r->getParam('mode');
+        $this->view->trim = $r->getParam('trim') ? "trim=\"{$r->getParam('trim')}\"" : '';
+        $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? "readonly=\"readonly\"" : '';
+        $this->view->disabled = $r->getParam('disabled') === 'true' || $r->getParam($r->getParam('mode')) == 'disabled' ? "disabled=\"disabled\"" : '';
+        $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
+        $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
+        $this->view->regExp = $r->getParam('regExp') ? "regExp=\"{$r->getParam('regExp')}\"" : '';
+        $this->view->label = $r->getParam('label') ? "label=\"{$r->getParam('label')}\"" : '';
+        
+        $this->view->onchange = $r->getParam('onchange') ? $r->getParam('onchange') : '';
+        
+        $this->view->onclick = $r->getParam('onclick') ? "onclick=\"{$r->getParam('onclick')}\"" : '';
+        $this->view->onshow = $r->getParam('onshow') ? "onShow=\"{$r->getParam('onshow')}\"" : '';
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         $this->view->onload = $r->getParam('onload', '');
         
         if (preg_match("/^\{BASE_URL\}(.*)$/", $r->getParam('label'), $matches)) {
             $this->view->label = "url=\"".BASE_URL . $matches[1]."\"";
         }
         
+<<<<<<< HEAD
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? " invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
         $this->view->missingMessage = $r->getParam('missingMessage') ? "missingMessage=\"{$r->getParam('missingMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? " promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         $this->view->placeHolder = $r->getParam('placeHolder') ? " placeHolder=\"{$r->getParam('placeHolder')}\"" : '';
         
         if ($r->getParam('data') && in_array($r->getParam('mode'), array('add', null)) && $r->getParam('defaultValue') !== false) {
+=======
+        $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
+        $this->view->promptMessage= $r->getParam('promptMessage') ? "promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
+        $this->view->placeHolder = $r->getParam('placeHolder') ? "placeHolder=\"{$r->getParam('placeHolder')}\"" : '';
+        
+        if ($r->getParam('data') && $r->getParam('mode') == 'add' && $r->getParam('defaultValue') !== false) {
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
             $this->view->value =  $r->getParam('defaultValue');
         } else if ($r->getParam('data') && $r->getParam('value') !== false) {
             $this->view->value = $r->getParam('value');
@@ -75,10 +100,14 @@ class Elements_DijitFormSelectController extends Zend_Controller_Action
         if ($r->getParam('table')) {
             $id = $r->getParam('tablePk', 'id');
             $className = $r->getParam('table');
+<<<<<<< HEAD
             
             /**
              * @var $model Zwei_Db_Table
              */
+=======
+
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
             $model = new $className();
     
             if ($r->getParam('tableMethod')) {
@@ -99,6 +128,7 @@ class Elements_DijitFormSelectController extends Zend_Controller_Action
             
             try {
                 $rows = $model->fetchAll($select);
+<<<<<<< HEAD
                 if ($r->getParam('overloadDataList')) {
                     $rows = $model->overloadDataList($rows);
                 }
@@ -111,6 +141,17 @@ class Elements_DijitFormSelectController extends Zend_Controller_Action
                 $options .= "<option value=\"{$r->getParam('defaultValue', '')}\" label=\"{$r->getParam('defaultText', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
             }
             
+=======
+            } catch (Zend_Db_Exception $e) {
+                throw new Zend_Db_Exception("$className::$methodName() {$e->getMessage()}", $e->getCode());
+            }
+
+            if ($r->getParam('defaultValue') || $r->getParam('defaultValue') === '' || $r->getParam('defaultText') || $r->getParam('defaultText') === '') {
+                $options .= "<option value=\"{$r->getParam('defaultValue', '')}\" label=\"{$r->getParam('defaultText', '')}\">{$r->getParam('defaultText', '')}</option>\r\n";
+            }
+    
+    
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
             foreach ($rows as $row) {
                 $selected = $row[$id] == $value ? "selected=\"selected\"" : "";
                 if ($r->getParam('tableField')) {
@@ -137,5 +178,10 @@ class Elements_DijitFormSelectController extends Zend_Controller_Action
         }
         return $options;
     }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 }
 

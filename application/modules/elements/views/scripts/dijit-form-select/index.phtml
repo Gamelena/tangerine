@@ -1,5 +1,6 @@
 <script>
 setTimeout(function () {
+<<<<<<< HEAD
 <?php 
 //Si existe atributo formatter se aplica para el select (además de la grilla)
 if (!$this->data && $this->formatter) :
@@ -20,6 +21,8 @@ if (!$this->data && $this->formatter) :
 <?php 
 endif;
 ?>
+=======
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 <?php
 if ($this->data && $this->value && $this->mode == 'add') :
 ?>
@@ -52,7 +55,12 @@ if ($this->data) :
 endif;
 ?>
 <select data-dojo-type="dijit/form/Select" id="<?=$this->domId.$this->i?>" name="<?=$this->target?>" onchange="<?=$this->onchange?>" onload="dijit.byId('<?=$this->domId . $this->i?>').set('value', dijit.byId('<?=$this->domId . $this->i?>').get('value'));<?=$this->onload ?>" data-dojo-props="<?=$store?>" 
+<<<<<<< HEAD
     <?=$value.$this->readonly.$this->disabled.$this->required.$this->invalidMessage.$this->missingMessage.$this->onshow.
     $this->promptMessage.$this->onkeypress.$this->placeHolder.$this->onblur.$this->onclick.$this->trim ?> <?php if ($this->formatter) echo " searchAttr=\"name\" labelAttr=\"$labelName\" labelType=\"html\""?>>
+=======
+    <?=$value.$this->readonly.$this->disabled.$this->required.$this->invalidMessage.$this->onshow.
+    $this->promptMessage.$this->placeHolder.$this->onblur.$this->onclick.$this->trim ?> <?php if ($this->formatter) echo " searchAttr=\"name\" labelAttr=\"$labelName\" labelType=\"html\""?> style="width: 15em">
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
     <?=$this->options ? $this->options : '' ?>
 </select>

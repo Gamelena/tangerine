@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+CREATE DATABASE IF NOT EXISTS `admportal`;
+
+USE `admportal`;
+
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 -- phpMyAdmin SQL Dump
 -- version 4.0.10deb1
 -- http://www.phpmyadmin.net

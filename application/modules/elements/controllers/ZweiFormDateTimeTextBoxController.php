@@ -1,6 +1,6 @@
 <?php
 
-class Elements_DijitFormDateTextBoxController extends Zend_Controller_Action
+class Elements_ZweiFormDateTextBoxController extends Zend_Controller_Action
 {
     public function init()
     {
@@ -20,10 +20,6 @@ class Elements_DijitFormDateTextBoxController extends Zend_Controller_Action
         $this->view->required = $r->getParam('required') === 'true' ? "required:true" : '';
         $this->view->onblur = $r->getParam('onblur') ? "onblur=\"{$r->getParam('onblur')}\"" : '';
         $this->view->onchange = $r->getParam('onchange') ? "onchange=\"{$r->getParam('onchange')}\"" : '';
-<<<<<<< HEAD
-        $this->view->regExp = $r->getParam('regExp') ? "regExp=\"{$r->getParam('regExp')}\"" : '';
-=======
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         $this->view->invalidMessage = $r->getParam('invalidMessage') ? "invalidMessage=\"{$r->getParam('invalidMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? "promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         $this->view->trim = $r->getParam('trim', '') === 'true' ? "trim=\"true\"" : '';

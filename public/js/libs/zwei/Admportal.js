@@ -463,7 +463,11 @@ dojo.declare("zwei.Admportal", null, {
         if (object == undefined) var object = ''; 
         if (primary == undefined) var primary = 'id'; 
 
+<<<<<<< HEAD
         var uri = dijit.byId(domPrefix+'dataGrid').store ? escape(dijit.byId(domPrefix+'dataGrid').store.url) : '';
+=======
+        var uri = escape(dijit.byId(domPrefix+'dataGrid').store.url);
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 
         try {
             var items = dijit.byId(domPrefix + 'dataGrid').selection.getSelected();

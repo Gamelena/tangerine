@@ -14,7 +14,10 @@ interface Zwei_Admin_ModelInterface
     public function fetchAll();
     
     public function fetchRow();
+<<<<<<< HEAD
     
     public function info($key);
+=======
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 
 }

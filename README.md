@@ -7,7 +7,11 @@ Requerimientos Básicos
 
 >= 5.2.4 para sitios web (requerimiento mínimo pero no recomendado)
 
+<<<<<<< HEAD
 >= 5.4 o superior para tests unitarios y composer (versión recomendada)
+=======
+>= 5.4 o superior para tests unitarios (versión recomendada)
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 
 
 INSTALACION DE DEPENDENCIAS
@@ -134,8 +138,13 @@ Ejemplo de configuración de suite de pruebas
         <directory>./selenium</directory>
     </testsuite>
     <php>
+<<<<<<< HEAD
         <const name="PHPUNIT_USERNAME" value="rodrigo"/>
         <const name="PHPUNIT_PASSWORD" value="rodrigo"/>
+=======
+        <const name="PHPUNIT_USERNAME" value="zweicom"/>
+        <const name="PHPUNIT_PASSWORD" value="zweicom"/>
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         <const name="PHPUNIT_BROWSER" value="opera"/>
         <const name="PHPUNIT_WAITSECONDS" value="5"/>
     </php>
@@ -179,4 +188,8 @@ Agregar a apache2.conf
    #Allow from all #Apache 2.2
 </Directory>
 
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
