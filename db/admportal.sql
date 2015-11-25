@@ -1,3 +1,7 @@
+CREATE DATABASE IF NOT EXISTS `admportal`;
+
+USE `admportal`;
+
 -- phpMyAdmin SQL Dump
 -- version 4.0.5
 -- http://www.phpmyadmin.net
