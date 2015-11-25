@@ -8,5 +8,6 @@ php:
 before_script:
   - mysql -e "CREATE DATABASE IF NOT EXISTS admportal;" -u root
   - mysql -e "GRANT ALL ON admportal.* TO travis;" -u root
+  - mysql -e "GRANT ALL ON admportal.* TO travis@localhost;" -u root
 script:
   - ant
