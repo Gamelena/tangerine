@@ -75,6 +75,9 @@
 	</target>
 
 	<target name="database" description="Create Database and privileges">
+		<exec executable="${mysql}" input="${basedir}/db/travis.sql" failonerror="true">
+			<arg value="--user=${db.username}"/>
+		</exec>
 		<exec executable="${mysql}" input="${basedir}/db/admportal.sql" failonerror="true">
 			<arg value="--user=${db.username}"/>
 		</exec>
