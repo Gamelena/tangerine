@@ -6,7 +6,7 @@ php:
   - hhvm
   - nightly
 before_script:
-  - mysql -e "CREATE DATABASE IF NOT EXISTS admportal;" -u travis
-  - mysql -e "GRANT ALL ON admportal.* TO travis;" -u travis
+  - mysql -e "CREATE DATABASE IF NOT EXISTS admportal;" -u root
+  - mysql -e "GRANT ALL ON admportal.* TO travis;" -u root
 script:
   - ant
