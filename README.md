@@ -5,7 +5,7 @@ Requerimientos Básicos
 
 - PHP Version
 
->= 5.2.4 para sitios web (requerimiento mínimo pero no recomendado)
+>= 5.2.4 para sitios web (requerimiento mínimo para Zend Framework pero no recomendado)
 
 <<<<<<< HEAD
 >= 5.4 o superior para tests unitarios y composer (versión recomendada)
