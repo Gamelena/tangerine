@@ -9,5 +9,7 @@ before_script:
   - mysql -e "CREATE DATABASE IF NOT EXISTS admportal;" -uroot
   - mysql -e "GRANT ALL ON admportal.* TO travis;" -uroot
   - mysql -e "GRANT ALL ON admportal.* TO travis@localhost;" -uroot
+  - mysql -e "GRANT ALL ON admportal.* to admportal_user identified by 'admportal_pass';" -uroot
+  - mysql -e "GRANT ALL ON admportal.* to admportal_user@localhost identified by 'admportal_pass';" -uroot
 script:
   - ant
