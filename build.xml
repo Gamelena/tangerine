@@ -77,15 +77,12 @@
 	<target name="database" description="Create Database and privileges">
 		<exec executable="${mysql}" input="${basedir}/db/admportal.sql" failonerror="true">
 			<arg value="--user=${db.username}"/>
-			<arg value="--password=${db.password}"/>
 		</exec>
 		<exec executable="${mysql}" input="${basedir}/db/basicdata.sql" failonerror="true">
 			<arg value="--user=${db.username}"/>
-			<arg value="--password=${db.password}"/>
 		</exec>
 		<exec executable="${mysql}" input="${basedir}/db/privileges.sql" failonerror="true">
 			<arg value="--user=${db.username}"/>
-			<arg value="--password=${db.password}"/>
 		</exec>
 	</target>
 
