@@ -29,7 +29,7 @@
 		value="${basedir}/vendor/bin/phpunit"/> -->
 
 	<target name="full-build"
-		depends="prepare,database,composer,static-analysis,phpdox"
+		depends="prepare,composer,static-analysis,phpdox"
 		description="Performs static analysis, runs the tests, and generates project documentation" />
 
 	<target name="full-build-parallel"
