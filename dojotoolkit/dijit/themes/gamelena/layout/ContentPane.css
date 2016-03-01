@@ -1,0 +1,20 @@
+/* ContentPane */
+
+.gamelena .dijitContentPane {
+    padding: 0;
+}
+
+/* nested layouts */
+.gamelena .dijitTabContainerTop-dijitContentPane,
+.gamelena .dijitTabContainerLeft-dijitContentPane,
+.gamelena .dijitTabContainerBottom-dijitContentPane,
+.gamelena .dijitTabContainerRight-dijitContentPane,
+.gamelena .dijitAccordionContainer-dijitContentPane {
+    /*background-color: #fff;*/
+}
+
+.gamelena .dijitSplitContainer-dijitContentPane,
+.gamelena .dijitBorderContainer-dijitContentPane {
+    background-color: #fff;		/* override background-color setting on parent .dijitBorderContainer */
+    padding: 5px;
+}
