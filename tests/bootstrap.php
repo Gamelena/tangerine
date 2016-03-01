@@ -20,13 +20,10 @@ set_include_path(implode(PATH_SEPARATOR, array(
     get_include_path(),
 )));
 
-<<<<<<< HEAD
-=======
 //Autoloader de Composer
 if (file_exists(APPLICATION_PATH . '/../vendor/autoload.php')) {
     require_once APPLICATION_PATH . '/../vendor/autoload.php';
 }
 
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 require_once 'Zend/Loader/Autoloader.php';
 Zend_Loader_Autoloader::getInstance();

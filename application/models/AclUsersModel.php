@@ -4,10 +4,9 @@
  * Modelo de datos para usuarios.
  *
  * @category Zwei
- * @package Models
- * @version $Id:$
- * @since 0.1
- *
+ * @package  Models
+ * @version  $Id:$
+ * @since    0.1
  */
 
 class AclUsersModel extends DbTable_AclUsers
@@ -47,7 +46,8 @@ class AclUsersModel extends DbTable_AclUsers
      * @param Zend_Db_Table_Rowset
      * @return array
      */
-    public function overloadDataForm($data) {
+    public function overloadDataForm($data) 
+    {
         $data = $data->toArray();
     
         $model = new DbTable_AclUsersGroups();
@@ -70,13 +70,14 @@ class AclUsersModel extends DbTable_AclUsers
     {
         $aWhere = $this->whereToArray($where);
         $id = $aWhere['id'];
+        $table = new DbTable_AclUsers();
         
         if ($id == $this->_user_info->id) {
             $this->setMessage("No puede darse de baja usted mismo.");
             return false;
         }
         
-        $delete = parent::delete($where);
+        $delete = $table->delete($where);
         
         if ($delete) {
             $aWhere = self::whereToArray($where);
@@ -115,7 +116,7 @@ class AclUsersModel extends DbTable_AclUsers
     /**
      * 
      * @param string $userName
-     * @param array $columns
+     * @param array  $columns
      * @return Zend_Db_Table_Rowset_Abstract
      */
     public function findUserName($userName, $columns = array('*'))
@@ -129,8 +130,9 @@ class AclUsersModel extends DbTable_AclUsers
     
     /**
      * Captura de excepciones posibles como nombre de usuario en uso
-     * @param array $data
-     * @param string $where
+     *
+     * @param  array  $data
+     * @param  string $where
      * @return boolean
      * 
      * @see Zwei_Db_TableLoggeable::update()

@@ -1,30 +1,25 @@
 <?php
 /**
  * Controlador de funciones genericas para Zend XML Admin
- *
  * Permite invocar métodos de Zwei_Utils_CustomFunctions() por URL.
  * Para ser invocado mediante el atributo "functions" de los components xml del admin.
- *
- *
  * @package Controllers
  * @version $Id:$
  * @since 0.1
- *
  */
 class FunctionsController extends Zend_Controller_Action
 {
     public function init()
     {
         $this->_helper->layout()->disableLayout();
-        if(!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
-            echo "<script>if (window.parent != undefined) window.parent.location.href='".BASE_URL."admin/login'
-              else window.location.href='".BASE_URL."admin/login';</script>"; 
-            //$this->_redirect('admin/login');
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+            $this->_redirect('admin/login');
         }
         $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
     }
 
-    public function indexAction(){
+    public function indexAction()
+    {
         $CustomFunctions = new Zwei_Utils_CustomFunctions();
         $form = new Zwei_Utils_Form();
         $string_params = $form->params;
@@ -41,9 +36,7 @@ class FunctionsController extends Zend_Controller_Action
         } else {
             $count_params=0;
         }
-
-        switch($count_params)
-        {
+        switch ($count_params) {
             case 0:
                 $response = $CustomFunctions->$method();
                 break;
@@ -66,7 +59,6 @@ class FunctionsController extends Zend_Controller_Action
                 Console::error("Núm. de parámetros excedido ($count_params) para Zwei_Utils_CustomFunctions::$method($string_params)");
                 $response=false;
         }
-
         $this->view->content=$response;
     }
 }

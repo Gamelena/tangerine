@@ -2,7 +2,6 @@
 /**
  * Clase candidata para franjas horarias genericas en Admportal
  * @author rodrigo
- *
  */
 class Components_ScheduleController extends Zend_Controller_Action
 {
@@ -12,11 +11,11 @@ class Components_ScheduleController extends Zend_Controller_Action
      */
     private $_model;
 
-	/**
-	 * Nombre de campo foreign key.
-	 * 
-	 * @var string 
-	 */
+    /**
+     * Nombre de campo foreign key.
+     * 
+     * @var string 
+     */
     protected $_fkName;
 
     public function init()
@@ -30,7 +29,7 @@ class Components_ScheduleController extends Zend_Controller_Action
     {
         $r = $this->getRequest();
         $select = $this->_model->select()
-        ->where($this->_model->getAdapter()->quoteInto("$this->_fkName = ?", $r->getParam($this->_fkName)));
+            ->where($this->_model->getAdapter()->quoteInto("$this->_fkName = ?", $r->getParam($this->_fkName)));
 
         Debug::writeBySettings($select->__toString(), 'query_log');
         
@@ -49,9 +48,9 @@ class Components_ScheduleController extends Zend_Controller_Action
         foreach ($rows as $i => $f) {
             $franja['id'] = $f->id;
             $datesPeriod = new DatePeriod(
-                    new DateTime($f['fecha_inicio'] . " " . $f['hora_inicio']),
-                    new DateInterval('P1D'),
-                    new DateTime($f['fecha_termino']. " " . $f['hora_termino'])
+                new DateTime($f['fecha_inicio'] . " " . $f['hora_inicio']),
+                new DateInterval('P1D'),
+                new DateTime($f['fecha_termino']. " " . $f['hora_termino'])
             );
 
             /**

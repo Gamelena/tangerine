@@ -1,23 +1,23 @@
 @import url("Grid.css");
 
-.zweicom .dojoxGrid {
+.gamelena .dojoxGrid {
 	background-color: #e9e9e9;
 	font-size: 0.85em; /* inherit font-family from dojo.css */
 }
 
 /* master messages */
 
-.zweicom .dojoxGridMasterMessages {
+.gamelena .dojoxGridMasterMessages {
 	background-color: #fefefe;
 }
 
 /* header */
 
-.zweicom .dojoxGridHeader {
+.gamelena .dojoxGridHeader {
 	background-color:  #e9e9e9;
 }
 
-.zweicom .dojoxGridHeader .dojoxGridCell { 
+.gamelena .dojoxGridHeader .dojoxGridCell { 
 	border-width: 1px;
 	padding-bottom: 0px;
 	border-color: transparent #ACA899 #919191 transparent;
@@ -25,20 +25,20 @@
 	color: #000 !important;
 }
 
-.zweicom .dojoxGridHeader .dojoxGridCellOver {
+.gamelena .dojoxGridHeader .dojoxGridCellOver {
 	background: url(../../../dijit/themes/soria/images/titleBarActive.png) #e9e9e9 repeat-x top;
 }
 
-.zweicom .dojoxGridHeader .dojoxGridCellFocus {
+.gamelena .dojoxGridHeader .dojoxGridCellFocus {
 	border-color: #ACA899 #919191;
 	border-style: dashed;	
 }
 
-.zweicom .dojoxGridArrowButtonChar {
+.gamelena .dojoxGridArrowButtonChar {
 	float: right;
 	display: none;
 }
-.zweicom .dojoxGridArrowButtonNode {
+.gamelena .dojoxGridArrowButtonNode {
 	display: block !important;
 	padding-left: 0px;
 	float: right;
@@ -47,203 +47,203 @@
 	width: 11px;
 	height: 1em;
 }
-.dj_ie6 .zweicom .dojoxGridArrowButtonNode {
+.dj_ie6 .gamelena .dojoxGridArrowButtonNode {
 	background-image:url("../../../dijit/themes/soria/images/spriteArrows.gif");
 	margin-left: 0px;
 }
 
-.zweicom .dojoxGridSortUp .dojoxGridArrowButtonNode {
+.gamelena .dojoxGridSortUp .dojoxGridArrowButtonNode {
 	background-position: -21px;
 }
-.dijit_a11y .zweicom .dojoxGridArrowButtonNode {
+.dijit_a11y .gamelena .dojoxGridArrowButtonNode {
 	display: none !important;
 }
 
 /* content */
 
-.zweicom .dojoxGridScrollbox {
+.gamelena .dojoxGridScrollbox {
 	background-color: #fefefe;
 }
 
 /* rowbar */
 
-.zweicom .dojoxGridRowbar { 
+.gamelena .dojoxGridRowbar { 
 	border: none;
 	background: url(../../../dijit/themes/soria/images/titleBar.png) #e9e9e9 repeat-y right;
 	border-right: 1px solid #ccc;
 	padding: 0px;
 }
 
-.zweicom .dojoxGridRowbarInner {
+.gamelena .dojoxGridRowbarInner {
 	border: none;
 	border-bottom: 1px solid #ccc;
 }
 
-.zweicom .dojoxGridRowbarOver {
+.gamelena .dojoxGridRowbarOver {
 	background: url(../../../dijit/themes/soria/images/titleBarActive.png) #e9e9e9 repeat-y right;
 }
 
-.zweicom .dojoxGridRowbarSelected {
+.gamelena .dojoxGridRowbarSelected {
 	background: url(../../../dijit/themes/soria/images/titleBar.png) #D9E8F9 no-repeat center;
 	border-right: 1px solid #ccc;
 }
 
 /* rows */
 
-.zweicom .dojoxGridRow {
+.gamelena .dojoxGridRow {
 	border: none;
 	background-color: white;
 }
 
-.zweicom .dojoxGridRowOver {
+.gamelena .dojoxGridRowOver {
 	border-top-color: #ccc;
 	border-bottom-color: #ccc;
 }
 
-.zweicom .dojoxGridRowOver .dojoxGridCell {
+.gamelena .dojoxGridRowOver .dojoxGridCell {
 	background-color: #60a1ea; 
 	color:#fff;
 }
 
-.zweicom .dojoxGridRowOver .dojoxGridCell .dijit {
+.gamelena .dojoxGridRowOver .dojoxGridCell .dijit {
 	color: #000;
 }
 
-.zweicom .dojoxGridRowOver .dojoxGridCell .dijitDisabled {
+.gamelena .dojoxGridRowOver .dojoxGridCell .dijitDisabled {
 	color: gray;
 }
 
-.zweicom .dojoxGridRowOdd {
+.gamelena .dojoxGridRowOdd {
 	background-color: #f2f5f9;
 }
 
-.zweicom .dojoxGridRowSelected {
+.gamelena .dojoxGridRowSelected {
 	background-color: #aec7e3;
 }
 
-.dijit_a11y .zweicom .dojoxGridRowSelected { 
+.dijit_a11y .gamelena .dojoxGridRowSelected { 
     background-color: #aec7e3;     
     border-style: solid;     
 }   
 
 /* cells */
 
-.zweicom .dojoxGridCell {
+.gamelena .dojoxGridCell {
 	border: 1px dotted #D5CDB5;
 	border-left-color: transparent;
 	border-top-color: transparent;
 }
 
-.dj_ff2 .zweicom .dojoxGridCell {
+.dj_ff2 .gamelena .dojoxGridCell {
 	border-left-width: 0px;
 	border-top-width: 0px;
 }
 
-.dj_ie6 .zweicom .dojoxGridCell {
+.dj_ie6 .gamelena .dojoxGridCell {
 	border: 1px solid white;
 	border-right: 1px solid #D5CDB5;
 }
 
-.zweicom .dojoxGridCellFocus {
+.gamelena .dojoxGridCellFocus {
 	border: 1px dashed darkblue;
 }
 
-.zweicom .dojoxGridCellOver {
+.gamelena .dojoxGridCellOver {
 	border: 1px dotted #a6a6a6;
 }
 
-.zweicom .dojoxGridCellFocus.dojoxGridCellOver {
+.gamelena .dojoxGridCellFocus.dojoxGridCellOver {
 	border: 1px dashed darkblue;
 }
 
 /* editing */
 
 /* FIXME: these colors are off! */
-.zweicom .dojoxGridRowEditing td {
+.gamelena .dojoxGridRowEditing td {
 	/* background-color: #F4FFF4; */
 	background-color: #60a1ea; 
 	/* padding: 0px 3px 0px 3px; */
 }
 
-.zweicom .dojoxGridRow-inserting td {
+.gamelena .dojoxGridRow-inserting td {
 	background-color: #F4FFF4;
 }
-.zweicom .dojoxGridRow-inflight td {
+.gamelena .dojoxGridRow-inflight td {
 	background-color: #F2F7B7;
 }
-.zweicom .dojoxGridRow-error td {
+.gamelena .dojoxGridRow-error td {
 	background-color: #F8B8B6;
 }
 
 /* Drag and Drop */
 
-.zweicom .dojoxGrid .dojoDndItemBefore {
+.gamelena .dojoxGrid .dojoDndItemBefore {
 	border-left-color: #4B5AAA;
 }
-.zweicom .dojoxGrid .dojoDndItemAfter {
+.gamelena .dojoxGrid .dojoDndItemAfter {
 	border-right-color: #4B5AAA;
 }
 
 /* Tree Grid */
-.zweicom .dojoxGridExpando {
+.gamelena .dojoxGridExpando {
 	float: left;
 	height: 18px;
 	width: 18px;
 	text-align: center;
 	margin-top: -3px;
 }
-.dijitRtl .zweicom .dojoxGridExpando {
+.dijitRtl .gamelena .dojoxGridExpando {
 	float: right;
 }
-.zweicom .dojoxGridExpandoCell {
+.gamelena .dojoxGridExpandoCell {
 	padding-top: 5px;
 }
-.zweicom .dojoxGridExpandoNode {
+.gamelena .dojoxGridExpandoNode {
 	height: 18px;
 	background-image: url('../../../dijit/themes/soria/images/spriteTree.gif');
 }
-.zweicom .dojoxGridExpandoOpened .dojoxGridExpandoNode {
+.gamelena .dojoxGridExpandoOpened .dojoxGridExpandoNode {
 	background: url('../../../dijit/themes/soria/images/spriteTree.gif') no-repeat -18px top;
 }
-.zweicom .dojoxGridExpandoLoading .dojoxGridExpandoNode {
+.gamelena .dojoxGridExpandoLoading .dojoxGridExpandoNode {
 	background: url('../../../dijit/themes/soria/images/treeExpand_loading.gif');	
 }
-.zweicom .dojoxGridTreeModel .dojoxGridNoChildren .dojoxGridExpando {
+.gamelena .dojoxGridTreeModel .dojoxGridNoChildren .dojoxGridExpando {
 	visibility: visible !important;
 	width: 18px !important;
 }
-.zweicom .dojoxGridTreeModel .dojoxGridNoChildren .dojoxGridExpandoNode {
+.gamelena .dojoxGridTreeModel .dojoxGridNoChildren .dojoxGridExpandoNode {
 	background: url('../../../dijit/themes/soria/images/spriteTree.gif') no-repeat -36px top;
 }
-.zweicom .dojoxGridExpandoNodeInner {
+.gamelena .dojoxGridExpandoNodeInner {
 	visibility: hidden;
 }
 .dijit_a11y .dojoxGridExpandoNodeInner {
 	visibility: visible;
 }
 		
-.zweicom .dojoxGridSummaryRow .dojoxGridCell {
+.gamelena .dojoxGridSummaryRow .dojoxGridCell {
 	border-top-color: #999;
 	border-top-style: solid;
 }
-.zweicom .dojoxGridSpacerCell,
-.zweicom .dojoxGridExpandoCell,
-.zweicom .dojoxGridSummaryRow .dojoxGridSpacerCell {
+.gamelena .dojoxGridSpacerCell,
+.gamelena .dojoxGridExpandoCell,
+.gamelena .dojoxGridSummaryRow .dojoxGridSpacerCell {
 	border-color: transparent;
 	border-right-color: #D5CDB5;
 }
-.zweicom .dojoxGridSummaryRow .dojoxGridTotalCell,
-.zweicom .dojoxGridRowCollapsed .dojoxGridExpandoCell,
-.zweicom .dojoxGridTreeModel .dojoxGridExpandoCell {
+.gamelena .dojoxGridSummaryRow .dojoxGridTotalCell,
+.gamelena .dojoxGridRowCollapsed .dojoxGridExpandoCell,
+.gamelena .dojoxGridTreeModel .dojoxGridExpandoCell {
 	border-bottom-color: #D5CDB5;
 }
-.zweicom .dojoxGridSubRowAlt {
+.gamelena .dojoxGridSubRowAlt {
 	background-color: #F8F8F8;
 }
-.zweicom .dojoxGridRowOdd .dojoxGridSubRowAlt {
+.gamelena .dojoxGridRowOdd .dojoxGridSubRowAlt {
 	background-color: #EDEFF3;
 }
 
-.zweicom .dojoxGridRowTable .dojoDndHorizontal th.dojoDndItem {
+.gamelena .dojoxGridRowTable .dojoDndHorizontal th.dojoDndItem {
 	padding: 3px;
 }

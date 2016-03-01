@@ -1,10 +1,8 @@
 <?php
 /**
- * Controlador de Datos
- *
- * Controlador principal que interactúa con capa de datos para operaciones CRUD, 
- * recibe parametros por $_REQUEST y devuelve datos y/o mensajes en formatos como json, xml o excel
- *
+ * Controlador de Datos.
+ * Interactúa con capa de datos para operaciones CRUD via REST (no RESTFUL),
+ * recibe parametros por $_REQUEST y devuelve datos y/o mensajes en formatos como json, xml o excel.
  * @package Controllers
  * @version $Id:$
  * @since 0.1
@@ -110,7 +108,7 @@ class CrudRequestController extends Zend_Controller_Action
             
             //Es posible que $this->_model NO sea un modelo Zwei_Db_Table y sea una implementación de Zwei_Admin_ModelInterface
             //en cuyo caso no existe el método 'getValidateXmlAcl'
-            $validateXml = method_exists($this->_model, 'getValidateXmlAcl') 
+            $validateXml = method_exists($this->_model, 'getValidateXmlAcl')
                 ? $this->_model->getValidateXmlAcl()
                 : array('EDIT' => false, 'ADD' => false, 'DELETE' => false, 'LIST' => false);
                         
@@ -190,9 +188,9 @@ class CrudRequestController extends Zend_Controller_Action
                                 foreach ($this->_form->primary as $i => $primary) {
                                     $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $primary);
                                 }
-                                if (count($where) == 1)
+                                if (count($where) == 1) {
                                     $where = $where[0];
-                                
+                                }
                                 $response = $this->_model->delete($where);
                             } else {
                                 Console::error(array($this->_model->info('name'), "Se intento borrar sin parametros"));
@@ -211,9 +209,9 @@ class CrudRequestController extends Zend_Controller_Action
                                 foreach ($this->_form->primary as $i => $primary) {
                                     $where[] = $this->_model->getAdapter()->quoteInto($this->_model->getAdapter()->quoteIdentifier($i) . " = ?", $primary);
                                 }
-                                if (count($where) == 1)
+                                if (count($where) == 1) {
                                     $where = $where[0];
-                                
+                                }
                                 foreach ($this->_form->data as $i => $myData) {
                                     $data[$i] = $myData;
                                 }
@@ -246,7 +244,7 @@ class CrudRequestController extends Zend_Controller_Action
                     $validatedR = true;
                     if ($validateXml['LIST']) {
                         $validatedR = $this->_model->validateXmlAcl($this->_form, $this->_xml);
-                    } 
+                    }
                
                     if ($validatedR) {
                         $oDbObject = new Zwei_Db_Object($this->_form);
@@ -255,8 +253,10 @@ class CrudRequestController extends Zend_Controller_Action
                         if ($oSelect instanceof Zend_Db_Select) {
                             $adapter = $this->_model->getZwAdapter();
                             
-                            if (isset($adapter) && !empty($adapter))
+                            if (isset($adapter) && !empty($adapter)) {
                                 $this->_model->setAdapter($adapter);
+                            }
+                            
                             try {
                                 $data      = $this->_model->fetchAll($oSelect);
                             } catch (Zend_Db_Exception $e) {
@@ -275,9 +275,9 @@ class CrudRequestController extends Zend_Controller_Action
                         $i = 0;
                         
                         //Si es necesario se añaden columnas o filas manualmente que no vengan del select original
-                        if (method_exists($this->_model, 'overloadDataList') && $this->_model->overloadDataList($data)) {
+                        if (method_exists($this->_model, 'overloadDataList') && $this->_model->overloadDataList($data) !== false) {
+                            $data      = $this->_model->overloadDataList($data);
                             if (!method_exists($this->_model, 'count') || $this->_model->count() === false) {
-                                $data      = $this->_model->overloadDataList($data);
                                 $countData = count($data);
                                 if ($numRows < $countData) {
                                     $numRows = $countData;
@@ -329,9 +329,9 @@ class CrudRequestController extends Zend_Controller_Action
                                 }
                                 $this->view->content = $content;
                             }
-                        
+                            
                             $this->render();
-                        } 
+                        }
                     } else {
                         $data = array();
                     }
@@ -405,24 +405,33 @@ class CrudRequestController extends Zend_Controller_Action
                 }
                 
                 if (method_exists($this->_model, 'getLabels') && $this->_model->getLabels()) {
-                    $content->setMetadata(array(
+                    $content->setMetadata(
+                        array(
                         "labels" => $this->_model->getLabels()
-                    ));
+                        )
+                    );
                 }
                 
                 if (method_exists($this->_model, 'getTitle') && $this->_model->getTitle()) {
-                    $content->setMetadata(array(
+                    $content->setMetadata(
+                        array(
                         "title" => $this->_model->getTitle()
-                    ));
+                        )
+                    );
                 }
                 
-                if (method_exists($this->_model, 'getMore') && $this->_model->getMore())
-                    $content->setMetadata(array(
+                if (method_exists($this->_model, 'getMore') && $this->_model->getMore()) {
+                    $content->setMetadata(
+                        array(
                         "more" => $this->_model->getMore()
-                    ));
+                        )
+                    );
+                }
                 
-                if (isset($numRows))
+                if (isset($numRows)) {
                     $content->setMetadata('numRows', $numRows);
+                }
+                
                 $this->getResponse()->setHeader('Content-Type', 'text/html');
                 
             }
@@ -492,8 +501,9 @@ class CrudRequestController extends Zend_Controller_Action
                 }
             }
             $row->$columnValueName = $value;
-            if ($row->save())
+            if ($row->save()) {
                 $updated++;
+            }
         }
         
         $message .= "Actualizados $updated registros";
@@ -510,11 +520,10 @@ class CrudRequestController extends Zend_Controller_Action
     }
     
     /**
-     * Genera las miniaturas a partir de información xml
-     * 
+     * Genera las miniaturas a partir de información xml.
      * @param Zwei_Admin_Xml $node
-     * @param array $infoFile
-     * @param string $path
+     * @param array          $infoFile
+     * @param string         $path
      * @return GdThumb
      */
     protected function createThumb(Zwei_Admin_Xml $node, $infoFile, $path)
@@ -532,11 +541,12 @@ class CrudRequestController extends Zend_Controller_Action
             }
             
             //[TODO] cambiar configuracion del Autoloader en Bootstrap para no usar require_once
-            require_once ADMPORTAL_APPLICATION_PATH . '/../library/PhpThumb/ThumbLib.inc.php';
+            include_once TANGERINE_APPLICATION_PATH . '/../library/PhpThumb/ThumbLib.inc.php';
             
-            if (!file_exists($thumbPath))
+            if (!file_exists($thumbPath)) {
                 mkdir($thumbPath, 0777, true);
-
+            }
+            
             $thumb  = PhpThumbFactory::create($path . "/" . $infoFile['filename']);
             $width  = $node->getAttribute('width') ? $node->getAttribute('width') : 0;
             $height = $node->getAttribute('height') ? $node->getAttribute('height') : 0;
@@ -548,5 +558,4 @@ class CrudRequestController extends Zend_Controller_Action
             return false;
         }
     }
-    
 }

@@ -3,7 +3,6 @@
  * 
  * @author Steven Brown
  * @link http://framework.zend.com/wiki/display/ZFPROP/Zend_Ftp+-+Steven+Brown
- *
  */
 class Zend_Ftp
 {
@@ -109,11 +108,11 @@ class Zend_Ftp
     /**
      * Instantiate
      * 
-     * @param string $host The FTP host
+     * @param string $host     The FTP host
      * @param string $username The login username
      * @param string $password The login password
-     * @param int $port [optional] The port to connect to
-     * @param int $timeout [optional] The command timeout
+     * @param int    $port     [optional] The port to connect to
+     * @param int    $timeout  [optional] The command timeout
      */
     public function __construct($host, $username, $password, $port = 21, $timeout = 90)
     {
@@ -184,7 +183,7 @@ class Zend_Ftp
     /**
      * Get a directory given an absolute pathname
      * 
-     * @param string $filename The directory to get
+     * @param  string $filename The directory to get
      * @return Zend_Ftp_Directory
      */
     public function getDirectory($filename = '')
@@ -201,7 +200,7 @@ class Zend_Ftp
     /**
      * Get a file given an absolute pathname
      * 
-     * @param string $filename The file to get
+     * @param  string $filename The file to get
      * @return Zend_Ftp_File
      */
     public function getFile($filename)
@@ -214,7 +213,7 @@ class Zend_Ftp
     /**
      * Set the command timeout period in seconds
      * 
-     * @param int $timeout The timeout period
+     * @param  int $timeout The timeout period
      * @return Zend_Ftp
      */
     public function setTimeout($timeout)
@@ -233,7 +232,7 @@ class Zend_Ftp
     /**
      * Set whether or not to use an SSL connection
      * 
-     * @param boolean $ssl [optional]
+     * @param  boolean $ssl [optional]
      * @return Zend_Ftp
      */
     public function setSecure($ssl = true)
@@ -246,7 +245,7 @@ class Zend_Ftp
     /**
      * Turn passive mode on or off
      * 
-     * @param boolean $passive [optional] Whether or not to use passive mode
+     * @param  boolean $passive [optional] Whether or not to use passive mode
      * @return Zend_Ftp
      */
     public function setPassive($passive = true)
@@ -277,19 +276,19 @@ class Zend_Ftp
     /**
      * Set the default transfer mode
      * 
-     * @param int $mode The transfer mode
+     * @param  int $mode The transfer mode
      * @return Zend_Ftp
      */
     public function setMode($mode)
     {
         switch ($mode) {
-            case self::MODE_ASCII:
-            case self::MODE_BINARY:
-            case self::MODE_AUTO:
-                $this->_currentMode = $mode;
-                break;
-            default:
-                throw new Zend_Ftp_Exception('Unknown FTP transfer mode');
+        case self::MODE_ASCII:
+        case self::MODE_BINARY:
+        case self::MODE_AUTO:
+            $this->_currentMode = $mode;
+            break;
+        default:
+            throw new Zend_Ftp_Exception('Unknown FTP transfer mode');
         }
          
         return $this;
@@ -314,7 +313,7 @@ class Zend_Ftp
     /**
      * Determine the transfer mode for the given filename
      * 
-     * @param string $filename
+     * @param  string $filename
      * @return int
      */
     public function determineMode($filename)
@@ -332,7 +331,7 @@ class Zend_Ftp
     /**
      * Set the ASCII file types for automatic transfer mode
      * 
-     * @param array $types
+     * @param  array $types
      * @return Zend_Ftp
      */
     public function setAsciiTypes($types)
@@ -345,7 +344,7 @@ class Zend_Ftp
     /**
      * Add an ASCII file type for automatic transfer mode
      * 
-     * @param string $type
+     * @param  string $type
      * @return Zend_Ftp
      */
     public function addAsciiType($type)
@@ -370,8 +369,8 @@ class Zend_Ftp
     /**
      * Change the permissions of a file or directory
      * 
-     * @param string $path The file or directory
-     * @param int|string $permissions The permissions as an octal e.g. 0777 or string e.g. 'rwxrwxrwx'
+     * @param  string     $path        The file or directory
+     * @param  int|string $permissions The permissions as an octal e.g. 0777 or string e.g. 'rwxrwxrwx'
      * @return 
      */
     public function chmod($path, $permissions)
@@ -388,7 +387,7 @@ class Zend_Ftp
     /**
      * Converts string permissions into octal format
      * 
-     * @param int|string $permissions The permissions
+     * @param  int|string $permissions The permissions
      * @return int
      */
     protected function _parsePermissions($permissions)
@@ -416,11 +415,11 @@ class Zend_Ftp
     /**
      * Utility method to create an instance for chaining
      * 
-     * @param string $host The FTP host
-     * @param string $username The login username
-     * @param string $password The login password
-     * @param int $port [optional] The port to connect to
-     * @param int $timeout [optional] The command timeout
+     * @param  string $host     The FTP host
+     * @param  string $username The login username
+     * @param  string $password The login password
+     * @param  int    $port     [optional] The port to connect to
+     * @param  int    $timeout  [optional] The command timeout
      * @return Zend_Ftp
      */
     public static function connect($host, $username, $password, $port = 21, $timeout = 90)

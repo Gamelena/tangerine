@@ -4,7 +4,7 @@
  *
  * @package Zwei_Db
  * @version $Id:$
- * @since 0.1
+ * @since   0.1
  */
 class Zwei_Db_Table extends Zend_Db_Table_Abstract
 {
@@ -34,6 +34,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     
     /**
      * Campos sobre los cuales se puede realizar la búsqueda por defecto, esto tambien se puede hacer vía XML.
+     *
      * @deprecated usar XML en su lugar.
      * 
      * @var array
@@ -115,15 +116,16 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     
     /**
      * __call() es lanzado al invocar un método inaccesible en un contexto de objeto.
+     *
      * @link http://php.net/manual/es/language.oop5.overloading.php
      * 
      * Permite usar self::findBy$field($value) sin tener que escribir los finders manualmente.
      * 
-     * Por defecto convierte $field de UpperCamelCase a Underscore. Ej: 'IdClasePlataforma' ==> 'id_clase_plataforma'
+     * Por defecto convierte $field de UpperCamelCase a Underscore (*). Ej: 'IdClasePlataforma' ==> 'id_clase_plataforma'
      * 
      * @param string $function
-     * @param string $args[0] - $value (valor para $field)
-     * @param string $args[1] - si es true, NO hace conversion de UpperCamelCase a undercore.
+     * @param string $args[0]  - $value (valor para $field)
+     * @param string $args[1]  - (*) si es true, NO hace conversion de UpperCamelCase a undercore.
      */
     public function __call($method, $args)
     {
@@ -133,18 +135,16 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         if (substr($method, 0, 6) == 'findBy') {
             $criteria = substr($method, 6);
             
-            if (!$camelCase) 
-                $criteria = strtolower(Zwei_Utils_String::toVarWord($criteria));
+            if (!$camelCase) { 
+                $criteria = strtolower(Zwei_Utils_String::toVarWord($criteria)); 
+            }
  
             $select = $this->select()
                 ->from($this->_name)
                 ->where($criteria . ' = ?', $value);
             
             return $this->fetchAll($select);
-        } else {
-            throw new BadMethodCallException("No existe " . __CLASS__ . "::" . $method);
         }
-        
     }
     
     /**
@@ -161,9 +161,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * resources.multidb.{$adapter}.*
      * 
      * en archivo /application/configs/application.ini
-     * 
-     * 
-     * @param $adapter
+     *
+     * @param  $adapter
      * @return void
      */
     public function setAdapter($adapter) 
@@ -176,7 +175,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * Inserts a new row.
      *
-     * @param  array  $data  Column-value pairs.
+     * @param  array $data Column-value pairs.
      * @return mixed         The primary key of the row inserted.
      */    
     public function insert(array $data)
@@ -198,8 +197,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * clonate existing row.
      * 
-     * @param array|string $where  An SQL WHERE clause, or an array of SQL WHERE clauses.
-     * @param array  array columna valor para forzar guardar tales valores en tales columnas.
+     * @param  array|string                                                                    $where An SQL WHERE clause, or an array of SQL WHERE clauses.
+     * @param  array  array columna valor para forzar guardar tales valores en tales columnas.
      * @return int|array|false  last inserted Id(s)
      */
     public function clonate($where, $overdata = null)
@@ -230,7 +229,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
                         $data[$col] = $row->{$col};
                     }
                 }
-                if ($overdata) $data = array_merge($data, $overdata);
+                if ($overdata) { $data = array_merge($data, $overdata); 
+                }
                 $inserted = $this->insert($data);
                 if ($count == 1) {
                     $clonated = $inserted;  
@@ -300,10 +300,6 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         
         if ($update === 0) {
             $this->setMessage("Sin Cambios");
-<<<<<<< HEAD
-            return true;
-=======
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         }
         return $update;
     }
@@ -334,7 +330,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * Se setea attributo $this->_label el cual puede ser usado (por ejemplo) para almacenes de datos js como dojo.data.ItemFileReadStore
      * 
-     * @param string $value
+     * @param  string $value
      * @return void
      */
     public function setLabel($value)
@@ -355,8 +351,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * Retorna atributo resources.multidb.{$_adapter}.
      * Lleva prefijo Zw para distinguirlo de método nativo Zend_Db_Table_Abstract::getAdapter()
-     * 
-     *  
+     *
      * @return string
      */
     public function getZwAdapter()
@@ -492,7 +487,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
                     $array[0] = str_replace("`", "", $aux[1]);
                 }
                 
-                $return[trim(str_replace("`", "", $array[0]))] = trim(str_replace("'", "",$array[1]));
+                $return[trim(str_replace("`", "", $array[0]))] = trim(str_replace("'", "", $array[1]));
             }
         }
         return $return;
@@ -502,8 +497,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
      * Valida los permisos de usuario en sesion en modelo $form->model para ejecutar $form->action 
      * según permisos sobre archivo xml $form->p.
      * 
-     * @param Zwei_Utils_Form<model, p, action> $form
-     * @param Zwei_Admin_Xml $xml
+     * @param  Zwei_Utils_Form<model, p, action> $form
+     * @param  Zwei_Admin_Xml                    $xml
      * @return boolean
      */
     public function validateXmlAcl($form, $xml = null)
@@ -515,7 +510,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
         
         if (!$xml) {
             //Si esto es llamado desde CrudRequestController SIEMPRE existe $xml y nunca entra acá.
-            if (isset ($form->p)) {
+            if (isset($form->p)) {
                 $file = Zwei_Admin_Xml::getFullPath($form->p);
                 $xml  = new Zwei_Admin_Xml($file, 0, 1);
             } else {
@@ -579,7 +574,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * Método para separar datos de tabla principal de datos de tablas auxiliares, para ser reescrito en modelos respectivos.
      * 
-     * @param Zend_Db_Table_Rowset $data
+     * @param  Zend_Db_Table_Rowset $data
      * @return array
      */
     protected function cleanDataParams($data)
@@ -590,7 +585,7 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * Método para preguntar si determinado usuario es el owner de un elemento
      * 
-     * @param unknown $user
+     * @param  unknown $user
      * @return boolean
      */
     public function isOwner($itemId, $user = null) 
@@ -610,12 +605,13 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
     /**
      * Guarda acciones en log
      *
-     * @param string $action
+     * @param string       $action
      * @param string|array $condition
      */
     public function log($action, $condition, $table = null) 
     {
-        if (is_array($condition)) $condition = print_r($condition, true);
+        if (is_array($condition)) { $condition = print_r($condition, true); 
+        }
         if (self::$_defaultLogMode) {
             try {
                 $logBook = new DbTable_LogBook();
@@ -627,7 +623,8 @@ class Zwei_Db_Table extends Zend_Db_Table_Abstract
                         "ip" => $_SERVER['REMOTE_ADDR'],
                         "stamp" => date("Y-m-d H:i:s")
                 );
-                if ($condition) $logData["condition"] = $condition;
+                if ($condition) { $logData["condition"] = $condition; 
+                }
                 $logBook->insert($logData);
             } catch (Zend_Acl_Role_Registry_Exception $e) {
                 //Si se elimina un perfil con permisos asociados se genera esta Exception 

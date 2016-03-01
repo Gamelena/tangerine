@@ -74,7 +74,7 @@ class Helpers_AclGroupableCrud
     /**
      * Se sobrecarga método para perfilamiento avanzado.
      * @param Zend_Db_Table_Select $select
-     * @param string $action
+     * @param string               $action
      * @return Zend_Db_Table_Select
      */
     public function select($select, $action = 'LIST')
@@ -106,7 +106,8 @@ class Helpers_AclGroupableCrud
      */
     public function overloadDataList($data)
     {
-        if ($data instanceof Zend_Db_Table_Rowset) $data = $data->toArray();
+        if ($data instanceof Zend_Db_Table_Rowset) { $data = $data->toArray(); 
+        }
         $modulesModel = new AclModulesModel();
         $moduleId     = $modulesModel->getModuleId($this->_component);
         $groups       = !empty($this->_userInfo->groups) ? implode(',', $this->_userInfo->groups) : false;

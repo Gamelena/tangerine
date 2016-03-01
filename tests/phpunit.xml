@@ -9,15 +9,22 @@
 		</testsuite>
 	</testsuites>
 	<php>
-		<const name="PHPUNIT_USERNAME" value="zweicom" />
-		<const name="PHPUNIT_PASSWORD" value="zweicom" />
+		<const name="PHPUNIT_USERNAME" value="gamelena" />
+		<const name="PHPUNIT_PASSWORD" value="gamelena" />
 		<const name="PHPUNIT_BROWSER" value="opera" />
 		<const name="PHPUNIT_WAITSECONDS" value="10" />
-		<env name="APP_ENV" value="testing" />
+		<env name="APPLICATION_ENV" value="testing" />
 		<env name="CACHE_DRIVER" value="array" />
 		<env name="SESSION_DRIVER" value="array" />
 		<env name="QUEUE_DRIVER" value="sync" />
 	</php>
+	<filter>
+		<whitelist>
+			<directory>../application</directory>
+			<directory>../library</directory>
+			<directory>../public</directory>
+		</whitelist>
+	</filter>
 	<logging>
 		<log type="coverage-html" target="./ci/codeCoverage/" charset="UTF-8"
 			yui="true" highlight="false" lowUpperBound="35" highLowerBound="70" />

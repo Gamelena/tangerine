@@ -3,7 +3,6 @@
  * Utilidades de archivos.
  * 
  * @category Zwei
- *
  */
 
 class Zwei_Utils_File
@@ -12,11 +11,12 @@ class Zwei_Utils_File
     /**
      * Borrar contenido de un directorio.
      * 
-     * @param string - ruta 
-     * @param boolean
+     * @param  string - ruta 
+     * @param  boolean
      * @return boolean
      */
-    static public function clearRecursive($dir, $remove_dir = false, $exclude = array()) {
+    static public function clearRecursive($dir, $remove_dir = false, $exclude = array()) 
+    {
         $exclude = (array) $exclude;
         $return = false;
         foreach (glob($dir . '/*') as $file) {
@@ -26,32 +26,34 @@ class Zwei_Utils_File
                 $return = unlink($file);
             }
         }
-        if ($remove_dir) $return = rmdir($dir);
+        if ($remove_dir) { $return = rmdir($dir); 
+        }
         return $return;
     }
     
     /**
      * Determinar si carpeta no está vacía.
      * 
-     * @param $folder string - carpeta
+     * @param  $folder string - carpeta
      * @return boolean
      */
     static public function isNotEmptyFolder($folder)
     { 
-        if (! is_dir($folder)) 
+        if (! is_dir($folder)) { 
             return false; // not a dir 
-    
+        }    
         $files = opendir($folder); 
         while ($file = readdir($files)) { 
-            if ($file != '.' && $file != '..') 
-            return true; // not empty 
+            if ($file != '.' && $file != '..') { 
+                return true; // not empty 
+            }        
         } 
     } 
     
     /**
      * Obtener codificación de archivo.
      * 
-     * @param string $filename
+     * @param  string $filename
      * @return string
      */
     static public function getEncoding($filename)
@@ -63,8 +65,8 @@ class Zwei_Utils_File
      * Lee el comienzo del cuerpo de un archivo para buscar caracteres separadores de campos como ",", ";" y "\t", 
      * esos caracteres son comunes en esquema csv.
      *  
-     * @param string $filename
-     * @param int $lines
+     * @param  string $filename
+     * @param  int    $lines
      * @return string 
      */
     static public function getSeparator($filename, $linesToReview = 5)
@@ -80,7 +82,8 @@ class Zwei_Utils_File
             $tabs[] = count(explode("\t", $line));
             $semicolons[] = count(explode(";", $line));
             $i++;
-            if ($i >= $linesToReview) break;
+            if ($i >= $linesToReview) { break; 
+            }
         }
         
         if ($tabs[0] > 1) {
@@ -137,7 +140,7 @@ class Zwei_Utils_File
      * @param string $params
      * @param string $username
      * @param string $password
-     * @param string $method GET|POST|DELETE|HEAD
+     * @param string $method   GET|POST|DELETE|HEAD
      */
     static public function getResponseFromService($url, $params = null, $username = null, $password = null, $method = 'GET')
     {
@@ -180,10 +183,10 @@ class Zwei_Utils_File
         $parsedUrl = parse_url($url);
         $host = $parsedUrl['host'];
         if (isset($parsedUrl['path'])) {
-          $path = $parsedUrl['path'];
+            $path = $parsedUrl['path'];
         } else {
-          // the url is pointing to the host like http://www.mysite.com
-          $path = '/';
+            // the url is pointing to the host like http://www.mysite.com
+            $path = '/';
         }
     
         if (isset($parsedUrl['query'])) {
@@ -193,7 +196,7 @@ class Zwei_Utils_File
         if (isset($parsedUrl['port'])) {
             $port = $parsedUrl['port'];
         } else {
-          // most sites use port 80
+            // most sites use port 80
             $port = '80';
         }
     
@@ -201,33 +204,35 @@ class Zwei_Utils_File
         $response = '';
     
         // connect to the remote server
-        $fp = @fsockopen($host, '80', $errno, $errstr, $timeout );
+        $fp = @fsockopen($host, '80', $errno, $errstr, $timeout);
     
-        if( !$fp ) {
+        if(!$fp ) {
             echo "Cannot retrieve $url";
         } else {
-          // send the necessary headers to get the file
-            fputs($fp, "GET $path HTTP/1.0\r\n" .
-                     "Host: $host\r\n" .
-                     "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.3) Gecko/20060426 Firefox/1.5.0.3\r\n" .
-                     "Accept: */*\r\n" .
-                     "Accept-Language: en-us,en;q=0.5\r\n" .
-                     "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n" .
-                     "Keep-Alive: 300\r\n" .
-                     "Connection: keep-alive\r\n" .
-                     "Referer: http://$host\r\n\r\n");
+            // send the necessary headers to get the file
+            fputs(
+                $fp, "GET $path HTTP/1.0\r\n" .
+                "Host: $host\r\n" .
+                "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.3) Gecko/20060426 Firefox/1.5.0.3\r\n" .
+                "Accept: */*\r\n" .
+                "Accept-Language: en-us,en;q=0.5\r\n" .
+                "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n" .
+                "Keep-Alive: 300\r\n" .
+                "Connection: keep-alive\r\n" .
+                "Referer: http://$host\r\n\r\n"
+            );
     
-          // retrieve the response from the remote server
-            while ( $line = fread( $fp, 4096 ) ) {
+            // retrieve the response from the remote server
+            while ( $line = fread($fp, 4096) ) {
                 $response .= $line;
             }
     
-            fclose( $fp );
+            fclose($fp);
             // strip the headers
             $pos = strpos($response, "\r\n\r\n");
             $response = substr($response, $pos + 4);
         }
-       // return the file content
-       return $response;
+        // return the file content
+        return $response;
     }
 }

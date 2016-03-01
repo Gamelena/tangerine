@@ -6,8 +6,8 @@
  * @example
  * @package Components
  * @version 2014-03-19
- * @since 1.0
- * @author rodrigo.riquelme@zweicom.com
+ * @since   1.0
+ * @author  rodrigo.riquelme@gamelena.com
  * @example
  * <code>
     <?xml version="1.0"?> 
@@ -15,7 +15,7 @@
     name="Informaci&amp;oacute;n" type="dojo-simple-crud" target="PersonalInfoModel" list="true" plugins="{}" edit="true" add="false" delete="false" serverPagination="true"
     >
         <elements>
-           	<element name="ID" target="id" type="id-box" visible="false" edit="false" add="false"/>
+               <element name="ID" target="id" type="id-box" visible="false" edit="false" add="false"/>
             <element name="Usuario" target="user_name" type="dijit-form-validation-text-box" visible="true" edit="false" add="true"/>
             <element name="Nombres" target="first_names" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
             <element name="Apellidos" target="last_names" type="dijit-form-validation-text-box" visible="true" edit="true" add="true"/>
@@ -28,10 +28,6 @@
         </forms>
     </component>
  * </code>
- *
- *
- *
- *
  */
 
 class Components_DojoSimpleCrudController extends Zend_Controller_Action
@@ -84,7 +80,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      */
     public function init()
     {
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+            $this->_redirect('admin/login');
+        }
         $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
         
         $this->_config = Zwei_Controller_Config::getOptions();
@@ -155,13 +153,9 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         $this->view->panes = $this->_xml->xpath("//component/pane") ? $this->_xml->xpath("//component/pane") : array();
         $this->view->script = $this->_xml->xpath("//component/script") ? "<script>\n" . dom_import_simplexml($this->_xml->script)->textContent . "</script>\n" : '';
         $this->view->hasElements = $this->_xml->xpath("//component/elements/element") ? true : false;
-<<<<<<< HEAD
-        $this->view->searchersOutsideContent = $this->_xml->xpath("//component/searchers[@outsideContent='true']") && $this->view->hasElements ? true : false;;
-=======
         $this->view->hasSearchers = $this->_xml->xpath("//component/searchers/element") ? true : false;
         $this->view->model = $this->_xml->getAttribute('target');
         $this->view->searchersOutsideContent = $this->_xml->xpath("//component/searchers[@outsideContent='true']") && $this->view->hasElements ? true : false;
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         
         if ($this->view->changePassword) {
             $this->view->primary = $this->_model->info(Zend_Db_Table::PRIMARY);
@@ -254,7 +248,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                     }
                     $select->where($a->quoteInto($a->quoteIdentifier($i). " = ?", $v));
                 }
-                if (method_exists($select, '__toString')) Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log");
+                if (method_exists($select, '__toString')) { Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log"); 
+                }
                 $data = $this->_model->fetchRow($select);
                 if ($this->view->multiForm) {
                     $this->view->dialogIndex = '';
@@ -266,7 +261,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                 
                 //Es posible añadir más valores al retorno de la query principal sobrecargando este Zwei_Db_Table::overloadDataForm.
                 $this->view->data = $data;
-                if (method_exists($this->_model, 'overloadDataForm')) $this->view->data = $this->_model->overloadDataForm($data);
+                if (method_exists($this->_model, 'overloadDataForm')) { $this->view->data = $this->_model->overloadDataForm($data); 
+                }
             }
         }
         $this->view->dijitDialogId = $r->getParam('dijitDialogId', $this->view->domPrefix . 'dialog_' . $mode . $this->view->dialogIndex);
@@ -350,7 +346,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                             $this->view->uploaders[] = $uploader;
                         }
                     } else {
-                        //@TODO habilitar permisos para otras acciones acá de ser necesario en el futuro.
+                        //Habilitar permisos para otras acciones acá de ser necesario en el futuro.
                         $this->view->uploaders[] = $uploader;
                     }
                 }
@@ -377,7 +373,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     {
         $ajax = $this->_xml->xpath("//component/forms[@ajax='true']") ? 'true' : 'false';
         $this->view->changePassword = $this->_xml->xpath("//component/forms/changePassword") ? true : false;
-        if (!$ajax === 'false' && $this->_xml->xpath("//component/forms/edit[@ajax='true']")) $ajax = 'true';
+        if (!$ajax === 'false' && $this->_xml->xpath("//component/forms/edit[@ajax='true']")) { $ajax = 'true'; 
+        }
         $this->view->ajax = $ajax === 'true' ? true : false;
         $this->view->queryParams = http_build_query($this->getRequest()->getParams());
         
@@ -602,6 +599,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         foreach ($element->attributes() as $i => $attr) {
             if ($i != 'target') {
                 $this->view->inputParams[$i] = $attr;
+                $this->view->inputConfirmParams[$i] = $attr;
             }
         }
         

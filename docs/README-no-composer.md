@@ -59,11 +59,11 @@ ln -s /usr/share/php/Zend/bin/zf.sh /usr/bin/zf
 2. Crear variables de entorno, agregar las siguiente líneas al ~/.bashrc asumiendo que AdmPortal está instalado en $DEVELBASE/admportal 
 
 DEVELBASE="/{Carpeta de desarrollo de proyectos}"
-export ZWC_ADMPORTAL=$DEVELBASE/admportal
-export PATH=$PATH:$ZWC_ADMPORTAL/tools  
+export ZWC_TANGERINE=$DEVELBASE/admportal
+export PATH=$PATH:$ZWC_TANGERINE/tools  
 export APPLICATION_ENV=development
 
-3. Hacer un Alias para las librerias javascript de zweicom, donde "/proyectos/admportal/" es la ruta donde se instaló admportal
+3. Hacer un Alias para las librerias javascript de gamelena, donde "/proyectos/admportal/" es la ruta donde se instaló admportal
 
 Alias /libs "/proyectos/admportal/public/js/libs/"
 <Directory "/proyectos/admportal/public/js/libs/">
@@ -87,7 +87,7 @@ Alias /libs "/proyectos/admportal/public/js/libs/"
 
 Perfiles y Usuarios por defecto en caso de generación automática de tablas:
 
--Soporte         user: zweicom, password: zweicom
+-Soporte         user: gamelena, password: gamelena
 -Administrador   user: admin,   password: admin
 -Consultas       user: consultas, password: consultas
 

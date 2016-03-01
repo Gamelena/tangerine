@@ -1,7 +1,7 @@
 <?php
 /**
- * 
  * Adaptador dummy, útil para implementar en Modelos No DB que usen la api rest CrudRequestController.
+ *
  * @example
  * <code>
  * class MyCrazyModel implements Zwei_Admin_ModelInterface

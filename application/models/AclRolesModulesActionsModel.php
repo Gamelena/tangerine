@@ -7,7 +7,7 @@ class AclRolesModulesActionsModel extends DbTable_AclRolesModulesActions
     /**
      * 
      * @param string $aclRolesId
-     * @param array $fields
+     * @param array  $fields
      * @return Zend_Db_Table_Rowset_Abstract
      */
     public function findAclRolesId($aclRolesId, $fields = array('*'))
@@ -22,7 +22,7 @@ class AclRolesModulesActionsModel extends DbTable_AclRolesModulesActions
      * 
      * @param string $aclModules
      * @param string $aclRolesId
-     * @param array $fields
+     * @param array  $fields
      * @return Zend_Db_Table_Rowset_Abstract
      */
     public function findAclModulesIdAclRolesId($aclModulesId, $aclRolesId, $aclActionsId = null, $fields = array('*'))
@@ -35,7 +35,8 @@ class AclRolesModulesActionsModel extends DbTable_AclRolesModulesActions
         
         $select->where($this->getAdapter()->quoteInto('acl_roles_id = ?', $aclRolesId));
         $select->where($this->getAdapter()->quoteInto('acl_modules_id = ?', $aclModulesId));
-        if ($aclActionsId)  $select->where($this->getAdapter()->quoteInto('acl_actions_id = ?', $aclActionsId));
+        if ($aclActionsId) {  $select->where($this->getAdapter()->quoteInto('acl_actions_id = ?', $aclActionsId)); 
+        }
          
         //Debug::write($select->__toString());
         return $this->fetchAll($select);

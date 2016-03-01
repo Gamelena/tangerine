@@ -1,9 +1,7 @@
 <?php
 /**
- * 
  * Esto no es una tabla, es una vista.
- * @author rodrigo.riquelme@zweicom.com
- *
+ * @author rodrigo.riquelme@gamelena.com
  */
 class TablesLoggedModel extends Zwei_Db_Table
 {

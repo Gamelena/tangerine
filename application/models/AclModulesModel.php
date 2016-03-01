@@ -3,12 +3,10 @@
 /**
  * Modelo de datos para módulos ACL del admin
  *
- *
  * @category Zwei
- * @package Models
- * @version $Id:$
- * @since 0.1
- *
+ * @package  Models
+ * @version  $Id:$
+ * @since    0.1
  */
 
 class AclModulesModel extends DbTable_AclModules
@@ -103,7 +101,7 @@ class AclModulesModel extends DbTable_AclModules
     /**
      * Escribe archivo xml.
      * 
-     * @param array $data
+     * @param  array $data
      * @return number
      */
     public function writeContent($data)
@@ -121,9 +119,9 @@ class AclModulesModel extends DbTable_AclModules
     /**
      * Se separa entre datos de modulo y datos de acciones asociadas.
      * 
-     * @param array
+     * @param  array
      * @return array
-     * @see Zwei_Db_Table::cleanDataParams()
+     * @see    Zwei_Db_Table::cleanDataParams()
      */
     protected function cleanDataParams($data)
     {
@@ -132,7 +130,8 @@ class AclModulesModel extends DbTable_AclModules
             if (!file_exists(COMPONENTS_ADMIN_PATH . '/' . $data['module'])) {
                 if (is_writable(COMPONENTS_ADMIN_PATH)) {
                     $handle = fopen(COMPONENTS_ADMIN_PATH . '/' . $data['module'], "w+");
-                    fwrite($handle, "<?xml version=\"1.0\"?>\n"
+                    fwrite(
+                        $handle, "<?xml version=\"1.0\"?>\n"
                         . "<component name=\"M&amp;oacute;dulos\" type=\"dojo-simple-crud\" target=\"EjemploModel\" list=\"true\""
                         . " delete=\"true\" edit=\"true\" add=\"true\" clone=\"true\" serverPagination=\"true\""
                         . " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"components.xsd\">\n"
@@ -141,7 +140,8 @@ class AclModulesModel extends DbTable_AclModules
                         . "\t</elements>\n"
                         . "\t<forms ajax=\"true\"></forms>"
                         . "\t<!--@todo esta es sólo una base de ejemplo, ver components.xsd para definición de datos. -->\n"
-                        . "</component>\n");
+                        . "</component>\n"
+                    );
                     fclose($handle);
                     @chmod(COMPONENTS_ADMIN_PATH . '/' . $data['module'], 0777);
                     Console::log("Creado archivo " . COMPONENTS_ADMIN_PATH . '/' . $data['module']);
@@ -149,7 +149,7 @@ class AclModulesModel extends DbTable_AclModules
                     Console::log("No se pudo crear el archivo " . COMPONENTS_ADMIN_PATH . '/' . $data['module']);
                 }
             }
-        } else if (empty ($data['type'])) {
+        } else if (empty($data['type'])) {
             $data['type'] = null;
         }
         
@@ -159,10 +159,12 @@ class AclModulesModel extends DbTable_AclModules
         }
         
         
-        if (empty($data['module']))
-            $data['module'] = null;
-        if (empty($data['parent_id']))
-            $data['parent_id'] = null;
+        if (empty($data['module'])) {
+            $data['module'] = null; 
+        }
+        if (empty($data['parent_id'])) {
+            $data['parent_id'] = null; 
+        }
         if (isset($data['actions'])) {
             $this->_dataActions = $data['actions'];
             //Encomillar los elementos de $this->_dataActions
@@ -175,7 +177,7 @@ class AclModulesModel extends DbTable_AclModules
     /**
      * Guardar acciones. 
      * 
-     * @param int $aclModulesId
+     * @param  int $aclModulesId
      * @return boolean
      */
     protected function saveDataActions($aclModulesId)
@@ -190,8 +192,9 @@ class AclModulesModel extends DbTable_AclModules
         $where = array();
         
         $where[] = $ad->quoteInto('acl_modules_id = ?', $aclModulesId);
-        if ($list)
-            $where[] = "acl_actions_id NOT IN ($list)";
+        if ($list) {
+            $where[] = "acl_actions_id NOT IN ($list)"; 
+        }
         
         $delete = $modulesAction->delete($where);
         
@@ -222,23 +225,24 @@ class AclModulesModel extends DbTable_AclModules
      */
     public function delete($where)
     {
-        $modulesActions = new AclModulesActionsModel();
+        $modulesActions = new DbTable_AclModulesActions();
         
         $whereArray        = self::whereToArray($where);
         $whereAclModulesId = "acl_modules_id={$whereArray['id']}";
         $modulesActions->delete($whereAclModulesId);
         
-        return parent::delete($where);
+        $table = new DbTable_AclModules();
+        
+        return $table->delete($where);
     }
     
     
     /**
      * Obtiene arbol de módulos en forma recursiva.
      * 
-     * @param $parentId int, id sobre la que se buscaran modulos hijos
-     * @param $noTree boolean, Indica que esta funcion no se usara para el Arbol Menu para omitir lógica asociada a este.
+     * @param  $parentId int, id sobre la que se buscaran modulos hijos
+     * @param  $noTree boolean, Indica que esta funcion no se usara para el Arbol Menu para omitir lógica asociada a este.
      * @return array
-     *      
      */
     public function getTree($parentId = null, $noTree = false)
     {
@@ -290,10 +294,12 @@ class AclModulesModel extends DbTable_AclModules
                 }
                 
                 
-                if ($prefix != "")
-                    $branch['module'] = urlencode($branch['module']);
-                if ($branch['type'])
-                    $arrNodes[$key]['url'] = $prefix . $branch['module'];
+                if ($prefix != "") {
+                    $branch['module'] = urlencode($branch['module']); 
+                }
+                if ($branch['type']) {
+                    $arrNodes[$key]['url'] = $prefix . $branch['module']; 
+                }
                 
                 
                 $childrens = $this->getTree($branch['id']);
@@ -316,15 +322,19 @@ class AclModulesModel extends DbTable_AclModules
     {
         $select = parent::select($withFromPart);
         $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
-        $select->from($this->_name)->joinLeft(array(
+        $select->from($this->_name)->joinLeft(
+            array(
             'parent' => $this->_name
-        ), "$this->_name.parent_id = parent.id", array(
+            ), "$this->_name.parent_id = parent.id", array(
             "parent_title" => "title",
             "parent_module" => "module"
-        ))->joinLeft($this->_nameIcons, "$this->_name.icons_id=$this->_nameIcons.id", array(
-            'icon_title' => 'title',
-            'image'
-        ))->where("$this->_name.id != ?", 0);
+            )
+        )->joinLeft(
+            $this->_nameIcons, "$this->_name.icons_id=$this->_nameIcons.id", array(
+                'icon_title' => 'title',
+                'image'
+                )
+        )->where("$this->_name.id != ?", 0);
         
         //Si no pertenece al role_id 1, no puede ver módulos root
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
@@ -372,14 +382,18 @@ class AclModulesModel extends DbTable_AclModules
     {
         $select = new Zend_Db_Table_Select($this);
         $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
-        $select->from($this->_name, array(
+        $select->from(
+            $this->_name, array(
             'id',
             'title' => 'title'
-        ))->joinLeft(array(
-            'parent' => $this->_name
-        ), "$this->_name.parent_id = parent.id", array(
-            "parent_title" => new Zend_Db_Expr("IF($this->_name.parent_id > 0, CONCAT(parent.title, '->', $this->_name.title), $this->_name.title)")
-        ))->order("parent.id")->order("title");
+            )
+        )->joinLeft(
+            array(
+                'parent' => $this->_name
+                ), "$this->_name.parent_id = parent.id", array(
+                "parent_title" => new Zend_Db_Expr("IF($this->_name.parent_id > 0, CONCAT(parent.title, '->', $this->_name.title), $this->_name.title)")
+                )
+        )->order("parent.id")->order("title");
         
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where("$this->_name.root != ?", "1");
@@ -397,14 +411,18 @@ class AclModulesModel extends DbTable_AclModules
     {
         $select = new Zend_Db_Table_Select($this);
         $select->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
-        $select->from($this->_name, array(
+        $select->from(
+            $this->_name, array(
             'id',
             'title' => 'title'
-        ))->joinLeft(array(
-            'parent' => $this->_name
-        ), "$this->_name.parent_id = parent.id", array(
-            "module_title" => new Zend_Db_Expr("IF($this->_name.parent_id > 0, CONCAT(parent.title, '->', $this->_name.title), $this->_name.title)")
-        ))->where("$this->_name.id != ?", 0)->order("parent.id")->order("title");
+            )
+        )->joinLeft(
+            array(
+                'parent' => $this->_name
+                ), "$this->_name.parent_id = parent.id", array(
+                "module_title" => new Zend_Db_Expr("IF($this->_name.parent_id > 0, CONCAT(parent.title, '->', $this->_name.title), $this->_name.title)")
+                )
+        )->where("$this->_name.id != ?", 0)->order("parent.id")->order("title");
         
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where("$this->_name.root != ?", "1");
@@ -415,7 +433,7 @@ class AclModulesModel extends DbTable_AclModules
     /**
      * Retorna el id asociado a module.
      * 
-     * @param string $module
+     * @param  string $module
      * @return int
      */
     public function getModuleId($module)
@@ -433,8 +451,8 @@ class AclModulesModel extends DbTable_AclModules
     /**
      * Obtiene la fila asociada al nombre del módulo.
      * 
-     * @param string $module
-     * @param array $fields
+     * @param  string $module
+     * @param  array  $fields
      * @return Zend_Db_Table_Row
      */
     public function findModule($module, $fields = array('*'))
@@ -447,7 +465,7 @@ class AclModulesModel extends DbTable_AclModules
     /**
      * Obtiene las acciones asociadas al módulo.
      * 
-     * @param int $id
+     * @param  int $id
      * @return Zend_Db_Table_Rowset_Abstract
      */
     public function getActions($id)

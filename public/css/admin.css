@@ -28,41 +28,41 @@
 }
 
 
-.zweicom {
-    background: #bcd5f0 url("/dojotoolkit/dijit/themes/zweicom/images/titleBar.png") repeat-x top left;
+.gamelena {
+    background: #bcd5f0 url("/dojotoolkit/dijit/themes/gamelena/images/titleBar.png") repeat-x top left;
     background-attachment: fixed;
 }
 
-.zweicom .dojoxExpandoTitle {
+.gamelena .dojoxExpandoTitle {
          height:16px;
          font-size:0.9em;
          font-weight:bold;
          padding:3px;
          padding-top:6px;
          padding-bottom:5px;
-         background:#F0F4FC url("/dojotoolkit/dijit/themes/zweicom/images/tabContainerSprite.gif") repeat-x scroll 0pt -50px;
+         background:#F0F4FC url("/dojotoolkit/dijit/themes/gamelena/images/tabContainerSprite.gif") repeat-x scroll 0pt -50px;
          border-left: 1px solid #B1BADF;
          border-right: 1px solid #B1BADF;
 }
  
-.zweicom .dojoxExpandoClosed .dojoxExpandoTitle {
+.gamelena .dojoxExpandoClosed .dojoxExpandoTitle {
      background: none;
      background-color: #F0F4FC;
      border: none;
 }
  
-.zweicom .dojoxExpandoClosed {
+.gamelena .dojoxExpandoClosed {
      background: none;
      background-color: #F0F4FC;
      border: 1px solid #B1BADF !important;
 }
  
-.zweicom .dojoxExpandoIcon {
-     background-image: url('/dojotoolkit//dijit/themes/zweicom/images/spriteRoundedIconsSmall.png');
+.gamelena .dojoxExpandoIcon {
+     background-image: url('/dojotoolkit//dijit/themes/gamelena/images/spriteRoundedIconsSmall.png');
 }
  
-.dj_ie6 .zweicom .dojoxExpandoIcon {
-     background-image: url('/dojotoolkit/dijit/themes/zweicom/images/spriteRoundedIconsSmall.gif');
+.dj_ie6 .gamelena .dojoxExpandoIcon {
+     background-image: url('/dojotoolkit/dijit/themes/gamelena/images/spriteRoundedIconsSmall.gif');
 }
 
 a {
@@ -586,10 +586,10 @@ a.settingsTab {
     background: url(i/bgmetal-light.png) #F0F0F0;
 }
 
-.zweicom .dijitSplitContainer-dijitContentPane, .zweicom .dijitBorderContainer-dijitContentPane
+.gamelena .dijitSplitContainer-dijitContentPane, .gamelena .dijitBorderContainer-dijitContentPane
 {
     border-bottom: 1px solid #ccc;
-    background: #bcd5f0 url("/dojotoolkit/dijit/themes/zweicom/images/titleBar.png") repeat-x top left;
+    background: #bcd5f0 url("/dojotoolkit/dijit/themes/gamelena/images/titleBar.png") repeat-x top left;
 }
 
 .tundra #appToolboxContainer
@@ -680,8 +680,8 @@ a.settingsTab {
 .appLoader div:first-child { font-size: 1.364em; margin: 0 auto; margin-top: 42px; position: absolute; text-align: center; top: 50%; width: 100%; }
 
 
-.zweicom .formSearch {
-    /*background: #007AC9 url("/dojotoolkit/dijit/themes/zweicom/images/titleBar.png") repeat-x top left;*/
+.gamelena .formSearch {
+    /*background: #007AC9 url("/dojotoolkit/dijit/themes/gamelena/images/titleBar.png") repeat-x top left;*/
 }
 
 .formSearch {
@@ -742,7 +742,7 @@ a.settingsTab {
     outline: none;
 }
 
-.zweicom .contentWrapper {
+.gamelena .contentWrapper {
     
 }
 
@@ -871,7 +871,7 @@ a.settingsTab {
     height: 16px;
 }
 
-.zweicom .dojoxGridHeader .dojoxGridCell, .flat .dojoxGridHeader .dojoxGridCell {
+.gamelena .dojoxGridHeader .dojoxGridCell, .flat .dojoxGridHeader .dojoxGridCell {
     padding-top: 1em;
     padding-bottom: 1em;
 	font-weight: bold;
@@ -888,29 +888,29 @@ form .flat .keyPadWrapper {
     background-color: #fff;
 }
 
-.zweicom .dojoxGridCell, .flat .dojoxGridCell {
+.gamelena .dojoxGridCell, .flat .dojoxGridCell {
 	padding-top: 1em;
 	padding-bottom: 1em;
 }
 
-.zweicom .dijitButtonNode {
+.gamelena .dijitButtonNode {
 	padding-top: 0.4em;
 	padding-bottom: 0.4em;
 }
 
-.zweicom .dijitDialogTitleBar {
+.gamelena .dijitDialogTitleBar {
     padding : 0.8em;	
 }
 
-.zweicom  a.settingsTab  {
+.gamelena  a.settingsTab  {
 	font-weight: bold;
 	padding: 0.5em;
 }
-.zweicom #personalWrapper {
+.gamelena #personalWrapper {
 	top: 0.3em;
 }
 
-.zweicom .dijitMenuItem {
+.gamelena .dijitMenuItem {
 	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 12px;
 	margin: 0;
@@ -918,20 +918,20 @@ form .flat .keyPadWrapper {
 	font-weight: bold;
 }
 
-.zweicom .settingsArea {
+.gamelena .settingsArea {
 	overflow: hidden;
 }
 
-.zweicom .dijitDialogCloseIcon {
+.gamelena .dijitDialogCloseIcon {
 	top: 8px;
 }
 
-.zweicom .dijitSelect input, .zweicom .dijitTextBox input {
+.gamelena .dijitSelect input, .gamelena .dijitTextBox input {
 	padding-top: 0.3em;
 	padding-bottom: 0.3em;
 }
 
-.zweicom .dojoxMultiSelectItem {
+.gamelena .dojoxMultiSelectItem {
 	padding: 0.3em;
 }
 

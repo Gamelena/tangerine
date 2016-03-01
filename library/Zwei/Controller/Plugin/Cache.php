@@ -1,10 +1,7 @@
 <?php
 /**
- * 
  * Implementación de Zend_Cache para admportal como Plugin,
  * tip: para no cachear algun componente XML, usar la palabra "nocache" en el nombre de archivo, ej trafico-por-nodo-nocache.xml
- *
- *
  */
 final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
 {
@@ -77,7 +74,7 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
             || isset($_REQUEST['action']) 
             || preg_match("/settings/", $request->getParam('p'))
             || preg_match("/nocache/", $request->getParam('p'))
-            ) {
+        ) {
             self::$doNotCache = true;
         } else {
             $userInfo = Zend_Auth::getInstance()->getStorage()->read();
@@ -129,7 +126,8 @@ final class Zwei_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abstract
      */
     public function cleanByTags($tags)
     {
-        if (!$this->cache) return false;
+        if (!$this->cache) { return false; 
+        }
         
         return $this->cache->clean(
             Zend_Cache::CLEANING_MODE_MATCHING_TAG,

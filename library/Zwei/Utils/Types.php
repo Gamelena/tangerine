@@ -2,21 +2,20 @@
 
 /**
  * Conversiones de formatos y tipos de datos
- *
  */
 
-Class Zwei_Utils_Types 
+Class Zwei_Utils_Types
 {
     /**
      * Convierte un número de bits a una unidad leible
      * 
-     * @param int $bytes
-     * @param int $decimals
-     * @param string $dec_sep
-     * @param string $thous_sep
+     * @param  int    $bytes
+     * @param  int    $decimals
+     * @param  string $dec_sep
+     * @param  string $thous_sep
      * @return string
      */
-    public function bytesToReadable ($bytes, $decimals=2, $dec_sep=",", $thous_sep=".")
+    public function bytesToReadable($bytes, $decimals=2, $dec_sep=",", $thous_sep=".")
     {
         if ($bytes < 1024) {
             return $bytes." bytes";

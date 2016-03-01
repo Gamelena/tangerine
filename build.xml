@@ -2,7 +2,7 @@
 <project name="name-of-project" default="full-build">
 	<!-- By default, we assume all tools to be on the $PATH -->
 	<property name="db.username" value="root"/>
-	<property name="db.password" value="zweicom"/>
+	<property name="db.password" value="gamelena"/>
 	
 	<property name="pdepend" value="pdepend" />
 	<property name="phpcpd" value="phpcpd" />
@@ -37,7 +37,7 @@
 		depends="prepare,static-analysis-parallel,phpdox"
 		description="Performs static analysis (executing the tools in parallel), runs the tests, and generates project documentation" />
 
-	<target name="quick-build" depends="prepare,lint"
+	<target name="quick-build" depends="prepare,database,composer"
 		description="Performs a lint check and runs the tests (without generating code coverage reports)" />
 
 	<target name="static-analysis"
@@ -65,28 +65,83 @@
 		<delete dir="${basedir}/tests/logs" />
 		<delete dir="${basedir}/tests/pdepend" />
 		<delete dir="${basedir}/tests/phpdox" />
-		<delete dir="${basedir}/vendor" />
 		<property name="clean.done" value="true" />
 	</target>
 
-	<target name="composer" depends="prepare" description="Installing composer dependencies">
-		<exec dir="${basedir}" executable="composer" failonerror="true">
+	<target name="composer" depends="vendordir-check" description="Installing composer dependencies">
+		<antcall target="composer-install"/>
+		<antcall target="composer-update"/>
+	</target>
+	<target name="composer-install" unless="vendordir.exists" >
+		<exec executable="composer" failonerror="true">
 			<arg value="install" />
 		</exec>
+	</target>
+	<target name="composer-update" if="vendordir.exists" >
+		<exec executable="composer" failonerror="true">
+			<arg value="update" />
+		</exec>
+	</target>
+	
+	<target name="vendordir-check">
+		<condition property="vendordir.exists">
+			<available file="${basedir}/vendor" type="dir" />
+		</condition>
+	</target>
+
+	<target name="bower" depends="bower_componentsdir-check" description="Installing bower dependencies">
+		<antcall target="bower-install"/>
+		<antcall target="bower-update"/>
+		<exec dir="${basedir}/tasks"  executable="./bower-postinstall.sh" />
+	</target>
+	<target name="bower-install" unless="bower_componentsdir.exists" >
+		<exec executable="bower" failonerror="true">
+			<arg value="install" />
+		</exec>
+	</target>
+	<target name="bower-update" if="bower_componentsdir.exists" >
+		<exec executable="bower" failonerror="true">
+			<arg value="update" />
+		</exec>
+	</target>
+	<target name="bower_componentsdir-check">
+		<condition property="bower_componentsdir.exists">
+			<available file="${basedir}/bower_components" type="dir" />
+		</condition>
+	</target>
+	
+	<target name="global-testing-deps" description="Install global dependencies for php cli">
+		<exec dir="${basedir}/tasks"  executable="./global-testing-deps.sh" failonerror="true">
+		</exec>
+	</target>
+
+	<target name="alias" description="Create An Apache Alias for this site">
+		<exec dir="${basedir}/tasks" executable="./alias.sh" failonerror="true"/>
+	</target>
+	
+	<target name="generator-start" description="Include environment vars for admportal tools">
+		<exec dir="${basedir}/tasks" executable="./generator-start.sh" failonerror="true"/>
+	</target>
+
+	<target name="zend-test-patch" description="Patch Zend_Test_PHPUnit to work with PHPUnit 4">
+		<exec dir="${basedir}/tasks" executable="./zend-test-patch.sh" failonerror="true"/>
 	</target>
 
 	<target name="database" description="Create Database and privileges">
 		<exec executable="${mysql}" input="${basedir}/db/admportal.sql" failonerror="true">
 			<arg value="--user=${db.username}"/>
 			<arg value="--password=${db.password}"/>
+			<arg value="--database=admportal"/>
 		</exec>
 		<exec executable="${mysql}" input="${basedir}/db/basicdata.sql" failonerror="true">
 			<arg value="--user=${db.username}"/>
 			<arg value="--password=${db.password}"/>
+			<arg value="--database=admportal"/>
 		</exec>
 		<exec executable="${mysql}" input="${basedir}/db/privileges.sql" failonerror="true">
 			<arg value="--user=${db.username}"/>
 			<arg value="--password=${db.password}"/>
+			<arg value="--database=admportal"/>
 		</exec>
 	</target>
 
@@ -202,7 +257,7 @@
 	<target name="phpcs" unless="phpcs.done"
 		description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
 		<exec executable="${phpcs}" taskname="phpcs">
-			<arg value="--standard=PSR2" />
+			<arg value="--standard=${basedir}/tests/phpcs.xml" />
 			<arg value="--extensions=php" />
 			<arg value="--ignore=autoload.php" />
 			<arg path="${basedir}/application" />
@@ -218,7 +273,7 @@
 		<exec executable="${phpcs}" output="/dev/null" taskname="phpcs">
 			<arg value="--report=checkstyle" />
 			<arg value="--report-file=${basedir}/tests/logs/checkstyle.xml" />
-			<arg value="--standard=PSR2" />
+			<arg value="--standard=${basedir}/tests/phpcs.xml" />
 			<arg value="--extensions=php" />
 			<arg value="--ignore=autoload.php" />
 			<arg path="${basedir}/application" />
@@ -277,6 +332,11 @@
 		<exec executable="${phpdox}" dir="${basedir}/tests" taskname="phpdox" />
 
 		<property name="phpdox.done" value="true" />
+	</target>
+	
+	<target name="dist"
+		description="Generate distribuible compressed file">
+		<exec executable="./install.sh" />
 	</target>
 
 	<target name="-check-failure">

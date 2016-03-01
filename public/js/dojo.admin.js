@@ -12,7 +12,7 @@ var $globals = {};
 var initLoad = function() 
 {
     admportal.loadEvents();
-    admportal.loadLayoutSettings(dojo.byId("logosAdm"),dojo.byId("tituloAdm"), dojo.byId("zweicomLogo"), dojo.byId("zweicomLegend"));
+    admportal.loadLayoutSettings(dojo.byId("logosAdm"),dojo.byId("tituloAdm"), dojo.byId("gamelenaLogo"), dojo.byId("gamelenaLegend"));
     admportal.loadMainMenu();
     admportal.initListeners();
 };

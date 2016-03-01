@@ -1,17 +1,7 @@
 <?php
-<<<<<<< HEAD
-/**
- * Ruta de instalación por defecto de adaptador MonetDB en Debian y Ubuntu.
- * @link https://www.monetdb.org/downloads/deb/
- */
-require_once '/usr/share/php/monetdb/php_monetdb.php';
-=======
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 
 /**
- * 
  * Adaptador de tabla MonetDB
- *
  */
 abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
 {
@@ -33,6 +23,12 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     protected $_primary = null;
     
     /**
+     * 
+     * @var string
+     */
+    protected $_schema = null;
+    
+    /**
      * parámetros de conexión por defecto de monetdb_connect()
      * @var array
      */
@@ -47,15 +43,12 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     );
     
     /**
-<<<<<<< HEAD
-=======
      * parámetros enviados por $_REQUEST
      * @var Zwei_Utils_Form
      */
     protected $_form;
     
     /**
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
      * @var string
      */
     protected $_adapter;
@@ -66,15 +59,8 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      */
     protected $_connection;
     
-<<<<<<< HEAD
-    /**
-     * 
-     */
-    protected $_isFiltered = false;
-=======
     const SELECT_WITH_FROM_PART    = true;
     const SELECT_WITHOUT_FROM_PART = false;
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
     
     /**
      * 
@@ -82,12 +68,9 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      */
     protected $_count = 0;
     
-<<<<<<< HEAD
-=======
     
     protected $_is_filtered;
     
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
     /**
      * Hash que indica si deben ser validados los permisos modulo-usuario-accion en api rest.
      *
@@ -105,8 +88,6 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         $this->init();
     }
     
-<<<<<<< HEAD
-=======
     
     /**
      * Flag para especificar que ignore filtros en Zwei_Db_Object
@@ -118,7 +99,6 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         return $this->_is_filtered;
     }
     
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
     /**
      * Initialize object
      *
@@ -130,8 +110,6 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     {
         $options = Zwei_Controller_Config::getOptions();
         
-<<<<<<< HEAD
-=======
         if (isset($options->zwei->monetdb) && isset($options->zwei->monetdb->driverFile)) {
             require_once $options->zwei->monetdb->driverFile;
         } else {
@@ -143,7 +121,6 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         }
         
         
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         $params = array();
         if ($this->_adapter === null) {
             if (isset($options->zwei->monetdb)) {
@@ -157,11 +134,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         {
             $this->_params[$i] = $param;
         }
-<<<<<<< HEAD
-        
-=======
         $this->_form = new Zwei_Utils_Form();
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
         $this->connect();
     }
     
@@ -181,8 +154,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      *
      * en archivo /application/configs/application.ini
      *
-     *
-     * @param $adapter
+     * @param  $adapter
      * @return void
      */
     public function connect($params = array())
@@ -199,11 +171,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     }
     
     
-<<<<<<< HEAD
-    public function select()
-=======
     public function select($withFromPart = self::SELECT_WITH_FROM_PART)
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
     {
         /**
          * @fixme estamos iniciando el generador de querys con adaptador SQL por defecto, usualmente MySQL, 
@@ -211,17 +179,11 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
          * 
          * @todo esto debiera inicializarse con new Zwei_Db_TableMonet_Select($this->getAdapter()), $this->getAdapter debiera retornar un Zwei_Db_TableMonet_Adapter.
          */
-<<<<<<< HEAD
-        $select = new Zwei_Db_TableMonet_Select(Zend_Db_Table::getDefaultAdapter());
-        return $select->from($this->_name);
-    }
-    
-=======
         
         $select = new Zwei_Db_TableMonet_Select(Zend_Db_Table::getDefaultAdapter());
         
         if ($withFromPart === self::SELECT_WITH_FROM_PART) {
-            $select->from($this->_name);
+            $select->from($this->_name, "*", $this->_schema);
         }
         
         return $select;
@@ -230,7 +192,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     /**
      * Query a raw SQL string.
      * 
-     * @param string $query
+     * @param  string $query
      * @return unknown
      */
     public function query($query)
@@ -240,7 +202,6 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     }
     
     
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
     /**
      * @param $select Zwei_Db_Table_Monet
      * @see Zwei_Admin_ModelInterface::fetchAll()
@@ -254,6 +215,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         } else if ($select instanceof Zend_Db_Select) {
             $select = $select->__toString();
         }
+        
         $result = monetdb_query($this->_connection, $select)
             or trigger_error(monetdb_last_error(), E_USER_ERROR);
         
@@ -274,7 +236,6 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      * Retorna atributo resources.multidb.{$_adapter}.
      * Lleva prefijo Zw para distinguirlo de método nativo Zend_Db_Table_Abstract::getAdapter()
      *
-     *
      * @return string
      */
     public function getZwAdapter()
@@ -288,14 +249,6 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         
     }
     
-<<<<<<< HEAD
-    public function isFiltered()
-    {
-        return $this->_isFiltered;
-    }
-    
-=======
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
     public function info($key)
     {
         if ($key === 'primary') {

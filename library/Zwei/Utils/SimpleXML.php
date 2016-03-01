@@ -1,15 +1,14 @@
 <?php
 /**
- * 
  * Extensión de SimpleXMLElement, clase reciclada de USSD (SimpleXMLElementExtended).
  *
 * @package Zwei_Utils
 * @version $Id:$
-* @since 0.1
+* @since   0.1
  */
 class Zwei_Utils_SimpleXML extends SimpleXMLElement
 {
-  /**
+    /**
    * 
    * @param string
    * @return string
@@ -45,8 +44,9 @@ class Zwei_Utils_SimpleXML extends SimpleXMLElement
     {
         $cnt = 0;
         foreach ($this->children() as $node) {
-        if ($node->getName() == $name )
-            $cnt++;
+            if ($node->getName() == $name ) {
+                $cnt++; 
+            }
         }
         return (int) $cnt;
     }

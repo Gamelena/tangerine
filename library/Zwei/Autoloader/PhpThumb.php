@@ -9,21 +9,21 @@ class Zwei_Autoloader_PhpThumb implements Zend_Loader_Autoloader_Interface
           'GdReflectionLib' => 'thumb_plugins/gd_reflection.inc.php',
        );
 
-  /**
+    /**
    * Autoload a class
    *
-   * @param   string $class
-   * @return  mixed
+   * @param  string $class
+   * @return mixed
    *          False [if unable to load $class]
    *          get_class($class) [if $class is successfully loaded]
    */
-   public function autoload($class)
-   {
-      $file = ADMPORTAL_APPLICATION_PATH . '/../library/PhpThumb/' . self::$php_thumb_classes[$class];
-      if (is_file($file)) {
-         require_once($file);
-         return $class;
-      }
-      return false;
-   }
+    public function autoload($class)
+    {
+        $file = TANGERINE_APPLICATION_PATH . '/../library/PhpThumb/' . self::$php_thumb_classes[$class];
+        if (is_file($file)) {
+            include_once $file;
+            return $class;
+        }
+        return false;
+    }
 }

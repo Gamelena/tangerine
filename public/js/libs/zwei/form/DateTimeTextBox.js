@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-define(["dojo/_base/declare", "dijit/form/DateTextBox"], function(declare, DateTextBox) {
-	return declare("zwei.form.DateTimeTextBox", [DateTextBox], {
-	
-	});
-});
-=======
 dojo.provide("dijit.DateTimeWidget");
 dojo.require("dojo.fx");
 dojo.require("dojo.cldr.supplemental");
@@ -85,4 +78,3 @@ onMouseOut : function(e) {
 }
 
 });
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4

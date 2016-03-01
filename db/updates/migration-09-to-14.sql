@@ -527,12 +527,12 @@ BEGIN
     INSERT INTO `', @dbNew ,'`.`web_settings` 
       (`id`, `list`, `value`, `type`, `description`, `ord`, `group`, `function`, `approved`, `path`, `url`, `regExp`, `invalidMessage`, `promptMessage`, `formatter`, `xml_children`) 
       VALUES
-      ("credits", "", "&copy; Zweicom 2014", "dijit-form-validation-text-box", "", "2", "Admin", "", "1", "", NULL, "", "", "", "", ""),
+      ("credits", "", "&copy; gamelena 2014", "dijit-form-validation-text-box", "", "2", "Admin", "", "1", "", NULL, "", "", "", "", ""),
       ("query_log", "", "1", "dijit-form-check-box", "", "1", "Debug", "", "1", "", NULL, "", "", "", "", ""),
       ("titulo_adm", "", (SELECT `value` FROM `', @dbOld ,'`.`web_settings` WHERE id="titulo_adm" LIMIT 1) , "dijit-form-validation-text-box", "", "1", "Admin", "", "1", "", NULL, "", "", "", "", ""),
       ("transactions_log", "", "1", "dijit-form-check-box", "", "1", "Debug", "", "1", "", NULL, "", "", "", "", ""),
       ("url_logo_oper", "", (SELECT `value` FROM `', @dbOld ,'`.`web_settings` WHERE id="url_logo_oper" LIMIT 1), "dojox-form-uploader", "", "3", "Admin", "", "1", "{ROOT_DIR}/public/upfiles/", "{BASE_URL}/upfiles/corporative/", "", "", "", "formatImage", \'&lt;thumb height="56" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;\'),
-      ("url_logo_zweicom", "", "b28576bblogo-zweicom-26x34.png", "dojox-form-uploader", "", "3", "Admin", "", "1", "{ROOT_DIR}/public/upfiles/", "{BASE_URL}/upfiles/corporative/", "", "", "", "formatImage", \'&lt;thumb height="18" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;\');
+      ("url_logo_gamelena", "", "b28576bblogo-gamelena-26x34.png", "dojox-form-uploader", "", "3", "Admin", "", "1", "{ROOT_DIR}/public/upfiles/", "{BASE_URL}/upfiles/corporative/", "", "", "", "formatImage", \'&lt;thumb height="18" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;\');
     ');
 
     PREPARE stmt FROM @query;

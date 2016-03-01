@@ -38,7 +38,7 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 					handleAs : 'json',
 					load : function(items) {
 						self.items = items;
-						self.refreshValues(items);
+						self.refreshValues();
 						self._finishedLoadItems();
 					},
 					error : function(e) {
@@ -46,7 +46,7 @@ define(["dojo/_base/declare", "dijit/form/FilteringSelect"], function(declare, F
 					}
 				});	
 			} else if (self.items !== null) {
-				self.refreshValues(items);
+				self.refreshValues();
 				self._finishedLoadItems();
 			} else {
 				console.log('url is not defined, loading empty list');

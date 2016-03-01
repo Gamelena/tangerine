@@ -15,7 +15,7 @@ dojo.declare("zwei.Admportal", null, {
     initLoad: function() 
     {
         this.loadEvents();
-        this.loadLayoutSettings(dojo.byId("logosAdm"),dojo.byId("tituloAdm"), dojo.byId("zweicomLogo"), dojo.byId("zweicomLegend"));
+        this.loadLayoutSettings(dojo.byId("logosAdm"),dojo.byId("tituloAdm"), dojo.byId("gamelenaLogo"), dojo.byId("gamelenaLegend"));
         this.loadMainMenu();
     },
     loadEvents: function()
@@ -73,8 +73,8 @@ dojo.declare("zwei.Admportal", null, {
     {
         if (domLogo == undefined) var domLogo = dojo.byId("logosAdm");
         if (domTitle == undefined) var domTitle = dojo.byId("tituloAdm");
-        if (domFooterImg == undefined) var domFooterImg = dojo.byId("zweicomLogo");
-        if (domFooterLegend == undefined) var domFooterLegend = dojo.byId("zweicomLegend");
+        if (domFooterImg == undefined) var domFooterImg = dojo.byId("gamelenaLogo");
+        if (domFooterLegend == undefined) var domFooterLegend = dojo.byId("gamelenaLegend");
         
         require(["dojo/data/ItemFileReadStore"], function(ItemFileReadStore){
             var store = new ItemFileReadStore({
@@ -93,7 +93,7 @@ dojo.declare("zwei.Admportal", null, {
                             images += "<img src=\""+base_url+ 'upfiles/corporative/' +store.getValue(i, "value")+ "\" />";
                         } else if(store.getValue(i, "id") == "titulo_adm") {
                             domTitle.innerHTML = store.getValue(i, "value");
-                        } else if(store.getValue(i, "id") == "url_logo_zweicom") {
+                        } else if(store.getValue(i, "id") == "url_logo_gamelena") {
                             domFooterImg.src = base_url+ 'upfiles/corporative/' +store.getValue(i, "value");
                         } else if(store.getValue(i, "id") == "credits") {
                             domFooterLegend.innerHTML = store.getValue(i, "value");
@@ -463,11 +463,7 @@ dojo.declare("zwei.Admportal", null, {
         if (object == undefined) var object = ''; 
         if (primary == undefined) var primary = 'id'; 
 
-<<<<<<< HEAD
-        var uri = dijit.byId(domPrefix+'dataGrid').store ? escape(dijit.byId(domPrefix+'dataGrid').store.url) : '';
-=======
         var uri = escape(dijit.byId(domPrefix+'dataGrid').store.url);
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 
         try {
             var items = dijit.byId(domPrefix + 'dataGrid').selection.getSelected();

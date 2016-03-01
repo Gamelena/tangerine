@@ -1,6 +1,6 @@
 <?php
 
-class Elements_DojoDndSourceController extends Zend_Controller_Action
+class Elements_DojoDndSourceController extends Elements_BaseController
 {
     /**
      * 
@@ -8,18 +8,11 @@ class Elements_DojoDndSourceController extends Zend_Controller_Action
      */
     protected $_model;
     
-    public function init()
-    {
-        /* Initialize action controller here */
-    }
 
     public function indexAction()
     {
         $r = $this->getRequest();
 
-        $this->view->i =  $r->getParam('i');
-        $this->view->domId =  $r->getParam('domId');
-        $this->view->target =  $r->getParam('target');
         $this->view->selectedTitle =  $r->getParam('selectedTitle', 'Seleccionados');
         $this->view->unselectedTitle =  $r->getParam('unselectedTitle', 'No seleccionados');
         $this->view->saveUnselected = $r->getParam('saveUnselected', false);
@@ -54,7 +47,8 @@ class Elements_DojoDndSourceController extends Zend_Controller_Action
             } else {
                 $select = $this->_model->select();
             }
-            if (method_exists($select, "__toString")) Debug::writeBySettings($select->__toString(), 'query_log');
+            if (method_exists($select, "__toString")) { Debug::writeBySettings($select->__toString(), 'query_log'); 
+            }
             $rows = $this->_model->fetchAll($select); //Query para pintar, sin seleccionar, todas las opciones disponibles.
             
             $value = $r->getParam('value');
@@ -109,4 +103,3 @@ class Elements_DojoDndSourceController extends Zend_Controller_Action
         }
     }
 }
-

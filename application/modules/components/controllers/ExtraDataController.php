@@ -6,24 +6,18 @@ class Components_ExtraDataController extends Zend_Controller_Action
     /**
      *
      * @var Zwei_Db_Table
-     *
-     *
      */
     protected $_model = null;
     
     /**
      *
      * @var Zwei_Admin_Acl
-     *
-     *
      */
     protected $_acl = null;
     
     /**
      *
      * @var Zwei_Admin_Xml
-     *
-     *
      */
     protected $_xml = null;
     
@@ -32,7 +26,7 @@ class Components_ExtraDataController extends Zend_Controller_Action
      *
      * @see Zend_Controller_Action::init()
      */
-    public function init ()
+    public function init()
     {
         $r = $this->getRequest();
         $component = $r->getParam('p');
@@ -68,7 +62,7 @@ class Components_ExtraDataController extends Zend_Controller_Action
      *
      * @return void
      */
-    public function indexAction ()
+    public function indexAction()
     {
         $r = $this->getRequest();
         $this->initPermissions();
@@ -83,7 +77,7 @@ class Components_ExtraDataController extends Zend_Controller_Action
      * 
      * @return void
      */
-    private function initPermissions ()
+    private function initPermissions()
     {
         $component = $this->_xml->getAttribute('aclComponent');
         $aclComponent = $component ? $component : $this->getRequest()->getParam('p');

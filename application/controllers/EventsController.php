@@ -1,11 +1,9 @@
 <?php
 /**
  * Controlador que valida estatus de sesion en curso.
- * 
  */
 class EventsController extends Zend_Controller_Action
 {
-
     /**
      * Verificar status de usuario en sesión.
      * @return void
@@ -48,7 +46,7 @@ class EventsController extends Zend_Controller_Action
                 
                 $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter(false);
                 $authAdapter->setIdentity($username)
-                ->setCredential($password);
+                    ->setCredential($password);
 
                 $result = $auth->authenticate($authAdapter);
                 

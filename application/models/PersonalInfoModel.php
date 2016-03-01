@@ -4,10 +4,9 @@
  * Modelo de datos personales, requiere sesion ACL iniciada
  *
  * @category Zwei
- * @package Models
- * @version $Id:$
- * @since 0.1
- *
+ * @package  Models
+ * @version  $Id:$
+ * @since    0.1
  */
 
 class PersonalInfoModel extends Zwei_Db_Table
@@ -15,25 +14,14 @@ class PersonalInfoModel extends Zwei_Db_Table
     protected $_name = "acl_users";
     protected $_name_roles = "acl_roles";
     protected $_generate_pass = "user_name";
-    protected $_acl;
-    protected $_user_name;
-
-    public function init()
-    {
-        if(!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('index/login');
-        $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-        $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
-        $this->_user_name = $userInfo->user_name;
-    }
 
     public function select()
     {
         $oSelect=new Zend_Db_Table_Select($this);
         $oSelect->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
         $oSelect->from($this->_name, array('id', 'user_name', 'acl_roles_id', 'first_names', 'last_names', 'email', 'approved'))
-        ->joinLeft($this->_name_roles, "$this->_name.acl_roles_id = $this->_name_roles.id", "role_name")
-        ;
-        $oSelect->where($this->getAdapter()->quoteInto('user_name = ?', $this->_user_name));
+            ->joinLeft($this->_name_roles, "$this->_name.acl_roles_id = $this->_name_roles.id", "role_name");
+        $oSelect->where($this->getAdapter()->quoteInto('user_name = ?', $this->_user_info->user_name));
         return $oSelect;
     }
 
@@ -62,7 +50,8 @@ class PersonalInfoModel extends Zwei_Db_Table
      * Captura de excepciones posibles como nombre de usuario en uso
      */
 
-    public function update($data, $where) {
+    public function update($data, $where) 
+    {
         try {
             $update = parent::update($data, $where);
         } catch(Zend_Db_Exception $e) {

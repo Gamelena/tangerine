@@ -1,7 +1,6 @@
 <?php
 /**
  * Utilidades de Fecha/Hora
- * 
  */
 
 class Zwei_Utils_Time
@@ -50,8 +49,8 @@ class Zwei_Utils_Time
     /**
      * Convierte un string datetime a un timestamp.
      * 
-     * @param $datetime datetime YYYY-MM-DD hh:mm:ss|DD-MM-YYY hh:mm:ss
-     * @param $lang string "eng"|"esp"
+     * @param  $datetime datetime YYYY-MM-DD hh:mm:ss|DD-MM-YYY hh:mm:ss
+     * @param  $lang string "eng"|"esp"
      * @return int timestamp
      */
     static public function datetimeToTimestamp($datetime, $lang = "eng")
@@ -65,7 +64,7 @@ class Zwei_Utils_Time
         
         
         if ($lang == "eng") {
-            $timestamp = mktime($arrTime[0], $arrTime[1], $arrTime[2], (int) $arrDate[1], (int) $arrDate[2], (int) $arrDate[0]);
+            $timestamp = mktime((int) $arrTime[0], (int) $arrTime[1], (int) $arrTime[2], (int) $arrDate[1], (int) $arrDate[2], (int) $arrDate[0]);
         } else if ($lang == "esp") {
             $timestamp = mktime((int) $arrTime[0], (int) $arrTime[1], (int) $arrTime[2], (int) $arrDate[1], (int) $arrDate[0], (int) $arrDate[2]);
         }
@@ -76,9 +75,9 @@ class Zwei_Utils_Time
     /**
      * Retorna un array de días u horas de un intervalo de tiempo dado.
      * 
-     * @param $from int timestamp - datetime desde.
-     * @param $to int timestamp - datetime hasta.
-     * @param $interval string "hours"|"days" - retornar días u horas.
+     * @param  $from int timestamp - datetime desde.
+     * @param  $to int timestamp - datetime hasta.
+     * @param  $interval string "hours"|"days" - retornar días u horas.
      * @return array 
      */
     static public function createInterval($from, $to, $interval = "hours")

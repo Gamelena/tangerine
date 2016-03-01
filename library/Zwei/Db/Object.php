@@ -3,6 +3,7 @@
  * Crea un objeto Zend_Db_Select o Zend_Db_Table_Select según parámetros enviados por Zwei_Utils_Form ($_REQUEST),
  * generalmente es instanciado por ObjectsController pero puede instanciado en cualquier lugar, 
  * por ejemplo para sobrecargar manualmente Zwei_Db_Table::select() usando parámetros equivalentes.
+ *
  * @example
  * <code>
  * //Recibe parametros $_REQUEST, debe existir $_REQUEST['model'] esto equivale a $form->model. 
@@ -20,9 +21,9 @@
  * $select = $object->select();  
  * </code>
  * @category Zwei
- * @package Zwei_Db
- * @version $Id:$
- * @since 0.1
+ * @package  Zwei_Db
+ * @version  $Id:$
+ * @since    0.1
  */
 class Zwei_Db_Object
 {
@@ -65,7 +66,9 @@ class Zwei_Db_Object
             $model = $this->_form->model;
             $this->_model = new $model();
         }
-        if ($select) $this->_select = $select;
+        if ($select) { 
+            $this->_select = $select; 
+        }
     }
     /**
      * 
@@ -131,8 +134,8 @@ class Zwei_Db_Object
     /**
      * Recarga objeto Zend_Db_Select con parametros generados en buscador de Admportal
      * 
-     * @param string $i nombre del campo
-     * @param array('operator', 'prefix', 'sufix') $s contiene operador, valor, sufijo, prefijo
+     * @param  string                               $i nombre del campo
+     * @param  array('operator', 'prefix', 'sufix') $s contiene operador, valor, sufijo, prefijo
      * @return void
      */
     protected function iterateSearcher($i, $s)
@@ -151,8 +154,12 @@ class Zwei_Db_Object
                     $prefix = isset($s['prefix'][0]) ? $s['prefix'][0] : '';
                 }
             } else {
-                if (isset($s['sufix'][0])) $sufix = $s['sufix'][0];
-                if (isset($s['prefix'][0])) $sufix = $s['prefix'][0];
+                if (isset($s['sufix'][0])) { 
+                    $sufix = $s['sufix'][0]; 
+                }
+                if (isset($s['prefix'][0])) { 
+                    $sufix = $s['prefix'][0]; 
+                }
             }
         
         

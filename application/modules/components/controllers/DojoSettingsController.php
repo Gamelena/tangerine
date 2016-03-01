@@ -2,19 +2,17 @@
 /**
  * Controlador de módulo tipo settings.
  *
- * @author rodrigo.riquelme@zweicom.com
- *
- *
+ * @author rodrigo.riquelme@gamelena.com
  */
 class Components_DojoSettingsController extends Zend_Controller_Action
 {
 
     /**
      * Nombre del modelo Zend_Db_Table debe tener método loadGroups()
+     *
      * @see SettingsModel
      *
      * @var Zwei_Db_Table
-     *
      */
     private $_model = null;
 
@@ -22,7 +20,6 @@ class Components_DojoSettingsController extends Zend_Controller_Action
      * Configuración global.
      *
      * @var Zend_Config
-     *
      */
     private $_config = null;
     
@@ -30,7 +27,6 @@ class Components_DojoSettingsController extends Zend_Controller_Action
      * Post constructor.
      *
      * @see Zend_Controller_Action::init()
-     *
      */
     public function init()
     {
@@ -53,7 +49,6 @@ class Components_DojoSettingsController extends Zend_Controller_Action
      * Acción index.
      *
      * @return void
-     *
      */
     public function indexAction()
     {

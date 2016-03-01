@@ -3,55 +3,70 @@ README
 
 Requerimientos Básicos
 
-- PHP Version
+- PHP Version >= 5.4
 
->= 5.2.4 para sitios web (requerimiento mínimo para Zend Framework pero no recomendado)
-
-<<<<<<< HEAD
->= 5.4 o superior para tests unitarios y composer (versión recomendada)
-=======
->= 5.4 o superior para tests unitarios (versión recomendada)
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
+- MYSQL Version >= 5
 
 
 INSTALACION DE DEPENDENCIAS
 ===========================
 
-1. Instalar Composer
-
+1. Composer
+	Automatiza la instalación y configuración las dependencias del lado servidor
+	```
 	curl -sS https://getcomposer.org/installer | php -- 
 	mv composer.phar /usr/local/bin/composer
+	```
+    Ahora tenemos disponible el comando 'composer'
 
-Ahora debieramos tener disponible el comando 'composer'
-
-2. Instalar Bower
-
-Bower es un paquete NPM, por lo que instalaremos Node.js y NPM
+2. Bower
+    Bower es un paquete NPM, por lo que instalaremos Node.js y NPM
+	Automatiza la instalación y configuración las dependencias del lado cliente
+	```
 	sudo apt-get install nodejs npm nodejs-legacy
 	sudo npm install bower -g
-	
-3. ejecutar 
-
-> ./install.sh
-
+	```
+	Ahora tenemos disponible el comando 'bower'
+3. Ant 
+	Se usa ant como herramienta de automatizacion de tareas tales como construcción y análisis estático del código.
+	Para ejecutar los tests funcionales debe clonarse el proyecto admportal/admportal-testing.
+	```
+	sudo apt-get install ant
+	```
+	sudo apt-get install nodejs npm nodejs-legacy
  
-	
-y seguir las instrucciones post instalación
-
+    Para hacer un full build del proyecto ejecutar
+	```	
+	ant
+	```
+	En la raiz del proyecto, esto tambien ejecuta las tarea relacionadas con Bower y Composer.
+	Nota: esto deployará el proyecto, pero lanzara una salida de error si no tenemos instaladas las herramientas de testing en forma global, lo cual se puede realizar con la tarea.
+	```
+	ant global-testing-deps
+	```
+	Para ver el detalle de las tareas disponibles.
+	```
+	cat build.xml
+	``` 
+	Ver detalle de mensajes (modo verboso).
+	```
+	ant -v
+	```
 	
 Para evitar problemas de charset en los caracteres especiales en el despliegue web, se debe agregar 
 al archivo php.ini cargado por apache.
-
+    ```
 	default_charset = "UTF-8" 
-
+    ```
 CREACION DE MANTENEDORES
 ========================
 4. Moverse a una nueva carpeta y ejecutar 
+```
 	admportal-create 
-	Deberá ingresar: 
-	Tipo de DB (MySQL por omisión), 
-	nombre de DB, Usuario DB, Password DB, 
-	estos parámetros son de una instancia de DB ya existente o para crear una nueva DB.
+```
+Se pedirá ingresar: 
+-	Tipo de DB (MySQL por omisión), 
+-	nombre de DB, Usuario DB, Password DB,  estos parámetros son de una instancia de DB ya existente o para crear una nueva DB.
 
 Después se podrán escoger las opciones:
 
@@ -102,9 +117,46 @@ Alias /ussd-admportal "/proyectos/ussd-admportal/web/public/"
 ```
 TESTING
 =======
-Las dependencias instaladas con require-dev con composer resuelven los requerimientos para las pruebas basadas en el servidor.
+Se requieren las librerías 
+- PHPUnit
+- PHP_CodeSniffer
+- PHPLOC
+- PHP_Depend
+- PHPMD
+- PHPCPD
+- phpDox
+Las cuales también son usadas por Jenkins para integración continua y pueden ser instaladas con ant
+```
+ant global-testing-deps
+```
 
-Para ejecutar los tests basados en browser se debe instalar Selenium server.
+GENERACIÓN DE PLANTILLAS DE TESTS UNITARIOS
+-------------------------------------------
+Los Controllers y Actions deben ser creados con la herramienta
+```
+zf
+```
+Debe incluirse al archivo php.ini cli (en Debian/Ubuntu '/etc/php5/cli/php.ini', En RHEL/Centos '/etc/php.ini')
+```
+INCLUDE_PATH {paths ya existentes}:{admportal path}/vendor/phpunit/phpunit
+```
+En este punto zf intentará crear los Tests Unitarios, pero Zend Framework 1 por defecto no es compatible con PHPUnit 4 por lo que arrojará el siguiente error
+```
+zf create controller Pepito
+Creating a controller {...blah}
+Creating a controller test {...bleh}
+PHP Fatal error: Class 'PHPUnit_Framework_TestCase' not found in {..blih}/vendor/zendframework/zendframework1/library/Zend/Test/PHPUnit/ControllerTestCase.php
+PHP Stack trace:
+{...bloh}
+``` 
+Para solucionar este problema se debe aplicar un parche a Zend_Test_PHPUnit
+```
+ant zend-test-patch
+```
+
+SELENIUM
+--------
+Para ejecutar los tests basados en browser se debe instalar Selenium server (Las pruebas con Selenium no están "Jenkinizadas").
 Instalación de Selenium
 - Descargar el .jar Selenium SERVER desde http://www.seleniumhq.org/download/
 - Dejarlo el archivo en /usr/local/bin 
@@ -117,12 +169,17 @@ java -jar /usr/local/bin/selenium-server-standalone-2.42.2.jar
 Para usarlo con phpunit debe estar instalada la extension phpunit-selenium la cual es instalada con composer.
 Por convención los tests de selenium están escritos en web/tests/selenium/
 
-Es necesario crear alias para selenium en ~/.bashrc (o equivalente) para escribir una secuencia de comandos de testing compatible en diferentes sistemas.
-Y así escribir, por ejemplo, un archivo "tests.sh" único que ejecute las pruebas en diferentes ambientes.
+Es necesario crear alias para selenium en ~/.bashrc (o equivalente).
 ```
 alias selenium="java -jar /usr/local/bin/selenium-server-standalone-2.42.2.jar"
 ```
 Ejecutar selenium antes de iniciar los tests unitarios
+
+
+Se debe especificar la URL BASE en el archivo application.ini, reemplazando {BASE_URL} por la URL BASE del administrador web.
+```
+ zwei.uTesting.httpHost = "http://{BASE_URL}"
+```
 
 Los Tests se escriben en la carpeta web/tests
 
@@ -138,26 +195,14 @@ Ejemplo de configuración de suite de pruebas
         <directory>./selenium</directory>
     </testsuite>
     <php>
-<<<<<<< HEAD
-        <const name="PHPUNIT_USERNAME" value="rodrigo"/>
-        <const name="PHPUNIT_PASSWORD" value="rodrigo"/>
-=======
-        <const name="PHPUNIT_USERNAME" value="zweicom"/>
-        <const name="PHPUNIT_PASSWORD" value="zweicom"/>
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
+        <const name="PHPUNIT_USERNAME" value="gamelena"/>
+        <const name="PHPUNIT_PASSWORD" value="gamelena"/>
         <const name="PHPUNIT_BROWSER" value="opera"/>
         <const name="PHPUNIT_WAITSECONDS" value="5"/>
     </php>
 </phpunit>
 ```
-SETUP DE PRUEBAS
-================
-Se debe especificar la URL BASE en el archivo application.ini
 
-Ejemplo:
-```
- zwei.uTesting.httpHost = "localhost/ussd-arboles-canvas"
-```
 
 
 ---
@@ -188,8 +233,4 @@ Agregar a apache2.conf
    #Allow from all #Apache 2.2
 </Directory>
 
-<<<<<<< HEAD
 ```
-=======
-```
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4

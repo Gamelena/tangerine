@@ -7,7 +7,8 @@ class Zwei_Db_TableMonet_Select extends Zend_Db_Select
      */
     public function __toString()
     {
-        $select = str_replace('`', '', parent::__toString());
+        $select = str_replace('`', '"', parent::__toString());
         return $select;
     }
+    
 }

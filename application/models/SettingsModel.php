@@ -26,15 +26,13 @@
  ('debug_path', '', 'log/debug', 'dojo_validation_textbox', '', 4, 'Debug', 'cleanDebugFile', '1'),
  ('titulo_adm', '', 'Administrador Bonos de Consumo', 'dojo_validation_textbox', '', 1, 'Admin', '', '1'),
  ('url_logo_oper', '', 'images/logo_movistar26x19.jpg', 'dojo_validation_textbox', '', 2, 'Admin', '', '1'),
- ('url_logo_zweicom', '', 'images/logo_zweicom26x15.png', 'dojo_validation_textbox', '', 3, 'Admin', '', '1');
+ ('url_logo_gamelena', '', 'images/logo_gamelena26x15.png', 'dojo_validation_textbox', '', 3, 'Admin', '', '1');
  </code>
+ *
  * @category Zwei
- * @package Models
- * @version $Id:$
- * @since 0.1
- *
- *
- *
+ * @package  Models
+ * @version  $Id:$
+ * @since    0.1
  */
 
 class SettingsModel extends Zwei_Db_Table
