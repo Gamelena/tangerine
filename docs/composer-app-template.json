@@ -9,9 +9,13 @@
 		}
 	],
 	"repositories": [
+		{
+			"type": "git",
+			"url": "https://github.com/DonMostro/tangerine.git"
+		}
 	],
 	"require": {
-		"gamelena/admportal": "*"
+		"gamelena/tangerine": "dev-develop"
 	},
 	"minimum-stability": "dev"
 }

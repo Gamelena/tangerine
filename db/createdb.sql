@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS `admportal`;
+CREATE DATABASE IF NOT EXISTS `tangerine`;
 
-USE `admportal`;
+USE `tangerine`;
 
-GRANT ALL ON admportal.* to admportal_user identified by 'admportal_pass';
-GRANT ALL ON admportal.* to admportal_user@localhost identified by 'admportal_pass';
+GRANT ALL ON tangerine.* to tangerine_user identified by 'tangerine_pass';
+GRANT ALL ON tangerine.* to tangerine_user@localhost identified by 'tangerine_pass';

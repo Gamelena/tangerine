@@ -19,23 +19,25 @@ else
 			APACHE_SERVICE="httpd"
 			APACHE_PATH="/etc/httpd"
 			APACHE_CONF="/etc/httpd/conf/httpd.conf"
+			APACHE_USER="apache"
 		fi
 	else
 		APACHE_SERVICE="apache2"
 		APACHE_PATH="/etc/apache2"
 		APACHE_CONF="/etc/apache2/apache2.conf"
+		APACHE_USER="www-data"
 	fi
 	
 	mkdir -p $APACHE_PATH/alias
 
 	if grep -i  "include alias\/\*\.conf" $APACHE_CONF; then
-    		echo "Se encontró la directiva include alias/* en $APACHE_CONF, no se hace nada."
+		echo "Se encontró la directiva include alias/* en $APACHE_CONF, no se hace nada."
 	else
 		DATE=$(date +"%Y-%m-%d-%H-%M-%S")
 		echo "Creando backup de $APACHE_CONF en $APACHE_CONF $APACHE_CONF.$DATE"
 		cp $APACHE_CONF $APACHE_CONF.$DATE
 
-    		echo "Se intentará agregar la directiva Include alias/*.conf en $APACHE_CONF"
+		echo "Se intentará agregar la directiva Include alias/*.conf en $APACHE_CONF"
 		echo "# Generado por AdmPortal" >> $APACHE_CONF
 		echo "Include alias/*.conf\n" >> $APACHE_CONF
 	fi
@@ -72,6 +74,16 @@ else
 	SetEnv APPLICATION_ENV $APPLICATION_ENV
 </Directory>" > $ALIAS_FILE
 	fi
+	
+	echo "Otorgando permisos a $APACHE_USER"
+	chown $APACHE_USER -R $SITEPATH/log $SITEPATH/cache $SITEPATH/public/upfiles
+	
+	if grep -i  $SITENAME $SITEPATH/public/.htaccess; then
+		echo "se encontró referencia a $SITENAME en $SITEPATH/public/.htaccess, no se hace nada"
+	else
+		echo "Agregando rewritebase a .htaccess"
+		sed -i "1 i\RewriteBase /$SITENAME/" "$SITEPATH/public/.htaccess"
+	fi 
 
 	printf "\nTerminado\nPara ver los cambios reinicie apache\nservice $APACHE_SERVICE restart\n"
 fi

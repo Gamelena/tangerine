@@ -10,7 +10,7 @@ else
 	echo "Se intentará agregar las variables de entorno en $FILENAME"
 	echo "# Generado por Admportal" >> $FILENAME
 	echo "export TANGERINE_PATH=$TANGERINE_PATH"  >> $FILENAME
-	echo "export PATH=\$PATH:\$TANGERINE_PATH/tools"  >> $FILENAME
+	echo "export PATH=\$PATH:\$TANGERINE_PATH/bin"  >> $FILENAME
 	echo "export APPLICATION_ENV=development" >> $FILENAME
 	bash
 fi
