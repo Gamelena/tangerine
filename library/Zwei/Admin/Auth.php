@@ -143,11 +143,7 @@ class Zwei_Admin_Auth
                     $row->acl_roles_id = $userInfo->acl_roles_id;
                     $row->ip = $_SERVER['REMOTE_ADDR'];
                     $row->user_agent = $_SERVER['HTTP_USER_AGENT'];
-                    
-                    //@todo la siguiente condición "if" existe solo para compatibilidad hacia atras, deprecar cuando sea posible
-                    if (in_array('created', $aclSession->info(Zend_Db_Table::COLS))) {
-                        $row->created = time();
-                    }
+                    $row->created = time();
                     
                     $row->save();
                 } else {

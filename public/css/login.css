@@ -278,24 +278,25 @@ CORPORATIVO
 *******************/
 .gamelenaLogo
 {
-	background-image: url(../images/logo-gamelena-trans.svg);
-	width: 322px;
-	height: 185px;
-	left: 81%;
-	top: 81%;
-	position: fixed;
-	background-size: 200px;
-	background-repeat: no-repeat;
+    background-image: url(../images/logo-tangerine-trans.svg);
+    width: 37em;
+    height: 60em;
+    left: 43%;
+    top: 38%;
+    position: fixed;
+    background-size: 100%;
+    background-repeat: no-repeat;
 }	
 .operLogo
 {
-	background-repeat: no-repeat;
-	width: 103px;
-	height: 105px;
-	left: -7%;
-	top: 6%;
-	z-index: 9999;
-	position: absolute;
+    background-repeat: no-repeat;
+    width: 7em;
+    height: 7em;
+    left: -13%;
+    top: 0%;
+    z-index: 9999;
+    position: absolute;
+    background-size: 100%;
 }
 
 .dijitDialog {
