@@ -3,17 +3,21 @@
  * Funciones auxiliares para ser invocadas por los componentes XML.
  * 
  * @category Zwei
- * @package Zwei_Utils
- * @version $Id:$
- * @since 0.1
- * 
+ * @package  Zwei_Utils
+ * @version  $Id:$
+ * @since    0.1
  *
- * @example: <section type="table_dojo" functions="assign_request,enviar_reporte" (...)> para $CustomFunctions->assignRequest(...) y $CustomFunctions->enviarReporte(...)
+ * @example: 
+ * <helpers>
+ *    <customFunction target="enviarReporte" {...} />
+ * </helpers>
+ * 
+ * @deprecated
  */
 
 class Zwei_Utils_CustomFunctions extends Zwei_Utils_CustomFunctionsBase
 {
-    //[TODO] personalizar este código, es solo una base de ejemplo para modificar. 
+    //Esta es solo una base de ejemplo para modificar en archivo clonado a partir de esto. 
     public function enviarReporte()
     {
         echo "<script  type='text/javascript'>

@@ -1,21 +1,12 @@
 <?php
 
-class Elements_ZweiFormFilteringJsonSelectController extends Zend_Controller_Action
+class Elements_ZweiFormFilteringJsonSelectController extends Elements_BaseController
 {
-
-    public function init()
-    {
-        /* Initialize action controller here */
-    }
-
     public function indexAction()
     {
         $r = $this->getRequest();
         $dataDojoProps = array();
         
-        $this->view->i =  $r->getParam('i');
-        $this->view->domId =  $r->getParam('domId');
-        $this->view->target =  $r->getParam('target');
         
         $this->view->formatter = $r->getParam('formatter', false);
         $this->view->data = $r->getParam('data', false);
@@ -31,15 +22,13 @@ class Elements_ZweiFormFilteringJsonSelectController extends Zend_Controller_Act
             $dataDojoProps[] = "url:'{$r->getParam('url')}'";
         }
         
-        if ($r->getParam("unbounded")) $dataDojoProps[] = "unbounded:{$r->getParam('unbounded')}";
-        if ($r->getParam('maximum')) $dataDojoProps[] = "maximum:{$r->getParam('maximum')}";
-        if ($r->getParam('value') !== '') $dataDojoProps[] = "value:'{$r->getParam('value')}'";
+        if ($r->getParam("unbounded")) { $dataDojoProps[] = "unbounded:{$r->getParam('unbounded')}"; 
+        }
+        if ($r->getParam('maximum')) { $dataDojoProps[] = "maximum:{$r->getParam('maximum')}"; 
+        }
+        if ($r->getParam('value') !== '') { $dataDojoProps[] = "value:'{$r->getParam('value')}'"; 
+        }
         
-        $this->view->trim = $r->getParam('trim') ? "trim=\"{$r->getParam('trim')}\"" : '';
-        $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? " readonly=\"readonly\"" : '';
-        $this->view->disabled = $r->getParam('disabled') === 'true' || $r->getParam($r->getParam('mode')) == 'disabled' ? " disabled=\"disabled\"" : '';
-        $this->view->required = $r->getParam('required', '') === 'true' ? "required=\"true\"" : '';
-        $this->view->onblur = $r->getParam('onblur') ? " onblur=\"{$r->getParam('onblur')}\"" : '';
         $this->view->regExp = $r->getParam('regExp') ? " regExp=\"{$r->getParam('regExp')}\"" : '';
         $this->view->label = $r->getParam('label') ? " label=\"{$r->getParam('label')}\"" : '';
         
@@ -48,7 +37,6 @@ class Elements_ZweiFormFilteringJsonSelectController extends Zend_Controller_Act
         
         $this->view->onchange = $r->getParam('onchange') ? $formatter.$r->getParam('onchange') : $formatter;
         
-        $this->view->onclick = $r->getParam('onclick') ? " onclick=\"{$r->getParam('onclick')}\"" : '';
         $this->view->onkeypress = $r->getParam('onkeypress') ? " onkeypress=\"{$r->getParam('onkeypress')}\"" : '';
         $this->view->onshow = $r->getParam('onshow') ? " onShow=\"{$r->getParam('onshow')}\"" : '';
         $this->view->onload = $r->getParam('onload', '');
@@ -58,10 +46,6 @@ class Elements_ZweiFormFilteringJsonSelectController extends Zend_Controller_Act
         $this->view->missingMessage = $r->getParam('missingMessage') ? "missingMessage=\"{$r->getParam('missingMessage')}\"" : '';
         $this->view->promptMessage= $r->getParam('promptMessage') ? " promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         $this->view->placeHolder = $r->getParam('placeHolder') ? " placeHolder=\"{$r->getParam('placeHolder')}\"" : '';
-        
-        $this->view->value = $r->getParam('value');
-
-
         
         $this->view->dataDojoProps = implode(",", $dataDojoProps);
     }

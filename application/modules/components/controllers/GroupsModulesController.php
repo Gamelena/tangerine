@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="components.xsd">
     </component>
  * </code>
- *
  */
 class Components_GroupsModulesController extends Zend_Controller_Action
 {
@@ -47,12 +46,11 @@ class Components_GroupsModulesController extends Zend_Controller_Action
      * Post Constructor
      *
      * @see Zend_Controller_Action::init()
-     *
-     *
      */
     public function init()
     {
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) { $this->_redirect('admin/login'); 
+        }
         $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
         
         if ($this->getRequest()->getParam('p')) {
@@ -81,9 +79,9 @@ class Components_GroupsModulesController extends Zend_Controller_Action
     /**
      * Mapa jerarquico de módulos con permisos asociados.
      * 
-     * @param string $aclModulesId
-     * @param string $title
-     * @param string $first
+     * @param  string $aclModulesId
+     * @param  string $title
+     * @param  string $first
      * @return StdClass
      */
     public function getModules($aclModulesId = null, $title = null, $first = false)

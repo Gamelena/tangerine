@@ -1,4 +1,4 @@
-<select data-dojo-type="dojox/form/CheckedMultiSelect" multiple="true" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" <?=$this->readonly.$this->disabled.$this->required.$this->trim.$this->invalidMessage.$this->promptMessage.$this->onblur.$this->value.$this->onchange.$this->onclick?>>
+<select data-dojo-type="dojox/form/CheckedMultiSelect" multiple="true" id="<?=$this->domId . $this->i?>" name="<?=$this->target?>[]" onchange="<?=$this->onchange?>;" <?=$this->readonly.$this->disabled.$this->required.$this->trim.$this->invalidMessage.$this->promptMessage.$this->onblur.$this->onclick?>>
 <?php 
 if ($this->disabled) :
 ?>

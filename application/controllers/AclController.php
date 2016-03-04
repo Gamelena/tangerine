@@ -5,25 +5,21 @@ class AclController extends Zend_Controller_Action
 
     /**
      * @var Zwei_Admin_Acl
-     *
      */
     private $_acl = null;
 
     /**
      * @var string
-     *
      */
     private $_module = null;
 
     /**
      * @var string
-     *
      */
     private $_permission = null;
 
     /**
      * @var string
-     *
      */
     private $_itemId = null;
 
@@ -63,15 +59,4 @@ class AclController extends Zend_Controller_Action
         $response = Zend_Auth::getInstance()->getStorage()->read();
         $this->view->response = Zend_Json::encode($response);
     }
-
-
 }
-
-
-
-
-
-
-
-
-

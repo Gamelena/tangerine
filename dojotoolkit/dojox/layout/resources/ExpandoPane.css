@@ -276,38 +276,38 @@
     }
     
     
-    /* zweicom definitions */
+    /* gamelena definitions */
 
-    .zweicom .dojoxExpandoTitle {
+    .gamelena .dojoxExpandoTitle {
         height:16px;
         font-size:0.9em;
         font-weight:bold;
         padding:3px;
         padding-top:6px;
         padding-bottom:5px;
-        background:#F0F4FC url("../../../dijit/themes/zweicom/images/tabContainerSprite.gif") repeat-x scroll 0pt -50px;
+        background:#F0F4FC url("../../../dijit/themes/gamelena/images/tabContainerSprite.gif") repeat-x scroll 0pt -50px;
         border-left: 1px solid #B1BADF;
         border-right: 1px solid #B1BADF;
     }
     
-    .zweicom .dojoxExpandoClosed .dojoxExpandoTitle {
+    .gamelena .dojoxExpandoClosed .dojoxExpandoTitle {
         background: none;
         background-color: #F0F4FC;
         border: none;
     }
     
-    .zweicom .dojoxExpandoClosed {
+    .gamelena .dojoxExpandoClosed {
         background: none;
         background-color: #F0F4FC;
         border: 1px solid #B1BADF !important;
     }
     
-    .zweicom .dojoxExpandoIcon {
-        background-image: url('../../../dijit/themes/zweicom/images/spriteRoundedIconsSmall.png');
+    .gamelena .dojoxExpandoIcon {
+        background-image: url('../../../dijit/themes/gamelena/images/spriteRoundedIconsSmall.png');
     }
     
-    .dj_ie6 .zweicom .dojoxExpandoIcon {
-        background-image: url('../../../dijit/themes/zweicom/images/spriteRoundedIconsSmall.gif');
+    .dj_ie6 .gamelena .dojoxExpandoIcon {
+        background-image: url('../../../dijit/themes/gamelena/images/spriteRoundedIconsSmall.gif');
     }
     
     .flat .dojoxExpandoTitle {
@@ -336,10 +336,10 @@
     }
     
     .flat .dojoxExpandoIcon {
-        background-image: url('../../../dijit/themes/zweicom/images/spriteRoundedIconsSmall.png');
+        background-image: url('../../../dijit/themes/gamelena/images/spriteRoundedIconsSmall.png');
     }
     
     .dj_ie6 .flat .dojoxExpandoIcon {
-        background-image: url('../../../dijit/themes/zweicom/images/spriteRoundedIconsSmall.gif');
+        background-image: url('../../../dijit/themes/gamelena/images/spriteRoundedIconsSmall.gif');
     }
     

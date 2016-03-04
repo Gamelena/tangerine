@@ -60,8 +60,8 @@ class Zwei_Utils_File_Parser
     
     /**
      * 
-     * @param string $fileName
-     * @param array $titles @example array('columna', '\[regexp]\') 
+     * @param string                   $fileName
+     * @param array                    $titles   @example array('columna', '\[regexp]\') 
      * @param Zend_Db_Adapter_Abstract $adapter
      */
     public function __construct($fileName, $titles, $adapter = null)

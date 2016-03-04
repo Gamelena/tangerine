@@ -1,14 +1,7 @@
 <?php
-/**
- * Ruta de instalación por defecto de adaptador MonetDB en Debian y Ubuntu.
- * @link https://www.monetdb.org/downloads/deb/
- */
-require_once '/usr/share/php/monetdb/php_monetdb.php';
 
 /**
- * 
  * Adaptador de tabla MonetDB
- *
  */
 abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
 {
@@ -30,6 +23,12 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     protected $_primary = null;
     
     /**
+     * 
+     * @var string
+     */
+    protected $_schema = null;
+    
+    /**
      * parámetros de conexión por defecto de monetdb_connect()
      * @var array
      */
@@ -44,6 +43,12 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     );
     
     /**
+     * parámetros enviados por $_REQUEST
+     * @var Zwei_Utils_Form
+     */
+    protected $_form;
+    
+    /**
      * @var string
      */
     protected $_adapter;
@@ -54,16 +59,17 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      */
     protected $_connection;
     
-    /**
-     * 
-     */
-    protected $_isFiltered = false;
+    const SELECT_WITH_FROM_PART    = true;
+    const SELECT_WITHOUT_FROM_PART = false;
     
     /**
      * 
      * @var int
      */
     protected $_count = 0;
+    
+    
+    protected $_is_filtered;
     
     /**
      * Hash que indica si deben ser validados los permisos modulo-usuario-accion en api rest.
@@ -82,6 +88,17 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         $this->init();
     }
     
+    
+    /**
+     * Flag para especificar que ignore filtros en Zwei_Db_Object
+     * y aplique filtros en modelo
+     * @return boolean
+     */
+    public function isFiltered()
+    {
+        return $this->_is_filtered;
+    }
+    
     /**
      * Initialize object
      *
@@ -92,6 +109,17 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     public function init()
     {
         $options = Zwei_Controller_Config::getOptions();
+        
+        if (isset($options->zwei->monetdb) && isset($options->zwei->monetdb->driverFile)) {
+            require_once $options->zwei->monetdb->driverFile;
+        } else {
+            /**
+             * Ruta de instalación por defecto de adaptador MonetDB en Debian y Ubuntu.
+             * @link https://www.monetdb.org/downloads/deb/
+             */
+            require_once '/usr/share/php/monetdb/php_monetdb.php';
+        }
+        
         
         $params = array();
         if ($this->_adapter === null) {
@@ -106,7 +134,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         {
             $this->_params[$i] = $param;
         }
-        
+        $this->_form = new Zwei_Utils_Form();
         $this->connect();
     }
     
@@ -126,8 +154,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      *
      * en archivo /application/configs/application.ini
      *
-     *
-     * @param $adapter
+     * @param  $adapter
      * @return void
      */
     public function connect($params = array())
@@ -144,7 +171,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     }
     
     
-    public function select()
+    public function select($withFromPart = self::SELECT_WITH_FROM_PART)
     {
         /**
          * @fixme estamos iniciando el generador de querys con adaptador SQL por defecto, usualmente MySQL, 
@@ -152,9 +179,28 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
          * 
          * @todo esto debiera inicializarse con new Zwei_Db_TableMonet_Select($this->getAdapter()), $this->getAdapter debiera retornar un Zwei_Db_TableMonet_Adapter.
          */
+        
         $select = new Zwei_Db_TableMonet_Select(Zend_Db_Table::getDefaultAdapter());
-        return $select->from($this->_name);
+        
+        if ($withFromPart === self::SELECT_WITH_FROM_PART) {
+            $select->from($this->_name, "*", $this->_schema);
+        }
+        
+        return $select;
     }
+    
+    /**
+     * Query a raw SQL string.
+     * 
+     * @param  string $query
+     * @return unknown
+     */
+    public function query($query)
+    {
+        $result = monetdb_query($this->_connection, monetdb_escape_string($query)) or trigger_error(monetdb_last_error());
+        return $result;
+    }
+    
     
     /**
      * @param $select Zwei_Db_Table_Monet
@@ -169,6 +215,7 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
         } else if ($select instanceof Zend_Db_Select) {
             $select = $select->__toString();
         }
+        
         $result = monetdb_query($this->_connection, $select)
             or trigger_error(monetdb_last_error(), E_USER_ERROR);
         
@@ -189,7 +236,6 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
      * Retorna atributo resources.multidb.{$_adapter}.
      * Lleva prefijo Zw para distinguirlo de método nativo Zend_Db_Table_Abstract::getAdapter()
      *
-     *
      * @return string
      */
     public function getZwAdapter()
@@ -201,11 +247,6 @@ abstract class Zwei_Db_TableMonet implements Zwei_Admin_ModelInterface
     public function fetchRow($select = null)
     {
         
-    }
-    
-    public function isFiltered()
-    {
-        return $this->_isFiltered;
     }
     
     public function info($key)

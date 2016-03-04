@@ -1,0 +1,22 @@
+/* Tree */
+
+.dijitRtl .gamelena .dijitTreeNode,
+.dijitRtl .gamelena .dijitTreeExpandoLeaf {
+	/* disable grid lines for Tree in RTL mode, too hard to support */
+    background-image: none;
+}
+
+.dijitRtl .gamelena .dijitTreeContent {
+    padding-left: 0;
+    padding-right: 1px;
+}
+
+.dijitRtl .gamelena .dijitTreeExpandoOpened {
+	/* todo: icon contains grid line but grid lines disabled above */
+	background: url('images/spriteTree_rtl.gif') no-repeat -18px top;
+}
+
+.dijitRtl .gamelena .dijitTreeExpandoClosed {
+	/* todo: icon contains grid line but grid lines disabled above */
+	background-image: url('images/spriteTree_rtl.gif');
+}

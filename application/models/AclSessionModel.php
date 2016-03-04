@@ -4,7 +4,7 @@ class AclSessionModel extends DbTable_AclSession
 {
     /**
      * 
-     * @param int $aclUsersId
+     * @param int          $aclUsersId
      * @param string|array $fields
      * @return Zend_Db_Table_Rowset_Abstract
      */

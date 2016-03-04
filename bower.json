@@ -1,8 +1,8 @@
 {
-  "name": "tangerine",
-  "version": "1.5.4",
+  "name": "admportal",
+  "version": "1.6.1",
   "authors": [
-    "rodrigo <rodrigo.riquelme@zweicom.com>"
+    "rodrigo <rodrigo.riquelme@gamelena.com>"
   ],
   "description": "Base de mantenedores web",
   "keywords": [

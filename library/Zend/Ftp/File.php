@@ -3,7 +3,6 @@
  *
  * @author Steven Brown
  * @link http://framework.zend.com/wiki/display/ZFPROP/Zend_Ftp+-+Steven+Brown
- *
  */
 class Zend_Ftp_File
 {
@@ -38,8 +37,8 @@ class Zend_Ftp_File
     /**
      * Instantiate an FTP file
      * 
-     * @param string $path The full remote path to the file
-     * @param Zend_Ftp $ftp The FTP connection
+     * @param string   $path The full remote path to the file
+     * @param Zend_Ftp $ftp  The FTP connection
      */
     public function __construct($path, $ftp)
     {
@@ -51,16 +50,16 @@ class Zend_Ftp_File
     /**
      * Provide read-only access to properties
      * 
-     * @param string $name The property to get
+     * @param  string $name The property to get
      * @return mixed
      */
     public function __get($name)
     {
         switch ($name) {
-            case 'name':
-                return $this->_name;
-            case 'path':
-                return $this->_path;
+        case 'name':
+            return $this->_name;
+        case 'path':
+            return $this->_path;
         }
         throw new Zend_Ftp_Directory_Exception('Unknown property "' . $name . '"');
     }
@@ -88,7 +87,7 @@ class Zend_Ftp_File
     /**
      * Set the transfer mode for this file, overrides the FTP connection default
      * 
-     * @param int $mode [optional] The transfer mode
+     * @param  int $mode [optional] The transfer mode
      * @return Zend_Ftp_File
      */
     public function setMode($mode = null)
@@ -101,9 +100,9 @@ class Zend_Ftp_File
     /**
      * Save to a local path using the remote file name
      * 
-     * @param string $path The full path to save to
-     * @param int $mode [optional] The transfer mode
-     * @param int $offset [optional] The offset to start from for resuming
+     * @param  string $path   The full path to save to
+     * @param  int    $mode   [optional] The transfer mode
+     * @param  int    $offset [optional] The offset to start from for resuming
      * @return Zend_Ftp_File
      */
     public function saveToPath($path, $mode = null, $offset = 0)
@@ -119,9 +118,9 @@ class Zend_Ftp_File
     /**
      * Save to a local file
      * 
-     * @param string $file The full path to the local file
-     * @param int $mode [optional] The transfer mode
-     * @param int $offset [optional] The offset to start from for resuming
+     * @param  string $file   The full path to the local file
+     * @param  int    $mode   [optional] The transfer mode
+     * @param  int    $offset [optional] The offset to start from for resuming
      * @return Zend_Ftp_File
      */
     public function saveToFile($file, $mode = null, $offset = 0)
@@ -140,9 +139,9 @@ class Zend_Ftp_File
     /**
      * Upload a local file
      * 
-     * @param string $localFilepath The full path to the local file
-     * @param int $mode [optional] The transfer mode
-     * @param int $startPos [optional] The offset to start from for resuming
+     * @param  string $localFilepath The full path to the local file
+     * @param  int    $mode          [optional] The transfer mode
+     * @param  int    $startPos      [optional] The offset to start from for resuming
      * @return Zend_Ftp_File
      */
     public function put($localFilepath, $mode = null, $startPos = 0)
@@ -161,7 +160,7 @@ class Zend_Ftp_File
     /**
      * Change the file permissions
      * 
-     * @param int|string $mode
+     * @param  int|string $mode
      * @return Zend_Ftp_File
      */
     public function chmod($mode)
@@ -174,7 +173,7 @@ class Zend_Ftp_File
     /**
      * Rename the file
      * 
-     * @param string $filename The new filename
+     * @param  string $filename The new filename
      * @return Zend_Ftp_File
      */
     public function rename($filename)
@@ -187,7 +186,7 @@ class Zend_Ftp_File
     /**
      * Copy the file to another filename or location
      * 
-     * @param string $filename
+     * @param  string $filename
      * @return Zend_Ftp_File
      */
     public function copy($filename)
@@ -198,7 +197,7 @@ class Zend_Ftp_File
     /**
      * Move the file to another location
      * 
-     * @param string $path
+     * @param  string $path
      * @return Zend_Ftp_File
      */
     public function move($path)

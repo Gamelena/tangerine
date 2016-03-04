@@ -1,7 +1,6 @@
 <?php
 /**
  * Plugin para controlar el timeout de sesión
- *
  */
 
 class Zwei_Controller_Plugin_TimeOutHandler extends Zend_Controller_Plugin_Abstract
@@ -28,7 +27,8 @@ class Zwei_Controller_Plugin_TimeOutHandler extends Zend_Controller_Plugin_Abstr
      * @return void
      * @see Zend_Controller_Plugin_Abstract::preDispatch()
      */
-    public function preDispatch(Zend_Controller_Request_Abstract $request) {
+    public function preDispatch(Zend_Controller_Request_Abstract $request) 
+    {
         $authNamespace = new Zend_Session_Namespace('Zend_Auth');
         
         // clear the identity of a user who has not accessed a controller for
@@ -41,8 +41,10 @@ class Zwei_Controller_Plugin_TimeOutHandler extends Zend_Controller_Plugin_Abstr
             // Store the request URI so that an authentication after a timeout
             // can be directed back to the pre-timeout display.  The base URL needs to
             // be stripped off of the request URI to function properly.
-            $authNamespace->requestUri = substr($this->_request->getRequestUri(),
-                strlen(Zend_Controller_Front::getInstance()->getBaseUrl()));
+            $authNamespace->requestUri = substr(
+                $this->_request->getRequestUri(),
+                strlen(Zend_Controller_Front::getInstance()->getBaseUrl())
+            );
         }
     }   
 }

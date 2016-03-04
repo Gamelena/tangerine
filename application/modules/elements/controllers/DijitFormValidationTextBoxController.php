@@ -1,21 +1,12 @@
 <?php
 
-class Elements_DijitFormValidationTextBoxController extends Zend_Controller_Action
+class Elements_DijitFormValidationTextBoxController extends Elements_BaseController
 {
-
-    public function init()
-    {
-        /* Initialize action controller here */
-    }
 
     public function indexAction()
     {
         $r = $this->getRequest();
-        $this->view->i =  $r->getParam('i');
-        $this->view->domId =  $r->getParam('domId');
-        $this->view->target =  $r->getParam('target');
         
-        $this->view->value =  $r->getParam('value', $r->getParam('defaultValue', ''));
         $this->view->type = $r->getParam('password') === 'true' ? 'password' : 'text' ;
         $this->view->readonly = $r->getParam('readonly') === 'true' || $r->getParam($r->getParam('mode')) == 'readonly' ? " readonly=\"readonly\"" : '';
         $this->view->disabled = $r->getParam('disabled') === 'true' || $r->getParam($r->getParam('mode')) == 'disabled' ? " disabled=\"disabled\"" : '';
@@ -33,7 +24,7 @@ class Elements_DijitFormValidationTextBoxController extends Zend_Controller_Acti
         $this->view->promptMessage= $r->getParam('promptMessage') ? " promptMessage=\"{$r->getParam('promptMessage')}\"" : '';
         $this->view->autocomplete = $r->getParam('autocomplete') ? " autocomplete=\"{$r->getParam('autocomplete')}\"" : '';
         $this->view->autocorrect = $r->getParam('autocorrect') ? " autocorrect=\"{$r->getParam('autocorrect')}\"" : '';
-		$this->view->autocapitalize = $r->getParam('autocapitalize') ? " autocapitalize=\"{$r->getParam('autocapitalize')}\"" : '';
+        $this->view->autocapitalize = $r->getParam('autocapitalize') ? " autocapitalize=\"{$r->getParam('autocapitalize')}\"" : '';
         $this->view->spellcheck = $r->getParam('spellcheck') ? " spellcheck=\"{$r->getParam('spellcheck')}\"" : '';
         $this->view->maxlength = $r->getParam('maxlength')? " maxLength=\"{$r->getParam('maxlength')}\"" : '';
         $this->view->trim = $r->getParam('trim', '') === 'true' ? " trim=\"true\"" : '';

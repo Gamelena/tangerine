@@ -10,6 +10,9 @@
 		<element name="Nombres" target="first_names"
 			type="dijit-form-validation-text-box" visible="true" edit="true" add="true"
 			required="true" />
+		<element name="Apellidos" target="last_names"
+			type="dijit-form-validation-text-box" required="true" visible="true"
+			edit="true" add="true" />
 		<element name="E-Mail" target="email"
 			regExp="[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}"
 			invalidMessage="mail no valido" type="dijit-form-validation-text-box"
@@ -28,6 +31,7 @@
 		<group name="Datos Personales">
 			<element target="user_name" />
 			<element target="first_names" />
+			<element target="last_names" />
 			<element target="email" />
 		</group>
 		<element target="acl_roles_id" defaultText="Todo" operator="=" />

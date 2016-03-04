@@ -1,7 +1,6 @@
 <?php
 /**
  * Modelo de acciones por módulo.
- *
  */
 class AclModulesActionsModel extends DbTable_AclModulesActions
 {
@@ -44,7 +43,7 @@ class AclModulesActionsModel extends DbTable_AclModulesActions
     /**
      * Consulta para obtener un listado de todas las acciones por módulo disponibles.
      * 
-     * @param string $aclRolesId
+     * @param  string $aclRolesId
      * @return Zend_Db_Table_Select
      */
     public function selectAllActions($aclRolesId = null)
@@ -55,7 +54,8 @@ class AclModulesActionsModel extends DbTable_AclModulesActions
         $select->from($this->_name, array('id', 'acl_modules_id', 'acl_actions_id'));
         $select->joinLeft($this->_nameModules, "$this->_name.acl_modules_id=$this->_nameModules.id", array('module'));
         $select->joinLeft(array('parent' => $this->_nameModules), "$this->_nameModules.parent_id = parent.id", array('parent_title' => 'title'));
-        $select->joinLeft($this->_nameActions, 
+        $select->joinLeft(
+            $this->_nameActions, 
             "$this->_name.acl_actions_id=$this->_nameActions.id", 
             array('title' => 
                 new Zend_Db_Expr(
@@ -70,7 +70,8 @@ class AclModulesActionsModel extends DbTable_AclModulesActions
             $select->joinLeft(
                 $this->_nameModulesAction, 
                 "$this->_name.id = $this->_nameModulesAction.acl_modules_actions_id  ", 
-                array());
+                array()
+            );
             $select->where("$this->_nameModulesAction.acl_roles_id = ?", $aclRolesId);
         }
         
@@ -89,7 +90,8 @@ class AclModulesActionsModel extends DbTable_AclModulesActions
      * @param int $aclActionsId
      * @return Zend_Db_Table_Row_Abstract
      */
-    public function findByAclModulesIdAclActionsId ($aclModulesId, $aclActionsId) {
+    public function findByAclModulesIdAclActionsId($aclModulesId, $aclActionsId) 
+    {
         $ad = $this->getAdapter(); 
         return $this->fetchAll(
             array(

@@ -10,10 +10,9 @@
  * 
  * Hacerlo para cada ambiente si es que las rutas cambian.
  * 
- * @author rodrigo.riquelme@zweicom.com
- * @since 0.9
+ * @author  rodrigo.riquelme@gamelena.com
+ * @since   0.9
  * @version 1
- *
  */
 
 class Zwei_Controller_Plugin_ApplicationPath extends Zend_Controller_Plugin_Abstract
@@ -25,20 +24,20 @@ class Zwei_Controller_Plugin_ApplicationPath extends Zend_Controller_Plugin_Abst
         $frontController = Zend_Controller_Front::getInstance();
         
         if (file_exists(APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php')) {
-//             Console::log("Existe ". APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php');
+            //Debug::write("Existe ". APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php');
             $frontController->addControllerDirectory(APPLICATION_PATH . '/controllers');
         } else {
-//             Console::log("Buscando ".ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');
-            $frontController->addControllerDirectory(ADMPORTAL_APPLICATION_PATH.'/controllers');
+            //Debug::write("Buscando ".TANGERINE_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller).'Controller.php');
+            $frontController->addControllerDirectory(TANGERINE_APPLICATION_PATH.'/controllers');
         }
         
         if ($module != "default") {
             if (file_exists(APPLICATION_PATH . '/modules/' . $module . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php')) {
-//                 Console::log("Existe ". APPLICATION_PATH . '/modules/' . $module . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php');
+                //Debug::write("Existe ". APPLICATION_PATH . '/modules/' . $module . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php');
                 $frontController->addModuleDirectory(APPLICATION_PATH . '/modules');
             } else {
-//                 Console::log("Buscando ". ADMPORTAL_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php');   
-                $frontController->addModuleDirectory(ADMPORTAL_APPLICATION_PATH . '/modules');            
+                //Debug::write("Buscando ". TANGERINE_APPLICATION_PATH . '/controllers/' . Zwei_Utils_String::toClassWord($controller, "-").'Controller.php');   
+                $frontController->addModuleDirectory(TANGERINE_APPLICATION_PATH . '/modules');            
             }
         }
     }

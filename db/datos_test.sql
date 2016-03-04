@@ -78,7 +78,7 @@ INSERT INTO `acl_roles` (`id`, `role_name` ) VALUES
 
 
 INSERT INTO `acl_users` (`id`, `acl_roles_id`, `user_name`, `password`, `first_names`, `last_names`, `email`, `approved`) VALUES
-  ('1', '1', 'zweicom', 'bc5ac95d42e44c9ba777516afe83fc3f', 'Soporte', 'Zweicom', 'tecnicos@zweicom.com', '1'),
+  ('1', '1', 'gamelena', 'bc5ac95d42e44c9ba777516afe83fc3f', 'Soporte', 'gamelena', 'tecnicos@gamelena.com', '1'),
   ('2', '2', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'Cliente', 'administrador@telefonicamoviles.com.pe', '1'),
   ('3', '3', 'consultas', '83da1fbc8f1a993de3f31cec6d7bf5b2', 'Consultas', 'Cliente', '', '1');
 
@@ -93,6 +93,6 @@ INSERT INTO `web_settings` (`id`, `enum`, `value`, `type`, `description`, `ord`,
   ('query_log', 'SI,NO', 'NO', 'dojo_filtering_select', '', '1', 'Debug', '', '1'),
   ('titulo_adm', '', 'Admin Portal Base', 'dojo_validation_textbox', '', '0', 'Admin', '', '1'),
   ('url_logo_oper', '', 'images/logo_movistar60x44.png', 'dojo_validation_textbox', '', '0', 'Admin', '', '1'),
-  ('url_logo_zweicom', '', 'images/logo_zweicom26x15.png', 'dojo_validation_textbox', '', '0', 'Admin', '', '1');
+  ('url_logo_gamelena', '', 'images/logo_gamelena26x15.png', 'dojo_validation_textbox', '', '0', 'Admin', '', '1');
 
 

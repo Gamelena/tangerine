@@ -107,6 +107,7 @@
         <xsd:attribute name="onhide"/>
         <xsd:attribute name="disabled" type="xsd:boolean"/>
         <xsd:attribute name="name"/>
+        <xsd:attribute name="href" />
     </xsd:complexType>
     <xsd:complexType name="tabsType">
         <xsd:sequence>
@@ -126,11 +127,6 @@
         <xsd:attribute name="onDownloadError" />
         <xsd:attribute name="dojoType" />
         <xsd:attribute name="style" />
-    </xsd:complexType>
-    <xsd:complexType name="paneType">
-        <xsd:attribute name="name" />
-        <xsd:attribute name="href" />
-        <xsd:attribute name="onshow" />
     </xsd:complexType>
     <xsd:complexType name="groupType">
         <xsd:sequence>
@@ -180,8 +176,9 @@
         <xsd:attribute name="iconClass"/>
         <xsd:attribute name="disabled" type="xsd:boolean"/>
     </xsd:complexType>
-        <xsd:complexType name="uploaderType">
+    <xsd:complexType name="uploaderType">
         <xsd:attribute name="name"/>
+        <xsd:attribute name="url"/>
         <xsd:attribute name="title"/>
         <xsd:attribute name="path"/>
         <xsd:attribute name="iconClass"/>

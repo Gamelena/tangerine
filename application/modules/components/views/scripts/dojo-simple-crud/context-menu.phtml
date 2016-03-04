@@ -294,6 +294,7 @@ foreach ($this->uploaders as $i => $f) :
     $action = $f->getAttribute('action') ? $f->getAttribute('action') : '';
     $truncate = $f->getAttribute('truncate') ? $f->getAttribute('truncate') : 'false';
     $path = $f->getAttribute('path')  ? "'{$f->getAttribute('path')}'" : 'null';
+    $url = $f->getAttribute('url')  ? "'{$f->getAttribute('url')}'" : 'null';
 ?>
 if (dijit.byId('<?=$this->domPrefix?>MenuUploader<?=$i?>')) dijit.byId('<?=$this->domPrefix?>MenuUploader<?=$i?>').destroy(); 
 menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
@@ -302,9 +303,10 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     iconClass: "<?=$f->getAttribute('iconClass') ? $f->getAttribute('iconClass') : 'dijitIconEdit'?>",
     disabled: <?=$disabled?>,
     onClick : function(){
-    	dojo.require('zwei.Uploader');
+        dojo.require('zwei.Uploader');
         var uploader = new zwei.Uploader({
             component: '<?=$this->component?>',
+            url : <?=$url?>,
             dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
             dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'),
             iframe: dojo.byId('ifrm_process'),

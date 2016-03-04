@@ -3,7 +3,6 @@
  *
  * @author Steven Brown
  * @link http://framework.zend.com/wiki/display/ZFPROP/Zend_Ftp+-+Steven+Brown
- *
  */
 class Zend_Ftp_Directory
 {
@@ -38,8 +37,8 @@ class Zend_Ftp_Directory
     /**
      * Instantiate a directory
      * 
-     * @param string $path The full path
-     * @param Zend_Ftp $ftp The FTP connection
+     * @param  string   $path The full path
+     * @param  Zend_Ftp $ftp  The FTP connection
      * @return 
      */
     public function __construct($path, $ftp)
@@ -52,16 +51,16 @@ class Zend_Ftp_Directory
     /**
      * Provide read-only access to properties
      * 
-     * @param string $name The property to get
+     * @param  string $name The property to get
      * @return mixed
      */
     public function __get($name)
     {
         switch ($name) {
-            case 'name':
-                return $this->_name;
-            case 'path':
-                return $this->_path;
+        case 'name':
+            return $this->_name;
+        case 'path':
+            return $this->_path;
         }
         throw new Zend_Ftp_Directory_Exception('Unknown property "' . $name . '"');
     }
@@ -115,9 +114,9 @@ class Zend_Ftp_Directory
     /**
      * Create a directory with optional recursion
      * 
-     * @param string|array $path The directory to create
-     * @param boolean $recursive [optional] Create all directories in the path
-     * @param string|int $permissions [optional] The permissions to set, can be a string e.g. 'rwxrwxrwx' or octal e.g. 0777
+     * @param  string|array $path        The directory to create
+     * @param  boolean      $recursive   [optional] Create all directories in the path
+     * @param  string|int   $permissions [optional] The permissions to set, can be a string e.g. 'rwxrwxrwx' or octal e.g. 0777
      * @return Zend_Ftp_Directory
      */
     public function makeDirectory($path, $recursive = false, $permissions = null)
@@ -163,9 +162,9 @@ class Zend_Ftp_Directory
     /**
      * Upload a local file to the current directory
      * 
-     * @param string $localFilepath The full path and filename to upload
-     * @param int $mode [optional] The transfer mode
-     * @param string $remoteFilename [optional] Filename to save to on the server
+     * @param  string $localFilepath  The full path and filename to upload
+     * @param  int    $mode           [optional] The transfer mode
+     * @param  string $remoteFilename [optional] Filename to save to on the server
      * @return Zend_Ftp_File
      */
     public function put($localFilepath, $mode = null, $remoteFilename = null)
@@ -184,7 +183,7 @@ class Zend_Ftp_Directory
     /**
      * Get a file within the current directory
      * 
-     * @param string $filename The file to get
+     * @param  string $filename The file to get
      * @return Zend_Ftp_File
      */
     public function getFile($filename)
@@ -195,7 +194,7 @@ class Zend_Ftp_Directory
     /**
      * Get a folder within the current directory
      * 
-     * @param string $filename The directory to get
+     * @param  string $filename The directory to get
      * @return Zend_Ftp_Directory
      */
     public function getDirectory($filename)
@@ -216,7 +215,7 @@ class Zend_Ftp_Directory
     /**
      * Delete the directory
      * 
-     * @param boolean $recursive [optional] Recursively delete contents
+     * @param  boolean $recursive [optional] Recursively delete contents
      * @return Zend_Ftp_Directory
      */
     public function delete($recursive = false)
@@ -229,7 +228,7 @@ class Zend_Ftp_Directory
     /**
      * Deletes the contents of the directory
      * 
-     * @param boolean $recursive [optional] Recursively delete contents
+     * @param  boolean $recursive [optional] Recursively delete contents
      * @return Zend_Ftp_Directory
      */
     public function deleteContents($recursive = false)
@@ -242,7 +241,7 @@ class Zend_Ftp_Directory
     /**
      * Rename the directory
      * 
-     * @param string $filename The new name
+     * @param  string $filename The new name
      * @return Zend_Ftp_Directory
      */
     public function rename($filename)
@@ -255,7 +254,7 @@ class Zend_Ftp_Directory
     /**
      * Copy the directory
      * 
-     * @param string $filename The new name
+     * @param  string $filename The new name
      * @return Zend_Ftp_Directory
      */
     public function copy($filename)
@@ -268,7 +267,7 @@ class Zend_Ftp_Directory
     /**
      * Move the directory
      * 
-     * @param string $filename The new name
+     * @param  string $filename The new name
      * @return Zend_Ftp_Directory
      */
     public function move($filename)
@@ -281,7 +280,7 @@ class Zend_Ftp_Directory
     /**
      * Change the directory permissions
      * 
-     * @param int|string $permissions The permissions
+     * @param  int|string $permissions The permissions
      * @return Zend_Ftp_Directory
      */
     public function chmod($permissions)
@@ -294,7 +293,7 @@ class Zend_Ftp_Directory
     /**
      * Save the directory to the given path
      * 
-     * @param boolean $recursive [optional] Save the contents recursively
+     * @param  boolean $recursive [optional] Save the contents recursively
      * @return Zend_Ftp_Directory
      */
     public function saveToPath($recursive = false)
@@ -307,7 +306,7 @@ class Zend_Ftp_Directory
     /**
      * Save the directory contents to the given path
      * 
-     * @param boolean $recursive [optional] Save the contents recursively
+     * @param  boolean $recursive [optional] Save the contents recursively
      * @return Zend_Ftp_Directory
      */
     public function saveContentsToPath($recursive = false)

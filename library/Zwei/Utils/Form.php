@@ -9,20 +9,16 @@
  * 
  * Para controladores Zend_Controller usar es aconsejable $this->getRequest() para los $_GET y $_POST en lugar de Zwei_Utils_Form, usar sólo para upload de archivos,
  * ya que Zend_Controller::getRequest() ofrece mejor compatibilidad con Zend_Test_PHPUnit_ControllerTestCase.
- * 
- * 
- *  
- * 
+ *
  * @package Zwei_Utils
  * @version $Id:$
- * @since 0.1
+ * @since   0.1
  * 
  * @example
  * <code> 
  * $oForm = new Zwei_Utils_Form();
  * $var = $oForm->id;//Esto equivalente a $var = $_REQUEST['id']
  * </code> 
- * 
  */
 class Zwei_Utils_Form
 {
@@ -64,7 +60,7 @@ class Zwei_Utils_Form
     /**
      * Allow upload files with extension $extension
      * 
-     * @param string $extension
+     * @param  string $extension
      * @return boolean
      */
     public function allowExtension($extension)
@@ -162,8 +158,8 @@ class Zwei_Utils_Form
      * Upload de archivos
      * @param string $file
      * @param string $dest
-     * @param int $maxSize
-     * @param array $list
+     * @param int    $maxSize
+     * @param array  $list
      * @return array
      */
     public function upload($file, $dest, $maxSize = 999999999999, $list = array(), $listIsBlack = true)
@@ -185,7 +181,7 @@ class Zwei_Utils_Form
                     
                     $filename = substr(md5(microtime() . $_FILES[$file]['tmp_name'][$i]), 0, 8) . Zwei_Utils_String::slugify($oldname) . ".$ext";
                     if ($allowed) {
-                        if (move_uploaded_file($_FILES[$file]['tmp_name'][$i], $dest . "/" . $filename)) {
+                        if ($this->moveUploadedFile($_FILES[$file]['tmp_name'][$i], $dest . "/" . $filename)) {
                             $info[$i]['size']     = $_FILES[$file]['size'][$i];
                             $info[$i]['filename'] = $filename;
                             $info[$i]['ext']      = $ext;
@@ -212,12 +208,12 @@ class Zwei_Utils_Form
                 $oldname  = implode(".", $oldname);
                 $ext      = $fp[count($fp) - 1];
                 $filename = substr(md5(microtime() . $_FILES[$file]['tmp_name']), 0, 8) . Zwei_Utils_String::slugify($oldname) . ".$ext";
-                if (move_uploaded_file($_FILES[$file]['tmp_name'], $dest . "/" . $filename)) {
+                if ($this->moveUploadedFile($_FILES[$file]['tmp_name'], $dest . "/" . $filename)) {
                     $info             = $_FILES[$file];
                     $info['filename'] = $filename;
                     $info['ext']      = $ext;
                 } else {
-                    Debug::write("No se pudo subir archivo {$_FILES[$file]['tmp_name'][$i]} a $dest." / ".$filename");
+                    Console::error("No se pudo subir archivo {$_FILES[$file]['tmp_name']} a {$dest}/{$filename}");
                     $info = false;
                 }
                 return $info;
@@ -248,6 +244,19 @@ class Zwei_Utils_Form
         return $value;
     }
     
+    /**
+     * 
+     * @param string $orig
+     * @param string $dest
+     */
+    public function moveUploadedFile($filename, $destination)
+    {
+        if (PHP_SAPI === 'cli') {
+            return copy($filename, $destination);
+        } else {
+            return move_uploaded_file($filename, $destination);
+        }
+    }
     /**
      * 
      * @param string $source
@@ -297,14 +306,18 @@ class Zwei_Utils_Form
      */
     private function _code2utf($num)
     {
-        if ($num < 128)
-            return chr($num);
-        if ($num < 2048)
-            return chr(($num >> 6) + 192) . chr(($num & 63) + 128);
-        if ($num < 65536)
-            return chr(($num >> 12) + 224) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
-        if ($num < 2097152)
-            return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
+        if ($num < 128) {
+            return chr($num); 
+        }
+        if ($num < 2048) {
+            return chr(($num >> 6) + 192) . chr(($num & 63) + 128); 
+        }
+        if ($num < 65536) {
+            return chr(($num >> 12) + 224) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128); 
+        }
+        if ($num < 2097152) {
+            return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128); 
+        }
         return '';
     }
     
@@ -316,7 +329,8 @@ class Zwei_Utils_Form
     private function _isUTF8($string)
     {
         // from http://w3.org/International/questions/qa-forms-utf-8.html 
-        return preg_match('%^( 
+        return preg_match(
+            '%^( 
                  [\x09\x0A\x0D\x20-\x7E]            # ASCII 
                | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte 
                |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs 
@@ -325,7 +339,8 @@ class Zwei_Utils_Form
                |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3 
                | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15 
                |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16 
-           )*$%xs', $string);
+           )*$%xs', $string
+        );
     }
     
     /**

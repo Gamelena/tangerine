@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Controlador de franjas horarias.
+ */
 class ScheduleController extends Zend_Controller_Action
 {
 
@@ -12,7 +14,4 @@ class ScheduleController extends Zend_Controller_Action
     {
         // action body
     }
-
-
 }
-

@@ -18,9 +18,6 @@
  * target="counter_c_d_r_compras"
  * />
  * </code>
- *
- *
- *
  */
 
 /**
@@ -40,9 +37,6 @@
  *          target="counter_c_d_r_compras"
  *          />
  *          </code>
- *         
- *         
- *         
  */
 class Components_DojoChartController extends Zend_Controller_Action
 {
@@ -51,7 +45,6 @@ class Components_DojoChartController extends Zend_Controller_Action
      * Dojo theme
      * 
      * @var string
-     *
      */
     private $_dojo_style = 'claro';
 
@@ -59,7 +52,6 @@ class Components_DojoChartController extends Zend_Controller_Action
      * carpeta base de dojo toolkit
      * 
      * @var string
-     *
      */
     private $_base_dojo_folder = '/dojotoolkit';
 
@@ -67,7 +59,6 @@ class Components_DojoChartController extends Zend_Controller_Action
      * Nombre archivo xml
      * 
      * @var string
-     *
      */
     private $_page = null;
 
@@ -75,11 +66,10 @@ class Components_DojoChartController extends Zend_Controller_Action
      * Objeto XML
      * 
      * @var Zwei_Admin_Xml
-     *
      */
     private $_xml = null;
 
-    public function init ()
+    public function init()
     {
         $this->_helper->layout()->disableLayout();
         
@@ -136,17 +126,19 @@ class Components_DojoChartController extends Zend_Controller_Action
         
         // Eje Y
         $this->view->yTarget = $this->_xml->getAttribute("chartYTarget");
-        if ($this->_xml->getAttribute("chart_y_label"))
-            $this->view->yTitle = $this->_xml->getAttribute("chart_y_label");
+        if ($this->_xml->getAttribute("chart_y_label")) {
+            $this->view->yTitle = $this->_xml->getAttribute("chart_y_label"); 
+        }
         
         $this->view->options = $this->_xml->getAttribute("options") ? $this->_xml->getAttribute("options") : "new Object()";
         $this->view->chartingTheme = $this->_xml->getAttribute("chartDojoTheme") ? $this->_xml->getAttribute("chartDojoTheme") : "Claro";
         
-        if (! empty($this->_request->style))
-            $this->_dojo_style = $this->_request->style;
+        if (! empty($this->_request->style)) {
+            $this->_dojo_style = $this->_request->style; 
+        }
     }
 
-    public function indexAction ()
+    public function indexAction()
     {
         $this->view->xTarget = $this->_xml->getAttribute("chartXTarget");
         $this->view->items = $this->_xml->getAttribute("chart_items");
@@ -162,23 +154,28 @@ class Components_DojoChartController extends Zend_Controller_Action
             $this->view->url .= "&chart_items_description=" . $this->_request->getParam("chart_items_description");
         }
         
-        if ($this->_xml->getAttribute("chart_x_label"))
-            $this->view->xTitle = $this->_xml->getAttribute("chart_x_label");
+        if ($this->_xml->getAttribute("chart_x_label")) {
+            $this->view->xTitle = $this->_xml->getAttribute("chart_x_label"); 
+        }
         
         $this->view->chartType = $this->_xml->getAttribute("chartDojoType") ? $this->_xml->getAttribute(
-                "chartDojoType") : "Lines";
+            "chartDojoType"
+        ) : "Lines";
     }
 
-    public function pieAction ()
-    {}
+    public function pieAction()
+    {
+    }
 
-    public function barsAction ()
-    {}
+    public function barsAction()
+    {
+    }
 
-    public function linesAction ()
-    {}
+    public function linesAction()
+    {
+    }
 
-    public function excelAction ()
+    public function excelAction()
     {
         /**
          *
@@ -193,12 +190,14 @@ class Components_DojoChartController extends Zend_Controller_Action
         header("Content-Type: application/octet-stream");
         header("Content-Type: application/download");
         header(
-                "Content-Disposition: attachment; filename={$this->view->model}.csv");
+            "Content-Disposition: attachment; filename={$this->view->model}.csv"
+        );
         header('Content-Encoding: UTF-8');
         header('Content-type: text/csv; charset=UCS-2LE');
         
         $elements = $this->_xml->elements ? $this->_xml->xpath(
-                '//component/elements/element') : array();
+            '//component/elements/element'
+        ) : array();
         
         foreach ($elements as $element) {
             $labels[] = $element->getAttribute("name") ? $element->getAttribute("name") : $element->getAttribute("target");

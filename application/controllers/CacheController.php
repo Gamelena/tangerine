@@ -5,7 +5,8 @@ class CacheController extends Zend_Controller_Action
 
     public function init()
     {
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) $this->_redirect('admin/login');
+        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) { $this->_redirect('admin/login'); 
+        }
         $this->_helper->layout()->disableLayout();
     }
 

@@ -1,67 +1,35 @@
 {
-	"name": "gamelena/tangerine",
-	"description": "Tangerine",
-	"version": "1.5.4",
+	"name": "gamelena/admportal",
+	"description": "Admportal",
+	"version": "1.6.1",
 	"type": "library",
 	"require": {
-		"php": ">=5.4.1"
+		"php": ">=5.4.1",
+		"ext-libxml": "*",
+		"ext-mbstring": "*",
+		"ext-dom": "*",
+		"ext-mysql": "*",
+		"zendframework/zendframework1": "~1.12",
+		"phpoffice/phpexcel": "1.8.*"
 	},
-	"repositories": [
-		{
-			"type": "package",
-			"package": {
-				"name": "zend/zendframework",
-				"version": "1.11.9",
-				"source": {
-					"url": "http://framework.zend.com/svn/framework/standard",
-					"type": "svn",
-					"reference": "tags/release-1.11.9/"
-				},
-				"autoload": {
-					"psr-0": {
-						"Zend": "library",
-						"ZendX": "library"
-					}
-				},
-				"config": {
-					"bin-dir": "bin"
-				}
-			}
-		}, {
-			"type": "package",
-			"package": {
-				"name": "PHPOffice/PHPExcel",
-				"version": "1.7.8",
-				"source": {
-					"url": "https://github.com/PHPOffice/PHPExcel.git",
-					"type": "git",
-					"reference": "PHPExcel_1.7.8"
-				},
-				"autoload": {
-					"psr-0": {
-						"PHPExcel": "Classes/"
-					}
-				}
-			}
-		}
-	],
-	"require": {
-
+	"suggest": {
+		"ext-gd": "to use GD library based image processing.",
+		"ext-imagick": "to use Imagick based image processing."
 	},
 	"require-dev": {
-		"zend/zendframework": "*",
-		"PHPOffice/PHPExcel": "*",
-		"phpunit/phpunit": "3.7.*",
-		"phpunit/phpunit-selenium": ">=1.2",
-		"phpunit/dbunit": ">=1.2",
-		"phpunit/php-invoker": "1.*",
-		"phpunit/phpunit-story": ">=1"
+		"phpunit/phpunit": "3.7.*"
 	},
 	"authors": [
 		{
-			"name": "Rodrigo",
-			"email": "rodrigo.riquelme.e@gmail.com"
+			"name": "Desarrollo",
+			"email": "desarrollo@gamelena.com"
 		}
 	],
+	"scripts" : {
+		"pre-archive-cmd": [
+			"bower install --allow-root",
+			"./bower-postinstall.sh"
+		]
+	},
 	"minimum-stability": "stable"
 }

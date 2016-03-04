@@ -3,7 +3,6 @@
  *
  * @author Steven Brown
  * @link http://framework.zend.com/wiki/display/ZFPROP/Zend_Ftp+-+Steven+Brown
- *
  */
 class Zend_Ftp_Directory_Iterator implements SeekableIterator, Countable, ArrayAccess
 {
@@ -52,7 +51,7 @@ class Zend_Ftp_Directory_Iterator implements SeekableIterator, Countable, ArrayA
     /**
      * Instantiate
      * 
-     * @param string $dir The full path
+     * @param string   $dir The full path
      * @param Zend_Ftp $ftp The FTP connection
      */
     public function __construct($dir, $ftp)
@@ -107,14 +106,14 @@ class Zend_Ftp_Directory_Iterator implements SeekableIterator, Countable, ArrayA
         if (empty($this->_rows[$this->_pointer])) {
             $row = $this->_data[$this->_pointer];
             switch ($row['type']) {
-                case 'd': // Directory
-                    $this->_rows[$this->_pointer] = new Zend_Ftp_Directory($this->_dir . $row['name'] . '/', $this->_ftp);
-                    break;
-                case '-': // File
-                    $this->_rows[$this->_pointer] = new Zend_Ftp_File($this->_dir . $row['name'], $this->_ftp);
-                    break;
-                case 'l': // Symlink
-                default:
+            case 'd': // Directory
+                $this->_rows[$this->_pointer] = new Zend_Ftp_Directory($this->_dir . $row['name'] . '/', $this->_ftp);
+                break;
+            case '-': // File
+                $this->_rows[$this->_pointer] = new Zend_Ftp_File($this->_dir . $row['name'], $this->_ftp);
+                break;
+            case 'l': // Symlink
+            default:
             }
         }
          
@@ -162,7 +161,7 @@ class Zend_Ftp_Directory_Iterator implements SeekableIterator, Countable, ArrayA
     /**
      * Seek to the given position, required by seekable
      * 
-     * @param int $position
+     * @param  int $position
      * @return Zend_Ftp_Directory_Iterator
      */
     public function seek($position)
@@ -179,7 +178,7 @@ class Zend_Ftp_Directory_Iterator implements SeekableIterator, Countable, ArrayA
     /**
      * Whether or not the offset exists, required by seekable
      * 
-     * @param int $offset
+     * @param  int $offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -190,7 +189,7 @@ class Zend_Ftp_Directory_Iterator implements SeekableIterator, Countable, ArrayA
     /**
      * Get the item at the given offset, required by seekable
      * 
-     * @param int $offset
+     * @param  int $offset
      * @return Zend_Ftp_Directory|Zend_Ftp_File|null
      */
     public function offsetGet($offset)
@@ -203,7 +202,7 @@ class Zend_Ftp_Directory_Iterator implements SeekableIterator, Countable, ArrayA
     /**
      * Set the item at the given offset (ignored), required by seekable
      * 
-     * @param int $offset
+     * @param int   $offset
      * @param mixed $value
      */
     public function offsetSet($offset, $value)
@@ -222,8 +221,8 @@ class Zend_Ftp_Directory_Iterator implements SeekableIterator, Countable, ArrayA
     /**
      * Get a given row, required by seekable
      * 
-     * @param int $position
-     * @param boolean $seek [optional]
+     * @param  int     $position
+     * @param  boolean $seek     [optional]
      * @return Zend_Ftp_Directory|Zend_Ftp_File|null
      */
     public function getRow($position, $seek = false)

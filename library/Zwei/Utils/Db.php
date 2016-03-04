@@ -1,20 +1,19 @@
 <?php
 /**
  * 
- * @author rodrigo.riquelme@zweicom.com
- *
+ * @author rodrigo.riquelme@gamelena.com
  */
 class Zwei_Utils_Db
 {
     /**
      * Obtiene un array con nombres de tablas rotadas, tipo "transacciones_20121222".
      * 
-     * @param datetime|null - fecha desde 'Y-m-d h:i:s'
-     * @param datetime|null - fecha hasta 'Y-m-d h:i:s'
-     * @param string - alias de columna (ejecutar "SHOW TABLES" en MySQL para saber cual es este alias)
-     * @param string - prefijo de tabla que es seguido por fecha resultante 
-     * @param string "days"|"hours"
-     * @param Zend_Db_Table $table
+     * @param  datetime|null - fecha desde 'Y-m-d h:i:s'
+     * @param  datetime|null - fecha hasta 'Y-m-d h:i:s'
+     * @param  string - alias de columna (ejecutar "SHOW TABLES" en MySQL para saber cual es este alias)
+     * @param  string - prefijo de tabla que es seguido por fecha resultante 
+     * @param  string "days"|"hours"
+     * @param  Zend_Db_Table                                                                             $table
      * @return array
      */
     public static function getRotatedTables($from, $to, $whereAlias, $prefix, $interval = "days", Zend_Db_Table_Abstract $table=null)
@@ -26,7 +25,7 @@ class Zwei_Utils_Db
         $realTables = array();
         if (!is_null($from) && !is_null($to)) {
         
-            $interval = Zwei_Utils_Time::createInterval (
+            $interval = Zwei_Utils_Time::createInterval(
                 Zwei_Utils_Time::datetimeToTimestamp($from), 
                 Zwei_Utils_Time::datetimeToTimestamp($to),
                 $interval
@@ -59,7 +58,7 @@ class Zwei_Utils_Db
     /**
      * Hace un backup de estructura y datos de tabla $table MySQL.
      * 
-     * @param Zend_Db_Table_Abstract $table 
+     * @param  Zend_Db_Table_Abstract $table 
      * @return string|false - Nombre tabla creada
      */
     public static function backupTable(Zend_Db_Table_Abstract $table = null, $sufix = '_bkp')

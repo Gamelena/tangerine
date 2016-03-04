@@ -3,10 +3,11 @@ dojo.declare("zwei.Uploader", dojo.Stateful, {
 	dijitDataGrid : null,
 	uploadsControllerAction : null,
 	truncate: '',
+	url : null,
 	queryKeys: '',
 	component : null,
-	onShow: function(){console.log('on show')},
-	onHide: function(){console.log('on hide')},
+	onShow: function(){console.log('on show');},
+	onHide: function(){console.log('on hide');},
 	iframe : dojo.byId('ifrm_process'),
 	constructor : function(args) {
 		dojo.mixin(this, args);
@@ -25,7 +26,9 @@ dojo.declare("zwei.Uploader", dojo.Stateful, {
 			this.queryKeys += keys.join('&');
 		}
 
-		var href = base_url + '/components/dojo-simple-crud/upload-form?'
+		var url = this.url ? this.url : base_url + '/components/dojo-simple-crud/upload-form';
+
+		var href = url + '?'
 				+ this.queryKeys + '&accion=' + accion + '&jsUploaderInstance='
 				+ this.jsUploaderInstance + "&p=" + this.component + "&truncate=" + this.truncate;
 		

@@ -1,8 +1,6 @@
 <?php
 /**
- *
  * Modelo relacional entre grupos, módulos y acciones.
- *
  */
 class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
 {
@@ -28,7 +26,7 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     /**
      * Setea flag para borrar acciones asociadas.
      *
-     * @param string $value
+     * @param  string $value
      * @return void
      */
     public function setDeleteUnchecked($value = true)
@@ -40,14 +38,15 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
      * @see Zwei_Db_Table::init()
      * @return void
      */
-    public function init(){
+    public function init()
+    {
         $aclModulesActions = new DbTable_AclModulesActions();
         $this->_nameModulesActions = $aclModulesActions->info(Zend_Db_Table::NAME);
         parent::init();
     }
 
     /**
-     * @param array $data
+     * @param array  $data
      * @param string $where
      * @see Zwei_Db_Table::update()
      */
@@ -117,9 +116,9 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     /**
      * Se separan los datos de tabla principal de tabla acciones por módulo.
      *
-     * @param array $data
+     * @param  array $data
      * @return array $data
-     * @see Zwei_Db_Table::cleanDataParams()
+     * @see    Zwei_Db_Table::cleanDataParams()
      */
     public function cleanDataParams($data)
     {
@@ -152,7 +151,7 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     /**
      * Se borra todas las acciones que no existan en $data.
      *
-     * @param array $data
+     * @param array  $data
      * @param string $where
      */
     public function deleteUnchecked($data, $where)
@@ -161,7 +160,8 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
         implode(",", $this->_dataModulesActionsId) :
         false;
 
-        if ($list) $where[] = "acl_modules_actions_id NOT IN ($list)";
+        if ($list) { $where[] = "acl_modules_actions_id NOT IN ($list)"; 
+        }
 
         $delete = parent::delete($where);
     }
@@ -175,9 +175,10 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
         $select = parent::select($withFromPart);
         $select->setIntegrityCheck(false);
         //$select->from($this->_name);
-        $select->joinLeft($this->_nameModulesActions,
-                "$this->_name.acl_modules_actions_id=$this->_nameModulesActions.id",
-                array('acl_modules_id', 'acl_actions_id')
+        $select->joinLeft(
+            $this->_nameModulesActions,
+            "$this->_name.acl_modules_actions_id=$this->_nameModulesActions.id",
+            array('acl_modules_id', 'acl_actions_id')
         );
         return $select;
     }

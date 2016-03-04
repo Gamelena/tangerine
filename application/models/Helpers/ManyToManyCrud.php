@@ -1,6 +1,5 @@
 <?php
 /**
- * 
  * Clase auxiliar para modelos que trabajen con datos con cardinalidad muchos a muchos. 
  * 
  * @example
@@ -10,7 +9,6 @@
  *  
  * @see DatosDeCobroModel
  * @see ServicioModel
- *
  */
 class Helpers_ManyToManyCrud
 {
@@ -39,9 +37,9 @@ class Helpers_ManyToManyCrud
     
     /**
      * 
-     * @param string $idNameFrom
-     * @param string $idNameTo
-     * @param Zwei_Db_Table[] $modelsMap - ('FieldName' => new Zwei_Db_Table()) 
+     * @param string          $idNameFrom
+     * @param string          $idNameTo
+     * @param Zwei_Db_Table[] $modelsMap  - ('FieldName' => new Zwei_Db_Table()) 
      * @return void
      */
     public function __construct($idNameFrom, $idNameTo, $modelsMap)
@@ -78,7 +76,8 @@ class Helpers_ManyToManyCrud
      */
     public function overloadDataForm($data)
     {
-        if ($data instanceof Zend_Db_Table_Row) $data = $data->toArray();
+        if ($data instanceof Zend_Db_Table_Row) { $data = $data->toArray(); 
+        }
         /**
          * @var $model Zwei_Db_Table
         */
@@ -119,8 +118,8 @@ class Helpers_ManyToManyCrud
     /**
      *
      * @param Zwei_Db_Table $model
-     * @param string $idFrom
-     * @param array $data
+     * @param string        $idFrom
+     * @param array         $data
      * @return boolean
      */
     public function save($model, $idFrom, $dataTo)
@@ -149,7 +148,8 @@ class Helpers_ManyToManyCrud
         //(4) Clausula WHERE lista, ahora borremos.
         $delete = $model->delete($where);
     
-        if (!empty($dataTo)) $return = $delete;
+        if (!empty($dataTo)) { $return = $delete; 
+        }
     
         //(5) Agregar los elementos que fueron chequeadas.
         $insert =  false;

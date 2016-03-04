@@ -1,1 +1,0 @@
-ALTER TABLE  `acl_modules` CHANGE  `type`  `type` ENUM(  'xml',  'zend_module',  'iframe' ) NULL DEFAULT NULL ;

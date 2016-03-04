@@ -2,39 +2,33 @@
 /**
  * Controlador de backoffice
  *
- *
  * @package Controllers
  * @version $Id:$
- * @since 1.0
+ * @since   1.0
  */
 class AdminController extends Zend_Controller_Action
 {
     /**
-     *
      * @var string
      */
     private $_dojoTheme = 'claro';
     
     /**
-     *
      * @var string
      */
     private $_template = 'default';
     
     /**
-     *
      * @var Zwei_Db_Table
      */
     private $_model;
     
     /**
-     * 
      * @var Zwei_Admin_Acl
      */
     private $_acl;
     
     /**
-     * 
      * @var Zend_Config
      */
     private $_config;
@@ -51,10 +45,14 @@ class AdminController extends Zend_Controller_Action
         $r = $this->getRequest();
         
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
-        if ($userInfo) $this->_acl = new Zwei_Admin_Acl();
+        if ($userInfo) {
+            $this->_acl = new Zwei_Admin_Acl();
+        }
         
         $this->baseDojoFolder = isset($this->_config->zwei->js->dojo->baseUrl) ? $this->_config->zwei->js->dojo->baseUrl : '/dojotoolkit';
-        if (isset($this->_config->resources->dojo->cdnbase)) $this->baseDojoFolder = $this->_config->resources->dojo->cdnbase . '/' . $this->_config->resources->dojo->cdnversion;
+        if (isset($this->_config->resources->dojo->cdnbase)) {
+            $this->baseDojoFolder = $this->_config->resources->dojo->cdnbase . '/' . $this->_config->resources->dojo->cdnversion;
+        }
         
         $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : '';
         
@@ -71,44 +69,73 @@ class AdminController extends Zend_Controller_Action
         }
         
         
-        if ($confLayout->dojoTheme) $this->_dojoTheme = $confLayout->dojoTheme;
-        if ($r->getParam('theme')) $this->_dojoTheme = $r->getParam('theme');
+        if ($confLayout->dojoTheme) {
+            $this->_dojoTheme = $confLayout->dojoTheme;
+        }
+        
+        if ($r->getParam('theme')) {
+            $this->_dojoTheme = $r->getParam('theme');
+        }
         
         $this->_template = $confLayout->template ? $confLayout->template : "default";
         $this->_template = $r->getParam('template', $this->_template);
         $this->view->template = $this->_template;
         
-        $this->view->headStyle()->appendStyle('
+        $this->view->headStyle()->appendStyle(
+            '
             @import "'.$this->baseDojoFolder.'/dijit/themes/'.$this->_dojoTheme.'/'.$this->_dojoTheme.'.css";
-        ');
+        '
+        );
 
         $settings = new SettingsModel();
         
         try {
             $this->view->adminTitle = $settings->find('titulo_adm')->current()->value;
             $this->view->urlLogoOper = $settings->find('url_logo_oper')->current()->value;
-        } catch (Zend_Db_Exception $e){
+        } catch (Zend_Db_Exception $e) {
             Console::warn($e->getMessage(), APPLICATION_ENV !== 'production');
         }
-
+        
         if ($this->_template != '' && $this->_template != 'dojo') {
-            $this->view->headStyle()->appendStyle('
+            $this->view->headStyle()->appendStyle(
+                '
                 @import "'.BASE_URL.'css/'.$this->_template.'.css";
-            ');         
+            '
+            );
         }
         
         $color = $this->_dojoTheme === 'flat' ? '#02456D' : '#131313';
         
-        $this->view->headStyle()->appendStyle('
+        $this->view->headStyle()->appendStyle(
+            '
             .'.$this->_dojoTheme.'{
                color: '.$color.';
                font-family: Arial,Verdana, Helvetica,sans-serif;
                font-size: 0.75em;
             }
-        ');
+        '
+        );
         
     }
-
+    
+    /**
+     * 
+     * @param string $composerJson
+     * @return null
+     */
+    private function getComposerJsonVersion($composerJson)
+    {
+        /**
+         * @var $json array 
+         */
+        $json = file_exists($composerJson) ?
+            Zend_Json_Decoder::decode(file_get_contents($composerJson)) :
+            null;
+        
+        return $json && isset($json['version']) ? $json['version'] : 'unknown';
+    }
+    
+    
     /**
      * Agregar los temas de dojo y estilos css necesarios al head.
      * @return void
@@ -118,16 +145,16 @@ class AdminController extends Zend_Controller_Action
         $this->view->bodyClass = $this->_dojoTheme;
         
         $this->view->dojo()
-        ->requireModule("dojox.widget.Standby")
-        ->requireModule("dijit.form.Form")
-        ->requireModule("zwei.Utils")
-        ->requireModule("zwei.Admportal")
-        ->requireModule("zwei.Form")
-        ->requireModule("dojox.grid.enhanced.plugins.Pagination")
-        ->requireModule("dojox.form.CheckedMultiSelect")
-        ;
+            ->requireModule("dojox.widget.Standby")
+            ->requireModule("dijit.form.Form")
+            ->requireModule("zwei.Utils")
+            ->requireModule("zwei.Admportal")
+            ->requireModule("zwei.Form")
+            ->requireModule("dojox.grid.enhanced.plugins.Pagination")
+            ->requireModule("dojox.form.CheckedMultiSelect");
     
-        $this->view->headStyle()->appendStyle('
+        $this->view->headStyle()->appendStyle(
+            '
             @import "'.$this->baseDojoFolder.'/dojox/grid/resources/Grid.css";
             @import "'.$this->baseDojoFolder.'/dojox/grid/resources/'.$this->_dojoTheme.'Grid.css";
             @import "'.$this->baseDojoFolder.'/dojox/grid/enhanced/resources/'.$this->_dojoTheme.'/EnhancedGrid.css";
@@ -138,7 +165,8 @@ class AdminController extends Zend_Controller_Action
             @import "'.$this->baseDojoFolder.'/dojox/widget/Toaster/Toaster.css";
             @import "'.$this->baseDojoFolder.'/dojo/resources/dnd.css";
             @import "'.BASE_URL.'css/admin.css?version='.$this->view->noCache.'";
-        ');
+        '
+        );
     }
     
     /**
@@ -147,7 +175,11 @@ class AdminController extends Zend_Controller_Action
      */
     private function enableJavascriptLibs()
     {
-        $this->view->javascriptLibs = isset($this->_config->zwei->javascript->libs) ? $this->_config->zwei->javascript->libs->toArray() : array();
+        $this->view->javascriptLibs = isset($this->_config->zwei->javascript->libs) 
+            ? ($this->_config->zwei->javascript->libs instanceof Zend_Config 
+                    ? $this->_config->zwei->javascript->libs->toArray() 
+                    : array($this->_config->zwei->javascript->libs)) 
+            : array();
     }
     
     
@@ -170,7 +202,10 @@ class AdminController extends Zend_Controller_Action
             $this->view->user_id = $userInfo->id;
             $this->view->layout = isset($this->_config->zwei->layout->mainPane) ? "'".$this->_config->zwei->layout->mainPane."'" : 'undefined';//Para backward compatibility, TODO deprecar
             $this->view->multiForm = isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple) ? 'true' : 'false';//Para backward compatibility, TODO deprecar
-    
+            
+            $this->view->version = $this->getComposerJsonVersion(ROOT_DIR . '/composer.json');
+            $this->view->admportalVersion =  $this->getComposerJsonVersion(TANGERINE_APPLICATION_PATH . '/../composer.json');
+            
             if ($this->_template != 'default') {
                 $this->_helper->viewRenderer("index-$this->_template");
             }
@@ -206,7 +241,6 @@ class AdminController extends Zend_Controller_Action
                 $aclComponent = $xml->getAttribute('aclComponent') ? $xml->getAttribute('aclComponent') : $component;
                 
                 if ($this->_acl->isUserAllowed($aclComponent, "LIST") || $this->_acl->isUserAllowed($aclComponent, "EDIT") || $this->_acl->isUserAllowed($aclComponent, "ADD")) {
-                    
                     if (stristr($xml->getAttribute('type'), '.')) {
                         list($controller, $action) = explode('.', $xml->getAttribute('type'));
                     } else if (stristr($xml->getAttribute('type'), '/')) {
@@ -235,19 +269,17 @@ class AdminController extends Zend_Controller_Action
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_redirect('admin/login');
         } else {
-            
             Zend_Dojo::enableView($this->view);
             
             $this->_helper->ContextSwitch
-            ->setAutoJsonSerialization(false)
-            ->addActionContext('index', 'json')
-            ->initContext();
+                ->setAutoJsonSerialization(false)
+                ->addActionContext('index', 'json')
+                ->initContext();
             
             //$this->_helper->viewRenderer->setNoRender(true);
             $modules = new AclModulesModel();
             
             $this->view->tree = $modules->getTree();
-            
         }
     }
     
@@ -260,11 +292,9 @@ class AdminController extends Zend_Controller_Action
         if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_redirect('admin/login');
         } else {
-        
             Zend_Dojo::enableView($this->view);
             //$this->_helper->viewRenderer->setNoRender(true);
             $modules = new AclModulesModel();
-        
             $this->view->tree = $modules->getTree();
         }
     }
@@ -275,9 +305,11 @@ class AdminController extends Zend_Controller_Action
      */
     public function loginAction()
     {
-        $this->view->headStyle()->appendStyle('
+        $this->view->headStyle()->appendStyle(
+            '
             @import "'.BASE_URL.'css/admin.css";
-        ');
+        '
+        );
     
         if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
             //$this->_redirect(BASE_URL. 'admin');
@@ -300,19 +332,23 @@ class AdminController extends Zend_Controller_Action
                 $auth = Zend_Auth::getInstance();
                 
                 $authAdapter->setIdentity($username)
-                ->setCredential($password);
+                    ->setCredential($password);
                 $result = $auth->authenticate($authAdapter);
     
-                if($result->isValid())
-                {
+                if ($result->isValid()) {
                     // Obtener toda la info de usuario, excepto la password
                     Zwei_Admin_Auth::initUserInfo($authAdapter);
                     
                     $params = array();
                     $r = $this->getRequest();
-                    if ($r->getParam('template')) $params['template'] = $r->getParam('template');
-                    if ($r->getParam('theme')) $params['theme'] = $r->getParam('theme');
                     
+                    if ($r->getParam('template')) {
+                        $params['template'] = $r->getParam('template');
+                    }
+                    
+                    if ($r->getParam('theme')) {
+                        $params['theme'] = $r->getParam('theme');
+                    }
                     
                     $this->_helper->redirector('index', 'admin', 'default', $params);
                 } else {
@@ -378,16 +414,16 @@ class AdminController extends Zend_Controller_Action
     
         $loginForm = new Zend_Dojo_Form();
         $loginForm->setAction($this->_request->getBaseUrl() . '/admin/login/')
-        ->setTranslator(new Zend_Translate('array', array("Value is required and can't be empty"=>"Este valor no puede ir vacío"), 'es'))
+            ->setTranslator(new Zend_Translate('array', array("Value is required and can't be empty"=>"Este valor no puede ir vacío"), 'es'))
 
-        ->setMethod('post')
-        ->setAttrib('id', 'loginForm')
+            ->setMethod('post')
+            ->setAttrib('id', 'loginForm')
         //->setAttrib('onsubmit', "this['password'].value=hex_md5(this['password'].value)")
-        ->addElement($username)
-        ->addElement($password)
-        ->addElement($theme)
-        ->addElement($template)
-        ->addElement($submit);
+            ->addElement($username)
+            ->addElement($password)
+            ->addElement($theme)
+            ->addElement($template)
+            ->addElement($submit);
     
         return $loginForm;
     }

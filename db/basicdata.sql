@@ -4,25 +4,31 @@ USE `admportal`;
 -- version 4.0.10deb1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Feb 23, 2015 at 09:19 AM
--- Server version: 5.5.41-0ubuntu0.14.04.1
--- PHP Version: 5.5.9-1ubuntu4.6
+-- Servidor: localhost
+-- Tiempo de generación: 02-03-2016 a las 01:10:39
+-- Versión del servidor: 5.5.47-0ubuntu0.14.04.1
+-- Versión de PHP: 5.5.9-1ubuntu4.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
 --
--- Database: `admportal_ticket`
+-- Base de datos: `fuu`
 --
 
 --
--- Truncate table before insert `acl_actions`
+-- Truncar tablas antes de insertar `acl_actions`
 --
 
 TRUNCATE TABLE `acl_actions`;
 --
--- Dumping data for table `acl_actions`
+-- Volcado de datos para la tabla `acl_actions`
 --
 
 INSERT INTO `acl_actions` (`id`, `title`) VALUES
@@ -32,22 +38,22 @@ INSERT INTO `acl_actions` (`id`, `title`) VALUES
 ('LIST', 'Listar');
 
 --
--- Truncate table before insert `acl_groups`
+-- Truncar tablas antes de insertar `acl_groups`
 --
 
 TRUNCATE TABLE `acl_groups`;
 --
--- Truncate table before insert `acl_groups_modules_actions`
+-- Truncar tablas antes de insertar `acl_groups_modules_actions`
 --
 
 TRUNCATE TABLE `acl_groups_modules_actions`;
 --
--- Truncate table before insert `acl_modules`
+-- Truncar tablas antes de insertar `acl_modules`
 --
 
 TRUNCATE TABLE `acl_modules`;
 --
--- Dumping data for table `acl_modules`
+-- Volcado de datos para la tabla `acl_modules`
 --
 
 INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `refresh_on_load`, `type`, `approved`, `order`, `root`, `ownership`, `icons_id`) VALUES
@@ -56,7 +62,6 @@ INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `refres
 (3, NULL, 'Datos Personales', 'personal-info.xml', '0', '0', 'xml', '1', 0, '0', '0', NULL),
 (4, 11, 'M&oacute;dulos', 'modules.xml', '1', '0', 'xml', '1', 1, '1', '0', 6),
 (5, 10, 'Usuarios', 'users.xml', '1', '0', 'xml', '1', 1, '0', '0', 17),
-(6, 10, 'Permisos', 'permissions.xml', '0', '0', 'xml', '0', 3, '1', '0', 0),
 (7, 11, 'Servidor', 'phpinfo.xml', '1', '0', 'xml', '1', 6, '1', '0', 22),
 (8, 10, 'Perfiles', 'roles.xml', '1', '0', 'xml', '1', 2, '1', '0', 7),
 (9, 11, 'Configuraci&oacute;n Global', 'settings.xml', '1', '0', 'xml', '1', 5, '1', '0', 20),
@@ -66,12 +71,12 @@ INSERT INTO `acl_modules` (`id`, `parent_id`, `title`, `module`, `tree`, `refres
 (13, 9, 'Avanzado', 'settings-advanced.xml', '1', '0', 'xml', '1', 0, '1', '0', 21);
 
 --
--- Truncate table before insert `acl_modules_actions`
+-- Truncar tablas antes de insertar `acl_modules_actions`
 --
 
 TRUNCATE TABLE `acl_modules_actions`;
 --
--- Dumping data for table `acl_modules_actions`
+-- Volcado de datos para la tabla `acl_modules_actions`
 --
 
 INSERT INTO `acl_modules_actions` (`id`, `acl_modules_id`, `acl_actions_id`) VALUES
@@ -106,12 +111,12 @@ INSERT INTO `acl_modules_actions` (`id`, `acl_modules_id`, `acl_actions_id`) VAL
 (292, 13, 'LIST');
 
 --
--- Truncate table before insert `acl_roles`
+-- Truncar tablas antes de insertar `acl_roles`
 --
 
 TRUNCATE TABLE `acl_roles`;
 --
--- Dumping data for table `acl_roles`
+-- Volcado de datos para la tabla `acl_roles`
 --
 
 INSERT INTO `acl_roles` (`id`, `role_name`, `description`, `approved`, `must_refresh`) VALUES
@@ -120,12 +125,12 @@ INSERT INTO `acl_roles` (`id`, `role_name`, `description`, `approved`, `must_ref
 (3, 'Consultas', 'Acceso a listados y reportes.', '1', '0');
 
 --
--- Truncate table before insert `acl_roles_modules_actions`
+-- Truncar tablas antes de insertar `acl_roles_modules_actions`
 --
 
 TRUNCATE TABLE `acl_roles_modules_actions`;
 --
--- Dumping data for table `acl_roles_modules_actions`
+-- Volcado de datos para la tabla `acl_roles_modules_actions`
 --
 
 INSERT INTO `acl_roles_modules_actions` (`id`, `acl_roles_id`, `acl_modules_actions_id`, `permission`) VALUES
@@ -176,36 +181,48 @@ INSERT INTO `acl_roles_modules_actions` (`id`, `acl_roles_id`, `acl_modules_acti
 (148, 1, 288, 'ALLOW');
 
 --
--- Truncate table before insert `acl_users`
+-- Truncar tablas antes de insertar `acl_session`
+--
+
+TRUNCATE TABLE `acl_session`;
+--
+-- Volcado de datos para la tabla `acl_session`
+--
+
+INSERT INTO `acl_session` (`id`, `acl_users_id`, `acl_roles_id`, `created`, `modified`, `lifetime`, `data`, `ip`, `user_agent`, `must_refresh`) VALUES
+('ad1ho551rprmf8fm6jir8dr733', 1, 1, 1456888702, 1456891833, 864000, 'Zend_Auth|a:3:{s:7:"timeout";i:1456893414;s:10:"requestUri";s:32:"/admin/components?p=settings.xml";s:7:"storage";O:8:"stdClass":11:{s:2:"id";s:1:"1";s:12:"acl_roles_id";s:1:"1";s:9:"user_name";s:8:"gamelena";s:11:"first_names";s:7:"Soporte";s:10:"last_names";s:8:"gamelena";s:5:"email";s:21:"tecnicos@gamelena.com";s:8:"approved";s:1:"1";s:4:"foto";N;s:12:"must_refresh";s:1:"0";s:16:"sessionNamespace";s:3:"fuu";s:6:"groups";a:0:{}}}', '127.0.0.1', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36 FirePHP/4Chrome', '0');
+
+--
+-- Truncar tablas antes de insertar `acl_users`
 --
 
 TRUNCATE TABLE `acl_users`;
 --
--- Dumping data for table `acl_users`
+-- Volcado de datos para la tabla `acl_users`
 --
 
 INSERT INTO `acl_users` (`id`, `acl_roles_id`, `user_name`, `password`, `first_names`, `last_names`, `email`, `approved`, `foto`, `must_refresh`) VALUES
-(1, 1, 'zweicom', '3a62dc577a0db23fb0b5c1c9e8046c05', 'Soporte', 'Zweicom', 'tecnicos@zweicom.com', '1', NULL, '0'),
+(1, 1, 'gamelena', '31cb6a72f8f70612e27af0f59a9322ca', 'Soporte', 'gamelena', 'tecnicos@gamelena.com', '1', NULL, '0'),
 (2, 2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'Administrador', 'Cliente', 'administrador@telefonicamoviles.com.pe', '1', NULL, '0'),
 (3, 3, 'consultas', '83da1fbc8f1a993de3f31cec6d7bf5b2', 'Consultas', 'Cliente', '', '1', NULL, '0');
 
 --
--- Truncate table before insert `acl_users_groups`
+-- Truncar tablas antes de insertar `acl_users_groups`
 --
 
 TRUNCATE TABLE `acl_users_groups`;
 --
--- Truncate table before insert `log_book`
+-- Truncar tablas antes de insertar `log_book`
 --
 
 TRUNCATE TABLE `log_book`;
 --
--- Truncate table before insert `web_icons`
+-- Truncar tablas antes de insertar `web_icons`
 --
 
 TRUNCATE TABLE `web_icons`;
 --
--- Dumping data for table `web_icons`
+-- Volcado de datos para la tabla `web_icons`
 --
 
 INSERT INTO `web_icons` (`id`, `title`, `image`) VALUES
@@ -235,18 +252,22 @@ INSERT INTO `web_icons` (`id`, `title`, `image`) VALUES
 (24, 'CSV', 'ad4c5a07csv.png');
 
 --
--- Truncate table before insert `web_settings`
+-- Truncar tablas antes de insertar `web_settings`
 --
 
 TRUNCATE TABLE `web_settings`;
 --
--- Dumping data for table `web_settings`
+-- Volcado de datos para la tabla `web_settings`
 --
 
 INSERT INTO `web_settings` (`id`, `list`, `value`, `type`, `description`, `ord`, `group`, `function`, `approved`, `path`, `url`, `regExp`, `invalidMessage`, `promptMessage`, `formatter`, `xml_children`) VALUES
-('credits', '', '&copy; Zweicom 2015', 'dijit-form-validation-text-box', '', 2, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
+('credits', '', '&copy; gamelena 2015', 'dijit-form-validation-text-box', '', 2, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
 ('query_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', NULL, '', '', '', '', ''),
 ('titulo_adm', '', 'Hola Mundo', 'dijit-form-validation-text-box', '', 1, 'Admin', '', '1', '', NULL, '', '', '', '', ''),
 ('transactions_log', '', '1', 'dijit-form-check-box', '', 1, 'Debug', '', '1', '', NULL, '', '', '', '', ''),
-('url_logo_oper', '', 'b07d49fdlogo-zweicom-big.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="56" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;'),
-('url_logo_zweicom', '', 'b28576bblogo-zweicom-26x34.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="18" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;\r\n');
+('url_logo_gamelena', '', 'd1e645f8genesis.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="18" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;\r\n'),
+('url_logo_oper', '', '100a0c75genesis.png', 'dojox-form-uploader', '', 3, 'Admin', '', '1', '{ROOT_DIR}/public/upfiles/', '{BASE_URL}/upfiles/corporative/', '', '', '', 'formatImage', '&lt;thumb height="56" path="{ROOT_DIR}/public/upfiles/corporative/" /&gt;');
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

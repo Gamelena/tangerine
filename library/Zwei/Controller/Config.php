@@ -1,8 +1,6 @@
 <?php
 /**
  * Funcionalidades de configuracion Zend_Config del sitio
- * 
- *
  */
 class Zwei_Controller_Config
 {

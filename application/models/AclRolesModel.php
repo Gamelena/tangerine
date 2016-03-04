@@ -3,12 +3,10 @@
 /**
  * Modelo de datos para roles ACL o perfiles del admin
  *
- *
  * @category Zwei
- * @package Models
- * @version $Id:$
- * @since 0.1
- *
+ * @package  Models
+ * @version  $Id:$
+ * @since    0.1
  */
 
 class AclRolesModel extends DbTable_AclRoles
@@ -39,7 +37,8 @@ class AclRolesModel extends DbTable_AclRoles
      * (non-PHPdoc)
      * @see Zwei_Db_Table::init()
      */
-    public function init() {
+    public function init() 
+    {
         $this->_aclModulesActions = new AclModulesActionsModel();
         parent::init();
     }
@@ -66,7 +65,8 @@ class AclRolesModel extends DbTable_AclRoles
      * @param Zend_Db_Table_Rowset
      * @return array
      */
-    public function overloadDataForm($data) {
+    public function overloadDataForm($data) 
+    {
         $data = $data->toArray();
 
         $select = $this->_aclModulesActions->selectAllActions($data['id']);
@@ -85,7 +85,7 @@ class AclRolesModel extends DbTable_AclRoles
      * Separa del array $data, que usa como parametro al insertar o actualizar,
      * los datos de la tabla self::$_name de los datos de la tabla self::$_permissions
      *
-     * @param array $data
+     * @param  array $data
      * @return array
      */
     public function cleanDataParams($data)
@@ -186,7 +186,7 @@ class AclRolesModel extends DbTable_AclRoles
     /**
      * Agregar los permisos asociados al perfil
      *
-     * @param int $aclRolesId
+     * @param  int $aclRolesId
      * @return int || false
      */
     public function addPermissions($aclRolesId)
@@ -216,7 +216,8 @@ class AclRolesModel extends DbTable_AclRoles
         //(4) Clausula WHERE lista, ahora borremos los permisos.
         $delete = $aclRolesModulesAction->delete($where);
 
-        if (!empty($this->_dataRolesModulesActions)) $return = $delete;
+        if (!empty($this->_dataRolesModulesActions)) { $return = $delete; 
+        }
 
         //(5) Agregar los permisos que fueron chequeados.
         $insert =  false;
@@ -241,9 +242,9 @@ class AclRolesModel extends DbTable_AclRoles
     /**
      * Da permisos para listar en todos los modulos padres para poder acceder a modulo actual.
      *
-     * @param int $aclModulesId
-     * @param int $aclRolesId
-     * @param string $action
+     * @param  int    $aclModulesId
+     * @param  int    $aclRolesId
+     * @param  string $action
      * @return Zend_Db_Table_Row
      */
     public function setParentModulesPermissions($aclModulesId, $aclRolesId, $action = 'LIST', $selfPermission = true)

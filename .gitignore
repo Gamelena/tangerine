@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .gitignore
 composer.json
 /nbproject/
@@ -20,4 +21,21 @@ composer.json
 /public/js/libs/css/
 /public/upfiles/
 /sh_entorno/
+=======
+vendor/
+tests/ci/
+log/
+.buildpath
+.project
+.idea/
+.settings/
+composer.lock
+*.iml
+web/cache/*
+web/log/*
+web/tests/ci/*
+web/tests/logs/*
+web/tests/pdepend/*
+
+>>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 

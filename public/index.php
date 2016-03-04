@@ -18,8 +18,11 @@ defined('APPLICATION_PATH')
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
+// Use Composer Autoloader, if exists
+if (file_exists(APPLICATION_PATH . '/../vendor/autoload.php')) {
+    require_once APPLICATION_PATH . '/../vendor/autoload.php';
+}
 
-/** Zend_Application */
 require_once 'Zend/Application.php';
 
 $application = new Zend_Application(

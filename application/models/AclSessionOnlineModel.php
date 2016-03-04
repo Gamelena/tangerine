@@ -22,43 +22,49 @@ class AclSessionOnlineModel extends DbTable_AclSession
      * @return Zend_Db_Table_Select
      * @see Zend_Db_Table_Abstract::select()
      */
-    public function select ($withFromPart = self::SELECT_WITHOUT_FROM_PART)
+    public function select($withFromPart = self::SELECT_WITHOUT_FROM_PART)
     {
         $select = parent::select($withFromPart);
         $select->setIntegrityCheck(false);
         $config = Zwei_Controller_Config::getOptions();
         
-        $select->from($this->_name, array(
+        $select->from(
+            $this->_name, array(
                 'id',
                 'ip',
                 'user_agent',
                 'modified'
-        ));
-        $select->joinLeft($this->_nameAclUsers, 
-                "$this->_name.acl_users_id=$this->_nameAclUsers.id", 
-                array(
+            )
+        );
+        $select->joinLeft(
+            $this->_nameAclUsers, 
+            "$this->_name.acl_users_id=$this->_nameAclUsers.id", 
+            array(
                         'user_name',
                         'email'
-                ));
-        $select->joinLeft($this->_nameAclRoles, 
-                "$this->_nameAclUsers.acl_roles_id=$this->_nameAclRoles.id", 
-                array(
-                        'role_name'
-                ));
-        
-        if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
-            $select->where("$this->_name.acl_roles_id <> '1'");
-        }
-        
-        $modifiedDelayed = time() - 12;
-        $select->where(
-                $this->getAdapter()->quoteInto("$this->_name.modified > ?", $modifiedDelayed)
+                )
         );
-        $select->where("$this->_name.acl_users_id <> '0'");
-        $select->order("$this->_name.modified DESC");
+                $select->joinLeft(
+                    $this->_nameAclRoles, 
+                    "$this->_nameAclUsers.acl_roles_id=$this->_nameAclRoles.id", 
+                    array(
+                        'role_name'
+                    )
+                );
+        
+                if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
+                    $select->where("$this->_name.acl_roles_id <> '1'");
+                }
+        
+                $modifiedDelayed = time() - 32;
+                $select->where(
+                    $this->getAdapter()->quoteInto("$this->_name.modified > ?", $modifiedDelayed)
+                );
+                $select->where("$this->_name.acl_users_id <> '0'");
+                $select->order("$this->_name.modified DESC");
         
         
-        return $select;
+                return $select;
     }
 
     /**
@@ -68,7 +74,7 @@ class AclSessionOnlineModel extends DbTable_AclSession
      *
      * @see Zwei_Db_Table::overloadDataList()
      */
-    public function overloadDataList ($data)
+    public function overloadDataList($data)
     {
         $i = 0;
         $data = $data->toArray();
@@ -92,14 +98,15 @@ class AclSessionOnlineModel extends DbTable_AclSession
      *
      * @param  array|string $where SQL WHERE clause(s).
      * @return int          The number of rows deleted.
-     * @see Zwei_Db_Table::delete()
+     * @see    Zwei_Db_Table::delete()
      */
-    public function delete ($where)
+    public function delete($where)
     {
         $aWhere = self::whereToArray($where);
         if ($aWhere['id'] == Zend_Session::getId()) {
             $this->setMessage(
-                    "No puede borrar su propia sesión. <br/> Para cerrar sesión use 'Salir'.");
+                "No puede borrar su propia sesión. <br/> Para cerrar sesión use 'Salir'."
+            );
             return false;
         }
         return parent::delete($where);

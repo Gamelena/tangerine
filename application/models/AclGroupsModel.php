@@ -1,7 +1,6 @@
 <?php
 /**
  * Modelo de grupos (o equipos) de usuario
- *
  */
 class AclGroupsModel extends DbTable_AclGroups
 {
@@ -15,10 +14,11 @@ class AclGroupsModel extends DbTable_AclGroups
     /**
      * Se agregan usuarios asociados a rowset original.
      * 
-     * @param Zend_Db_Table_Rowset
+     * @param  Zend_Db_Table_Rowset
      * @return array
     */
-    public function overloadDataForm($data) {
+    public function overloadDataForm($data) 
+    {
         if (method_exists($data, 'toArray')) {
             $data = $data->toArray();
         
@@ -37,7 +37,7 @@ class AclGroupsModel extends DbTable_AclGroups
      * Separa del array $data, que usa como parametro al insertar o actualizar,
      * los datos de la tabla self::$_name de los datos de la tabla self::$_permissions
      *
-     * @param array $data
+     * @param  array $data
      * @return array
      */
     public function cleanDataParams($data)
@@ -80,7 +80,7 @@ class AclGroupsModel extends DbTable_AclGroups
     /**
      * Mantener a los usuarios asociados al grupo
      *
-     * @param int $aclGroupsId
+     * @param  int $aclGroupsId
      * @return int || false
      */
     public function addUsers($aclGroupsId)
@@ -112,7 +112,8 @@ class AclGroupsModel extends DbTable_AclGroups
         //(4) Clausula WHERE lista, borremos!!
         $delete = $model->delete($where);
     
-        if (!empty($this->_dataUsuarios)) $return = $delete;
+        if (!empty($this->_dataUsuarios)) { $return = $delete; 
+        }
         
         //Agregar a los usuarios que fueron chequeados.
         $insert =  false;
@@ -140,7 +141,7 @@ class AclGroupsModel extends DbTable_AclGroups
     /**
      * Obtener los usuarios asociados al grupo.
      * 
-     * @param int $aclGroupsId
+     * @param  int $aclGroupsId
      * @return Zend_Db_Table_Row
      */
     public function fetchUsers($aclGroupsId)
