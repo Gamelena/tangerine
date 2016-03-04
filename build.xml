@@ -119,7 +119,7 @@
 		<exec dir="${basedir}/tasks" executable="./alias.sh" failonerror="true"/>
 	</target>
 	
-	<target name="generator-start" description="Include environment vars for admportal tools">
+	<target name="generator-start" description="Include environment vars for tangerine tools">
 		<exec dir="${basedir}/tasks" executable="./generator-start.sh" failonerror="true"/>
 	</target>
 
@@ -128,20 +128,24 @@
 	</target>
 
 	<target name="database" description="Create Database and privileges">
-		<exec executable="${mysql}" input="${basedir}/db/admportal.sql" failonerror="true">
+		<exec executable="${mysql}" input="${basedir}/db/createdb.sql" failonerror="true">
 			<arg value="--user=${db.username}"/>
 			<arg value="--password=${db.password}"/>
-			<arg value="--database=admportal"/>
+		</exec>
+		<exec executable="${mysql}" input="${basedir}/db/tangerine.sql" failonerror="true">
+			<arg value="--user=${db.username}"/>
+			<arg value="--password=${db.password}"/>
+			<arg value="--database=tangerine"/>
 		</exec>
 		<exec executable="${mysql}" input="${basedir}/db/basicdata.sql" failonerror="true">
 			<arg value="--user=${db.username}"/>
 			<arg value="--password=${db.password}"/>
-			<arg value="--database=admportal"/>
+			<arg value="--database=tangerine"/>
 		</exec>
 		<exec executable="${mysql}" input="${basedir}/db/privileges.sql" failonerror="true">
 			<arg value="--user=${db.username}"/>
 			<arg value="--password=${db.password}"/>
-			<arg value="--database=admportal"/>
+			<arg value="--database=tangerine"/>
 		</exec>
 	</target>
 
