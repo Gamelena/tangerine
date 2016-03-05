@@ -1,27 +1,14 @@
-<<<<<<< HEAD
-.gitignore
-composer.json
 /nbproject/
-/public/js/libs/jquery-1.7.2.min.js
-/public/js/libs/jquery-1.9.0.min.js
-/public/js/libs/jquery-ui-1.8.21.min.js
-/public/js/libs/jquery.colorbox.js
-/public/js/libs/jquery.graphviz.css
-/public/js/libs/jquery.graphviz.js
-/public/js/libs/raphael-min.js
-/public/js/libs/tinymce/
 /.buildpath
 /.project
 /.settings/
 /.svn/
 /bin/
-/composer.lock
 /public/.htaccess
 /public/favicon.ico
 /public/js/libs/css/
 /public/upfiles/
 /sh_entorno/
-=======
 vendor/
 tests/ci/
 log/
@@ -29,13 +16,10 @@ log/
 .project
 .idea/
 .settings/
-composer.lock
 *.iml
 web/cache/*
 web/log/*
 web/tests/ci/*
 web/tests/logs/*
 web/tests/pdepend/*
-
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
 
