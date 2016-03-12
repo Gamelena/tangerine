@@ -1,6 +1,6 @@
 {
-	"name": "gamelena/admportal",
-	"description": "Admportal",
+	"name": "gamelena/tangerine",
+	"description": "Tangerine",
 	"version": "1.6.1",
 	"type": "library",
 	"require": {
