@@ -106,6 +106,10 @@
 	<target name="alias" description="Create An Apache Alias for this site">
 		<exec dir="${basedir}/web/tasks" executable="./alias.sh" failonerror="true"/>
 	</target>
+	
+	<target name="vhost" description="Create An Apache VHost for this site">
+		<exec dir="${basedir}/web/tasks" executable="./vhost.sh" failonerror="true"/>
+	</target>
 
 	<target name="prepare" unless="prepare.done" depends="clean"
 		description="Prepare for build">
