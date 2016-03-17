@@ -28,12 +28,9 @@
 		<property name="phploc" value="${basedir}/vendor/bin/phploc"/> <property 
 		name="phpmd" value="${basedir}/vendor/bin/phpmd"/> <property name="phpunit" 
 		value="${basedir}/vendor/bin/phpunit"/> -->
-	<target name="install"
-		depends="prepare,composer,bower,global-testing-deps,generator-start"
-		description="Performs instalation, execution of alias as superuser is needed for full install" />
 
 	<target name="full-build"
-		depends="prepare,database,composer,bower,static-analysis,phpdox"
+		depends="prepare,database,composer,static-analysis,phpdox"
 		description="Performs static analysis, runs the tests, and generates project documentation" />
 
 	<target name="full-build-parallel"
