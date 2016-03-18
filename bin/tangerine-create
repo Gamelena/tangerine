@@ -1,0 +1,269 @@
+#!/bin/bash
+
+if [ -z "$TANGERINE_PATH" ]; then
+    echo "Debe definirse TANGERINE_PATH"
+    exit 1
+fi  
+
+shopt -s nocasematch
+
+
+DEST_PATH=$PWD
+
+read -p "Ingrese adaptador de DB (por defecto Pdo_Mysql):" DB_ADAPTER  
+DB_ADAPTER=${DB_ADAPTER:-Pdo_Mysql}
+
+echo " "
+echo Ingrese nombre de su DB NAME:
+read DB_NAME
+
+echo " "
+read -p "Ingrese DB HOST (por defecto localhost):" DB_HOST    
+DB_HOST=${DB_HOST:-localhost}
+
+echo " "
+echo "Ingrese nombre de su DB USER:"
+read DB_USER
+
+echo " "
+echo Ingrese su DB PASSWORD:
+read DB_PASS
+
+
+echo Se seleccionaron los sig parámetros: DB_ADAPTER:$DB_ADAPTER, HOST:$DB_HOST, DB:$DB_NAME, USER:$DB_USER, PASSWORD:$DB_PASS
+echo " "
+
+read -p "¿Desea crear la base de datos MySQL (si no existe) y asignar los privilegios? (S/N) (por defecto S):" CREATE_DATABASE    
+CREATE_DATABASE=${CREATE_DATABASE:-S}
+
+
+if [[ "$CREATE_DATABASE" = "S" ]]; then
+        read -p "Ingrese Super Usuario para creación de DB (por defecto root):" DB_ROOT_USER  
+        DB_ROOT_USER=${DB_ROOT_USER:-root}
+        
+        MYSQL=`which mysql`
+ 
+        Q1="CREATE DATABASE IF NOT EXISTS $DB_NAME;"
+        Q2="GRANT ALL ON $DB_NAME.* TO $DB_USER IDENTIFIED BY '$DB_PASS';"
+        Q3="GRANT ALL ON $DB_NAME.* TO $DB_USER@localhost IDENTIFIED BY '$DB_PASS';"
+        SQL="${Q1}${Q2}${Q3}"
+        
+        echo $Q1
+         
+        $MYSQL -u$DB_ROOT_USER -p -e "$SQL"
+fi
+
+echo " "
+echo Creando definiciones proyecto Zend Framework en $DEST_PATH/web/ 
+zf create project web
+echo Creando proyecto Tangerine en $DEST_PATH/web
+rsync -r --exclude=.svn $TANGERINE_PATH/application/configs/ $DEST_PATH/web/application/configs/
+rsync -r --exclude=.svn $TANGERINE_PATH/application/components/ $DEST_PATH/web/application/components/
+rsync -r --exclude=.svn $TANGERINE_PATH/application/views/ $DEST_PATH/web/application/views/
+rsync -r --exclude=.svn --exclude='js/libs' $TANGERINE_PATH/public/ $DEST_PATH/web/public/
+cp  $TANGERINE_PATH/application/Bootstrap.php $DEST_PATH/web/application/Bootstrap.php
+mkdir -p $DEST_PATH/web/library/Zwei/Utils/
+cp $TANGERINE_PATH/library/Zwei/Utils/CustomFunctions.php $DEST_PATH/web/library/Zwei/Utils/CustomFunctions.php
+
+echo "Generando tareas apache ant"
+mkdir -p $DEST_PATH/web/tasks
+cp $TANGERINE_PATH/tasks/alias-app.sh $DEST_PATH/web/tasks/alias.sh
+cp $TANGERINE_PATH/tasks/vhost.sh $DEST_PATH/web/tasks/vhost.sh
+cp $TANGERINE_PATH/build-app.xml $DEST_PATH/build.xml
+
+echo Borrando prefijo \'Application_\' por defecto.
+sed -i 's/Application_//g' $DEST_PATH/web/.zfproject.xml
+
+cd web/
+
+echo Guardando configuracion de base de datos en $DEST_PATH/web/application/configs/application.ini
+zf configure dbadapter "adapter=$DB_ADAPTER&username=$DB_USER&password=$DB_PASS&dbname=$DB_NAME"
+
+echo Creando definiciones de tablas ZF en $DEST_PATH/web/application/models/DbTable ...
+zf create dbtable.from-database --force-overwrite=true
+
+echo " "
+read -p "¿Desea crear y poblar tablas básicas MySQL de Tangerine? (S/N) (por defecto S):" CREATE_TABLES
+CREATE_TABLES=${CREATE_TABLES:-S}
+
+if [[ "$CREATE_TABLES" = "S" ]]; then
+        echo mysql -u$DB_USER -h$DB_HOST -p$DB_PASS -e "source $TANGERINE_PATH/db/tangerine.sql" $DB_NAME
+        mysql -u$DB_USER -h$DB_HOST -p$DB_PASS -e "source $TANGERINE_PATH/db/tangerine.sql" $DB_NAME
+        echo " "
+        echo mysql -u$DB_USER -p$DB_PASS -e "source $TANGERINE_PATH/db/basicdata.sql" $DB_NAME
+        mysql -u$DB_USER -h$DB_HOST -p$DB_PASS -e "source $TANGERINE_PATH/db/basicdata.sql" $DB_NAME
+fi
+
+
+ADMAPPPATH=$TANGERINE_PATH/application
+PATHESCAPED=$(echo "${ADMAPPPATH}" | sed 's/\//\\\//g')
+
+echo " "
+echo guardando variable zwei.tangerine.applicationPath con valor $ADMAPPPATH en application.ini
+
+sed -i "s/TANGERINE_APPLICATION_PATH/$PATHESCAPED/g" $DEST_PATH/web/application/configs/application.ini
+
+
+echo " "
+read -p "¿Desea copiar Controladores de Tangerine en su proyecto local? (S/N) (por defecto N):" CREATE_CONTROLLERS    
+CREATE_CONTROLLERS=${CREATE_CONTROLLERS:-N}
+
+if [[ "$CREATE_CONTROLLERS" = "S" ]]; then
+    echo " "
+    echo Creando Controladores.
+    
+    #zf create controller Index  
+    zf create action components -c Index 
+    zf create action tabs -c Index 
+    zf create action tabsDojo -c Index 
+    zf create action modules -c Index
+    zf create action login -c Index 
+    zf create action logout -c Index 
+    
+    zf create controller Ajax index-action-included=1
+    zf create action loading -c Ajax 
+    
+    zf create controller Functions index-action-included=1
+
+    zf create controller Cache index-action-included=1
+    
+    zf create controller Uploads index-action-included=1
+    
+    zf create controller Objects index-action-included=1
+    zf create action multiUpdate -c Objects 
+    rsync -r --exclude=.svn $TANGERINE_PATH/application/controllers/ $DEST_PATH/web/application/controllers/
+    rsync -r --exclude=.svn $TANGERINE_PATH/application/views/ $DEST_PATH/web/application/views/
+else    
+    rm -rf $DEST_PATH/web/application/controllers/
+    rm -rf $DEST_PATH/web/application/views/helpers/
+    rm -rf $DEST_PATH/web/application/views/scripts/
+    mkdir -p $DEST_PATH/web/application/controllers/
+    mkdir -p $DEST_PATH/web/application/views/helpers/
+    mkdir -p $DEST_PATH/web/application/views/scripts/
+    cp $TANGERINE_PATH/application/views/layouts/layout.phtml $DEST_PATH/web/application/views/layouts/layout.phtml
+fi
+
+echo " "
+echo "Creando base de módulo components" 
+zf create module components 
+
+read -p "¿Desea copiar Módulos ZF de Tangerine en su proyecto local? (S/N) (por defecto N):" CREATE_MODULES    
+CREATE_MODULES=${CREATE_MODULES:-N}
+
+
+
+if [[ "$CREATE_MODULES" = "S" ]]; then
+    echo " "
+    echo Creando Módulos.
+    zf create controller DojoPieChart components
+    rsync -r --exclude=.svn $TANGERINE_PATH/application/modules/ $DEST_PATH/web/application/modules/
+else
+    mkdir -p $DEST_PATH/web/application/modules/
+fi
+
+echo " "
+read -p "¿Desea copiar Modelos de Tangerine en su proyecto local? (S/N) (por defecto N):" CREATE_MODELS    
+CREATE_MODELS=${CREATE_MODELS:-N}
+
+if [[ "$CREATE_MODELS" = "S" ]]; then
+
+    echo " "
+    echo Creando Modelos.
+    
+    zf create model AclModulesModel
+    zf create model AclPermissionsModel
+    zf create model AclRolesModel
+    zf create model AclUsersModel
+    zf create model LogBookModel
+    zf create model PermissionsModel
+    zf create model PersonalInfoModel
+    zf create model SettingsModel
+    
+    echo " "
+
+    rsync -r --exclude=.svn $TANGERINE_PATH/application/models/ $DEST_PATH/web/application/models/
+else    
+    mkdir -p $DEST_PATH/web/application/models/
+fi
+
+shopt -u nocasematch
+
+if [ -a $DEST_PATH/web/application/models/DbTable ];then
+    echo Adaptando Tablas ZF a Tablas de Tangerine
+    echo " "
+    find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Model_//' {} \;
+    find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Zend_Db_Table_Abstract/Zwei_Db_Table/' {} \;
+fi
+
+cd ../
+
+echo " "
+echo guardando variable zwei.session.namespace con valor ${PWD##*/} en application.ini
+
+sed -i "s/TANGERINE_SITENAME/${PWD##*/}/g" $DEST_PATH/web/application/configs/application.ini
+
+echo " "
+echo Eliminando resources.frontController.moduleDirectory autogenerado por zf tool
+sed -i '/resources.frontController.moduleDirectory =/d' $DEST_PATH/web/application/configs/application.ini 
+
+echo " "
+echo "Generando tests unitarios"
+rm -rf $DEST_PATH/web/tests/
+mkdir -p $DEST_PATH/web/tests/application/controllers/
+mkdir -p $DEST_PATH/web/tests/library/
+mkdir -p $DEST_PATH/web/tests/selenium/
+rsync -r --exclude=.svn $TANGERINE_PATH/tests/application/controllers/ $DEST_PATH/web/tests/application/controllers/
+rsync -r --exclude=.svn $TANGERINE_PATH/tests/selenium/ $DEST_PATH/web/tests/selenium/
+rsync -r --exclude=.svn $TANGERINE_PATH/tests/bootstrap.php $DEST_PATH/web/tests/bootstrap.php
+rsync -r --exclude=.svn $TANGERINE_PATH/tests/phpunit.xml $DEST_PATH/web/tests/phpunit.xml
+
+echo "Creando instaladores"
+cp $TANGERINE_PATH/docs/composer-app-template.json $DEST_PATH/web/composer.json
+
+echo " "
+echo \*\*\* Listo, para configurar el servidor con VHOST revise ejemplo en $DEST_PATH/web/docs/README.txt. \*\*\*
+echo \*\*\* Si no desea usar VHOST considere el siguiente script para configurar un ALIAS de Apache. \*\*\*
+echo " " 
+
+
+echo Alias /${PWD##*/} \"$DEST_PATH/web/public/\"
+echo \<Directory \"$DEST_PATH/web/public/\"\>
+echo    Options Indexes MultiViews FollowSymLinks
+echo    AllowOverride All
+echo    allow from all
+echo    SetEnv APPLICATION_ENV development
+echo \</Directory\>
+echo " "
+echo \*\*\* Si usa este ALIAS Apache deberá añadir la siguiente linea al comienzo de su archivo $DEST_PATH/web/public/.htaccess \*\*\*
+echo " "
+mkdir -p $DEST_PATH/web/log/
+mkdir -p $DEST_PATH/web/cache/
+echo RewriteBase /${PWD##*/}/
+echo " "
+echo "Puede copiar este comando para hacerlo vía consola:"
+echo " "
+echo "      sed -i '1 i\RewriteBase /${PWD##*/}/' $DEST_PATH/web/public/.htaccess " 
+
+echo " "  
+echo \*\*\* Deberá darles permisos de escritura a las carpetas $DEST_PATH/web/log/, $DEST_PATH/web/cache/ y $DEST_PATH/web/public/upfiles/  \*\*\*
+echo " "
+echo "Puede tomar como referencia uno de estos comandos:"
+echo " "
+echo "      chown www-data  $DEST_PATH/web/log/ $DEST_PATH/web/cache/ $DEST_PATH/web/public/upfiles/"
+echo "      chmod 777 -R  $DEST_PATH/web/log/ $DEST_PATH/web/cache/ $DEST_PATH/web/public/upfiles/"
+echo " "
+echo "Tambien puede crear el alias mediante Apache Ant"
+echo "-------------"
+echo "ant alias"
+echo "-------------"
+echo Happy Tangerine\'ing.
+echo " "
+
+
+
+
+
+
+
+
+ 
