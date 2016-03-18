@@ -233,4 +233,19 @@ Agregar a apache2.conf
    #Allow from all #Apache 2.2
 </Directory>
 
+Bower puede dar problemas al intentar resolver dependencias por protocolo git
+```
+ECMDERR Failed to execute "git ls-remote --tags --heads git://github.com/dojo/dojo.git", exit code of #128 fatal: unable to connect to github.com: github.com[0: 192.30.252.129]: errno=Expiró el tiempo de conexión
+```
+
+La solución es usar https:// el lugar de git://
+
+```
+git config --global url."https://".insteadOf git://
+```
+
+
+
+
+
 ```
