@@ -29,30 +29,26 @@ INSTALACION DE DEPENDENCIAS
 	Ahora tenemos disponible el comando 'bower'
 3. Ant 
 	Se usa ant como herramienta de automatizacion de tareas tales como construcción y análisis estático del código.
-	Para ejecutar los tests funcionales debe clonarse el proyecto admportal/admportal-testing.
 	```
 	sudo apt-get install ant
-	```
 	sudo apt-get install nodejs npm nodejs-legacy
+	```
  
-    Para hacer un full build del proyecto ejecutar
+    Para hacer un full build del proyecto ejecutar, en la raiz del proyecto
 	```	
-	ant
+	ant install
 	```
-	En la raiz del proyecto, esto tambien ejecuta las tarea relacionadas con Bower y Composer.
-	Nota: esto deployará el proyecto, pero lanzara una salida de error si no tenemos instaladas las herramientas de testing en forma global, lo cual se puede realizar con la tarea.
-	```
-	ant global-testing-deps
-	```
-	Para ver el detalle de las tareas disponibles.
+    
+    Para la creacion de los Alias de Apache necesarios, ejecutar como super usuario.
+        ```
+        ant alias
+        ```
+
+    Para ver el detalle de las tareas disponibles.
 	```
 	cat build.xml
 	``` 
-	Ver detalle de mensajes (modo verboso).
-	```
-	ant -v
-	```
-	
+
 Para evitar problemas de charset en los caracteres especiales en el despliegue web, se debe agregar 
 al archivo php.ini cargado por apache.
     ```
@@ -62,7 +58,7 @@ CREACION DE MANTENEDORES
 ========================
 4. Moverse a una nueva carpeta y ejecutar 
 ```
-	admportal-create 
+	tangerine-create 
 ```
 Se pedirá ingresar: 
 -	Tipo de DB (MySQL por omisión), 
@@ -78,7 +74,7 @@ Después se podrán escoger las opciones:
 
  - Generación automática de tablas y datos base (S/N) (S por omisión)
    solo se (re)crean los datos básicos para el funcionamiento de
-   AdmPortal.
+   Tangerine.
 
 	
 
@@ -87,8 +83,7 @@ Después se podrán escoger las opciones:
    controladores/vistas por defecto, tener en cuenta que en este caso de
    escoger S, se crea una copia del MVC, lo cual permite personalizar
    estos componentes pero las actualizaciones y mejoras que se hagan en
-   AdmPortal en estos elementos no serán reflejados en la nueva
-   aplicación.
+   Tangerine en estos elementos no serán reflejados.
 
 
 
@@ -105,16 +100,7 @@ ver
  - zf create db-table ?
  - zf create form ?
 
-Directiva Alias de ejemplo
 
-```
-Alias /ussd-admportal "/proyectos/ussd-admportal/web/public/"
-<Directory "/proyectos/ussd-admportal/web/public/">
-	AllowOverride All
-	Allow from all
-    SetEnv APPLICATION_ENV development
-</Directory>
-```
 TESTING
 =======
 Se requieren las librerías 
@@ -138,7 +124,7 @@ zf
 ```
 Debe incluirse al archivo php.ini cli (en Debian/Ubuntu '/etc/php5/cli/php.ini', En RHEL/Centos '/etc/php.ini')
 ```
-INCLUDE_PATH {paths ya existentes}:{admportal path}/vendor/phpunit/phpunit
+INCLUDE_PATH {paths ya existentes}:{tangerine path}/vendor/phpunit/phpunit
 ```
 En este punto zf intentará crear los Tests Unitarios, pero Zend Framework 1 por defecto no es compatible con PHPUnit 4 por lo que arrojará el siguiente error
 ```
@@ -203,37 +189,12 @@ Ejemplo de configuración de suite de pruebas
 </phpunit>
 ```
 
-
-
 ---
 
 FAQ
 ===
-Para solucionar problemas de permisos "forbidden by application config"
 
-Agregar a apache2.conf
-
-```
-<Directory "/$carpeta de proyectos/">
-   Options Indexes
-   FollowSymLinks
-   AllowOverride None 		
-   Require all granted #Apache2.4
-   #Order allow,deny #Apache 2.2 
-   #Allow from all #Apache 2.2
-</Directory>
-```
-```
-<Directory "/opt/admportal/"> 		
-   Options Indexes
-   FollowSymLinks
-   AllowOverride None 		
-   Require all granted #Apache2.4
-   #Order allow,deny #Apache 2.2 
-   #Allow from all #Apache 2.2
-</Directory>
-
-Bower puede dar problemas al intentar resolver dependencias por protocolo git
+Bower puede dar problemas al intentar resolver dependencias por protocolo git, dando un mensaje similar a éste:
 ```
 ECMDERR Failed to execute "git ls-remote --tags --heads git://github.com/dojo/dojo.git", exit code of #128 fatal: unable to connect to github.com: github.com[0: 192.30.252.129]: errno=Expiró el tiempo de conexión
 ```
@@ -244,8 +205,3 @@ La solución es usar https:// el lugar de git://
 git config --global url."https://".insteadOf git://
 ```
 
-
-
-
-
-```
