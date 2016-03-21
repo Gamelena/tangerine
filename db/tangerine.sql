@@ -1,4 +1,4 @@
-USE `admportal`;
+USE 'tangerine';
 
 -- phpMyAdmin SQL Dump
 -- version 4.0.5

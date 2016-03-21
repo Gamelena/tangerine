@@ -30,7 +30,7 @@
 		value="${basedir}/vendor/bin/phpunit"/> -->
 
 	<target name="install"
-		depends="prepare,composer,bower,generator-start"
+		depends="prepare,composer,bower,generator-start,zend-test-patch"
 		description="Install the local dependencies of tangerine, after this you must call the tasks 'alias' and 'global-testing-deps' as superuser" />
 	
 	<target name="full-build"
