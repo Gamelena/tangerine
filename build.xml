@@ -2,7 +2,7 @@
 <project name="name-of-project" default="full-build">
 	<!-- By default, we assume all tools to be on the $PATH -->
 	<property name="db.username" value="root"/>
-	<property name="db.password" value="gamelena"/>
+	<property name="db.password" value=""/>
 	
 	<property name="pdepend" value="pdepend" />
 	<property name="phpcpd" value="phpcpd" />
