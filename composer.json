@@ -13,9 +13,9 @@
 		"phpoffice/phpexcel": "1.8.*"
 	},
 	"suggest": {
-		"ext-gd": "to use GD library based image processing.",
-		"ext-imagick": "to use Imagick based image processing.",
-		"ext-xsl": "to generate phpDoc documentation."
+		"ext-imagick": "to use Imagick based image processing (or ext-gd).",
+		"ext-xsl" : "to generate phpDoc documentation.",
+		"ext-xdebug" : "to generate xdebug documentation."
 	},
 	"require-dev": {
 		"phpunit/phpunit": "3.7.*"
