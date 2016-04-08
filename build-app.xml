@@ -120,6 +120,8 @@
 		<mkdir dir="${basedir}/web/tests/phpdox" />
 		<mkdir dir="${basedir}/web/tests/ci" />
 		<mkdir dir="${basedir}/web/tests/ci/codeCoverage" />
+		<mkdir dir="${basedir}/web/log" />
+		<mkdir dir="${basedir}/web/cache" />
 		<property name="prepare.done" value="true" />
 	</target>
 
