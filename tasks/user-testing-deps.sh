@@ -5,3 +5,4 @@ composer global require 'phpmd/phpmd=*'
 composer global require 'phpdocumentor/phpdocumentor:2.*'
 composer global require 'sebastian/phpcpd=*'
 
+
