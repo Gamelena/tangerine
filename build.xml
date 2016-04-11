@@ -31,7 +31,7 @@
 
 	<target name="install"
 		depends="prepare,composer,bower,generator-start,zend-test-patch"
-		description="Install the local dependencies of tangerine, after this you must call the tasks 'alias' and 'global-testing-deps' as superuser" />
+		description="Install the local dependencies of tangerine, after this you must call the tasks 'alias' and 'user-testing-deps' or 'global-testing-deps' as superuser" />
 	
 	<target name="full-build"
 		depends="prepare,database,composer,static-analysis,phpdox"
@@ -114,8 +114,13 @@
 		</condition>
 	</target>
 	
-	<target name="global-testing-deps" description="Install global dependencies for php cli">
+	<target name="global-testing-deps" description="Install global dependencies for php cli with phar">
 		<exec dir="${basedir}/tasks"  executable="./global-testing-deps.sh" failonerror="true">
+		</exec>
+	</target>
+	
+	<target name="user-testing-deps" description="Install user dependencies for php cli with composer">
+		<exec dir="${basedir}/tasks"  executable="./user-testing-deps.sh" failonerror="true">
 		</exec>
 	</target>
 
