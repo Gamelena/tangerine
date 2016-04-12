@@ -2,7 +2,7 @@
 <project name="name-of-project" default="full-build">
 	<!-- By default, we assume all tools to be on the $PATH -->
 	<property name="db.username" value="root"/>
-	<property name="db.password" value=""/>
+	<property name="db.password" value="gamelena"/>
 	
 	<property name="pdepend" value="pdepend" />
 	<property name="phpcpd" value="phpcpd" />
@@ -31,7 +31,7 @@
 
 	<target name="install"
 		depends="prepare,composer,bower,generator-start,zend-test-patch"
-		description="Install the local dependencies of tangerine, after this you must call the tasks 'vhost' and 'global-testing-deps' as superuser" />
+		description="Install the local dependencies of tangerine, after this you must call the tasks 'alias' and 'global-testing-deps' as superuser" />
 	
 	<target name="full-build"
 		depends="prepare,database,composer,static-analysis,phpdox"
