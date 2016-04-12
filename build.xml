@@ -36,6 +36,10 @@
 	<target name="full-build"
 		depends="prepare,database,composer,static-analysis,phpdox"
 		description="Performs static analysis, runs the tests, and generates project documentation" />
+	
+	<target name="quick-build-test"
+			depends="prepare,database,composer,quick-static-analysis"
+			description="Performs static analysis, runs the tests, and generates project documentation" />
 
 	<target name="full-build-parallel"
 		depends="prepare,static-analysis-parallel,phpdox"
@@ -44,6 +48,11 @@
 	<target name="quick-build" depends="prepare,database,composer"
 		description="Performs a lint check and runs the tests (without generating code coverage reports)" />
 
+	<target name="quick-static-analysis"
+			depends="lint,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci"
+			description="Performs static analysis" />
+
+	
 	<target name="static-analysis"
 		depends="lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci"
 		description="Performs static analysis" />
