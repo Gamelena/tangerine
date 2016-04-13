@@ -1,6 +1,4 @@
-README
-======
-
+[![Build Status](https://travis-ci.org/Gamelena/tangerine.svg?branch=master)](https://travis-ci.org/Gamelena/tangerine)
 Requerimientos Básicos
 
 - PHP Version >= 5.4
@@ -8,54 +6,41 @@ Requerimientos Básicos
 - MYSQL Version >= 5
 
 
-INSTALACION DE DEPENDENCIAS
-===========================
+DEPENDENCIAS
+============
 
 1. Composer
-	Automatiza la instalación y configuración las dependencias del lado servidor
-	```
+```
 	curl -sS https://getcomposer.org/installer | php -- 
 	mv composer.phar /usr/local/bin/composer
-	```
-    Ahora tenemos disponible el comando 'composer'
+```
 
 2. Bower
-    Bower es un paquete NPM, por lo que instalaremos Node.js y NPM
-	Automatiza la instalación y configuración las dependencias del lado cliente
-	```
+```
 	sudo apt-get install nodejs npm nodejs-legacy
 	sudo npm install bower -g
-	```
-	Ahora tenemos disponible el comando 'bower'
-3. Ant 
-	Se usa ant como herramienta de automatizacion de tareas tales como construcción y análisis estático del código.
-	```
+```
+3. Ant (optional)
+```
 	sudo apt-get install ant
-	sudo apt-get install nodejs npm nodejs-legacy
-	```
- 
-    Para hacer un full build del proyecto ejecutar, en la raiz del proyecto
-	```	
+```
+	for full build
+```	
 	ant install
-	```
-    
-    Para la creacion de los Alias de Apache necesarios, ejecutar como super usuario.
-        ```
-        ant alias
-        ```
+```
+	
+	for creation of apache vhost
+```
+	ant vhost
+```
 
-    Para ver el detalle de las tareas disponibles.
-	```
-	cat build.xml
-	``` 
+	Para ver el detalle de las tareas disponibles.
+```
+cat build.xml
+``` 
 
-Para evitar problemas de charset en los caracteres especiales en el despliegue web, se debe agregar 
-al archivo php.ini cargado por apache.
-    ```
-	default_charset = "UTF-8" 
-    ```
-CREACION DE MANTENEDORES
-========================
+MANTENEDORES
+============
 4. Moverse a una nueva carpeta y ejecutar 
 ```
 	tangerine-create 
