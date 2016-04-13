@@ -1,12 +1,14 @@
 [![Build Status](https://travis-ci.org/Gamelena/tangerine.svg?branch=master)](https://travis-ci.org/Gamelena/tangerine)
+
 Requerimientos Básicos
+======================
 
 - PHP Version >= 5.4
 
 - MYSQL Version >= 5
 
 
-DEPENDENCIAS
+Dependencias
 ============
 
 1. Composer
