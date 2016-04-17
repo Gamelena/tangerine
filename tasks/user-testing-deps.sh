@@ -5,6 +5,6 @@ composer global require 'phpmd/phpmd=*'
 composer global require 'phpdocumentor/phpdocumentor:2.*'
 composer global require 'sebastian/phpcpd=*'
 cd ..
-export PATH="./vendor/bin:.:$PATH"
+export PATH="$HOME/vendor/bin:.:$PATH"
 cd -
 

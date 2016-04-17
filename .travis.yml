@@ -8,7 +8,7 @@ php:
 before_script:
   ant user-testing-deps -v
 script:
-  ant quick-build -v
+  ant -v
 branches:
   only:
     - master
