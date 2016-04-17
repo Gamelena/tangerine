@@ -69,8 +69,7 @@ else
 <Directory \"$TANGERINEPATH/bower_components\">
 	Options Indexes FollowSymLinks
 	AllowOverride None
-	Require all granted
-   	$grant
+	$grant
 </Directory>" > $ALIAS_FILE
 	fi
 	echo "\nTerminado\nPara ver los cambios reinicie apache\nservice $APACHE_SERVICE restart\n"
