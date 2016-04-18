@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Gamelena/tangerine.svg?branch=master)](https://travis-ci.org/Gamelena/tangerine)
+[![Build Status](https://travis-ci.org/Gamelena/tangerine.svg?branch=develop)](https://travis-ci.org/Gamelena/tangerine)
 
 Requerimientos Básicos
 ======================
