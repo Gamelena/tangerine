@@ -22,10 +22,12 @@ Dependencias
 	sudo apt-get install nodejs npm nodejs-legacy
 	sudo npm install bower -g
 ```
+
 3. Ant (optional)
 ```
 	sudo apt-get install ant
 ```
+
 	for full build
 ```	
 	ant install
@@ -43,6 +45,7 @@ cat build.xml
 
 MANTENEDORES
 ============
+
 4. Moverse a una nueva carpeta y ejecutar 
 ```
 	tangerine-create 
