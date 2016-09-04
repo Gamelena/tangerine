@@ -251,7 +251,7 @@ class Zwei_Admin_Acl extends Zend_Acl
      */
     public function listGrantedResourcesByParentId($parentId)
     {
-        $select = $this->_db->select()->distinct();
+        $select = $this->_db->select();
         $groups = $this->_userInfo->groups;
         $fields = array(
             'id',
