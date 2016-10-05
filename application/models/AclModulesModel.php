@@ -118,6 +118,7 @@ class AclModulesModel extends DbTable_AclModules
     
     /**
      * Se separa entre datos de modulo y datos de acciones asociadas.
+     * Es decir tabla principal y tablas relacionadas.
      * 
      * @param  array
      * @return array
