@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/Gamelena/tangerine.svg?branch=master)](https://travis-ci.org/Gamelena/tangerine)
 
-Requerimientos Básicos
+Requeriments
 ======================
 
 - PHP Version >= 5.4
@@ -28,25 +28,22 @@ Dependencias
 	sudo apt-get install ant
 ```
 
-	for full build
+for full build
+	
 ```	
 	ant install
 ```
 	
-	for creation of apache vhost
+for creation of apache vhost
 ```
 	ant vhost
 ```
 
-	Para ver el detalle de las tareas disponibles.
-```
-cat build.xml
-``` 
 
-MANTENEDORES
+CRUD CREATION
 ============
 
-4. Moverse a una nueva carpeta y ejecutar 
+4. Run
 ```
 	tangerine-create 
 ```
@@ -78,22 +75,10 @@ Después se podrán escoger las opciones:
 
 
 
-TIP: para agregar nuevos módulos ZF ejecutar dentro del proyecto
-$ zf create module {módulo} 
-
-Los componentes deben ser creados con el comando "zf" para la generación automatica de tests
-ver
-
- - zf create module  ?
- - zf create controller ?
- - zf create model ?
- - zf create db-table ?
- - zf create form ?
-
 
 TESTING
 =======
-Se requieren las librerías 
+Requirements
 - PHPUnit
 - PHP_CodeSniffer
 - PHPLOC
@@ -101,7 +86,8 @@ Se requieren las librerías
 - PHPMD
 - PHPCPD
 - phpDox
-Las cuales también son usadas por Jenkins para integración continua y pueden ser instaladas con ant
+
+For resolve all dependencies above
 ```
 ant global-testing-deps
 ```
