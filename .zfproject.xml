@@ -36,6 +36,9 @@
         <controllerFile controllerName="Schedule">
           <actionMethod actionName="index"/>
         </controllerFile>
+        <controllerFile controllerName="Api">
+          <actionMethod actionName="index"/>
+        </controllerFile>
       </controllersDirectory>
       <formsDirectory enabled="false"/>
       <layoutsDirectory enabled="false"/>
@@ -322,12 +325,9 @@
               <viewControllerScriptsDirectory forControllerName="DijitFormHorizontalSlider">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
-<<<<<<< HEAD
-=======
               <viewControllerScriptsDirectory forControllerName="ZweiFormDateTimeTextBox">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
             <viewFiltersDirectory/>
@@ -382,6 +382,9 @@
             <viewScriptFile forActionName="getUserInfo"/>
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Schedule">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Api">
             <viewScriptFile forActionName="index"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
