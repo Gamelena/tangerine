@@ -8,7 +8,7 @@
 		"ext-libxml": "*",
 		"ext-mbstring": "*",
 		"ext-dom": "*",
-		"ext-mysql": "*",
+		"ext-mysqli": "*",
 		"zendframework/zendframework1": "~1.12",
 		"phpoffice/phpexcel": "1.8.*"
 	},
@@ -20,7 +20,7 @@
 	"require-dev": {
 		"phpunit/phpunit": "3.7.*",
 		"squizlabs/php_codesniffer" : "*",
-		"phploc/phploc" : "dev-master",
+		"phploc/phploc" : "3.0.*",
 		"pdepend/pdepend" :"*",
 		"phpmd/phpmd" : "*",
 		"phpdocumentor/phpdocumentor" : "2.*",
