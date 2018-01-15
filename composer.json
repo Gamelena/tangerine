@@ -18,13 +18,7 @@
 		"ext-xsl": "to generate phpDoc documentation."
 	},
 	"require-dev": {
-		"phpunit/phpunit": "3.7.*",
-		"squizlabs/php_codesniffer" : "*",
-		"phploc/phploc" : "3.0.*",
-		"pdepend/pdepend" :"*",
-		"phpmd/phpmd" : "*",
-		"phpdocumentor/phpdocumentor" : "2.*",
-		"sebastian/phpcpd" : "*"
+		"phpunit/phpunit": "3.7.*"
 	},
 	"authors": [
 		{
