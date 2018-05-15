@@ -39,7 +39,7 @@ class Helpers_ManyToManyCrud
      * 
      * @param string          $idNameFrom
      * @param string          $idNameTo
-     * @param Zwei_Db_Table[] $modelsMap  - ('FieldName' => new Zwei_Db_Table()) 
+     * @param Gamelena_Db_Table[] $modelsMap  - ('FieldName' => new Gamelena_Db_Table()) 
      * @return void
      */
     public function __construct($idNameFrom, $idNameTo, $modelsMap)
@@ -57,7 +57,7 @@ class Helpers_ManyToManyCrud
     /**
      * @param array $data
      * @return array
-     * @see Zwei_Db_Table::cleanDataParams()
+     * @see Gamelena_Db_Table::cleanDataParams()
      */
     public function cleanDataParams(array $data)
     {
@@ -79,7 +79,7 @@ class Helpers_ManyToManyCrud
         if ($data instanceof Zend_Db_Table_Row) { $data = $data->toArray(); 
         }
         /**
-         * @var $model Zwei_Db_Table
+         * @var $model Gamelena_Db_Table
         */
         foreach ($this->_modelsMap as $index => $model) {
             $ad = $model->getAdapter();
@@ -117,7 +117,7 @@ class Helpers_ManyToManyCrud
     
     /**
      *
-     * @param Zwei_Db_Table $model
+     * @param Gamelena_Db_Table $model
      * @param string        $idFrom
      * @param array         $data
      * @return boolean

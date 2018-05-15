@@ -31,12 +31,12 @@ foreach ($this->groups as $group) :
         <script type="dojo/method" event="onSubmit">
         if (this.validate()) {
             <?=$this->onSubmit?>
-            var form = new zwei.Form({dijitForm:this, iframe: dojo.byId('ifrm_process')});
+            var form = new gamelena.Form({dijitForm:this, iframe: dojo.byId('ifrm_process')});
             form.save();
             var observer = form.watch("response", function(name, oldValue, response) {
                 if (response != null) {
                     dijit.byId('mainTabModule' + globalModuleId).refresh();
-                    admportal.loadLayoutSettings();
+                    tangerine.loadLayoutSettings();
                 }
             });
             return false;

@@ -65,7 +65,7 @@ class Components_DojoChartController extends Zend_Controller_Action
     /**
      * Objeto XML
      * 
-     * @var Zwei_Admin_Xml
+     * @var Gamelena_Admin_Xml
      */
     private $_xml = null;
 
@@ -75,9 +75,9 @@ class Components_DojoChartController extends Zend_Controller_Action
         
         $this->_page = $this->_request->getParam('p');
         $this->view->component = $this->_page;
-        $this->view->domPrefix = Zwei_Utils_String::toVarWord($this->_page);
-        $file = Zwei_Admin_Xml::getFullPath($this->_page);
-        $this->_xml = new Zwei_Admin_Xml($file, 0, true);
+        $this->view->domPrefix = Gamelena_Utils_String::toVarWord($this->_page);
+        $file = Gamelena_Admin_Xml::getFullPath($this->_page);
+        $this->_xml = new Gamelena_Admin_Xml($file, 0, true);
         
         $this->view->dojoStyle = $this->_dojo_style;
         $this->view->baseDojo = $this->_base_dojo_folder;
@@ -179,7 +179,7 @@ class Components_DojoChartController extends Zend_Controller_Action
     {
         /**
          *
-         * @var $model Zwei_Db_Table
+         * @var $model Gamelena_Db_Table
          */
         $model = new $this->view->model();
         
@@ -208,11 +208,11 @@ class Components_DojoChartController extends Zend_Controller_Action
         }
         
         $select = $model->select();
-        $dbObject = new Zwei_Db_Object($this->getRequest()->getParams());
+        $dbObject = new Gamelena_Db_Object($this->getRequest()->getParams());
         $select = $dbObject->select();
         
         $collection = $model->fetchAll($select);
-        $table = new Zwei_Utils_Table();
+        $table = new Gamelena_Utils_Table();
         
         $content = $table->rowsetToCsv($collection, $labels);
         $this->view->content = chr(255) . chr(254) .

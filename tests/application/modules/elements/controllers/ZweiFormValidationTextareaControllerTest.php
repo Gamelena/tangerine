@@ -1,6 +1,6 @@
 <?php
 
-class Elements_ZweiFormValidationTextareaControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
+class Elements_GamelenaFormValidationTextareaControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
 
     public function setUp()
@@ -11,7 +11,7 @@ class Elements_ZweiFormValidationTextareaControllerTest extends Zend_Test_PHPUni
 
     public function testIndexAction()
     {
-        $params = array('action' => 'index', 'controller' => 'ZweiFormValidationTextarea', 'module' => 'elements');
+        $params = array('action' => 'index', 'controller' => 'GamelenaFormValidationTextarea', 'module' => 'elements');
         $urlParams = $this->urlizeOptions($params);
         $url = $this->url($urlParams);
         $this->dispatch($url);

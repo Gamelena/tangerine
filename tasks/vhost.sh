@@ -38,7 +38,7 @@ else
 		cp $APACHE_CONF $APACHE_CONF.$DATE
 
 		echo "Se intentará agregar la directiva Include vhosts/*.conf en $APACHE_CONF"
-		echo "# Generado por AdmPortal" >> $APACHE_CONF
+		echo "# Generado por Tangerine" >> $APACHE_CONF
 		echo "Include vhosts/*.conf\n" >> $APACHE_CONF
 	fi
 

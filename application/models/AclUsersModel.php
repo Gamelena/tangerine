@@ -3,7 +3,7 @@
 /**
  * Modelo de datos para usuarios.
  *
- * @category Zwei
+ * @category Gamelena
  * @package  Models
  * @version  $Id:$
  * @since    0.1
@@ -64,7 +64,7 @@ class AclUsersModel extends DbTable_AclUsers
      * @param string $where
      * @return boolean
      * 
-     * @see Zwei_Db_Table::delete()
+     * @see Gamelena_Db_Table::delete()
      */
     public function delete($where)
     {
@@ -135,7 +135,7 @@ class AclUsersModel extends DbTable_AclUsers
      * @param  string $where
      * @return boolean
      * 
-     * @see Zwei_Db_TableLoggeable::update()
+     * @see Gamelena_Db_TableLoggeable::update()
      */
     public function update(array $data, $where)
     {
@@ -168,7 +168,7 @@ class AclUsersModel extends DbTable_AclUsers
         
         //Limpiar cache
         foreach ($tagsSufix as $sufix) {
-            $cache = new Zwei_Controller_Plugin_Cache(Zwei_Controller_Config::getOptions());
+            $cache = new Gamelena_Controller_Plugin_Cache(Gamelena_Controller_Config::getOptions());
             $cleaned = $cache->cleanByTags(array("userid{$sufix}"));
         }
         

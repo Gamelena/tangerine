@@ -19,7 +19,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
 <?php 
     if (!$this->multiForm) :
 ?>
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 component: '<?=$this->component?>',
                 ajax: <?=$this->ajax ?>,
                 action: 'add',
@@ -32,7 +32,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
 <?php 
     else :
 ?>
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 component: '<?=$this->component?>',
                 prefix: '<?=$this->domPrefix?>',
                 ajax: <?=$this->ajax ?>,
@@ -64,7 +64,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
 <?php 
     if (!$this->multiForm) :
 ?>
-                var form = new zwei.Form({
+                var form = new gamelena.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
                     action: 'edit',
@@ -77,7 +77,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
 <?php 
     else :
 ?>
-                var form = new zwei.Form({
+                var form = new gamelena.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
                     action: 'edit',
@@ -120,7 +120,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
 <?php 
     if (!$this->multiForm) :
 ?>
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 ajax: <?=$this->ajax ?>,
                 action: 'delete',
                 component: '<?=$this->component?>',
@@ -134,7 +134,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
 <?php 
     else :
 ?>
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 ajax: <?=$this->ajax ?>,
                 action: 'delete',
                 component: '<?=$this->component?>',
@@ -176,7 +176,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
 <?php 
     if (!$this->multiForm) :
 ?>
-                var form = new zwei.Form({
+                var form = new gamelena.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
                     action: 'clone',
@@ -188,7 +188,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
 <?php 
     else :
 ?>
-                var form = new zwei.Form({
+                var form = new gamelena.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
                     action: 'clone',
@@ -216,7 +216,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     label: "Cambiar Contraseña",
     iconClass: "dijitIconEdit",
     onClick : function(){
-        var form = new zwei.Form({
+        var form = new gamelena.Form({
             ajax: false,
             component: '<?=$this->component?>',
             action: 'edit',
@@ -244,7 +244,7 @@ endif;
 <?php 
 foreach ($this->customFunctions as $i => $f) :
     $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
-    $target = isset($f['target']) && !empty($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+    $target = isset($f['target']) && !empty($f['target']) ? "tangerine.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
     $disabled = isset($f['disabled']) && $f['disabled'] == 'true' ? 'true' : 'false';
 ?>
 if (dijit.byId('<?=$this->domPrefix?>MenuItem<?=$i?>')) dijit.byId('<?=$this->domPrefix?>MenuItem<?=$i?>').destroy(); 
@@ -263,7 +263,7 @@ endforeach;
 ?>
 <?php 
 foreach ($this->excel as $i => $f) :
-    $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->zweiExcelVersion;
+    $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->gamelenaExcelVersion;
     $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Descargar como Excel' ;
     $disabled = $f->getAttribute('disabled') || !$this->list ? 'true' : 'false';
 ?>
@@ -274,7 +274,7 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     iconClass: "<?=$f->getAttribute('iconClass') ? $f->getAttribute('iconClass') : 'dijitIconEdit'?>",
     disabled: <?=$disabled?>,
     onClick : function(){
-        var form = new zwei.Form({
+        var form = new gamelena.Form({
             dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
             dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 
             queryParams: 'format=excel&excel_formatter=<?=$formatter?>',
@@ -303,8 +303,8 @@ menu<?=$this->domPrefix?>.addChild(new dijit.MenuItem({
     iconClass: "<?=$f->getAttribute('iconClass') ? $f->getAttribute('iconClass') : 'dijitIconEdit'?>",
     disabled: <?=$disabled?>,
     onClick : function(){
-        dojo.require('zwei.Uploader');
-        var uploader = new zwei.Uploader({
+        dojo.require('gamelena.Uploader');
+        var uploader = new gamelena.Uploader({
             component: '<?=$this->component?>',
             url : <?=$url?>,
             dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 

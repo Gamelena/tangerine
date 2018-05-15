@@ -40,15 +40,15 @@ endif;
         this.resize();
     },*/
     onApplyCellEdit: function(inValue, inRowIndex, inFieldIndex) {
-        dojo.require('zwei.ExtraData');
-        var extradata = new zwei.ExtraData();
+        dojo.require('gamelena.ExtraData');
+        var extradata = new gamelena.ExtraData();
 
         extradata.model = '<?=$this->editableModel?>';
         extradata.applyEdit('<?=$this->model?>', inValue, this, <?=$this->idParentEditorName ? "'$this->idParentEditorName'" : 'null'?>);
     },
     onCellDblClick: function(e){
-        dojo.require('zwei.ExtraData');
-        var extradata = new zwei.ExtraData();
+        dojo.require('gamelena.ExtraData');
+        var extradata = new gamelena.ExtraData();
         extradata.edit(e, this)
     }">
  <thead>
@@ -67,7 +67,7 @@ endif;
    Agregar Variable
    <script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
              if (dijit.byId('<?=$this->domPrefix?>form_add')) dijit.byId('<?=$this->domPrefix?>form_add').destroyRecursive();
-             var form = new zwei.Form({
+             var form = new gamelena.Form({
                 ajax: true,
                 component: '<?=$this->component?>',
                 action: 'add',
@@ -86,8 +86,8 @@ endif;
    Remover variable
     <script type="dojo/method" data-dojo-event="onClick"
     data-dojo-args="evt">
-                dojo.require('zwei.ExtraData');
-                var extradata = new zwei.ExtraData();
+                dojo.require('gamelena.ExtraData');
+                var extradata = new gamelena.ExtraData();
                 extradata.idExtraDataName = '<?=$this->idExtraDataName?>';
                 extradata.idExtraDataValue = '<?=$this->idExtraDataValue?>';
                 extradata.removeVars('<?=$this->model?>', dijit.byId('<?=$this->domPrefix?>extraDataGrid_<?=$this->idExtraDataValue?>'));

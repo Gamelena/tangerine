@@ -110,14 +110,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         defined('TANGERINE_APPLICATION_PATH') ||
             define(
                 'TANGERINE_APPLICATION_PATH',
-                $this->_config->zwei->admportal->applicationPath
+                $this->_config->gamelena->tangerine->applicationPath
             );
         
         //Define ACL root role id
         defined('ROLES_ROOT_ID')
             || define(
                 'ROLES_ROOT_ID',
-                (isset($this->_config->zwei->roles->rootId) ? $this->_config->zwei->roles->rootId : '1' )
+                (isset($this->_config->gamelena->roles->rootId) ? $this->_config->gamelena->roles->rootId : '1' )
             );
     }
     
@@ -144,15 +144,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Run!
         $frontController = Zend_Controller_Front::getInstance();
         //Plugin Timeout de Sesión
-        $frontController->registerPlugin(new Zwei_Controller_Plugin_TimeOutHandler($this->_config));
+        $frontController->registerPlugin(new Gamelena_Controller_Plugin_TimeOutHandler($this->_config));
         
         //Plugin para usar multiples carpetas aplication sobreescribibles
-        $frontController->registerPlugin(new Zwei_Controller_Plugin_ApplicationPath());
+        $frontController->registerPlugin(new Gamelena_Controller_Plugin_ApplicationPath());
         
         //Plugin para cache de páginas
-        $frontController->registerPlugin(new Zwei_Controller_Plugin_Cache($this->_config));
+        $frontController->registerPlugin(new Gamelena_Controller_Plugin_Cache($this->_config));
         
-        Zwei_Db_Table::setDefaultLogMode($this->_config->zwei->db->table->logbook);
+        Gamelena_Db_Table::setDefaultLogMode($this->_config->gamelena->db->table->logbook);
         
         try {
             parent::run();

@@ -1,6 +1,6 @@
 <?php
 
-class Elements_ZweiFormFilteringJsonSelectControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
+class Elements_GamelenaFormFilteringJsonSelectControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
 
     public function setUp()
@@ -11,7 +11,7 @@ class Elements_ZweiFormFilteringJsonSelectControllerTest extends Zend_Test_PHPUn
 
     public function testIndexAction()
     {
-        $params = array('action' => 'index', 'controller' => 'ZweiFormFilteringJsonSelect', 'module' => 'elements');
+        $params = array('action' => 'index', 'controller' => 'GamelenaFormFilteringJsonSelect', 'module' => 'elements');
         $urlParams = $this->urlizeOptions($params);
         $url = $this->url($urlParams);
         $this->dispatch($url);

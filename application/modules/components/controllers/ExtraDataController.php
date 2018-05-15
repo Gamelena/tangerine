@@ -5,19 +5,19 @@ class Components_ExtraDataController extends Zend_Controller_Action
 
     /**
      *
-     * @var Zwei_Db_Table
+     * @var Gamelena_Db_Table
      */
     protected $_model = null;
     
     /**
      *
-     * @var Zwei_Admin_Acl
+     * @var Gamelena_Admin_Acl
      */
     protected $_acl = null;
     
     /**
      *
-     * @var Zwei_Admin_Xml
+     * @var Gamelena_Admin_Xml
      */
     protected $_xml = null;
     
@@ -30,8 +30,8 @@ class Components_ExtraDataController extends Zend_Controller_Action
     {
         $r = $this->getRequest();
         $component = $r->getParam('p');
-        $file = Zwei_Admin_Xml::getFullPath($component);
-        $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+        $file = Gamelena_Admin_Xml::getFullPath($component);
+        $this->_xml = new Gamelena_Admin_Xml($file, 0, 1);
         
         if ($this->_xml->getAttribute('target')) {
             $this->view->model = $this->view->editableModel = $this->_xml->getAttribute('target');
@@ -42,7 +42,7 @@ class Components_ExtraDataController extends Zend_Controller_Action
         
         $this->view->list = $this->_xml->getAttribute('list') === "true" ? true : false;
         $this->view->component = $component;
-        $this->view->domPrefix = Zwei_Utils_String::toVarWord($this->view->component);
+        $this->view->domPrefix = Gamelena_Utils_String::toVarWord($this->view->component);
         $this->view->extraDataParams = array();
         $this->view->idParentEditorName = null;
         
@@ -54,7 +54,7 @@ class Components_ExtraDataController extends Zend_Controller_Action
             $this->view->idExtraDataValue = $s['value'] ? $s['value'] : '0';
         }
         
-        $this->_acl = new Zwei_Admin_Acl();
+        $this->_acl = new Gamelena_Admin_Acl();
     }
 
     /**

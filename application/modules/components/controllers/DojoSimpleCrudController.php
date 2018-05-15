@@ -35,7 +35,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     /**
      * Objecto XML
-     * @var Zwei_Admin_Xml
+     * @var Gamelena_Admin_Xml
      */
     private $_xml = null;
 
@@ -58,13 +58,13 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
 
     /**
      * Control de acceso a recursos.
-     * @var Zwei_Admin_Acl
+     * @var Gamelena_Admin_Acl
      */
     private $_acl = null;
 
     /**
      * Modelo sobre el cual se opera.
-     * @var Zwei_Db_Table
+     * @var Gamelena_Db_Table
      */
     private $_model = null;
 
@@ -80,26 +80,26 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      */
     public function init()
     {
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+        if (!Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_redirect('admin/login');
         }
-        $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
+        $this->_acl = new Gamelena_Admin_Acl(Zend_Auth::getInstance());
         
-        $this->_config = Zwei_Controller_Config::getOptions();
-        $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : '';
-        $this->view->menus = $this->_config->zwei->layout->menus;
-        $this->view->zweiExcelVersion = $this->_config->zwei->excel->version ? $this->_config->zwei->excel->version : 'csv';
+        $this->_config = Gamelena_Controller_Config::getOptions();
+        $this->view->noCache = isset($this->_config->gamelena->resources) ? $this->_config->gamelena->resources->noCache : '';
+        $this->view->menus = $this->_config->gamelena->layout->menus;
+        $this->view->gamelenaExcelVersion = $this->_config->gamelena->excel->version ? $this->_config->gamelena->excel->version : 'csv';
         
         if ($this->getRequest()->getParam('p')) {
-            $file = Zwei_Admin_Xml::getFullPath($this->getRequest()->getParam('p'));
-            $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+            $file = Gamelena_Admin_Xml::getFullPath($this->getRequest()->getParam('p'));
+            $this->_xml = new Gamelena_Admin_Xml($file, 0, 1);
             $this->_component = $this->getRequest()->getParam('p');
             $this->_aclComponent = $this->_xml->getAttribute('aclComponent') ? $this->_xml->getAttribute('aclComponent') : $this->_component;
             $this->view->aclComponent = $this->_aclComponent;
         }
         
-        $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
-        $this->view->domPrefix = isset($this->view->mainPane) && $this->view->mainPane == 'dijitTabs' ? Zwei_Utils_String::toVarWord($this->getRequest()->getParam('p')) : '';
+        $this->view->mainPane = isset($this->_config->gamelena->layout->mainPane) ? $this->_config->gamelena->layout->mainPane : 'undefined';
+        $this->view->domPrefix = isset($this->view->mainPane) && $this->view->mainPane == 'dijitTabs' ? Gamelena_Utils_String::toVarWord($this->getRequest()->getParam('p')) : '';
         
         if ($this->_acl->userHasRoleAllowed($this->_aclComponent, 'EDIT')) {
             $this->view->validateGroupEdit = false;
@@ -169,8 +169,8 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
     public function searchAction()
     {
         $this->view->p = $this->_component;
-        $userAgent = new Zwei_UserAgent();
-        $this->view->isInternetExplorer = $userAgent->getBrowser() === Zwei_UserAgent::BROWSER_IE;
+        $userAgent = new Gamelena_UserAgent();
+        $this->view->isInternetExplorer = $userAgent->getBrowser() === Gamelena_UserAgent::BROWSER_IE;
         $this->view->model = $this->_xml->getAttribute('target');
         $this->view->hide = '';
         if (isset($this->_xml->searchers)) {
@@ -191,7 +191,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                 $excel = $this->_xml->xpath("//component/helpers/excel");
                 $myExcel = $excel ? $excel : array();
                 foreach ($myExcel as $i => $f) {
-                    $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->view->zweiExcelVersion;
+                    $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->view->gamelenaExcelVersion;
                     if ($this->view->menu = 'keypad' || $this->view->menu = 'both') {
                         $this->view->enableActions = "dijit.byId('{$this->view->domPrefix}MenuExcel{$formatter}').set('disabled', false);";
                     }
@@ -248,7 +248,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                     }
                     $select->where($a->quoteInto($a->quoteIdentifier($i). " = ?", $v));
                 }
-                if (method_exists($select, '__toString')) { Zwei_Utils_Debug::writeBySettings($select->__toString(), "query_log"); 
+                if (method_exists($select, '__toString')) { Gamelena_Utils_Debug::writeBySettings($select->__toString(), "query_log"); 
                 }
                 $data = $this->_model->fetchRow($select);
                 if ($this->view->multiForm) {
@@ -256,10 +256,10 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                     foreach ($this->_model->info('primary') as $primary) {
                         $this->view->dialogIndex .= $data[$primary];
                     }
-                    $this->view->dialogIndex = Zwei_Utils_String::toVarWord($this->view->dialogIndex);
+                    $this->view->dialogIndex = Gamelena_Utils_String::toVarWord($this->view->dialogIndex);
                 }
                 
-                //Es posible añadir más valores al retorno de la query principal sobrecargando este Zwei_Db_Table::overloadDataForm.
+                //Es posible añadir más valores al retorno de la query principal sobrecargando este Gamelena_Db_Table::overloadDataForm.
                 $this->view->data = $data;
                 if (method_exists($this->_model, 'overloadDataForm')) { $this->view->data = $this->_model->overloadDataForm($data); 
                 }
@@ -309,7 +309,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $this->view->customFunctions = array();
         /**
-         * @var $function Zwei_Admin_Xml
+         * @var $function Gamelena_Admin_Xml
          */
         foreach ($customFunctions as $function) {
             $action = $function->getAttribute('aclAction') ? $function->getAttribute('aclAction') : 'EDIT';
@@ -324,7 +324,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         if (count($filterUploaders)) {
             
             /**
-             * @var $uploader Zwei_Admin_Xml
+             * @var $uploader Gamelena_Admin_Xml
              */
             foreach ($filterUploaders as $i => $uploader) {
                 $uploaderAction = $uploader->getAttribute('action') ? $uploader->getAttribute('action') : null;
@@ -412,7 +412,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
      */
     public function listAction()
     {
-        $userAgent = new Zwei_UserAgent();
+        $userAgent = new Gamelena_UserAgent();
         $this->view->p = $this->_component;
         $this->view->model = $this->_xml->getAttribute('target');
         $primary = $this->_model->info(Zend_Db_Table::PRIMARY);
@@ -426,7 +426,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
         
         $this->view->dataDojoType = $this->_xml->getAttribute('serverPagination') === "true" ? 'dojox/data/QueryReadStore' : 'dojo/data/ItemFileReadStore';
         $this->view->gridDojoType = $this->_xml->getAttribute('gridDojoType') ? $this->_xml->getAttribute('gridDojoType') : 'dojox/grid/EnhancedGrid';
-        $menus = in_array($this->_config->zwei->layout->menus, array('contextMenu', 'both')) ? "menus:{selectedRegionMenu: menu{$this->view->domPrefix}}," : '';
+        $menus = in_array($this->_config->gamelena->layout->menus, array('contextMenu', 'both')) ? "menus:{selectedRegionMenu: menu{$this->view->domPrefix}}," : '';
         
         $pagination = !$userAgent->isMobile() && $this->_xml->getAttribute('serverPagination') === "true" ? "pagination: {defaultPageSize:25, maxPageStep: 5, id: '{$this->view->domPrefix}gridPaginator', style: {position: 'relative'}}" : '';
         
@@ -486,7 +486,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
             if (!$this->view->validateGroupEdit) {
                 if ($this->view->multiForm) {
                     $this->view->onRowDblClick = "
-                        var form = new zwei.Form({
+                        var form = new gamelena.Form({
                             ajax: $ajax,
                             component: '{$this->_component}',
                             action: 'edit',
@@ -500,7 +500,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                         ";
                 } else {
                     $this->view->onRowDblClick = "
-                        var form = new zwei.Form({
+                        var form = new gamelena.Form({
                             ajax: $ajax,
                             component: '{$this->_component}',
                             action: 'edit',
@@ -517,7 +517,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                         var items = this.selection.getSelected();
                         if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
                         if (items[0].admPortalIsAllowedEDIT=='1') {
-                            var form = new zwei.Form({
+                            var form = new gamelena.Form({
                                 ajax: $ajax,
                                 component: '{$this->_component}',
                                 action: 'edit',
@@ -535,7 +535,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                         var items = this.selection.getSelected();
                         if (items[0].i != undefined && items[0].r._items != undefined) items[0] = items[0].i;//workaround, a Dojo bug?
                         if (items[0].admPortalIsAllowedEDIT=='1') {
-                            var form = new zwei.Form({
+                            var form = new gamelena.Form({
                                 ajax: $ajax,
                                 component: '{$this->_component}',
                                 action: 'edit',
@@ -640,7 +640,7 @@ class Components_DojoSimpleCrudController extends Zend_Controller_Action
                     'size' => '0'
                 );
                 
-                $uploader = new Zwei_Utils_File_Uploader($this->_xml);
+                $uploader = new Gamelena_Utils_File_Uploader($this->_xml);
                 
                 if ($r->getParam('truncate') === 'true' && $this->_acl->isUserAllowed($this->_component, 'DELETE')) {
                     $uploader->truncate();

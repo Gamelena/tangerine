@@ -8,7 +8,7 @@ else
 	cp $FILENAME $FILENAME.$DATE
 
 	echo "Se intentará agregar las variables de entorno en $FILENAME"
-	echo "# Generado por Admportal" >> $FILENAME
+	echo "# Generado por Tangerine" >> $FILENAME
 	echo "export TANGERINE_PATH=$TANGERINE_PATH"  >> $FILENAME
 	echo "export PATH=\$PATH:\$TANGERINE_PATH/bin"  >> $FILENAME
 	echo "export APPLICATION_ENV=development" >> $FILENAME
@@ -26,7 +26,7 @@ else
 	cp $ZF_PATH/bin/zf.sh  $ZF_PATH/bin/zf
 	
 	echo "Se intentará agregar las variables de entorno en $FILENAME"
-	echo "# Generado por Admportal" >> $FILENAME
+	echo "# Generado por Tangerine" >> $FILENAME
 	echo "export PATH=\$PATH:$ZF_PATH/bin"  >> $FILENAME
 	bash
 fi

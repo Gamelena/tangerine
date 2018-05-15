@@ -49,14 +49,14 @@ class Components_GroupsModulesController extends Zend_Controller_Action
      */
     public function init()
     {
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) { $this->_redirect('admin/login'); 
+        if (!Gamelena_Admin_Auth::getInstance()->hasIdentity()) { $this->_redirect('admin/login'); 
         }
-        $this->_acl = new Zwei_Admin_Acl(Zend_Auth::getInstance());
+        $this->_acl = new Gamelena_Admin_Acl(Zend_Auth::getInstance());
         
         if ($this->getRequest()->getParam('p')) {
             $this->_component = $this->getRequest()->getParam('p');
-            $file = Zwei_Admin_Xml::getFullPath($this->_component);
-            $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+            $file = Gamelena_Admin_Xml::getFullPath($this->_component);
+            $this->_xml = new Gamelena_Admin_Xml($file, 0, 1);
         
             $aclModulesModel = new AclModulesModel();
             $this->_module = $aclModulesModel->findModule($this->_component);
@@ -93,7 +93,7 @@ class Components_GroupsModulesController extends Zend_Controller_Action
         $modulesModel = new DbTable_AclModules();
         $parent = $modulesModel->find($aclModulesId)->current();
         if (!$parent) {
-            throw new Zwei_Exception("No se ha encontrado un módulo con id $aclModulesId");
+            throw new Gamelena_Exception("No se ha encontrado un módulo con id $aclModulesId");
         }
         
         $modules[$i]['id'] = $parent->id;

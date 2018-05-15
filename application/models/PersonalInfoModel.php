@@ -3,13 +3,13 @@
 /**
  * Modelo de datos personales, requiere sesion ACL iniciada
  *
- * @category Zwei
+ * @category Gamelena
  * @package  Models
  * @version  $Id:$
  * @since    0.1
  */
 
-class PersonalInfoModel extends Zwei_Db_Table
+class PersonalInfoModel extends Gamelena_Db_Table
 {
     protected $_name = "acl_users";
     protected $_name_roles = "acl_roles";
@@ -40,7 +40,7 @@ class PersonalInfoModel extends Zwei_Db_Table
                 $this->setMessage('Nombre de Usuario en uso.');
                 return false;
             } else {
-                Zwei_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
+                Gamelena_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
             }
         }
         return $last_insert_id;
@@ -59,7 +59,7 @@ class PersonalInfoModel extends Zwei_Db_Table
                 $this->setMessage('Nombre de Usuario en uso.');
                 return false;
             } else {
-                Zwei_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
+                Gamelena_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
             }
         }
         return $update;

@@ -29,13 +29,13 @@
  ('url_logo_gamelena', '', 'images/logo_gamelena26x15.png', 'dojo_validation_textbox', '', 3, 'Admin', '', '1');
  </code>
  *
- * @category Zwei
+ * @category Gamelena
  * @package  Models
  * @version  $Id:$
  * @since    0.1
  */
 
-class SettingsModel extends Zwei_Db_Table
+class SettingsModel extends Gamelena_Db_Table
 {
     /**
      * Tabla principal.

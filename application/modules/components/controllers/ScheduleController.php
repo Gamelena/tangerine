@@ -1,13 +1,13 @@
 <?php
 /**
- * Clase candidata para franjas horarias genericas en Admportal
+ * Clase candidata para franjas horarias genericas en Tangerine
  * @author rodrigo
  */
 class Components_ScheduleController extends Zend_Controller_Action
 {
     /**
      *
-     * @var Zwei_Db_Table
+     * @var Gamelena_Db_Table
      */
     private $_model;
 

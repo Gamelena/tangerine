@@ -1,6 +1,6 @@
 <?php
 
-class DbTable_WebSettings extends Zwei_Db_Table
+class DbTable_WebSettings extends Gamelena_Db_Table
 {
 
     protected $_name = 'web_settings';
