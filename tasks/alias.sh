@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 if [ "$(id -u)" != "0" ]; then
 	echo "This script must be run as root or sudo" 1>&2
 	exit 1
@@ -6,7 +7,11 @@ else
 	unamestr=`uname`
 
 	if [[ "$unamestr" == 'Darwin' ]]; then
-		echo "Se instentara usar greadlink, de no estar disponible debe instalar el paquete coreutils"
+		echo -e "Detectado MAC OS.\n"
+	    if ! [ -x "$(command -v greadlink)" ]; then
+	    	echo "Comando 'greadlink' no disponible, por favor instale el paquete coreutils con brew ('brew install coreutils') o macports.\n"
+	    	exit 1;
+	    fi
     	TANGERINEPATH=`echo $(dirname $(greadlink -f $PWD))`
 	else
 		TANGERINEPATH=`echo $(dirname $(readlink -e $PWD))`
