@@ -1,6 +1,6 @@
 <?php
 
-class Elements_ZweiFormFilteringJsonSelectController extends Elements_BaseController
+class Elements_GamelenaFormFilteringJsonSelectController extends Elements_BaseController
 {
     public function indexAction()
     {

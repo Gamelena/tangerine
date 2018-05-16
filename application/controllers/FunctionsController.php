@@ -1,7 +1,7 @@
 <?php
 /**
  * Controlador de funciones genericas para Zend XML Admin
- * Permite invocar métodos de Zwei_Utils_CustomFunctions() por URL.
+ * Permite invocar métodos de Gamelena_Utils_CustomFunctions() por URL.
  * Para ser invocado mediante el atributo "functions" de los components xml del admin.
  * @package Controllers
  * @version $Id:$
@@ -12,7 +12,7 @@ class FunctionsController extends Zend_Controller_Action
     public function init()
     {
         $this->_helper->layout()->disableLayout();
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+        if (!Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_redirect('admin/login');
         }
         $this->_user_info = Zend_Auth::getInstance()->getStorage()->read();
@@ -20,10 +20,10 @@ class FunctionsController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $CustomFunctions = new Zwei_Utils_CustomFunctions();
-        $form = new Zwei_Utils_Form();
+        $CustomFunctions = new Gamelena_Utils_CustomFunctions();
+        $form = new Gamelena_Utils_Form();
         $string_params = $form->params;
-        $method = Zwei_Utils_String::toFunctionWord($form->method);
+        $method = Gamelena_Utils_String::toFunctionWord($form->method);
          
         if (isset($form->id)) {
             $CustomFunctions->setId($form->id);
@@ -56,7 +56,7 @@ class FunctionsController extends Zend_Controller_Action
                 $response = $CustomFunctions->$method($params[0], $params[1], $params[2], $params[3], $params[4]);
                 break;
             default:
-                Console::error("Núm. de parámetros excedido ($count_params) para Zwei_Utils_CustomFunctions::$method($string_params)");
+                Console::error("Núm. de parámetros excedido ($count_params) para Gamelena_Utils_CustomFunctions::$method($string_params)");
                 $response=false;
         }
         $this->view->content=$response;

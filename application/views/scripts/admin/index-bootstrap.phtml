@@ -29,8 +29,8 @@ endforeach;
 ?>
     <?=$this->dojo()?>
     <script type="text/javascript">
-    var utils = new zwei.Utils();
-    var admportal = new zwei.Admportal({noCache: '<?=$this->noCache?>'});
+    var utils = new gamelena.Utils();
+    var tangerine = new gamelena.Tangerine({noCache: '<?=$this->noCache?>'});
     // Create a Standby instance
     dojo.addOnLoad(function() {
         var appStandBy = new dojox.widget.Standby({
@@ -92,7 +92,7 @@ endif;
                     <div data-dojo-type="dijit/Menu" id="confMenu" style="display: none;">
                         <div data-dojo-type="dijit/MenuItem" id="btnConfPersonal"
                             iconClass="dijitIconTask"
-                            onclick="admportal.loadModuleTab('admin/components?p=personal-info.xml', '<?=uniqid() ?>', 'Datos Personales')">
+                            onclick="tangerine.loadModuleTab('admin/components?p=personal-info.xml', '<?=uniqid() ?>', 'Datos Personales')">
                         Personal</div>
                    </div>
                 </button>

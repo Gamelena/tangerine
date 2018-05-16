@@ -850,22 +850,22 @@ a.settingsTab {
     border-color: #5FAFB0;
 }
 
-/*Zwei Theme*/
+/*Gamelena Theme*/
 
-.zweiIconCsv {
+.gamelenaIconCsv {
 	background-image:  url('i/csv.png');
 	width: 16px;
     height: 16px;
 }
 
 
-.zweiIconUpload {
+.gamelenaIconUpload {
 	background-image:  url('i/upload.png');
 	width: 16px;
     height: 16px;
 }
 
-.zweiIconDownload {
+.gamelenaIconDownload {
 	background-image:  url('i/download.png');
 	width: 16px;
     height: 16px;

@@ -12,7 +12,7 @@ class EventsController extends Zend_Controller_Action
     {
         $this->view->response = array('status' => 'OK');
         
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+        if (!Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
             $this->view->response['status'] = 'AUTH_FAILED';
             $this->render();
         } else {
@@ -44,15 +44,15 @@ class EventsController extends Zend_Controller_Action
                 $username = $currentUser->user_name;
                 $password = $currentUser->password;
                 
-                $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter(false);
+                $authAdapter = Gamelena_Admin_Auth::getInstance()->getAuthAdapter(false);
                 $authAdapter->setIdentity($username)
                     ->setCredential($password);
 
                 $result = $auth->authenticate($authAdapter);
                 
                 if ($result->isValid()) {
-                    Zwei_Admin_Auth::initUserInfo($authAdapter);
-                    $acl = new Zwei_Admin_Acl();
+                    Gamelena_Admin_Auth::initUserInfo($authAdapter);
+                    $acl = new Gamelena_Admin_Acl();
                     $this->view->response['status'] = 'ROLE_HAS_CHANGED';
                 } else {
                     $this->view->response['status'] = 'AUTH_FAILED';
@@ -75,7 +75,7 @@ class EventsController extends Zend_Controller_Action
             $aclUsersId = $authInfo->id;
             
             if ($this->getRequest()->getParam('acl_users_id')) {
-                $acl = new Zwei_Admin_Acl();
+                $acl = new Gamelena_Admin_Acl();
                 if ($acl->isUserAllowed('users.xml', 'edit')) {
                     $aclUsersId = $this->getRequest()->getParam('acl_users_id');
                 }

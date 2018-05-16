@@ -12,7 +12,7 @@
             add="true"></element>
         <element name="Tipo" target="type"
             type="dijit-form-filtering-select"
-            list="dijit-form-check-box;dijit-form-combo-box;dijit-form-date-text-box;dijit-form-filtering-select;dijit-form-textarea;dijit-form-validation-text-box;dojox-form-checked-multi-select;dojox-form-checked-multi-select-binary;dojox-form-uploader;tiny-mce-zwei-form-validation-textarea"
+            list="dijit-form-check-box;dijit-form-combo-box;dijit-form-date-text-box;dijit-form-filtering-select;dijit-form-textarea;dijit-form-validation-text-box;dojox-form-checked-multi-select;dojox-form-checked-multi-select-binary;dojox-form-uploader;tiny-mce-gamelena-form-validation-textarea"
             edit="true" add="true" visible="true"></element>
         <element name="Valor" target="value"
             type="dijit-form-validation-text-box" edit="false" add="true"

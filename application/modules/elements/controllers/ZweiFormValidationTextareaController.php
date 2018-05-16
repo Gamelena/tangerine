@@ -1,6 +1,6 @@
 <?php
 
-class Elements_ZweiFormValidationTextareaController extends Elements_BaseController
+class Elements_GamelenaFormValidationTextareaController extends Elements_BaseController
 {
 
     public function indexAction()

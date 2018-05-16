@@ -1,6 +1,6 @@
 <?php
 
-class DbTable_LogBook extends Zwei_Db_Table
+class DbTable_LogBook extends Gamelena_Db_Table
 {
 
     protected $_name = 'log_book';

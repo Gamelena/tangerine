@@ -1,6 +1,6 @@
 <?php
 
-class Elements_ZweiFormDateTextBoxController extends Elements_BaseController
+class Elements_GamelenaFormDateTextBoxController extends Elements_BaseController
 {
     public function indexAction()
     {

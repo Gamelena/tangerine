@@ -10,7 +10,7 @@ class UploadsControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
             $_ENV['APPLICATION_CONFIG']
         );
         $options = $this->bootstrap->getOptions();
-        $_SERVER['HTTP_HOST'] = $options['zwei']['uTesting']['httpHost'];
+        $_SERVER['HTTP_HOST'] = $options['gamelena']['uTesting']['httpHost'];
         parent::setUp();
     }
 

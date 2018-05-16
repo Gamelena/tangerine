@@ -5,8 +5,8 @@
  * Para usarlo con XML debe estar adentro de un formulario que cargue datos vía ajax @forms.ajax="true".
  * No habilitado para cargar datos directamente de DataGrid ya que este no permite arrays dentro de un recordset como en este caso.
  *
- * @category   Zwei
- * @package    Zwei_Admin
+ * @category   Gamelena
+ * @package    Gamelena_Admin
  * @subpackage Elements
  * @version    $Id:$
  * @since      0.1
@@ -80,7 +80,7 @@ class Elements_DojoxFormCheckedMultiSelectController extends Elements_BaseContro
             $rows = $r->getParam('list') ? explode(",", $r->getParam('list')) : array();
             
             foreach ($rows as $row) {
-                //Zwei_Utils_Debug::write('$id='.$id.'$row='.$row.'$value='.$value);
+                //Gamelena_Utils_Debug::write('$id='.$id.'$row='.$row.'$value='.$value);
                 $selected = $row == $value ? "selected" : "";
                 $options .= "<option value=\"".$row."\" ".$selected." >$row</option>\r\n";
             }

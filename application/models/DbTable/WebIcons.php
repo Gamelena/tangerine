@@ -1,5 +1,5 @@
 <?php
-class DbTable_WebIcons extends Zwei_Db_Table
+class DbTable_WebIcons extends Gamelena_Db_Table
 {
     protected $_name = 'web_icons';
 

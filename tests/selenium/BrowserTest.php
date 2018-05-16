@@ -10,7 +10,7 @@ class BrowserTest extends PHPUnit_Extensions_Selenium2TestCase
         $options = $this->bootstrap->getBootstrap()->getOptions();
        
         defined('PHPUNIT_BASE_URL') 
-            || define('PHPUNIT_BASE_URL', $options['zwei']['uTesting']['httpHost']);
+            || define('PHPUNIT_BASE_URL', $options['gamelena']['uTesting']['httpHost']);
         
         $this->setBrowser('opera');
         $this->setBrowserUrl(PHPUNIT_BASE_URL);
@@ -18,7 +18,7 @@ class BrowserTest extends PHPUnit_Extensions_Selenium2TestCase
     
     public function initUserInfo()
     {
-        $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter();
+        $authAdapter = Gamelena_Admin_Auth::getInstance()->getAuthAdapter();
     
         $username = PHPUNIT_USERNAME;
         $password = PHPUNIT_PASSWORD;
@@ -30,7 +30,7 @@ class BrowserTest extends PHPUnit_Extensions_Selenium2TestCase
     
         if ($result->isValid())
         {
-            Zwei_Admin_Auth::initUserInfo($authAdapter);
+            Gamelena_Admin_Auth::initUserInfo($authAdapter);
         } else {
             echo "Usuario '$username' o Password '$password' incorrectos.";
         }

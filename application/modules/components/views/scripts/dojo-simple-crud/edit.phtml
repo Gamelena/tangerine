@@ -23,7 +23,7 @@ if (!$this->loadPartial) :
     if (count($this->tabs) > 1) :
         $tableWrapperClass = "settingsArea";
          /**
-         * @var Zwei_Admin_Xml $tab
+         * @var Gamelena_Admin_Xml $tab
          */
         foreach ($this->tabs as $tab) :
             //if ($tab->getAttribute($this->mode) !== 'false') :
@@ -31,7 +31,7 @@ if (!$this->loadPartial) :
             $activeClass =  $i == 0 ? "active" : "";
             $i++;
 ?>
-    <a id="<?=$this->domPrefix .'tab_'. $modAux .'_ctrl'. $i?><?=$this->dialogIndex?>" class="settingsTab <?=$activeClass?>" <?=$style ?> onclick="admportal.switchTabs('<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>', this.id, '<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>');<?=$tab->getAttribute('onClick')?>"><?=$tab->getAttribute('name') ?></a>
+    <a id="<?=$this->domPrefix .'tab_'. $modAux .'_ctrl'. $i?><?=$this->dialogIndex?>" class="settingsTab <?=$activeClass?>" <?=$style ?> onclick="tangerine.switchTabs('<?=$this->domPrefix?>form_<?=$modAux?><?=$this->dialogIndex?>', this.id, '<?=$this->domPrefix.'tab_'.$modAux.$i?><?=$this->dialogIndex?>');<?=$tab->getAttribute('onClick')?>"><?=$tab->getAttribute('name') ?></a>
 <?php 
             //endif;
         endforeach;
@@ -42,7 +42,7 @@ if (!$this->loadPartial) :
     $i=0;
     $j=0;
     /**
-    * @var $tab Zwei_Admin_Xml 
+    * @var $tab Gamelena_Admin_Xml 
     */
     foreach ($this->tabs as $tab) :
         $style = $i == 0 ? ' style="display:block"' : ' style="display:none"'; 
@@ -59,7 +59,7 @@ if (!$this->loadPartial) :
 <?php 
         $k = 0;
         /**
-         * @var $acl Zwei_Admin_Acl
+         * @var $acl Gamelena_Admin_Acl
          */
         $acl = $this->acl;
         /**
@@ -67,7 +67,7 @@ if (!$this->loadPartial) :
          */
         $elements = is_object($tab) ? $tab->xpath("element") : $tab;
         /**
-        * @var $element Zwei_Admin_Xml 
+        * @var $element Gamelena_Admin_Xml 
         */
         foreach ($elements as $element) :
             $j++;
@@ -93,7 +93,7 @@ if (!$this->loadPartial) :
                 $params['mode'] = $this->mode;
                 $params['i'] = $j;
                 if (!isset($params['type'])) {
-                    throw new Zwei_Exception("Nodo XML <element> debe tener atributo 'type'.");
+                    throw new Gamelena_Exception("Nodo XML <element> debe tener atributo 'type'.");
                 }
                 
                 $hidden = $params['type'] == 'hidden' ? ' style="display:none"' : '';
@@ -121,7 +121,7 @@ if (!$this->loadPartial) :
             $f = (array) $function->attributes();
             $f = $f['@attributes'];
             $onclick = isset($f['onclick']) ? $f['onclick'] . ';' : '';
-            $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+            $target = isset($f['target']) ? "tangerine.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
 ?>
             <div class="keyPadButton">
                 <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?><?=$modAux?>btnFormFunctionTab<?=$this->dialogIndex?><?=$num?>" onClick="<?=$onclick . $target?>">
@@ -160,7 +160,7 @@ endif;
 <?php 
 foreach ($this->customFunctions as $num => $f) :
         $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
-        $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+        $target = isset($f['target']) ? "tangerine.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
 ?>
         <div class="keyPadButton">
             <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?><?=$modAux?>btnFormFunction<?=$this->dialogIndex?><?=$num?>" onClick="<?=$onclick.$target?>">
@@ -175,7 +175,7 @@ endforeach;
     <script type="dojo/method" event="onSubmit">
     if (this.validate()) {
         try {
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 dijitForm: this, 
                 dijitDialog: dijit.byId('<?=$this->dijitDialogId?>'),
                 dijitDataGrid: dijit.byId('<?=$this->dijitDataGridId?>'),
@@ -183,21 +183,21 @@ endforeach;
                 iframe: dojo.byId('ifrm_process')
             });
             <?=$this->onSubmit ?>
-            admportal.lockScreen();
+            tangerine.lockScreen();
             var name, oldValue, response;
             var observer = form.watch("response", function(name, oldValue, response) {
                 if (response != null) {
                     <?=$this->onPostSubmit ?>
                     if (response.todo == 'goToLogin') window.location.href = base_url + 'admin/login';
-                    else if (response.todo == 'cargarArbolMenu') admportal.loadMainMenu();
+                    else if (response.todo == 'cargarArbolMenu') tangerine.loadMainMenu();
                     this.set("response", null);
-                    admportal.lockScreen(false);
+                    tangerine.lockScreen(false);
                 }
                 console.log('observer');
             });
             form.save();
         } catch (e) {
-            admportal.lockScreen(false);
+            tangerine.lockScreen(false);
             utils.showMessage(e.message, 'error');
         }
         return false;

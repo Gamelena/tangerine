@@ -59,7 +59,7 @@ endforeach;
         {
             utils.showMessage(data.message, (data.error == '0' ? 'message' : 'error'), '15000');
             if (data.error <= '1') {
-                var form = new zwei.Form({
+                var form = new gamelena.Form({
                     dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid'),
                     dijitFormSearch: dijit.byId('<?=$this->domPrefix?>formSearch'),
                     iframe: dojo.byId('ifrm_process')

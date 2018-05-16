@@ -12,7 +12,7 @@ class Components_DojoSettingsController extends Zend_Controller_Action
      *
      * @see SettingsModel
      *
-     * @var Zwei_Db_Table
+     * @var Gamelena_Db_Table
      */
     private $_model = null;
 
@@ -32,17 +32,17 @@ class Components_DojoSettingsController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();
         
-        $this->_config = Zwei_Controller_Config::getOptions();
+        $this->_config = Gamelena_Controller_Config::getOptions();
         
-        $file = Zwei_Admin_Xml::getFullPath($this->getRequest()->getParam('p'));
-        $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+        $file = Gamelena_Admin_Xml::getFullPath($this->getRequest()->getParam('p'));
+        $this->_xml = new Gamelena_Admin_Xml($file, 0, 1);
         $model = $this->_xml->getAttribute('target');
         $this->_model = new $model();
         
         $this->_model->xml = $this->_xml;
         
-        $this->view->mainPane = isset($this->_config->zwei->layout->mainPane) ? $this->_config->zwei->layout->mainPane : 'undefined';
-        $this->view->domPrefix = Zwei_Utils_String::toVarWord($this->getRequest()->getParam('p'));
+        $this->view->mainPane = isset($this->_config->gamelena->layout->mainPane) ? $this->_config->gamelena->layout->mainPane : 'undefined';
+        $this->view->domPrefix = Gamelena_Utils_String::toVarWord($this->getRequest()->getParam('p'));
     }
 
     /**
@@ -60,14 +60,14 @@ class Components_DojoSettingsController extends Zend_Controller_Action
                 $groups = $this->_xml->getTabsWithElements();
                 $i = 0;
                 /**
-                 * @var $group Zwei_Admin_Xml
+                 * @var $group Gamelena_Admin_Xml
                  */
                 foreach ($groups as $name => $group) {
                     $this->view->groups[$i]['group'] = $group->getAttribute("name");
                     $i++;
                 }
             } else {
-                throw new Zwei_Exception("Debe estar implementar implementado " . get_class($this->_model). "::loadGroups() o //components/forms/tabs en {$this->getRequest()->getParam('p')}");
+                throw new Gamelena_Exception("Debe estar implementar implementado " . get_class($this->_model). "::loadGroups() o //components/forms/tabs en {$this->getRequest()->getParam('p')}");
             }
             $this->view->onSubmit = $this->_xml->xpath('//component/forms/onSubmit') ? dom_import_simplexml($this->_xml->forms->onSubmit)->textContent : '';
         } else {

@@ -1,9 +1,9 @@
 <?php
 /**
- * Alias corto para Zwei_Utils_Debug.
- * @category Zwei
+ * Alias corto para Gamelena_Utils_Debug.
+ * @category Gamelena
  */
-class Debug extends Zwei_Utils_Debug
+class Debug extends Gamelena_Utils_Debug
 {
 
 }

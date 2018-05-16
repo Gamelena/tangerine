@@ -91,7 +91,7 @@
 	</target>
 	
 	<target name="database" description="Create Database and privileges">
-		<exec executable="${mysql}" input="${basedir}/db/admportal.sql"
+		<exec executable="${mysql}" input="${basedir}/db/tangerine.sql"
 			failonerror="true">
 			<arg value="--user=${db.username}" />
 			<arg value="--password=${db.password}" />

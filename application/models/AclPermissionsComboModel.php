@@ -4,7 +4,7 @@
  * Modelo de datos para permisos ACL del admin
  *
  *
- * @category Zwei
+ * @category Gamelena
  * @package Models
  * @version $Id:$
  * @since 0.1
@@ -36,7 +36,7 @@ class AclPermissionsComboModel extends DbTable_AclActions
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where("$this->_name_roles.id != ?", "1");
         }
-        //Zwei_Utils_Debug::write($select->__toString());
+        //Gamelena_Utils_Debug::write($select->__toString());
         return $select;
     }
 }

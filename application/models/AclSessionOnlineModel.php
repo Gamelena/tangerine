@@ -26,7 +26,7 @@ class AclSessionOnlineModel extends DbTable_AclSession
     {
         $select = parent::select($withFromPart);
         $select->setIntegrityCheck(false);
-        $config = Zwei_Controller_Config::getOptions();
+        $config = Gamelena_Controller_Config::getOptions();
         
         $select->from(
             $this->_name, array(
@@ -72,19 +72,19 @@ class AclSessionOnlineModel extends DbTable_AclSession
      * @param Zend_Db_Table_Rowset $data            
      * @return array
      *
-     * @see Zwei_Db_Table::overloadDataList()
+     * @see Gamelena_Db_Table::overloadDataList()
      */
     public function overloadDataList($data)
     {
         $i = 0;
         $data = $data->toArray();
-        $config = Zwei_Controller_Config::getOptions();
+        $config = Gamelena_Controller_Config::getOptions();
         
         foreach ($data as $d) {
             // si la última actividad fue hace más de 10 segundos entonces ya no
             // está logueado,
             // le damos 2 segundos más como margen de error (12 en total)
-            $timeout = $d['modified'] + $config->zwei->session->timeout;
+            $timeout = $d['modified'] + $config->gamelena->session->timeout;
             $data[$i]['expires'] = date('Y-m-d H:i:s', $timeout);
             $data[$i]['modified'] = date('Y-m-d H:i:s', $d['modified']);
             $i ++;
@@ -98,7 +98,7 @@ class AclSessionOnlineModel extends DbTable_AclSession
      *
      * @param  array|string $where SQL WHERE clause(s).
      * @return int          The number of rows deleted.
-     * @see    Zwei_Db_Table::delete()
+     * @see    Gamelena_Db_Table::delete()
      */
     public function delete($where)
     {

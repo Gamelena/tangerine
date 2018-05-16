@@ -17,7 +17,7 @@ class CrudRequestController extends Zend_Controller_Action
     private $_userInfo;
     /**
      * Instancia de $_REQUEST, en este caso preferible a Zend_Controller_Request ya que este no permite manejar un <pre>$_REQUEST['action']</pre> al ser el índice reservado.
-     * @var Zwei_Utils_Form
+     * @var Gamelena_Utils_Form
      */
     private $_form;
     /**
@@ -28,27 +28,27 @@ class CrudRequestController extends Zend_Controller_Action
     
     /**
      * Modelo sobre el cual se trabajará.
-     * @var Zwei_Db_Table
+     * @var Gamelena_Db_Table
      */
     private $_model;
     
     /**
      * Archivo XML para obtener atributos adicionales y validar permisos
-     * @var Zwei_Admin_Xml
+     * @var Gamelena_Admin_Xml
      */
     private $_xml;
     
     /**
      * Lista de control de accesos
-     * @var Zwei_Admin_Acl
+     * @var Gamelena_Admin_Acl
      */
     private $_acl;
     
     public function init()
     {
-        $this->_form = new Zwei_Utils_Form();
+        $this->_form = new Gamelena_Utils_Form();
         
-        if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+        if (Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_userInfo = Zend_Auth::getInstance()->getStorage()->read();
         } else if (isset($this->_form->format) && $this->_form->format == 'json') {
             $this->_helper->ContextSwitch->setAutoJsonSerialization(false)->addActionContext('index', 'json')->initContext();
@@ -67,8 +67,8 @@ class CrudRequestController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout();
         
         if (isset($this->_form->p)) {
-            $file       = Zwei_Admin_Xml::getFullPath($this->_form->p);
-            $this->_xml = new Zwei_Admin_Xml($file, 0, 1);
+            $file       = Gamelena_Admin_Xml::getFullPath($this->_form->p);
+            $this->_xml = new Gamelena_Admin_Xml($file, 0, 1);
         }
         //@todo migrar a Bootstrap
         if (!defined('DEFAULT_CHARSET')) {
@@ -99,20 +99,20 @@ class CrudRequestController extends Zend_Controller_Action
                 throw new Zend_Application_Resource_Exception($classModel . ": " . $e->getMessage(), $e->getCode());
             }
             
-            if (!$this->_model instanceof Zend_Db_Table_Abstract && !$this->_model instanceof Zwei_Admin_ModelInterface) {
-                throw new Zwei_Exception("$classModel no es una instancia de Zend_Db_Table_Abstract ni implementa Zwei_Admin_ModelInterface");
+            if (!$this->_model instanceof Zend_Db_Table_Abstract && !$this->_model instanceof Gamelena_Admin_ModelInterface) {
+                throw new Gamelena_Exception("$classModel no es una instancia de Zend_Db_Table_Abstract ni implementa Gamelena_Admin_ModelInterface");
             }
             
             
             $this->view->collection = array();
             
-            //Es posible que $this->_model NO sea un modelo Zwei_Db_Table y sea una implementación de Zwei_Admin_ModelInterface
+            //Es posible que $this->_model NO sea un modelo Gamelena_Db_Table y sea una implementación de Gamelena_Admin_ModelInterface
             //en cuyo caso no existe el método 'getValidateXmlAcl'
             $validateXml = method_exists($this->_model, 'getValidateXmlAcl')
                 ? $this->_model->getValidateXmlAcl()
                 : array('EDIT' => false, 'ADD' => false, 'DELETE' => false, 'LIST' => false);
                         
-            if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+            if (Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
                 if (isset($this->_form->action)) {
                     $validatedCUD = true;
                     $aclAction = strtoupper($this->_form->action);
@@ -247,7 +247,7 @@ class CrudRequestController extends Zend_Controller_Action
                     }
                
                     if ($validatedR) {
-                        $oDbObject = new Zwei_Db_Object($this->_form);
+                        $oDbObject = new Gamelena_Db_Object($this->_form);
                         $oSelect   = $oDbObject->select();
                         
                         if ($oSelect instanceof Zend_Db_Select) {
@@ -290,7 +290,7 @@ class CrudRequestController extends Zend_Controller_Action
                             $this->_helper->layout->disableLayout();
                             $this->_helper->viewRenderer->setNoRender();
                             
-                            $table = new Zwei_Utils_Table();
+                            $table = new Gamelena_Utils_Table();
                             
                             if (in_array($this->_form->excel_formatter, array('Excel5', 'Excel2007'))) {
                                 if (isset($this->_form->p)) {
@@ -461,7 +461,7 @@ class CrudRequestController extends Zend_Controller_Action
                 foreach ($infoFiles as $id => $v) {
                     $id          = str_replace("'", '', $id);
                     $row         = $this->_model->find($id)->current();
-                    $xmlChildren = new Zwei_Admin_Xml('<element>' . html_entity_decode($row->xml_children) . '</element>');
+                    $xmlChildren = new Gamelena_Admin_Xml('<element>' . html_entity_decode($row->xml_children) . '</element>');
                     
                     foreach ($xmlChildren->thumb as $child) {
                         $this->createThumb($child, $v, $path);
@@ -521,12 +521,12 @@ class CrudRequestController extends Zend_Controller_Action
     
     /**
      * Genera las miniaturas a partir de información xml.
-     * @param Zwei_Admin_Xml $node
+     * @param Gamelena_Admin_Xml $node
      * @param array          $infoFile
      * @param string         $path
      * @return GdThumb
      */
-    protected function createThumb(Zwei_Admin_Xml $node, $infoFile, $path)
+    protected function createThumb(Gamelena_Admin_Xml $node, $infoFile, $path)
     {
         try {
             $thumbPath = $path;

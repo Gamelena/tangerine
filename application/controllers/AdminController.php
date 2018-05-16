@@ -19,12 +19,12 @@ class AdminController extends Zend_Controller_Action
     private $_template = 'default';
     
     /**
-     * @var Zwei_Db_Table
+     * @var Gamelena_Db_Table
      */
     private $_model;
     
     /**
-     * @var Zwei_Admin_Acl
+     * @var Gamelena_Admin_Acl
      */
     private $_acl;
     
@@ -40,29 +40,29 @@ class AdminController extends Zend_Controller_Action
      */
     public function init()
     {
-        $this->_config = Zwei_Controller_Config::getOptions();
-        $confLayout = $this->_config->zwei->layout;
+        $this->_config = Gamelena_Controller_Config::getOptions();
+        $confLayout = $this->_config->gamelena->layout;
         $r = $this->getRequest();
         
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         if ($userInfo) {
-            $this->_acl = new Zwei_Admin_Acl();
+            $this->_acl = new Gamelena_Admin_Acl();
         }
         
-        $this->baseDojoFolder = isset($this->_config->zwei->js->dojo->baseUrl) ? $this->_config->zwei->js->dojo->baseUrl : '/dojotoolkit';
+        $this->baseDojoFolder = isset($this->_config->gamelena->js->dojo->baseUrl) ? $this->_config->gamelena->js->dojo->baseUrl : '/dojotoolkit';
         if (isset($this->_config->resources->dojo->cdnbase)) {
             $this->baseDojoFolder = $this->_config->resources->dojo->cdnbase . '/' . $this->_config->resources->dojo->cdnversion;
         }
         
-        $this->view->noCache = isset($this->_config->zwei->resources) ? $this->_config->zwei->resources->noCache : '';
+        $this->view->noCache = isset($this->_config->gamelena->resources) ? $this->_config->gamelena->resources->noCache : '';
         
         $this->view->isObsoleteBrowser = false;
         
-        $ieMinVersion = isset($this->_config->zwei->browser->ieMinVersion) ? $this->_config->zwei->browser->ieMinVersion : null;
+        $ieMinVersion = isset($this->_config->gamelena->browser->ieMinVersion) ? $this->_config->gamelena->browser->ieMinVersion : null;
         
         if ($ieMinVersion) {
-            $userAgent = new Zwei_UserAgent();
-            if ($userAgent->getBrowser() === Zwei_UserAgent::BROWSER_IE && $userAgent->getVersion() < $ieMinVersion) {
+            $userAgent = new Gamelena_UserAgent();
+            if ($userAgent->getBrowser() === Gamelena_UserAgent::BROWSER_IE && $userAgent->getVersion() < $ieMinVersion) {
                 $this->view->isObsoleteBrowser = true;
                 $this->view->ieMinVersion = $ieMinVersion;
             }
@@ -147,9 +147,9 @@ class AdminController extends Zend_Controller_Action
         $this->view->dojo()
             ->requireModule("dojox.widget.Standby")
             ->requireModule("dijit.form.Form")
-            ->requireModule("zwei.Utils")
-            ->requireModule("zwei.Admportal")
-            ->requireModule("zwei.Form")
+            ->requireModule("gamelena.Utils")
+            ->requireModule("gamelena.Tangerine")
+            ->requireModule("gamelena.Form")
             ->requireModule("dojox.grid.enhanced.plugins.Pagination")
             ->requireModule("dojox.form.CheckedMultiSelect");
     
@@ -175,10 +175,10 @@ class AdminController extends Zend_Controller_Action
      */
     private function enableJavascriptLibs()
     {
-        $this->view->javascriptLibs = isset($this->_config->zwei->javascript->libs) 
-            ? ($this->_config->zwei->javascript->libs instanceof Zend_Config 
-                    ? $this->_config->zwei->javascript->libs->toArray() 
-                    : array($this->_config->zwei->javascript->libs)) 
+        $this->view->javascriptLibs = isset($this->_config->gamelena->javascript->libs)
+            ? ($this->_config->gamelena->javascript->libs instanceof Zend_Config
+                    ? $this->_config->gamelena->javascript->libs->toArray()
+                    : array($this->_config->gamelena->javascript->libs))
             : array();
     }
     
@@ -192,7 +192,7 @@ class AdminController extends Zend_Controller_Action
         $this->enableJavascriptLibs();
         $this->enableDojo();
         
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+        if (!Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_redirect('admin/login');
         } else {
             $userInfo = Zend_Auth::getInstance()->getStorage()->read();
@@ -200,11 +200,11 @@ class AdminController extends Zend_Controller_Action
             $this->view->first_names = $userInfo->first_names;
             $this->view->last_names = $userInfo->last_names;
             $this->view->user_id = $userInfo->id;
-            $this->view->layout = isset($this->_config->zwei->layout->mainPane) ? "'".$this->_config->zwei->layout->mainPane."'" : 'undefined';//Para backward compatibility, TODO deprecar
-            $this->view->multiForm = isset($this->_config->zwei->form->multiple) && !empty($this->_config->zwei->form->multiple) ? 'true' : 'false';//Para backward compatibility, TODO deprecar
+            $this->view->layout = isset($this->_config->gamelena->layout->mainPane) ? "'".$this->_config->gamelena->layout->mainPane."'" : 'undefined';//Para backward compatibility, TODO deprecar
+            $this->view->multiForm = isset($this->_config->gamelena->form->multiple) && !empty($this->_config->gamelena->form->multiple) ? 'true' : 'false';//Para backward compatibility, TODO deprecar
             
             $this->view->version = $this->getComposerJsonVersion(ROOT_DIR . '/composer.json');
-            $this->view->admportalVersion =  $this->getComposerJsonVersion(TANGERINE_APPLICATION_PATH . '/../composer.json');
+            $this->view->tangerineVersion =  $this->getComposerJsonVersion(TANGERINE_APPLICATION_PATH . '/../composer.json');
             
             if ($this->_template != 'default') {
                 $this->_helper->viewRenderer("index-$this->_template");
@@ -221,16 +221,16 @@ class AdminController extends Zend_Controller_Action
         if ($this->getRequest()->getParam('p')) {
             $component = $this->getRequest()->getParam('p');
             
-            if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+            if (!Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
                 $this->_redirect('admin/login');
             } else {
-                $file = Zwei_Admin_Xml::getFullPath($component);
+                $file = Gamelena_Admin_Xml::getFullPath($component);
                 if (!file_exists($file) && pathinfo($file, PATHINFO_EXTENSION) === 'xml') {
-                    throw new Zwei_Exception("No existe archivo $file.");
+                    throw new Gamelena_Exception("No existe archivo $file.");
                 }
                 
                 try {
-                    $xml = new Zwei_Admin_Xml($file, LIBXML_NOWARNING, 1);
+                    $xml = new Gamelena_Admin_Xml($file, LIBXML_NOWARNING, 1);
                 } catch (Exception $e) {
                     $message = "Error al intentar parsear $file";
                     Console::error($message);
@@ -266,7 +266,7 @@ class AdminController extends Zend_Controller_Action
      */
     public function modulesAction()
     {
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+        if (!Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_redirect('admin/login');
         } else {
             Zend_Dojo::enableView($this->view);
@@ -289,7 +289,7 @@ class AdminController extends Zend_Controller_Action
      */
     public function menuAction()
     {
-        if (!Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+        if (!Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
             $this->_redirect('admin/login');
         } else {
             Zend_Dojo::enableView($this->view);
@@ -311,7 +311,7 @@ class AdminController extends Zend_Controller_Action
         '
         );
     
-        if (Zwei_Admin_Auth::getInstance()->hasIdentity()) {
+        if (Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
             //$this->_redirect(BASE_URL. 'admin');
         }
         
@@ -324,7 +324,7 @@ class AdminController extends Zend_Controller_Action
     
         if ($r->isPost()) {
             if ($loginForm->isValid($r->getPost())) {
-                $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter();
+                $authAdapter = Gamelena_Admin_Auth::getInstance()->getAuthAdapter();
     
                 $username = $loginForm->getValue('username');
                 $password = $loginForm->getValue('password');
@@ -337,7 +337,7 @@ class AdminController extends Zend_Controller_Action
     
                 if ($result->isValid()) {
                     // Obtener toda la info de usuario, excepto la password
-                    Zwei_Admin_Auth::initUserInfo($authAdapter);
+                    Gamelena_Admin_Auth::initUserInfo($authAdapter);
                     
                     $params = array();
                     $r = $this->getRequest();

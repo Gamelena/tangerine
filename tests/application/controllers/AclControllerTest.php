@@ -10,14 +10,14 @@ class AclControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
             $_ENV['APPLICATION_CONFIG']
         );
         $options = $this->bootstrap->getBootstrap()->getOptions();
-        $_SERVER['HTTP_HOST'] = $options['zwei']['uTesting']['httpHost'];
+        $_SERVER['HTTP_HOST'] = $options['gamelena']['uTesting']['httpHost'];
         parent::setUp();
     }
     
     public function initUserInfo()
     {
         $this->getFrontController()->setParam('bootstrap', $this->bootstrap->getBootstrap());
-        $authAdapter = Zwei_Admin_Auth::getInstance()->getAuthAdapter();
+        $authAdapter = Gamelena_Admin_Auth::getInstance()->getAuthAdapter();
     
         $username = PHPUNIT_USERNAME;
         $password = PHPUNIT_PASSWORD;
@@ -29,7 +29,7 @@ class AclControllerTest extends Zend_Test_PHPUnit_ControllerTestCase
     
         if ($result->isValid())
         {
-            Zwei_Admin_Auth::initUserInfo($authAdapter);
+            Gamelena_Admin_Auth::initUserInfo($authAdapter);
         } else {
             echo "Usuario '$username' o Password '$password' incorrectos.";
         }

@@ -3,7 +3,7 @@
 Requerimientos Básicos
 ======================
 
-- PHP Version >= 5.4
+- PHP Version >= 5.4 < 7.2
 
 - MYSQL Version >= 5
 
@@ -65,7 +65,7 @@ Después se podrán escoger las opciones:
 
 	
 
- - Copiar modelos, módulos y controladores de AdmPortal (N por omisión)
+ - Copiar modelos, módulos y controladores de Tangerine (N por omisión)
    escoger S sólo en caso de necesitar modificar modelos, módulos,
    controladores/vistas por defecto, tener en cuenta que en este caso de
    escoger S, se crea una copia del MVC, lo cual permite personalizar
@@ -151,7 +151,7 @@ Ejecutar selenium antes de iniciar los tests unitarios
 
 Se debe especificar la URL BASE en el archivo application.ini, reemplazando {BASE_URL} por la URL BASE del administrador web.
 ```
- zwei.uTesting.httpHost = "http://{BASE_URL}"
+ gamelena.uTesting.httpHost = "http://{BASE_URL}"
 ```
 
 Los Tests se escriben en la carpeta web/tests
@@ -175,20 +175,3 @@ Ejemplo de configuración de suite de pruebas
     </php>
 </phpunit>
 ```
-
----
-
-FAQ
-===
-
-Bower puede dar problemas al intentar resolver dependencias por protocolo git, dando un mensaje similar a éste:
-```
-ECMDERR Failed to execute "git ls-remote --tags --heads git://github.com/dojo/dojo.git", exit code of #128 fatal: unable to connect to github.com: github.com[0: 192.30.252.129]: errno=Expiró el tiempo de conexión
-```
-
-La solución es usar https:// el lugar de git://
-
-```
-git config --global url."https://".insteadOf git://
-```
-
