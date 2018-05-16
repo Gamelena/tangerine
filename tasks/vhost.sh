@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 if [ "$(id -u)" != "0" ]; then
 	echo "This script must be run as root or sudo" 1>&2
 	exit 1
@@ -6,15 +7,30 @@ else
 	SITENAME=`echo "${PWD##*/}"`
 	cd - 
 	ROOT_DIR="../"
-	SITEPATH=`echo $(dirname $(readlink -e $PWD))`
-	echo "Creando alias basados en $SITEPATH"
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+	    echo -e "Detectado MAC OS.\n"
+	    if ! [ -x "$(command -v greadlink)" ]; then
+	    	echo "Comando 'greadlink' no disponible, por favor instale el paquete coreutils con brew ('brew install coreutils') o macports.\n"
+	    	exit 1;
+	    fi
+        TANGERINEPATH=`echo $(dirname $(greadlink -e $PWD))`
+    else
+		TANGERINEPATH=`echo $(dirname $(readlink -e $PWD))`
+	fi
+
+	echo "Creando vhost basados en $SITEPATH"
 
 	APACHE_EXEC=$(which apache2)
 	if [ ! -x "$APACHE_EXEC" ]; then
 		APACHE_EXEC=$(which httpd)
 		if [ ! -x "$APACHE_EXEC" ]; then
-			echo "No se encontró una instalación de Apache, abortando."
+			echo "No se encontro una instalacion de Apache, abortando."
 			exit 1;
+		elif [[ "$OSTYPE" == "darwin"* ]]; then
+		    echo "Se esta asumiendo configuracion de homebrew.\n"
+            APACHE_SERVICE="httpd"
+			APACHE_PATH="/etc/apache2"
+			APACHE_CONF="/etc/apache2/httpd.conf"
 		else
 			APACHE_SERVICE="httpd"
 			APACHE_PATH="/etc/httpd"
@@ -31,13 +47,13 @@ else
 	mkdir -p $APACHE_PATH/vhosts
 
 	if grep -i  "include vhosts\/\*\.conf" $APACHE_CONF; then
-		echo "Se encontró la directiva include vhosts/* en $APACHE_CONF, no se hace nada."
+		echo -e "Se encontro la directiva include vhosts/* en $APACHE_CONF, no se hace nada en ese archivo.\n"
 	else
 		DATE=$(date +"%Y-%m-%d-%H-%M-%S")
 		echo "Creando backup de $APACHE_CONF en $APACHE_CONF $APACHE_CONF.$DATE"
 		cp $APACHE_CONF $APACHE_CONF.$DATE
 
-		echo "Se intentará agregar la directiva Include vhosts/*.conf en $APACHE_CONF"
+		echo -e "Se intentará agregar la directiva Include vhosts/*.conf en $APACHE_CONF\n"
 		echo "# Generado por Tangerine" >> $APACHE_CONF
 		echo "Include vhosts/*.conf\n" >> $APACHE_CONF
 	fi
@@ -77,10 +93,14 @@ else
 	</Directory>
 </VirtualHost>" > $VHOST_FILE
 	fi
-	
-	echo "Otorgando permisos a $APACHE_USER"
-	chown $APACHE_USER -R $SITEPATH/log $SITEPATH/cache $SITEPATH/public/upfiles
-	
+
+	if [$APACHE_USER]; then
+	    echo "Otorgando permisos a $APACHE_USER"
+	    chown $APACHE_USER -R $SITEPATH/log $SITEPATH/cache $SITEPATH/public/upfiles
+	else
+	    echo "No se pudo detectar usuario apache, agregue los permisos correspondientes para $SITEPATH/log $SITEPATH/cache $SITEPATH/public/upfiles"
+	fi
+
 	printf "\nTerminado\nPara ver los cambios reinicie apache\nservice $APACHE_SERVICE restart\n"
 	printf "\nRecuerde agregar $SITENAME.local a su archivo /etc/hosts o equivalente\n"
 fi
