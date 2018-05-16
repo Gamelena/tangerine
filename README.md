@@ -3,7 +3,7 @@
 Requeriments
 ======================
 
-- PHP Version >= 5.5 < 7.2
+- PHP Version >= 5.5
 
 - MYSQL Version >= 5
 
