@@ -4,12 +4,12 @@
 	<property name="db.username" value="root"/>
 	<property name="db.password" value=""/>
 	
-	<property name="pdepend" value="pdepend" />
-	<property name="phpcpd" value="phpcpd" />
-	<property name="phpcs" value="phpcs" />
-	<property name="phpdox" value="phpdox" />
-	<property name="phploc" value="phploc" />
-	<property name="phpmd" value="phpmd" />
+	<property name="pdepend" value="vendor/bin/pdepend" />
+	<property name="phpcpd" value="vendor/bin/phpcpd" />
+	<property name="phpcs" value="vendor/bin/phpcs" />
+	<property name="phpdox" value="vendor/bin/phpdox" />
+	<property name="phploc" value="vendor/bin/phploc" />
+	<property name="phpmd" value="vendor/bin/phpmd" />
 	<property name="phpunit" value="phpunit" />
 	<property name="mysql" value="mysql" />
 	
@@ -351,7 +351,7 @@
 
 	<target name="phpdox" unless="phpdox.done" depends="phploc-ci,phpcs-ci,phpmd-ci"
 		description="Generate project documentation using phpDox">
-		<exec executable="${phpdox}" dir="${basedir}/tests" taskname="phpdox" />
+		<exec executable="${phpdox}" dir="${basedir}" taskname="phpdox" />
 
 		<property name="phpdox.done" value="true" />
 	</target>

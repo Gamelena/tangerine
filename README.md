@@ -3,7 +3,7 @@
 Requeriments
 ======================
 
-- PHP Version >= 5.4 < 7.2
+- PHP Version >= 5.5
 
 - MYSQL Version >= 5
 
@@ -73,24 +73,6 @@ Después se podrán escoger las opciones:
    Tangerine en estos elementos no serán reflejados.
 
 
-
-
-
-TESTING
-=======
-Requirements
-- PHPUnit
-- PHP_CodeSniffer
-- PHPLOC
-- PHP_Depend
-- PHPMD
-- PHPCPD
-- phpDox
-
-For resolve all dependencies above
-```
-ant global-testing-deps
-```
 
 GENERACIÓN DE PLANTILLAS DE TESTS UNITARIOS
 -------------------------------------------
