@@ -28,7 +28,7 @@
 	],
 	"scripts" : {
 		"pre-archive-cmd": [
-			"bower install --allow-root",
+			"bower install",
 			"./bower-postinstall.sh"
 		]
 	},
