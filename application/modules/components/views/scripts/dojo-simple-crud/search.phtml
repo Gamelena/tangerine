@@ -124,7 +124,7 @@ endif;
 <?php 
 foreach ($this->customFunctions as $i => $f) :
         $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
-        $target = isset($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+        $target = isset($f['target']) ? "tangerine.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
 ?>
     <div class="keyPadButton">
         <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f['iconClass'] ? $f['iconClass'] : 'dijitIconFunction'?>" id="<?=$this->domPrefix?>btnFunction<?=$i?>" onClick="<?=$onclick.$target?>">
@@ -145,7 +145,7 @@ if (!$this->hideSubmit) :
             try {
                 <?=$this->onSubmit ?>
                 <?=$this->enableActions?>
-                var form = new zwei.Form({dijitFormSearch: this, dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')});
+                var form = new gamelena.Form({dijitFormSearch: this, dijitDataGrid: dijit.byId('<?=$this->domPrefix?>dataGrid')});
                 form.loadData();
                 <?=$this->onPostSubmit ?>
             } catch(e) {

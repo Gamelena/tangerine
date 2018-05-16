@@ -7,7 +7,7 @@ if ($this->add) :
 <?php 
     if (!$this->multiForm) :
 ?>
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 component: '<?=$this->component?>',
                 ajax: <?=$this->ajax ?>,
                 action: 'add',
@@ -20,7 +20,7 @@ if ($this->add) :
 <?php 
     else :
 ?>
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 component: '<?=$this->component?>',
                 prefix: '<?=$this->domPrefix?>',
                 ajax: <?=$this->ajax ?>,
@@ -49,7 +49,7 @@ if ($this->edit) :
 <?php 
     if (!$this->multiForm) :
 ?>
-                var form = new zwei.Form({
+                var form = new gamelena.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
                     action: 'edit',
@@ -62,7 +62,7 @@ if ($this->edit) :
 <?php 
     else :
 ?>
-                var form = new zwei.Form({
+                var form = new gamelena.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
                     action: 'edit',
@@ -91,7 +91,7 @@ if ($this->delete) :
 <?php 
     if (!$this->multiForm) :
 ?>
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 ajax: <?=$this->ajax ?>,
                 action: 'delete',
                 component: '<?=$this->component?>',
@@ -106,7 +106,7 @@ if ($this->delete) :
                 if (response != null) {
                     <?=$this->onPostSubmit ?>
                     if (response.todo == 'goToLogin') window.location.href = base_url + 'admin/login';
-                    else if (response.todo == 'cargarArbolMenu') admportal.loadMainMenu();
+                    else if (response.todo == 'cargarArbolMenu') tangerine.loadMainMenu();
                     this.set('response', null);
                 }
             }); 
@@ -115,7 +115,7 @@ if ($this->delete) :
 <?php 
     else :
 ?>
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 ajax: <?=$this->ajax ?>,
                 action: 'delete',
                 component: '<?=$this->component?>',
@@ -130,7 +130,7 @@ if ($this->delete) :
                 if (response != null) {
                     <?=$this->onPostSubmit ?>
                     if (response.todo == 'goToLogin') window.location.href = base_url + 'admin/login';
-                    else if (response.todo == 'cargarArbolMenu') admportal.loadMainMenu();
+                    else if (response.todo == 'cargarArbolMenu') tangerine.loadMainMenu();
                     this.set('response', null);
                 }
             }); 
@@ -154,7 +154,7 @@ if ($this->clone) :
 <?php 
     if (!$this->multiForm) :
 ?>
-                var form = new zwei.Form({
+                var form = new gamelena.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
                     action: 'clone',
@@ -166,7 +166,7 @@ if ($this->clone) :
 <?php 
     else :
 ?>
-                var form = new zwei.Form({
+                var form = new gamelena.Form({
                     ajax: <?=$this->ajax ?>,
                     component: '<?=$this->component?>',
                     action: 'clone',
@@ -191,7 +191,7 @@ if ($this->changePassword) :
 ?>
     <div class="keyPadButton">
         <button type="button" data-dojo-type="dijit/form/Button" iconClass="dijitIconEdit" disabled="disabled" id="<?=$this->domPrefix?>btnChangePassword" onClick="
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 ajax: false,
                 component: '<?=$this->component?>',
                 action: 'edit',
@@ -208,11 +208,11 @@ endif;
 ?>
 <?php 
 /**
- * @var $f Zwei_Admin_Xml 
+ * @var $f Gamelena_Admin_Xml 
  */
 foreach ($this->customFunctions as $i => $f) :
     $onclick = isset($f['onclick']) ? $f['onclick'].';' : '';
-    $target = isset($f['target']) && !empty($f['target']) ? "admportal.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
+    $target = isset($f['target']) && !empty($f['target']) ? "tangerine.execFunction('{$f['target']}', '', '{$this->domPrefix}', '{$this->component}', '{$this->primary}');" : '';
     $disabled = isset($f['disabled']) && $f['disabled'] == 'true' ? 'disabled="disabled"' : '';
     $title = isset($f['title']) ? " title=\"{$f['title']}\"" : '';
 ?>
@@ -226,7 +226,7 @@ endforeach;
 ?>
 <?php 
 foreach ($this->excel as $i => $f) :
-    $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->zweiExcelVersion;
+    $formatter = $f->getAttribute('formatter') ? $f->getAttribute('formatter') : $this->gamelenaExcelVersion;
     $name = $f->getAttribute('name') ? $f->getAttribute('name') : 'Descargar como Excel' ;
     $disabled = $f->getAttribute('disabled') || !$this->list ? 'disabled="disabled"' : '';
     $title = $f->getAttribute('title') ? " title=\"{$f->getAttribute('title')}\"" : '';
@@ -234,7 +234,7 @@ foreach ($this->excel as $i => $f) :
 
     <div class="keyPadButton">
         <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f->getAttribute('iconClass') ? $f->getAttribute('iconClass') : 'dijitIconEdit'?>" <?=$disabled.$title?> id="<?=$this->domPrefix?>btnExcel<?=$formatter?>" onClick="
-            var form = new zwei.Form({
+            var form = new gamelena.Form({
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 
                 dijitDataGrid: dijit.byId('<?=$this->domPrefix ?>dataGrid'), 
                 queryParams: 'format=excel&excel_formatter=<?=$formatter?>',
@@ -260,8 +260,8 @@ foreach ($this->uploaders as $i => $f) :
 
     <div class="keyPadButton">
         <button type="button" data-dojo-type="dijit/form/Button" iconClass="<?=$f->getAttribute('iconClass') ? $f->getAttribute('iconClass') : 'dijitIconEdit'?>" <?=$disabled.$title?> id="<?=$this->domPrefix?>btnUploader<?=$i?>" onClick="
-            dojo.require('zwei.Uploader');
-            var uploader = new zwei.Uploader({
+            dojo.require('gamelena.Uploader');
+            var uploader = new gamelena.Uploader({
                 component: '<?=$this->component?>',
                 url : <?=$url?>,
                 dijitFormSearch: dijit.byId('<?=$this->domPrefix ?>formSearch'), 

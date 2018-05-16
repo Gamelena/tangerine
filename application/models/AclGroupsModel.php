@@ -52,7 +52,7 @@ class AclGroupsModel extends DbTable_AclGroups
     }
     /**
      * (non-PHPdoc)
-     * @see Zwei_Db_Table::insert()
+     * @see Gamelena_Db_Table::insert()
      */
     public function insert(array $data)
     {
@@ -63,7 +63,7 @@ class AclGroupsModel extends DbTable_AclGroups
     }
     /**
      * (non-PHPdoc)
-     * @see Zwei_Db_Table::update()
+     * @see Gamelena_Db_Table::update()
      */
     public function update(array $data, $where)
     {

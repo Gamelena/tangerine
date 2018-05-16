@@ -1,6 +1,6 @@
 <?php
 
-class DbTable_AclUsers extends Zwei_Db_TableLoggeable
+class DbTable_AclUsers extends Gamelena_Db_TableLoggeable
 {
 
     protected $_name = 'acl_users';

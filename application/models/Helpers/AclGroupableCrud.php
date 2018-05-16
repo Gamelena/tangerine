@@ -72,14 +72,14 @@ class Helpers_AclGroupableCrud
     }
     
     /**
-     * Se sobrecarga método para perfilamiento avanzado.
+     * Se sobrecarga mï¿½todo para perfilamiento avanzado.
      * @param Zend_Db_Table_Select $select
      * @param string               $action
      * @return Zend_Db_Table_Select
      */
     public function select($select, $action = 'LIST')
     {
-        $this->_acl = new Zwei_Admin_Acl();
+        $this->_acl = new Gamelena_Admin_Acl();
         
         $select->setIntegrityCheck(false);
         $select->distinct();
@@ -114,7 +114,7 @@ class Helpers_AclGroupableCrud
         $actions      = $modulesModel->getActions($moduleId);
     
         if (empty($this->_acl)) {
-            $this->_acl = new Zwei_Admin_Acl();
+            $this->_acl = new Gamelena_Admin_Acl();
         }
     
         $i = 0;

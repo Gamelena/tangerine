@@ -11,10 +11,10 @@ var $globals = {};
 
 var initLoad = function() 
 {
-    admportal.loadEvents();
-    admportal.loadLayoutSettings(dojo.byId("logosAdm"),dojo.byId("tituloAdm"), dojo.byId("gamelenaLogo"), dojo.byId("gamelenaLegend"));
-    admportal.loadMainMenu();
-    admportal.initListeners();
+    tangerine.loadEvents();
+    tangerine.loadLayoutSettings(dojo.byId("logosAdm"),dojo.byId("tituloAdm"), dojo.byId("gamelenaLogo"), dojo.byId("gamelenaLegend"));
+    tangerine.loadMainMenu();
+    tangerine.initListeners();
 };
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-class DbTable_AclGroupsModulesActions extends Zwei_Db_Table
+class DbTable_AclGroupsModulesActions extends Gamelena_Db_Table
 {
 
     protected $_name = 'acl_groups_modules_actions';

@@ -21,4 +21,5 @@ web/log/*
 web/tests/ci/*
 web/tests/logs/*
 web/tests/pdepend/*
+bower_components/
 

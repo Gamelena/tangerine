@@ -36,6 +36,9 @@
         <controllerFile controllerName="Schedule">
           <actionMethod actionName="index"/>
         </controllerFile>
+        <controllerFile controllerName="Api">
+          <actionMethod actionName="index"/>
+        </controllerFile>
       </controllersDirectory>
       <formsDirectory enabled="false"/>
       <layoutsDirectory enabled="false"/>
@@ -221,7 +224,7 @@
             <controllerFile controllerName="DojoxFormUploader">
               <actionMethod actionName="index"/>
             </controllerFile>
-            <controllerFile controllerName="ZweiFormValidationTextarea">
+            <controllerFile controllerName="GamelenaFormValidationTextarea">
               <actionMethod actionName="index"/>
             </controllerFile>
             <controllerFile controllerName="Hidden">
@@ -248,18 +251,15 @@
             <controllerFile controllerName="DojoxWidgetColorPicker">
               <actionMethod actionName="index"/>
             </controllerFile>
-            <controllerFile controllerName="ZweiFormFilteringJsonSelect">
+            <controllerFile controllerName="GamelenaFormFilteringJsonSelect">
               <actionMethod actionName="index"/>
             </controllerFile>
             <controllerFile controllerName="DijitFormHorizontalSlider">
               <actionMethod actionName="index"/>
             </controllerFile>
-<<<<<<< HEAD
-=======
-            <controllerFile controllerName="ZweiFormDateTimeTextBox">
+            <controllerFile controllerName="GamelenaFormDateTimeTextBox">
               <actionMethod actionName="index"/>
             </controllerFile>
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
           </controllersDirectory>
           <formsDirectory enabled="false"/>
           <layoutsDirectory enabled="false"/>
@@ -289,7 +289,7 @@
               <viewControllerScriptsDirectory forControllerName="DojoxFormUploader">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
-              <viewControllerScriptsDirectory forControllerName="ZweiFormValidationTextarea">
+              <viewControllerScriptsDirectory forControllerName="GamelenaFormValidationTextarea">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="Hidden">
@@ -319,18 +319,15 @@
               <viewControllerScriptsDirectory forControllerName="DojoxWidgetColorPicker">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
-              <viewControllerScriptsDirectory forControllerName="ZweiFormFilteringJsonSelect">
+              <viewControllerScriptsDirectory forControllerName="GamelenaFormFilteringJsonSelect">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
               <viewControllerScriptsDirectory forControllerName="DijitFormHorizontalSlider">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
-<<<<<<< HEAD
-=======
-              <viewControllerScriptsDirectory forControllerName="ZweiFormDateTimeTextBox">
+              <viewControllerScriptsDirectory forControllerName="GamelenaFormDateTimeTextBox">
                 <viewScriptFile forActionName="index"/>
               </viewControllerScriptsDirectory>
->>>>>>> f306af8cbc860e73b2c8de2e6c526d3db946b5d4
             </viewScriptsDirectory>
             <viewHelpersDirectory/>
             <viewFiltersDirectory/>
@@ -385,6 +382,9 @@
             <viewScriptFile forActionName="getUserInfo"/>
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Schedule">
+            <viewScriptFile forActionName="index"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Api">
             <viewScriptFile forActionName="index"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
@@ -518,7 +518,7 @@
               <testApplicationControllerFile forControllerName="DojoxFormUploader">
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
-              <testApplicationControllerFile forControllerName="ZweiFormValidationTextarea">
+              <testApplicationControllerFile forControllerName="GamelenaFormValidationTextarea">
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
               <testApplicationControllerFile forControllerName="Hidden">
@@ -545,7 +545,7 @@
               <testApplicationControllerFile forControllerName="DojoxWidgetColorPicker">
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
-              <testApplicationControllerFile forControllerName="ZweiFormFilteringJsonSelect">
+              <testApplicationControllerFile forControllerName="GamelenaFormFilteringJsonSelect">
                 <testApplicationActionMethod forActionName="index"/>
               </testApplicationControllerFile>
               <testApplicationControllerFile forControllerName="DijitFormHorizontalSlider">

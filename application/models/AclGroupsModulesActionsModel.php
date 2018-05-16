@@ -35,7 +35,7 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     }
     /**
      * Post Constructor
-     * @see Zwei_Db_Table::init()
+     * @see Gamelena_Db_Table::init()
      * @return void
      */
     public function init()
@@ -48,7 +48,7 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     /**
      * @param array  $data
      * @param string $where
-     * @see Zwei_Db_Table::update()
+     * @see Gamelena_Db_Table::update()
      */
     public function update(array $data, $where)
     {
@@ -89,7 +89,7 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
     /**
      * @param $data array
      * @return int
-     * @see Zwei_Db_Table::insert()
+     * @see Gamelena_Db_Table::insert()
      */
     public function insert(array $data)
     {
@@ -118,7 +118,7 @@ class AclGroupsModulesActionsModel extends DbTable_AclGroupsModulesActions
      *
      * @param  array $data
      * @return array $data
-     * @see    Zwei_Db_Table::cleanDataParams()
+     * @see    Gamelena_Db_Table::cleanDataParams()
      */
     public function cleanDataParams($data)
     {

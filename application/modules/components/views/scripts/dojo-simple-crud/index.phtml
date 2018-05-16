@@ -29,15 +29,15 @@ if ($this->hasElements || ($this->hasSearchers && $this->model)) :
         <script type="dojo/on" data-dojo-event="show">
         require(["dojo/aspect", "dijit/registry"], function(aspect, registry) {
             aspect.after(registry.byId("<?=$this->domPrefix?>contentCenter"), "resize", function() {
-                admportal.resizeGrid("<?=$this->domPrefix?>");
+                tangerine.resizeGrid("<?=$this->domPrefix?>");
             });
             
             aspect.after(window, "resize", function() {
-                admportal.resizeGrid("<?=$this->domPrefix?>");
+                tangerine.resizeGrid("<?=$this->domPrefix?>");
             });
             
             aspect.after(dijit.byId("<?=$this->domPrefix?>contentCenter"), "show", function() {
-                admportal.resizeGrid("<?=$this->domPrefix?>");
+                tangerine.resizeGrid("<?=$this->domPrefix?>");
             });
 
         });

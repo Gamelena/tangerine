@@ -3,7 +3,7 @@
 /**
  * Modelo de datos para roles ACL o perfiles del admin
  *
- * @category Zwei
+ * @category Gamelena
  * @package  Models
  * @version  $Id:$
  * @since    0.1
@@ -35,7 +35,7 @@ class AclRolesModel extends DbTable_AclRoles
 
     /**
      * (non-PHPdoc)
-     * @see Zwei_Db_Table::init()
+     * @see Gamelena_Db_Table::init()
      */
     public function init() 
     {
@@ -101,7 +101,7 @@ class AclRolesModel extends DbTable_AclRoles
 
     /**
      * (non-PHPdoc)
-     * @see Zwei_Db_Table::update()
+     * @see Gamelena_Db_Table::update()
      */
     public function update(array $data, $where)
     {
@@ -132,7 +132,7 @@ class AclRolesModel extends DbTable_AclRoles
         
         if ($addPermissions) {
             
-            $cache = new Zwei_Controller_Plugin_Cache(Zwei_Controller_Config::getOptions());//@TODO una vez eliminados los BCP limpiar cache en self::notifyUsers()
+            $cache = new Gamelena_Controller_Plugin_Cache(Gamelena_Controller_Config::getOptions());//@TODO una vez eliminados los BCP limpiar cache en self::notifyUsers()
             $cache->cleanByTags(array("roleid{$aclRolesId}"));
             
             if (Zend_Session::getSaveHandler() instanceof Zend_Session_SaveHandler_DbTable) { //@TODO BCP
@@ -163,7 +163,7 @@ class AclRolesModel extends DbTable_AclRoles
     
     /**
      * (non-PHPdoc)
-     * @see Zwei_Db_Table::insert()
+     * @see Gamelena_Db_Table::insert()
      */
     public function insert(array $data)
     {
@@ -282,7 +282,7 @@ class AclRolesModel extends DbTable_AclRoles
 
     /**
      * (non-PHPdoc)
-     * @see Zwei_Db_Table::delete()
+     * @see Gamelena_Db_Table::delete()
      */
     public function delete($where)
     {

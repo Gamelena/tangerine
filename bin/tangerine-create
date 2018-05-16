@@ -62,8 +62,8 @@ rsync -r --exclude=.svn $TANGERINE_PATH/application/components/ $DEST_PATH/web/a
 rsync -r --exclude=.svn $TANGERINE_PATH/application/views/ $DEST_PATH/web/application/views/
 rsync -r --exclude=.svn --exclude='js/libs' $TANGERINE_PATH/public/ $DEST_PATH/web/public/
 cp  $TANGERINE_PATH/application/Bootstrap.php $DEST_PATH/web/application/Bootstrap.php
-mkdir -p $DEST_PATH/web/library/Zwei/Utils/
-cp $TANGERINE_PATH/library/Zwei/Utils/CustomFunctions.php $DEST_PATH/web/library/Zwei/Utils/CustomFunctions.php
+mkdir -p $DEST_PATH/web/library/Gamelena/Utils/
+cp $TANGERINE_PATH/library/Gamelena/Utils/CustomFunctions.php $DEST_PATH/web/library/Gamelena/Utils/CustomFunctions.php
 
 echo "Generando tareas apache ant"
 mkdir -p $DEST_PATH/web/tasks
@@ -99,7 +99,7 @@ ADMAPPPATH=$TANGERINE_PATH/application
 PATHESCAPED=$(echo "${ADMAPPPATH}" | sed 's/\//\\\//g')
 
 echo " "
-echo guardando variable zwei.tangerine.applicationPath con valor $ADMAPPPATH en application.ini
+echo guardando variable gamelena.tangerine.applicationPath con valor $ADMAPPPATH en application.ini
 
 sed -i "s/TANGERINE_APPLICATION_PATH/$PATHESCAPED/g" $DEST_PATH/web/application/configs/application.ini
 
@@ -192,13 +192,13 @@ if [ -a $DEST_PATH/web/application/models/DbTable ];then
     echo Adaptando Tablas ZF a Tablas de Tangerine
     echo " "
     find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Model_//' {} \;
-    find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Zend_Db_Table_Abstract/Zwei_Db_Table/' {} \;
+    find $DEST_PATH/web/application/models/DbTable/ -type f -exec sed -i 's/Zend_Db_Table_Abstract/Gamelena_Db_Table/' {} \;
 fi
 
 cd ../
 
 echo " "
-echo guardando variable zwei.session.namespace con valor ${PWD##*/} en application.ini
+echo guardando variable gamelena.session.namespace con valor ${PWD##*/} en application.ini
 
 sed -i "s/TANGERINE_SITENAME/${PWD##*/}/g" $DEST_PATH/web/application/configs/application.ini
 

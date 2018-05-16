@@ -42,7 +42,7 @@ abstract class Elements_BaseController extends Zend_Controller_Action
             $className = $r->getParam('table');
     
             /**
-             * @var $model Zwei_Db_Table
+             * @var $model Gamelena_Db_Table
             */
             $model = new $className();
     
@@ -60,7 +60,7 @@ abstract class Elements_BaseController extends Zend_Controller_Action
             }
     
     
-            if (method_exists($select, '__toString')) { Zwei_Utils_Debug::writeBySettings($select->__toString(), 'query_log'); 
+            if (method_exists($select, '__toString')) { Gamelena_Utils_Debug::writeBySettings($select->__toString(), 'query_log'); 
             }
     
             try {

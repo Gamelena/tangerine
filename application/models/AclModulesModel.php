@@ -3,7 +3,7 @@
 /**
  * Modelo de datos para módulos ACL del admin
  *
- * @category Zwei
+ * @category Gamelena
  * @package  Models
  * @version  $Id:$
  * @since    0.1
@@ -36,7 +36,7 @@ class AclModulesModel extends DbTable_AclModules
     
     /**
      * (non-PHPdoc)
-     * @see Zwei_Db_Table::update()
+     * @see Gamelena_Db_Table::update()
      */
     public function update(array $data, $where)
     {
@@ -57,7 +57,7 @@ class AclModulesModel extends DbTable_AclModules
             }
             $this->setMessage($e->getMessage());
         }
-        Zwei_Utils_File::clearRecursive(ROOT_DIR . "/cache", false, ROOT_DIR . "/cache/readme.txt");
+        Gamelena_Utils_File::clearRecursive(ROOT_DIR . "/cache", false, ROOT_DIR . "/cache/readme.txt");
         $writeContent = $this->writeContent($data);
         
         return $saveActions || $update || $writeContent;
@@ -76,7 +76,7 @@ class AclModulesModel extends DbTable_AclModules
 
     /**
      * (non-PHPdoc)
-     * @see Zwei_Db_Table::insert()
+     * @see Gamelena_Db_Table::insert()
      */
     public function insert(array $data)
     {
@@ -118,10 +118,11 @@ class AclModulesModel extends DbTable_AclModules
     
     /**
      * Se separa entre datos de modulo y datos de acciones asociadas.
+     * Es decir tabla principal y tablas relacionadas.
      * 
      * @param  array
      * @return array
-     * @see    Zwei_Db_Table::cleanDataParams()
+     * @see    Gamelena_Db_Table::cleanDataParams()
      */
     protected function cleanDataParams($data)
     {
@@ -221,7 +222,7 @@ class AclModulesModel extends DbTable_AclModules
     /**
      * @param string $where
      * @return int
-     * @see Zwei_Db_Table::delete()
+     * @see Gamelena_Db_Table::delete()
      */
     public function delete($where)
     {
@@ -246,7 +247,7 @@ class AclModulesModel extends DbTable_AclModules
      */
     public function getTree($parentId = null, $noTree = false)
     {
-        $this->_acl = new Zwei_Admin_Acl();
+        $this->_acl = new Gamelena_Admin_Acl();
         $root = $this->_acl->listGrantedResourcesByParentId($parentId);
         
         $arrNodes = array();
@@ -255,10 +256,10 @@ class AclModulesModel extends DbTable_AclModules
             //Buscar si usuario en sesion es owner de algun elemento para desplegar nodo
             
             if ($branch['ownership']) {
-                $file      = Zwei_Admin_Xml::getFullPath($branch['module']);
+                $file      = Gamelena_Admin_Xml::getFullPath($branch['module']);
                 if (file_exists($file)) {
                     try {
-                        $xml       = new Zwei_Admin_Xml($file, null, true);
+                        $xml       = new Gamelena_Admin_Xml($file, null, true);
                     } catch (Exception $e) {
                         Console::error("No se pudo parsear $file.");
                     }
@@ -347,7 +348,7 @@ class AclModulesModel extends DbTable_AclModules
     /**
      * @param $data Zend_Db_Table_Row
      * @return array
-     * @see Zwei_Db_Table::overloadDataForm()
+     * @see Gamelena_Db_Table::overloadDataForm()
      */
     public function overloadDataForm($data)
     {
