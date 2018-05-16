@@ -9,7 +9,7 @@
 	<property name="phpcs" value="phpcs" />
 	<property name="phpdox" value="phpdox" />
 	<property name="phploc" value="vendor/bin/phploc" />
-	<property name="phpmd" value="phpmd" />
+	<property name="phpmd" value="vendor/bin/phpmd" />
 	<property name="phpunit" value="phpunit" />
 	<property name="mysql" value="mysql" />
 	
