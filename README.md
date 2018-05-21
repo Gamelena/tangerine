@@ -4,39 +4,24 @@ Requeriments
 ======================
 
 - PHP Version >= 5.5
-
 - MYSQL Version >= 5
 
-
-Dependencias
+Dependencies
 ============
 
 1. Composer
-```
-	curl -sS https://getcomposer.org/installer | php -- 
-	mv composer.phar /usr/local/bin/composer
-```
-
 2. Bower
-```
-	sudo apt-get install nodejs npm nodejs-legacy
-	sudo npm install bower -g
-```
-
 3. Ant (optional)
-```
-	sudo apt-get install ant
-```
 
 for full build
 	
 ```	
-	ant install
+ant
 ```
-	
-for creation of apache vhost
+
+for quick build
 ```
-	ant vhost
+ant quick-build
 ```
 
 
