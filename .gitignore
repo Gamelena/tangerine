@@ -23,3 +23,6 @@ web/tests/logs/*
 web/tests/pdepend/*
 bower_components/
 cache/
+log/
+public/dojotoolkit/
+cache.properties

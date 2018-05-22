@@ -32,11 +32,12 @@ class AdminController extends Zend_Controller_Action
      * @var Zend_Config
      */
     private $_config;
-    
+
     /**
      * Post Constructor
      * @return void
      * @see Zend_Controller_Action::init()
+     * @throws Zend_Auth_Storage_Exception
      */
     public function init()
     {
@@ -117,11 +118,12 @@ class AdminController extends Zend_Controller_Action
         );
         
     }
-    
+
     /**
-     * 
+     *
      * @param string $composerJson
-     * @return null
+     * @return string
+     * @throws Zend_Json_Exception
      */
     private function getComposerJsonVersion($composerJson)
     {
@@ -181,11 +183,13 @@ class AdminController extends Zend_Controller_Action
                     : array($this->_config->gamelena->javascript->libs))
             : array();
     }
-    
-    
+
+
     /**
      * Acción layout pantalla principal}
      * @return void
+     * @throws Zend_Auth_Storage_Exception
+     * @throws Zend_Json_Exception
      */
     public function indexAction()
     {
@@ -215,6 +219,7 @@ class AdminController extends Zend_Controller_Action
     /**
      * Acción parseadora de componentes XML
      * @return void
+     * @throws Gamelena_Exception
      */
     public function componentsAction()
     {
@@ -298,10 +303,11 @@ class AdminController extends Zend_Controller_Action
             $this->view->tree = $modules->getTree();
         }
     }
-    
+
     /**
      * Accion pantalla login.
      * @return void
+     * @throws Zend_Form_Exception
      */
     public function loginAction()
     {
@@ -310,10 +316,6 @@ class AdminController extends Zend_Controller_Action
             @import "'.BASE_URL.'css/admin.css";
         '
         );
-    
-        if (Gamelena_Admin_Auth::getInstance()->hasIdentity()) {
-            //$this->_redirect(BASE_URL. 'admin');
-        }
         
         $this->view->bodyClass = $this->_dojoTheme;
         
@@ -369,12 +371,13 @@ class AdminController extends Zend_Controller_Action
         Zend_Auth::getInstance()->clearIdentity();
         $this->_redirect(BASE_URL.'admin/login');
     }
-    
-    
+
+
     /**
      * login form
      *
      * @return Zend_Dojo_Form
+     * @throws Zend_Form_Exception
      */
     protected function getLoginForm()
     {

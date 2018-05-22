@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 if [ "$(id -u)" != "0" ]; then
 	echo "This script must be run as root or sudo" 1>&2
 	exit 1
