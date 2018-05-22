@@ -1,4 +1,4 @@
-BASE="../"
-cp -f -R ${BASE}dojotoolkit/* ${BASE}bower_components/
-cp -f -R ${BASE}bower_components/dojo-calendar/* ${BASE}bower_components/dojox/calendar/
+#!/usr/bin/env bash
+cp -f -R dojotoolkit/* public/dojotoolkit/
+cp -f -R public/dojotoolkit/dojo-calendar/* public/dojotoolkit/dojox/calendar/
 

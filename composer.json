@@ -33,14 +33,13 @@
 	},
 	"authors": [
 		{
-			"name": "Desarrollo",
-			"email": "desarrollo@gamelena.com"
+			"name": "Rodrigo Riquelme",
+			"email": "rodrigo.riquelme.e@gmail.com"
 		}
 	],
 	"scripts" : {
 		"pre-archive-cmd": [
-			"bower install",
-			"./bower-postinstall.sh"
+			"bower install"
 		]
 	},
 	"minimum-stability": "stable"
