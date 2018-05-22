@@ -105,7 +105,6 @@
 	<target name="bower" depends="bower_componentsdir-check" description="Installing bower dependencies">
 		<antcall target="bower-install"/>
 		<antcall target="bower-update"/>
-		<exec dir="${basedir}/tasks"  executable="./bower-postinstall.sh" />
 	</target>
 	<target name="bower-install" unless="bower_componentsdir.exists" >
 		<exec executable="bower" failonerror="true">
