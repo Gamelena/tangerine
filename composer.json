@@ -37,6 +37,9 @@
 			"email": "rodrigo.riquelme.e@gmail.com"
 		}
 	],
+	"bin": [
+		"bin/tangerine-create"
+	],
 	"scripts" : {
 		"pre-archive-cmd": [
 			"bower install"
