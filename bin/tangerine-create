@@ -1,7 +1,10 @@
 #!/bin/bash
 
+unamestr=`uname`
+
 if [[ "$unamestr" == 'Darwin' ]]; then
-    if ! [ -x "$(command -v greadlink)" ]; then
+    echo -e 'Detectado Mac OS.\n'
+    if ! [[ -x "$(command -v greadlink)" ]]; then
       echo 'Error: greadlink is not installed, please install coreutils with brew or macports.' >&2
       exit 1
     fi

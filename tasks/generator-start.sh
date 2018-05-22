@@ -7,7 +7,7 @@ if [[ "$unamestr" == 'Darwin' ]]; then
       exit 1
     fi
     FILENAME=~/.bash_profile
-    TANGERINE_PATH=`echo $(dirname $(greadlink -e $PWD))`
+    TANGERINE_PATH=`echo $(dirname $(greadlink $PWD))`
 else
     FILENAME=~/.bashrc
     TANGERINE_PATH=`echo $(dirname $(readlink -e $PWD))`
