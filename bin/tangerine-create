@@ -1,9 +1,16 @@
 #!/bin/bash
 
-if [ -z "$TANGERINE_PATH" ]; then
-    echo "Debe definirse TANGERINE_PATH"
-    exit 1
-fi  
+if [[ "$unamestr" == 'Darwin' ]]; then
+    if ! [ -x "$(command -v greadlink)" ]; then
+      echo 'Error: greadlink is not installed, please install coreutils with brew or macports.' >&2
+      exit 1
+    fi
+    FILENAME=~/.bash_profile
+    TANGERINE_PATH=`echo $(dirname $(greadlink -e $PWD))`
+else
+    FILENAME=~/.bashrc
+    TANGERINE_PATH=`echo $(dirname $(readlink -e $PWD))`
+fi
 
 shopt -s nocasematch
 
@@ -250,7 +257,7 @@ echo " "
 echo "Puede tomar como referencia uno de estos comandos:"
 echo " "
 echo "      chown www-data  $DEST_PATH/web/log/ $DEST_PATH/web/cache/ $DEST_PATH/web/public/upfiles/"
-echo "      chmod 777 -R  $DEST_PATH/web/log/ $DEST_PATH/web/cache/ $DEST_PATH/web/public/upfiles/"
+echo "      chmod 755 -R  $DEST_PATH/web/log/ $DEST_PATH/web/cache/ $DEST_PATH/web/public/upfiles/"
 echo " "
 echo "Tambien puede crear el alias mediante Apache Ant"
 echo "-------------"

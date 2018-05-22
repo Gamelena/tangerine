@@ -2,6 +2,10 @@
 unamestr=`uname`
 
 if [[ "$unamestr" == 'Darwin' ]]; then
+    if ! [ -x "$(command -v greadlink)" ]; then
+      echo 'Error: greadlink is not installed, please install coreutils with brew or macport.' >&2
+      exit 1
+    fi
     FILENAME=~/.bash_profile
     TANGERINE_PATH=`echo $(dirname $(greadlink -e $PWD))`
 else
