@@ -1,5 +1,15 @@
-FILENAME=~/.bashrc
-TANGERINE_PATH=`echo $(dirname $(readlink -e $PWD))`
+#!/usr/bin/env bash
+unamestr=`uname`
+
+if [[ "$unamestr" == 'Darwin' ]]; then
+    FILENAME=~/.bash_profile
+    TANGERINE_PATH=`echo $(dirname $(greadlink -e $PWD))`
+else
+    FILENAME=~/.bashrc
+    TANGERINE_PATH=`echo $(dirname $(readlink -e $PWD))`
+fi
+
+
 if grep -i  "TANGERINE_PATH" $FILENAME; then
 	echo "Se encontró referencia a TANGERINE_PATH en $FILENAME, no se hace nada."
 else

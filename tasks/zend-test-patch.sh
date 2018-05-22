@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 ROOT_DIR=`readlink -f $PWD/..`
 cd ../vendor/zendframework/zendframework1/library/Zend/Test/PHPUnit/
 echo "Generando parche para Zend_Test_PHPUnit_ControllerTestCase"

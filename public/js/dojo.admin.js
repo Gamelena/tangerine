@@ -23,7 +23,7 @@ var initLoad = function()
  */
 window.tinyMCEPreInit = {
         suffix : '',
-        base : '/libs/tinymce/jscripts/tiny_mce', // your path to tinyMCE
+        base : '/js/libs/tinymce/jscripts/tiny_mce', // your path to tinyMCE
         query : 'something'
 };
 

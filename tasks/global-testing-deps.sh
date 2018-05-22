@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 wget -c https://www.phpunit.de/phpunit-4.8.18.phar
 chmod +x phpunit-4.8.18.phar
 alias phpunit=phpunit-4.8.18.phar
