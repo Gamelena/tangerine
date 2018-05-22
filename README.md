@@ -11,7 +11,7 @@ Dependencies
 
 1. Composer
 2. Bower
-3. Ant (optional)
+3. Ant
 
 for full build
 	
