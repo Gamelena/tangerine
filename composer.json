@@ -4,8 +4,8 @@
 	"version": "1.7.2",
 	"type": "library",
 	"suggest": {
-		"ext-gd": "to use GD library based image processing.",
-		"ext-imagick": "to use Imagick based image processing.",
+		"ext-gd": "to use GD library based image processing, you cant had installed ext-imagick ignore this.",
+		"ext-imagick": "to use Imagick based image processing, you cant had installed ext-gd ignore this.",
 		"ext-xsl": "to generate phpDoc documentation."
 	},
 	"require": {
