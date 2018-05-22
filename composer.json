@@ -9,7 +9,7 @@
 		"ext-xsl": "to generate phpDoc documentation."
 	},
 	"require": {
-		"php": ">=5.4.1",
+		"php": ">=5.5.0",
 		"ext-libxml": "*",
 		"ext-mbstring": "*",
 		"ext-dom": "*",
