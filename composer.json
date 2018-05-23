@@ -38,7 +38,8 @@
 		}
 	],
 	"bin": [
-		"bin/tangerine-create"
+		"bin/tangerine-create",
+		"vendor/zendframework/zendframework1/bin/zf"
 	],
 	"scripts" : {
 		"pre-archive-cmd": [
