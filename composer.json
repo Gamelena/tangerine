@@ -1,7 +1,7 @@
 {
 	"name": "gamelena/tangerine",
 	"description": "Tangerine",
-	"version": "1.7.3",
+	"version": "1.7.4",
 	"type": "library",
 	"suggest": {
 		"ext-gd": "to use GD library based image processing, you cant had installed ext-imagick ignore this.",
