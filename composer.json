@@ -8,13 +8,19 @@
 		"ext-imagick": "to use Imagick based image processing, you cant had installed ext-gd ignore this.",
 		"ext-xsl": "to generate phpDoc documentation."
 	},
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/magento-engcom/zf1-php-7.2-support"
+        }
+    ],
 	"require": {
 		"php": ">=5.5.0",
 		"ext-libxml": "*",
 		"ext-mbstring": "*",
 		"ext-dom": "*",
 		"ext-mysqli": "*",
-		"zendframework/zendframework1": "1.12.16",
+		"magento/zendframework1": "1.12.*",
 		"phpoffice/phpexcel": "1.8.*"
 	},
 	"require-dev": {
@@ -39,8 +45,8 @@
 	],
 	"bin": [
 		"bin/tangerine-create",
-		"vendor/zendframework/zendframework1/bin/zf.sh",
-        "vendor/zendframework/zendframework1/bin/zf.bat"
+		"vendor/magento/zendframework1/bin/zf.sh",
+        "vendor/magento/zendframework1/bin/zf.bat"
 	],
 	"scripts" : {
 		"pre-archive-cmd": [
