@@ -1,7 +1,7 @@
 {
 	"name": "gamelena/tangerine",
 	"description": "Tangerine",
-	"version": "1.7.6",
+	"version": "1.7.5",
 	"type": "library",
 	"suggest": {
 		"ext-gd": "to use GD library based image processing, you cant had installed ext-imagick ignore this.",
@@ -20,7 +20,7 @@
 		"ext-mbstring": "*",
 		"ext-dom": "*",
 		"ext-mysqli": "*",
-		"magento/zendframework1": "1.12.*",
+		"magento/zendframework1": "dev-master#1.12.16",
 		"phpoffice/phpexcel": "1.8.*"
 	},
 	"require-dev": {

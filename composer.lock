@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "95fdca460dfc743a569c045f984610a9",
+    "content-hash": "79cd72b209932fbe24396fcb156e9953",
     "packages": [
         {
             "name": "magento/zendframework1",
-            "version": "1.12.16-patch3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento-engcom/zf1-php-7.2-support",
-                "reference": "21985df8d570d2bcb5f908a113d4fafe50947c1e"
+                "reference": "a6a427ec8d45f58168b0a2ced4a82b0c8553ed57"
             },
             "archive": {
                 "exclude": [
@@ -51,7 +51,7 @@
                 "framework",
                 "zf1"
             ],
-            "time": "2017-02-27T21:19:07+00:00"
+            "time": "2018-05-21T20:39:51+00:00"
         },
         {
             "name": "phpoffice/phpexcel",
@@ -1644,7 +1644,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "magento/zendframework1": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
