@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "da1da48301e3b9e620c412c677c924b6",
+    "content-hash": "9cd02c0d66a56ff00c1be6cb1a87a355",
     "packages": [
         {
             "name": "magento/zendframework1",
