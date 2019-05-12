@@ -1,26 +1,20 @@
 {
     "name": "gamelena/tangerine",
     "description": "Tangerine",
-    "version": "1.7.5",
+    "version": "1.7.6",
     "type": "library",
     "suggest": {
         "ext-gd": "to use GD library based image processing, you cant had installed ext-imagick ignore this.",
         "ext-imagick": "to use Imagick based image processing, you cant had installed ext-gd ignore this.",
         "ext-xsl": "to generate phpDoc documentation."
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/magento-engcom/zf1-php-7.2-support"
-        }
-    ],
     "require": {
         "php": ">=5.5.0",
         "ext-libxml": "*",
         "ext-mbstring": "*",
         "ext-dom": "*",
         "ext-mysqli": "*",
-        "magento/zendframework1": "1.12.16",
+        "shardj/zendframework1-php7.2": "^1.14.1",
         "phpoffice/phpexcel": "1.8.*"
     },
     "require-dev": {
