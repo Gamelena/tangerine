@@ -4,55 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db988462a388574c05b05104c1b1832e",
+    "content-hash": "4c37b11bf662e59a6ec1e25431a98ee4",
     "packages": [
-        {
-            "name": "magento/zendframework1",
-            "version": "1.12.16",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/magento-engcom/zf1-php-7.2-support",
-                "reference": "c9d607bfd9454bc18b9deff737ccd5d044e2ab10"
-            },
-            "archive": {
-                "exclude": [
-                    "/demos",
-                    "/documentation",
-                    "/tests"
-                ]
-            },
-            "require": {
-                "php": ">=5.2.11"
-            },
-            "require-dev": {
-                "phpunit/dbunit": "1.3.*",
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.12.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Zend_": "library/"
-                }
-            },
-            "include-path": [
-                "library/"
-            ],
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Magento Zend Framework 1",
-            "homepage": "http://framework.zend.com/",
-            "keywords": [
-                "framework",
-                "zf1"
-            ],
-            "time": "2015-10-29T14:34:55+00:00"
-        },
         {
             "name": "phpoffice/phpexcel",
             "version": "1.8.2",
@@ -115,6 +68,56 @@
             ],
             "abandoned": "phpoffice/phpspreadsheet",
             "time": "2018-11-22T23:07:24+00:00"
+        },
+        {
+            "name": "shardj/zendframework1-php7.2",
+            "version": "1.14.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Shardj/zf1-future.git",
+                "reference": "c4fe107468f7d334d7cba1968db18b995dfe075b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Shardj/zf1-future/zipball/c4fe107468f7d334d7cba1968db18b995dfe075b",
+                "reference": "c4fe107468f7d334d7cba1968db18b995dfe075b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.11"
+            },
+            "replace": {
+                "zendframework/zendframework1": "1.*"
+            },
+            "require-dev": {
+                "phpunit/dbunit": "1.3.*",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.12.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend_": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "library/"
+            ],
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 PHP 7.2 and 7.3 compatible",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework"
+            ],
+            "time": "2019-04-18T14:13:57+00:00"
         }
     ],
     "packages-dev": [

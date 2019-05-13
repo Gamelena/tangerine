@@ -39,8 +39,8 @@
     ],
     "bin": [
         "bin/tangerine-create",
-        "vendor/magento/zendframework1/bin/zf.sh",
-        "vendor/magento/zendframework1/bin/zf.bat"
+        "vendor/shardj/zendframework1-php7.2/bin/zf.sh",
+        "vendor/shardj/zendframework1-php7.2/bin/zf.bat"
     ],
     "scripts" : {
         "pre-archive-cmd": [
