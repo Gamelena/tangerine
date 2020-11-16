@@ -1,7 +1,7 @@
 {
     "name": "gamelena/tangerine",
     "description": "Tangerine",
-    "version": "1.7.6",
+    "version": "1.7.7",
     "type": "library",
     "suggest": {
         "ext-gd": "to use GD library based image processing, you cant had installed ext-imagick ignore this.",
@@ -14,8 +14,8 @@
         "ext-mbstring": "*",
         "ext-dom": "*",
         "ext-mysqli": "*",
-        "shardj/zendframework1-php7.2": "^1.14.1",
-        "phpoffice/phpexcel": "1.8.*"
+        "phpoffice/phpexcel": "1.8.*",
+        "shardj/zf1-future": "^1.18"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
@@ -38,9 +38,7 @@
         }
     ],
     "bin": [
-        "bin/tangerine-create",
-        "vendor/shardj/zendframework1-php7.2/bin/zf.sh",
-        "vendor/shardj/zendframework1-php7.2/bin/zf.bat"
+        "bin/tangerine-create"
     ],
     "scripts" : {
         "pre-archive-cmd": [
