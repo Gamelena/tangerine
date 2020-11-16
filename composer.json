@@ -38,7 +38,9 @@
         }
     ],
     "bin": [
-        "bin/tangerine-create"
+        "bin/tangerine-create",
+        "vendor/shardj/zf1-future/bin/zf.sh",
+        "vendor/shardj/zf1-future/bin/zf.bat"
     ],
     "scripts" : {
         "pre-archive-cmd": [
