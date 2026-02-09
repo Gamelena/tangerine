@@ -1,62 +1,33 @@
 [![Build Status](https://travis-ci.org/Gamelena/tangerine.svg?branch=develop)](https://travis-ci.org/Gamelena/tangerine)
 
-Requeriments
-======================
+# Local Testing Environment (Docker) - Recommended
 
-- PHP Version >= 5.5
-- MYSQL Version >= 5
+This configuration is provided **for developing and testing** the library in a standalone environment. Since Tangerine is a PHP library, this setup lifts a test application container to verify functionality.
 
-Dependencies
-============
+## Usage
 
-1. Composer
-2. Bower
-3. Ant
-
-for full build
-	
-```	
-ant
+### 1. Start Environment
+Lifts PHP 7.2 Apache + MySQL 5.7 containers.
+```bash
+docker-compose up -d --build
 ```
 
-for quick build
+### 2. Install & Patch (Replaces Ant/Bower)
+Runs `composer install`, `bower install`, and applies patches (like `zend-test-patch.sh`) inside the container.
+```bash
+# Remove local lock file if present (to avoid platform mismatches)
+rm -f composer.lock 
+
+docker-compose exec app bootstrap.sh
 ```
-ant quick-build
+
+### 3. Initialize Test Database
+Creates the `tangerine` database and users.
+```bash
+docker-compose exec app bash init_db.sh
 ```
 
-
-CRUD CREATION
-============
-
-4. Run
-```
-	tangerine-create 
-```
-Se pedirá ingresar: 
--	Tipo de DB (MySQL por omisión), 
--	nombre de DB, Usuario DB, Password DB,  estos parámetros son de una instancia de DB ya existente o para crear una nueva DB.
-
-Después se podrán escoger las opciones:
-
- - Creación automática de Base de Datos y Usuario (S/N) (N por omisión)
-   escoger S en caso de no usar una DB ya existente, sólo se crea la DB
-   si no existe.
-
-	
-
- - Generación automática de tablas y datos base (S/N) (S por omisión)
-   solo se (re)crean los datos básicos para el funcionamiento de
-   Tangerine.
-
-	
-
- - Copiar modelos, módulos y controladores de Tangerine (N por omisión)
-   escoger S sólo en caso de necesitar modificar modelos, módulos,
-   controladores/vistas por defecto, tener en cuenta que en este caso de
-   escoger S, se crea una copia del MVC, lo cual permite personalizar
-   estos componentes pero las actualizaciones y mejoras que se hagan en
-   Tangerine en estos elementos no serán reflejados.
-
-
+### 4. Verify
+Access the test instance at [http://localhost:8888](http://localhost:8888).
 
 

@@ -1,0 +1,27 @@
+version: '3'
+services:
+  app:
+    build: .
+    container_name: tangerine-app
+    ports:
+      - "8888:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - APPLICATION_ENV=development
+
+  db:
+    image: mysql:5.7
+    container_name: tangerine-db
+    environment:
+      MYSQL_ROOT_PASSWORD: gamelena
+      MYSQL_DATABASE: tangerine
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
