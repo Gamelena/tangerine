@@ -1,11 +1,11 @@
-FROM php:7.2-apache
+FROM php:8.1-apache
 
-# Fix for Debian Buster EOL archives
-RUN echo "deb [trusted=yes] http://archive.debian.org/debian buster main" > /etc/apt/sources.list && \
-    echo "deb [trusted=yes] http://archive.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list && \
-    echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf.d/99no-check-valid-until && \
-    echo "Acquire::AllowInsecureRepositories true;" > /etc/apt/apt.conf.d/99allow-insecure && \
-    echo "Acquire::AllowDowngradeToInsecureRepositories true;" >> /etc/apt/apt.conf.d/99allow-insecure
+# Fix for Debian Buster EOL archives (Not needed for 8.1/Bullseye+)
+# RUN echo "deb [trusted=yes] http://archive.debian.org/debian buster main" > /etc/apt/sources.list && \
+#     echo "deb [trusted=yes] http://archive.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list && \
+#     echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf.d/99no-check-valid-until && \
+#     echo "Acquire::AllowInsecureRepositories true;" > /etc/apt/apt.conf.d/99allow-insecure && \
+#     echo "Acquire::AllowDowngradeToInsecureRepositories true;" >> /etc/apt/apt.conf.d/99allow-insecure
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -16,7 +16,10 @@ RUN apt-get update && apt-get install -y \
     libmcrypt-dev \
     libxml2-dev \
     libssl-dev \
+    libonig-dev \
     libxslt-dev \
+    libzip-dev \
+    libjpeg-dev \
     mariadb-client \
     && rm -rf /var/lib/apt/lists/*
 
@@ -26,11 +29,14 @@ RUN apt-get update && apt-get install -y nodejs npm
 # Install Bower globally
 RUN npm install -g bower
 
+# Configure GD with jpeg support
+RUN docker-php-ext-configure gd --with-jpeg
+
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mysqli gd zip soap mbstring xsl
 
-# Install Mcrypt (deprecated in 7.2)
-RUN pecl install mcrypt-1.0.4 && docker-php-ext-enable mcrypt
+# Install Mcrypt (deprecated in 7.2, removed in 8.0+)
+# RUN pecl install mcrypt-1.0.4 && docker-php-ext-enable mcrypt
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
@@ -52,7 +58,7 @@ COPY bootstrap.sh /usr/local/bin/bootstrap.sh
 RUN chmod +x /usr/local/bin/bootstrap.sh
 
 # Install Composer
-COPY --from=composer:1 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 WORKDIR /var/www/html

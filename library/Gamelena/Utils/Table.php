@@ -37,36 +37,37 @@ class Gamelena_Utils_Table
      * @param $component Gamelena_Admin_Components
      * @return string html
      */
-    function showTitles ($rowset, $html = true, $separator = ',')
+    function showTitles($rowset, $html = true, $separator = ',')
     {
         $out = $html ? "<tr>" : "";
         $i = 0;
         $keys = array_keys($this->_name);
         $counter = $rowset instanceof Zend_Db_Table_Rowset ? count(
-                $rowset[0]->toArray()) : count($rowset[0]);
+            $rowset[0]->toArray()
+        ) : count($rowset[0]);
         foreach ($rowset[0] as $target => $value) {
             if (in_array($target, $keys)) {
-                $i ++;
-                if (! isset($this->_xml)) {
+                $i++;
+                if (!isset($this->_xml)) {
                     if ($html) {
                         $out .= "<th>$target</th>";
                     } else {
                         $out .= stristr($target, $separator) ||
-                                 stristr($target, '"') ? '"' .
-                                 str_replace('"', "", $target) . '"' : $target;
+                            stristr($target, '"') ? '"' .
+                            str_replace('"', "", $target) . '"' : $target;
                     }
-                } else 
-                    if (! empty($this->_name[$target])) {
+                } else
+                    if (!empty($this->_name[$target])) {
                         if ($html) {
                             $out .= "<th>{$this->_name[$target]}</th>";
                         } else {
                             $out .= stristr(",", $this->_name[$target]) ||
-                                     stristr('"', $this->_name[$target]) ? '"' .
-                                     str_replace('"', "", $this->_name[$target]) .
-                                     '"' : $this->_name[$target];
+                                stristr('"', $this->_name[$target]) ? '"' .
+                                str_replace('"', "", $this->_name[$target]) .
+                                '"' : $this->_name[$target];
                         }
                     }
-                if (! $html && $i < $counter) {
+                if (!$html && $i < $counter) {
                     $out .= $separator;
                 }
             }
@@ -87,28 +88,29 @@ class Gamelena_Utils_Table
      *            $count
      * @return HTML
      */
-    function showContent ($rowset, $count, $html = true, $separator = ',')
+    function showContent($rowset, $count, $html = true, $separator = ',')
     {
         $out = $html ? "<tr>" : "";
         $i = 0;
         $keys = array_keys($this->_name);
         $counter = is_a($rowset, 'Zend_Db_Table_Rowset') ? count(
-                $rowset[$count]->toArray()) : count($rowset[$count]);
+            $rowset[$count]->toArray()
+        ) : count($rowset[$count]);
         foreach ($rowset[$count] as $target => $value) {
             if (in_array($target, $keys)) {
                 $value = html_entity_decode($value);
-                $i ++;
-                if (! empty($this->_name[$target]) || ! isset($this->_xml)) {
+                $i++;
+                if (!empty($this->_name[$target]) || !isset($this->_xml)) {
                     if ($html) {
                         $out .= "<td>$value</td>";
                     } else {
                         $out .= $value &&
-                                 (stristr($value, $separator) ||
-                                 stristr($value, '"')) ? '"' .
-                                 str_replace('"', "", $value) . '"' : $value;
+                            (stristr($value, $separator) ||
+                                stristr($value, '"')) ? '"' .
+                            str_replace('"', "", $value) . '"' : $value;
                     }
                 }
-                if (! $html && $i < $counter) {
+                if (!$html && $i < $counter) {
                     $out .= $separator;
                 }
             }
@@ -124,20 +126,24 @@ class Gamelena_Utils_Table
      * Lee los alias de los campos de la tabla según su equivalente en el XML
      * y lo prepara para su impresión si es que debe ser visible
      */
-    private function parseComponent ($component)
+    private function parseComponent($component)
     {
         $file = Gamelena_Admin_Xml::getFullPath($component);
         $this->_xml = new Gamelena_Admin_Xml($file, null, true);
-        
+
         foreach ($this->_xml->elements->element as $element) {
-            if ($element->getAttribute("visible") &&
-                     $element->getAttribute("visible") === "true") {
+            if (
+                $element->getAttribute("visible") &&
+                $element->getAttribute("visible") === "true"
+            ) {
                 if ($element->getAttribute("field")) {
                     $this->_name[$element->getAttribute("field")] = html_entity_decode(
-                            $element->getAttribute("name"));
+                        $element->getAttribute("name")
+                    );
                 } else {
                     $this->_name[$element->getAttribute("target")] = html_entity_decode(
-                            $element->getAttribute("name"));
+                        $element->getAttribute("name")
+                    );
                 }
             }
         }
@@ -152,10 +158,10 @@ class Gamelena_Utils_Table
      *            string|array componente XML|array de títulos
      * @return string tabla HTML
      */
-    public function rowsetToCsv ($rowset, $component = false)
+    public function rowsetToCsv($rowset, $component = false)
     {
         if ($component) {
-            if (! is_array($component)) { // buscar títulos en componente xml
+            if (!is_array($component)) { // buscar títulos en componente xml
                 $this->parseComponent($component);
             } else { // sacar títulos de array
                 $row = $rowset[0];
@@ -163,24 +169,24 @@ class Gamelena_Utils_Table
                 foreach ($row as $i => $v) {
                     if (isset($component[$j])) {
                         $this->_name[$i] = $component[$j];
-                        $j ++;
+                        $j++;
                     }
                 }
-                
+
                 $this->_xml = "array";
             }
         }
-        
+
         $count = count($rowset);
         $out = '';
-        
-        if (! empty($rowset) && count($rowset) > 0) {
+
+        if (!empty($rowset) && count($rowset) > 0) {
             if ($rowset instanceof Zend_Db_Table_Rowset) {
                 $rowset = $rowset->toArray();
             }
-            
+
             $out .= $this->showTitles($rowset, false);
-            for ($i = 0; $i < $count; $i ++) {
+            for ($i = 0; $i < $count; $i++) {
                 $out .= $this->showContent($rowset, $i, false);
             }
         }
@@ -196,29 +202,29 @@ class Gamelena_Utils_Table
      *            string|array componente XML|array de títulos
      * @return string tabla HTML
      */
-    public function rowsetToHtml ($rowset, $component = false)
+    public function rowsetToHtml($rowset, $component = false)
     {
         if ($component) {
-            if (! is_array($component)) { // buscar títulos en componente xml
+            if (!is_array($component)) { // buscar títulos en componente xml
                 $this->parseComponent($component);
             } else { // sacar títulos de array
                 $row = $rowset[0];
                 $j = 0;
                 foreach ($row as $i => $v) {
                     $this->_name[$i] = $component[$j];
-                    $j ++;
+                    $j++;
                 }
-                
+
                 $this->_xml = "array";
             }
         }
-        
+
         $count = count($rowset);
-        
+
         $out = "<table border=\"1\">\n";
-        if (! empty($rowset) && count($rowset) > 0) {
+        if (!empty($rowset) && count($rowset) > 0) {
             $out .= $this->showTitles($rowset);
-            for ($i = 0; $i < $count; $i ++) {
+            for ($i = 0; $i < $count; $i++) {
                 $out .= $this->showContent($rowset, $i);
             }
         }
@@ -238,92 +244,114 @@ class Gamelena_Utils_Table
      * @param
      *            string
      */
-    public function rowsetToExcel ($rowset, $component = false, 
-            $excelVersion = 'Excel5', $filename = false)
-    {
+    public function rowsetToExcel(
+        $rowset,
+        $component = false,
+        $excelVersion = 'Excel5',
+        $filename = false
+    ) {
         if ($component) {
-            if (! is_array($component)) { // buscar títulos en componente xml
+            if (!is_array($component)) { // buscar títulos en componente xml
                 $this->parseComponent($component);
             } else { // sacar títulos de array
                 $row = $rowset[0];
                 $j = 0;
                 foreach ($row as $i => $v) {
                     $this->_name[$i] = $component[$j];
-                    $j ++;
+                    $j++;
                 }
-                
+
                 $this->_xml = "array";
             }
         }
         $count = count($rowset);
-        $excel = new PHPExcel();
-        $excel->setActiveSheetIndex(0);
-        $excel->getProperties()->setCreator("gamelena");
-        
-        if (! empty($this->_xml[0]['NAME'])) {
-            $excel->getProperties()->setTitle(! empty($this->_xml[0]['NAME']));
+
+        // Create new Spreadsheet object
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $spreadsheet->setActiveSheetIndex(0);
+        $spreadsheet->getProperties()->setCreator("gamelena");
+
+        if (!empty($this->_xml[0]['NAME'])) {
+            $spreadsheet->getProperties()->setTitle(!empty($this->_xml[0]['NAME']));
         }
-        
-        if (! $filename) {
-            $filename = (! empty($this->_xml[0]['TARGET'])) ? $this->_xml[0]['TARGET'] : "Reporte";
+
+        if (!$filename) {
+            $filename = (!empty($this->_xml[0]['TARGET'])) ? $this->_xml[0]['TARGET'] : "Reporte";
         }
-        
-        $ext = $excelVersion == 'Excel2007' ? 'xlsx' : 'xls';
-        $worksheet = $excel->getActiveSheet();
-        
-        $col = "A";
+
+        $headers = [];
+        $writerType = 'Xls';
+        $ext = 'xls';
+
+        if ($excelVersion == 'Excel2007') {
+            $writerType = 'Xlsx';
+            $ext = 'xlsx';
+        }
+
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $col = 1; // 1-based column index
         $row = 1;
-        
+
         if ($count) {
             // Titulos
             foreach ($rowset[0] as $target => $value) {
-                if (! isset($this->_xml)) {
-                    $worksheet->getCell($col . $row)->setValue($target);
-                    $col ++;
-                } else 
-                    if (! empty($this->_name[$target])) {
+                if (!isset($this->_xml)) {
+                    $worksheet->setCellValueByColumnAndRow($col, $row, $target);
+                    $col++;
+                } else
+                    if (!empty($this->_name[$target])) {
                         $title = str_ireplace('\n', "", $this->_name[$target]);
-                        $title = html_entity_decode($title, null, 'UTF-8');
-                        $worksheet->getCell($col . $row)->setValue($title);
-                        $col ++;
+                        $title = html_entity_decode((string) $title, ENT_QUOTES | ENT_HTML401, 'UTF-8');
+                        $worksheet->setCellValueByColumnAndRow($col, $row, $title);
+                        $col++;
                     }
             }
-            
-            $worksheet->getStyle(1)
-                ->getFont()
-                ->setBold(true)
-                ->setUnderline("single")
-                ->setName("Arial");
-            
+
+            // Styles for header
+            $styleArray = [
+                'font' => [
+                    'bold' => true,
+                    'underline' => \PhpOffice\PhpSpreadsheet\Style\Font::UNDERLINE_SINGLE,
+                    'name' => 'Arial'
+                ]
+            ];
+            $worksheet->getStyle('A1:' . $worksheet->getHighestColumn() . '1')->applyFromArray($styleArray);
+
             // Valores
             $row = 2;
             foreach ($rowset as $index => $tuple) {
-                $col = "A";
+                $col = 1;
                 foreach ($tuple as $target => $value) {
-                    if (! empty($this->_name[$target]) || ! isset($this->_xml)) {
-                        $value = html_entity_decode($value, null, 'UTF-8');
-                        $worksheet->getCell($col . $row)->setValue($value);
-                        $col ++;
+                    if (!empty($this->_name[$target]) || !isset($this->_xml)) {
+                        $value = html_entity_decode((string) $value, ENT_QUOTES | ENT_HTML401, 'UTF-8');
+                        $worksheet->setCellValueByColumnAndRow($col, $row, $value);
+                        $col++;
                     }
                 }
-                $row ++;
+                $row++;
             }
         }
-        ob_start();
-        
-        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-        header("Cache-Control: no-store, no-cache, must-revalidate");
-        header("Cache-Control: post-check=0, pre-check=0", false);
-        header("Pragma: no-cache");
-        header(
-                "Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+        // Clean output buffer
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        // Redirect output to a client’s web browser (Xls or Xlsx)
+        if ($writerType == 'Xlsx') {
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        } else {
+            header('Content-Type: application/vnd.ms-excel');
+        }
+
         header("Content-Disposition: attachment;filename=\"$filename.$ext\"");
-        
-        $objWriter = PHPExcel_IOFactory::createWriter($excel, $excelVersion);
-        ob_end_clean();
-        
-        $objWriter->save('php://output');
-        $excel->disconnectWorksheets();
-        unset($excel);
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, $writerType);
+        $writer->save('php://output');
+        exit;
     }
 }

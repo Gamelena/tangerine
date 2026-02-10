@@ -28,7 +28,7 @@ class Gamelena_Utils_Form
      * @var array
      */
     private $_forbiddenExtensions = array('py', 'php', 'pl', 'cgi', 'bin', 'sh');
-    
+
     /**
      * 
      * @return array()
@@ -37,7 +37,7 @@ class Gamelena_Utils_Form
     {
         return $this->_forbiddenExtensions;
     }
-    
+
     /**
      * 
      * @param array $forbiddenExtensions
@@ -46,7 +46,7 @@ class Gamelena_Utils_Form
     {
         $this->_forbiddenExtensions = $forbiddenExtensions;
     }
-    
+
     /**
      * Forbid Extension $extension
      * 
@@ -56,7 +56,7 @@ class Gamelena_Utils_Form
     {
         $this->_forbiddenExtensions[] = $extension;
     }
-    
+
     /**
      * Allow upload files with extension $extension
      * 
@@ -66,7 +66,7 @@ class Gamelena_Utils_Form
     public function allowExtension($extension)
     {
         $modified = false;
-        
+
         foreach ($this->_forbiddenExtensions as $i => $ext) {
             if ($extension == $ext) {
                 unset($this->_forbiddenExtensions[$i]);
@@ -76,7 +76,7 @@ class Gamelena_Utils_Form
         }
         return $modified;
     }
-    
+
     /**
      * 
      * @param $array array - si existe se transforma $array a objeto y se retorna, ignorando el $_REQUEST por defecto.
@@ -129,7 +129,7 @@ class Gamelena_Utils_Form
     {
         return count($_POST);
     }
-    
+
     /**
      * Cuenta los $_GET
      * @return int
@@ -138,7 +138,7 @@ class Gamelena_Utils_Form
     {
         return count($_GET);
     }
-    
+
     /**
      * 
      * @return Gamelena_Utils_Form
@@ -153,7 +153,7 @@ class Gamelena_Utils_Form
         }
         return $me[0];
     }
-    
+
     /**
      * Upload de archivos
      * @param string $file
@@ -168,23 +168,23 @@ class Gamelena_Utils_Form
             $info = array();
             foreach ($_FILES[$file]['name'] as $i => $f) {
                 if ($_FILES[$file]['size'][$i] > 0 && $_FILES[$file]['size'][$i] < $maxSize && !in_array(substr($_FILES[$file]['name'][$i], -3, 3), $this->_forbiddenExtensions)) {
-                    $fp      = explode(".", $_FILES[$file]['name'][$i]);
+                    $fp = explode(".", $_FILES[$file]['name'][$i]);
                     $oldname = array();
                     foreach ($fp as $j => $v) {
                         if ($j < count($fp) - 1) {
                             $oldname[] = $v;
                         }
                     }
-                    $oldname  = implode(".", $oldname);
-                    $ext      = $fp[count($fp) - 1];
+                    $oldname = implode(".", $oldname);
+                    $ext = $fp[count($fp) - 1];
                     $allowed = $listIsBlack ? !in_array($ext, $list) : in_array($ext, $list);
-                    
+
                     $filename = substr(md5(microtime() . $_FILES[$file]['tmp_name'][$i]), 0, 8) . Gamelena_Utils_String::slugify($oldname) . ".$ext";
                     if ($allowed) {
                         if ($this->moveUploadedFile($_FILES[$file]['tmp_name'][$i], $dest . "/" . $filename)) {
-                            $info[$i]['size']     = $_FILES[$file]['size'][$i];
+                            $info[$i]['size'] = $_FILES[$file]['size'][$i];
                             $info[$i]['filename'] = $filename;
-                            $info[$i]['ext']      = $ext;
+                            $info[$i]['ext'] = $ext;
                         } else {
                             Debug::write("No se pudo subir archivo {$_FILES[$file]['tmp_name'][$i]} a $dest." / ".$filename");
                             $info = false;
@@ -198,20 +198,20 @@ class Gamelena_Utils_Form
             return $info;
         } else {
             if ($_FILES[$file]['size'] > 0 && $_FILES[$file]['size'] < $maxSize && !in_array(substr($_FILES[$file]['name'], -3, 3), $this->_forbiddenExtensions)) {
-                $fp      = explode(".", $_FILES[$file]['name']);
+                $fp = explode(".", $_FILES[$file]['name']);
                 $oldname = array();
                 foreach ($fp as $j => $v) {
                     if ($j < count($fp) - 1) {
                         $oldname[] = $v;
                     }
                 }
-                $oldname  = implode(".", $oldname);
-                $ext      = $fp[count($fp) - 1];
+                $oldname = implode(".", $oldname);
+                $ext = $fp[count($fp) - 1];
                 $filename = substr(md5(microtime() . $_FILES[$file]['tmp_name']), 0, 8) . Gamelena_Utils_String::slugify($oldname) . ".$ext";
                 if ($this->moveUploadedFile($_FILES[$file]['tmp_name'], $dest . "/" . $filename)) {
-                    $info             = $_FILES[$file];
+                    $info = $_FILES[$file];
                     $info['filename'] = $filename;
-                    $info['ext']      = $ext;
+                    $info['ext'] = $ext;
                 } else {
                     Console::error("No se pudo subir archivo {$_FILES[$file]['tmp_name']} a {$dest}/{$filename}");
                     $info = false;
@@ -227,23 +227,25 @@ class Gamelena_Utils_Form
      * @param $value
      * @return unknown_type
      */
-    
+
     public function encode($value)
     {
+        /*
         if (get_magic_quotes_gpc() == 1 && !is_array($value)) {
             $value = stripslashes($value);
         }
-        
+        */
+
         if (!is_array($value)) {
             if (strlen($value) <= 256) {//Si la longitud de $value es mucho más larga que esto $this->_unescape demora demasiado en procesar.
-                $value = htmlentities($this->_unescape($value), null, 'UTF-8');
+                $value = htmlentities($this->_unescape($value), ENT_QUOTES | ENT_HTML401, 'UTF-8');
             } else {
-                $value = htmlentities($value, null, 'UTF-8');
+                $value = htmlentities($value, ENT_QUOTES | ENT_HTML401, 'UTF-8');
             }
         }
         return $value;
     }
-    
+
     /**
      * 
      * @param string $orig
@@ -266,8 +268,8 @@ class Gamelena_Utils_Form
     private function _unescape($source, $iconv_to = 'UTF-8')
     {
         $decodedStr = '';
-        $pos        = 0;
-        $len        = !is_array($source) ? strlen($source) : 0;
+        $pos = 0;
+        $len = !is_array($source) ? strlen($source) : 0;
         while ($pos < $len) {
             $charAt = substr($source, $pos, 1);
             if ($charAt == '%') {
@@ -277,7 +279,7 @@ class Gamelena_Utils_Form
                     // we got a unicode character
                     $pos++;
                     $unicodeHexVal = substr($source, $pos, 4);
-                    $unicode       = hexdec($unicodeHexVal);
+                    $unicode = hexdec($unicodeHexVal);
                     $decodedStr .= $this->_code2utf($unicode);
                     $pos += 4;
                 } else {
@@ -291,14 +293,14 @@ class Gamelena_Utils_Form
                 $pos++;
             }
         }
-        
+
         if ($iconv_to != "UTF-8") {
             $decodedStr = iconv("UTF-8", $iconv_to, $decodedStr);
         }
-        
+
         return $decodedStr;
     }
-    
+
     /**
      * 
      * @param int $num
@@ -307,20 +309,20 @@ class Gamelena_Utils_Form
     private function _code2utf($num)
     {
         if ($num < 128) {
-            return chr($num); 
+            return chr($num);
         }
         if ($num < 2048) {
-            return chr(($num >> 6) + 192) . chr(($num & 63) + 128); 
+            return chr(($num >> 6) + 192) . chr(($num & 63) + 128);
         }
         if ($num < 65536) {
-            return chr(($num >> 12) + 224) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128); 
+            return chr(($num >> 12) + 224) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
         }
         if ($num < 2097152) {
-            return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128); 
+            return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
         }
         return '';
     }
-    
+
     /**
      * 
      * @param string $string
@@ -339,10 +341,11 @@ class Gamelena_Utils_Form
                |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3 
                | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15 
                |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16 
-           )*$%xs', $string
+           )*$%xs',
+            $string
         );
     }
-    
+
     /**
      * 
      * @return array
@@ -351,5 +354,5 @@ class Gamelena_Utils_Form
     {
         return (array) $this;
     }
-    
+
 }

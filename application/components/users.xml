@@ -45,4 +45,7 @@
 			<element target="password" />
 		</changePassword>
 	</forms>
+	<helpers>
+        <excel formatter="Excel5"/>
+    </helpers>
 </component> 

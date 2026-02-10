@@ -14,18 +14,17 @@ bower install --allow-root
 # 3. Create Symlinks (Legacy Aliases)
 echo "Creating Symlinks..."
 # Alias /libs "$TANGERINEPATH/public/js/libs"
-if [ ! -L public/libs ]; then
-    ln -s js/libs public/libs
-fi
+# Alias /libs "$TANGERINEPATH/public/js/libs"
+rm -rf public/libs
+ln -s js/libs public/libs
 
-# Alias /dojotoolkit "$TANGERINEPATH/bower_components"
-if [ ! -L public/dojotoolkit ]; then
-    ln -s ../bower_components public/dojotoolkit
-fi
+# Alias /dojotoolkit is handled by .bowerrc (installs directly to public/dojotoolkit)
+# No symlink needed.
+
 
 # 4. Apply Patches
-echo "Applying Zend Test Patch..."
-/usr/local/bin/zend-test-patch.sh
+# echo "Applying Zend Test Patch..."
+# bash tasks/zend-test-patch.sh
 
 # 5. Create Log Directories (Runtime, to survive volume mount)
 echo "Creating Log Directories..."

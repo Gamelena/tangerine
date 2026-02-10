@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Salida de mensajes a archivos de log y/o consola de javascript.
  * Se requiere firePHP para firefox o equivalente para consola javascript.
@@ -21,12 +21,12 @@ class Console
     static function log($message = null, $showOutput = false, $write = true, $file = 'php://stderr')
     {
         $trace = debug_backtrace();
-        if  ($message !== null ) {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
+        if ($message !== null) {
+            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . ']: ' . print_r($message, 1);
         } else {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] El grillo dijo "cri cri" (acá no hay nada).';
+            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . '] El grillo dijo "cri cri" (acá no hay nada).';
         }
-        
+
         if ($write) {
             $ff = fopen($file, "a");
             fwrite($ff, "[TANGERINE LOG]: $message\r\n");
@@ -39,7 +39,7 @@ class Console
             $logger->log($message, Zend_Log::NOTICE);
         }
     }
-    
+
     /**
      * Escribe el reporte en un archivo de log del sistema.
      * Muestra salida por consola javascript.
@@ -54,19 +54,19 @@ class Console
         $logger = new Zend_Log();
         $writer = new Zend_Log_Writer_Firebug();
         $logger->addWriter($writer);
-        
+
         $trace = debug_backtrace();
-        if  ($message !== null ) {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
+        if ($message !== null) {
+            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . ']: ' . print_r($message, 1);
         } else {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] El grillo dijo "cri cri" (acá no hay nada).';
+            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . '] El grillo dijo "cri cri" (acá no hay nada).';
         }
         if ($write) {
             $ff = fopen($file, "a");
             fwrite($ff, "[TANGERINE INFO]: $message\r\n");
             fclose($ff);
         }
-        
+
         if ($showOutput) {
             $logger = new Zend_Log();
             $writer = new Zend_Log_Writer_Firebug();
@@ -74,7 +74,7 @@ class Console
             $logger->log($message, Zend_Log::INFO);
         }
     }
-    
+
     /**
      * Muestra salida por consola javascript.
      * Escribe el reporte de error en un archivo de texto plano llamado debug si $write=true.
@@ -87,15 +87,15 @@ class Console
     static function debug($message = null, $showOutput = true, $write = false, $file = null)
     {
         if ($file == null) {
-            $file = ROOT_DIR."/log/debug";
+            $file = ROOT_DIR . "/log/debug";
         } else {
             $write = true;
         }
         $trace = debug_backtrace();
-        if  ($message !== null ) {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
+        if ($message !== null) {
+            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . ']: ' . print_r($message, 1);
         } else {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] El grillo dijo "cri cri" (acá no hay nada).';
+            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . '] El grillo dijo "cri cri" (acá no hay nada).';
         }
         if ($write) {
             $ff = fopen($file, "a");
@@ -109,7 +109,7 @@ class Console
             $logger->log($message, Zend_Log::DEBUG);
         }
     }
-    
+
     /**
      * Muestra salida por consola javascript.
      * Escribe el reporte en un archivo de error del sistema.
@@ -119,20 +119,20 @@ class Console
      * @param boolean $write
      * @param string  $file       - ruta del archivo a escribir.
      */
-    static function warn($message = null, $showOutput = true, $write = true,$file = 'php://stderr')
+    static function warn($message = null, $showOutput = true, $write = true, $file = 'php://stderr')
     {
         $trace = debug_backtrace();
-        if  ($message !== null ) {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
+        if ($message !== null) {
+            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . ']: ' . print_r($message, 1);
         } else {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] El grillo dijo "cri cri" (acá no hay nada).';
+            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . '] El grillo dijo "cri cri" (acá no hay nada).';
         }
         if ($write) {
             $ff = fopen($file, "a");
             fwrite($ff, "[TANGERINE WARNING]: $message\r\n");
             fclose($ff);
         }
-        
+
         if ($showOutput) {
             $logger = new Zend_Log();
             $writer = new Zend_Log_Writer_Firebug();
@@ -140,8 +140,8 @@ class Console
             $logger->log($message, Zend_Log::WARN);
         }
     }
-    
-    
+
+
     /**
      * Escribe el reporte en un archivo de error del sistema.
      * Muestra salida por consola javascript si $showOutput = true.
@@ -154,19 +154,19 @@ class Console
     static function error($message = null, $showOutput = false, $write = true, $file = 'php://stderr')
     {
 
-        
+
         $trace = debug_backtrace();
-        if  ($message !== null ) {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').']: '.print_r($message, 1);
+        if ($message !== null) {
+            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . ']: ' . print_r($message, 1);
         } else {
-            $message = $trace[0]['file'].'['.$trace[0]['line'].']['.strftime('%Y-%m-%d %H:%M:%S').'] El grillo dijo "cri cri" (acá no hay nada).';
+            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . '] El grillo dijo "cri cri" (acá no hay nada).';
         }
         if ($write) {
             $ff = fopen($file, "a");
             fwrite($ff, "[TANGERINE ERROR]: $message\r\n");
             fclose($ff);
         }
-        
+
         if ($showOutput) {
             $logger = new Zend_Log();
             $writer = new Zend_Log_Writer_Firebug();
@@ -174,7 +174,7 @@ class Console
             $logger->log($message, Zend_Log::ERR);
         }
     }
-    
+
 
 }
 

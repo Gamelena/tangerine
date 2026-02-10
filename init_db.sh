@@ -7,24 +7,26 @@ DB_PASS="gamelena"
 DB_NAME="tangerine"
 
 echo "Waiting for MySQL to be ready..."
-until mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" -e "SELECT 1" &> /dev/null; do
+echo "Waiting for MySQL to be ready..."
+until mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" --skip-ssl -e "SELECT 1" &> /dev/null; do
   echo "MySQL is unavailable - sleeping"
-  sleep 1
+  mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" --skip-ssl -e "SELECT 1" || true
+  sleep 2
 done
 
 echo "MySQL is up - executing initialization scripts..."
 
 # Load Schema
 echo "Loading createdb.sql..."
-mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" < db/createdb.sql
+mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" --skip-ssl < db/createdb.sql
 
 echo "Loading tangerine.sql..."
-mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" < db/tangerine.sql
+mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" --skip-ssl < db/tangerine.sql
 
 echo "Loading basicdata.sql..."
-mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" < db/basicdata.sql
+mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" --skip-ssl < db/basicdata.sql
 
 echo "Loading privileges.sql..."
-mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" < db/privileges.sql
+mysql -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" --skip-ssl < db/privileges.sql
 
 echo "Database initialization complete."

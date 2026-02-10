@@ -9,17 +9,17 @@ final class Gamelena_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abst
      *  @var boolean
      */
     public static $doNotCache = false;
-    
+
     /**
      * @var Zend_Cache_Frontend
      */
     public $cache;
-    
+
     /**
      * @var string Cache key
      */
     public $key;
-    
+
     /**
      * Etiquetas para agrupar archivos de cache
      * @var string
@@ -40,9 +40,9 @@ final class Gamelena_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abst
             //Console::debug("No hay valores para inicializar cache");
             return;
         }
-        
+
         $options['frontend']['options']['automatic_serialization'] = true;
-        
+
         try {
             $this->cache = Zend_Cache::factory(
                 'Output',
@@ -59,7 +59,7 @@ final class Gamelena_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abst
             throw new Zend_Cache_Exception($message);
         }
     }
-    
+
     /**
      * Start caching
      *
@@ -70,10 +70,11 @@ final class Gamelena_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abst
      */
     public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
     {
-        if (!Zend_Auth::getInstance()->hasIdentity() 
-            || isset($_REQUEST['action']) 
-            || preg_match("/settings/", $request->getParam('p'))
-            || preg_match("/nocache/", $request->getParam('p'))
+        if (
+            !Zend_Auth::getInstance()->hasIdentity()
+            || isset($_REQUEST['action'])
+            || preg_match("/settings/", (string) $request->getParam('p'))
+            || preg_match("/nocache/", (string) $request->getParam('p'))
         ) {
             self::$doNotCache = true;
         } else {
@@ -81,22 +82,22 @@ final class Gamelena_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abst
             //Dependiendo el usuario pertenece o no a grupos se debe serializar el cache por id de usuario o id de perfil.
             $cacheUserRoleHash = !empty($userInfo->groups) ? "userid{$userInfo->id}" : "roleid{$userInfo->acl_roles_id}";
             //$cacheUserRoleHash = empty($userInfo->groups) ? "roleid{$userInfo->acl_roles_id}" : "roleid{$userInfo->acl_roles_id}-groupsids" . implode("_", $userInfo->groups);
-            
+
             if ($request->getControllerName() == "admin" && $request->getActionName() == "components") {
                 $this->key = md5(BASE_URL . $request->getPathInfo() . $request->getParam("p")) . $cacheUserRoleHash;
             } else if ($request->getControllerName() == "objects" && $request->getParam('model') == "settings" && $request->getParam('format') == "json") {
-                $this->key = md5(BASE_URL . "_settings"); 
+                $this->key = md5(BASE_URL . "_settings");
             } else if ($request->getControllerName() == "admin" && $request->getActionName() == "modules") {
-                $this->key = md5(BASE_URL . "_modules" . $cacheUserRoleHash); 
+                $this->key = md5(BASE_URL . "_modules" . $cacheUserRoleHash);
             } else {
                 self::$doNotCache = true;
                 return;
             }
-            
+
             $this->tags[] = "userid{$userInfo->id}";
             $this->tags[] = "roleid{$userInfo->acl_roles_id}";
             $this->tags[] = "component" . Gamelena_Utils_String::toVarWord($request->getParam("p"));
-            
+
             if (false !== ($response = $this->getCache())) {
                 $response->sendResponse();
                 if (PHP_SAPI !== 'cli') { //exit mata silenciosamente a phpunit.
@@ -105,7 +106,7 @@ final class Gamelena_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abst
             }
         }
     }
-    
+
     /**
      * 
      * @return boolean
@@ -118,7 +119,7 @@ final class Gamelena_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abst
         }
         return false;
     }
-    
+
     /**
      * Borrar cache por tags
      * 
@@ -126,15 +127,16 @@ final class Gamelena_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abst
      */
     public function cleanByTags($tags)
     {
-        if (!$this->cache) { return false; 
+        if (!$this->cache) {
+            return false;
         }
-        
+
         return $this->cache->clean(
             Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             $tags
         );
     }
-    
+
     /**
      * Guardar cache
      * 
@@ -142,14 +144,15 @@ final class Gamelena_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abst
      */
     public function dispatchLoopShutdown()
     {
-        if (self::$doNotCache
+        if (
+            self::$doNotCache
             || $this->getResponse()->isRedirect()
             || (null === $this->key)
         ) {
-            
+
             return;
         } else if ($this->cache) {
             $this->cache->save($this->getResponse(), $this->key, $this->tags);
-        }    
+        }
     }
 }

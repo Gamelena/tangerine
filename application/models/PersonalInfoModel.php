@@ -15,9 +15,9 @@ class PersonalInfoModel extends Gamelena_Db_Table
     protected $_name_roles = "acl_roles";
     protected $_generate_pass = "user_name";
 
-    public function select()
+    public function select($withFromPart = self::SELECT_WITHOUT_FROM_PART)
     {
-        $oSelect=new Zend_Db_Table_Select($this);
+        $oSelect = new Zend_Db_Table_Select($this);
         $oSelect->setIntegrityCheck(false); //de lo contrario no podemos hacer JOIN
         $oSelect->from($this->_name, array('id', 'user_name', 'acl_roles_id', 'first_names', 'last_names', 'email', 'approved'))
             ->joinLeft($this->_name_roles, "$this->_name.acl_roles_id = $this->_name_roles.id", "role_name");
@@ -30,17 +30,18 @@ class PersonalInfoModel extends Gamelena_Db_Table
      * se genera la password repitiendo el nombre de usuario en md5
      * @return int
      */
-    public function insert($data)
+    public function insert(array $data)
     {
         $data["password"] = md5($data[$this->_generate_pass]);
+        $last_insert_id = false;
         try {
             $last_insert_id = parent::insert($data);
-        } catch(Zend_Db_Exception $e) {
+        } catch (Zend_Db_Exception $e) {
             if ($e->getCode() == '23000') {
                 $this->setMessage('Nombre de Usuario en uso.');
                 return false;
             } else {
-                Gamelena_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
+                Gamelena_Utils_Debug::write("error:" . $e->getMessage() . "code" . $e->getCode());
             }
         }
         return $last_insert_id;
@@ -50,16 +51,17 @@ class PersonalInfoModel extends Gamelena_Db_Table
      * Captura de excepciones posibles como nombre de usuario en uso
      */
 
-    public function update($data, $where) 
+    public function update(array $data, $where)
     {
+        $update = false;
         try {
             $update = parent::update($data, $where);
-        } catch(Zend_Db_Exception $e) {
-            if ($e->getCode()=='23000') {
+        } catch (Zend_Db_Exception $e) {
+            if ($e->getCode() == '23000') {
                 $this->setMessage('Nombre de Usuario en uso.');
                 return false;
             } else {
-                Gamelena_Utils_Debug::write("error:".$e->getMessage()."code".$e->getCode());
+                Gamelena_Utils_Debug::write("error:" . $e->getMessage() . "code" . $e->getCode());
             }
         }
         return $update;
