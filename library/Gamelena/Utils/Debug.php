@@ -33,6 +33,8 @@ class Gamelena_Utils_Debug
         if ($ff) {
             fwrite($ff, "$message\r\n");
             fclose($ff);
+        } else {
+            error_log("Gamelena_Utils_Debug: Unable to open log file: $file - Message: $message");
         }
     }
 
@@ -70,6 +72,8 @@ class Gamelena_Utils_Debug
                 if ($ff) {
                     fwrite($ff, "$message\r\n");
                     fclose($ff);
+                } else {
+                    error_log("Gamelena_Utils_Debug: Unable to open log file: $file - Message: $message");
                 }
             }
         } catch (Zend_Db_Exception $e) {
