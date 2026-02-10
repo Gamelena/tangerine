@@ -30,8 +30,10 @@ class Gamelena_Utils_Debug
             $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . '] A cricket said "cri cri" (nothing here).';
         }
         $ff = fopen($file, "a");
-        fwrite($ff, "$message\r\n");
-        fclose($ff);
+        if ($ff) {
+            fwrite($ff, "$message\r\n");
+            fclose($ff);
+        }
     }
 
     /**
@@ -65,8 +67,10 @@ class Gamelena_Utils_Debug
                     $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . '] El grillo dijo "criet cri" (acá no hay nada).';
                 }
                 $ff = fopen($file, "a");
-                fwrite($ff, "$message\r\n");
-                fclose($ff);
+                if ($ff) {
+                    fwrite($ff, "$message\r\n");
+                    fclose($ff);
+                }
             }
         } catch (Zend_Db_Exception $e) {
             Gamelena_Utils_Debug::write("Error {$e->getCode()} {$e->getMessage()}");
