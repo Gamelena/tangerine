@@ -35,6 +35,13 @@ RUN docker-php-ext-configure gd --with-jpeg
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mysqli gd zip soap mbstring xsl
 
+# Install Xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
 # Install Mcrypt (deprecated in 7.2, removed in 8.0+)
 # RUN pecl install mcrypt-1.0.4 && docker-php-ext-enable mcrypt
 
