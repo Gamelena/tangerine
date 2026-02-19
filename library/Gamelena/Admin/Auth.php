@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Valida sesión por admin web, evitando colisiones de sesión entre diferentes admin mediante flag
  * Zend_Auth::getInstance()->getStorage()->read()->sessionNamespace
@@ -10,13 +10,13 @@
 
 class Gamelena_Admin_Auth
 {
-     /**
+    /**
      * Instancia singleton.
      *
      * @var Gamelena_Admin_Auth
      */
     protected static $_instance = null;
-    
+
     /**
      * Singleton pattern implementation makes "new" unavailable
      *
@@ -49,7 +49,7 @@ class Gamelena_Admin_Auth
 
         return self::$_instance;
     }
-    
+
     /**
      * Verifica instancia con identitad de Zend_Auth.
      * 
@@ -57,9 +57,10 @@ class Gamelena_Admin_Auth
      */
     public function hasIdentity()
     {
-        if (!Zend_Auth::getInstance()->hasIdentity()) { return false; 
+        if (!Zend_Auth::getInstance()->hasIdentity()) {
+            return false;
         }
-        
+
         $userInfo = Zend_Auth::getInstance()->getStorage()->read();
         $options = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
         $config = new Zend_Config($options);
@@ -67,40 +68,37 @@ class Gamelena_Admin_Auth
             return (isset($userInfo->sessionNamespace) && $config->gamelena->session->namespace == $userInfo->sessionNamespace) ? true : false;
         } else {
             return true;
-        }    
+        }
     }
-    
+
     /**
      * Autentificación contra DB.
      * 
-     * @return Zend_Auth_Adapter_DbTable
+     * @return Zend_Auth_Adapter_Interface
      */
-    public function getAuthAdapter($hash = 'MD5')
+    public function getAuthAdapter()
     {
-        $resource = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getResource("multidb");
-        $dbAdapter = isset($resource) && $resource->getDb("auth") ?
-            $resource->getDb("auth") :
-            Zend_Db_Table::getDefaultAdapter();
-    
-        $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
-        $authUsersTable = 'acl_users';
-        $authUserName = 'user_name';
-        $authPassword = 'password';
-    
-        $authAdapter->setTableName($authUsersTable)
-            ->setIdentityColumn($authUserName)
-            ->setCredentialColumn($authPassword);
-        
-        if (!empty($hash)) {
-            $authAdapter->setCredentialTreatment($hash.'(?) and approved="1"');
-        } else {
-            $authAdapter->setCredentialTreatment('? and approved="1"');
-        }
-        
-        
-        return $authAdapter;
+        // Return our custom adapter
+        // We don't need identity/credential column setup here as the adapter handles it 
+        // using the Model directly.
+        // However, the caller of this method (AdminController::loginAction) sets identity and credential *after* getting the adapter.
+        // But my new adapter takes them in constructor. 
+        // Wait, AdminController sets them later: $authAdapter->setIdentity($username)->setCredential($password);
+        // Standard Zend adapters allow late setting. My custom one should too or I need to change AdminController.
+        // The interface Zend_Auth_Adapter_Interface only requires authenticate().
+        // But standard practice in ZF1 is setIdentity/setCredential.
+        // To minimize impact on AdminController, I'll make my adapter compatible with setIdentity/setCredential pattern
+        // OR I'll update AdminController.
+        // Looking at AdminController: 
+        // $authAdapter = ...->getAuthAdapter();
+        // $authAdapter->setIdentity($username)->setCredential($password);
+        //
+        // So my new adapter needs those methods if I want to keep AdminController as is.
+        // Or I return a dummy wrapper? No, easier to implement setIdentity/setCredential in Gamelena_Auth_Adapter_Bcrypt.
+
+        return new Gamelena_Auth_Adapter_Bcrypt();
     }
-    
+
     /**
      * Inicializa la información de sesión con datos del usuario en DB.
      * 
@@ -110,28 +108,28 @@ class Gamelena_Admin_Auth
     {
         $auth = Zend_Auth::getInstance();
         $userInfo = $authAdapter->getResultRowObject(null, 'password');
-        
+
         $options = Zend_Controller_Front::getInstance()->getParam("bootstrap")->getApplication()->getOptions();
         $config = new Zend_Config($options);
-        
+
         if (isset($config->gamelena->session->namespace)) {
             $userInfo->sessionNamespace = $config->gamelena->session->namespace;
         }
-        
+
         $authStorage = $auth->getStorage();
         $aclUsersGroupsModel = new AclUsersGroupsModel();
-        
+
         $buffGroups = $aclUsersGroupsModel->findByUserId($userInfo->id);
         $groups = array();
-        
+
         foreach ($buffGroups as $g) {
             $groups[] = $g['acl_groups_id'];
         }
-        
-        
+
+
         $userInfo->groups = $groups;
         $authStorage->write($userInfo);
-        
+
         /*Guardar sesion en base de datos, si tabla existe*/
         try {
             $db = Zend_Db_Table::getDefaultAdapter();
@@ -144,7 +142,7 @@ class Gamelena_Admin_Auth
                     $row->ip = $_SERVER['REMOTE_ADDR'];
                     $row->user_agent = $_SERVER['HTTP_USER_AGENT'];
                     $row->created = time();
-                    
+
                     $row->save();
                 } else {
                     if (PHP_SAPI !== 'cli') { //Un Redirector fuera de un controlador mata silenciosamente a phpunit ya que usa exit(), lo evitamos.
@@ -158,7 +156,7 @@ class Gamelena_Admin_Auth
         } //PDOException is not caught :facepalm:
 
     }
-    
+
     /**
      * Limpia identidad Zend_Auth
      * @return void

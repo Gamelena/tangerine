@@ -32,7 +32,7 @@ class PersonalInfoModel extends Gamelena_Db_Table
      */
     public function insert(array $data)
     {
-        $data["password"] = md5($data[$this->_generate_pass]);
+        $data["password"] = password_hash($data[$this->_generate_pass], PASSWORD_BCRYPT);
         $last_insert_id = false;
         try {
             $last_insert_id = parent::insert($data);
@@ -55,6 +55,9 @@ class PersonalInfoModel extends Gamelena_Db_Table
     {
         $update = false;
         try {
+            if (isset($data['password']) && !empty($data['password'])) {
+                $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+            }
             $update = parent::update($data, $where);
         } catch (Zend_Db_Exception $e) {
             if ($e->getCode() == '23000') {

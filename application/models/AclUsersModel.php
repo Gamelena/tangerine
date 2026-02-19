@@ -96,9 +96,9 @@ class AclUsersModel extends DbTable_AclUsers
     public function insert(array $data)
     {
         if (!isset($data["password"])) {
-            $data["password"] = md5($data[$this->_generate_pass]);
+            $data["password"] = password_hash($data[$this->_generate_pass], PASSWORD_BCRYPT);
         } else {
-            $data["password"] = md5($data["password"]);
+            $data["password"] = password_hash($data["password"], PASSWORD_BCRYPT);
         }
 
         $last_insert_id = false;
@@ -141,6 +141,9 @@ class AclUsersModel extends DbTable_AclUsers
     public function update(array $data, $where)
     {
         try {
+            if (isset($data['password']) && !empty($data['password'])) {
+                $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+            }
             $update = parent::update($data, $where);
         } catch (Zend_Db_Exception $e) {
             if ($e->getCode() == '23000') {
