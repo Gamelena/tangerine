@@ -33,9 +33,9 @@ Access the test instance at [http://localhost:8888](http://localhost:8888).
 ### 5. Access Database
 To access the MySQL database inside the container:
 ```bash
-docker-compose exec db mysql -u root -pgamelena tangerine
+docker-compose exec db mysql -u root -p*** tangerine
 ```
 Or to run a specific query:
 ```bash
-docker-compose exec db mysql -u root -pgamelena tangerine -e "SELECT * FROM users WHERE md5_password = '31cb6a72f8f70612e27af0f59a9322ca';"
+docker-compose exec db mysql -u root -p*** tangerine -e "SELECT * FROM users WHERE md5_password = '31cb6a72f8f70612e27af0f59a9322ca';"
 ```
