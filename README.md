@@ -7,7 +7,7 @@ This configuration is provided **for developing and testing** the library in a s
 ## Usage
 
 ### 1. Start Environment
-Lifts PHP 7.2 Apache + MySQL 5.7 containers.
+Lifts PHP 8.2 Apache + MySQL 5.7 containers.
 ```bash
 docker-compose up -d --build
 ```
