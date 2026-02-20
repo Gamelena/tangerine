@@ -36,7 +36,7 @@ class AclPermissionsComboModel extends DbTable_AclActions
         if ($this->_user_info->acl_roles_id != ROLES_ROOT_ID) {
             $select->where("$this->_name_roles.id != ?", "1");
         }
-        //Gamelena_Utils_Debug::write($select->__toString());
+        //Console::log($select->__toString());
         return $select;
     }
 }

@@ -41,7 +41,7 @@ class PersonalInfoModel extends Gamelena_Db_Table
                 $this->setMessage('Nombre de Usuario en uso.');
                 return false;
             } else {
-                Gamelena_Utils_Debug::write("error:" . $e->getMessage() . "code" . $e->getCode());
+                Console::error($e->getMessage() . " code: " . $e->getCode());
             }
         }
         return $last_insert_id;
@@ -64,7 +64,7 @@ class PersonalInfoModel extends Gamelena_Db_Table
                 $this->setMessage('Nombre de Usuario en uso.');
                 return false;
             } else {
-                Gamelena_Utils_Debug::write("error:" . $e->getMessage() . "code" . $e->getCode());
+                Console::error( $e->getMessage() . " code: " . $e->getCode());
             }
         }
         return $update;

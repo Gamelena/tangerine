@@ -212,7 +212,7 @@ class Gamelena_Admin_Acl extends Zend_Acl
     {
         $select = $this->_db->select()->from($this->_tb_roles, "id")->where($this->_tb_roles . ".role_name = '" . $roleName . "'");
         
-        //Gamelena_Utils_Debug::write($select->__toString());
+        //Console::log($select->__toString());
         return $this->_db->fetchRow($select);
     }
     
@@ -320,7 +320,7 @@ class Gamelena_Admin_Acl extends Zend_Acl
         $result = null;
         $select = $this->_db->select()->from($this->_tb_modules)->from($this->_tb_roles_modules_actions)->where($this->_tb_modules . '.module = "' . $group . '"')->where($this->_tb_modules . ".id = " . $this->_tb_modules . "_id");
         
-        //Gamelena_Utils_Debug::write($select->__toString());
+        //Console::log($select->__toString());
         
         $group = $this->_db->fetchAll($select);
         
@@ -445,7 +445,7 @@ class Gamelena_Admin_Acl extends Zend_Acl
                     $varReturn =  $aclGMAModel->fetchRow($select) ? true : false;
                     //$cache->save($$varReturn, $varReturn);
                 //} else {
-                    //Debug::write('usando cache');
+                    //Console::log('usando cache');
                 //}
                 return $varReturn;
             }

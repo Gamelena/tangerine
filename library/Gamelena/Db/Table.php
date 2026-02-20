@@ -188,7 +188,7 @@ class Gamelena_Db_Table extends Zend_Db_Table_Abstract
             $logMessage = "[$userName $ip] INSERT INTO " . $this->info(Zend_Db_Table::NAME) . " VALUES ($strData) ";
             Debug::writeBySettings($logMessage, 'transactions_log', '1', "../log/transactions");
         } else {
-            Debug::write("No existe SettingsModel");
+            Console::log("No existe SettingsModel");
         }
         
         return parent::insert($data);
@@ -268,7 +268,7 @@ class Gamelena_Db_Table extends Zend_Db_Table_Abstract
             $rowOrig = $this->fetchRow($select);
         } catch (Zend_Db_Exception $e) {
             $differences = '{Ocurrió un error al obtener los datos originales.}';
-            Debug::write($e->getCode() . " " . $e->getMessage());
+            Console::log($e->getCode() . " " . $e->getMessage());
         }
         
         $update = parent::update($data, $where);
@@ -282,10 +282,10 @@ class Gamelena_Db_Table extends Zend_Db_Table_Abstract
                         $differences = Gamelena_Utils_Array::getDifferences($rowOrig->toArray(), $rowNew->toArray());
                         $differences = print_r($differences, true);
                     } else {
-                        Debug::write('FIXME, modificaron mi identidad y perdí el seguimiento');
+                        Console::log('FIXME, modificaron mi identidad y perdí el seguimiento');
                     }
                 } catch (Zend_Db_Exception $e) {
-                    Debug::write($e->getCode() . " " . $e->getMessage());
+                    Console::log($e->getCode() . " " . $e->getMessage());
                 }
             }
             $userName = (isset($this->_user_info->user_name)) ? $this->_user_info->user_name : "NN"; 
@@ -321,7 +321,7 @@ class Gamelena_Db_Table extends Zend_Db_Table_Abstract
             //Debug::writeBySettings($this->getAdapter()->getConfig(), 'transactions_log', '1', "../log/transactions");
             Debug::writeBySettings($logMessage, 'transactions_log', '1', "../log/transactions");
         } else {
-            Debug::write('No existe SettingsModel');
+            Console::log('No existe SettingsModel');
         }
 
         return parent::delete($where);

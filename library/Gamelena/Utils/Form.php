@@ -186,11 +186,11 @@ class Gamelena_Utils_Form
                             $info[$i]['filename'] = $filename;
                             $info[$i]['ext'] = $ext;
                         } else {
-                            Debug::write("No se pudo subir archivo {$_FILES[$file]['tmp_name'][$i]} a $dest." / ".$filename");
+                            Console::log("No se pudo subir archivo {$_FILES[$file]['tmp_name'][$i]} a $dest." / ".$filename");
                             $info = false;
                         }
                     } else {
-                        Debug::write("Extensión no permitida para {$_FILES[$file]['tmp_name'][$i]} a $dest." / ".$filename");
+                        Console::log("Extensión no permitida para {$_FILES[$file]['tmp_name'][$i]} a $dest." / ".$filename");
                         $info = false;
                     }
                 }

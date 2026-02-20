@@ -143,7 +143,7 @@ class Gamelena_Ftp_File
      */
     public function put($localFilepath, $mode = null, $startPos = 0)
     {    
-        Debug::write($this->_path);
+        Console::log($this->_path);
         if ($mode === null) {
             $mode = ($this->_mode === null ? $this->_ftp->determineMode($localFilepath) : $this->_mode);
         }

@@ -114,7 +114,7 @@ final class Gamelena_Controller_Plugin_Cache extends Zend_Controller_Plugin_Abst
     public function getCache()
     {
         if (isset($this->cache) && ($response = $this->cache->load($this->key)) != false) {
-            //Debug::write("Trayendo de cache ".@$_SERVER['REQUEST_URI']);
+            //Console::log("Trayendo de cache ".@$_SERVER['REQUEST_URI']);
             return $response;
         }
         return false;

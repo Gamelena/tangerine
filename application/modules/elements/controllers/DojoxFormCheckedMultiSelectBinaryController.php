@@ -84,7 +84,7 @@ class Elements_DojoxFormCheckedMultiSelectBinaryController extends Elements_Base
         } else {
             $rows = explode(",", $r->getParam('list'));
             foreach ($rows as $i => $row) {
-                //Gamelena_Utils_Debug::write('$id='.$id.'$row='.$row.'$value='.$value);
+                //Console::log('$id='.$id.'$row='.$row.'$value='.$value);
                 $selected = "";
                 if ($value & pow(2, $i)) {
                     $selected = "selected=\"selected\"";

@@ -150,7 +150,7 @@ class AclUsersModel extends DbTable_AclUsers
                 $this->setMessage('Nombre de Usuario en uso.');
                 return false;
             } else {
-                Debug::write(array($e->getMessage(), $e->getCode()));
+                Console::log(array($e->getMessage(), $e->getCode()));
             }
         }
 
@@ -177,7 +177,7 @@ class AclUsersModel extends DbTable_AclUsers
         }
 
         if (!(Zend_Session::getSaveHandler() instanceof Zend_Session_SaveHandler_DbTable)) { //@TODO BACKWARD compatibility
-            Debug::write('!Zend_Session_SaveHandler_DbTable');
+            Console::log('!Zend_Session_SaveHandler_DbTable');
             $aclRoles = new DbTable_AclRoles();
             if (in_array('must_refresh', $aclRoles->info('cols'))) {
                 $users = new DbTable_AclUsers();
@@ -190,7 +190,7 @@ class AclUsersModel extends DbTable_AclUsers
             }
 
         } else { //END BACKWARD compatibility
-            Debug::write('Zend_Session_SaveHandler_DbTable');
+            Console::log('Zend_Session_SaveHandler_DbTable');
             $aclSession = new DbTable_AclSession();
 
             $data = array('must_refresh' => '1');

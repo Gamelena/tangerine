@@ -14,7 +14,7 @@ class AclRolesModulesActionsModel extends DbTable_AclRolesModulesActions
     {
         $select = new Zend_Db_Table_Select($this);
         $select->from($this->_name, $fields)->where($this->getAdapter()->quoteInto('acl_roles_id = ?', $aclRolesId));
-        Debug::write($select->__toString());
+        Console::log($select->__toString());
         return $this->fetchAll($select);
     }
     
@@ -38,7 +38,7 @@ class AclRolesModulesActionsModel extends DbTable_AclRolesModulesActions
         if ($aclActionsId) {  $select->where($this->getAdapter()->quoteInto('acl_actions_id = ?', $aclActionsId)); 
         }
          
-        //Debug::write($select->__toString());
+        //Console::log($select->__toString());
         return $this->fetchAll($select);
     }
 

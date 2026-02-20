@@ -24,19 +24,19 @@ class Gamelena_Controller_Plugin_ApplicationPath extends Zend_Controller_Plugin_
         $frontController = Zend_Controller_Front::getInstance();
         
         if (file_exists(APPLICATION_PATH . '/controllers/' . Gamelena_Utils_String::toClassWord($controller, "-").'Controller.php')) {
-            //Debug::write("Existe ". APPLICATION_PATH . '/controllers/' . Gamelena_Utils_String::toClassWord($controller, "-").'Controller.php');
+            //Console::log("Existe ". APPLICATION_PATH . '/controllers/' . Gamelena_Utils_String::toClassWord($controller, "-").'Controller.php');
             $frontController->addControllerDirectory(APPLICATION_PATH . '/controllers');
         } else {
-            //Debug::write("Buscando ".TANGERINE_APPLICATION_PATH . '/controllers/' . Gamelena_Utils_String::toClassWord($controller).'Controller.php');
+            //Console::log("Buscando ".TANGERINE_APPLICATION_PATH . '/controllers/' . Gamelena_Utils_String::toClassWord($controller).'Controller.php');
             $frontController->addControllerDirectory(TANGERINE_APPLICATION_PATH.'/controllers');
         }
         
         if ($module != "default") {
             if (file_exists(APPLICATION_PATH . '/modules/' . $module . '/controllers/' . Gamelena_Utils_String::toClassWord($controller, "-").'Controller.php')) {
-                //Debug::write("Existe ". APPLICATION_PATH . '/modules/' . $module . '/controllers/' . Gamelena_Utils_String::toClassWord($controller, "-").'Controller.php');
+                //Console::log("Existe ". APPLICATION_PATH . '/modules/' . $module . '/controllers/' . Gamelena_Utils_String::toClassWord($controller, "-").'Controller.php');
                 $frontController->addModuleDirectory(APPLICATION_PATH . '/modules');
             } else {
-                //Debug::write("Buscando ". TANGERINE_APPLICATION_PATH . '/controllers/' . Gamelena_Utils_String::toClassWord($controller, "-").'Controller.php');   
+                //Console::log("Buscando ". TANGERINE_APPLICATION_PATH . '/controllers/' . Gamelena_Utils_String::toClassWord($controller, "-").'Controller.php');   
                 $frontController->addModuleDirectory(TANGERINE_APPLICATION_PATH . '/modules');            
             }
         }

@@ -80,7 +80,7 @@ class Elements_DojoxFormCheckedMultiSelectController extends Elements_BaseContro
             $rows = $r->getParam('list') ? explode(",", $r->getParam('list')) : array();
             
             foreach ($rows as $row) {
-                //Gamelena_Utils_Debug::write('$id='.$id.'$row='.$row.'$value='.$value);
+                //Console::log('$id='.$id.'$row='.$row.'$value='.$value);
                 $selected = $row == $value ? "selected" : "";
                 $options .= "<option value=\"".$row."\" ".$selected." >$row</option>\r\n";
             }

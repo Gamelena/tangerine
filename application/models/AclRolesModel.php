@@ -120,7 +120,7 @@ class AclRolesModel extends DbTable_AclRoles
                 $this->setMessage("Nombre de Perfil en uso, por favor escoja otro.");
                 return false;
             } else {
-                Debug::write($e->getMessage()."-".$e->getCode());
+                Console::log($e->getMessage()."-".$e->getCode());
             }
         }
         
@@ -232,7 +232,7 @@ class AclRolesModel extends DbTable_AclRoles
             } catch (Zend_Db_Exception $e) {
                 if ($e->getCode() == 23000) {
                     $printData = print_r($data, 1);
-                    Debug::write("Ya existe permiso asociado a $printData");
+                    Console::log("Ya existe permiso asociado a $printData");
                 }
             }
         }
@@ -272,7 +272,7 @@ class AclRolesModel extends DbTable_AclRoles
                     );
                     $aclRolesModulesActionsModel->insert($data);
                 } catch (Zend_Db_Exception $e) {
-                    Debug::write($e->getMessage());
+                    Console::log($e->getMessage());
                 }
             }
             $this->setParentModulesPermissions($aclModulesId, $aclRolesId, 'LIST', false);

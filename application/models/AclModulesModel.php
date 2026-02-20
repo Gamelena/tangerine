@@ -212,7 +212,7 @@ class AclModulesModel extends DbTable_AclModules
             catch (Zend_Db_Exception $e) {
                 if ($e->getCode() == '23000') {
                     $printData = print_r($data, 1);
-                    Debug::write("Ya existe modulo_accion asociado a $printData");
+                    Console::log("Ya existe modulo_accion asociado a $printData");
                 }
             }
         }

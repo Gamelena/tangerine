@@ -69,7 +69,7 @@ class Gamelena_Utils_Time
             $timestamp = mktime((int) $arrTime[0], (int) $arrTime[1], (int) $arrTime[2], (int) $arrDate[1], (int) $arrDate[0], (int) $arrDate[2]);
         }
         return $timestamp;
-        //Gamelena_Utils_Debug::write("mktime((int){$arrTime[0]},(int){$arrTime[1]},(int){$arrTime[2]},(int){$arrDate[1]},(int){$arrDate[2]},(int){$arrDate[0]})");
+        //Console::log("mktime((int){$arrTime[0]},(int){$arrTime[1]},(int){$arrTime[2]},(int){$arrDate[1]},(int){$arrDate[2]},(int){$arrDate[0]})");
     }
     
     /**

@@ -6,37 +6,10 @@
  * @package  Gamelena_Utils
  * @version  $Id:$
  * @since    0.1
- * 
- * @example: Gamelena_Utils_Debug::write($mensaje)
+ *
  */
 class Gamelena_Utils_Debug
 {
-
-    /**
-     * Escribe el reporte de error en un archivo de texto plano llamado debug
-     * @param string $message - texto a escribir en archivo. 
-     * @param string $file    - ruta del archivo a escribir.
-     * @deprecated use Console::info instead
-     */
-    static function write($message = null, $file = null)
-    {
-        if ($file == null) {
-            $file = ROOT_DIR . "/log/debug";
-        }
-        $trace = debug_backtrace();
-        if ($message !== null) {
-            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . ']: ' . print_r($message, 1);
-        } else {
-            $message = $trace[0]['file'] . '[' . $trace[0]['line'] . '][' . date('Y-m-d H:i:s') . '] A cricket said "cri cri" (nothing here).';
-        }
-        $ff = fopen($file, "a");
-        if ($ff) {
-            fwrite($ff, "$message\r\n");
-            fclose($ff);
-        } else {
-            error_log("Gamelena_Utils_Debug: Unable to open log file: $file - Message: $message");
-        }
-    }
 
     /**
      * Escribe mensaje en archivo de log, dependiendo de valores de tabla de configuración global (web_settings). 
@@ -77,7 +50,7 @@ class Gamelena_Utils_Debug
                 }
             }
         } catch (Zend_Db_Exception $e) {
-            Gamelena_Utils_Debug::write("Error {$e->getCode()} {$e->getMessage()}");
+            Console::log("Error {$e->getCode()} {$e->getMessage()}");
         }
     }
 }
