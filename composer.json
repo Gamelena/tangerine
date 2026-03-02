@@ -1,7 +1,7 @@
 {
 	"name": "gamelena/tangerine",
 	"description": "Tangerine",
-	"version": "2.2.0",
+	"version": "2.3.0",
 	"type": "library",
 	"suggest": {
 		"ext-gd": "to use GD library based image processing, you cant had installed ext-imagick ignore this.",
@@ -9,7 +9,7 @@
 		"ext-xsl": "to generate phpDoc documentation."
 	},
 	"require": {
-		"php": ">=5.5.0",
+		"php": ">=8.1.0",
 		"ext-libxml": "*",
 		"ext-mbstring": "*",
 		"ext-dom": "*",
