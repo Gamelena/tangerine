@@ -79,8 +79,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         
         $eop = (substr(dirname($_SERVER["SCRIPT_NAME"]), -1, 1) === "/") ? '' : '/';
-        
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on") {
+
+        $isHttps = false;
+        if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') {
+            $isHttps = true;
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') {
+            $isHttps = true;
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) == 'on') {
+            $isHttps = true;
+        }
+
+        if ($isHttps) {
             defined('PROTO') || define('PROTO', 'https://');
         } else {
             defined('PROTO') || define('PROTO', 'http://');
